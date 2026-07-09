@@ -1,222 +1,159 @@
-/* --- 変数定義（デフォルト：マットブラック & 青色ネオン） --- */
+/* --- 変数定義（デフォルト：マットブラック & ぼやけた青色ネオン） --- */
 :root {
-    --bg-color: #0d0d0d;           /* マットブラック */
+    --bg-color: #05050a;           /* 宇宙空間のような超深海ブラック */
     --text-color: #f0f0f0;
-    --panel-bg: #161616;           /* パネル背景色 */
-    --border-color: #262626;
-    --neon-blue: #00d2ff;          /* 鮮やかなネオンブルー */
-    --neon-glow: rgba(0, 210, 255, 0.6); /* ネオンの光の広がり */
+    --sidebar-bg: rgba(15, 15, 25, 0.8);
+    --panel-bg: rgba(22, 22, 35, 0.65); /* すりガラス風の透過マットブラック */
+    --border-color: rgba(255, 255, 255, 0.08);
+    --hover-color: rgba(255, 255, 255, 0.1);
+    --neon-blue: #00d2ff;
+    /* 何重にも重ねて、大きなぼやけた光を表現 */
+    --neon-glow: 0 0 10px rgba(0, 210, 255, 0.8),
+                 0 0 30px rgba(0, 210, 255, 0.4),
+                 0 0 60px rgba(0, 210, 255, 0.2),
+                 0 0 100px rgba(0, 210, 255, 0.1);
     --transition-speed: 0.3s;
 }
 
 /* --- ライトモード（ホワイト基調） --- */
 [data-theme="light"] {
-    --bg-color: #ffffff;           /* ホワイト */
+    --bg-color: #f4f5f7;
     --text-color: #333333;
-    --panel-bg: #fdfdfd;           /* パネル背景色 */
+    --sidebar-bg: #ffffff;
+    --panel-bg: #ffffff;
     --border-color: #e5e5e5;
-    --neon-blue: #007bff;          /* 通常の青 */
-    --neon-glow: rgba(0, 123, 255, 0.2); 
+    --hover-color: #f0f0f0;
+    --neon-blue: #007bff;
+    --neon-glow: 0 10px 30px rgba(0, 123, 255, 0.15); /* 通常のマイルドな影 */
 }
 
-/* --- リセット & 基本スタイル --- */
+/* --- 基本スタイル & プラネタリウム背景 --- */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
 }
 
 body {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
     background-color: var(--bg-color);
     color: var(--text-color);
     transition: background-color var(--transition-speed), color var(--transition-speed);
-    padding: 20px;
+    min-height: 100vh;
+    overflow-x: hidden;
+    perspective: 1000px; /* 3D効果に必須の奥行き設定 */
 }
 
-/* --- テーマ切り替えスイッチ --- */
-.theme-switch-wrapper {
+/* プラネタリウム（星空）エフェクト */
+.stars-container {
     position: fixed;
-    top: 20px;
-    right: 20px;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    transition: opacity var(--transition-speed);
+}
+[data-theme="light"] .stars-container {
+    opacity: 0; /* ライトモード時は星空を隠す */
+}
+
+/* 簡易的な満天の星空（ドットの影で星を表現） */
+.stars, .stars2 {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: transparent;
+    box-shadow: 10vw 20vh #fff, 30vw 45vh #fff, 55vw 15vh #fff, 80vw 70vh #fff, 15vw 85vh #fff, 70vw 30vh #fff, 90vw 10vh #fff, 40vw 80vh #fff, 65vw 60vh #fff, 85vw 40vh #fff;
+    animation: animStars 150s linear infinite;
+}
+.stars2 {
+    width: 1px; height: 1px;
+    box-shadow: 5vw 10vh rgba(255,255,255,0.5), 25vw 30vh rgba(255,255,255,0.5), 50vw 75vh rgba(255,255,255,0.5), 75vw 20vh rgba(255,255,255,0.5), 95vw 60vh rgba(255,255,255,0.5), 35vw 90vh rgba(255,255,255,0.5);
+    animation: animStars 250s linear infinite;
+}
+@keyframes animStars {
+    from { transform: translateY(0px) rotate(0deg); }
+    to { transform: translateY(-2000px) rotate(20deg); }
+}
+
+/* --- サイドバー共通スタイル（部品用） --- */
+.sidebar {
+    width: 250px; height: 100vh;
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    backdrop-filter: blur(10px); /* 背景ぼかしで高級感を */
+    display: flex; flex-direction: column; justify-content: space-between;
+    padding: 20px 15px; position: fixed; top: 0; left: 0;
+    transition: transform var(--transition-speed);
     z-index: 1000;
 }
+.sidebar.closed { transform: translateX(-250px); }
+.sidebar-brand { font-size: 1.2rem; font-weight: bold; padding: 10px; border-bottom: 1px solid var(--border-color); }
+.nav-list { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 20px; }
+.nav-item a { display: flex; align-items: center; gap: 15px; padding: 12px 15px; color: var(--text-color); text-decoration: none; border-radius: 8px; font-weight: 500; }
+.nav-item a:hover { background-color: var(--hover-color); }
+.nav-item i { width: 20px; text-align: center; }
 
-.theme-switch {
-    display: inline-block;
-    height: 34px;
-    position: relative;
-    width: 60px;
-}
+/* トグルスイッチ */
+.theme-switch-container { padding: 15px 10px; border-top: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; }
+.switch { position: relative; display: inline-block; width: 46px; height: 24px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #333; transition: .4s; border-radius: 34px; }
+[data-theme="light"] .slider { background-color: #ccc; }
+.slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+input:checked + .slider { background-color: #007bff; }
+input:checked + .slider:before { transform: translateX(22px); }
 
-.theme-switch input {
-    display:none;
-}
+/* --- メイン領域 & 3Dカード --- */
+.main-content { flex-grow: 1; padding: 30px; margin-left: 250px; transition: margin-left var(--transition-speed); }
+.main-content.expanded { margin-left: 0; }
+.toggle-btn { background: none; border: none; color: var(--text-color); font-size: 1.5rem; cursor: pointer; }
 
-.slider {
-    background-color: #333;
-    bottom: 0;
-    cursor: pointer;
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-    transition: .4s;
-    border-radius: 34px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 6px;
-}
+.wrapper-center { display: flex; justify-content: center; align-items: center; min-height: 80vh; }
 
-[data-theme="light"] .slider {
-    background-color: #ccc;
-}
-
-.slider .icon-light {
-    color: #f1c40f;
-    opacity: 0;
-    transition: opacity 0.4s;
-    font-size: 0.9rem;
-}
-
-.slider .icon-dark {
-    color: #f1c40f;
-    opacity: 1;
-    transition: opacity 0.4s;
-    font-size: 0.9rem;
-}
-
-input:checked + .slider .icon-light { opacity: 1; }
-input:checked + .slider .icon-dark { opacity: 0; }
-
-.slider:before {
-    background-color: white;
-    bottom: 4px;
-    content: "";
-    height: 26px;
-    left: 4px;
-    position: absolute;
-    transition: .4s;
-    width: 26px;
-    z-index: 1;
-    border-radius: 50%;
-}
-
-input:checked + .slider:before {
-    transform: translateX(26px);
-}
-
-/* --- guns.lol風 自己紹介パネル --- */
-.profile-container {
+/* 3Dカードの本体 */
+.profile-card-3d {
     background-color: var(--panel-bg);
-    padding: 35px 25px;
-    border-radius: 20px;
-    width: 100%;
-    max-width: 380px;
+    width: 100%; max-width: 380px;
+    padding: 40px 30px;
+    border-radius: 24px;
+    border: 1px solid var(--border-color);
+    backdrop-filter: blur(12px);
     text-align: center;
-    border: 1px solid var(--border-color);
-    transition: all var(--transition-speed);
+    box-shadow: var(--neon-glow); /* ぼやけたライト効果 */
+    transition: box-shadow var(--transition-speed), border var(--transition-speed), background-color var(--transition-speed);
+    transform-style: preserve-3d; /* 子要素を立体的に配置 */
+    will-change: transform;
+}
+/* ダークモード時のネオン外枠 */
+:root:not([data-theme="light"]) .profile-card-3d {
+    border: 1px solid rgba(0, 210, 255, 0.4);
 }
 
-/* デフォルト（ダークモード）時のネオン効果 */
-.profile-container {
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5), 
-                0 0 20px var(--neon-glow);
-    border: 1px solid var(--neon-blue);
-}
-
-/* ライトモード時はネオンをオフにしてマイルドな影に */
-[data-theme="light"] .profile-container {
-    border: 1px solid var(--border-color);
-    box-shadow: 0 10px 25px var(--neon-glow);
-}
-
-/* プロフィール画像 */
-.profile-img {
-    width: 110px;
-    height: 110px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 15px;
+/* アバターの立体化 */
+.profile-avatar {
+    width: 110px; height: 110px; border-radius: 50%; object-fit: cover;
     border: 2px solid var(--neon-blue);
-    box-shadow: 0 0 15px var(--neon-glow);
-    transition: all var(--transition-speed);
+    box-shadow: var(--neon-glow);
+    transform: translateZ(40px); /* 手前に飛び出させる効果 */
+    transition: transform 0.1s;
 }
+[data-theme="light"] .profile-avatar { box-shadow: none; border-color: var(--border-color); }
 
-[data-theme="light"] .profile-img {
-    border: 2px solid var(--border-color);
-    box-shadow: none;
-}
+.profile-name { font-size: 1.7rem; font-weight: 800; margin-top: 15px; transform: translateZ(30px); }
+.profile-tagline { font-size: 0.9rem; color: #777; margin-bottom: 20px; transform: translateZ(20px); }
+.profile-bio { font-size: 0.95rem; line-height: 1.6; margin-bottom: 25px; transform: translateZ(15px); }
 
-/* 名前・キャッチコピー */
-.profile-name {
-    font-size: 1.6rem;
-    font-weight: 800;
-    letter-spacing: 1px;
-    margin-bottom: 2px;
-    transition: all var(--transition-speed);
-}
+.profile-links { display: flex; justify-content: center; gap: 18px; margin-bottom: 25px; transform: translateZ(25px); }
+.link-icon { font-size: 1.4rem; color: #aaa; text-decoration: none; transition: color 0.2s, text-shadow 0.2s; }
+.link-icon:hover { color: var(--neon-blue); }
+:root:not([data-theme="light"]) .link-icon:hover { text-shadow: 0 0 8px var(--neon-blue); }
 
-.profile-tagline {
-    font-size: 0.9rem;
-    color: #777;
-    margin-bottom: 20px;
-}
-
-/* 自己紹介テキスト */
-.profile-bio {
-    font-size: 0.95rem;
-    line-height: 1.6;
-    margin-bottom: 25px;
-    color: var(--text-color);
-}
-
-/* SNSアイコン */
-.profile-social {
-    display: flex;
-    justify-content: center;
-    gap: 18px;
-    margin-bottom: 25px;
-}
-
-.social-icon {
-    font-size: 1.4rem;
-    color: #888;
-    text-decoration: none;
-    transition: all 0.2s;
-}
-
-.social-icon:hover {
-    color: var(--neon-blue);
-    transform: translateY(-3px);
-}
-
-/* バッジ（タグ） */
-.profile-badges {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
+.profile-badges { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; transform: translateZ(20px); }
 .badge {
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 5px 12px;
-    border-radius: 30px;
+    font-size: 0.75rem; font-weight: 600; padding: 6px 14px; border-radius: 30px;
     background-color: rgba(0, 210, 255, 0.05);
-    border: 1px solid rgba(0, 210, 255, 0.3);
+    border: 1px solid rgba(0, 210, 255, 0.25);
     color: var(--neon-blue);
-    transition: all var(--transition-speed);
 }
-
-[data-theme="light"] .badge {
-    background-color: #f0f0f0;
-    border: 1px solid var(--border-color);
-    color: var(--text-color);
-}
+[data-theme="light"] .badge { background-color: var(--hover-color); border: 1px solid var(--border-color); color: var(--text-color); }
