@@ -191,3 +191,9 @@ input:checked + .slider:before {
 .content-body {
     margin-top: 20px;
 }
+
+/*中央寄せ*/
+
+.center-box {
+    text-align: center;
+}
