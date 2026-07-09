@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Sidebar with Dark Mode</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-top">
+            <div class="sidebar-brand">My Website</div>
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="#"><i class="fa-solid fa-house"></i><span>Home</span></a>
+                </li>
+                <li class="nav-item">
+                    <a href="#"><i class="fa-solid fa-user"></i><span>About</span></a>
+                </li>
+                <li class="nav-item">
+                    <a href="#"><i class="fa-solid fa-comments"></i><span>Chat</span></a>
+                </li>
+                <li class="nav-item">
+                    <a href="#"><i class="fa-solid fa-layer-group"></i><span>Lineup</span></a>
+                </li>
+                <li class="nav-item">
+                    <a href="#"><i class="fa-solid fa-wrench"></i><span>Tools</span></a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="theme-switch-container">
+            <span class="switch-label">Dark Mode</span>
+            <label class="switch">
+                <input type="checkbox" id="theme-toggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </nav>
+
+    <main class="main-content" id="main-content">
+        <button class="toggle-btn" id="toggle-btn">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <div class="content-body">
+            <h1>メインコンテンツエリア</h1>
+            <p>デフォルトは清潔感のある白基調（ライトモード）です。</p>
+            <p>左下のスイッチを切り替えると、目に優しいマットブラックのダークモードに切り替わります。</p>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
