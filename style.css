@@ -1,0 +1,193 @@
+/* --- 変数定義（ライトモード・デフォルト） --- */
+:root {
+    --bg-color: #ffffff;
+    --text-color: #333333;
+    --sidebar-bg: #f4f4f4;
+    --sidebar-text: #333333;
+    --hover-color: #e0e0e0;
+    --border-color: #dddddd;
+    --transition-speed: 0.3s;
+}
+
+/* --- ダークモード（マットブラック基調） --- */
+[data-theme="dark"] {
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --sidebar-bg: #1a1a1a;
+    --sidebar-text: #e0e0e0;
+    --hover-color: #2a2a2a;
+    --border-color: #333333;
+}
+
+/* --- リセット & 基本スタイル --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    display: flex;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color var(--transition-speed), color var(--transition-speed);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* --- サイドバーのスタイル --- */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px 15px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: transform var(--transition-speed), background-color var(--transition-speed);
+    z-index: 1000;
+}
+
+/* 閉じた状態のクラス */
+.sidebar.closed {
+    transform: translateX(-250px);
+}
+
+.sidebar-top {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ロゴ・タイトルエリア */
+.sidebar-brand {
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* ナビゲーションメニュー */
+.nav-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.nav-item a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 15px;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.nav-item a:hover {
+    background-color: var(--hover-color);
+}
+
+.nav-item i {
+    font-size: 1.1rem;
+    width: 20px;
+    text-align: center;
+}
+
+/* --- テーマ切り替えスイッチ --- */
+.theme-switch-container {
+    padding: 15px 10px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.switch-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(24px);
+}
+
+/* --- メインコンテンツエリア --- */
+.main-content {
+    flex-grow: 1;
+    padding: 30px;
+    margin-left: 250px;
+    transition: margin-left var(--transition-speed);
+}
+
+/* サイドバーが閉じた時のコンテンツ幅の調整 */
+.main-content.expanded {
+    margin-left: 0;
+}
+
+/* サイドバーを開閉するボタン */
+.toggle-btn {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin-bottom: 20px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+.toggle-btn:hover {
+    background-color: var(--hover-color);
+}
+
+.content-body {
+    margin-top: 20px;
+}
