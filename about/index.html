@@ -3,46 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About - 自己紹介パネル</title>
+    <title>About - 3D Planetarium Panel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="theme-switch-wrapper">
-        <label class="theme-switch" for="checkbox">
-            <input type="checkbox" id="checkbox" />
-            <div class="slider round">
-                <i class="fa-solid fa-sun icon-light"></i>
-                <i class="fa-solid fa-moon icon-dark"></i>
+    <div class="stars-container">
+        <div class="stars"></div>
+        <div class="stars2"></div>
+    </div>
+
+    <div id="sidebar-container"></div>
+
+    <main class="main-content" id="main-content">
+        <button class="toggle-btn" id="toggle-btn">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <div class="content-body wrapper-center">
+            <div class="profile-card-3d" id="profile-card">
+                <div class="profile-header">
+                    <div class="avatar-container">
+                        <img src="https://via.placeholder.com/110" alt="プロフィール画像" class="profile-avatar">
+                    </div>
+                    <h1 class="profile-name">YOUR NAME</h1>
+                    <p class="profile-tagline">@username</p>
+                </div>
+
+                <div class="profile-bio">
+                    <p>プラネタリウム背景と立体的な3Dデザイン。ぼやけたネオンライトが特徴の、進化したguns.lol風自己紹介パネルです。</p>
+                </div>
+
+                <div class="profile-links">
+                    <a href="#" target="_blank" class="link-icon"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#" target="_blank" class="link-icon"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" target="_blank" class="link-icon"><i class="fa-brands fa-discord"></i></a>
+                    <a href="#" target="_blank" class="link-icon"><i class="fa-brands fa-github"></i></a>
+                </div>
+
+                <div class="profile-badges">
+                    <span class="badge">3D Design</span>
+                    <span class="badge">Neon Glow</span>
+                    <span class="badge">Planetarium</span>
+                </div>
             </div>
-        </label>
-    </div>
-
-    <div class="profile-container">
-        <div class="profile-header">
-            <img src="https://via.placeholder.com/110" alt="プロフィール画像" class="profile-img">
-            <h1 class="profile-name">YOUR NAME</h1>
-            <p class="profile-tagline">@username</p>
         </div>
-
-        <div class="profile-bio">
-            <p>ここに自己紹介文を書きます。guns.lol風の洗練されたコンパクトなデザインです。マットブラックと青色ネオンが特徴です。</p>
-        </div>
-
-        <div class="profile-social">
-            <a href="#" target="_blank" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
-            <a href="#" target="_blank" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" target="_blank" class="social-icon"><i class="fa-brands fa-discord"></i></a>
-            <a href="#" target="_blank" class="social-icon"><i class="fa-brands fa-github"></i></a>
-        </div>
-        
-        <div class="profile-badges">
-            <span class="badge">HTML5</span>
-            <span class="badge">CSS3</span>
-            <span class="badge">JavaScript</span>
-        </div>
-    </div>
+    </main>
 
     <script src="script.js"></script>
 </body>
