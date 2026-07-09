@@ -195,5 +195,7 @@ input:checked + .slider:before {
 /*中央寄せ*/
 
 .center-box {
-    text-align: center;
+    text-align: center; /* 中の文字や画像を中央に寄せる */
+    width: 100%;        /* 横幅を画面いっぱいに広げる */
+    display: block;     /* 確実にブロック型の箱として扱う */
 }
