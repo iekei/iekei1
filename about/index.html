@@ -3,51 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About - 自己紹介</title>
+    <title>About - 自己紹介パネル</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="sidebar-container"></div>
-
-    <main class="main-content" id="main-content">
-        <button class="toggle-btn" id="toggle-btn">
-            <i class="fa-solid fa-bars"></i>
-        </button>
-
-        <div class="content-body wrapper-center">
-            
-            <div class="profile-card">
-                <div class="profile-header">
-                    <div class="avatar-container">
-                        <img src="https://via.placeholder.com/120" alt="プロフィール画像" class="profile-avatar">
-                    </div>
-                    <h1 class="profile-name">YOUR NAME</h1>
-                    <p class="profile-tagline">@username</p>
-                </div>
-
-                <div class="profile-bio">
-                    <p>ここに自己紹介文を書きます。guns.lol風の洗練されたコンパクトなデザインです。UIデザインやWeb制作に興味があります。</p>
-                </div>
-
-                <div class="profile-links">
-                    <a href="#" target="_blank" class="link-icon"><i class="fa-brands fa-twitter"></i></a>
-                    <a href="#" target="_blank" class="link-icon"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#" target="_blank" class="link-icon"><i class="fa-brands fa-discord"></i></a>
-                    <a href="#" target="_blank" class="link-icon"><i class="fa-brands fa-github"></i></a>
-                </div>
-
-                <div class="profile-badges">
-                    <span class="badge">HTML5</span>
-                    <span class="badge">CSS3</span>
-                    <span class="badge">JavaScript</span>
-                </div>
+    <div class="theme-switch-wrapper">
+        <label class="theme-switch" for="checkbox">
+            <input type="checkbox" id="checkbox" />
+            <div class="slider round">
+                <i class="fa-solid fa-sun icon-light"></i>
+                <i class="fa-solid fa-moon icon-dark"></i>
             </div>
+        </label>
+    </div>
 
+    <div class="profile-container">
+        <div class="profile-header">
+            <img src="https://via.placeholder.com/110" alt="プロフィール画像" class="profile-img">
+            <h1 class="profile-name">YOUR NAME</h1>
+            <p class="profile-tagline">@username</p>
         </div>
-        </main>
 
-    <script src="../script.js"></script>
+        <div class="profile-bio">
+            <p>ここに自己紹介文を書きます。guns.lol風の洗練されたコンパクトなデザインです。マットブラックと青色ネオンが特徴です。</p>
+        </div>
+
+        <div class="profile-social">
+            <a href="#" target="_blank" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
+            <a href="#" target="_blank" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" target="_blank" class="social-icon"><i class="fa-brands fa-discord"></i></a>
+            <a href="#" target="_blank" class="social-icon"><i class="fa-brands fa-github"></i></a>
+        </div>
+        
+        <div class="profile-badges">
+            <span class="badge">HTML5</span>
+            <span class="badge">CSS3</span>
+            <span class="badge">JavaScript</span>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
