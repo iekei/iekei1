@@ -10,7 +10,32 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../chat/style.css">
-  </head>
+
+    <style>
+      /* サイドバー内の文字を強制的に見える色にする */
+      .sidebar, 
+      .sidebar *, 
+      #sidebar-container, 
+      #sidebar-container * {
+          color: var(--text-color, #333) !important; /* 通常モードの時は濃いグレーや指定の色 */
+          opacity: 1 !important;
+          visibility: visible !important;
+      }
+
+      /* ダークモードの時は文字を白にする */
+      [data-theme="dark"] .sidebar,
+      [data-theme="dark"] .sidebar *,
+      [data-theme="dark"] #sidebar-container,
+      [data-theme="dark"] #sidebar-container * {
+          color: #fff !important;
+      }
+
+      /* 文字（spanタグ）が回り込みなどで消えている場合の保険 */
+      .nav-item span {
+          display: inline-block !important;
+      }
+    </style>
+    </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
 
