@@ -1,0 +1,11 @@
+body {
+  padding-left: 150px;
+  padding-right: 150px;
+  background-color: #0F1A26;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #cececf;
+  font-family: 'Signika Negative', sans-serif;
+}
+
+
