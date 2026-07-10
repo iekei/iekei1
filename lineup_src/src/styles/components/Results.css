@@ -1,0 +1,60 @@
+.Results-Block {
+    margin: 0 0px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+}
+
+.imgBlocks {
+    width: 33%;
+    vertical-align: top;
+    display: inline-block;
+    position: relative;
+    border-radius: 10px;
+    flex: 0 0 32%;
+    margin: 10px 0 30px;
+}
+
+.imgPreviewBlock {
+    width: 100%;
+    vertical-align: top;  
+    display: inline-block;
+    border-radius: 10px;
+    cursor: pointer;
+    aspect-ratio: 16 / 9;
+}
+
+.imgBlocksBottom {
+    background-color: #1F2933;
+    padding: 10px 5px;
+    position: absolute;
+    width: calc(100% - 10px);
+    border-radius: 0 0 10px 10px;
+    bottom: -20px;
+}
+
+.lineup-ability {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background-color: #1F2933;
+    border-radius: 44px;
+    width: 44px;
+    height: 44px;
+    padding: 2px;
+    border: 2px solid black;
+}
+
+.lineup-title {
+    margin-left: 5px;
+}
+
+.bookmark-icon {
+    width: 15px;
+    float: right;
+    margin-right: 5px;
+    cursor: pointer;
+}
