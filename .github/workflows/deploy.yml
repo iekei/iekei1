@@ -1,9 +1,9 @@
-name: Deploy React to Lineup
+name: Deploy React to Lineup Subfolder
 
 on:
   push:
     branches:
-      - main # あなたのメインブランチ名（masterなら master に変更してください）
+      - main
 
 permissions:
   contents: write
@@ -22,33 +22,17 @@ jobs:
 
       - name: Install and Build React
         run: |
-          cd lineup
+          cd lineup_src
           npm install
           npm run build
 
-      - name: Organize Files
+      - name: Deploy to Same Branch (lineup folder)
         run: |
-          # 1. 一時的な退避用フォルダ(temp_out)を作る
-          mkdir temp_out
-          
-          # 2. ビルド成果物（distまたはbuildフォルダの中身）を退避
-          if [ -d "lineup/dist" ]; then
-            mv lineup/dist/* temp_out/
-          else
-            mv lineup/build/* temp_out/
-          fi
-          
-          # 3. 元のReactソースコードが入っていたlineupフォルダを綺麗に消去
           rm -rf lineup
+          mv lineup_src/dist lineup || mv lineup_src/build lineup
           
-          # 4. 退避させておいた「Webで開ける本番ファイル」をlineupフォルダにする
-          mv temp_out lineup
-
-      - name: Deploy to Same Branch
-        run: |
-          # 変更を自分のリポジトリに自動でコミット・プッシュする
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add lineup
-          git commit -m "Actions: Auto-build React directly into lineup folder" || exit 0
+          git commit -m "Actions: Auto-build React to lineup folder" || exit 0
           git push
