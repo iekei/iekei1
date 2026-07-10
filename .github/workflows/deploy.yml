@@ -3,7 +3,7 @@ name: Deploy React to Lineup Subfolder
 on:
   push:
     branches:
-      - main
+      - main # ※お使いのメインブランチ名（masterなら master に変更）
 
 permissions:
   contents: write
@@ -28,9 +28,11 @@ jobs:
 
       - name: Deploy to Same Branch (lineup folder)
         run: |
+          # lineupフォルダ（本番用）を一度削除し、新しくビルドされた成果物を配置する
           rm -rf lineup
           mv lineup_src/dist lineup || mv lineup_src/build lineup
           
+          # 変更を自動でコミット・プッシュ
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add lineup
