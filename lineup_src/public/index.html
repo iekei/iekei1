@@ -1,21 +1,83 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-
+    <meta name="description" content="Valorant Lineups Website" />
     <title>Valorant Lineups</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../chat/style.css">
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+
+    <div id="sidebar-container"></div>
+
+    <main class="main-content" id="main-content">
+      <button class="toggle-btn" id="toggle-btn">
+          <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <div id="root"></div>
+    </main>
+
+    <script>
+      window.addEventListener('DOMContentLoaded', () => {
+          // 1つ上の階層、または適切な場所にある sidebar.html を読み込む
+          // パスはお使いのリポジトリの配置（例: "../sidebar.html" など）に合わせて調整してください
+          fetch('../sidebar.html')
+              .then(response => {
+                  if (!response.ok) {
+                      throw new Error('Sidebarファイルの読み込みに失敗しました');
+                  }
+                  return response.text();
+              })
+              .then(data => {
+                  // 取得したHTMLを流し込む
+                  document.getElementById('sidebar-container').innerHTML = data;
+                  
+                  // サイドバーが読み込まれた「後」に、開閉やテーマ切り替えのイベントをセットする
+                  initSidebarLogic();
+              })
+              .catch(error => console.error(error));
+
+          function initSidebarLogic() {
+              const sidebar = document.getElementById('sidebar');
+              const mainContent = document.getElementById('main-content');
+              const toggleBtn = document.getElementById('toggle-btn');
+              const themeToggle = document.getElementById('theme-toggle');
+
+              // 開閉制御
+              if (toggleBtn && sidebar && mainContent) {
+                  toggleBtn.addEventListener('click', () => {
+                      sidebar.classList.toggle('closed');
+                      mainContent.classList.toggle('expanded');
+                  });
+              }
+
+              // テーマ切り替え
+              const savedTheme = localStorage.getItem('theme') || 'light';
+              if (savedTheme === 'dark') {
+                  document.documentElement.setAttribute('data-theme', 'dark');
+                  if (themeToggle) themeToggle.checked = true;
+              }
+
+              if (themeToggle) {
+                  themeToggle.addEventListener('change', (e) => {
+                      if (e.target.checked) {
+                          document.documentElement.setAttribute('data-theme', 'dark');
+                          localStorage.setItem('theme', 'dark');
+                      } else {
+                          document.documentElement.setAttribute('data-theme', 'light');
+                          localStorage.setItem('theme', 'light');
+                      }
+                  });
+              }
+          }
+      });
+    </script>
   </body>
 </html>
