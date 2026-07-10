@@ -67,6 +67,7 @@
     "static/media/Dark_Cover.webp": "./static/media/Dark_Cover.c9b9008f5316759d9bbd.webp",
     "static/media/Flash_Drive.webp": "./static/media/Flash_Drive.1c9301cc979a1597b4ec.webp",
     "static/media/Owl_Drone.webp": "./static/media/Owl_Drone.358930768cfbc8400774.webp",
+    "index.html": "./index.html",
     "static/media/Blade_Storm.webp": "./static/media/Blade_Storm.82085166bc0514048a23.webp",
     "static/media/Turret.webp": "./static/media/Turret.d2af873a600b5d17c15f.webp",
     "static/media/Seize.webp": "./static/media/Seize.be0db0b5e19b8d5caa72.webp",
@@ -79,7 +80,6 @@
     "static/media/Trailblazer.webp": "./static/media/Trailblazer.003bda6871e470c7a19b.webp",
     "static/media/Tailwind.webp": "./static/media/Tailwind.e6d0a0698df76a21536f.webp",
     "static/media/Guiding_Light.webp": "./static/media/Guiding_Light.0387d3411e7c3590d0b0.webp",
-    "index.html": "./index.html",
     "main.5483d5eb.css.map": "./static/css/main.5483d5eb.css.map",
     "main.87a9393b.js.map": "./static/js/main.87a9393b.js.map"
   },
