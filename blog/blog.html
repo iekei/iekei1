@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Blog Manager</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../chat/style.css"> <link rel="stylesheet" href="blog.css">          </head>
+<body>
+    <div id="sidebar-container"></div>
+
+    <main class="main-content" id="main-content">
+        <button class="toggle-btn" id="toggle-btn">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <div class="blog-wrapper">
+            <section class="editor-section">
+                <h2>ブログ記事作成</h2>
+                
+                <div class="input-group">
+                    <label>GitHubパーソナルアクセストークン:</label>
+                    <input type="password" id="github-token" placeholder="ghp_...">
+                </div>
+
+                <div class="input-group">
+                    <label>記事のタイトル:</label>
+                    <input type="text" id="blog-title" placeholder="今日の出来事など">
+                </div>
+
+                <div class="input-group">
+                    <label>画像を追加:</label>
+                    <input type="file" id="blog-image" accept="image/*">
+                </div>
+
+                <div class="input-group">
+                    <label>本文（テキストやHTML）:</label>
+                    <textarea id="blog-content" rows="12" placeholder="ここに文章を書きます。上のボタンから画像を選ぶと、自動で画像コードが追加されます。"></textarea>
+                </div>
+
+                <button id="publish-btn" class="btn"><i class="fa-solid fa-paper-plane"></i> ブログを公開</button>
+                <div id="status-message"></div>
+            </section>
+
+            <section class="posts-section">
+                <h2>📚 記事一覧</h2>
+                <div id="posts-container">
+                    <p class="loading">記事を読み込み中...</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="blog.js"></script>
+</body>
+</html>
