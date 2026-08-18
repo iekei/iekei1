@@ -1,13 +1,13 @@
 // 1. マップ初期化（無限ループ）
 const map = L.map('map', {
-  center: [52.5, 25.0], // ヨーロッパ・ソ連領域を中心に設定
+  center: [52.5, 25.0],
   zoom: 4,
   minZoom: 3,
   maxZoom: 7,
   worldCopyJump: true
 });
 
-// HOI4風のダーク背景地図
+// HOI4風ダーク背景
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
   attribution: '&copy; OpenStreetMap &copy; CARTO',
   subdomains: 'abcd',
@@ -18,10 +18,9 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
 let selectedCountry = 'SOV';
 let isAddDivisionMode = false;
 
-// 国家ごとの配色（ソ連：赤、ドイツ：黒/ダークグレー、その他：中立色）
 const countryColors = {
-  'SOV': '#a81c1c',
-  'GER': '#262626',
+  'SOV': '#a81c1c', // 赤
+  'GER': '#262626', // 黒
   'NONE': '#3a444d'
 };
 
@@ -31,89 +30,129 @@ const countryNames = {
   'NONE': '中立・未支配'
 };
 
-// 2. 1936年プロヴィンス資源データ（各国家・領域に対応）
-const provinceDataMap = {
-  "SOV": { name: "ソ連本土 (ロシア・ウクライナ)", owner: "SOV", resources: { 石油: 120, 鉄: 180, アルミニウム: 45, クロム: 90 } },
-  "DEU": { name: "ドイツ本土 (ベルリン・ルビジ)", owner: "GER", resources: { 鉄: 140, 石炭: 210, アルミニウム: 30 } },
-  "POL": { name: "ポーランド領 (1936年)", owner: "NONE", resources: { 鉄: 35, 石炭: 50, ゴム: 5 } },
-  "FRA": { name: "フランス領", owner: "NONE", resources: { 鉄: 85, アルミニウム: 40 } },
-  "FIN": { name: "フィンランド領", owner: "NONE", resources: { クロム: 25, 木材: 100 } },
-  "ROU": { name: "ルーマニア領 (プロエシュティ)", owner: "NONE", resources: { 石油: 95, 鉄: 15 } }
-};
+// 2. 地区（プロヴィンス）レベルのデータ定義
+const provinces = [
+  // --- ドイツ主要地区 ---
+  {
+    id: 'prov_berlin',
+    name: 'ベルリン (首都地区)',
+    owner: 'GER',
+    resources: { 鉄: 80, 工場: 12, アルミニウム: 20 },
+    coords: [[52.3, 13.0], [52.7, 13.0], [52.7, 13.8], [52.3, 13.8]]
+  },
+  {
+    id: 'prov_rhine',
+    name: 'ラインラント / ルール工業地帯',
+    owner: 'GER',
+    resources: { 石炭: 250, 鉄: 120, 工場: 20 },
+    coords: [[50.5, 6.5], [51.8, 6.5], [51.8, 8.0], [50.5, 8.0]]
+  },
+  {
+    id: 'prov_bavaria',
+    name: 'バイエルン地区',
+    owner: 'GER',
+    resources: { 鉄: 30, 木材: 50 },
+    coords: [[47.5, 10.0], [49.5, 10.0], [49.5, 13.0], [47.5, 13.0]]
+  },
 
-// 太平洋・バルト海などの海域データ
+  // --- ソ連主要地区 ---
+  {
+    id: 'prov_moscow',
+    name: 'モスクワ地区',
+    owner: 'SOV',
+    resources: { 鉄: 90, 工場: 15, クロム: 30 },
+    coords: [[55.2, 36.5], [56.2, 36.5], [56.2, 38.5], [55.2, 38.5]]
+  },
+  {
+    id: 'prov_stalingrad',
+    name: 'スターリングラード地区',
+    owner: 'SOV',
+    resources: { 石油: 60, 鉄: 75, トラクター工場: 8 },
+    coords: [[48.2, 44.0], [49.2, 44.0], [49.2, 45.2], [48.2, 45.2]]
+  },
+  {
+    id: 'prov_leningrad',
+    name: 'レニングラード地区',
+    owner: 'SOV',
+    resources: { 造船所: 10, 鉄: 50, 木材: 80 },
+    coords: [[59.3, 29.5], [60.3, 29.5], [60.3, 31.0], [59.3, 31.0]]
+  },
+  {
+    id: 'prov_kiev',
+    name: 'キエフ地区 (ウライナ)',
+    owner: 'SOV',
+    resources: { 食料: 200, 鉄: 65, 石炭: 90 },
+    coords: [[50.0, 30.0], [51.0, 30.0], [51.0, 31.5], [50.0, 31.5]]
+  },
+  {
+    id: 'prov_baku',
+    name: 'バクー油田地区',
+    owner: 'SOV',
+    resources: { 石油: 300, クロム: 40 },
+    coords: [[40.0, 49.0], [41.0, 49.0], [41.0, 50.5], [40.0, 50.5]]
+  },
+
+  // --- ポーランド・緩衝地帯 ---
+  {
+    id: 'prov_warsaw',
+    name: 'ワルシャワ地区',
+    owner: 'NONE',
+    resources: { 鉄: 40, 石炭: 60 },
+    coords: [[52.0, 20.5], [52.6, 20.5], [52.6, 21.5], [52.0, 21.5]]
+  }
+];
+
+// 海域データ（太平洋・バルト海など）
 const seaZones = [
   {
     name: 'バルト海域',
     owner: 'GER',
     resources: { 通商路: '極めて重要', 制海権: 'ドイツ優位' },
-    coords: [[54, 14], [60, 14], [60, 30], [54, 20]]
+    coords: [[54.0, 14.0], [60.0, 14.0], [60.0, 28.0], [54.0, 20.0]]
   },
   {
     name: '黒海海域',
     owner: 'SOV',
     resources: { 通商路: '重要', 制海権: 'ソ連優位' },
-    coords: [[41, 28], [47, 28], [47, 42], [41, 42]]
+    coords: [[41.0, 28.0], [46.5, 28.0], [46.5, 41.5], [41.0, 41.5]]
   }
 ];
 
-let geoJsonLayer;
+// 3. 地区（プロヴィンス）ポリゴンの描画
+provinces.forEach(data => {
+  const polygon = L.polygon(data.coords, {
+    color: '#d4af37', // 黄金色の境界線
+    weight: 1.5,
+    fillColor: countryColors[data.owner],
+    fillOpacity: 0.65
+  }).addTo(map);
 
-// 3. 正確な国境線（GeoJSON）の取得とプロヴィンス描画
-fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json')
-  .then(res => res.json())
-  .then(data => {
-    geoJsonLayer = L.geoJSON(data, {
-      style: (feature) => {
-        const id = feature.id;
-        let owner = 'NONE';
-        if (id === 'SOV') owner = 'SOV';
-        else if (id === 'DEU') owner = 'GER';
+  polygon.data = data;
 
-        return {
-          fillColor: countryColors[owner],
-          weight: 1.5,
-          opacity: 1,
-          color: '#556677', // 正確な境界線
-          fillOpacity: 0.6
-        };
-      },
-      onEachFeature: (feature, layer) => {
-        const id = feature.id;
-        let pInfo = provinceDataMap[id] || {
-          name: feature.properties.name,
-          owner: 'NONE',
-          resources: { 資源量: '小規模' }
-        };
+  // ホバー時に「ベルリン」「スターリングラード」などの地区名と資源を表示
+  polygon.bindTooltip(() => {
+    let resHTML = Object.entries(polygon.data.resources)
+      .map(([k, v]) => `<span class="resource-badge">${k}: ${v}</span>`)
+      .join('');
 
-        layer.provinceOwner = pInfo.owner;
+    return `
+      <div>
+        <strong>📌 ${polygon.data.name}</strong><br/>
+        支配国: <b>${countryNames[polygon.data.owner]}</b><br/>
+        <div style="margin-top:4px;">${resHTML}</div>
+      </div>
+    `;
+  }, { className: 'hoi4-tooltip', sticky: true });
 
-        // 全プロヴィンスにマウスカーソルを合わせたら資源量を表示
-        layer.bindTooltip(() => {
-          let resHTML = Object.entries(pInfo.resources)
-            .map(([k, v]) => `<span class="resource-badge">${k}: ${v}</span>`)
-            .join('');
-
-          return `
-            <div>
-              <strong>${pInfo.name}</strong><br/>
-              支配国: <b>${countryNames[layer.provinceOwner]}</b><br/>
-              <div style="margin-top:4px;">${resHTML}</div>
-            </div>
-          `;
-        }, { className: 'hoi4-tooltip', sticky: true });
-
-        // クリックで支配国（ソ連/ドイツ）の塗替え
-        layer.on('click', () => {
-          if (isAddDivisionMode) return;
-          layer.provinceOwner = selectedCountry;
-          layer.setStyle({
-            fillColor: countryColors[selectedCountry]
-          });
-        });
-      }
-    }).addTo(map);
+  // 地区をクリックした際に選択中の国（ソ連/ドイツ）の領土へ切り替え
+  polygon.on('click', () => {
+    if (isAddDivisionMode) return;
+    polygon.data.owner = selectedCountry;
+    polygon.setStyle({
+      fillColor: countryColors[selectedCountry]
+    });
   });
+});
 
 // 海域ポリゴンの描画
 seaZones.forEach(sea => {
@@ -124,7 +163,7 @@ seaZones.forEach(sea => {
     fillOpacity: 0.35
   }).addTo(map);
 
-  polygon.provinceOwner = sea.owner;
+  polygon.data = sea;
 
   polygon.bindTooltip(() => {
     let resHTML = Object.entries(sea.resources)
@@ -133,8 +172,8 @@ seaZones.forEach(sea => {
 
     return `
       <div>
-        <strong>${sea.name}</strong> (海域)<br/>
-        支配権: <b>${countryNames[polygon.provinceOwner]}</b><br/>
+        <strong>🌊 ${sea.name}</strong><br/>
+        支配権: <b>${countryNames[polygon.data.owner]}</b><br/>
         <div style="margin-top:4px;">${resHTML}</div>
       </div>
     `;
@@ -142,7 +181,7 @@ seaZones.forEach(sea => {
 
   polygon.on('click', () => {
     if (isAddDivisionMode) return;
-    polygon.provinceOwner = selectedCountry;
+    polygon.data.owner = selectedCountry;
     polygon.setStyle({
       fillColor: countryColors[selectedCountry]
     });
@@ -150,8 +189,6 @@ seaZones.forEach(sea => {
 });
 
 // 4. 山脈・川へのアイコン配置および地形・突破予測ライン
-
-// アイコン付与ヘルパー関数
 function addTerrainIcon(latlng, iconSymbol, tooltipText) {
   const icon = L.divIcon({
     className: 'terrain-icon-marker',
@@ -162,23 +199,20 @@ function addTerrainIcon(latlng, iconSymbol, tooltipText) {
   marker.bindTooltip(tooltipText, { className: 'hoi4-tooltip', sticky: true });
 }
 
-// 山脈 (ウラル山脈 & カルパティア山脈)
-const uralMountains = L.polyline([[65, 59], [58, 59], [52, 57]], { color: '#e67e22', weight: 4, dashArray: '6, 6' }).addTo(map);
-addTerrainIcon([58, 59], '⛰️', 'ウラル山脈 (自然の要塞・極めて高い突破コスト)');
+// 山脈
+L.polyline([[65, 59], [58, 59], [52, 57]], { color: '#e67e22', weight: 4, dashArray: '6, 6' }).addTo(map);
+addTerrainIcon([58, 59], '⛰️', 'ウラル山脈 (自然の要塞・高防衛補正)');
 
-const carpathians = L.polyline([[49, 19], [47, 25], [45, 26]], { color: '#e67e22', weight: 4, dashArray: '6, 6' }).addTo(map);
-addTerrainIcon([47, 23], '⛰️', 'カルパティア山脈 (防衛ライン)');
+// 川
+L.polyline([[54, 30], [50, 30], [47, 33]], { color: '#2ecc71', weight: 3 }).addTo(map);
+addTerrainIcon([50, 30], '🌊', 'ドニエプル川 (主要渡河ライン)');
 
-// 川 (ドニエプル川 & ヴォルガ川)
-const dneiperRiver = L.polyline([[54, 30], [50, 30], [47, 33]], { color: '#2ecc71', weight: 3 }).addTo(map);
-addTerrainIcon([50, 30], '🌊', 'ドニエプル川 (主要渡河ライン・渡河ペナルティ)');
+L.polyline([[49.0, 44.5], [48.0, 44.8]], { color: '#2ecc71', weight: 4 }).addTo(map);
+addTerrainIcon([48.7, 44.5], '🌊', 'ヴォルガ川 (スターリングラード防衛線)');
 
-const volgaRiver = L.polyline([[57, 32], [55, 49], [48, 44]], { color: '#2ecc71', weight: 3 }).addTo(map);
-addTerrainIcon([53, 45], '🌊', 'ヴォルガ川 (最終防衛線)');
-
-// 電撃戦突破予測ルート (赤破線矢印)
-const barbarossaRoute = L.polyline([[52, 21], [53, 27], [55, 37]], { color: '#e74c3c', weight: 4, dashArray: '8, 8' }).addTo(map);
-barbarossaRoute.bindTooltip("⚡ バルバロッサ作戦: モスクワ中央突破予測ルート", { className: 'hoi4-tooltip', sticky: true });
+// 電撃戦突破予測ルート (ベルリン ➡ スターリングラード / モスクワ)
+const attackRoute = L.polyline([[52.5, 13.4], [52.3, 21.0], [55.7, 37.6]], { color: '#e74c3c', weight: 4, dashArray: '8, 8' }).addTo(map);
+attackRoute.bindTooltip("⚡ 東部戦線攻勢ルート (ベルリン ➡ モスクワ)", { className: 'hoi4-tooltip', sticky: true });
 
 
 // 5. 師団（ヘルメット）配置機能
@@ -203,8 +237,9 @@ function addDivision(latlng, country) {
   });
 }
 
-// 1936年初期配置
+// 主要地区への初期配置
 addDivision([55.7, 37.6], 'SOV'); // モスクワ
+addDivision([48.7, 44.5], 'SOV'); // スターリングラード
 addDivision([52.5, 13.4], 'GER'); // ベルリン
 
 map.on('click', function(e) {
@@ -214,7 +249,7 @@ map.on('click', function(e) {
   }
 });
 
-// 6. UI制御ハンドラ
+// 6. UI制御
 function selectCountry(country) {
   selectedCountry = country;
   document.querySelectorAll('.country-btn').forEach(btn => btn.classList.remove('active'));
