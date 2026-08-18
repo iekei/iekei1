@@ -81,7 +81,6 @@ function completeActiveFocus() {
   const completedNf = activeFocus;
   completedFocuses.add(completedNf.id);
 
-  // 相互排他（片方を選択したらもう片方をロックする処理）
   if (completedNf.mutually_exclusive) {
     const targets = Array.isArray(completedNf.mutually_exclusive) 
       ? completedNf.mutually_exclusive 
@@ -159,12 +158,11 @@ container.addEventListener('wheel', (e) => {
 });
 
 // ==========================================
-// 4. HOI4風 枝分かれ描画 & 排他分岐レンダリング
+// 4. 本家HOI4風：大元親からの幹・枝描画システム
 // ==========================================
 function isUnlocked(nf) {
   if (lockedFocuses.has(nf.id)) return false;
   if (!nf.prerequisites || nf.prerequisites.length === 0) return true;
-  // 前提NFのいずれか、または全て達成しているか確認
   return nf.prerequisites.every(parentId => completedFocuses.has(parentId));
 }
 
@@ -227,7 +225,7 @@ function renderTree() {
     nodesContainer.appendChild(node);
   });
 
-  // 2. HOI4本家風：1つの親から分岐する「木の枝」配線を描画
+  // 2. 親ごとにグループ化してHOI4風の広範な「横幹線＋下分岐」を描画
   const parentGroups = {};
 
   allFocuses.forEach(nf => {
@@ -239,36 +237,48 @@ function renderTree() {
     }
   });
 
-  // 各親ノードからの分岐を一括処理
   Object.keys(parentGroups).forEach(parentId => {
     const parent = focusMap[parentId];
     if (!parent) return;
 
     const children = parentGroups[parentId];
-    const parentX = parent.x + 55; // カードの中央
-    const parentY = parent.y + 75; // カードの底部
+    const parentX = parent.x + 55; // ノード中央
+    const parentY = parent.y + 75; // ノード底面
     const isParentDone = completedFocuses.has(parentId);
 
     if (children.length === 1) {
-      // 1対1の直角接続
+      // 直下または単一の接続
       const child = children[0];
-      drawOrthogonalLine(parentX, parentY, child.x + 55, child.y, svgLines, isParentDone);
-    } else {
-      // 1対多の「T字・木の枝」配線
-      const childMinX = Math.min(...children.map(c => c.x + 55));
-      const childMaxX = Math.max(...children.map(c => c.x + 55));
-      const minChildY = Math.min(...children.map(c => c.y));
-      const branchY = parentY + (minChildY - parentY) / 2; // 中間高さ
+      const childX = child.x + 55;
+      const childY = child.y;
 
-      // ① 親からの垂直なメイン幹
+      if (parentX === childX) {
+        drawDirectLine(parentX, parentY, childX, childY, svgLines, isParentDone);
+      } else {
+        const midY = parentY + (childY - parentY) / 2;
+        drawDirectLine(parentX, parentY, parentX, midY, svgLines, isParentDone);
+        drawDirectLine(parentX, midY, childX, midY, svgLines, isParentDone);
+        drawDirectLine(childX, midY, childX, childY, svgLines, isParentDone);
+      }
+    } else {
+      // 本家HOI4スタイル：大元から左右に一気に広がる横幹線
+      const childXs = children.map(c => c.x + 55);
+      const minChildX = Math.min(...childXs);
+      const maxChildX = Math.max(...childXs);
+      const minChildY = Math.min(...children.map(c => c.y));
+      
+      // 親のすぐ下で横幹線を引く高さ（中間地点）
+      const branchY = parentY + Math.max(20, (minChildY - parentY) / 2);
+
+      // ① 親ノードから縦の幹を下ろす
       drawDirectLine(parentX, parentY, parentX, branchY, svgLines, isParentDone);
 
-      // ② 左右へ広がる水平な枝
-      const hMinX = Math.min(parentX, childMinX);
-      const hMaxX = Math.max(parentX, childMaxX);
-      drawDirectLine(hMinX, branchY, hMaxX, branchY, svgLines, isParentDone);
+      // ② 最左から最右（または親のX座標を含む）まで一本の横幹線を引く
+      const mainLineLeft = Math.min(parentX, minChildX);
+      const mainLineRight = Math.max(parentX, maxChildX);
+      drawDirectLine(mainLineLeft, branchY, mainLineRight, branchY, svgLines, isParentDone);
 
-      // ③ 水平枝から各子ノードへの垂直線
+      // ③ 横幹線から各子ノードへ垂れ下げる
       children.forEach(child => {
         const childX = child.x + 55;
         drawDirectLine(childX, branchY, childX, child.y, svgLines, isParentDone);
@@ -276,13 +286,13 @@ function renderTree() {
     }
   });
 
-  // 3. 相互排他マーク（赤破線＆両矢印）の描画
+  // 3. 排他選択（相互ロック）の赤破線描画
   allFocuses.forEach(nf => {
     if (nf.mutually_exclusive) {
       const targets = Array.isArray(nf.mutually_exclusive) ? nf.mutually_exclusive : [nf.mutually_exclusive];
       targets.forEach(targetId => {
         const targetNf = focusMap[targetId];
-        if (targetNf && nf.id < targetId) { // 重複描画防止
+        if (targetNf && nf.id < targetId) {
           drawExclusiveLine(nf.x + 55, nf.y + 37, targetNf.x + 55, targetNf.y + 37, svgLines);
         }
       });
@@ -290,7 +300,7 @@ function renderTree() {
   });
 }
 
-// 直線描画ヘルパー
+// 直線描画関数
 function drawDirectLine(x1, y1, x2, y2, svg, isActive) {
   const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
   line.setAttribute('x1', x1);
@@ -301,20 +311,7 @@ function drawDirectLine(x1, y1, x2, y2, svg, isActive) {
   svg.appendChild(line);
 }
 
-// クランク型直角線描画
-function drawOrthogonalLine(x1, y1, x2, y2, svg, isActive) {
-  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  const midY = y1 + (y2 - y1) / 2;
-  const d = (x1 === x2)
-    ? `M ${x1} ${y1} L ${x2} ${y2}`
-    : `M ${x1} ${y1} L ${x1} ${midY} L ${x2} ${midY} L ${x2} ${y2}`;
-
-  path.setAttribute('d', d);
-  path.setAttribute('class', isActive ? 'nf-line active' : 'nf-line');
-  svg.appendChild(path);
-}
-
-// 排他接続線（赤い点線）
+// 排他線（赤点線）
 function drawExclusiveLine(x1, y1, x2, y2, svg) {
   const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
   line.setAttribute('x1', x1);
@@ -375,7 +372,7 @@ function hideTooltip() {
 }
 
 // ==========================================
-// 5. 初期化 & バッチファイルの複数読み込み処理
+// 5. 初期化 & バッチ複数ロード処理
 // ==========================================
 document.getElementById('btn-pause').addEventListener('click', () => setGameSpeed(0));
 document.querySelectorAll('.speed-btn[data-speed]').forEach(btn => {
@@ -385,10 +382,9 @@ document.querySelectorAll('.speed-btn[data-speed]').forEach(btn => {
   });
 });
 
-// 今後 batch2 や batch3 を追加する場合はこの配列に追加します
 const batchFiles = [
   './data/nf_batch1.json',
-  './data/nf_batch2.json' // トロツキー版などを追加可能（存在しなくても自動スキップ）
+  './data/nf_batch2.json'
 ];
 
 async function loadAllBatches() {
@@ -399,11 +395,8 @@ async function loadAllBatches() {
       if (res.ok) {
         const json = await res.json();
         loadedData = loadedData.concat(json);
-        console.log(`[Loaded] ${path}`);
       }
-    } catch (e) {
-      // ファイルが存在しない場合はスルー
-    }
+    } catch (e) {}
   }
   return loadedData;
 }
@@ -414,11 +407,11 @@ async function init() {
   if (data.length > 0) {
     allFocuses = data;
   } else {
-    // データがない場合のフォールバック（動作テスト用）
+    // データ未読み込み時のサンプル
     allFocuses = [
-      { id: "SOV_center", title: "党中央の再編", x: 600, y: 50, cost: 70, effect: "政治力 +50" },
-      { id: "SOV_stalin", title: "スターリン派の強固化", x: 400, y: 180, cost: 70, prerequisites: ["SOV_center"], mutually_exclusive: ["SOV_trotsky"], effect: "安定度 +10" },
-      { id: "SOV_trotsky", title: "トロツキーの帰還", x: 800, y: 180, cost: 70, prerequisites: ["SOV_center"], mutually_exclusive: ["SOV_stalin"], effect: "戦争協力度 +15" }
+      { id: "SOV_1936", title: "1936年5月5日計画", x: 1000, y: 50, cost: 70, effect: "政治力 +50" },
+      { id: "SOV_stalin", title: "スターリン主義の確立", x: 600, y: 180, cost: 70, prerequisites: ["SOV_1936"], mutually_exclusive: ["SOV_trotsky"], effect: "安定度 +10" },
+      { id: "SOV_trotsky", title: "左翼反対派の招集", x: 1400, y: 180, cost: 70, prerequisites: ["SOV_1936"], mutually_exclusive: ["SOV_stalin"], effect: "戦争協力度 +15" }
     ];
   }
   
