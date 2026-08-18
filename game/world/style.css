@@ -24,7 +24,6 @@ body, html {
   height: 100vh;
 }
 
-/* サイドバー UI */
 #sidebar {
   width: 320px;
   height: 100%;
@@ -39,7 +38,7 @@ body, html {
 .panel-header {
   background: #151a1e;
   padding: 15px;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: bold;
   color: var(--hoi4-accent);
   border-bottom: 1px solid var(--hoi4-border);
@@ -112,12 +111,19 @@ body, html {
 
 .legend-list {
   font-size: 12px;
-  padding-left: 20px;
+  padding-left: 10px;
+  list-style: none;
   color: #ccc;
   margin-top: 5px;
 }
 
-/* マップ領域 */
+.legend-list li {
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 #map {
   flex: 1;
   height: 100%;
@@ -144,7 +150,7 @@ body, html {
   font-size: 11px;
 }
 
-/* カスタムマーカー（師団ヘルメット） */
+/* 師団マーカー */
 .helmet-marker {
   background: #2c3e50;
   border: 2px solid var(--hoi4-accent);
@@ -154,4 +160,12 @@ body, html {
   line-height: 28px;
   font-size: 16px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+}
+
+/* 地形アイコンマーカー */
+.terrain-icon-marker {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  text-align: center;
 }
