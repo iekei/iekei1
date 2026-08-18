@@ -151,3 +151,48 @@ path.nf-line {
 #tooltip-time { color: #8899a6; margin-bottom: 6px; font-size: 10px; }
 #nf-tooltip hr { border: 0; border-top: 1px solid #334455; margin: 6px 0; }
 #tooltip-effect { color: #55ff55; line-height: 1.4; white-space: pre-wrap; }
+
+/* ノード状態別スタイリング */
+.focus-node.locked {
+  opacity: 0.5;
+  filter: grayscale(0.8);
+  border-color: #333d47;
+  cursor: not-allowed;
+}
+
+.focus-node.available {
+  border-color: #4a86e8;
+  animation: pulse-border 2s infinite;
+}
+
+@keyframes pulse-border {
+  0% { box-shadow: 0 0 4px rgba(74, 134, 232, 0.4); }
+  50% { box-shadow: 0 0 12px rgba(74, 134, 232, 0.8); }
+  100% { box-shadow: 0 0 4px rgba(74, 134, 232, 0.4); }
+}
+
+.focus-node.completed {
+  opacity: 1;
+  filter: none;
+  border-color: #00ffcc !important;
+  background: linear-gradient(180deg, #183e38 0%, #0a201c 100%) !important;
+  box-shadow: 0 0 12px rgba(0, 255, 204, 0.5);
+}
+
+.focus-node.completed .focus-symbol {
+  border-color: #00ffcc;
+  background: radial-gradient(circle, #255850 0%, #0d2823 100%);
+}
+
+/* 接続線の状態 */
+path.nf-line {
+  fill: none;
+  stroke: #3a4856;
+  stroke-width: 2.5;
+  transition: stroke 0.4s;
+}
+
+path.nf-line.active {
+  stroke: #00ffcc;
+  stroke-width: 3;
+}
