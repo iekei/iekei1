@@ -196,3 +196,192 @@ path.nf-line.active {
   stroke: #00ffcc;
   stroke-width: 3;
 }
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+body {
+  background-color: #0e1217;
+  color: #e1e6eb;
+  font-family: 'Segoe UI', sans-serif;
+  overflow: hidden;
+}
+
+/* トップバー & 速度コントロール */
+#top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #161c24;
+  padding: 8px 20px;
+  border-bottom: 2px solid #2a3545;
+  height: 50px;
+}
+
+.stats-group {
+  display: flex;
+  gap: 20px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.time-control-group {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+#calendar-display {
+  font-family: monospace;
+  font-size: 16px;
+  background: #090c10;
+  padding: 4px 10px;
+  border: 1px solid #3b485a;
+  border-radius: 4px;
+  color: #00ffcc;
+}
+
+.speed-buttons {
+  display: flex;
+  gap: 2px;
+}
+
+.speed-btn {
+  background: #212b36;
+  border: 1px solid #3b485a;
+  color: #fff;
+  padding: 4px 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.speed-btn.active {
+  background: #00ffcc;
+  color: #000;
+  font-weight: bold;
+}
+
+/* ログ表示エリア */
+#log-banner {
+  background: #090c10;
+  padding: 6px 20px;
+  font-size: 13px;
+  border-bottom: 1px solid #2a3545;
+  color: #ffcc00;
+  height: 30px;
+}
+
+/* ツリー表示エリア (ドラッグ＆ズーム領域) */
+#tree-container {
+  width: 100vw;
+  height: calc(100vh - 80px);
+  cursor: grab;
+  position: relative;
+  overflow: hidden;
+}
+
+#tree-viewport {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  width: 3000px;
+  height: 3000px;
+}
+
+#svg-lines {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* NFノードカード */
+.focus-node {
+  position: absolute;
+  width: 110px;
+  height: 75px;
+  background: #1c2531;
+  border: 2px solid #3b485a;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 4px;
+  text-align: center;
+}
+
+.focus-symbol { font-size: 18px; }
+.focus-title { font-size: 11px; font-weight: bold; margin-top: 2px; }
+.focus-cost, .focus-progress { font-size: 10px; color: #8a99ad; }
+
+/* 達成済み (チェックマーク付き) */
+.focus-node.completed {
+  border-color: #00ffcc;
+  background: #0f2d27;
+}
+
+.check-mark {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #00ffcc;
+  color: #000;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 8px rgba(0,255,204,0.8);
+}
+
+/* 進行中 (点滅アニメーション) */
+.focus-node.in-progress {
+  border-color: #ffcc00;
+  animation: focus-pulse 1.2s infinite alternate;
+}
+
+.focus-node.in-progress .focus-progress {
+  color: #ffcc00;
+  font-weight: bold;
+}
+
+@keyframes focus-pulse {
+  0% { box-shadow: 0 0 4px #ffcc00; }
+  100% { box-shadow: 0 0 15px #ffcc00; }
+}
+
+/* ロック中 & 排他遮断 */
+.focus-node.locked { opacity: 0.4; filter: grayscale(1); cursor: not-allowed; }
+.focus-node.mutually-blocked::after {
+  content: "✖";
+  position: absolute;
+  color: #ff4d4d;
+  font-size: 36px;
+}
+
+/* SVGライン */
+path.nf-line { fill: none; stroke: #3a4856; stroke-width: 2.5; }
+path.nf-line.active { stroke: #00ffcc; stroke-width: 3; }
+
+/* ツールチップ */
+#nf-tooltip {
+  position: fixed;
+  background: rgba(10, 15, 20, 0.95);
+  border: 1px solid #00ffcc;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 1000;
+}
+.hidden { display: none; }
