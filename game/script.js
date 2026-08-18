@@ -1,35 +1,54 @@
-// 読み込みたいファイルの一覧（ここで50個ごとのファイルを指定）
+// 読み込むJSONバッチファイルのリスト
 const batchFiles = [
-  'data/nf_batch1.json',
-  'data/nf_batch2.json',
-  'data/nf_batch3.json'
+  './data/nf_batch1.json'
 ];
 
 let allFocuses = [];
 const focusMap = {};
 
-// すべてのNFデータを取得して統合する関数
 async function loadAllFocusTrees() {
+  const nodesContainer = document.getElementById('focus-nodes');
+  
   try {
-    const promises = batchFiles.map(file => fetch(file).then(res => res.json()));
+    // 複数JSONファイルの並行取得
+    const promises = batchFiles.map(file => 
+      fetch(file).then(res => {
+        if (!res.ok) {
+          throw new Error(`ファイルが見つかりません: ${file} (Status: ${res.status})`);
+        }
+        return res.json();
+      })
+    );
+
     const results = await Promise.all(promises);
     
-    // 全バッチのデータを一つの配列に結合
+    // データを統合
     allFocuses = results.flat();
 
-    // Map化して高速アクセスを可能にする
+    if (allFocuses.length === 0) {
+      nodesContainer.innerHTML = '<p style="color:red; padding:20px;">データが空です。</p>';
+      return;
+    }
+
     allFocuses.forEach(nf => {
       focusMap[nf.id] = nf;
     });
 
-    // 描画実行
     renderTree();
+
   } catch (error) {
-    console.error("NFデータの読み込みに失敗しました:", error);
+    console.error("NFデータの読み込みエラー:", error);
+    // 画面にエラー理由を表示して「真っ暗」を防ぐ
+    nodesContainer.innerHTML = `
+      <div style="color: #ff6b6b; padding: 40px; font-family: monospace;">
+        <h2>エラーが発生しました</h2>
+        <p>${error.message}</p>
+        <p>※ './data/nf_batch1.json' のパスやファイル名が正しいか確認してください。</p>
+      </div>
+    `;
   }
 }
 
-// NFノードと前提条件の接続線を描画
 function renderTree() {
   const nodesContainer = document.getElementById('focus-nodes');
   const svgLines = document.getElementById('svg-lines');
@@ -37,7 +56,7 @@ function renderTree() {
   nodesContainer.innerHTML = '';
   svgLines.innerHTML = '';
 
-  // 1. ノードの描画
+  // 1. ノードを描画
   allFocuses.forEach(nf => {
     const node = document.createElement('div');
     node.className = 'focus-node';
@@ -45,28 +64,35 @@ function renderTree() {
     node.style.left = `${nf.x}px`;
     node.style.top = `${nf.y}px`;
 
+    // 簡略版アイコン表示（画像フォールバック付き）
+    const shortText = nf.id.replace('sov_', '').slice(0, 4).toUpperCase();
+
     node.innerHTML = `
-      <img src="${nf.icon}" alt="${nf.title}">
+      <div class="focus-icon-box">${shortText}</div>
       <div class="focus-title">${nf.title}</div>
     `;
 
     nodesContainer.appendChild(node);
   });
 
-  // 2. 接続線 (Prerequisites) の描画
+  // 2. 接続線を描画
   allFocuses.forEach(nf => {
     if (nf.prerequisites && nf.prerequisites.length > 0) {
       nf.prerequisites.forEach(parentId => {
         const parent = focusMap[parentId];
         if (parent) {
-          drawLine(parent.x + 60, parent.y + 70, nf.x + 60, nf.y, svgLines);
+          // 親ノードの下中央から、子ノードの上中央へ線を引く
+          drawLine(
+            parent.x + 65, parent.y + 80,
+            nf.x + 65, nf.y,
+            svgLines
+          );
         }
       });
     }
   });
 }
 
-// SVG直線を描画するヘルパー
 function drawLine(x1, y1, x2, y2, svg) {
   const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
   line.setAttribute('x1', x1);
@@ -76,5 +102,5 @@ function drawLine(x1, y1, x2, y2, svg) {
   svg.appendChild(line);
 }
 
-// 初期化実行
+// 実行
 loadAllFocusTrees();
