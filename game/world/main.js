@@ -1,14 +1,18 @@
 // 1. マップ初期化
 const map = L.map('map', {
-  center: [52.5, 25.0],
-  zoom: 4,
+  center: [35.0, 30.0],
+  zoom: 3,
   minZoom: 2,
   maxZoom: 10,
   worldCopyJump: true
 });
 
 // 暗色系マップタイル（CartoDB Dark Matter）
-L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 19 }).addTo(map);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+  subdomains: 'abcd',
+  maxZoom: 19
+}).addTo(map);
 
 // 状態管理
 window.selectedCountry = 'SOV'; // 'SOV' | 'GER'
@@ -19,7 +23,7 @@ const countryStyles = {
   'SOV': {
     fillColor: '#e74c3c', // ソ連：赤色
     fillOpacity: 0.6,
-    color: '#ffffff',     // 白い境界線（地区の目を際立たせる）
+    color: '#ffffff',     // 白い境界線
     weight: 1.0
   },
   'GER': {
@@ -31,7 +35,7 @@ const countryStyles = {
   'NONE': {
     fillColor: '#34495e',
     fillOpacity: 0.25,
-    color: '#7f8c8d',     // 未支配・中立：グレー境界線
+    color: '#7f8c8d',     // 中立・未支配地域：グレー境界線
     weight: 0.8
   }
 };
@@ -39,10 +43,10 @@ const countryStyles = {
 const countryNames = {
   'SOV': 'ソビエト連邦',
   'GER': 'ナチス・ドイツ',
-  'NONE': '中立・未支配'
+  'NONE': '中立・未支配地域'
 };
 
-// 仮想リソース生成関数（プロヴィンス用）
+// 資源生成関数
 function generateRandomResources() {
   const types = ['鉄', '石油', '石炭', '軍需工場', '木材', 'クロム', 'アルミニウム'];
   const res = {};
@@ -54,17 +58,16 @@ function generateRandomResources() {
   return res;
 }
 
-// 初期所有国の推定設定（ISO国コードベース）
-function getInitialOwner(isoCode) {
+// 全世界対応の初期所有国判定（ISOコードベース）
+function getInitialOwner(isoCode, adm0) {
   const gerList = ['DEU', 'AUT', 'CZE', 'POL'];
-  const sovList = ['RUS', 'UKR', 'BLR', 'MDA', 'EST', 'LVA', 'LTU', 'GEO', 'ARM', 'AZE', 'KAZ'];
+  const sovList = ['RUS', 'UKR', 'BLR', 'MDA', 'EST', 'LVA', 'LTU', 'GEO', 'ARM', 'AZE', 'KAZ', 'TJK', 'TKM', 'UZB', 'KGZ'];
   
-  if (gerList.includes(isoCode)) return 'GER';
-  if (sovList.includes(isoCode)) return 'SOV';
+  if (gerList.includes(isoCode) || gerList.includes(adm0)) return 'GER';
+  if (sovList.includes(isoCode) || sovList.includes(adm0)) return 'SOV';
   return 'NONE';
 }
 
-// ツールチップ文字列生成
 function getTooltipHTML(name, owner, resources) {
   const resHTML = Object.entries(resources)
     .map(([k, v]) => `<span class="resource-badge">${k}: ${v}</span>`)
@@ -79,15 +82,15 @@ function getTooltipHTML(name, owner, resources) {
   `;
 }
 
-// 2. 州・都道府県レベル（Admin-1）のGeoJSONデータを取得して細分化プロヴィンス化
-// Natural Earth の Admin-1（州・県・地方レベルの境界線データ）
+// 2. 全世界の州・県・プロヴィンスデータを読み込み
 fetch('https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_1_states_provinces.geojson')
   .then(response => response.json())
   .then(data => {
     L.geoJSON(data, {
       style: function(feature) {
-        const countryCode = feature.properties.iso_a2 || feature.properties.adm0_a3;
-        const owner = getInitialOwner(countryCode);
+        const iso = feature.properties.iso_a2 || '';
+        const adm0 = feature.properties.adm0_a3 || '';
+        const owner = getInitialOwner(iso, adm0);
         const style = countryStyles[owner] || countryStyles['NONE'];
         return {
           fillColor: style.fillColor,
@@ -97,34 +100,36 @@ fetch('https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geo
         };
       },
       onEachFeature: function(feature, layer) {
-        // 州・県・都市の名称（日本語表記があれば優先、なければ英語）
         const provName = feature.properties.name_ja || feature.properties.name || '未知の地区';
-        const countryCode = feature.properties.iso_a2 || feature.properties.adm0_a3;
-        const initialOwner = getInitialOwner(countryCode);
+        const iso = feature.properties.iso_a2 || '';
+        const adm0 = feature.properties.adm0_a3 || '';
+        const initialOwner = getInitialOwner(iso, adm0);
         const resources = generateRandomResources();
 
-        // レイヤーにプロヴィンス情報を保持
         layer.provData = {
           name: provName,
           owner: initialOwner,
           resources: resources
         };
 
-        // ツールチップ追加（マウスオーバーで地区名と資源を表示）
         layer.bindTooltip(() => getTooltipHTML(layer.provData.name, layer.provData.owner, layer.provData.resources), {
           className: 'hoi4-tooltip',
           sticky: true
         });
 
-        // 📌 クリックした地区（ベルリン、スターリングラード、各都道府県など）のみを塗り替え
+        // 📌 クリックイベントの競合解消
         layer.on('click', function(e) {
-          L.DomEvent.stopPropagation(e);
-          if (window.isAddDivisionMode) return;
+          L.DomEvent.stopPropagation(e); // イベント伝播を停止
 
-          // 支配国を更新
+          // 師団配備モードがONのときは、クリックしたプロヴィンスの場所に師団を置く
+          if (window.isAddDivisionMode) {
+            addDivision(e.latlng, window.selectedCountry);
+            toggleAddDivisionMode();
+            return;
+          }
+
+          // 通常時は選択中の国家の領土（赤 or 黒）に変更
           layer.provData.owner = window.selectedCountry;
-
-          // クリックされたポリゴンの色を切り替え（ソ連＝赤 / ドイツ＝黒）
           const newStyle = countryStyles[window.selectedCountry];
           layer.setStyle({
             fillColor: newStyle.fillColor,
@@ -132,18 +137,36 @@ fetch('https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geo
             color: newStyle.color,
             weight: newStyle.weight
           });
-
-          // ツールチップ表示を更新
           layer.setTooltipContent(getTooltipHTML(layer.provData.name, layer.provData.owner, layer.provData.resources));
         });
       }
     }).addTo(map);
   })
   .catch(err => {
-    console.error('細分化プロヴィンスデータの読み込みに失敗しました:', err);
+    console.error('全世界プロヴィンスデータの読み込みに失敗しました:', err);
   });
 
-// 3. 主要拠点の固定アイコン（要塞・河川）
+// 3. マップ上に主要国の日本語ラベルを配置
+function addCountryLabel(latlng, text) {
+  const labelIcon = L.divIcon({
+    className: 'country-name-label',
+    html: `<div style="color: #ffffff; font-weight: bold; font-size: 13px; text-shadow: 1px 1px 3px #000, -1px -1px 3px #000; pointer-events: none; white-space: nowrap;">${text}</div>`,
+    iconSize: [100, 20],
+    iconAnchor: [50, 10]
+  });
+  L.marker(latlng, { icon: labelIcon, interactive: false }).addTo(map);
+}
+
+// 主要国の日本語国名ラベル
+addCountryLabel([55.7, 37.6], '🇷🇺 ソビエト連邦');
+addCountryLabel([52.5, 13.4], '🇩🇪 ドイツ国');
+addCountryLabel([36.2, 138.2], '🇯🇵 日本');
+addCountryLabel([38.0, -95.0], '🇺🇸 アメリカ合衆国');
+addCountryLabel([51.5, -0.1], '🇬🇧 イギリス');
+addCountryLabel([46.6, 2.2], '🇫🇷 フランス');
+addCountryLabel([35.8, 104.1], '🇨🇳 中国');
+
+// 山脈・要塞アイコン
 function addTerrainIcon(latlng, iconSymbol, tooltipText) {
   const icon = L.divIcon({
     className: 'terrain-icon-marker',
@@ -185,6 +208,7 @@ addDivision([55.7, 37.6], 'SOV');
 addDivision([48.7, 44.5], 'SOV');
 addDivision([52.5, 13.4], 'GER');
 
+// マップ自体のクリック（海域やポリゴンの隙間用）
 map.on('click', function (e) {
   if (window.isAddDivisionMode) {
     addDivision(e.latlng, window.selectedCountry);
