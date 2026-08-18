@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HoI4 USSR Full NF Tree Terminal</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+    :root {
+      --bg-dark: #070a08;
+      --panel-bg: #101712;
+      --panel-border: #1e2e22;
+      --hoi-gold: #d4af37;
+      --hoi-green: #388e3c;
+      --hoi-red: #d32f2f;
+      --hoi-blue: #1976d2;
+      --hoi-text: #c8e6c9;
+      --text-dim: #66bb6a;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Share Tech Mono', monospace;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--hoi-text);
+      margin: 0;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* トップダッシュボード */
+    .dashboard {
+      width: 100%;
+      max-width: 1200px;
+      background: var(--panel-bg);
+      border: 2px solid var(--panel-border);
+      padding: 10px 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 0 15px rgba(0,0,0,0.9);
+      margin-bottom: 10px;
+    }
+
+    .top-stat {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-size: 1.1rem;
+    }
+
+    .stat-badge {
+      background: #000;
+      border: 1px solid var(--panel-border);
+      padding: 4px 8px;
+      color: var(--hoi-gold);
+    }
+
+    /* ステータスバー (100 Max) */
+    .status-bar-container {
+      width: 100%;
+      max-width: 1200px;
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      padding: 8px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .stat-box {
+      background: #050806;
+      border: 1px solid var(--panel-border);
+      padding: 4px 8px;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 2px;
+    }
+
+    .progress-bar {
+      height: 6px;
+      background: #141f16;
+      border: 1px solid #1e2e22;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--hoi-green);
+      width: 50%;
+      transition: width 0.3s;
+    }
+
+    .btn {
+      background: #141f16;
+      border: 1px solid var(--panel-border);
+      color: var(--hoi-text);
+      padding: 4px 10px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: var(--hoi-green);
+      color: #000;
+    }
+
+    .btn-active {
+      background: var(--hoi-green) !important;
+      color: #000 !important;
+    }
+
+    /* NF ツリービューポート (広大な領域) */
+    .nf-tree-wrapper {
+      width: 100%;
+      max-width: 1200px;
+      height: 620px;
+      background: #040605;
+      border: 2px solid var(--panel-border);
+      position: relative;
+      overflow: auto;
+      background-image: radial-gradient(#101a12 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    .nf-tree {
+      width: 1400px;
+      height: 1100px;
+      position: relative;
+    }
+
+    /* ルートタイトルの見出し */
+    .branch-header {
+      position: absolute;
+      font-size: 0.85rem;
+      color: var(--hoi-gold);
+      border-bottom: 1px solid var(--hoi-gold);
+      padding-bottom: 2px;
+      letter-spacing: 1px;
+      pointer-events: none;
+    }
+
+    /* NF ノード (HoI4スタイル) */
+    .nf-node {
+      position: absolute;
+      width: 130px;
+      height: 70px;
+      background: linear-gradient(180deg, #18241b 0%, #090e0a 100%);
+      border: 2px solid var(--hoi-gold);
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.8);
+      transition: transform 0.15s;
+      z-index: 2;
+    }
+
+    .nf-node:hover {
+      transform: scale(1.06);
+      box-shadow: 0 0 10px var(--hoi-gold);
+    }
+
+    .nf-node.completed {
+      border-color: #4caf50;
+      background: linear-gradient(180deg, #142e17 0%, #061207 100%);
+    }
+
+    .nf-node.in-progress {
+      border-color: #ff9800;
+      animation: pulse 1.2s infinite;
+    }
+
+    .nf-node.locked {
+      border-color: #424242;
+      background: #111;
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 2px #ff9800; }
+      50% { box-shadow: 0 0 10px #ff9800; }
+      100% { box-shadow: 0 0 2px #ff9800; }
+    }
+
+    .nf-icon {
+      width: 24px;
+      height: 24px;
+      fill: var(--hoi-gold);
+    }
+
+    .nf-title {
+      font-size: 0.7rem;
+      text-align: center;
+      color: #fff;
+      font-weight: bold;
+      line-height: 1.1;
+      margin-top: 2px;
+    }
+
+    .nf-status-text {
+      font-size: 0.6rem;
+      color: #ff9800;
+    }
+
+    /* SVG 接続線 */
+    .nf-lines {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .line {
+      stroke: var(--panel-border);
+      stroke-width: 2.5;
+    }
+
+    .line.active {
+      stroke: var(--hoi-gold);
+    }
+
+    .line.exclusive {
+      stroke: var(--hoi-red);
+      stroke-dasharray: 4;
+    }
+
+    /* ツールチップ */
+    #tooltip {
+      position: fixed;
+      display: none;
+      width: 290px;
+      background: #090e0a;
+      border: 2px solid var(--hoi-gold);
+      padding: 10px;
+      box-shadow: 5px 5px 20px rgba(0,0,0,0.95);
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    #tooltip h3 {
+      margin: 0 0 4px 0;
+      color: var(--hoi-gold);
+      font-size: 0.9rem;
+      border-bottom: 1px solid var(--panel-border);
+    }
+
+    #tooltip p {
+      font-size: 0.75rem;
+      margin: 4px 0;
+      color: #b0bec5;
+      line-height: 1.25;
+    }
+
+    #tooltip .effect {
+      color: #81c784;
+      font-size: 0.7rem;
+      margin-top: 6px;
+      white-space: pre-line;
+    }
+
+    #tooltip .warn {
+      color: var(--hoi-red);
+      font-size: 0.7rem;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="dashboard">
+    <div class="top-stat">
+      <span>USSR [ソビエト連邦 NFツリー]</span>
+      <span class="stat-badge" id="clock-date">1936-01-01</span>
+    </div>
+    <div style="display:flex; gap:5px; align-items:center;">
+      <span>SPEED:</span>
+      <button class="btn" onclick="setSpeed(0)">PAUSE</button>
+      <button class="btn btn-active" id="spd-1" onclick="setSpeed(1)">1速</button>
+      <button class="btn" id="spd-2" onclick="setSpeed(3)">3速</button>
+      <button class="btn" id="spd-3" onclick="setSpeed(10)">5速</button>
+    </div>
+  </div>
+
+  <!-- 国家ステータス (100 Max) -->
+  <div class="status-bar-container">
+    <div class="stat-box">
+      <div class="stat-label"><span>国民安定度</span><span id="val-stability">45 / 100</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="bar-stability" style="width: 45%;"></div></div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label"><span>戦争協力度</span><span id="val-warSupport">60 / 100</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="bar-warSupport" style="width: 60%; background: var(--hoi-red);"></div></div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label"><span>軍部攻撃度</span><span id="val-aggression">30 / 100</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="bar-aggression" style="width: 30%; background: #ff9800;"></div></div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label"><span>政治力 (PP)</span><span id="val-pp" style="color:var(--hoi-gold)">120</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="bar-pp" style="width: 100%; background: var(--hoi-gold);"></div></div>
+    </div>
+  </div>
+
+  <!-- NF ツリー本体 -->
+  <div class="nf-tree-wrapper">
+    <div class="nf-tree" id="tree-container">
+      <svg class="nf-lines" id="svg-lines"></svg>
+      <!-- ジャンル見出し -->
+      <div class="branch-header" style="left: 40px; top: 10px;">【政治分岐：スターリン派】</div>
+      <div class="branch-header" style="left: 360px; top: 10px;">【政治分岐：反スターリン派（トロツキー/右派）】</div>
+      <div class="branch-header" style="left: 720px; top: 10px;">【経済・産業ツリー】</div>
+      <div class="branch-header" style="left: 1080px; top: 10px;">【軍事・赤軍ツリー】</div>
+    </div>
+  </div>
+
+  <!-- ツールチップ -->
+  <div id="tooltip">
+    <h3 id="tt-title">NF名</h3>
+    <p id="tt-desc">説明</p>
+    <div class="effect" id="tt-effect"></div>
+    <div class="warn" id="tt-warn"></div>
+  </div>
+
+<script>
+  let currentDate = new Date(1936, 0, 1);
+  let timerId = null;
+  let gameSpeed = 1000;
+
+  let stats = { stability: 45, warSupport: 60, aggression: 30, pp: 120 };
+
+  // --- ソ連全分岐 NF データベース ---
+  const nfData = [
+    // === 1. 政治：スターリン正統派ルート ===
+    {
+      id: "center_bloch", title: "中央派の堅持", days: 70, x: 40, y: 40, req: [], excl: ["left_opposition", "right_opposition"],
+      desc: "スターリンを中心とする党中央の権限を強固にし、異分子を排除する準備を整える。",
+      effect: "政治力 +50\n国民安定度 +5",
+      icon: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+    },
+    {
+      id: "great_purge", title: "大粛清", days: 70, x: 40, y: 160, req: ["center_bloch"], excl: [],
+      desc: "軍部および党内の不忠実な幹部を一網打尽にし、反乱の芽を摘み取る。",
+      effect: "国民安定度 +20\n軍部攻撃度 -20\n将軍・将校の離脱",
+      icon: "M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"
+    },
+    {
+      id: "nkvd_cult", title: "NKVDの権限強化", days: 70, x: 40, y: 280, req: ["great_purge"], excl: [],
+      desc: "内務人民委員部（NKVD）に絶対的な権限を与え、国内の監視網を網羅する。",
+      effect: "スパイ防衛 +50\n国民安定度 +10\n政治力 +30",
+      icon: "M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
+    },
+
+    // === 2. 政治：反スターリン・左翼反対派（トロツキー）ルート ===
+    {
+      id: "left_opposition", title: "左翼反対派を結集", days: 70, x: 340, y: 40, req: [], excl: ["center_bloch", "right_opposition"],
+      desc: "亡命中のトロツキー支持者と連携し、スターリン独裁に対する地下活動を開始する。",
+      effect: "軍部攻撃度 +15\n国民安定度 -10\n内戦準備開始",
+      icon: "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+    },
+    {
+      id: "return_of_trotsky", title: "永久革命論の復権", days: 70, x: 340, y: 160, req: ["left_opposition"], excl: [],
+      desc: "トロツキーを帰国させ、全世界への共産主義革命輸出を正当化する。",
+      effect: "戦争協力度 +25\n軍部攻撃度 +30\n他国への正当化時間 -50%",
+      icon: "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+    },
+
+    // === 3. 政治：右翼反対派（ブハーリン）ルート ===
+    {
+      id: "right_opposition", title: "右翼反対派との同盟", days: 70, x: 500, y: 40, req: [], excl: ["center_bloch", "left_opposition"],
+      desc: "ブハーリンやリコフらと結び、急進的な工業化・集団化を見直す。",
+      effect: "国民安定度 +15\n政治力 +40\n消費財工場 -5%",
+      icon: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"
+    },
+
+    // === 4. 経済・産業ツリー ===
+    {
+      id: "five_year_plan", title: "第三次五ヶ年計画", days: 70, x: 720, y: 40, req: [], excl: [],
+      desc: "重工業と資源採掘の急速な拡大を図り、国家全体の生産力を底上げする。",
+      effect: "民需工場 +3\n軍需工場 +2\n国民安定度 -5",
+      icon: "M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"
+    },
+    {
+      id: "ural_industrial", title: "ウラル産業の開発", days: 70, x: 650, y: 160, req: ["five_year_plan"], excl: [],
+      desc: "敵の侵略が届かないウラル山脈の奥地に安全な工場地帯を建設する。",
+      effect: "ウラル地域に軍需工場 +4\n資源産出量 +15%",
+      icon: "M12 2L2 7l10 5 10-5-10-5z"
+    },
+    {
+      id: "armaments_commission", title: "兵器人民委員部", days: 70, x: 790, y: 160, req: ["five_year_plan"], excl: [],
+      desc: "軍需生産の一元管理により、戦車や砲兵装備の生産効率を劇的に高める。",
+      effect: "生産力効率上限 +10%\n生産維持費 -10%",
+      icon: "M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"
+    },
+
+    // === 5. 軍事・赤軍（陸海空）ツリー ===
+    {
+      id: "red_army_reorg", title: "赤軍の再編", days: 70, x: 1080, y: 40, req: [], excl: [],
+      desc: "広大な陸上戦線を維持するため、師団構成と指揮系統を刷新する。",
+      effect: "陸軍ドクトリン完了時間 -20%\n軍部攻撃度 +10",
+      icon: "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+    },
+    {
+      id: "deep_battle", title: "縦深陣地戦術の導入", days: 70, x: 1010, y: 160, req: ["red_army_reorg"], excl: ["mass_mobilization"],
+      desc: "連続攻勢と重装甲部隊の突進により、敵の防衛線を深部から破壊する。",
+      effect: "機甲・砲兵師団の突破力 +20%\n軍部攻撃度 +20",
+      icon: "M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"
+    },
+    {
+      id: "mass_mobilization", title: "大量動員ドクトリン", days: 70, x: 1150, y: 160, req: ["red_army_reorg"], excl: ["deep_battle"],
+      desc: "圧倒的な人命と補給で敵の弾薬を尽きさせ、戦列を押し潰す。",
+      effect: "適齢人口（ manpower ）+3%\n師団回収率 +15%\n戦争協力度 +15",
+      icon: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"
+    }
+  ];
+
+  let activeNF = null;
+  let nfProgress = {};
+
+  function init() {
+    const container = document.getElementById('tree-container');
+    const svgLines = document.getElementById('svg-lines');
+
+    nfData.forEach(nf => {
+      nfProgress[nf.id] = { progress: 0, completed: false };
+
+      // Node
+      const node = document.createElement('div');
+      node.className = 'nf-node';
+      node.id = `node-${nf.id}`;
+      node.style.left = `${nf.x}px`;
+      node.style.top = `${nf.y}px`;
+
+      node.innerHTML = `
+        <svg class="nf-icon" viewBox="0 0 24 24"><path d="${nf.icon}"/></svg>
+        <div class="nf-title">${nf.title}</div>
+        <div class="nf-status-text" id="prog-${nf.id}">[ ${nf.days}日 ]</div>
+      `;
+
+      node.addEventListener('mouseenter', (e) => showTooltip(e, nf));
+      node.addEventListener('mouseleave', hideTooltip);
+      node.addEventListener('click', () => startNF(nf.id));
+
+      container.appendChild(node);
+
+      // Lines (Prerequisites)
+      nf.req.forEach(reqId => {
+        const parent = nfData.find(d => d.id === reqId);
+        if (parent) {
+          const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          line.setAttribute('x1', parent.x + 65);
+          line.setAttribute('y1', parent.y + 70);
+          line.setAttribute('x2', nf.x + 65);
+          line.setAttribute('y2', nf.y);
+          line.setAttribute('class', 'line');
+          line.setAttribute('id', `line-${reqId}-${nf.id}`);
+          svgLines.appendChild(line);
+        }
+      });
+
+      // Lines (Exclusive Branches)
+      nf.excl.forEach(exclId => {
+        const target = nfData.find(d => d.id === exclId);
+        if (target && nf.x < target.x) { // 重複線描画の防止
+          const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          line.setAttribute('x1', nf.x + 130);
+          line.setAttribute('y1', nf.y + 35);
+          line.setAttribute('x2', target.x);
+          line.setAttribute('y2', target.y + 35);
+          line.setAttribute('class', 'line exclusive');
+          svgLines.appendChild(line);
+        }
+      });
+    });
+
+    updateUI();
+    startClock();
+  }
+
+  function startClock() {
+    if (timerId) clearInterval(timerId);
+    if (gameSpeed === 0) return;
+
+    timerId = setInterval(() => {
+      currentDate.setDate(currentDate.getDate() + 1);
+      document.getElementById('clock-date').innerText = currentDate.toISOString().split('T')[0];
+
+      if (activeNF) {
+        nfProgress[activeNF].progress += 1;
+        const target = nfData.find(d => d.id === activeNF);
+
+        if (nfProgress[activeNF].progress >= target.days) {
+          nfProgress[activeNF].completed = true;
+          applyEffect(target);
+          activeNF = null;
+        }
+      }
+
+      updateUI();
+    }, gameSpeed);
+  }
+
+  function setSpeed(spd) {
+    document.querySelectorAll('.time-controls .btn, .dashboard .btn').forEach(b => b.classList.remove('btn-active'));
+    if (spd === 0) gameSpeed = 0;
+    else if (spd === 1) { gameSpeed = 1000; document.getElementById('spd-1').classList.add('btn-active'); }
+    else if (spd === 3) { gameSpeed = 300; document.getElementById('spd-2').classList.add('btn-active'); }
+    else if (spd === 10) { gameSpeed = 80; document.getElementById('spd-3').classList.add('btn-active'); }
+    startClock();
+  }
+
+  function startNF(id) {
+    const target = nfData.find(d => d.id === id);
+    if (nfProgress[id].completed || activeNF === id) return;
+
+    // 前提条件チェック
+    const reqMet = target.req.every(reqId => nfProgress[reqId].completed);
+    if (!reqMet && target.req.length > 0) return;
+
+    // 排他選択チェック
+    const exclBlocked = target.excl.some(exclId => nfProgress[exclId].completed);
+    if (exclBlocked) return;
+
+    activeNF = id;
+    updateUI();
+  }
+
+  function applyEffect(nf) {
+    if (nf.id === "center_bloch") { stats.pp += 50; stats.stability += 5; }
+    if (nf.id === "great_purge") { stats.stability += 20; stats.aggression -= 20; }
+    if (nf.id === "left_opposition") { stats.aggression += 15; stats.stability -= 10; }
+    if (nf.id === "return_of_trotsky") { stats.warSupport += 25; stats.aggression += 30; }
+    if (nf.id === "five_year_plan") { stats.stability -= 5; }
+
+    stats.stability = Math.min(100, Math.max(0, stats.stability));
+    stats.warSupport = Math.min(100, Math.max(0, stats.warSupport));
+    stats.aggression = Math.min(100, Math.max(0, stats.aggression));
+  }
+
+  function updateUI() {
+    document.getElementById('val-stability').innerText = `${stats.stability} / 100`;
+    document.getElementById('bar-stability').style.width = `${stats.stability}%`;
+
+    document.getElementById('val-warSupport').innerText = `${stats.warSupport} / 100`;
+    document.getElementById('bar-warSupport').style.width = `${stats.warSupport}%`;
+
+    document.getElementById('val-aggression').innerText = `${stats.aggression} / 100`;
+    document.getElementById('bar-aggression').style.width = `${stats.aggression}%`;
+
+    document.getElementById('val-pp').innerText = stats.pp;
+
+    nfData.forEach(nf => {
+      const node = document.getElementById(`node-${nf.id}`);
+      const progText = document.getElementById(`prog-${nf.id}`);
+      const p = nfProgress[nf.id];
+
+      // 排他でブロックされたかチェック
+      const exclBlocked = nf.excl.some(exclId => nfProgress[exclId].completed);
+
+      node.classList.remove('completed', 'in-progress', 'locked');
+
+      if (p.completed) {
+        node.classList.add('completed');
+        progText.innerText = "[ 完了 ]";
+        progText.style.color = "#4caf50";
+      } else if (exclBlocked) {
+        node.classList.add('locked');
+        progText.innerText = "[ 選択不可 ]";
+        progText.style.color = "#757575";
+      } else if (activeNF === nf.id) {
+        node.classList.add('in-progress');
+        progText.innerText = `残り ${nf.days - p.progress} 日`;
+        progText.style.color = "#ff9800";
+      } else {
+        progText.innerText = `[ ${nf.days}日 ]`;
+        progText.style.color = "#81c784";
+      }
+
+      // 線更新
+      nf.req.forEach(reqId => {
+        const line = document.getElementById(`line-${reqId}-${nf.id}`);
+        if (line && nfProgress[reqId].completed) {
+          line.classList.add('active');
+        }
+      });
+    });
+  }
+
+  // ツールチップ
+  const tooltip = document.getElementById('tooltip');
+
+  function showTooltip(e, nf) {
+    document.getElementById('tt-title').innerText = nf.title;
+    document.getElementById('tt-desc').innerText = nf.desc;
+    document.getElementById('tt-effect').innerText = `【達成効果】\n${nf.effect}`;
+
+    const exclBlocked = nf.excl.some(exclId => nfProgress[exclId].completed);
+    const warnEl = document.getElementById('tt-warn');
+
+    if (exclBlocked) {
+      warnEl.innerText = "※排他的な相互ルートが既に選択されています";
+    } else if (nf.excl.length > 0) {
+      warnEl.innerText = "※これを選択すると相互排他ルートはロックされます";
+    } else {
+      warnEl.innerText = "";
+    }
+
+    tooltip.style.display = 'block';
+    tooltip.style.left = `${e.clientX + 15}px`;
+    tooltip.style.top = `${e.clientY + 15}px`;
+  }
+
+  function hideTooltip() {
+    tooltip.style.display = 'none';
+  }
+
+  document.addEventListener('mousemove', (e) => {
+    if (tooltip.style.display === 'block') {
+      tooltip.style.left = `${e.clientX + 15}px`;
+      tooltip.style.top = `${e.clientY + 15}px`;
+    }
+  });
+
+  window.onload = init;
+</script>
+</body>
+</html>
