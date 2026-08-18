@@ -1,20 +1,12 @@
 // ==========================================
 // 1. ゲーム内時間 & 速度管理システム
 // ==========================================
-let currentDate = new Date(1936, 0, 1); // 1936年1月1日スタート
-let gameSpeed = 0; // 0: 停止, 1~5: 各スピード
+let currentDate = new Date(1936, 0, 1);
+let gameSpeed = 0;
 let gameTimer = null;
 
-// スピードごとの更新間隔(ミリ秒)
-const speedIntervals = {
-  1: 2000,
-  2: 1200,
-  3: 700,
-  4: 350,
-  5: 120
-};
+const speedIntervals = { 1: 2000, 2: 1200, 3: 700, 4: 350, 5: 120 };
 
-// ゲームステータス
 const gameStats = {
   stability: 85,
   warSupport: 60,
@@ -27,10 +19,9 @@ const focusMap = {};
 const completedFocuses = new Set();
 const lockedFocuses = new Set();
 
-let activeFocus = null;      // 現在選択して進行中のNFオブジェクト
-let focusDaysRemaining = 0;  // 選択中NFの残り日数
+let activeFocus = null;
+let focusDaysRemaining = 0;
 
-// 日付表示の更新
 function updateCalendarUI() {
   const y = currentDate.getFullYear();
   const m = currentDate.getMonth() + 1;
@@ -38,37 +29,28 @@ function updateCalendarUI() {
   document.getElementById('calendar-display').textContent = `${y}年${m}月${d}日`;
 }
 
-// 時間を進めるメインループ (1日経過)
 function tickDay() {
   currentDate.setDate(currentDate.getDate() + 1);
   updateCalendarUI();
 
-  // NFの進行処理
   if (activeFocus) {
     focusDaysRemaining--;
-
-    // 進行状況（残り日数）の画面リアルタイム反映
     const activeNodeEl = document.querySelector(`.focus-node[data-id="${activeFocus.id}"]`);
     if (activeNodeEl) {
       const progressEl = activeNodeEl.querySelector('.focus-progress');
-      if (progressEl) {
-        progressEl.textContent = `残り ${focusDaysRemaining}日`;
-      }
+      if (progressEl) progressEl.textContent = `残り ${focusDaysRemaining}日`;
     }
 
-    // NF達成時の処理
     if (focusDaysRemaining <= 0) {
       completeActiveFocus();
     }
   }
 }
 
-// 速度変更
 function setGameSpeed(speed) {
   gameSpeed = speed;
   if (gameTimer) clearInterval(gameTimer);
 
-  // UIアクティブ状態の切替
   document.querySelectorAll('.speed-btn').forEach(btn => btn.classList.remove('active'));
 
   if (speed === 0) {
@@ -76,19 +58,18 @@ function setGameSpeed(speed) {
   } else {
     const activeBtn = document.querySelector(`.speed-btn[data-speed="${speed}"]`);
     if (activeBtn) activeBtn.classList.add('active');
-
     gameTimer = setInterval(tickDay, speedIntervals[speed]);
   }
 }
 
 // ==========================================
-// 2. NF進行 & 報酬適用
+// 2. NF進行 & 排他ロック・報酬適用
 // ==========================================
 function startFocus(nf) {
   if (activeFocus) {
     setLogText(`【変更】国家方針を「${nf.title}」に変更しました。`);
   } else {
-    setLogText(`【国家方針開始】「${nf.title}」の実行を開始しました。（必要日数: ${nf.cost || 70}日）`);
+    setLogText(`【国家方針開始】「${nf.title}」の実行を開始。（必要日数: ${nf.cost || 70}日）`);
   }
 
   activeFocus = nf;
@@ -100,7 +81,7 @@ function completeActiveFocus() {
   const completedNf = activeFocus;
   completedFocuses.add(completedNf.id);
 
-  // 相互排他処理の適用
+  // 相互排他（片方を選択したらもう片方をロックする処理）
   if (completedNf.mutually_exclusive) {
     const targets = Array.isArray(completedNf.mutually_exclusive) 
       ? completedNf.mutually_exclusive 
@@ -108,10 +89,8 @@ function completeActiveFocus() {
     targets.forEach(id => lockedFocuses.add(id));
   }
 
-  // 報酬の自動適用
   applyFocusEffects(completedNf.effect);
 
-  // ログに報酬と達成を表示
   const effectClean = completedNf.effect ? completedNf.effect.replace(/\n/g, ' / ') : '特記事項なし';
   setLogText(`🎉【国家方針完了】「${completedNf.title}」を達成！ 報酬: [ ${effectClean} ]`);
 
@@ -143,7 +122,7 @@ function updateTransform() {
 }
 
 container.addEventListener('mousedown', (e) => {
-  if (e.target.closest('.focus-node')) return; // ノードのクリックを優先
+  if (e.target.closest('.focus-node')) return;
   isDragging = true;
   startX = e.clientX - pointX;
   startY = e.clientY - pointY;
@@ -162,7 +141,6 @@ window.addEventListener('mouseup', () => {
   container.style.cursor = 'grab';
 });
 
-// マウスホイールでの拡大・縮小
 container.addEventListener('wheel', (e) => {
   e.preventDefault();
   const xs = (e.clientX - pointX) / scale;
@@ -170,9 +148,9 @@ container.addEventListener('wheel', (e) => {
   const delta = -e.deltaY;
 
   if (delta > 0) {
-    scale = Math.min(scale * 1.1, 2.5); // 最大 2.5倍
+    scale = Math.min(scale * 1.1, 2.5);
   } else {
-    scale = Math.max(scale / 1.1, 0.3); // 最小 0.3倍
+    scale = Math.max(scale / 1.1, 0.3);
   }
 
   pointX = e.clientX - xs * scale;
@@ -181,11 +159,12 @@ container.addEventListener('wheel', (e) => {
 });
 
 // ==========================================
-// 4. ツリー描画処理 & 安全対策
+// 4. HOI4風 枝分かれ描画 & 排他分岐レンダリング
 // ==========================================
 function isUnlocked(nf) {
   if (lockedFocuses.has(nf.id)) return false;
   if (!nf.prerequisites || nf.prerequisites.length === 0) return true;
+  // 前提NFのいずれか、または全て達成しているか確認
   return nf.prerequisites.every(parentId => completedFocuses.has(parentId));
 }
 
@@ -195,7 +174,7 @@ function renderTree() {
   nodesContainer.innerHTML = '';
   svgLines.innerHTML = '';
 
-  // 1. ノードの描画
+  // 1. ノードを描画
   allFocuses.forEach(nf => {
     const node = document.createElement('div');
     node.className = 'focus-node';
@@ -219,7 +198,6 @@ function renderTree() {
     node.style.left = `${nf.x}px`;
     node.style.top = `${nf.y}px`;
 
-    // チェックマーク表示と時間テキストの切り替え
     const checkMarkHtml = isCompleted ? `<div class="check-mark">✔</div>` : '';
     const progressTextHtml = isActive 
       ? `<div class="focus-progress">残り ${focusDaysRemaining}日</div>` 
@@ -232,17 +210,15 @@ function renderTree() {
       ${progressTextHtml}
     `;
 
-    // ツールチップイベント
     node.addEventListener('mouseenter', (e) => showTooltip(e, nf));
     node.addEventListener('mousemove', (e) => moveTooltip(e));
     node.addEventListener('mouseleave', hideTooltip);
 
-    // クリック（国家方針選択）
     node.addEventListener('click', (e) => {
       e.stopPropagation();
       if (isCompleted) return;
       if (isLocked) {
-        setLogText(`【不可】この国家方針は現在選択できません。前提条件または排他選択を確認してください。`);
+        setLogText(`【選択不可】前提条件を満たしていないか、反対の分岐を選択済みです。`);
         return;
       }
       startFocus(nf);
@@ -251,30 +227,62 @@ function renderTree() {
     nodesContainer.appendChild(node);
   });
 
-  // 2. 接続線の描画（右側などの線が途切れないよう安全ガードを実装）
+  // 2. HOI4本家風：1つの親から分岐する「木の枝」配線を描画
+  const parentGroups = {};
+
   allFocuses.forEach(nf => {
     if (nf.prerequisites && Array.isArray(nf.prerequisites)) {
       nf.prerequisites.forEach(parentId => {
-        const parent = focusMap[parentId];
-        if (parent) {
-          drawOrthogonalLine(
-            parent.x + 55, parent.y + 75, // 親の下中央
-            nf.x + 55, nf.y,               // 子の上中央
-            svgLines,
-            completedFocuses.has(parentId)
-          );
-        } else {
-          console.warn(`[NF Line Warning] ノード "${nf.id}" (${nf.title}) の親ID "${parentId}" が見つかりません。JSONデータを確認してください。`);
-        }
+        if (!parentGroups[parentId]) parentGroups[parentId] = [];
+        parentGroups[parentId].push(nf);
       });
     }
+  });
 
-    // 排他線（赤破線）の描画
+  // 各親ノードからの分岐を一括処理
+  Object.keys(parentGroups).forEach(parentId => {
+    const parent = focusMap[parentId];
+    if (!parent) return;
+
+    const children = parentGroups[parentId];
+    const parentX = parent.x + 55; // カードの中央
+    const parentY = parent.y + 75; // カードの底部
+    const isParentDone = completedFocuses.has(parentId);
+
+    if (children.length === 1) {
+      // 1対1の直角接続
+      const child = children[0];
+      drawOrthogonalLine(parentX, parentY, child.x + 55, child.y, svgLines, isParentDone);
+    } else {
+      // 1対多の「T字・木の枝」配線
+      const childMinX = Math.min(...children.map(c => c.x + 55));
+      const childMaxX = Math.max(...children.map(c => c.x + 55));
+      const minChildY = Math.min(...children.map(c => c.y));
+      const branchY = parentY + (minChildY - parentY) / 2; // 中間高さ
+
+      // ① 親からの垂直なメイン幹
+      drawDirectLine(parentX, parentY, parentX, branchY, svgLines, isParentDone);
+
+      // ② 左右へ広がる水平な枝
+      const hMinX = Math.min(parentX, childMinX);
+      const hMaxX = Math.max(parentX, childMaxX);
+      drawDirectLine(hMinX, branchY, hMaxX, branchY, svgLines, isParentDone);
+
+      // ③ 水平枝から各子ノードへの垂直線
+      children.forEach(child => {
+        const childX = child.x + 55;
+        drawDirectLine(childX, branchY, childX, child.y, svgLines, isParentDone);
+      });
+    }
+  });
+
+  // 3. 相互排他マーク（赤破線＆両矢印）の描画
+  allFocuses.forEach(nf => {
     if (nf.mutually_exclusive) {
       const targets = Array.isArray(nf.mutually_exclusive) ? nf.mutually_exclusive : [nf.mutually_exclusive];
       targets.forEach(targetId => {
         const targetNf = focusMap[targetId];
-        if (targetNf && nf.id < targetId) { // 二重描画防止
+        if (targetNf && nf.id < targetId) { // 重複描画防止
           drawExclusiveLine(nf.x + 55, nf.y + 37, targetNf.x + 55, targetNf.y + 37, svgLines);
         }
       });
@@ -282,7 +290,18 @@ function renderTree() {
   });
 }
 
-// HOI4風 直角線の描画
+// 直線描画ヘルパー
+function drawDirectLine(x1, y1, x2, y2, svg, isActive) {
+  const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  line.setAttribute('x1', x1);
+  line.setAttribute('y1', y1);
+  line.setAttribute('x2', x2);
+  line.setAttribute('y2', y2);
+  line.setAttribute('class', isActive ? 'nf-line active' : 'nf-line');
+  svg.appendChild(line);
+}
+
+// クランク型直角線描画
 function drawOrthogonalLine(x1, y1, x2, y2, svg, isActive) {
   const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
   const midY = y1 + (y2 - y1) / 2;
@@ -295,7 +314,7 @@ function drawOrthogonalLine(x1, y1, x2, y2, svg, isActive) {
   svg.appendChild(path);
 }
 
-// 相互排他線（赤破線）の描画
+// 排他接続線（赤い点線）
 function drawExclusiveLine(x1, y1, x2, y2, svg) {
   const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
   line.setAttribute('x1', x1);
@@ -330,14 +349,14 @@ function updateStatusBarUI() {
   document.getElementById('val-pp').textContent = `${Math.min(100, Math.max(0, gameStats.politicalPower))} / 100`;
 }
 
-// ツールチップ関数
+// ツールチップ表示
 const tooltip = document.getElementById('nf-tooltip');
 function showTooltip(e, nf) {
   const isCompleted = completedFocuses.has(nf.id);
   const isActive = activeFocus && activeFocus.id === nf.id;
   const isLocked = lockedFocuses.has(nf.id) || !isUnlocked(nf);
   
-  let status = isCompleted ? "【達成済み】" : (isActive ? "【実行中】" : (isLocked ? "🔒【選択不可】" : "🔓【選択可能】"));
+  let status = isCompleted ? "【達成済み】" : (isActive ? "【実行中】" : (isLocked ? "🔒【選択不可/排他】" : "🔓【選択可能】"));
   document.getElementById('tooltip-title').textContent = `${nf.title} ${status}`;
   document.getElementById('tooltip-time').textContent = `⏱️ 必要時間: ${isActive ? focusDaysRemaining + "日 (進行中)" : (nf.cost || 70) + "日"}`;
   document.getElementById('tooltip-effect').textContent = nf.effect || "効果なし";
@@ -356,7 +375,7 @@ function hideTooltip() {
 }
 
 // ==========================================
-// 5. 初期化 & イベントバインド
+// 5. 初期化 & バッチファイルの複数読み込み処理
 // ==========================================
 document.getElementById('btn-pause').addEventListener('click', () => setGameSpeed(0));
 document.querySelectorAll('.speed-btn[data-speed]').forEach(btn => {
@@ -366,33 +385,40 @@ document.querySelectorAll('.speed-btn[data-speed]').forEach(btn => {
   });
 });
 
-// パス試行リスト（データロード）
+// 今後 batch2 や batch3 を追加する場合はこの配列に追加します
 const batchFiles = [
   './data/nf_batch1.json',
-  '../data/nf_batch1.json',
-  'data/nf_batch1.json'
+  './data/nf_batch2.json' // トロツキー版などを追加可能（存在しなくても自動スキップ）
 ];
 
-async function fetchWithFallback(paths) {
-  for (const path of paths) {
+async function loadAllBatches() {
+  let loadedData = [];
+  for (const path of batchFiles) {
     try {
       const res = await fetch(path);
-      if (res.ok) return await res.json();
-    } catch (e) {}
+      if (res.ok) {
+        const json = await res.json();
+        loadedData = loadedData.concat(json);
+        console.log(`[Loaded] ${path}`);
+      }
+    } catch (e) {
+      // ファイルが存在しない場合はスルー
+    }
   }
-  throw new Error(`JSONファイルが見つかりません:\n${paths.join('\n')}`);
+  return loadedData;
 }
 
 async function init() {
-  try {
-    allFocuses = await fetchWithFallback(batchFiles);
-  } catch (e) {
-    console.error(e.message);
-    // 取得失敗時のデモフォールバックデータ
+  const data = await loadAllBatches();
+  
+  if (data.length > 0) {
+    allFocuses = data;
+  } else {
+    // データがない場合のフォールバック（動作テスト用）
     allFocuses = [
-      { id: "NF_1", title: "産業基盤の強化", x: 300, y: 50, cost: 30, effect: "政治力 +20\n安定度 +5" },
-      { id: "NF_2", title: "軍需工場の拡張", x: 200, y: 180, cost: 45, prerequisites: ["NF_1"], mutually_exclusive: ["NF_3"], effect: "戦争協力度 +10" },
-      { id: "NF_3", title: "民需工場の建設", x: 400, y: 180, cost: 40, prerequisites: ["NF_1"], mutually_exclusive: ["NF_2"], effect: "安定度 +10" }
+      { id: "SOV_center", title: "党中央の再編", x: 600, y: 50, cost: 70, effect: "政治力 +50" },
+      { id: "SOV_stalin", title: "スターリン派の強固化", x: 400, y: 180, cost: 70, prerequisites: ["SOV_center"], mutually_exclusive: ["SOV_trotsky"], effect: "安定度 +10" },
+      { id: "SOV_trotsky", title: "トロツキーの帰還", x: 800, y: 180, cost: 70, prerequisites: ["SOV_center"], mutually_exclusive: ["SOV_stalin"], effect: "戦争協力度 +15" }
     ];
   }
   
