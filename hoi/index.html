@@ -1,1 +1,329 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HoI4 Card Game Terminal</title>
+  <style>
+    /* レトロタイプライター・ミリタリーグリーン風CSS */
+    @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap');
 
+    :root {
+      --bg-color: #0d130e;
+      --panel-bg: #141f17;
+      --text-green: #33ff66;
+      --text-dim: #1d993d;
+      --border-green: #2b8241;
+      --alert-red: #ff3333;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Courier Prime', 'Courier New', monospace;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-green);
+      margin: 0;
+      padding: 15px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      border: 2px solid var(--border-green);
+      padding: 15px;
+      background-color: var(--panel-bg);
+      box-shadow: 0 0 15px rgba(51, 255, 102, 0.15);
+    }
+
+    h1, h2 {
+      text-align: center;
+      margin: 5px 0 15px 0;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-bottom: 1px dashed var(--border-green);
+      padding-bottom: 8px;
+    }
+
+    .section {
+      border: 1px solid var(--border-green);
+      padding: 10px;
+      margin-bottom: 15px;
+      background: rgba(0,0,0,0.2);
+    }
+
+    /* ターン・時間コントロール */
+    .turn-panel {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.1rem;
+    }
+
+    /* 入力・ボタン */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      margin-bottom: 3px;
+    }
+
+    input, select {
+      background: #000;
+      border: 1px solid var(--border-green);
+      color: var(--text-green);
+      padding: 6px;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: #1a3a21;
+      color: var(--text-green);
+      border: 1px solid var(--border-green);
+      padding: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background-color: var(--border-green);
+      color: #000;
+    }
+
+    .btn-main {
+      width: 100%;
+      font-size: 1.1rem;
+      margin-top: 10px;
+      padding: 12px;
+      letter-spacing: 1px;
+    }
+
+    /* タイマー表示表示部 */
+    .timer-item {
+      background: #000;
+      border: 1px dashed var(--border-green);
+      padding: 8px;
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .timer-item.completed {
+      border-color: var(--alert-red);
+      color: var(--alert-red);
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0.5; }
+    }
+
+    /* レポート・ステータス */
+    .status-box {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      background: #050a06;
+      padding: 8px;
+      border-left: 3px solid var(--border-green);
+    }
+
+    .alert {
+      color: var(--alert-red);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>[ HOI4 HQ TERMINAL ]</h1>
+
+  <!-- 時間・ターン管理 -->
+  <div class="section turn-panel">
+    <div>DATE: <span id="game-date">1936-01-01</span></div>
+    <div>DAY: <span id="turn-count">1</span></div>
+  </div>
+
+  <!-- 工場＆資源（手札やカードに合わせて入力） -->
+  <div class="section">
+    <h2>1. FACTORY & RESOURCE</h2>
+    <div class="grid">
+      <div class="input-group">
+        <label>軍需工場 (IC)</label>
+        <input type="number" id="mil-factories" value="10" min="0">
+      </div>
+      <div class="input-group">
+        <label>必要石油 (OIL)</label>
+        <input type="number" id="oil-req" value="5" min="0">
+      </div>
+      <div class="input-group">
+        <label>所有石油</label>
+        <input type="number" id="oil-have" value="5" min="0">
+      </div>
+      <div class="input-group">
+        <label>政治力蓄積/日</label>
+        <input type="number" id="pp-gain" value="1" min="0">
+      </div>
+    </div>
+  </div>
+
+  <!-- 自動計算レポート -->
+  <div class="section">
+    <h2>2. DAILY REPORT</h2>
+    <div class="status-box">
+      <div>保有政治力 (PP): <span id="total-pp">0</span></div>
+      <div>生産力 (IC総和): <span id="total-ic">10</span></div>
+      <div id="oil-status">石油状況: 正常</div>
+    </div>
+  </div>
+
+  <!-- 研究 & NF タイマー -->
+  <div class="section">
+    <h2>3. RESEARCH & NF</h2>
+    <div class="grid">
+      <input type="text" id="task-name" placeholder="項目名 (例: 陸軍ドクトリン)">
+      <input type="number" id="task-days" placeholder="必要日数 (例: 70)" min="1">
+    </div>
+    <button style="width: 100%; margin-top: 8px;" onclick="addTimer()">研究/NF 開始</button>
+
+    <div id="timer-list"></div>
+  </div>
+
+  <!-- 時間経過ボタン -->
+  <button class="btn-main" onclick="nextTurn(7)">7日進める (1週間経過)</button>
+  <button class="btn-main" style="background:#2a1a1a; border-color:#822b2b;" onclick="nextTurn(1)">1日だけ進める</button>
+</div>
+
+<script>
+  // ゲームの状態データ
+  let currentDay = 1;
+  let totalPP = 0;
+  let startDate = new Date(1936, 0, 1); // 1936/01/01
+  let activeTimers = [];
+
+  // 音声効果（ブラウザ標準のWeb Audio APIでレトロ音を作成）
+  function playBeep(freq = 440, type = 'sine') {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.15);
+    osc.stop(ctx.currentTime + 0.15);
+  }
+
+  // 自動計算処理
+  function calculate() {
+    const mil = parseInt(document.getElementById('mil-factories').value) || 0;
+    const oilReq = parseInt(document.getElementById('oil-req').value) || 0;
+    const oilHave = parseInt(document.getElementById('oil-have').value) || 0;
+
+    // 石油不足チェック
+    const oilStatusEl = document.getElementById('oil-status');
+    let icMultiplier = 1.0;
+
+    if (oilHave < oilReq) {
+      oilStatusEl.innerHTML = `<span class="alert">石油不足! (IC効率 50%ダウン)</span>`;
+      icMultiplier = 0.5;
+    } else {
+      oilStatusEl.textContent = "石油状況: 正常 (100%)";
+    }
+
+    // 生産力（IC）計算
+    const totalIC = Math.floor(mil * icMultiplier);
+    document.getElementById('total-ic').textContent = totalIC;
+  }
+
+  // ターンを進める処理
+  function nextTurn(days) {
+    playBeep(600, 'square'); // タイプライター風のクリック音
+    currentDay += days;
+
+    // 日付の計算
+    let currentDate = new Date(startDate);
+    currentDate.setDate(startDate.getDate() + (currentDay - 1));
+    const dateStr = currentDate.toISOString().split('T')[0];
+
+    document.getElementById('game-date').textContent = dateStr;
+    document.getElementById('turn-count').textContent = currentDay;
+
+    // PP加算
+    const ppGain = parseInt(document.getElementById('pp-gain').value) || 0;
+    totalPP += ppGain * days;
+    document.getElementById('total-pp').textContent = totalPP;
+
+    // タイマーのカウントダウン
+    activeTimers.forEach(timer => {
+      if (timer.remaining > 0) {
+        timer.remaining -= days;
+        if (timer.remaining <= 0) {
+          timer.remaining = 0;
+          playBeep(880, 'triangle'); // 完了音
+        }
+      }
+    });
+
+    calculate();
+    renderTimers();
+  }
+
+  // タイマー追加
+  function addTimer() {
+    const nameInput = document.getElementById('task-name');
+    const daysInput = document.getElementById('task-days');
+
+    if (!nameInput.value || !daysInput.value) return;
+
+    activeTimers.push({
+      id: Date.now(),
+      name: nameInput.value,
+      remaining: parseInt(daysInput.value)
+    });
+
+    nameInput.value = '';
+    daysInput.value = '';
+    renderTimers();
+  }
+
+  // タイマー画面更新
+  function renderTimers() {
+    const listEl = document.getElementById('timer-list');
+    listEl.innerHTML = '';
+
+    activeTimers.forEach(timer => {
+      const isDone = timer.remaining === 0;
+      const item = document.createElement('div');
+      item.className = `timer-item ${isDone ? 'completed' : ''}`;
+      item.innerHTML = `
+        <span>${timer.name}</span>
+        <span>${isDone ? '[ 完了! ]' : '残り ' + timer.remaining + ' 日'}</span>
+      `;
+      listEl.appendChild(item);
+    });
+  }
+
+  // リアルタイム計算用のイベント付与
+  document.querySelectorAll('input').forEach(input => {
+    input.addEventListener('input', calculate);
+  });
+</script>
+</body>
+</html>
