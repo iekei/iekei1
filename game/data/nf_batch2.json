@@ -2,7 +2,7 @@
   {
     "id": "SOV_trotsky_return",
     "title": "左翼反対派の結集",
-    "x": 1200,
+    "x": 2000,
     "y": 180,
     "cost": 70,
     "prerequisites": ["SOV_center"],
@@ -12,7 +12,7 @@
   {
     "id": "SOV_smite_stalin",
     "title": "スターリン派の追放",
-    "x": 1200,
+    "x": 2000,
     "y": 280,
     "cost": 70,
     "prerequisites": ["SOV_trotsky_return"],
@@ -21,7 +21,7 @@
   {
     "id": "SOV_recall_trotsky",
     "title": "トロツキーの帰還",
-    "x": 1200,
+    "x": 2000,
     "y": 380,
     "cost": 70,
     "prerequisites": ["SOV_smite_stalin"],
@@ -30,7 +30,7 @@
   {
     "id": "SOV_permanent_revolution",
     "title": "永続革命論の実践",
-    "x": 1200,
+    "x": 2000,
     "y": 480,
     "cost": 70,
     "prerequisites": ["SOV_recall_trotsky"],
@@ -38,8 +38,8 @@
   },
   {
     "id": "SOV_fourth_international",
-    "title": "第四インターナショナルの設立",
-    "x": 1000,
+    "title": "第四インターナショナル",
+    "x": 1750,
     "y": 580,
     "cost": 70,
     "prerequisites": ["SOV_permanent_revolution"],
@@ -49,7 +49,7 @@
   {
     "id": "SOV_red_army_reconstruction",
     "title": "赤軍の再編",
-    "x": 1400,
+    "x": 2250,
     "y": 580,
     "cost": 70,
     "prerequisites": ["SOV_permanent_revolution"],
@@ -57,8 +57,8 @@
   },
   {
     "id": "SOV_support_spanish_revolution",
-    "title": "スペイン革命への全量支援",
-    "x": 850,
+    "title": "スペイン革命支援",
+    "x": 1600,
     "y": 680,
     "cost": 70,
     "prerequisites": ["SOV_fourth_international"],
@@ -67,34 +67,34 @@
   {
     "id": "SOV_export_revolution_europe",
     "title": "欧州への革命輸出",
-    "x": 1000,
+    "x": 1750,
     "y": 680,
     "cost": 70,
     "prerequisites": ["SOV_fourth_international"],
     "effect": "正当化時間 -25%\n攻撃力 +10%"
   },
   {
-    "id": "SOV_agitate_german_workers",
-    "title": "ドイツ労働者の蜂起扇動",
-    "x": 1000,
-    "y": 780,
-    "cost": 70,
-    "prerequisites": ["SOV_export_revolution_europe"],
-    "effect": "対ドイツ攻撃力 +15%"
-  },
-  {
     "id": "SOV_liberate_poland",
     "title": "ポーランド解放作戦",
-    "x": 1150,
+    "x": 1900,
     "y": 680,
     "cost": 70,
     "prerequisites": ["SOV_fourth_international"],
     "effect": "正当化時間 -50%"
   },
   {
+    "id": "SOV_agitate_german_workers",
+    "title": "ドイツ労働者蜂起",
+    "x": 1750,
+    "y": 780,
+    "cost": 70,
+    "prerequisites": ["SOV_export_revolution_europe"],
+    "effect": "対ドイツ攻撃力 +15%"
+  },
+  {
     "id": "SOV_military_commissar_expansion",
-    "title": "政治将校権限の再定義",
-    "x": 1300,
+    "title": "政治将校権限再定義",
+    "x": 2150,
     "y": 680,
     "cost": 70,
     "prerequisites": ["SOV_red_army_reconstruction"],
@@ -103,7 +103,7 @@
   {
     "id": "SOV_deep_operation_doctrine",
     "title": "縦深戦略理論の完成",
-    "x": 1500,
+    "x": 2350,
     "y": 680,
     "cost": 70,
     "prerequisites": ["SOV_red_army_reconstruction"],
@@ -111,8 +111,8 @@
   },
   {
     "id": "SOV_global_hegemony",
-    "title": "世界社会主義共和国連邦",
-    "x": 1200,
+    "title": "世界社会主義連邦",
+    "x": 2000,
     "y": 900,
     "cost": 70,
     "prerequisites": ["SOV_agitate_german_workers", "SOV_deep_operation_doctrine"],
