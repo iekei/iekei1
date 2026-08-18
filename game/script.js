@@ -189,33 +189,28 @@ function isUnlocked(nf) {
 }
 
 function renderTree() {
-  const nodesContainer = document.getElementById('focus-nodes');
-  const svgLines = document.getElementById('svg-lines');
-  nodesContainer.innerHTML = '';
-  svgLines.innerHTML = '';
+// script.js 内 renderTree() の後半（線の描画部分）を以下に差し替え
 
+  // 接続線を描画
   allFocuses.forEach(nf => {
-    const node = document.createElement('div');
-    node.className = 'focus-node';
-    node.setAttribute('data-id', nf.id);
-
-    const isCompleted = completedFocuses.has(nf.id);
-    const isLocked = lockedFocuses.has(nf.id) || !isUnlocked(nf);
-    const isActive = activeFocus && activeFocus.id === nf.id;
-
-    if (isCompleted) {
-      node.classList.add('completed');
-    } else if (isActive) {
-      node.classList.add('in-progress');
-    } else if (isLocked) {
-      node.classList.add('locked');
-      if (lockedFocuses.has(nf.id)) node.classList.add('mutually-blocked');
-    } else {
-      node.classList.add('available');
+    if (nf.prerequisites && Array.isArray(nf.prerequisites)) {
+      nf.prerequisites.forEach(parentId => {
+        const parent = focusMap[parentId];
+        
+        // 親ノードが存在する場合のみ線を引く（存在しない場合のガード処理）
+        if (parent) {
+          drawOrthogonalLine(
+            parent.x + 55, parent.y + 75, // 親ノードの下中央
+            nf.x + 55, nf.y,               // 子ノードの上中央
+            svgLines,
+            completedFocuses.has(parentId)
+          );
+        } else {
+          console.warn(`[NF Line Error] ID: "${nf.id}" の親NF "${parentId}" が見つかりません。JSONのIDを確認してください。`);
+        }
+      });
     }
-
-    node.style.left = `${nf.x}px`;
-    node.style.top = `${nf.y}px`;
+  });
 
     // アイコン & チェックマーク設定
     const checkMarkHtml = isCompleted ? `<div class="check-mark">✔</div>` : '';
