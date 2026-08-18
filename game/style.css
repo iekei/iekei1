@@ -1,202 +1,3 @@
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #0b0e11;
-  color: #e0e6ed;
-  font-family: 'Consolas', 'Courier New', monospace;
-  overflow: hidden;
-}
-
-/* タイプライター風 トップステータスバー */
-#status-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 50px;
-  background-color: #12181d;
-  border-bottom: 2px solid #334455;
-  display: flex;
-  align-items: center;
-  padding: 0 15px;
-  gap: 20px;
-  z-index: 100;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.8);
-}
-
-.stat-item {
-  font-size: 11px;
-  white-space: nowrap;
-}
-
-.stat-label { color: #8899a6; font-weight: bold; }
-.stat-val { color: #00ffcc; font-weight: bold; }
-
-#typewriter-container {
-  flex-grow: 1;
-  background: #080a0c;
-  border: 1px solid #223344;
-  padding: 4px 10px;
-  height: 28px;
-  border-radius: 3px;
-  overflow: hidden;
-  white-space: nowrap;
-  font-size: 11px;
-  color: #33ff33;
-}
-
-.cursor { animation: blink 0.8s infinite; color: #33ff33; }
-@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-
-/* ツリー表示エリア */
-#hoi4-tree-viewport {
-  width: 100vw;
-  height: calc(100vh - 50px);
-  margin-top: 50px;
-  overflow: auto;
-  position: relative;
-  background: radial-gradient(circle at center, #151c22 0%, #080a0c 100%);
-}
-
-#hoi4-tree-container {
-  width: 4000px;
-  height: 1500px;
-  position: relative;
-}
-
-#svg-lines {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-  z-index: 1;
-}
-
-#focus-nodes {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  z-index: 2;
-}
-
-/* ツリー状直角接続線 */
-path.nf-line {
-  fill: none;
-  stroke: #667788;
-  stroke-width: 2.5;
-  transition: stroke 0.3s;
-}
-
-/* HOI4風 視覚的NFアイコンノード */
-.focus-node {
-  position: absolute;
-  width: 110px;
-  background: linear-gradient(180deg, #222c35 0%, #11161b 100%);
-  border: 2px solid #4f5d6c;
-  border-radius: 6px;
-  padding: 8px 4px;
-  text-align: center;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
-  transition: all 0.2s ease;
-  user-select: none;
-}
-
-.focus-node:hover {
-  border-color: #ffd700;
-  transform: scale(1.08);
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
-  z-index: 10;
-}
-
-/* 視覚的シンボルアイコン */
-.focus-symbol {
-  width: 42px;
-  height: 42px;
-  margin: 0 auto 6px auto;
-  border-radius: 50%;
-  background: radial-gradient(circle, #3a4856 0%, #1a222a 100%);
-  border: 2px solid #788a9c;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-}
-
-.focus-title {
-  font-size: 10px;
-  font-weight: bold;
-  line-height: 1.2;
-  color: #dce4ec;
-}
-
-/* ツールチップ */
-#nf-tooltip {
-  position: fixed;
-  pointer-events: none;
-  z-index: 1000;
-  background: rgba(12, 16, 20, 0.95);
-  border: 1px solid #d4af37;
-  border-radius: 4px;
-  padding: 10px;
-  width: 220px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.9);
-  font-size: 11px;
-}
-
-#nf-tooltip.hidden { display: none; }
-#tooltip-title { font-weight: bold; color: #ffd700; font-size: 12px; margin-bottom: 4px; }
-#tooltip-time { color: #8899a6; margin-bottom: 6px; font-size: 10px; }
-#nf-tooltip hr { border: 0; border-top: 1px solid #334455; margin: 6px 0; }
-#tooltip-effect { color: #55ff55; line-height: 1.4; white-space: pre-wrap; }
-
-/* ノード状態別スタイリング */
-.focus-node.locked {
-  opacity: 0.5;
-  filter: grayscale(0.8);
-  border-color: #333d47;
-  cursor: not-allowed;
-}
-
-.focus-node.available {
-  border-color: #4a86e8;
-  animation: pulse-border 2s infinite;
-}
-
-@keyframes pulse-border {
-  0% { box-shadow: 0 0 4px rgba(74, 134, 232, 0.4); }
-  50% { box-shadow: 0 0 12px rgba(74, 134, 232, 0.8); }
-  100% { box-shadow: 0 0 4px rgba(74, 134, 232, 0.4); }
-}
-
-.focus-node.completed {
-  opacity: 1;
-  filter: none;
-  border-color: #00ffcc !important;
-  background: linear-gradient(180deg, #183e38 0%, #0a201c 100%) !important;
-  box-shadow: 0 0 12px rgba(0, 255, 204, 0.5);
-}
-
-.focus-node.completed .focus-symbol {
-  border-color: #00ffcc;
-  background: radial-gradient(circle, #255850 0%, #0d2823 100%);
-}
-
-/* 接続線の状態 */
-path.nf-line {
-  fill: none;
-  stroke: #3a4856;
-  stroke-width: 2.5;
-  transition: stroke 0.4s;
-}
-
-path.nf-line.active {
-  stroke: #00ffcc;
-  stroke-width: 3;
-}
-
 * {
   box-sizing: border-box;
   margin: 0;
@@ -207,11 +8,13 @@ path.nf-line.active {
 body {
   background-color: #0e1217;
   color: #e1e6eb;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   overflow: hidden;
 }
 
-/* トップバー & 速度コントロール */
+/* ==========================================
+   1. トップバー & 速度コントロール
+   ========================================== */
 #top-bar {
   display: flex;
   justify-content: space-between;
@@ -220,6 +23,7 @@ body {
   padding: 8px 20px;
   border-bottom: 2px solid #2a3545;
   height: 50px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .stats-group {
@@ -229,43 +33,63 @@ body {
   font-weight: bold;
 }
 
+.stat-item {
+  background: #0d1117;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid #2a3545;
+}
+
 .time-control-group {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 12px;
 }
 
 #calendar-display {
-  font-family: monospace;
-  font-size: 16px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 15px;
+  font-weight: bold;
   background: #090c10;
-  padding: 4px 10px;
-  border: 1px solid #3b485a;
+  padding: 5px 12px;
+  border: 1px solid #00ffcc;
   border-radius: 4px;
   color: #00ffcc;
+  box-shadow: 0 0 6px rgba(0, 255, 204, 0.3);
 }
 
 .speed-buttons {
   display: flex;
-  gap: 2px;
+  gap: 3px;
 }
 
 .speed-btn {
   background: #212b36;
   border: 1px solid #3b485a;
-  color: #fff;
-  padding: 4px 8px;
+  color: #8a99ad;
+  padding: 5px 10px;
   font-size: 12px;
+  font-weight: bold;
   cursor: pointer;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+
+.speed-btn:hover {
+  background: #2c3846;
+  color: #fff;
 }
 
 .speed-btn.active {
   background: #00ffcc;
-  color: #000;
-  font-weight: bold;
+  color: #0d1117;
+  border-color: #00ffcc;
+  box-shadow: 0 0 8px rgba(0, 255, 204, 0.5);
 }
 
-/* ログ表示エリア */
+/* ==========================================
+   2. ログ表示エリア (タイプライター風)
+   ========================================== */
 #log-banner {
   background: #090c10;
   padding: 6px 20px;
@@ -273,15 +97,27 @@ body {
   border-bottom: 1px solid #2a3545;
   color: #ffcc00;
   height: 30px;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  letter-spacing: 0.5px;
 }
 
-/* ツリー表示エリア (ドラッグ＆ズーム領域) */
+/* ==========================================
+   3. ツリー表示エリア (ドラッグ＆ズーム領域)
+   ========================================== */
 #tree-container {
   width: 100vw;
   height: calc(100vh - 80px);
   cursor: grab;
   position: relative;
   overflow: hidden;
+  background-color: #0e1217;
+  /* 方眼紙風グリッド背景 */
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
 }
 
 #tree-viewport {
@@ -289,18 +125,33 @@ body {
   top: 0;
   left: 0;
   transform-origin: 0 0;
-  width: 3000px;
-  height: 3000px;
+  width: 5000px;  /* 右に広がっても切れないよう拡張 */
+  height: 5000px;
 }
 
+/* 接続線SVG（ノードの後ろに描画） */
 #svg-lines {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  top: 0;
+  left: 0;
+  width: 5000px;
+  height: 5000px;
   pointer-events: none;
+  z-index: 1;
 }
 
-/* NFノードカード */
+#focus-nodes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+/* ==========================================
+   4. NFノードカードデザイン
+   ========================================== */
 .focus-node {
   position: absolute;
   width: 110px;
@@ -315,38 +166,47 @@ body {
   cursor: pointer;
   padding: 4px;
   text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  transition: transform 0.15s ease, border-color 0.2s ease;
 }
 
-.focus-symbol { font-size: 18px; }
-.focus-title { font-size: 11px; font-weight: bold; margin-top: 2px; }
-.focus-cost, .focus-progress { font-size: 10px; color: #8a99ad; }
-
-/* 達成済み (チェックマーク付き) */
-.focus-node.completed {
-  border-color: #00ffcc;
-  background: #0f2d27;
+.focus-node:hover {
+  transform: translateY(-2px);
 }
 
-.check-mark {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background: #00ffcc;
-  color: #000;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  font-size: 14px;
+.focus-symbol {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.focus-title {
+  font-size: 11px;
   font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 8px rgba(0,255,204,0.8);
+  margin-top: 3px;
+  line-height: 1.2;
+  color: #ffffff;
+  word-break: break-all;
 }
 
-/* 進行中 (点滅アニメーション) */
+.focus-cost, .focus-progress {
+  font-size: 10px;
+  color: #8a99ad;
+  margin-top: 3px;
+}
+
+/* --- 選択可能 (Available) --- */
+.focus-node.available {
+  border-color: #4a90e2;
+}
+.focus-node.available:hover {
+  border-color: #64b5f6;
+  box-shadow: 0 0 10px rgba(74, 144, 226, 0.5);
+}
+
+/* --- 進行中 (In-Progress) --- */
 .focus-node.in-progress {
   border-color: #ffcc00;
+  background: #262215;
   animation: focus-pulse 1.2s infinite alternate;
 }
 
@@ -357,38 +217,111 @@ body {
 
 @keyframes focus-pulse {
   0% { box-shadow: 0 0 4px #ffcc00; }
-  100% { box-shadow: 0 0 15px #ffcc00; }
+  100% { box-shadow: 0 0 16px #ffcc00; }
 }
 
-/* ロック中 & 排他遮断 */
-.focus-node.locked { opacity: 0.4; filter: grayscale(1); cursor: not-allowed; }
+/* --- 達成済み (Completed) --- */
+.focus-node.completed {
+  border-color: #00ffcc;
+  background: #0f2d27;
+}
+
+.check-mark {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #00ffcc;
+  color: #0d1117;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 13px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 8px rgba(0, 255, 204, 0.8);
+}
+
+/* --- ロック中 / 排他遮断 (Locked) --- */
+.focus-node.locked {
+  opacity: 0.45;
+  filter: grayscale(0.8);
+  cursor: not-allowed;
+}
+
 .focus-node.mutually-blocked::after {
   content: "✖";
   position: absolute;
   color: #ff4d4d;
-  font-size: 36px;
+  font-size: 38px;
+  font-weight: bold;
+  text-shadow: 0 0 6px #000;
 }
 
-/* SVGライン */
-#svg-lines {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 3000px;  /* tree-viewport と同じ幅に指定 */
-  height: 3000px; /* tree-viewport と同じ高さに指定 */
-  pointer-events: none;
-  z-index: 1;     /* ノードの下に線を引く */
+/* ==========================================
+   5. SVG 接続線
+   ========================================== */
+/* 通常・前提条件ライン */
+path.nf-line {
+  fill: none;
+  stroke: #3a4856;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-/* ツールチップ */
+/* アクティブ（親が完了済み）のライン */
+path.nf-line.active {
+  stroke: #00ffcc;
+  stroke-width: 3;
+  filter: drop-shadow(0px 0px 3px rgba(0, 255, 204, 0.6));
+}
+
+/* 相互排他ライン（赤破線） */
+line.nf-exclusive-line {
+  stroke: #ff4d4d;
+  stroke-width: 2;
+  stroke-dasharray: 5, 5;
+}
+
+/* ==========================================
+   6. ツールチップ
+   ========================================== */
 #nf-tooltip {
   position: fixed;
-  background: rgba(10, 15, 20, 0.95);
+  background: rgba(13, 17, 23, 0.95);
   border: 1px solid #00ffcc;
-  padding: 10px;
-  border-radius: 4px;
+  padding: 10px 14px;
+  border-radius: 6px;
   font-size: 12px;
   pointer-events: none;
   z-index: 1000;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+  max-width: 280px;
 }
-.hidden { display: none; }
+
+#tooltip-title {
+  font-weight: bold;
+  font-size: 13px;
+  color: #00ffcc;
+  margin-bottom: 4px;
+}
+
+#tooltip-time {
+  color: #8a99ad;
+  margin-bottom: 6px;
+  font-size: 11px;
+}
+
+#tooltip-effect {
+  color: #ffffff;
+  white-space: pre-line;
+  line-height: 1.4;
+  border-top: 1px solid #2a3545;
+  padding-top: 6px;
+}
+
+.hidden {
+  display: none !important;
+}
