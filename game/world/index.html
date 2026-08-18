@@ -3,57 +3,71 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>1936 WWII World Map</title>
+  <title>HoI4 Style Map Game</title>
   
+  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="style.css" />
+  
+  <!-- カスタムCSS -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div id="app">
-  <div id="sidebar">
-    <div class="panel-header">1936 Eastern Front Command</div>
-    
-    <div class="panel-section">
-      <div class="section-title">1. 支配国の選択（プロヴィンス占領）</div>
-      <div class="country-selector">
-        <button class="country-btn active" id="btn-SOV" onclick="selectCountry('SOV')">
-          <span>☭</span> ソ連
-        </button>
-        <button class="country-btn" id="btn-GER" onclick="selectCountry('GER')">
-          <span>卍</span> ドイツ
-        </button>
+  <div id="app">
+    <!-- サイドバーパネル -->
+    <div id="sidebar">
+      <div class="panel-header">
+        🛡️ 作戦司令部
       </div>
-      <p class="panel-note">
-        ※国家を選択し、マップ上の領土や海域をクリックすると支配国（ソ連:赤 / ドイツ:黒）を変更できます。
-      </p>
+
+      <!-- 国家選択セクション -->
+      <div class="panel-section">
+        <div class="section-title">操作対象・支配国の選択</div>
+        <div class="country-selector">
+          <button id="btn-SOV" class="country-btn active" onclick="selectCountry('SOV')">
+            🔴 ソビエト連邦
+          </button>
+          <button id="btn-GER" class="country-btn" onclick="selectCountry('GER')">
+            ⚫ ナチス・ドイツ
+          </button>
+        </div>
+        <div class="panel-note">
+          ※ 選択した状態でマップ上のプロヴィンス（地区）をクリックすると領土が切り替わります。
+        </div>
+      </div>
+
+      <!-- 師団配備セクション -->
+      <div class="panel-section">
+        <div class="section-title">部隊運用</div>
+        <div class="division-box">
+          <div class="division-note">選択中の国家の師団をマップに配置</div>
+          <button id="btn-add-div" class="country-btn" onclick="toggleAddDivisionMode()">
+            🪖 師団を新規配備
+          </button>
+        </div>
+      </div>
+
+      <!-- 凡例セクション -->
+      <div class="panel-section">
+        <div class="section-title">マップ凡例</div>
+        <ul class="legend-list">
+          <li><span style="color: #e74c3c;">■</span> 赤色: ソビエト連邦 領土</li>
+          <li><span style="color: #2c3e50;">■</span> 紺灰色: ナチス・ドイツ 領土</li>
+          <li><span style="color: #7f8c8d;">---</span> 破線: 中立 / 緩衝地帯</li>
+          <li><span>⛰️</span> アイコン: 重要要塞・地形</li>
+          <li><span>🌊</span> アイコン: 主要渡河ライン / 海域</li>
+        </ul>
+      </div>
     </div>
 
-    <div class="panel-section">
-      <div class="section-title">2. 師団の追加</div>
-      <div class="division-box">
-        <div class="division-note">マップをクリックして師団を配置</div>
-        <button class="country-btn" onclick="toggleAddDivisionMode()" id="btn-add-div">
-          🪖 師団を新規配備
-        </button>
-      </div>
-    </div>
-
-    <div class="panel-section">
-      <div class="section-title">マップ凡例</div>
-      <ul class="legend-list">
-        <li><span class="legend-icon">⛰️</span> 主要山脈 (突破困難)</li>
-        <li><span class="legend-icon">🌊</span> 大河川 (渡河ペナルティ)</li>
-        <li><span style="color:#e74c3c;">➡</span> 電撃戦突破予測ルート</li>
-      </ul>
-    </div>
+    <!-- マップ表示エリア -->
+    <div id="map"></div>
   </div>
 
-  <div id="map"></div>
-</div>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="main.js"></script>
-
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  
+  <!-- メインロジック JS -->
+  <script src="main.js"></script>
 </body>
 </html>
