@@ -3,19 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HOI4 Soviet Focus Tree</title>
+  <title>HOI4 USSR Focus Tree & Command Terminal</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- HOI4風 ビューポート -->
+  <!-- 1. タイプライター風 トップステータスバー -->
+  <div id="status-bar">
+    <div class="stat-item"><span class="stat-label">STABILITY</span> <span id="val-stability" class="stat-val">85 / 100</span></div>
+    <div class="stat-item"><span class="stat-label">WAR SUPPORT</span> <span id="val-war-support" class="stat-val">60 / 100</span></div>
+    <div class="stat-item"><span class="stat-label">AGRESSION</span> <span id="val-aggression" class="stat-val">42 / 100</span></div>
+    <div class="stat-item"><span class="stat-label">POLITICAL POWER</span> <span id="val-pp" class="stat-val">120 / 100</span></div>
+    
+    <!-- タイプライター風 リアルタイムログ -->
+    <div id="typewriter-container">
+      <span id="typewriter-text"></span><span class="cursor">_</span>
+    </div>
+  </div>
+
+  <!-- 2. NFツリー描画ビューポート -->
   <div id="hoi4-tree-viewport">
     <div id="hoi4-tree-container">
-      <!-- 接続線を描画するSVGレイヤー -->
       <svg id="svg-lines"></svg>
-      <!-- NFノードが注入されるレイヤー -->
       <div id="focus-nodes"></div>
     </div>
+  </div>
+
+  <!-- 3. ホバー時ツールチップ (効果・説明の吹き出し) -->
+  <div id="nf-tooltip" class="hidden">
+    <div id="tooltip-title"></div>
+    <div id="tooltip-time"></div>
+    <hr>
+    <div id="tooltip-effect"></div>
   </div>
 
   <script src="script.js"></script>
