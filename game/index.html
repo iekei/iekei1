@@ -2,38 +2,50 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HOI4 USSR Focus Tree & Command Terminal</title>
+  <title>HOI4 Style Focus Tree System</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <!-- 1. タイプライター風 トップステータスバー -->
-  <div id="status-bar">
-    <div class="stat-item"><span class="stat-label">STABILITY</span> <span id="val-stability" class="stat-val">85 / 100</span></div>
-    <div class="stat-item"><span class="stat-label">WAR SUPPORT</span> <span id="val-war-support" class="stat-val">60 / 100</span></div>
-    <div class="stat-item"><span class="stat-label">AGRESSION</span> <span id="val-aggression" class="stat-val">42 / 100</span></div>
-    <div class="stat-item"><span class="stat-label">POLITICAL POWER</span> <span id="val-pp" class="stat-val">120 / 100</span></div>
-    
-    <!-- タイプライター風 リアルタイムログ -->
-    <div id="typewriter-container">
-      <span id="typewriter-text"></span><span class="cursor">_</span>
+  <!-- トップバー (ステータス & 日時・速度操作) -->
+  <header id="top-bar">
+    <div class="stats-group">
+      <div class="stat-item">安定度: <span id="val-stability">85 / 100</span></div>
+      <div class="stat-item">戦争協力度: <span id="val-war-support">60 / 100</span></div>
+      <div class="stat-item">攻撃性: <span id="val-aggression">42 / 100</span></div>
+      <div class="stat-item">政治力: <span id="val-pp">120 / 100</span></div>
     </div>
+
+    <!-- カレンダー & 時間速度変更コントローラー -->
+    <div class="time-control-group">
+      <div id="calendar-display">1936年1月1日</div>
+      <div class="speed-buttons">
+        <button id="btn-pause" class="speed-btn active">⏸️</button>
+        <button class="speed-btn" data-speed="1">1速</button>
+        <button class="speed-btn" data-speed="2">2速</button>
+        <button class="speed-btn" data-speed="3">3速</button>
+        <button class="speed-btn" data-speed="4">4速</button>
+        <button class="speed-btn" data-speed="5">5速</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- タイプライターログエリア -->
+  <div id="log-banner">
+    <span id="typewriter-text">1936年1月1日 - 世界情勢の監視を開始...</span>
   </div>
 
-  <!-- 2. NFツリー描画ビューポート -->
-  <div id="hoi4-tree-viewport">
-    <div id="hoi4-tree-container">
+  <!-- 国家方針ツリー表示領域 (ドラッグ＆ズーム可能) -->
+  <main id="tree-container">
+    <div id="tree-viewport">
       <svg id="svg-lines"></svg>
       <div id="focus-nodes"></div>
     </div>
-  </div>
+  </main>
 
-  <!-- 3. ホバー時ツールチップ (効果・説明の吹き出し) -->
+  <!-- ツールチップ -->
   <div id="nf-tooltip" class="hidden">
     <div id="tooltip-title"></div>
     <div id="tooltip-time"></div>
-    <hr>
     <div id="tooltip-effect"></div>
   </div>
 
