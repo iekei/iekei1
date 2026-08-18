@@ -1,11 +1,11 @@
 // ==========================================
 // 1. ゲーム内時間 & 速度管理システム
 // ==========================================
-let currentDate = new Date(1936, 0, 1); // 1936年1月1日
+let currentDate = new Date(1936, 0, 1); // 1936年1月1日スタート
 let gameSpeed = 0; // 0: 停止, 1~5: 各スピード
 let gameTimer = null;
 
-// スピードごとの更新間隔(ミリ秒) - 5速が最速
+// スピードごとの更新間隔(ミリ秒)
 const speedIntervals = {
   1: 2000,
   2: 1200,
@@ -30,7 +30,7 @@ const lockedFocuses = new Set();
 let activeFocus = null;      // 現在選択して進行中のNFオブジェクト
 let focusDaysRemaining = 0;  // 選択中NFの残り日数
 
-// 日付フォーマット更新
+// 日付表示の更新
 function updateCalendarUI() {
   const y = currentDate.getFullYear();
   const m = currentDate.getMonth() + 1;
@@ -47,7 +47,7 @@ function tickDay() {
   if (activeFocus) {
     focusDaysRemaining--;
 
-    // 進行状況の画面反映
+    // 進行状況（残り日数）の画面リアルタイム反映
     const activeNodeEl = document.querySelector(`.focus-node[data-id="${activeFocus.id}"]`);
     if (activeNodeEl) {
       const progressEl = activeNodeEl.querySelector('.focus-progress');
@@ -56,7 +56,7 @@ function tickDay() {
       }
     }
 
-    // NF達成時処理
+    // NF達成時の処理
     if (focusDaysRemaining <= 0) {
       completeActiveFocus();
     }
@@ -68,7 +68,7 @@ function setGameSpeed(speed) {
   gameSpeed = speed;
   if (gameTimer) clearInterval(gameTimer);
 
-  // UI状態更新
+  // UIアクティブ状態の切替
   document.querySelectorAll('.speed-btn').forEach(btn => btn.classList.remove('active'));
 
   if (speed === 0) {
@@ -100,7 +100,7 @@ function completeActiveFocus() {
   const completedNf = activeFocus;
   completedFocuses.add(completedNf.id);
 
-  // 排他処理の適用
+  // 相互排他処理の適用
   if (completedNf.mutually_exclusive) {
     const targets = Array.isArray(completedNf.mutually_exclusive) 
       ? completedNf.mutually_exclusive 
@@ -121,7 +121,8 @@ function completeActiveFocus() {
 }
 
 function setLogText(text) {
-  document.getElementById("typewriter-text").textContent = text;
+  const target = document.getElementById("typewriter-text");
+  if (target) target.textContent = text;
 }
 
 // ==========================================
@@ -169,9 +170,9 @@ container.addEventListener('wheel', (e) => {
   const delta = -e.deltaY;
 
   if (delta > 0) {
-    scale = Math.min(scale * 1.1, 2.5); // 最大倍率 2.5倍
+    scale = Math.min(scale * 1.1, 2.5); // 最大 2.5倍
   } else {
-    scale = Math.max(scale / 1.1, 0.4); // 最小倍率 0.4倍
+    scale = Math.max(scale / 1.1, 0.3); // 最小 0.3倍
   }
 
   pointX = e.clientX - xs * scale;
@@ -180,7 +181,7 @@ container.addEventListener('wheel', (e) => {
 });
 
 // ==========================================
-// 4. ツリー描画処理
+// 4. ツリー描画処理 & 安全対策
 // ==========================================
 function isUnlocked(nf) {
   if (lockedFocuses.has(nf.id)) return false;
@@ -189,30 +190,36 @@ function isUnlocked(nf) {
 }
 
 function renderTree() {
-// script.js 内 renderTree() の後半（線の描画部分）を以下に差し替え
+  const nodesContainer = document.getElementById('focus-nodes');
+  const svgLines = document.getElementById('svg-lines');
+  nodesContainer.innerHTML = '';
+  svgLines.innerHTML = '';
 
-  // 接続線を描画
+  // 1. ノードの描画
   allFocuses.forEach(nf => {
-    if (nf.prerequisites && Array.isArray(nf.prerequisites)) {
-      nf.prerequisites.forEach(parentId => {
-        const parent = focusMap[parentId];
-        
-        // 親ノードが存在する場合のみ線を引く（存在しない場合のガード処理）
-        if (parent) {
-          drawOrthogonalLine(
-            parent.x + 55, parent.y + 75, // 親ノードの下中央
-            nf.x + 55, nf.y,               // 子ノードの上中央
-            svgLines,
-            completedFocuses.has(parentId)
-          );
-        } else {
-          console.warn(`[NF Line Error] ID: "${nf.id}" の親NF "${parentId}" が見つかりません。JSONのIDを確認してください。`);
-        }
-      });
-    }
-  });
+    const node = document.createElement('div');
+    node.className = 'focus-node';
+    node.setAttribute('data-id', nf.id);
 
-    // アイコン & チェックマーク設定
+    const isCompleted = completedFocuses.has(nf.id);
+    const isLocked = lockedFocuses.has(nf.id) || !isUnlocked(nf);
+    const isActive = activeFocus && activeFocus.id === nf.id;
+
+    if (isCompleted) {
+      node.classList.add('completed');
+    } else if (isActive) {
+      node.classList.add('in-progress');
+    } else if (isLocked) {
+      node.classList.add('locked');
+      if (lockedFocuses.has(nf.id)) node.classList.add('mutually-blocked');
+    } else {
+      node.classList.add('available');
+    }
+
+    node.style.left = `${nf.x}px`;
+    node.style.top = `${nf.y}px`;
+
+    // チェックマーク表示と時間テキストの切り替え
     const checkMarkHtml = isCompleted ? `<div class="check-mark">✔</div>` : '';
     const progressTextHtml = isActive 
       ? `<div class="focus-progress">残り ${focusDaysRemaining}日</div>` 
@@ -225,17 +232,17 @@ function renderTree() {
       ${progressTextHtml}
     `;
 
-    // ツールチップ
+    // ツールチップイベント
     node.addEventListener('mouseenter', (e) => showTooltip(e, nf));
     node.addEventListener('mousemove', (e) => moveTooltip(e));
     node.addEventListener('mouseleave', hideTooltip);
 
-    // クリック処理（選択実行）
+    // クリック（国家方針選択）
     node.addEventListener('click', (e) => {
       e.stopPropagation();
       if (isCompleted) return;
       if (isLocked) {
-        setLogText(`【不可】この国家方針は現在選択できません。`);
+        setLogText(`【不可】この国家方針は現在選択できません。前提条件または排他選択を確認してください。`);
         return;
       }
       startFocus(nf);
@@ -244,24 +251,38 @@ function renderTree() {
     nodesContainer.appendChild(node);
   });
 
-  // 線の描画
+  // 2. 接続線の描画（右側などの線が途切れないよう安全ガードを実装）
   allFocuses.forEach(nf => {
-    if (nf.prerequisites) {
+    if (nf.prerequisites && Array.isArray(nf.prerequisites)) {
       nf.prerequisites.forEach(parentId => {
         const parent = focusMap[parentId];
         if (parent) {
           drawOrthogonalLine(
-            parent.x + 55, parent.y + 75,
-            nf.x + 55, nf.y,
+            parent.x + 55, parent.y + 75, // 親の下中央
+            nf.x + 55, nf.y,               // 子の上中央
             svgLines,
             completedFocuses.has(parentId)
           );
+        } else {
+          console.warn(`[NF Line Warning] ノード "${nf.id}" (${nf.title}) の親ID "${parentId}" が見つかりません。JSONデータを確認してください。`);
+        }
+      });
+    }
+
+    // 排他線（赤破線）の描画
+    if (nf.mutually_exclusive) {
+      const targets = Array.isArray(nf.mutually_exclusive) ? nf.mutually_exclusive : [nf.mutually_exclusive];
+      targets.forEach(targetId => {
+        const targetNf = focusMap[targetId];
+        if (targetNf && nf.id < targetId) { // 二重描画防止
+          drawExclusiveLine(nf.x + 55, nf.y + 37, targetNf.x + 55, targetNf.y + 37, svgLines);
         }
       });
     }
   });
 }
 
+// HOI4風 直角線の描画
 function drawOrthogonalLine(x1, y1, x2, y2, svg, isActive) {
   const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
   const midY = y1 + (y2 - y1) / 2;
@@ -274,6 +295,18 @@ function drawOrthogonalLine(x1, y1, x2, y2, svg, isActive) {
   svg.appendChild(path);
 }
 
+// 相互排他線（赤破線）の描画
+function drawExclusiveLine(x1, y1, x2, y2, svg) {
+  const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  line.setAttribute('x1', x1);
+  line.setAttribute('y1', y1);
+  line.setAttribute('x2', x2);
+  line.setAttribute('y2', y2);
+  line.setAttribute('class', 'nf-exclusive-line');
+  svg.appendChild(line);
+}
+
+// ステータス効果適用
 function applyFocusEffects(effectText) {
   if (!effectText) return;
   const lines = effectText.split('\n');
@@ -302,8 +335,9 @@ const tooltip = document.getElementById('nf-tooltip');
 function showTooltip(e, nf) {
   const isCompleted = completedFocuses.has(nf.id);
   const isActive = activeFocus && activeFocus.id === nf.id;
+  const isLocked = lockedFocuses.has(nf.id) || !isUnlocked(nf);
   
-  let status = isCompleted ? "【達成済み】" : (isActive ? "【実行中】" : "【選択可能】");
+  let status = isCompleted ? "【達成済み】" : (isActive ? "【実行中】" : (isLocked ? "🔒【選択不可】" : "🔓【選択可能】"));
   document.getElementById('tooltip-title').textContent = `${nf.title} ${status}`;
   document.getElementById('tooltip-time').textContent = `⏱️ 必要時間: ${isActive ? focusDaysRemaining + "日 (進行中)" : (nf.cost || 70) + "日"}`;
   document.getElementById('tooltip-effect').textContent = nf.effect || "効果なし";
@@ -321,7 +355,9 @@ function hideTooltip() {
   tooltip.classList.add('hidden');
 }
 
-// ボタンイベント設定
+// ==========================================
+// 5. 初期化 & イベントバインド
+// ==========================================
 document.getElementById('btn-pause').addEventListener('click', () => setGameSpeed(0));
 document.querySelectorAll('.speed-btn[data-speed]').forEach(btn => {
   btn.addEventListener('click', (e) => {
@@ -330,13 +366,29 @@ document.querySelectorAll('.speed-btn[data-speed]').forEach(btn => {
   });
 });
 
-// モックデータ読み込み（ローカル動作確認用fallback付き）
+// パス試行リスト（データロード）
+const batchFiles = [
+  './data/nf_batch1.json',
+  '../data/nf_batch1.json',
+  'data/nf_batch1.json'
+];
+
+async function fetchWithFallback(paths) {
+  for (const path of paths) {
+    try {
+      const res = await fetch(path);
+      if (res.ok) return await res.json();
+    } catch (e) {}
+  }
+  throw new Error(`JSONファイルが見つかりません:\n${paths.join('\n')}`);
+}
+
 async function init() {
   try {
-    const res = await fetch('./data/nf_batch1.json');
-    allFocuses = await res.json();
+    allFocuses = await fetchWithFallback(batchFiles);
   } catch (e) {
-    // データ取得失敗時のフォールバックデータ
+    console.error(e.message);
+    // 取得失敗時のデモフォールバックデータ
     allFocuses = [
       { id: "NF_1", title: "産業基盤の強化", x: 300, y: 50, cost: 30, effect: "政治力 +20\n安定度 +5" },
       { id: "NF_2", title: "軍需工場の拡張", x: 200, y: 180, cost: 45, prerequisites: ["NF_1"], mutually_exclusive: ["NF_3"], effect: "戦争協力度 +10" },
