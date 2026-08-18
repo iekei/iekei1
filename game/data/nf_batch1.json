@@ -1,431 +1,479 @@
 [
   {
-    "id": "sov_five_year_plan",
-    "title": "第3次5ヵ年計画の完了",
-    "icon": "https://via.placeholder.com/48/8b0000/ffffff?text=5YP",
-    "x": 300,
-    "y": 50,
+    "id": "sov_center_stalin",
+    "title": "スターリン主義の確立",
+    "x": 2000,
+    "y": 100,
+    "cost": 70,
+    "effect": "・政治力: +150\n・スターリンの個人的権威: +15%\n・日々の政治力獲得: +0.25",
     "prerequisites": []
-  },
-  {
-    "id": "sov_heavy_industry",
-    "title": "重工業の優先",
-    "icon": "https://via.placeholder.com/48/8b0000/ffffff?text=IND",
-    "x": 150,
-    "y": 180,
-    "prerequisites": ["sov_five_year_plan"]
-  },
-  {
-    "id": "sov_collectivization",
-    "title": "農業集団化の継続",
-    "icon": "https://via.placeholder.com/48/8b0000/ffffff?text=AGR",
-    "x": 450,
-    "y": 180,
-    "prerequisites": ["sov_five_year_plan"]
-  },
-  {
-    "id": "sov_resource_extraction",
-    "title": "シベリア資源開発",
-    "icon": "https://via.placeholder.com/48/8b0000/ffffff?text=MINE",
-    "x": 100,
-    "y": 310,
-    "prerequisites": ["sov_heavy_industry"]
-  },
-  {
-    "id": "sov_infrastructure",
-    "title": "インフラ整備とウラル開発",
-    "icon": "https://via.placeholder.com/48/8b0000/ffffff?text=INF",
-    "x": 200,
-    "y": 310,
-    "prerequisites": ["sov_heavy_industry"]
-  },
-  {
-    "id": "sov_armament_factories",
-    "title": "軍需工場の急速建設",
-    "icon": "https://via.placeholder.com/48/8b0000/ffffff?text=MIL",
-    "x": 150,
-    "y": 440,
-    "prerequisites": ["sov_infrastructure"]
-  },
-  {
-    "id": "sov_kolkhoz_expansion",
-    "title": "コレホーズの強化",
-    "icon": "https://via.placeholder.com/48/8b0000/ffffff?text=FARM",
-    "x": 400,
-    "y": 310,
-    "prerequisites": ["sov_collectivization"]
-  },
-  {
-    "id": "sov_grain_reserves",
-    "title": "国家食糧備蓄の確保",
-    "icon": "https://via.placeholder.com/48/8b0000/ffffff?text=GRAIN",
-    "x": 500,
-    "y": 310,
-    "prerequisites": ["sov_collectivization"]
-  },
-  {
-    "id": "sov_ural_evacuation_plan",
-    "title": "ウラル移転（疎開計画準備）",
-    "icon": "https://via.placeholder.com/48/8b0000/ffffff?text=EVAC",
-    "x": 300,
-    "y": 570,
-    "prerequisites": ["sov_armament_factories", "sov_kolkhoz_expansion"]
-  },
-
-  {
-    "id": "sov_stalin_center",
-    "title": "党中央の団結",
-    "icon": "https://via.placeholder.com/48/cc0000/ffffff?text=CENTER",
-    "x": 1000,
-    "y": 50,
-    "prerequisites": []
-  },
-  {
-    "id": "sov_secure_the_administration",
-    "title": "行政機構の掌握",
-    "icon": "https://via.placeholder.com/48/cc0000/ffffff?text=ADM",
-    "x": 1000,
-    "y": 180,
-    "prerequisites": ["sov_stalin_center"]
   },
   {
     "id": "sov_great_purge",
     "title": "大粛清の開始",
-    "icon": "https://via.placeholder.com/48/cc0000/ffffff?text=PURGE",
-    "x": 1000,
-    "y": 310,
-    "prerequisites": ["sov_secure_the_administration"]
+    "x": 2000,
+    "y": 250,
+    "cost": 70,
+    "effect": "・政治的混乱を解消\n・将校団の信頼度下降\n・「大粛清」国民精神を獲得",
+    "prerequisites": ["sov_center_stalin"]
   },
   {
-    "id": "sov_nkvd_primacy",
-    "title": "NKVDの権限強化",
-    "icon": "https://via.placeholder.com/48/cc0000/ffffff?text=NKVD",
-    "x": 800,
-    "y": 440,
+    "id": "sov_purge_military",
+    "title": "赤軍幹部の粛清",
+    "x": 1850,
+    "y": 400,
+    "cost": 70,
+    "effect": "・陸軍経験値: +50\n・組織率補正: -10%\n・不真面目な将兵の淘汰",
     "prerequisites": ["sov_great_purge"]
   },
   {
-    "id": "sov_bloc_of_rights_and_trotskyites",
-    "title": "右翼・トロツキー派裁判",
-    "icon": "https://via.placeholder.com/48/cc0000/ffffff?text=TRIAL1",
-    "x": 1000,
-    "y": 440,
+    "id": "sov_purge_party",
+    "title": "党内反対派の処罰",
+    "x": 2150,
+    "y": 400,
+    "cost": 70,
+    "effect": "・安定度: +10.00%\n・政治力: +100\n・旧トロツキー派の完全解体",
     "prerequisites": ["sov_great_purge"]
   },
   {
-    "id": "sov_military_purge",
-    "title": "赤軍幹部の清算（軍部粛清）",
-    "icon": "https://via.placeholder.com/48/cc0000/ffffff?text=ARMYP",
-    "x": 1200,
-    "y": 440,
-    "prerequisites": ["sov_great_purge"]
+    "id": "sov_show_trials",
+    "title": "モスクワ裁判",
+    "x": 2000,
+    "y": 550,
+    "cost": 70,
+    "effect": "・内戦の危険性を消滅\n・安定度: +15.00%\n・外国からの警戒度上昇",
+    "prerequisites": ["sov_purge_military", "sov_purge_party"]
   },
   {
-    "id": "sov_anti_soviet_trotskyist_center",
-    "title": "反ソ連トロツキー派中心の解体",
-    "icon": "https://via.placeholder.com/48/cc0000/ffffff?text=TRIAL2",
-    "x": 900,
-    "y": 570,
-    "prerequisites": ["sov_nkvd_primacy", "sov_bloc_of_rights_and_trotskyites"]
-  },
-  {
-    "id": "sov_purge_pessimists",
-    "title": "敗北主義者の排除",
-    "icon": "https://via.placeholder.com/48/cc0000/ffffff?text=CLEAN",
-    "x": 1100,
-    "y": 570,
-    "prerequisites": ["sov_bloc_of_rights_and_trotskyites", "sov_military_purge"]
+    "id": "sov_nkvd_order_00447",
+    "title": "NKVD命令第00447号",
+    "x": 1850,
+    "y": 700,
+    "cost": 35,
+    "effect": "・政情不安の抑止: +20.00%\n・NKVD特殊部隊の動員可能\n・戦争協力度: -5.00%",
+    "prerequisites": ["sov_show_trials"]
   },
   {
     "id": "sov_cult_of_personality",
-    "title": "個人崇拝の確立",
-    "icon": "https://via.placeholder.com/48/cc0000/ffffff?text=CULT",
-    "x": 1000,
+    "title": "個人崇拝の絶頂",
+    "x": 2150,
     "y": 700,
-    "prerequisites": ["sov_anti_soviet_trotskyist_center", "sov_purge_pessimists"]
-  },
-  {
-    "id": "sov_propaganda_campaign",
-    "title": "国家アジテーションポスター展開",
-    "icon": "https://via.placeholder.com/48/cc0000/ffffff?text=PROP",
-    "x": 850,
-    "y": 830,
-    "prerequisites": ["sov_cult_of_personality"]
+    "cost": 70,
+    "effect": "・スターリンの統制力強化\n・イデオロギー変化への抵抗感: +50%\n・国民の結束度上昇",
+    "prerequisites": ["sov_show_trials"]
   },
   {
     "id": "sov_socialist_realism",
-    "title": "社会主義リアリズムの推進",
-    "icon": "https://via.placeholder.com/48/cc0000/ffffff?text=ART",
-    "x": 1150,
-    "y": 830,
-    "prerequisites": ["sov_cult_of_personality"]
+    "title": "社会主義リアリズム",
+    "x": 2000,
+    "y": 850,
+    "cost": 70,
+    "effect": "・安定度: +10.00%\n・研究速度: +3.0%\n・文芸・思想の党管理化",
+    "prerequisites": ["sov_nkvd_order_00447", "sov_cult_of_personality"]
   },
   {
-    "id": "sov_komsomol_focus",
-    "title": "コムソモール（共産主義青年同盟）強化",
-    "icon": "https://via.placeholder.com/48/cc0000/ffffff?text=YOUTH",
-    "x": 1000,
-    "y": 960,
-    "prerequisites": ["sov_propaganda_campaign", "sov_socialist_realism"]
+    "id": "sov_constitution_1936",
+    "title": "1936年ソビエト憲法",
+    "x": 2000,
+    "y": 1000,
+    "cost": 70,
+    "effect": "・政治力獲得: +15%\n・国家の正当性確立\n・「大粛清」完了へのカウントダウン",
+    "prerequisites": ["sov_socialist_realism"]
   },
-
   {
-    "id": "sov_red_army_reorganization",
-    "title": "赤軍の再編",
-    "icon": "https://via.placeholder.com/48/445566/ffffff?text=ARMY",
-    "x": 1800,
-    "y": 50,
+    "id": "sov_five_year_plan_3",
+    "title": "第3次5ヵ年計画",
+    "x": 1200,
+    "y": 100,
+    "cost": 70,
+    "effect": "・産業出力: +5.0%\n・民需工場: +3\n・建設速度: +10.0%",
     "prerequisites": []
   },
   {
-    "id": "sov_political_commissars",
-    "title": "政治将校の配置強化",
-    "icon": "https://via.placeholder.com/48/445566/ffffff?text=COMM",
-    "x": 1650,
-    "y": 180,
-    "prerequisites": ["sov_red_army_reorganization"]
+    "id": "sov_industrial_heavy",
+    "title": "重工業の優先",
+    "x": 1050,
+    "y": 250,
+    "cost": 70,
+    "effect": "・インフラ建設速度: +15%\n・民需工場: +4\n・資源採掘量: +10%",
+    "prerequisites": ["sov_five_year_plan_3"]
   },
   {
-    "id": "sov_deep_battle",
-    "title": "縦深戦術ドクトリン",
-    "icon": "https://via.placeholder.com/48/445566/ffffff?text=DOCT",
-    "x": 1800,
-    "y": 180,
-    "prerequisites": ["sov_red_army_reorganization"]
+    "id": "sov_collectivization",
+    "title": "農業集団化の継続",
+    "x": 1350,
+    "y": 250,
+    "cost": 70,
+    "effect": "・安定度: +5.00%\n・補給物資消費量: -5.0%\n・可動人口: +1.0%",
+    "prerequisites": ["sov_five_year_plan_3"]
   },
   {
-    "id": "sov_tank_design_bureau",
-    "title": "戦車設計局（T-34開発）",
-    "icon": "https://via.placeholder.com/48/445566/ffffff?text=TANK",
-    "x": 1950,
-    "y": 180,
-    "prerequisites": ["sov_red_army_reorganization"]
+    "id": "sov_magnitogorsk",
+    "title": "マグニトゴルスク鉄鋼コンビナート",
+    "x": 900,
+    "y": 400,
+    "cost": 70,
+    "effect": "・鉄資源: +24\n・民需工場: +2\n・ウラル地域の開発",
+    "prerequisites": ["sov_industrial_heavy"]
+  },
+  {
+    "id": "sov_armament_industry",
+    "title": "軍需工場の拡張",
+    "x": 1200,
+    "y": 400,
+    "cost": 70,
+    "effect": "・軍需工場: +4\n・軍需工場建設速度: +10.0%",
+    "prerequisites": ["sov_industrial_heavy", "sov_collectivization"]
+  },
+  {
+    "id": "sov_tractor_factories",
+    "title": "トラクター工場の軍需転換",
+    "x": 1500,
+    "y": 400,
+    "cost": 35,
+    "effect": "・軍需工場: +3\n・戦車生産コスト: -5.0%",
+    "prerequisites": ["sov_collectivization"]
+  },
+  {
+    "id": "sov_ural_relocation",
+    "title": "ウラル疎開計画の策定",
+    "x": 1050,
+    "y": 550,
+    "cost": 70,
+    "effect": "・工場の移転コスト半減\n・東部地域のインフラ強化",
+    "prerequisites": ["sov_magnitogorsk", "sov_armament_industry"]
+  },
+  {
+    "id": "sov_siberian_development",
+    "title": "シベリア開発",
+    "x": 1350,
+    "y": 550,
+    "cost": 70,
+    "effect": "・アルミニウム: +16\n・石油: +12\n・インフラ: +2",
+    "prerequisites": ["sov_armament_industry", "sov_tractor_factories"]
+  },
+  {
+    "id": "sov_third_five_year_completion",
+    "title": "5ヵ年計画の達成",
+    "x": 1200,
+    "y": 700,
+    "cost": 70,
+    "effect": "・全工場出力: +10.0%\n・生産効率増大上限: +10.0%",
+    "prerequisites": ["sov_ural_relocation", "sov_siberian_development"]
+  },
+  {
+    "id": "sov_red_army",
+    "title": "赤軍の再編",
+    "x": 2800,
+    "y": 100,
+    "cost": 70,
+    "effect": "・陸軍経験値: +50\n・ドクトリン研究速度: +10.0%",
+    "prerequisites": []
+  },
+  {
+    "id": "sov_infantry_modernization",
+    "title": "歩兵装備の近代化",
+    "x": 2650,
+    "y": 250,
+    "cost": 70,
+    "effect": "・歩兵研究技術に100%研究ボーナス\n・歩兵装備生産性: +5%",
+    "prerequisites": ["sov_red_army"]
   },
   {
     "id": "sov_artillery_focus",
-    "title": "砲兵至上主義（カチューシャ砲）",
-    "icon": "https://via.placeholder.com/48/445566/ffffff?text=ARTY",
-    "x": 1700,
-    "y": 310,
-    "prerequisites": ["sov_deep_battle"]
+    "title": "大砲主義の確立",
+    "x": 2950,
+    "y": 250,
+    "cost": 70,
+    "effect": "・野砲・対戦車砲研究に100%ボーナス\n・砲兵攻撃力: +10%",
+    "prerequisites": ["sov_red_army"]
   },
   {
-    "id": "sov_mechanization",
-    "title": "機械化師団の整備",
-    "icon": "https://via.placeholder.com/48/445566/ffffff?text=MECH",
-    "x": 1900,
-    "y": 310,
-    "prerequisites": ["sov_deep_battle", "sov_tank_design_bureau"]
+    "id": "sov_tank_design",
+    "title": "新世代中戦車の設計",
+    "x": 2500,
+    "y": 400,
+    "cost": 70,
+    "effect": "・中戦車研究に100%ボーナス(T-34解禁)\n・装甲部隊信頼性: +10%",
+    "prerequisites": ["sov_infantry_modernization"]
   },
   {
-    "id": "sov_lessons_of_war",
-    "title": "戦争の教訓（軍事ペナルティ解除）",
-    "icon": "https://via.placeholder.com/48/445566/ffffff?text=LESSON",
-    "x": 1800,
-    "y": 440,
-    "prerequisites": ["sov_military_purge", "sov_political_commissars", "sov_mechanization"]
+    "id": "sov_deep_battle",
+    "title": "縦深戦略論の再評価",
+    "x": 2800,
+    "y": 400,
+    "cost": 70,
+    "effect": "・大規模作戦ドクトリンに100%ボーナス×2\n・師団組織率: +5",
+    "prerequisites": ["sov_infantry_modernization", "sov_artillery_focus"]
   },
   {
-    "id": "sov_rehabilitate_officers",
-    "title": "将校団の名誉回復",
-    "icon": "https://via.placeholder.com/48/445566/ffffff?text=OFFICER",
-    "x": 1650,
-    "y": 570,
-    "prerequisites": ["sov_lessons_of_war"]
+    "id": "sov_heavy_tanks",
+    "title": "重装甲師団の結成",
+    "x": 3100,
+    "y": 400,
+    "cost": 70,
+    "effect": "・重戦車研究ボーナス\n・KV-1 / IS-2 設計構想の獲得",
+    "prerequisites": ["sov_artillery_focus"]
   },
   {
-    "id": "sov_modernize_command",
-    "title": "指揮統率の近代化",
-    "icon": "https://via.placeholder.com/48/445566/ffffff?text=CMD",
-    "x": 1950,
-    "y": 570,
-    "prerequisites": ["sov_lessons_of_war"]
+    "id": "sov_katyusha",
+    "title": "カチューシャロケット砲の導入",
+    "x": 2650,
+    "y": 550,
+    "cost": 35,
+    "effect": "・ロケット砲兵解禁\n・対人攻撃力: +15%",
+    "prerequisites": ["sov_tank_design", "sov_deep_battle"]
   },
   {
-    "id": "sov_order_227",
-    "title": "「一歩も退くな！」（死守命令）",
-    "icon": "https://via.placeholder.com/48/445566/ffffff?text=227",
-    "x": 1800,
+    "id": "sov_lessons_of_winter_war",
+    "title": "冬戦争の教訓",
+    "x": 2950,
+    "y": 550,
+    "cost": 70,
+    "effect": "・「粛清のペナルティ」緩和\n・寒冷地適応補正: +15%",
+    "prerequisites": ["sov_deep_battle", "sov_heavy_tanks"]
+  },
+  {
+    "id": "sov_heroic_red_army",
+    "title": "無敵の英雄赤軍",
+    "x": 2800,
     "y": 700,
-    "prerequisites": ["sov_rehabilitate_officers", "sov_modernize_command"]
+    "cost": 70,
+    "effect": "・師団回収率: +10.0%\n・陸軍士気: +15.0%\n・大粛清ペナルティの完全消滅",
+    "prerequisites": ["sov_katyusha", "sov_lessons_of_winter_war"]
   },
-
   {
     "id": "sov_red_air_force",
     "title": "赤色空軍の再建",
-    "icon": "https://via.placeholder.com/48/336699/ffffff?text=AIR",
-    "x": 2300,
-    "y": 50,
+    "x": 3500,
+    "y": 100,
+    "cost": 70,
+    "effect": "・空軍経験値: +50\n・戦闘機技術に研究ボーナス",
     "prerequisites": []
   },
   {
     "id": "sov_cas_focus",
-    "title": "近接航空支援の強化（IL-2）",
-    "icon": "https://via.placeholder.com/48/336699/ffffff?text=IL2",
-    "x": 2200,
-    "y": 180,
-    "prerequisites": ["sov_red_air_force"]
-  },
-  {
-    "id": "sov_air_defense",
-    "title": "国土防空網整備",
-    "icon": "https://via.placeholder.com/48/336699/ffffff?text=AA",
-    "x": 2400,
-    "y": 180,
-    "prerequisites": ["sov_red_air_force"]
-  },
-  {
-    "id": "sov_air_academies",
-    "title": "空軍兵学校の拡充",
-    "icon": "https://via.placeholder.com/48/336699/ffffff?text=PILOT",
-    "x": 2300,
-    "y": 310,
-    "prerequisites": ["sov_cas_focus", "sov_air_defense"]
-  },
-
-  {
-    "id": "sov_red_fleet",
-    "title": "赤色大洋艦隊計画",
-    "icon": "https://via.placeholder.com/48/003366/ffffff?text=NAVY",
-    "x": 2700,
-    "y": 50,
-    "prerequisites": []
-  },
-  {
-    "id": "sov_sub_warfare",
-    "title": "潜水艦強国化",
-    "icon": "https://via.placeholder.com/48/003366/ffffff?text=SUB",
-    "x": 2600,
-    "y": 180,
-    "prerequisites": ["sov_red_fleet"]
-  },
-  {
-    "id": "sov_battleship_program",
-    "title": "戦艦「ソビエツキー・ソユーズ」設計",
-    "icon": "https://via.placeholder.com/48/003366/ffffff?text=BB",
-    "x": 2800,
-    "y": 180,
-    "prerequisites": ["sov_red_fleet"]
-  },
-  {
-    "id": "sov_baltic_shipyards",
-    "title": "バルト造船所の拡張",
-    "icon": "https://via.placeholder.com/48/003366/ffffff?text=DOCK",
-    "x": 2700,
-    "y": 310,
-    "prerequisites": ["sov_sub_warfare", "sov_battleship_program"]
-  },
-
-  {
-    "id": "sov_comintern_expansion",
-    "title": "コミンテルンの主導権強化",
-    "icon": "https://via.placeholder.com/48/990000/ffffff?text=DIP",
-    "x": 3200,
-    "y": 50,
-    "prerequisites": []
-  },
-  {
-    "id": "sov_spanish_intervention",
-    "title": "スペイン内戦への介入",
-    "icon": "https://via.placeholder.com/48/990000/ffffff?text=SPAIN",
-    "x": 3050,
-    "y": 180,
-    "prerequisites": ["sov_comintern_expansion"]
-  },
-  {
-    "id": "sov_anti_fascist_pact",
-    "title": "反ファシズム統一戦線提案",
-    "icon": "https://via.placeholder.com/48/990000/ffffff?text=ANTI",
+    "title": "地上支援機の開発",
     "x": 3350,
-    "y": 180,
-    "prerequisites": ["sov_comintern_expansion"]
+    "y": 250,
+    "cost": 70,
+    "effect": "・IL-2 (シュトルモヴィク) 解禁\n・近接航空支援の攻撃力: +15%",
+    "prerequisites": ["sov_red_air_force"]
   },
   {
-    "id": "sov_molotov_ribbentrop_pact",
-    "title": "モロトフ＝リッベントロップ協定",
-    "icon": "https://via.placeholder.com/48/990000/ffffff?text=PACT",
-    "x": 3100,
-    "y": 310,
-    "prerequisites": ["sov_spanish_intervention"]
+    "id": "sov_fighter_focus",
+    "title": "防空戦闘機隊の創設",
+    "x": 3650,
+    "y": 250,
+    "cost": 70,
+    "effect": "・Yak / La戦闘機系列にボーナス\n・迎撃効率: +20%",
+    "prerequisites": ["sov_red_air_force"]
   },
   {
-    "id": "sov_claims_on_baltics",
-    "title": "バルト諸国併合要求",
-    "icon": "https://via.placeholder.com/48/990000/ffffff?text=BALT",
-    "x": 3300,
-    "y": 310,
-    "prerequisites": ["sov_anti_fascist_pact"]
+    "id": "sov_aviation_cult",
+    "title": "空のパイロット英雄化",
+    "x": 3500,
+    "y": 400,
+    "cost": 35,
+    "effect": "・エースパイロット発生率: +25%\n・戦争協力度: +5.00%",
+    "prerequisites": ["sov_cas_focus", "sov_fighter_focus"]
+  },
+  {
+    "id": "sov_red_navy",
+    "title": "海洋艦隊構想",
+    "x": 400,
+    "y": 100,
+    "cost": 70,
+    "effect": "・海軍経験値: +50\n・造船所: +3",
+    "prerequisites": []
+  },
+  {
+    "id": "sov_submarine_school",
+    "title": "潜水艦ドクトリンの採用",
+    "x": 250,
+    "y": 250,
+    "cost": 70,
+    "effect": "・潜水艦生産コスト: -10%\n・通商破壊効率: +15%",
+    "prerequisites": ["sov_red_navy"]
+  },
+  {
+    "id": "sov_battleship_focus",
+    "title": "大洋艦隊と戦艦建造",
+    "x": 550,
+    "y": 250,
+    "cost": 70,
+    "effect": "・大型艦造船コスト: -10%\n・主力艦設計ボーナス",
+    "prerequisites": ["sov_red_navy"]
+  },
+  {
+    "id": "sov_baltic_fleet",
+    "title": "バルト海艦隊の拡張",
+    "x": 400,
+    "y": 400,
+    "cost": 70,
+    "effect": "・バルト海沿岸の沿岸要塞: +2\n・海軍基地レベル上昇",
+    "prerequisites": ["sov_submarine_school", "sov_battleship_focus"]
+  },
+  {
+    "id": "sov_foreign_policy",
+    "title": "ソビエト外交政策",
+    "x": 4500,
+    "y": 100,
+    "cost": 35,
+    "effect": "・政治力: +100\n・外交緊張度許容値の緩和",
+    "prerequisites": []
+  },
+  {
+    "id": "sov_collective_security",
+    "title": "集団安全保障の模索",
+    "x": 4350,
+    "y": 250,
+    "cost": 70,
+    "effect": "・英仏との関係改善: +50\n・民主主義イデオロギーへの歩み寄り",
+    "prerequisites": ["sov_foreign_policy"]
+  },
+  {
+    "id": "sov_realpolitik",
+    "title": "現実政治の追求",
+    "x": 4650,
+    "y": 250,
+    "cost": 70,
+    "effect": "・独自陣営「コミンテルン」の強化\n・対外正当化時間: -20%",
+    "prerequisites": ["sov_foreign_policy"]
+  },
+  {
+    "id": "sov_molotov_ribbentrop",
+    "title": "独ソ不可侵条約",
+    "x": 4500,
+    "y": 400,
+    "cost": 70,
+    "effect": "・ドイツとの不可侵条約締結\n・ポーランド分割・バルト三国併合の権利主張",
+    "prerequisites": ["sov_collective_security", "sov_realpolitik"]
+  },
+  {
+    "id": "sov_claim_baltics",
+    "title": "バルト三国の全圧迫",
+    "x": 4350,
+    "y": 550,
+    "cost": 35,
+    "effect": "・エストニア、ラトビア、リトアニアへ最後通牒\n・領土併合要求の獲得",
+    "prerequisites": ["sov_molotov_ribbentrop"]
+  },
+  {
+    "id": "sov_ultimatum_finland",
+    "title": "フィンランドへの主張",
+    "x": 4650,
+    "y": 550,
+    "cost": 35,
+    "effect": "・カレリア地峡の領土要求\n・拒否された場合戦争目標の獲得",
+    "prerequisites": ["sov_molotov_ribbentrop"]
   },
   {
     "id": "sov_claim_bessarabia",
-    "title": "ベッサラビア割譲要求（ルーマニア）",
-    "icon": "https://via.placeholder.com/48/990000/ffffff?text=ROM",
-    "x": 3000,
-    "y": 440,
-    "prerequisites": ["sov_molotov_ribbentrop_pact"]
-  },
-  {
-    "id": "sov_winter_war",
-    "title": "フィンランド侵攻（冬戦争）",
-    "icon": "https://via.placeholder.com/48/990000/ffffff?text=FIN",
-    "x": 3200,
-    "y": 440,
-    "prerequisites": ["sov_claims_on_baltics"]
-  },
-  {
-    "id": "sov_security_zone",
-    "title": "西部緩衝地帯の確立",
-    "icon": "https://via.placeholder.com/48/990000/ffffff?text=ZONE",
-    "x": 3100,
-    "y": 570,
-    "prerequisites": ["sov_claim_bessarabia", "sov_winter_war"]
-  },
-  {
-    "id": "sov_great_patriotic_war",
-    "title": "大祖国戦争（対独総力戦）",
-    "icon": "https://via.placeholder.com/48/990000/ffffff?text=WAR",
-    "x": 3200,
+    "title": "ベッサラビアの要求",
+    "x": 4500,
     "y": 700,
-    "prerequisites": ["sov_security_zone"]
+    "cost": 35,
+    "effect": "・ルーマニアへベッサラビア割譲を要求",
+    "prerequisites": ["sov_claim_baltics", "sov_ultimatum_finland"]
   },
   {
-    "id": "sov_tank_grad",
-    "title": "タンコグラード（戦車都市）覚醒",
-    "icon": "https://via.placeholder.com/48/990000/ffffff?text=CITY",
-    "x": 3050,
-    "y": 830,
-    "prerequisites": ["sov_great_patriotic_war", "sov_ural_evacuation_plan"]
+    "id": "sov_patriotic_war",
+    "title": "大祖国戦争",
+    "x": 2800,
+    "y": 850,
+    "cost": 35,
+    "effect": "・徴兵禁止解除\n・コア領土での防衛攻撃力: +20%\n・工場出力: +15%",
+    "prerequisites": ["sov_heroic_red_army", "sov_constitution_1936"]
   },
   {
-    "id": "sov_hero_cities",
-    "title": "英雄都市の宣言",
-    "icon": "https://via.placeholder.com/48/990000/ffffff?text=HERO",
-    "x": 3350,
-    "y": 830,
-    "prerequisites": ["sov_great_patriotic_war"]
+    "id": "sov_order_227",
+    "title": "一歩も退くな！(命令第227号)",
+    "x": 2650,
+    "y": 1000,
+    "cost": 35,
+    "effect": "・師団防衛値: +30.0%\n・降伏限界値: +15%\n・退却防止督戦隊の設置",
+    "prerequisites": ["sov_patriotic_war"]
   },
   {
-    "id": "sov_march_on_berlin",
-    "title": "ベルリンへの行進",
-    "icon": "https://via.placeholder.com/48/990000/ffffff?text=BERLIN",
-    "x": 3200,
-    "y": 960,
-    "prerequisites": ["sov_tank_grad", "sov_hero_cities"]
+    "id": "sov_guerrilla_warfare",
+    "title": "パルチザン運動の組織化",
+    "x": 2950,
+    "y": 1000,
+    "cost": 70,
+    "effect": "・敵占領下の消耗確率: +20%\n・暗号解読値・諜報力強化",
+    "prerequisites": ["sov_patriotic_war"]
   },
   {
-    "id": "sov_claim_kurils",
-    "title": "千島列島および樺太の確保",
-    "icon": "https://via.placeholder.com/48/990000/ffffff?text=EAST",
-    "x": 3400,
-    "y": 960,
-    "prerequisites": ["sov_great_patriotic_war"]
+    "id": "sov_women_in_war",
+    "title": "夜の魔女 (女性戦闘要員の動員)",
+    "x": 2800,
+    "y": 1150,
+    "cost": 35,
+    "effect": "・適齢男性人口枠の増加: +3.0%\n・空軍・狙撃兵部隊の能力上昇",
+    "prerequisites": ["sov_order_227", "sov_guerrilla_warfare"]
+  },
+  {
+    "id": "sov_counter_offensive",
+    "title": "大反撃の準備",
+    "x": 2800,
+    "y": 1300,
+    "cost": 70,
+    "effect": "・全軍の計画立案速度: +30%\n・移動速度: +10%\n・攻勢消費物資軽減",
+    "prerequisites": ["sov_women_in_war"]
+  },
+  {
+    "id": "sov_fall_of_berlin",
+    "title": "ベルリンへの赤旗",
+    "x": 2800,
+    "y": 1450,
+    "cost": 70,
+    "effect": "・全軍攻撃力補正: +25%\n・敵国の降伏限界急減\n・東欧のバッファーゾーン形成",
+    "prerequisites": ["sov_counter_offensive"]
+  },
+  {
+    "id": "sov_comecon",
+    "title": "コメコンの結成",
+    "x": 1200,
+    "y": 850,
+    "cost": 70,
+    "effect": "・傀儡国の工場出力を一部吸収\n・陣営内交易の効率化",
+    "prerequisites": ["sov_third_five_year_completion"]
+  },
+  {
+    "id": "sov_nuclear_project",
+    "title": "ソビエト原爆計画",
+    "x": 1200,
+    "y": 1000,
+    "cost": 70,
+    "effect": "・原子力研究に300%研究ボーナス\n・原子炉建設解禁",
+    "prerequisites": ["sov_comecon"]
+  },
+  {
+    "id": "sov_rocketry",
+    "title": "宇宙・ロケット工学",
+    "x": 1200,
+    "y": 1150,
+    "cost": 70,
+    "effect": "・ロケット技術に研究ボーナス\n・弾道ミサイル開発の基礎確立",
+    "prerequisites": ["sov_nuclear_project"]
+  },
+  {
+    "id": "sov_post_war_reconstruction",
+    "title": "戦後復興計画",
+    "x": 1200,
+    "y": 1300,
+    "cost": 70,
+    "effect": "・損傷工場の修復速度: +50%\n・国民の生活水準向上",
+    "prerequisites": ["sov_rocketry"]
   },
   {
     "id": "sov_superpower_status",
-    "title": "超大国（ソビエト超帝国）の誕生",
-    "icon": "https://via.placeholder.com/48/990000/ffffff?text=SUPER",
-    "x": 3200,
-    "y": 1090,
-    "prerequisites": ["sov_march_on_berlin"]
+    "title": "超大国の確立",
+    "x": 2000,
+    "y": 1450,
+    "cost": 70,
+    "effect": "・陣営主導権の絶対化\n・世界イデオロギー影響力: +50%\n・冷戦体制への移行",
+    "prerequisites": ["sov_fall_of_berlin", "sov_post_war_reconstruction"]
   }
 ]
