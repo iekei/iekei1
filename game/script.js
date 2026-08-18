@@ -1,32 +1,40 @@
-// 読み込むJSONバッチファイルのリスト
+// 試行するパスの候補リスト（上から順に試します）
 const batchFiles = [
-  './data/nf_batch1.json'
+  './data/nf_batch1.json',   // game/data/nf_batch1.json を試す
+  '../data/nf_batch1.json',  // 1つ上の階層 data/nf_batch1.json を試す
+  'data/nf_batch1.json'      // ルートからの相対を試す
 ];
 
 let allFocuses = [];
 const focusMap = {};
 
+// fetchを複数のパスで試す汎用関数
+async function fetchWithFallback(paths) {
+  for (const path of paths) {
+    try {
+      const res = await fetch(path);
+      if (res.ok) {
+        console.log(`成功したパス: ${path}`);
+        return await res.json();
+      }
+    } catch (e) {
+      // 次のパスを試す
+    }
+  }
+  throw new Error(`以下のすべてのパスでJSONが見つかりませんでした:\n${paths.join('\n')}`);
+}
+
 async function loadAllFocusTrees() {
   const nodesContainer = document.getElementById('focus-nodes');
   
   try {
-    // 複数JSONファイルの並行取得
-    const promises = batchFiles.map(file => 
-      fetch(file).then(res => {
-        if (!res.ok) {
-          throw new Error(`ファイルが見つかりません: ${file} (Status: ${res.status})`);
-        }
-        return res.json();
-      })
-    );
-
-    const results = await Promise.all(promises);
+    // パスを順番に試してデータを取得
+    const data = await fetchWithFallback(batchFiles);
     
-    // データを統合
-    allFocuses = results.flat();
+    allFocuses = data;
 
-    if (allFocuses.length === 0) {
-      nodesContainer.innerHTML = '<p style="color:red; padding:20px;">データが空です。</p>';
+    if (!allFocuses || allFocuses.length === 0) {
+      nodesContainer.innerHTML = '<p style="color:red; padding:20px;">JSONデータは読み込めましたが、中身が空です。</p>';
       return;
     }
 
@@ -37,13 +45,16 @@ async function loadAllFocusTrees() {
     renderTree();
 
   } catch (error) {
-    console.error("NFデータの読み込みエラー:", error);
-    // 画面にエラー理由を表示して「真っ暗」を防ぐ
+    // 万が一失敗した場合、真っ暗にせず画面に理由を出力する
     nodesContainer.innerHTML = `
-      <div style="color: #ff6b6b; padding: 40px; font-family: monospace;">
-        <h2>エラーが発生しました</h2>
-        <p>${error.message}</p>
-        <p>※ './data/nf_batch1.json' のパスやファイル名が正しいか確認してください。</p>
+      <div style="color: #ff6b6b; padding: 30px; font-family: sans-serif; background: rgba(0,0,0,0.8); border: 2px solid red; margin: 20px;">
+        <h2>⚠️ データの読み込みエラー</h2>
+        <pre style="white-space: pre-wrap;">${error.message}</pre>
+        <hr>
+        <p>【確認手順】</p>
+        <ul>
+          <li>GitHub上の <code>data/nf_batch1.json</code> が <code>game/</code> フォルダの中にあるか、その外にあるか確認してください。</li>
+        </ul>
       </div>
     `;
   }
@@ -64,7 +75,7 @@ function renderTree() {
     node.style.left = `${nf.x}px`;
     node.style.top = `${nf.y}px`;
 
-    // 簡略版アイコン表示（画像フォールバック付き）
+    // アイコン用簡易テキスト（IDから生成）
     const shortText = nf.id.replace('sov_', '').slice(0, 4).toUpperCase();
 
     node.innerHTML = `
@@ -81,7 +92,6 @@ function renderTree() {
       nf.prerequisites.forEach(parentId => {
         const parent = focusMap[parentId];
         if (parent) {
-          // 親ノードの下中央から、子ノードの上中央へ線を引く
           drawLine(
             parent.x + 65, parent.y + 80,
             nf.x + 65, nf.y,
