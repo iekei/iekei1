@@ -1,0 +1,65 @@
+body {
+  margin: 0;
+  background-color: #121619;
+  color: #fff;
+  font-family: sans-serif;
+  overflow: hidden;
+}
+
+#hoi4-tree-viewport {
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  position: relative;
+  background: radial-gradient(circle, #1a2228 0%, #0c0f12 100%);
+}
+
+#hoi4-tree-container {
+  width: 5000px; /* 巨大なNFツリーに対応できるように広めに設定 */
+  height: 3000px;
+  position: relative;
+}
+
+#svg-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.focus-node {
+  position: absolute;
+  width: 120px;
+  text-align: center;
+  background: rgba(20, 28, 34, 0.9);
+  border: 2px solid #556b2f;
+  border-radius: 6px;
+  padding: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.7);
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.focus-node:hover {
+  transform: scale(1.05);
+  border-color: #9acd32;
+}
+
+.focus-node img {
+  width: 48px;
+  height: 48px;
+}
+
+.focus-title {
+  font-size: 11px;
+  font-weight: bold;
+  margin-top: 4px;
+}
+
+/* HOI4風の接続線スタイル */
+line {
+  stroke: #7a8b99;
+  stroke-width: 3;
+}
