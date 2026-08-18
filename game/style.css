@@ -370,8 +370,15 @@ body {
 }
 
 /* SVGライン */
-path.nf-line { fill: none; stroke: #3a4856; stroke-width: 2.5; }
-path.nf-line.active { stroke: #00ffcc; stroke-width: 3; }
+#svg-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3000px;  /* tree-viewport と同じ幅に指定 */
+  height: 3000px; /* tree-viewport と同じ高さに指定 */
+  pointer-events: none;
+  z-index: 1;     /* ノードの下に線を引く */
+}
 
 /* ツールチップ */
 #nf-tooltip {
