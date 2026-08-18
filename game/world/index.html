@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HOI4 Style World Map Interactive</title>
+  
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div id="app">
+  <!-- 左側操作パネル -->
+  <div id="sidebar">
+    <div class="panel-header">HOI4 Command Center</div>
+    
+    <div class="panel-section">
+      <div class="section-title">1. 選択中の国家（占領モード）</div>
+      <div class="country-selector">
+        <button class="country-btn active" id="btn-SOV" onclick="selectCountry('SOV')">
+          <span>☭</span> ソ連
+        </button>
+        <button class="country-btn" id="btn-USA" onclick="selectCountry('USA')">
+          <span>★</span> アメリカ
+        </button>
+      </div>
+      <p class="panel-note">
+        ※選択した状態で地図上の「プロヴィンス」または「海域」をクリックすると領有権／支配権を変更できます。
+      </p>
+    </div>
+
+    <div class="panel-section">
+      <div class="section-title">2. 師団の追加 (ヘルメット)</div>
+      <div class="division-box">
+        <div class="division-note">マップ上に直接クリックして師団を配置</div>
+        <button class="country-btn" onclick="toggleAddDivisionMode()" id="btn-add-div">
+          🪖 師団を新規配備
+        </button>
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="section-title">マップ凡例</div>
+      <ul class="legend-list">
+        <li><span style="color:#2ecc71;">━</span> 川 (突破ルート)</li>
+        <li><span style="color:#e67e22;">▲</span> 山脈 (通行不可/高コスト)</li>
+        <li><span style="color:#e74c3c;">➡</span> 突破予測ライン</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 地図エリア -->
+  <div id="map"></div>
+</div>
+
+<!-- Leaflet JS & App Script -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="main.js"></script>
+
+</body>
+</html>
