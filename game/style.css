@@ -1,25 +1,33 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  background-color: #121619;
+  padding: 0;
+  background-color: #0d1114;
   color: #fff;
-  font-family: sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   overflow: hidden;
 }
 
+/* スクロール可能な外枠エリア */
 #hoi4-tree-viewport {
   width: 100vw;
   height: 100vh;
   overflow: auto;
   position: relative;
-  background: radial-gradient(circle, #1a2228 0%, #0c0f12 100%);
+  background: radial-gradient(circle at center, #182026 0%, #080a0c 100%);
 }
 
+/* 50個以上のNF（X=3400px, Y=1100px等）を収める巨大キャンバス */
 #hoi4-tree-container {
-  width: 5000px; /* 巨大なNFツリーに対応できるように広めに設定 */
-  height: 3000px;
+  width: 4000px;
+  height: 1500px;
   position: relative;
 }
 
+/* SVGライン */
 #svg-lines {
   position: absolute;
   top: 0;
@@ -27,39 +35,65 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
+  z-index: 1;
 }
 
+#focus-nodes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+/* HOI4風 NFノードデザイン */
 .focus-node {
   position: absolute;
-  width: 120px;
+  width: 130px;
+  min-height: 80px;
+  background: linear-gradient(180deg, #1f282e 0%, #11161a 100%);
+  border: 2px solid #5a6b7c;
+  border-radius: 4px;
+  padding: 6px;
   text-align: center;
-  background: rgba(20, 28, 34, 0.9);
-  border: 2px solid #556b2f;
-  border-radius: 6px;
-  padding: 8px;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.7);
-  transition: transform 0.2s, border-color 0.2s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
+  transition: border-color 0.2s, transform 0.2s;
+  user-select: none;
 }
 
 .focus-node:hover {
-  transform: scale(1.05);
-  border-color: #9acd32;
+  border-color: #d4af37;
+  transform: translateY(-2px);
 }
 
-.focus-node img {
-  width: 48px;
-  height: 48px;
+/* アイコン代替バッジ（外部画像切れ対策） */
+.focus-icon-box {
+  width: 36px;
+  height: 36px;
+  margin: 0 auto 4px auto;
+  background-color: #8b0000;
+  border: 1px solid #ff4500;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: bold;
+  color: #fff;
 }
 
 .focus-title {
   font-size: 11px;
-  font-weight: bold;
-  margin-top: 4px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #e0e6ed;
 }
 
-/* HOI4風の接続線スタイル */
+/* HOI4風 接続線 */
 line {
-  stroke: #7a8b99;
+  stroke: #a0b0c0;
   stroke-width: 3;
+  stroke-dasharray: none;
 }
