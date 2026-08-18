@@ -1,99 +1,153 @@
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
   padding: 0;
-  background-color: #0d1114;
-  color: #fff;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #0b0e11;
+  color: #e0e6ed;
+  font-family: 'Consolas', 'Courier New', monospace;
   overflow: hidden;
 }
 
-/* スクロール可能な外枠エリア */
-#hoi4-tree-viewport {
+/* タイプライター風 トップステータスバー */
+#status-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100vw;
-  height: 100vh;
-  overflow: auto;
-  position: relative;
-  background: radial-gradient(circle at center, #182026 0%, #080a0c 100%);
+  height: 50px;
+  background-color: #12181d;
+  border-bottom: 2px solid #334455;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  gap: 20px;
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.8);
 }
 
-/* 50個以上のNF（X=3400px, Y=1100px等）を収める巨大キャンバス */
+.stat-item {
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.stat-label { color: #8899a6; font-weight: bold; }
+.stat-val { color: #00ffcc; font-weight: bold; }
+
+#typewriter-container {
+  flex-grow: 1;
+  background: #080a0c;
+  border: 1px solid #223344;
+  padding: 4px 10px;
+  height: 28px;
+  border-radius: 3px;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 11px;
+  color: #33ff33;
+}
+
+.cursor { animation: blink 0.8s infinite; color: #33ff33; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+/* ツリー表示エリア */
+#hoi4-tree-viewport {
+  width: 100vw;
+  height: calc(100vh - 50px);
+  margin-top: 50px;
+  overflow: auto;
+  position: relative;
+  background: radial-gradient(circle at center, #151c22 0%, #080a0c 100%);
+}
+
 #hoi4-tree-container {
   width: 4000px;
   height: 1500px;
   position: relative;
 }
 
-/* SVGライン */
 #svg-lines {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   pointer-events: none;
   z-index: 1;
 }
 
 #focus-nodes {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   z-index: 2;
 }
 
-/* HOI4風 NFノードデザイン */
+/* ツリー状直角接続線 */
+path.nf-line {
+  fill: none;
+  stroke: #667788;
+  stroke-width: 2.5;
+  transition: stroke 0.3s;
+}
+
+/* HOI4風 視覚的NFアイコンノード */
 .focus-node {
   position: absolute;
-  width: 130px;
-  min-height: 80px;
-  background: linear-gradient(180deg, #1f282e 0%, #11161a 100%);
-  border: 2px solid #5a6b7c;
-  border-radius: 4px;
-  padding: 6px;
+  width: 110px;
+  background: linear-gradient(180deg, #222c35 0%, #11161b 100%);
+  border: 2px solid #4f5d6c;
+  border-radius: 6px;
+  padding: 8px 4px;
   text-align: center;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
-  transition: border-color 0.2s, transform 0.2s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+  transition: all 0.2s ease;
   user-select: none;
 }
 
 .focus-node:hover {
-  border-color: #d4af37;
-  transform: translateY(-2px);
+  border-color: #ffd700;
+  transform: scale(1.08);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+  z-index: 10;
 }
 
-/* アイコン代替バッジ（外部画像切れ対策） */
-.focus-icon-box {
-  width: 36px;
-  height: 36px;
-  margin: 0 auto 4px auto;
-  background-color: #8b0000;
-  border: 1px solid #ff4500;
-  border-radius: 3px;
+/* 視覚的シンボルアイコン */
+.focus-symbol {
+  width: 42px;
+  height: 42px;
+  margin: 0 auto 6px auto;
+  border-radius: 50%;
+  background: radial-gradient(circle, #3a4856 0%, #1a222a 100%);
+  border: 2px solid #788a9c;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 10px;
-  font-weight: bold;
-  color: #fff;
+  font-size: 20px;
 }
 
 .focus-title {
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 1.3;
-  color: #e0e6ed;
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 1.2;
+  color: #dce4ec;
 }
 
-/* HOI4風 接続線 */
-line {
-  stroke: #a0b0c0;
-  stroke-width: 3;
-  stroke-dasharray: none;
+/* ツールチップ */
+#nf-tooltip {
+  position: fixed;
+  pointer-events: none;
+  z-index: 1000;
+  background: rgba(12, 16, 20, 0.95);
+  border: 1px solid #d4af37;
+  border-radius: 4px;
+  padding: 10px;
+  width: 220px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.9);
+  font-size: 11px;
 }
+
+#nf-tooltip.hidden { display: none; }
+#tooltip-title { font-weight: bold; color: #ffd700; font-size: 12px; margin-bottom: 4px; }
+#tooltip-time { color: #8899a6; margin-bottom: 6px; font-size: 10px; }
+#nf-tooltip hr { border: 0; border-top: 1px solid #334455; margin: 6px 0; }
+#tooltip-effect { color: #55ff55; line-height: 1.4; white-space: pre-wrap; }
