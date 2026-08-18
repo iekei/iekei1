@@ -1,0 +1,121 @@
+[
+  {
+    "id": "SOV_trotsky_return",
+    "title": "左翼反対派の結集",
+    "x": 1200,
+    "y": 180,
+    "cost": 70,
+    "prerequisites": ["SOV_center"],
+    "mutually_exclusive": ["SOV_stalin_purges"],
+    "effect": "政治力 +50\n安定度 -10%"
+  },
+  {
+    "id": "SOV_smite_stalin",
+    "title": "スターリン派の追放",
+    "x": 1200,
+    "y": 280,
+    "cost": 70,
+    "prerequisites": ["SOV_trotsky_return"],
+    "effect": "政治力 +100\n安定度 +15%"
+  },
+  {
+    "id": "SOV_recall_trotsky",
+    "title": "トロツキーの帰還",
+    "x": 1200,
+    "y": 380,
+    "cost": 70,
+    "prerequisites": ["SOV_smite_stalin"],
+    "effect": "戦争協力度 +20%\n政治力 +50"
+  },
+  {
+    "id": "SOV_permanent_revolution",
+    "title": "永続革命論の実践",
+    "x": 1200,
+    "y": 480,
+    "cost": 70,
+    "prerequisites": ["SOV_recall_trotsky"],
+    "effect": "攻撃力 +15%\n戦争協力度 +10%"
+  },
+  {
+    "id": "SOV_fourth_international",
+    "title": "第四インターナショナルの設立",
+    "x": 1000,
+    "y": 580,
+    "cost": 70,
+    "prerequisites": ["SOV_permanent_revolution"],
+    "mutually_exclusive": ["SOV_socialism_in_one_country"],
+    "effect": "政治力 +100\n世界緊張度 +5%"
+  },
+  {
+    "id": "SOV_red_army_reconstruction",
+    "title": "赤軍の再編",
+    "x": 1400,
+    "y": 580,
+    "cost": 70,
+    "prerequisites": ["SOV_permanent_revolution"],
+    "effect": "陸軍経験値 +50\n組織力 +10%"
+  },
+  {
+    "id": "SOV_support_spanish_revolution",
+    "title": "スペイン革命への全量支援",
+    "x": 850,
+    "y": 680,
+    "cost": 70,
+    "prerequisites": ["SOV_fourth_international"],
+    "effect": "戦争協力度 +10%\n政治力 -30"
+  },
+  {
+    "id": "SOV_export_revolution_europe",
+    "title": "欧州への革命輸出",
+    "x": 1000,
+    "y": 680,
+    "cost": 70,
+    "prerequisites": ["SOV_fourth_international"],
+    "effect": "正当化時間 -25%\n攻撃力 +10%"
+  },
+  {
+    "id": "SOV_agitate_german_workers",
+    "title": "ドイツ労働者の蜂起扇動",
+    "x": 1000,
+    "y": 780,
+    "cost": 70,
+    "prerequisites": ["SOV_export_revolution_europe"],
+    "effect": "対ドイツ攻撃力 +15%"
+  },
+  {
+    "id": "SOV_liberate_poland",
+    "title": "ポーランド解放作戦",
+    "x": 1150,
+    "y": 680,
+    "cost": 70,
+    "prerequisites": ["SOV_fourth_international"],
+    "effect": "正当化時間 -50%"
+  },
+  {
+    "id": "SOV_military_commissar_expansion",
+    "title": "政治将校権限の再定義",
+    "x": 1300,
+    "y": 680,
+    "cost": 70,
+    "prerequisites": ["SOV_red_army_reconstruction"],
+    "effect": "指揮官能力 +1\n師団回収率 +15%"
+  },
+  {
+    "id": "SOV_deep_operation_doctrine",
+    "title": "縦深戦略理論の完成",
+    "x": 1500,
+    "y": 680,
+    "cost": 70,
+    "prerequisites": ["SOV_red_army_reconstruction"],
+    "effect": "計画速度 +20%\n陸軍ドクトリンコスト -10%"
+  },
+  {
+    "id": "SOV_global_hegemony",
+    "title": "世界社会主義共和国連邦",
+    "x": 1200,
+    "y": 900,
+    "cost": 70,
+    "prerequisites": ["SOV_agitate_german_workers", "SOV_deep_operation_doctrine"],
+    "effect": "安定度 +20%\n戦争協力度 +20%\n政治力 +200"
+  }
+]
