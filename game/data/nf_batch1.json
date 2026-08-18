@@ -1,0 +1,18 @@
+[
+  {
+    "id": "nf_1",
+    "title": "産業の再編",
+    "icon": "https://via.placeholder.com/48",
+    "x": 200,
+    "y": 50,
+    "prerequisites": []
+  },
+  {
+    "id": "nf_2",
+    "title": "軍備の拡張",
+    "icon": "https://via.placeholder.com/48",
+    "x": 200,
+    "y": 180,
+    "prerequisites": ["nf_1"]
+  }
+]
