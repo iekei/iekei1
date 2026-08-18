@@ -1,18 +1,431 @@
 [
   {
-    "id": "nf_1",
-    "title": "産業の再編",
-    "icon": "https://via.placeholder.com/48",
-    "x": 200,
+    "id": "sov_five_year_plan",
+    "title": "第3次5ヵ年計画の完了",
+    "icon": "https://via.placeholder.com/48/8b0000/ffffff?text=5YP",
+    "x": 300,
     "y": 50,
     "prerequisites": []
   },
   {
-    "id": "nf_2",
-    "title": "軍備の拡張",
-    "icon": "https://via.placeholder.com/48",
-    "x": 200,
+    "id": "sov_heavy_industry",
+    "title": "重工業の優先",
+    "icon": "https://via.placeholder.com/48/8b0000/ffffff?text=IND",
+    "x": 150,
     "y": 180,
-    "prerequisites": ["nf_1"]
+    "prerequisites": ["sov_five_year_plan"]
+  },
+  {
+    "id": "sov_collectivization",
+    "title": "農業集団化の継続",
+    "icon": "https://via.placeholder.com/48/8b0000/ffffff?text=AGR",
+    "x": 450,
+    "y": 180,
+    "prerequisites": ["sov_five_year_plan"]
+  },
+  {
+    "id": "sov_resource_extraction",
+    "title": "シベリア資源開発",
+    "icon": "https://via.placeholder.com/48/8b0000/ffffff?text=MINE",
+    "x": 100,
+    "y": 310,
+    "prerequisites": ["sov_heavy_industry"]
+  },
+  {
+    "id": "sov_infrastructure",
+    "title": "インフラ整備とウラル開発",
+    "icon": "https://via.placeholder.com/48/8b0000/ffffff?text=INF",
+    "x": 200,
+    "y": 310,
+    "prerequisites": ["sov_heavy_industry"]
+  },
+  {
+    "id": "sov_armament_factories",
+    "title": "軍需工場の急速建設",
+    "icon": "https://via.placeholder.com/48/8b0000/ffffff?text=MIL",
+    "x": 150,
+    "y": 440,
+    "prerequisites": ["sov_infrastructure"]
+  },
+  {
+    "id": "sov_kolkhoz_expansion",
+    "title": "コレホーズの強化",
+    "icon": "https://via.placeholder.com/48/8b0000/ffffff?text=FARM",
+    "x": 400,
+    "y": 310,
+    "prerequisites": ["sov_collectivization"]
+  },
+  {
+    "id": "sov_grain_reserves",
+    "title": "国家食糧備蓄の確保",
+    "icon": "https://via.placeholder.com/48/8b0000/ffffff?text=GRAIN",
+    "x": 500,
+    "y": 310,
+    "prerequisites": ["sov_collectivization"]
+  },
+  {
+    "id": "sov_ural_evacuation_plan",
+    "title": "ウラル移転（疎開計画準備）",
+    "icon": "https://via.placeholder.com/48/8b0000/ffffff?text=EVAC",
+    "x": 300,
+    "y": 570,
+    "prerequisites": ["sov_armament_factories", "sov_kolkhoz_expansion"]
+  },
+
+  {
+    "id": "sov_stalin_center",
+    "title": "党中央の団結",
+    "icon": "https://via.placeholder.com/48/cc0000/ffffff?text=CENTER",
+    "x": 1000,
+    "y": 50,
+    "prerequisites": []
+  },
+  {
+    "id": "sov_secure_the_administration",
+    "title": "行政機構の掌握",
+    "icon": "https://via.placeholder.com/48/cc0000/ffffff?text=ADM",
+    "x": 1000,
+    "y": 180,
+    "prerequisites": ["sov_stalin_center"]
+  },
+  {
+    "id": "sov_great_purge",
+    "title": "大粛清の開始",
+    "icon": "https://via.placeholder.com/48/cc0000/ffffff?text=PURGE",
+    "x": 1000,
+    "y": 310,
+    "prerequisites": ["sov_secure_the_administration"]
+  },
+  {
+    "id": "sov_nkvd_primacy",
+    "title": "NKVDの権限強化",
+    "icon": "https://via.placeholder.com/48/cc0000/ffffff?text=NKVD",
+    "x": 800,
+    "y": 440,
+    "prerequisites": ["sov_great_purge"]
+  },
+  {
+    "id": "sov_bloc_of_rights_and_trotskyites",
+    "title": "右翼・トロツキー派裁判",
+    "icon": "https://via.placeholder.com/48/cc0000/ffffff?text=TRIAL1",
+    "x": 1000,
+    "y": 440,
+    "prerequisites": ["sov_great_purge"]
+  },
+  {
+    "id": "sov_military_purge",
+    "title": "赤軍幹部の清算（軍部粛清）",
+    "icon": "https://via.placeholder.com/48/cc0000/ffffff?text=ARMYP",
+    "x": 1200,
+    "y": 440,
+    "prerequisites": ["sov_great_purge"]
+  },
+  {
+    "id": "sov_anti_soviet_trotskyist_center",
+    "title": "反ソ連トロツキー派中心の解体",
+    "icon": "https://via.placeholder.com/48/cc0000/ffffff?text=TRIAL2",
+    "x": 900,
+    "y": 570,
+    "prerequisites": ["sov_nkvd_primacy", "sov_bloc_of_rights_and_trotskyites"]
+  },
+  {
+    "id": "sov_purge_pessimists",
+    "title": "敗北主義者の排除",
+    "icon": "https://via.placeholder.com/48/cc0000/ffffff?text=CLEAN",
+    "x": 1100,
+    "y": 570,
+    "prerequisites": ["sov_bloc_of_rights_and_trotskyites", "sov_military_purge"]
+  },
+  {
+    "id": "sov_cult_of_personality",
+    "title": "個人崇拝の確立",
+    "icon": "https://via.placeholder.com/48/cc0000/ffffff?text=CULT",
+    "x": 1000,
+    "y": 700,
+    "prerequisites": ["sov_anti_soviet_trotskyist_center", "sov_purge_pessimists"]
+  },
+  {
+    "id": "sov_propaganda_campaign",
+    "title": "国家アジテーションポスター展開",
+    "icon": "https://via.placeholder.com/48/cc0000/ffffff?text=PROP",
+    "x": 850,
+    "y": 830,
+    "prerequisites": ["sov_cult_of_personality"]
+  },
+  {
+    "id": "sov_socialist_realism",
+    "title": "社会主義リアリズムの推進",
+    "icon": "https://via.placeholder.com/48/cc0000/ffffff?text=ART",
+    "x": 1150,
+    "y": 830,
+    "prerequisites": ["sov_cult_of_personality"]
+  },
+  {
+    "id": "sov_komsomol_focus",
+    "title": "コムソモール（共産主義青年同盟）強化",
+    "icon": "https://via.placeholder.com/48/cc0000/ffffff?text=YOUTH",
+    "x": 1000,
+    "y": 960,
+    "prerequisites": ["sov_propaganda_campaign", "sov_socialist_realism"]
+  },
+
+  {
+    "id": "sov_red_army_reorganization",
+    "title": "赤軍の再編",
+    "icon": "https://via.placeholder.com/48/445566/ffffff?text=ARMY",
+    "x": 1800,
+    "y": 50,
+    "prerequisites": []
+  },
+  {
+    "id": "sov_political_commissars",
+    "title": "政治将校の配置強化",
+    "icon": "https://via.placeholder.com/48/445566/ffffff?text=COMM",
+    "x": 1650,
+    "y": 180,
+    "prerequisites": ["sov_red_army_reorganization"]
+  },
+  {
+    "id": "sov_deep_battle",
+    "title": "縦深戦術ドクトリン",
+    "icon": "https://via.placeholder.com/48/445566/ffffff?text=DOCT",
+    "x": 1800,
+    "y": 180,
+    "prerequisites": ["sov_red_army_reorganization"]
+  },
+  {
+    "id": "sov_tank_design_bureau",
+    "title": "戦車設計局（T-34開発）",
+    "icon": "https://via.placeholder.com/48/445566/ffffff?text=TANK",
+    "x": 1950,
+    "y": 180,
+    "prerequisites": ["sov_red_army_reorganization"]
+  },
+  {
+    "id": "sov_artillery_focus",
+    "title": "砲兵至上主義（カチューシャ砲）",
+    "icon": "https://via.placeholder.com/48/445566/ffffff?text=ARTY",
+    "x": 1700,
+    "y": 310,
+    "prerequisites": ["sov_deep_battle"]
+  },
+  {
+    "id": "sov_mechanization",
+    "title": "機械化師団の整備",
+    "icon": "https://via.placeholder.com/48/445566/ffffff?text=MECH",
+    "x": 1900,
+    "y": 310,
+    "prerequisites": ["sov_deep_battle", "sov_tank_design_bureau"]
+  },
+  {
+    "id": "sov_lessons_of_war",
+    "title": "戦争の教訓（軍事ペナルティ解除）",
+    "icon": "https://via.placeholder.com/48/445566/ffffff?text=LESSON",
+    "x": 1800,
+    "y": 440,
+    "prerequisites": ["sov_military_purge", "sov_political_commissars", "sov_mechanization"]
+  },
+  {
+    "id": "sov_rehabilitate_officers",
+    "title": "将校団の名誉回復",
+    "icon": "https://via.placeholder.com/48/445566/ffffff?text=OFFICER",
+    "x": 1650,
+    "y": 570,
+    "prerequisites": ["sov_lessons_of_war"]
+  },
+  {
+    "id": "sov_modernize_command",
+    "title": "指揮統率の近代化",
+    "icon": "https://via.placeholder.com/48/445566/ffffff?text=CMD",
+    "x": 1950,
+    "y": 570,
+    "prerequisites": ["sov_lessons_of_war"]
+  },
+  {
+    "id": "sov_order_227",
+    "title": "「一歩も退くな！」（死守命令）",
+    "icon": "https://via.placeholder.com/48/445566/ffffff?text=227",
+    "x": 1800,
+    "y": 700,
+    "prerequisites": ["sov_rehabilitate_officers", "sov_modernize_command"]
+  },
+
+  {
+    "id": "sov_red_air_force",
+    "title": "赤色空軍の再建",
+    "icon": "https://via.placeholder.com/48/336699/ffffff?text=AIR",
+    "x": 2300,
+    "y": 50,
+    "prerequisites": []
+  },
+  {
+    "id": "sov_cas_focus",
+    "title": "近接航空支援の強化（IL-2）",
+    "icon": "https://via.placeholder.com/48/336699/ffffff?text=IL2",
+    "x": 2200,
+    "y": 180,
+    "prerequisites": ["sov_red_air_force"]
+  },
+  {
+    "id": "sov_air_defense",
+    "title": "国土防空網整備",
+    "icon": "https://via.placeholder.com/48/336699/ffffff?text=AA",
+    "x": 2400,
+    "y": 180,
+    "prerequisites": ["sov_red_air_force"]
+  },
+  {
+    "id": "sov_air_academies",
+    "title": "空軍兵学校の拡充",
+    "icon": "https://via.placeholder.com/48/336699/ffffff?text=PILOT",
+    "x": 2300,
+    "y": 310,
+    "prerequisites": ["sov_cas_focus", "sov_air_defense"]
+  },
+
+  {
+    "id": "sov_red_fleet",
+    "title": "赤色大洋艦隊計画",
+    "icon": "https://via.placeholder.com/48/003366/ffffff?text=NAVY",
+    "x": 2700,
+    "y": 50,
+    "prerequisites": []
+  },
+  {
+    "id": "sov_sub_warfare",
+    "title": "潜水艦強国化",
+    "icon": "https://via.placeholder.com/48/003366/ffffff?text=SUB",
+    "x": 2600,
+    "y": 180,
+    "prerequisites": ["sov_red_fleet"]
+  },
+  {
+    "id": "sov_battleship_program",
+    "title": "戦艦「ソビエツキー・ソユーズ」設計",
+    "icon": "https://via.placeholder.com/48/003366/ffffff?text=BB",
+    "x": 2800,
+    "y": 180,
+    "prerequisites": ["sov_red_fleet"]
+  },
+  {
+    "id": "sov_baltic_shipyards",
+    "title": "バルト造船所の拡張",
+    "icon": "https://via.placeholder.com/48/003366/ffffff?text=DOCK",
+    "x": 2700,
+    "y": 310,
+    "prerequisites": ["sov_sub_warfare", "sov_battleship_program"]
+  },
+
+  {
+    "id": "sov_comintern_expansion",
+    "title": "コミンテルンの主導権強化",
+    "icon": "https://via.placeholder.com/48/990000/ffffff?text=DIP",
+    "x": 3200,
+    "y": 50,
+    "prerequisites": []
+  },
+  {
+    "id": "sov_spanish_intervention",
+    "title": "スペイン内戦への介入",
+    "icon": "https://via.placeholder.com/48/990000/ffffff?text=SPAIN",
+    "x": 3050,
+    "y": 180,
+    "prerequisites": ["sov_comintern_expansion"]
+  },
+  {
+    "id": "sov_anti_fascist_pact",
+    "title": "反ファシズム統一戦線提案",
+    "icon": "https://via.placeholder.com/48/990000/ffffff?text=ANTI",
+    "x": 3350,
+    "y": 180,
+    "prerequisites": ["sov_comintern_expansion"]
+  },
+  {
+    "id": "sov_molotov_ribbentrop_pact",
+    "title": "モロトフ＝リッベントロップ協定",
+    "icon": "https://via.placeholder.com/48/990000/ffffff?text=PACT",
+    "x": 3100,
+    "y": 310,
+    "prerequisites": ["sov_spanish_intervention"]
+  },
+  {
+    "id": "sov_claims_on_baltics",
+    "title": "バルト諸国併合要求",
+    "icon": "https://via.placeholder.com/48/990000/ffffff?text=BALT",
+    "x": 3300,
+    "y": 310,
+    "prerequisites": ["sov_anti_fascist_pact"]
+  },
+  {
+    "id": "sov_claim_bessarabia",
+    "title": "ベッサラビア割譲要求（ルーマニア）",
+    "icon": "https://via.placeholder.com/48/990000/ffffff?text=ROM",
+    "x": 3000,
+    "y": 440,
+    "prerequisites": ["sov_molotov_ribbentrop_pact"]
+  },
+  {
+    "id": "sov_winter_war",
+    "title": "フィンランド侵攻（冬戦争）",
+    "icon": "https://via.placeholder.com/48/990000/ffffff?text=FIN",
+    "x": 3200,
+    "y": 440,
+    "prerequisites": ["sov_claims_on_baltics"]
+  },
+  {
+    "id": "sov_security_zone",
+    "title": "西部緩衝地帯の確立",
+    "icon": "https://via.placeholder.com/48/990000/ffffff?text=ZONE",
+    "x": 3100,
+    "y": 570,
+    "prerequisites": ["sov_claim_bessarabia", "sov_winter_war"]
+  },
+  {
+    "id": "sov_great_patriotic_war",
+    "title": "大祖国戦争（対独総力戦）",
+    "icon": "https://via.placeholder.com/48/990000/ffffff?text=WAR",
+    "x": 3200,
+    "y": 700,
+    "prerequisites": ["sov_security_zone"]
+  },
+  {
+    "id": "sov_tank_grad",
+    "title": "タンコグラード（戦車都市）覚醒",
+    "icon": "https://via.placeholder.com/48/990000/ffffff?text=CITY",
+    "x": 3050,
+    "y": 830,
+    "prerequisites": ["sov_great_patriotic_war", "sov_ural_evacuation_plan"]
+  },
+  {
+    "id": "sov_hero_cities",
+    "title": "英雄都市の宣言",
+    "icon": "https://via.placeholder.com/48/990000/ffffff?text=HERO",
+    "x": 3350,
+    "y": 830,
+    "prerequisites": ["sov_great_patriotic_war"]
+  },
+  {
+    "id": "sov_march_on_berlin",
+    "title": "ベルリンへの行進",
+    "icon": "https://via.placeholder.com/48/990000/ffffff?text=BERLIN",
+    "x": 3200,
+    "y": 960,
+    "prerequisites": ["sov_tank_grad", "sov_hero_cities"]
+  },
+  {
+    "id": "sov_claim_kurils",
+    "title": "千島列島および樺太の確保",
+    "icon": "https://via.placeholder.com/48/990000/ffffff?text=EAST",
+    "x": 3400,
+    "y": 960,
+    "prerequisites": ["sov_great_patriotic_war"]
+  },
+  {
+    "id": "sov_superpower_status",
+    "title": "超大国（ソビエト超帝国）の誕生",
+    "icon": "https://via.placeholder.com/48/990000/ffffff?text=SUPER",
+    "x": 3200,
+    "y": 1090,
+    "prerequisites": ["sov_march_on_berlin"]
   }
 ]
