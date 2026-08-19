@@ -3,40 +3,16 @@
     "id": "electronic_mechanical_engineering",
     "title": "電子機械工学",
     "year": 1936, "x": 200, "y": 50, "research_time": 120,
-    "icon": "https://hoi4.paradoxwikis.com/images/1/1a/Electronic_mechanical_engineering.png",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='3'/><path d='M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z'/></svg>",
     "effects": ["研究速度: +3.0%", "暗号解読: +1.0"],
     "prerequisites": []
-  },
-  {
-    "id": "radio",
-    "title": "無線",
-    "year": 1938, "x": 100, "y": 220, "research_time": 140,
-    "icon": "https://hoi4.paradoxwikis.com/images/c/c2/Radio.png",
-    "effects": ["増援増強率: +5.0%", "師団信頼性: +5.0%"],
-    "prerequisites": ["electronic_mechanical_engineering"]
-  },
-  {
-    "id": "mechanical_computing",
-    "title": "機械式計算機",
-    "year": 1938, "x": 300, "y": 220, "research_time": 140,
-    "icon": "https://hoi4.paradoxwikis.com/images/3/3d/Mechanical_computing.png",
-    "effects": ["研究速度: +4.0%"],
-    "prerequisites": ["electronic_mechanical_engineering"]
   },
   {
     "id": "atomic_research",
     "title": "原子核研究 (アルザマス16)",
     "year": 1940, "x": 650, "y": 500, "research_time": 250,
-    "icon": "https://hoi4.paradoxwikis.com/images/8/8c/Atomic_research.png",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#f85149' stroke-width='1.8' stroke-linecap='round'><circle cx='12' cy='12' r='2' fill='#f85149'/><ellipse cx='12' cy='12' rx='10' ry='4' transform='rotate(0 12 12)'/><ellipse cx='12' cy='12' rx='10' ry='4' transform='rotate(60 12 12)'/><ellipse cx='12' cy='12' rx='10' ry='4' transform='rotate(120 12 12)'/></svg>",
     "effects": ["原子炉建設可能", "核開発研究速度: +10.0%"],
-    "prerequisites": []
-  },
-  {
-    "id": "experimental_rockets",
-    "title": "実験的ロケット",
-    "year": 1942, "x": 850, "y": 780, "research_time": 200,
-    "icon": "https://hoi4.paradoxwikis.com/images/2/23/Experimental_rockets.png",
-    "effects": ["ロケット発射台建設可能"],
     "prerequisites": []
   }
 ]
