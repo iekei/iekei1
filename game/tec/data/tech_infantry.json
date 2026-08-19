@@ -3,47 +3,31 @@
     "id": "infantry_weapons_1",
     "title": "基本型歩兵装備 (M1891/30)",
     "year": 1936, "x": 150, "y": 50, "research_time": 140,
-    "icon": "https://hoi4.paradoxwikis.com/images/thumb/d/df/Infantry_weapons_1.png/60px-Infantry_weapons_1.png",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 19l18-14'/><path d='M5 19l2-8'/><path d='M15 9l4-2'/><path d='M20 5l1 1-2 2-1-1z'/></svg>",
     "effects": ["対人攻撃: +3.0", "対物攻撃: +1.0", "防衛: +5.0", "信頼性: +90%"],
     "prerequisites": []
   },
   {
     "id": "infantry_weapons_2",
-    "title": "改良型歩兵装備 (SVT-40/SKS)",
+    "title": "改良型歩兵装備 (SVT-40)",
     "year": 1939, "x": 150, "y": 360, "research_time": 170,
-    "icon": "https://hoi4.paradoxwikis.com/images/thumb/f/f6/Infantry_weapons_2.png/60px-Infantry_weapons_2.png",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 18l20-10'/><path d='M6 18l1-5'/><path d='M16 11l5-2.5'/><rect x='10' y='12' width='3' height='4' rx='0.5'/></svg>",
     "effects": ["対人攻撃: +6.0", "対物攻撃: +2.0", "防衛: +8.0", "突破: +3.0"],
     "prerequisites": ["infantry_weapons_1"]
-  },
-  {
-    "id": "infantry_weapons_3",
-    "title": "発展型歩兵装備 (AK-47)",
-    "year": 1942, "x": 150, "y": 780, "research_time": 200,
-    "icon": "https://hoi4.paradoxwikis.com/images/thumb/a/a2/Infantry_weapons_3.png/60px-Infantry_weapons_3.png",
-    "effects": ["対人攻撃: +10.0", "対物攻撃: +3.0", "防衛: +12.0", "突破: +6.0"],
-    "prerequisites": ["infantry_weapons_2"]
   },
   {
     "id": "support_weapons_1",
     "title": "支援兵器 I (マキシム重機関銃)",
     "year": 1936, "x": 380, "y": 50, "research_time": 120,
-    "icon": "https://hoi4.paradoxwikis.com/images/thumb/4/4b/Support_weapons_1.png/60px-Support_weapons_1.png",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 13h14v-3H2z'/><circle cx='18' cy='16' r='3'/><path d='M12 13l-4 6'/><path d='M16 13l4 6'/></svg>",
     "effects": ["歩兵防御力: +5.0%", "対人攻撃: +2.0%"],
     "prerequisites": []
-  },
-  {
-    "id": "support_weapons_2",
-    "title": "支援兵器 II (DP28/DShK)",
-    "year": 1938, "x": 380, "y": 220, "research_time": 140,
-    "icon": "https://hoi4.paradoxwikis.com/images/thumb/a/a0/Support_weapons_2.png/60px-Support_weapons_2.png",
-    "effects": ["歩兵防御力: +5.0%", "対人攻撃: +3.0%"],
-    "prerequisites": ["support_weapons_1"]
   },
   {
     "id": "field_hospital_1",
     "title": "野戦病院 I",
     "year": 1936, "x": 620, "y": 50, "research_time": 150,
-    "icon": "https://hoi4.paradoxwikis.com/images/thumb/8/8b/Field_hospital_1.png/60px-Field_hospital_1.png",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#3fb950' stroke-width='2' stroke-linecap='round'><path d='M9 3h6v6h6v6h-6v6H9v-6H3V9h6V3z'/></svg>",
     "effects": ["衛生（救命率）: +20.0%", "経験値損失軽減: +10.0%"],
     "prerequisites": []
   }
