@@ -1,74 +1,92 @@
 [
   {
-    "id": "ger_four_year_plan",
-    "title": "4ヶ年計画",
-    "x": 6000,
-    "y": 100,
+    "id": "SOV_the_great_purge",
+    "title": "大粛清の開始",
+    "x": 2000,
+    "y": 970,
     "cost": 70,
-    "effect": "・民需工場: +2\n・合成ゴム・石油技術の研究ボーナス",
-    "prerequisites": []
+    "effect": "・政治的妄想度: -20\n・政治力: +50\n・大粛清イベントの発生",
+    "prerequisites": ["SOV_securing_the_regime"]
   },
   {
-    "id": "ger_autobahn",
-    "title": "ライヒスアウトバーン",
-    "x": 5850,
-    "y": 250,
+    "id": "SOV_first_moscow_trial",
+    "title": "第一次モスクワ裁判",
+    "x": 1800,
+    "y": 1100,
     "cost": 70,
-    "effect": "・インフラ: +3\n・師団移動速度: +10%",
-    "prerequisites": ["ger_four_year_plan"]
+    "effect": "・ジノヴィエフ、カーメネフらの処罰\n・安定度: +5.00%\n・政治的妄想度: -15",
+    "prerequisites": ["SOV_the_great_purge"]
   },
   {
-    "id": "ger_hermann_goring_werke",
-    "title": "ヘルマン・ゲーリング・ヴェルケ",
-    "x": 6150,
-    "y": 250,
+    "id": "SOV_purge_the_military",
+    "title": "赤軍幹部の粛清",
+    "x": 2000,
+    "y": 1100,
     "cost": 70,
-    "effect": "・軍需工場: +3\n・鉄資源出力を強化",
-    "prerequisites": ["ger_four_year_plan"]
+    "effect": "・トゥハチェフスキー将軍らの解任/粛清\n・陸軍の組織率低下 (赤軍国民精神の悪化)\n・政治的妄想度: -25",
+    "prerequisites": ["SOV_the_great_purge"]
   },
   {
-    "id": "ger_rhineland",
-    "title": "ラインラント再武装",
-    "x": 6800,
-    "y": 100,
+    "id": "SOV_second_moscow_trial",
+    "title": "第二次モスクワ裁判",
+    "x": 2200,
+    "y": 1100,
     "cost": 70,
-    "effect": "・陸軍経験値: +50\n・緊張度上昇: +5%\n・陸軍陸上要塞の建設速度UP",
-    "prerequisites": []
+    "effect": "・ラデック、ピャタコフらの処罰\n・産業へのNKVD監査強化\n・政治的妄想度: -15",
+    "prerequisites": ["SOV_the_great_purge"]
   },
   {
-    "id": "ger_anschluss",
-    "title": "アンシュルス (オーストリア併合)",
-    "x": 6800,
-    "y": 250,
+    "id": "SOV_purge_the_nkvd",
+    "title": "NKVD自体の粛清",
+    "x": 1900,
+    "y": 1230,
     "cost": 70,
-    "effect": "・オーストリアをコア領土化\n・可動人口・工場獲得",
-    "prerequisites": ["ger_rhineland"]
+    "effect": "・エジョフの解任・ベリヤの起用\n・対スパイ防衛能力の是正\n・政治的妄想度: -30",
+    "prerequisites": ["SOV_first_moscow_trial", "SOV_purge_the_military"]
   },
   {
-    "id": "sov_left_opposition",
-    "title": "左翼反対派の結集",
-    "x": 1700,
-    "y": 250,
+    "id": "SOV_third_moscow_trial",
+    "title": "第三次モスクワ裁判 (右翼・トロツキストブロック)",
+    "x": 2100,
+    "y": 1230,
     "cost": 70,
-    "effect": "・スターリン批判運動の活性化\n・トロツキー派内戦の準備開始",
-    "prerequisites": ["sov_center_stalin"]
+    "effect": "・ブハーリン、リコフらの完全排除\n・党内対立の終焉\n・政治的妄想度: -30",
+    "prerequisites": ["SOV_purge_the_military", "SOV_second_moscow_trial"]
   },
   {
-    "id": "sov_return_of_trotsky",
-    "title": "永久革命派の復権 (トロツキー帰還)",
-    "x": 1700,
-    "y": 400,
+    "id": "SOV_end_of_the_purge",
+    "title": "大粛清の終結",
+    "x": 2000,
+    "y": 1360,
     "cost": 70,
-    "effect": "・レフ・トロツキーが指導者に就任\n・世界革命正当化コスト: -50%",
-    "prerequisites": ["sov_left_opposition"]
+    "effect": "・政治的妄想システム（パラノイア）の消滅\n・国家の完全な安定化\n・安定度: +15.00%",
+    "prerequisites": ["SOV_purge_the_nkvd", "SOV_third_moscow_trial"]
   },
   {
-    "id": "sov_tsar_restoration",
-    "title": "白軍残党の蜂起とロマノフ復辟",
-    "x": 2300,
-    "y": 250,
+    "id": "SOV_reorganize_the_pc_of_internal_affairs",
+    "title": "内務人民委員部の再編",
+    "x": 1750,
+    "y": 1490,
     "cost": 70,
-    "effect": "・君主制への回帰\n・白軍将校の復帰・旧帝国領土への特権主張",
-    "prerequisites": ["sov_center_stalin"]
+    "effect": "・暗殺・防諜ミッションの成功率: +20%\n・政治力: +100",
+    "prerequisites": ["SOV_end_of_the_purge"]
+  },
+  {
+    "id": "SOV_stalins_cult_of_personality_deepened",
+    "title": "スターリン個人崇拝の深化",
+    "x": 2000,
+    "y": 1490,
+    "cost": 70,
+    "effect": "・スターリンに「Lenin's True Heir」補正付与\n・毎日の政治力獲得量: +0.25\n・イデオロギー変化耐性: +50%",
+    "prerequisites": ["SOV_end_of_the_purge"]
+  },
+  {
+    "id": "SOV_bloc_of_rights_and_trotskyites_dismantled",
+    "title": "右翼・トロツキストブロックの完全解体",
+    "x": 2250,
+    "y": 1490,
+    "cost": 70,
+    "effect": "・共産主義の支持率: +20%\n・戦争協力度: +10.00%",
+    "prerequisites": ["SOV_end_of_the_purge"]
   }
 ]
