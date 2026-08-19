@@ -1,0 +1,34 @@
+[
+  {
+    "id": "artillery_1",
+    "title": "野砲 (76mm野砲 M1936)",
+    "year": 1936, "x": 200, "y": 50, "research_time": 140,
+    "icon": "https://hoi4.paradoxwikis.com/images/1/1b/Artillery_1.png",
+    "effects": ["対人攻撃: +25.0", "対物攻撃: +6.0"],
+    "prerequisites": []
+  },
+  {
+    "id": "anti_tank_1",
+    "title": "対戦車砲 (45mm対戦車砲)",
+    "year": 1936, "x": 450, "y": 50, "research_time": 140,
+    "icon": "https://hoi4.paradoxwikis.com/images/b/b5/Anti_tank_1.png",
+    "effects": ["対物攻撃: +20.0", "貫通力: +30.0"],
+    "prerequisites": []
+  },
+  {
+    "id": "anti_air_1",
+    "title": "対空砲 (37mm高射砲)",
+    "year": 1936, "x": 700, "y": 50, "research_time": 140,
+    "icon": "https://hoi4.paradoxwikis.com/images/2/23/Anti_air_1.png",
+    "effects": ["対空攻撃: +18.0", "対空爆撃軽減: +12.0%"],
+    "prerequisites": []
+  },
+  {
+    "id": "rocket_artillery_1",
+    "title": "ロケット砲 (BM-13 カチューシャ)",
+    "year": 1940, "x": 200, "y": 500, "research_time": 170,
+    "icon": "https://hoi4.paradoxwikis.com/images/e/e9/Rocket_artillery_1.png",
+    "effects": ["対人攻撃: +38.0", "突破: +12.0"],
+    "prerequisites": ["artillery_1"]
+  }
+]
