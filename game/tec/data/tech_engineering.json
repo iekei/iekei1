@@ -1,0 +1,42 @@
+[
+  {
+    "id": "electronic_mechanical_engineering",
+    "title": "電子機械工学",
+    "year": 1936, "x": 200, "y": 50, "research_time": 120,
+    "icon": "https://hoi4.paradoxwikis.com/images/1/1a/Electronic_mechanical_engineering.png",
+    "effects": ["研究速度: +3.0%", "暗号解読: +1.0"],
+    "prerequisites": []
+  },
+  {
+    "id": "radio",
+    "title": "無線",
+    "year": 1938, "x": 100, "y": 220, "research_time": 140,
+    "icon": "https://hoi4.paradoxwikis.com/images/c/c2/Radio.png",
+    "effects": ["増援増強率: +5.0%", "師団信頼性: +5.0%"],
+    "prerequisites": ["electronic_mechanical_engineering"]
+  },
+  {
+    "id": "mechanical_computing",
+    "title": "機械式計算機",
+    "year": 1938, "x": 300, "y": 220, "research_time": 140,
+    "icon": "https://hoi4.paradoxwikis.com/images/3/3d/Mechanical_computing.png",
+    "effects": ["研究速度: +4.0%"],
+    "prerequisites": ["electronic_mechanical_engineering"]
+  },
+  {
+    "id": "atomic_research",
+    "title": "原子核研究 (アルザマス16)",
+    "year": 1940, "x": 650, "y": 500, "research_time": 250,
+    "icon": "https://hoi4.paradoxwikis.com/images/8/8c/Atomic_research.png",
+    "effects": ["原子炉建設可能", "核開発研究速度: +10.0%"],
+    "prerequisites": []
+  },
+  {
+    "id": "experimental_rockets",
+    "title": "実験的ロケット",
+    "year": 1942, "x": 850, "y": 780, "research_time": 200,
+    "icon": "https://hoi4.paradoxwikis.com/images/2/23/Experimental_rockets.png",
+    "effects": ["ロケット発射台建設可能"],
+    "prerequisites": []
+  }
+]
