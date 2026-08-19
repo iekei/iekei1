@@ -5,84 +5,170 @@
   user-select: none;
 }
 
-body {
-  background-color: #0d0e10;
-  color: #d1d5db;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  overflow: hidden;
+html, body {
+  width: 100%;
   height: 100vh;
+  overflow: hidden; /* 全体の無駄なスクロールバーを消去 */
+  background-color: #0b0c0e;
+  color: #e5e7eb;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* 上から順に縦並びにする */
 }
 
-/* 上部タブバー */
-#research-header {
-  background: #14171a;
-  border-bottom: 2px solid #2a2f35;
+/* ==========================================
+   1. 上部ヘッダー（日付・速度・研究スロット）
+   ========================================== */
+#top-bar {
+  flex-shrink: 0; /* 上部に固定して縮ませない */
+  background: #15181c;
+  border-bottom: 2px solid #2d333b;
   padding: 8px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
   z-index: 100;
+  flex-wrap: wrap; /* 画面幅が狭い時も崩れないように */
 }
 
-.category-tabs {
+#game-clock {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#calendar-display {
+  font-family: monospace;
+  font-size: 15px;
+  font-weight: bold;
+  color: #f3f4f6;
+  background: #21262d;
+  padding: 5px 12px;
+  border-radius: 4px;
+  border: 1px solid #30363d;
+}
+
+#speed-controls {
+  display: flex;
+  gap: 2px;
+}
+
+.speed-btn {
+  background: #21262d;
+  color: #8b949e;
+  border: 1px solid #30363d;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.speed-btn:hover {
+  background: #30363d;
+  color: #f0f6fc;
+}
+
+.speed-btn.active {
+  background: #238636;
+  color: #fff;
+  border-color: #2ea043;
+}
+
+/* 研究スロット */
+#research-slots {
   display: flex;
   gap: 8px;
-  justify-content: center;
+  flex-wrap: wrap;
 }
 
-.tab-btn {
-  background: #1e2328;
-  color: #9ba0a6;
-  border: 1px solid #363c44;
-  padding: 8px 16px;
+.slot {
+  background: #1c2128;
+  border: 1px solid #30363d;
   border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 13px;
+  padding: 4px 10px;
+  font-size: 12px;
   display: flex;
   align-items: center;
   gap: 6px;
-  transition: all 0.2s;
+}
+
+.slot.active {
+  border-color: #3fb950;
+  background: #122c1b;
+}
+
+.slot.locked {
+  opacity: 0.5;
+  background: #0d1117;
+}
+
+.slot-name { color: #8b949e; }
+.slot-status { font-weight: bold; color: #3fb950; }
+
+/* ==========================================
+   2. カテゴリー切替タブ
+   ========================================== */
+#category-tabs {
+  flex-shrink: 0; /* 上部に固定 */
+  background: #1c2128;
+  display: flex;
+  gap: 4px;
+  padding: 6px 16px;
+  border-bottom: 1px solid #30363d;
+  overflow-x: auto; /* タブが多い場合に横スクロール可能に */
+  white-space: nowrap;
+}
+
+.tab-btn {
+  background: #21262d;
+  color: #8b949e;
+  border: 1px solid #30363d;
+  padding: 6px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: bold;
+  transition: all 0.15s;
 }
 
 .tab-btn:hover {
-  background: #2b323a;
-  color: #fff;
+  background: #30363d;
+  color: #f0f6fc;
 }
 
 .tab-btn.active {
-  background: #2e3b4e;
-  color: #48c774;
-  border-color: #48c774;
-  box-shadow: 0 0 8px rgba(72, 199, 116, 0.3);
+  background: #30363d;
+  color: #58a6ff;
+  border-color: #58a6ff;
 }
 
-/* メインツリーエリア */
+/* ==========================================
+   3. メインツリーエリア（残り全域を占有）
+   ========================================== */
 #tree-container {
-  flex: 1;
+  flex: 1; /* 残りの高さをすべて使う */
   position: relative;
   overflow: hidden;
   cursor: grab;
-  background-color: #121417;
-  /* 本家風の背景テクスチャ/グリッド */
-  background-image: 
-    radial-gradient(#1f242d 1px, transparent 0),
-    linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px);
-  background-size: 20px 20px, 120px 100%;
+  background-color: #0d1117;
+  background-image: radial-gradient(#21262d 1px, transparent 0);
+  background-size: 24px 24px;
 }
 
 #tree-container:active {
   cursor: grabbing;
 }
 
-/* 左側の固定年数軸 */
+/* 左側の年数バー */
 #year-sidebar {
   position: absolute;
   left: 0;
   top: 0;
   bottom: 0;
   width: 60px;
-  background: rgba(15, 17, 20, 0.85);
-  border-right: 1px solid #2a2f35;
+  background: rgba(13, 17, 23, 0.95);
+  border-right: 1px solid #30363d;
   z-index: 50;
   pointer-events: none;
 }
@@ -90,23 +176,22 @@ body {
 .year-label {
   position: absolute;
   left: 12px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: bold;
-  color: #6b7280;
+  color: #6e7681;
   font-family: monospace;
 }
 
-/* 可動キャンバス */
+/* ツリー本体の領域 */
 #tree-viewport {
   position: absolute;
   top: 0;
   left: 60px;
-  width: 3000px;
-  height: 2000px;
+  width: 3500px;
+  height: 2500px;
   transform-origin: 0 0;
 }
 
-/* SVG 接続線 */
 #svg-lines {
   position: absolute;
   top: 0;
@@ -117,14 +202,13 @@ body {
 }
 
 .tech-line {
-  stroke: #4b5563;
+  stroke: #30363d;
   stroke-width: 3;
   fill: none;
 }
 
 .tech-line.active {
-  stroke: #48c774;
-  stroke-width: 3;
+  stroke: #2ea043;
 }
 
 /* 技術ノード */
@@ -132,21 +216,21 @@ body {
   position: absolute;
   width: 64px;
   height: 64px;
-  background: #1a1d21;
-  border: 2px solid #374151;
-  border-radius: 8px;
+  background: #161b22;
+  border: 2px solid #30363d;
+  border-radius: 6px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.6);
   transition: transform 0.15s, border-color 0.15s;
 }
 
 .tech-node:hover {
   transform: scale(1.08);
-  border-color: #60a5fa;
+  border-color: #58a6ff;
   z-index: 10;
 }
 
@@ -154,23 +238,26 @@ body {
   width: 48px;
   height: 48px;
   object-fit: contain;
+  pointer-events: none;
 }
 
-.tech-node .tech-title {
+.tech-title {
   position: absolute;
-  bottom: -18px;
+  bottom: -22px;
   font-size: 10px;
   white-space: nowrap;
-  color: #9ca3af;
-  background: rgba(0,0,0,0.7);
-  padding: 1px 4px;
-  border-radius: 2px;
+  color: #c9d1d9;
+  background: rgba(0,0,0,0.85);
+  padding: 2px 5px;
+  border-radius: 3px;
+  border: 1px solid #30363d;
+  pointer-events: none;
 }
 
-/* 研究完了・未解除状態 */
+/* 状態別の装飾 */
 .tech-node.researched {
-  border-color: #48c774;
-  background: #132719;
+  border-color: #2ea043;
+  background: #0e2a17;
 }
 
 .tech-node.researched::after {
@@ -178,10 +265,9 @@ body {
   position: absolute;
   top: -6px;
   right: -6px;
-  background: #48c774;
-  color: #000;
+  background: #2ea043;
+  color: #fff;
   font-size: 10px;
-  font-weight: bold;
   width: 16px;
   height: 16px;
   border-radius: 50%;
@@ -190,44 +276,39 @@ body {
   justify-content: center;
 }
 
-/* ツールチップ */
+.tech-node.researching {
+  border-color: #e3b341;
+  box-shadow: 0 0 10px rgba(227, 179, 65, 0.5);
+}
+
+.tech-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background: #e3b341;
+  width: 0%;
+  border-radius: 0 0 4px 4px;
+}
+
+/* ==========================================
+   4. ツールチップ
+   ========================================== */
 #tech-tooltip {
   position: fixed;
-  background: rgba(18, 22, 28, 0.95);
-  border: 1px solid #4b5563;
+  background: rgba(22, 27, 34, 0.95);
+  border: 1px solid #484f58;
   border-radius: 6px;
   padding: 10px 14px;
-  color: #fff;
+  color: #f0f6fc;
   font-size: 12px;
   pointer-events: none;
   z-index: 1000;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.7);
-  max-width: 260px;
+  max-width: 280px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.5);
 }
 
-#tech-tooltip.hidden {
-  display: none;
-}
-
-#tooltip-title {
-  font-size: 14px;
-  font-weight: bold;
-  color: #60a5fa;
-}
-
-#tooltip-year {
-  color: #9ca3af;
-  font-size: 11px;
-  margin-bottom: 4px;
-}
-
-#tech-tooltip hr {
-  border: 0;
-  border-top: 1px solid #374151;
-  margin: 6px 0;
-}
-
-.effect-item {
-  color: #34d399;
-  margin-top: 2px;
-}
+#tech-tooltip.hidden { display: none; }
+#tooltip-title { font-size: 14px; font-weight: bold; color: #58a6ff; }
+#tooltip-info { color: #8b949e; font-size: 11px; margin-top: 2px; }
+.effect-item { color: #3fb950; margin-top: 3px; }
