@@ -1,0 +1,26 @@
+[
+  {
+    "id": "early_fighter",
+    "title": "初期型戦闘機 (I-16/I-153)",
+    "year": 1936, "x": 200, "y": 50, "research_time": 140,
+    "icon": "https://hoi4.paradoxwikis.com/images/4/41/Early_fighter.png",
+    "effects": ["空対空攻撃: +18.0", "機動性: +22.0", "最高速度: +420km/h"],
+    "prerequisites": []
+  },
+  {
+    "id": "interwar_cas",
+    "title": "対地攻撃機 (Il-2 シュトゥルモヴィク)",
+    "year": 1939, "x": 450, "y": 360, "research_time": 160,
+    "icon": "https://hoi4.paradoxwikis.com/images/d/d4/Interwar_cas.png",
+    "effects": ["対地攻撃: +16.0", "対空防御: +12.0", "信頼性: +80%"],
+    "prerequisites": []
+  },
+  {
+    "id": "fighter_1",
+    "title": "単発戦闘機 I (Yak-1/LaGG-3)",
+    "year": 1940, "x": 200, "y": 500, "research_time": 170,
+    "icon": "https://hoi4.paradoxwikis.com/images/0/06/Fighter_1.png",
+    "effects": ["空対空攻撃: +28.0", "機動性: +38.0", "最高速度: +580km/h"],
+    "prerequisites": ["early_fighter"]
+  }
+]
