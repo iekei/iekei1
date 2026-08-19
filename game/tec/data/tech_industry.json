@@ -1,0 +1,26 @@
+[
+  {
+    "id": "basic_machine_tools",
+    "title": "基本工作機械",
+    "year": 1936, "x": 200, "y": 50, "research_time": 130,
+    "icon": "https://hoi4.paradoxwikis.com/images/5/52/Basic_machine_tools.png",
+    "effects": ["生産効率上限: +10.0%", "生産効率保持率: +10.0%"],
+    "prerequisites": []
+  },
+  {
+    "id": "concentrated_industry_1",
+    "title": "集中型産業 I",
+    "year": 1936, "x": 450, "y": 50, "research_time": 130,
+    "icon": "https://hoi4.paradoxwikis.com/images/d/d3/Concentrated_industry_1.png",
+    "effects": ["工場出力: +15.0%", "州の最大工場数: +20.0%"],
+    "prerequisites": []
+  },
+  {
+    "id": "construction_1",
+    "title": "建築 I",
+    "year": 1936, "x": 700, "y": 50, "research_time": 130,
+    "icon": "https://hoi4.paradoxwikis.com/images/a/a2/Construction_1.png",
+    "effects": ["建築速度: +10.0%", "修復速度: +10.0%"],
+    "prerequisites": []
+  }
+]
