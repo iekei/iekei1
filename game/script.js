@@ -384,11 +384,12 @@ document.querySelectorAll('.speed-btn[data-speed]').forEach(btn => {
 
 const batchFiles = [
   './data/nf_batch1.json',
-  './data/nf_batch2.json'
-  './data/nf_batch3.json'
-  './data/nf_batch4.json'
-  './data/nf_batch5.json'
-  './data/nf_batch6.json'
+  './data/nf_batch2.json',
+  './data/nf_batch3.json',
+  './data/nf_batch4.json',
+  './data/nf_batch5.json',
+  './data/nf_batch6.json',
+  './data/nf_batch7.json'
 ];
 
 async function loadAllBatches() {
