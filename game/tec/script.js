@@ -180,26 +180,15 @@ function renderTree() {
   const techMap = {};
   techList.forEach(t => techMap[t.id] = t);
 
-  // ノード生成
-  techList.forEach(tech => {
-    const node = document.createElement('div');
-    node.className = 'tech-node';
-    node.setAttribute('data-id', tech.id);
+  // ノード生成部分
+const proxyIconUrl = tech.icon.startsWith('http') 
+  ? `https://images.weserv.nl/?url=${encodeURIComponent(tech.icon)}`
+  : tech.icon;
 
-    const isDone = researchedTechs.has(tech.id);
-    const activeSlot = researchSlots.find(s => s.techId === tech.id);
-
-    if (isDone) node.classList.add('researched');
-    if (activeSlot) node.classList.add('researching');
-
-    node.style.left = `${tech.x}px`;
-    node.style.top = `${tech.y}px`;
-
-    node.innerHTML = `
-      <img src="${tech.icon}" alt="${tech.title}">
-      <div class="tech-title">${tech.title}</div>
-    `;
-
+node.innerHTML = `
+  <img src="${proxyIconUrl}" alt="">
+  <div class="tech-title">${tech.title}</div>
+`;
     // ツールチップ
     node.addEventListener('mouseenter', (e) => showTooltip(e, tech));
     node.addEventListener('mousemove', moveTooltip);
