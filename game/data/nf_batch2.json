@@ -1,120 +1,74 @@
 [
   {
-    "id": "sov_left_opposition",
-    "title": "左翼反対派の結集",
-    "x": 5200,
-    "y": 250,
+    "id": "ger_four_year_plan",
+    "title": "4ヶ年計画",
+    "x": 6000,
+    "y": 100,
     "cost": 70,
-    "effect": "・政治力: +50\n・安定度: -10.00%\n・旧トロツキー派の地下組織活性化",
-    "prerequisites": ["sov_center_stalin"],
-    "mutually_exclusive": ["sov_great_purge"]
+    "effect": "・民需工場: +2\n・合成ゴム・石油技術の研究ボーナス",
+    "prerequisites": []
   },
   {
-    "id": "sov_smite_stalinists",
-    "title": "スターリン派の追放",
-    "x": 5200,
+    "id": "ger_autobahn",
+    "title": "ライヒスアウトバーン",
+    "x": 5850,
+    "y": 250,
+    "cost": 70,
+    "effect": "・インフラ: +3\n・師団移動速度: +10%",
+    "prerequisites": ["ger_four_year_plan"]
+  },
+  {
+    "id": "ger_hermann_goring_werke",
+    "title": "ヘルマン・ゲーリング・ヴェルケ",
+    "x": 6150,
+    "y": 250,
+    "cost": 70,
+    "effect": "・軍需工場: +3\n・鉄資源出力を強化",
+    "prerequisites": ["ger_four_year_plan"]
+  },
+  {
+    "id": "ger_rhineland",
+    "title": "ラインラント再武装",
+    "x": 6800,
+    "y": 100,
+    "cost": 70,
+    "effect": "・陸軍経験値: +50\n・緊張度上昇: +5%\n・陸軍陸上要塞の建設速度UP",
+    "prerequisites": []
+  },
+  {
+    "id": "ger_anschluss",
+    "title": "アンシュルス (オーストリア併合)",
+    "x": 6800,
+    "y": 250,
+    "cost": 70,
+    "effect": "・オーストリアをコア領土化\n・可動人口・工場獲得",
+    "prerequisites": ["ger_rhineland"]
+  },
+  {
+    "id": "sov_left_opposition",
+    "title": "左翼反対派の結集",
+    "x": 1700,
+    "y": 250,
+    "cost": 70,
+    "effect": "・スターリン批判運動の活性化\n・トロツキー派内戦の準備開始",
+    "prerequisites": ["sov_center_stalin"]
+  },
+  {
+    "id": "sov_return_of_trotsky",
+    "title": "永久革命派の復権 (トロツキー帰還)",
+    "x": 1700,
     "y": 400,
     "cost": 70,
-    "effect": "・政治力: +100\n・スターリン主義者の逮捕・失脚\n・党内抑圧の解除",
+    "effect": "・レフ・トロツキーが指導者に就任\n・世界革命正当化コスト: -50%",
     "prerequisites": ["sov_left_opposition"]
   },
   {
-    "id": "sov_recall_trotsky",
-    "title": "トロツキーの帰還",
-    "x": 5200,
-    "y": 550,
+    "id": "sov_tsar_restoration",
+    "title": "白軍残党の蜂起とロマノフ復辟",
+    "x": 2300,
+    "y": 250,
     "cost": 70,
-    "effect": "・レフ・トロツキーが国家元首に就任\n・戦争協力度: +20.00%\n・赤軍の指揮権完全掌握",
-    "prerequisites": ["sov_smite_stalinists"]
-  },
-  {
-    "id": "sov_permanent_revolution",
-    "title": "永続革命論の実践",
-    "x": 5200,
-    "y": 700,
-    "cost": 70,
-    "effect": "・世界緊張度の上昇に伴う攻勢補正: +15%\n・他国の共産主義イデオロギー支援効率: +50%",
-    "prerequisites": ["sov_recall_trotsky"]
-  },
-  {
-    "id": "sov_fourth_international",
-    "title": "第四インターナショナル",
-    "x": 4900,
-    "y": 850,
-    "cost": 70,
-    "effect": "・独自陣営「第四インターナショナル」を設立\n・政治力: +100\n・コミンテルンの解体と再編",
-    "prerequisites": ["sov_permanent_revolution"]
-  },
-  {
-    "id": "sov_trotskyist_red_army",
-    "title": "赤軍の再民主化",
-    "x": 5500,
-    "y": 850,
-    "cost": 70,
-    "effect": "・陸軍経験値: +50\n・組織率補正: +10.0%\n・将校の自主性尊重による計画速度: +15%",
-    "prerequisites": ["sov_permanent_revolution"]
-  },
-  {
-    "id": "sov_support_spanish_poums",
-    "title": "POUMとスペイン革命の支援",
-    "x": 4700,
-    "y": 1000,
-    "cost": 70,
-    "effect": "・スペイン義勇兵派遣枠: +3\n・戦争協力度: +10.00%\n・政治力: -30",
-    "prerequisites": ["sov_fourth_international"]
-  },
-  {
-    "id": "sov_export_revolution_europe",
-    "title": "欧州への革命輸出",
-    "x": 4900,
-    "y": 1000,
-    "cost": 70,
-    "effect": "・戦争目的の正当化時間: -25%\n・師団攻撃力: +10.0%",
-    "prerequisites": ["sov_fourth_international"]
-  },
-  {
-    "id": "sov_liberate_poland_trotsky",
-    "title": "ポーランド労働者への呼びかけ",
-    "x": 5100,
-    "y": 1000,
-    "cost": 70,
-    "effect": "・対ポーランド正当化時間: -50%\n・ポーランド国内の共産主義支持率急増",
-    "prerequisites": ["sov_fourth_international"]
-  },
-  {
-    "id": "sov_agitate_german_proletariat",
-    "title": "ドイツ労働者蜂起の扇動",
-    "x": 4900,
-    "y": 1150,
-    "cost": 70,
-    "effect": "・対ドイツ攻撃力: +15.0%\n・ドイツ国内での破壊工作・ストライキ誘発",
-    "prerequisites": ["sov_export_revolution_europe"]
-  },
-  {
-    "id": "sov_military_soviet_expansion",
-    "title": "兵士評議会（ソビエト）の復権",
-    "x": 5350,
-    "y": 1000,
-    "cost": 70,
-    "effect": "・指揮官能力: +1\n・師団回収率: +15.0%\n・士気: +10.0%",
-    "prerequisites": ["sov_trotskyist_red_army"]
-  },
-  {
-    "id": "sov_global_deep_battle",
-    "title": "超縦深戦略理論",
-    "x": 5650,
-    "y": 1000,
-    "cost": 70,
-    "effect": "・計画立案上限: +20%\n・陸軍ドクトリン研究ボーナス: +100%",
-    "prerequisites": ["sov_trotskyist_red_army"]
-  },
-  {
-    "id": "sov_world_socialist_republic",
-    "title": "世界社会主義共和国連邦",
-    "x": 5200,
-    "y": 1300,
-    "cost": 70,
-    "effect": "・安定度: +20.00%\n・戦争協力度: +20.00%\n・政治力: +200\n・全傀儡国の統合コスト激減",
-    "prerequisites": ["sov_agitate_german_proletariat", "sov_global_deep_battle"]
+    "effect": "・君主制への回帰\n・白軍将校の復帰・旧帝国領土への特権主張",
+    "prerequisites": ["sov_center_stalin"]
   }
 ]
