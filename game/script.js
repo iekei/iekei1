@@ -389,7 +389,10 @@ const batchFiles = [
   './data/nf_batch4.json',
   './data/nf_batch5.json',
   './data/nf_batch6.json',
-  './data/nf_batch7.json'
+  './data/nf_batch7.json',
+  './data/nf_batch8.json',
+  './data/nf_batch9.json',
+  './data/nf_batch10.json'
 ];
 
 async function loadAllBatches() {
