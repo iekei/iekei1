@@ -1,0 +1,42 @@
+[
+  {
+    "id": "basic_light_tank",
+    "title": "基本型軽戦車 (T-26/BT-7)",
+    "year": 1936, "x": 150, "y": 50, "research_time": 140,
+    "icon": "https://hoi4.paradoxwikis.com/images/2/28/Basic_light_tank.png",
+    "effects": ["装甲値: +12.0", "対人攻撃: +14.0", "最高速度: +10.0km/h"],
+    "prerequisites": []
+  },
+  {
+    "id": "basic_medium_tank",
+    "title": "基本型中戦車 (T-34/76)",
+    "year": 1939, "x": 380, "y": 360, "research_time": 170,
+    "icon": "https://hoi4.paradoxwikis.com/images/0/07/Basic_medium_tank.png",
+    "effects": ["装甲値: +45.0", "対人攻撃: +22.0", "対物攻撃: +18.0", "信頼性: +80%"],
+    "prerequisites": ["basic_light_tank"]
+  },
+  {
+    "id": "improved_medium_tank",
+    "title": "改良型中戦車 (T-34/85)",
+    "year": 1941, "x": 380, "y": 640, "research_time": 190,
+    "icon": "https://hoi4.paradoxwikis.com/images/b/b8/Improved_medium_tank.png",
+    "effects": ["装甲値: +60.0", "対人攻撃: +30.0", "対物攻撃: +28.0", "突破: +20.0"],
+    "prerequisites": ["basic_medium_tank"]
+  },
+  {
+    "id": "basic_heavy_tank",
+    "title": "基本型重戦車 (KV-1/KV-2)",
+    "year": 1939, "x": 620, "y": 360, "research_time": 180,
+    "icon": "https://hoi4.paradoxwikis.com/images/6/60/Basic_heavy_tank.png",
+    "effects": ["装甲値: +70.0", "対人攻撃: +28.0", "突破: +25.0"],
+    "prerequisites": ["basic_light_tank"]
+  },
+  {
+    "id": "improved_heavy_tank",
+    "title": "改良型重戦車 (IS-2)",
+    "year": 1943, "x": 620, "y": 920, "research_time": 210,
+    "icon": "https://hoi4.paradoxwikis.com/images/4/4e/Improved_heavy_tank.png",
+    "effects": ["装甲値: +110.0", "対人攻撃: +40.0", "対物攻撃: +45.0"],
+    "prerequisites": ["basic_heavy_tank"]
+  }
+]
