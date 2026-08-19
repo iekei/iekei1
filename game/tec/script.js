@@ -57,79 +57,7 @@ function initTabs() {
 }
 
 // ------------------------------------------
-// 3. ミリタリー・技術SVGアイコン生成関数
-// ------------------------------------------
-function getTechSvgIcon(cat, id) {
-  // 基本スタイル設定
-  const stroke = "#58a6ff";
-  const fill = "none";
-  const sw = "2";
-
-  // IDやカテゴリーに応じたSVG形状の定義
-  if (id.includes('infantry') || id.includes('support')) {
-    // 歩兵（クロスしたライフル）
-    return `<svg width="36" height="36" viewBox="0 0 24 24" fill="${fill}" stroke="${stroke}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M3 21l18-18"/>
-      <path d="M3 3l18 18"/>
-      <path d="M15 3h6v6"/>
-      <path d="M9 21H3v-6"/>
-    </svg>`;
-  } else if (id.includes('hospital')) {
-    // 野戦病院（赤十字）
-    return `<svg width="36" height="36" viewBox="0 0 24 24" fill="${fill}" stroke="${stroke}" stroke-width="${sw}">
-      <path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6V3z"/>
-    </svg>`;
-  } else if (cat === 'armor' || id.includes('tank')) {
-    // 戦車（キャタピラと砲塔）
-    return `<svg width="36" height="36" viewBox="0 0 24 24" fill="${fill}" stroke="${stroke}" stroke-width="${sw}">
-      <rect x="2" y="13" width="20" height="7" rx="3.5"/>
-      <path d="M6 13l2-6h8l2 6"/>
-      <path d="M16 9h6"/>
-    </svg>`;
-  } else if (cat === 'artillery' || id.includes('artillery') || id.includes('anti')) {
-    // 砲兵（大砲・対戦車砲）
-    return `<svg width="36" height="36" viewBox="0 0 24 24" fill="${fill}" stroke="${stroke}" stroke-width="${sw}">
-      <circle cx="7" cy="17" r="4"/>
-      <path d="M9 14l11-8"/>
-      <path d="M16 4l4 2"/>
-      <path d="M12 18h9"/>
-    </svg>`;
-  } else if (cat === 'air' || id.includes('fighter') || id.includes('plane')) {
-    // 航空機（飛行機）
-    return `<svg width="36" height="36" viewBox="0 0 24 24" fill="${fill}" stroke="${stroke}" stroke-width="${sw}">
-      <path d="M12 2v20M2 9h20M6 18h12"/>
-    </svg>`;
-  } else if (cat === 'naval' || id.includes('submarine') || id.includes('battleship')) {
-    // 海軍（船・潜水艦）
-    return `<svg width="36" height="36" viewBox="0 0 24 24" fill="${fill}" stroke="${stroke}" stroke-width="${sw}">
-      <path d="M2 17l2 4h16l2-4H2z"/>
-      <path d="M6 17V8l4-3h4l2 3v9"/>
-      <path d="M12 3v2"/>
-    </svg>`;
-  } else if (cat === 'engineering' || id.includes('electronic') || id.includes('radio') || id.includes('computing')) {
-    // 工学・電子（歯車 / 歯車と回路）
-    return `<svg width="36" height="36" viewBox="0 0 24 24" fill="${fill}" stroke="${stroke}" stroke-width="${sw}">
-      <circle cx="12" cy="12" r="3"/>
-      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-    </svg>`;
-  } else if (id.includes('atomic') || id.includes('rocket')) {
-    // 原子力・ロケット（アトム）
-    return `<svg width="36" height="36" viewBox="0 0 24 24" fill="${fill}" stroke="${stroke}" stroke-width="${sw}">
-      <circle cx="12" cy="12" r="2"/>
-      <ellipse cx="12" cy="12" rx="9" ry="3.5" transform="rotate(30 12 12)"/>
-      <ellipse cx="12" cy="12" rx="9" ry="3.5" transform="rotate(150 12 12)"/>
-    </svg>`;
-  } else {
-    // 産業・デフォルト（工場）
-    return `<svg width="36" height="36" viewBox="0 0 24 24" fill="${fill}" stroke="${stroke}" stroke-width="${sw}">
-      <path d="M2 20h20"/>
-      <path d="M6 20V10l4 3V10l4 3V6l6 4v10"/>
-    </svg>`;
-  }
-}
-
-// ------------------------------------------
-// 4. ツリーの描画 (SVGアイコン挿入)
+// 3. ツリーの描画 (JSON内のSVGアイコン表示対応)
 // ------------------------------------------
 function renderTree() {
   const container = document.getElementById('tech-nodes');
@@ -151,11 +79,11 @@ function renderTree() {
     node.style.left = `${tech.x}px`;
     node.style.top = `${tech.y}px`;
 
-    // カテゴリとIDから動的にSVGアイコンを取得
-    const iconSvg = getTechSvgIcon(currentCategory, tech.id);
+    // JSON内の svg 文字列を読み込み、無い場合はデフォルトの四角形枠を表示
+    const svgContent = tech.svg || `<svg viewBox="0 0 24 24" fill="none" stroke="#58a6ff" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>`;
 
     node.innerHTML = `
-      <div class="tech-icon-wrapper">${iconSvg}</div>
+      <div class="tech-icon-wrapper">${svgContent}</div>
       <div class="tech-title">${tech.title}</div>
     `;
 
@@ -166,7 +94,7 @@ function renderTree() {
     container.appendChild(node);
   });
 
-  // 2. 依存関係の接続線描画
+  // 2. 依存関係の接続線（SVG）の描画
   list.forEach(tech => {
     if (tech.prerequisites && tech.prerequisites.length > 0) {
       tech.prerequisites.forEach(preId => {
@@ -180,17 +108,20 @@ function renderTree() {
 }
 
 // ------------------------------------------
-// 5. SVG接続線の描画
+// 4. SVG接続線の描画
 // ------------------------------------------
 function drawLine(parent, child) {
   const svg = document.getElementById('svg-lines');
   
+  // ノードの中心軸に合わせてオフセット調整 (ノードサイズ 64x64 想定)
   const x1 = parent.x + 32;
   const y1 = parent.y + 64;
   const x2 = child.x + 32;
   const y2 = child.y;
 
   const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  
+  // HOI4風のカギ型ルート描画
   const midY = y1 + (y2 - y1) / 2;
   const d = `M ${x1} ${y1} L ${x1} ${midY} L ${x2} ${midY} L ${x2} ${y2}`;
 
@@ -200,7 +131,7 @@ function drawLine(parent, child) {
 }
 
 // ------------------------------------------
-// 6. ツールチップ制御
+// 5. ツールチップの制御 (設計者・信頼度・説明の表示)
 // ------------------------------------------
 function showTooltip(e, tech) {
   const tooltip = document.getElementById('tech-tooltip');
@@ -208,10 +139,31 @@ function showTooltip(e, tech) {
   const info = document.getElementById('tooltip-info');
   const effects = document.getElementById('tooltip-effects');
 
+  // タイトル設定
   title.textContent = tech.title;
-  info.textContent = `研究年: ${tech.year}年 | 必要日数: ${tech.research_time}日`;
+  
+  // 開発年、設計者、信頼度（配備状態）を表示
+  let subInfo = `開発年: ${tech.year}年`;
+  if (tech.designer) subInfo += ` | 設計: ${tech.designer}`;
+  if (tech.reliability) subInfo += `\n状態: ${tech.reliability}`;
+  info.innerText = subInfo;
   
   effects.innerHTML = '';
+
+  // 銃器の説明文がある場合はスタイルを整えて追加
+  if (tech.desc) {
+    const descDiv = document.createElement('div');
+    descDiv.style.fontSize = '12px';
+    descDiv.style.color = '#8b949e';
+    descDiv.style.marginBottom = '8px';
+    descDiv.style.lineHeight = '1.4';
+    descDiv.style.borderBottom = '1px solid #30363d';
+    descDiv.style.paddingBottom = '6px';
+    descDiv.textContent = tech.desc;
+    effects.appendChild(descDiv);
+  }
+
+  // ステータス効果（対人攻撃、機動力など）のリストを表示
   if (tech.effects && tech.effects.length > 0) {
     tech.effects.forEach(eff => {
       const div = document.createElement('div');
@@ -223,6 +175,7 @@ function showTooltip(e, tech) {
 
   tooltip.classList.remove('hidden');
 
+  // マウスカーソルに追従させる処理
   const updateTooltipPos = (evt) => {
     tooltip.style.left = `${evt.clientX + 15}px`;
     tooltip.style.top = `${evt.clientY + 15}px`;
@@ -238,12 +191,13 @@ function hideTooltip() {
 }
 
 // ------------------------------------------
-// 7. 画面ドラッグ（パン）操作の制御
+// 6. 画面ドラッグ（パン）操作の制御
 // ------------------------------------------
 function initPanAndZoom() {
   const container = document.getElementById('tree-container');
 
   container.addEventListener('mousedown', (e) => {
+    // ノード以外の部分を掴んだ場合のみドラッグ開始
     if (e.target.closest('.tech-node')) return;
     
     isDragging = true;
@@ -271,7 +225,9 @@ function updateViewportTransform() {
   viewport.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
 }
 
-// 外部連携用
+// ------------------------------------------
+// 7. 外部・NF（国家方針）側からの連携用関数
+// ------------------------------------------
 window.unlockResearchSlot = function(slotId) {
   const slotEl = document.querySelector(`.slot[data-slot="${slotId}"]`);
   if (slotEl) {
