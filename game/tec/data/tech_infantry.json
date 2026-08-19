@@ -1,0 +1,50 @@
+[
+  {
+    "id": "infantry_weapons_1",
+    "title": "基本型歩兵装備 (M1891/30)",
+    "year": 1936, "x": 150, "y": 50, "research_time": 140,
+    "icon": "https://hoi4.paradoxwikis.com/images/d/df/Infantry_weapons_1.png",
+    "effects": ["対人攻撃: +3.0", "対物攻撃: +1.0", "防衛: +5.0", "信頼性: +90%"],
+    "prerequisites": []
+  },
+  {
+    "id": "infantry_weapons_2",
+    "title": "改良型歩兵装備 (SVT-40/SKS)",
+    "year": 1939, "x": 150, "y": 360, "research_time": 170,
+    "icon": "https://hoi4.paradoxwikis.com/images/f/f6/Infantry_weapons_2.png",
+    "effects": ["対人攻撃: +6.0", "対物攻撃: +2.0", "防衛: +8.0", "突破: +3.0"],
+    "prerequisites": ["infantry_weapons_1"]
+  },
+  {
+    "id": "infantry_weapons_3",
+    "title": "発展型歩兵装備 (AK-47)",
+    "year": 1942, "x": 150, "y": 780, "research_time": 200,
+    "icon": "https://hoi4.paradoxwikis.com/images/a/a2/Infantry_weapons_3.png",
+    "effects": ["対人攻撃: +10.0", "対物攻撃: +3.0", "防衛: +12.0", "突破: +6.0"],
+    "prerequisites": ["infantry_weapons_2"]
+  },
+  {
+    "id": "support_weapons_1",
+    "title": "支援兵器 I (マキシム重機関銃)",
+    "year": 1936, "x": 380, "y": 50, "research_time": 120,
+    "icon": "https://hoi4.paradoxwikis.com/images/4/4b/Support_weapons_1.png",
+    "effects": ["歩兵防御力: +5.0%", "対人攻撃: +2.0%"],
+    "prerequisites": []
+  },
+  {
+    "id": "support_weapons_2",
+    "title": "支援兵器 II (DP28/DShK)",
+    "year": 1938, "x": 380, "y": 220, "research_time": 140,
+    "icon": "https://hoi4.paradoxwikis.com/images/a/a0/Support_weapons_2.png",
+    "effects": ["歩兵防御力: +5.0%", "対人攻撃: +3.0%"],
+    "prerequisites": ["support_weapons_1"]
+  },
+  {
+    "id": "field_hospital_1",
+    "title": "野戦病院 I",
+    "year": 1936, "x": 620, "y": 50, "research_time": 150,
+    "icon": "https://hoi4.paradoxwikis.com/images/8/8b/Field_hospital_1.png",
+    "effects": ["衛生（救命率）: +20.0%", "経験値損失軽減: +10.0%"],
+    "prerequisites": []
+  }
+]
