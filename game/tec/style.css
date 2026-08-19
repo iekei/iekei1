@@ -239,6 +239,9 @@ html, body {
   height: 48px;
   object-fit: contain;
   pointer-events: none;
+  /* 画像が壊れた時にaltテキストが溢れるのを防ぐ */
+  font-size: 0;
+  overflow: hidden;
 }
 
 .tech-title {
