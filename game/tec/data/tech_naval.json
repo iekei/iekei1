@@ -1,25 +1,17 @@
 [
   {
     "id": "early_submarine",
-    "title": "初期型潜水艦 (S型/Sch-型)",
+    "title": "初期型潜水艦 (S型)",
     "year": 1936, "x": 200, "y": 50, "research_time": 140,
-    "icon": "https://hoi4.paradoxwikis.com/images/b/ba/Early_submarine.png",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 14c0-3 5-5 10-5s10 2 10 5-5 4-10 4S2 17 2 14z'/><path d='M11 9V5h3v2'/><circle cx='18' cy='14' r='1'/></svg>",
     "effects": ["魚雷攻撃: +22.0", "隠蔽性: +10.0"],
     "prerequisites": []
   },
   {
-    "id": "early_destroyer",
-    "title": "初期型駆逐艦 (グネフヌイ級)",
-    "year": 1936, "x": 450, "y": 50, "research_time": 140,
-    "icon": "https://hoi4.paradoxwikis.com/images/d/dd/Early_destroyer.png",
-    "effects": ["対潜攻撃: +15.0", "航続距離: +1500km"],
-    "prerequisites": []
-  },
-  {
     "id": "early_battleship",
-    "title": "初期型戦艦 (ガングート級/ソビエツキー・ソユーズ級)",
+    "title": "初期型戦艦 (ガングート級)",
     "year": 1936, "x": 700, "y": 50, "research_time": 180,
-    "icon": "https://hoi4.paradoxwikis.com/images/a/a2/Early_battleship.png",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 16l2 4h16l2-4H2z'/><path d='M6 16v-6l4-2h4l4 2v6'/><path d='M8 10h8'/><path d='M12 4v4'/></svg>",
     "effects": ["主砲攻撃: +45.0", "装甲値: +30.0", "耐久値: +150"],
     "prerequisites": []
   }
