@@ -1,0 +1,92 @@
+[
+  {
+    "id": "SOV_the_great_patriotic_war",
+    "title": "大祖国戦争",
+    "x": 8500,
+    "y": 50,
+    "cost": 35,
+    "effect": "・防衛戦闘における師団攻撃力: +20.00%\n・徴兵可能人口比率: +3.00%\n・戦争協力度: +20.00%",
+    "prerequisites": []
+  },
+  {
+    "id": "SOV_scorched_earth_policy",
+    "title": "焦土作戦の徹底",
+    "x": 8200,
+    "y": 180,
+    "cost": 35,
+    "effect": "・敵軍の補給消費量: +50.00%\n・撤退時のインフラ自動破壊ディシジョン開放",
+    "prerequisites": ["SOV_the_great_patriotic_war"]
+  },
+  {
+    "id": "SOV_women_in_the_military",
+    "title": "「夜の魔女」と女性兵士の動員",
+    "x": 8500,
+    "y": 180,
+    "cost": 70,
+    "effect": "・可動人口: +2.00%\n・エースパイロット発生率: +50.00%",
+    "prerequisites": ["SOV_the_great_patriotic_war"]
+  },
+  {
+    "id": "SOV_order_no_227",
+    "title": "第227号命令「一歩も退くな！」",
+    "x": 8800,
+    "y": 180,
+    "cost": 35,
+    "effect": "・師団の組織率回復速度: +15.00%\n・防衛時の退却ペナルティ軽減\n・督戦隊の編成開放",
+    "prerequisites": ["SOV_the_great_patriotic_war"]
+  },
+  {
+    "id": "SOV_mass_production_of_tanks",
+    "title": "T-34/85 兵器大量増産体勢",
+    "x": 8200,
+    "y": 310,
+    "cost": 70,
+    "effect": "・戦車工場の生産効率上限: +20.00%\n・軍需工場: +5",
+    "prerequisites": ["SOV_scorched_earth_policy"]
+  },
+  {
+    "id": "SOV_operation_bagration",
+    "title": "バグラチオン作戦の立案",
+    "x": 8500,
+    "y": 310,
+    "cost": 70,
+    "effect": "・大規模攻勢時の計画立案速度: +50.00%\n・全軍の突破力: +15.00%",
+    "prerequisites": ["SOV_women_in_the_military"]
+  },
+  {
+    "id": "SOV_secret_cities_closed_cities",
+    "title": "秘密都市（アルザマス16）の設立",
+    "x": 8800,
+    "y": 310,
+    "cost": 70,
+    "effect": "・原子爆弾研究速度: +50.00%\n・研究スロット: +1",
+    "prerequisites": ["SOV_order_no_227"]
+  },
+  {
+    "id": "SOV_fall_of_berlin",
+    "title": "ベルリンへの進撃",
+    "x": 8350,
+    "y": 440,
+    "cost": 70,
+    "effect": "・対ドイツ戦における師団移動速度: +15.00%\n・陸軍の組織率: +10.00%",
+    "prerequisites": ["SOV_mass_production_of_tanks", "SOV_operation_bagration"]
+  },
+  {
+    "id": "SOV_first_atomic_test",
+    "title": "ソ連初の原爆実験 (RDS-1)",
+    "x": 8800,
+    "y": 440,
+    "cost": 70,
+    "effect": "・核兵器製造の解禁\n・超強国としての国際的影響力獲得",
+    "prerequisites": ["SOV_secret_cities_closed_cities"]
+  },
+  {
+    "id": "SOV_victory_in_europe",
+    "title": "欧州勝利率（対独勝利の栄光）",
+    "x": 8500,
+    "y": 570,
+    "cost": 70,
+    "effect": "・全土の安定度: +20.00%\n・政治力: +200\n・共産圏バフの永続獲得",
+    "prerequisites": ["SOV_fall_of_berlin", "SOV_first_atomic_test"]
+  }
+]
