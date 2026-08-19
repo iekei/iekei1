@@ -1,0 +1,87 @@
+[
+  {
+    "id": "SOV_left_opposition",
+    "title": "左翼反対派",
+    "x": 600,
+    "y": 180,
+    "cost": 70,
+    "effect": "・トロツキー派の支持率増大\n・赤軍内の秘密組織拡大\n・スターリン主義政治からの離脱準備",
+    "prerequisites": ["SOV_the_path_of_marxism_leninism"],
+    "mutually_exclusive": ["SOV_center", "SOV_right_opposition"]
+  },
+  {
+    "id": "SOV_right_opposition",
+    "title": "右翼反対派",
+    "x": 1200,
+    "y": 180,
+    "cost": 70,
+    "effect": "・ブハーリン派の支持率増大\n・NEP（新経済政策）再評価運動\n・農民層の不満利用",
+    "prerequisites": ["SOV_the_path_of_marxism_leninism"],
+    "mutually_exclusive": ["SOV_center", "SOV_left_opposition"]
+  },
+  {
+    "id": "SOV_organize_the_anti_stalinist_politburo",
+    "title": "反スターリン政治局の結成",
+    "x": 600,
+    "y": 310,
+    "cost": 70,
+    "effect": "・クーデター/内戦準備工作の開放\n・政治力: +100",
+    "prerequisites": ["SOV_left_opposition"]
+  },
+  {
+    "id": "SOV_return_of_trotsky",
+    "title": "トロツキーの帰還",
+    "x": 400,
+    "y": 440,
+    "cost": 70,
+    "effect": "・レフ・トロツキーが指導者に就任\n・正当化コスト: -50%\n・戦争協力度: +15.00%",
+    "prerequisites": ["SOV_organize_the_anti_stalinist_politburo"],
+    "mutually_exclusive": ["SOV_monarchist_coup"]
+  },
+  {
+    "id": "SOV_permanent_revolution",
+    "title": "永久革命論の提唱",
+    "x": 400,
+    "y": 570,
+    "cost": 70,
+    "effect": "・他国での共産主義クーデター工作速度: +50%\n・緊張度上昇: +15.00%",
+    "prerequisites": ["SOV_return_of_trotsky"]
+  },
+  {
+    "id": "SOV_monarchist_coup",
+    "title": "白軍残党との結託（ロマノフ復辟）",
+    "x": 800,
+    "y": 440,
+    "cost": 70,
+    "effect": "・旧ロシア帝国派勢力の支援拡大\n・非整解イデオロギー転換の準備",
+    "prerequisites": ["SOV_organize_the_anti_stalinist_politburo"],
+    "mutually_exclusive": ["SOV_return_of_trotsky"]
+  },
+  {
+    "id": "SOV_restore_the_tsar",
+    "title": "ツァーリの復権",
+    "x": 800,
+    "y": 570,
+    "cost": 70,
+    "effect": "・ロシア帝国の再宣言\n・旧領土全域へのコア主張獲得\n・安定度: +20.00%",
+    "prerequisites": ["SOV_monarchist_coup"]
+  },
+  {
+    "id": "SOV_bukharin_nep",
+    "title": "新経済政策(NEP)の現代化",
+    "x": 1200,
+    "y": 310,
+    "cost": 70,
+    "effect": "・消費財工場負担率: -5.00%\n・民需工場建設速度: +15.00%",
+    "prerequisites": ["SOV_right_opposition"]
+  },
+  {
+    "id": "SOV_reconcile_with_peasants",
+    "title": "農民との和解",
+    "x": 1200,
+    "y": 440,
+    "cost": 70,
+    "effect": "・安定度: +15.00%\n・食料供給安定による国民精神付与",
+    "prerequisites": ["SOV_bukharin_nep"]
+  }
+]
