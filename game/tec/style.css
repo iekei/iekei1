@@ -1,0 +1,233 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+body {
+  background-color: #0d0e10;
+  color: #d1d5db;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow: hidden;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 上部タブバー */
+#research-header {
+  background: #14171a;
+  border-bottom: 2px solid #2a2f35;
+  padding: 8px 16px;
+  z-index: 100;
+}
+
+.category-tabs {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.tab-btn {
+  background: #1e2328;
+  color: #9ba0a6;
+  border: 1px solid #363c44;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.tab-btn:hover {
+  background: #2b323a;
+  color: #fff;
+}
+
+.tab-btn.active {
+  background: #2e3b4e;
+  color: #48c774;
+  border-color: #48c774;
+  box-shadow: 0 0 8px rgba(72, 199, 116, 0.3);
+}
+
+/* メインツリーエリア */
+#tree-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  cursor: grab;
+  background-color: #121417;
+  /* 本家風の背景テクスチャ/グリッド */
+  background-image: 
+    radial-gradient(#1f242d 1px, transparent 0),
+    linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 20px 20px, 120px 100%;
+}
+
+#tree-container:active {
+  cursor: grabbing;
+}
+
+/* 左側の固定年数軸 */
+#year-sidebar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  background: rgba(15, 17, 20, 0.85);
+  border-right: 1px solid #2a2f35;
+  z-index: 50;
+  pointer-events: none;
+}
+
+.year-label {
+  position: absolute;
+  left: 12px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #6b7280;
+  font-family: monospace;
+}
+
+/* 可動キャンバス */
+#tree-viewport {
+  position: absolute;
+  top: 0;
+  left: 60px;
+  width: 3000px;
+  height: 2000px;
+  transform-origin: 0 0;
+}
+
+/* SVG 接続線 */
+#svg-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.tech-line {
+  stroke: #4b5563;
+  stroke-width: 3;
+  fill: none;
+}
+
+.tech-line.active {
+  stroke: #48c774;
+  stroke-width: 3;
+}
+
+/* 技術ノード */
+.tech-node {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  background: #1a1d21;
+  border: 2px solid #374151;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+  transition: transform 0.15s, border-color 0.15s;
+}
+
+.tech-node:hover {
+  transform: scale(1.08);
+  border-color: #60a5fa;
+  z-index: 10;
+}
+
+.tech-node img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.tech-node .tech-title {
+  position: absolute;
+  bottom: -18px;
+  font-size: 10px;
+  white-space: nowrap;
+  color: #9ca3af;
+  background: rgba(0,0,0,0.7);
+  padding: 1px 4px;
+  border-radius: 2px;
+}
+
+/* 研究完了・未解除状態 */
+.tech-node.researched {
+  border-color: #48c774;
+  background: #132719;
+}
+
+.tech-node.researched::after {
+  content: '✔';
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #48c774;
+  color: #000;
+  font-size: 10px;
+  font-weight: bold;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ツールチップ */
+#tech-tooltip {
+  position: fixed;
+  background: rgba(18, 22, 28, 0.95);
+  border: 1px solid #4b5563;
+  border-radius: 6px;
+  padding: 10px 14px;
+  color: #fff;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 1000;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.7);
+  max-width: 260px;
+}
+
+#tech-tooltip.hidden {
+  display: none;
+}
+
+#tooltip-title {
+  font-size: 14px;
+  font-weight: bold;
+  color: #60a5fa;
+}
+
+#tooltip-year {
+  color: #9ca3af;
+  font-size: 11px;
+  margin-bottom: 4px;
+}
+
+#tech-tooltip hr {
+  border: 0;
+  border-top: 1px solid #374151;
+  margin: 6px 0;
+}
+
+.effect-item {
+  color: #34d399;
+  margin-top: 2px;
+}
