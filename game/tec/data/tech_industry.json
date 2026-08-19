@@ -3,24 +3,8 @@
     "id": "basic_machine_tools",
     "title": "基本工作機械",
     "year": 1936, "x": 200, "y": 50, "research_time": 130,
-    "icon": "https://hoi4.paradoxwikis.com/images/5/52/Basic_machine_tools.png",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/><line x1='18' y1='10' x2='18' y2='6'/></svg>",
     "effects": ["生産効率上限: +10.0%", "生産効率保持率: +10.0%"],
-    "prerequisites": []
-  },
-  {
-    "id": "concentrated_industry_1",
-    "title": "集中型産業 I",
-    "year": 1936, "x": 450, "y": 50, "research_time": 130,
-    "icon": "https://hoi4.paradoxwikis.com/images/d/d3/Concentrated_industry_1.png",
-    "effects": ["工場出力: +15.0%", "州の最大工場数: +20.0%"],
-    "prerequisites": []
-  },
-  {
-    "id": "construction_1",
-    "title": "建築 I",
-    "year": 1936, "x": 700, "y": 50, "research_time": 130,
-    "icon": "https://hoi4.paradoxwikis.com/images/a/a2/Construction_1.png",
-    "effects": ["建築速度: +10.0%", "修復速度: +10.0%"],
     "prerequisites": []
   }
 ]
