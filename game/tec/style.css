@@ -227,22 +227,22 @@ html, body {
   box-shadow: 0 4px 8px rgba(0,0,0,0.6);
   transition: transform 0.15s, border-color 0.15s;
 }
-
-.tech-node:hover {
-  transform: scale(1.08);
-  border-color: #58a6ff;
-  z-index: 10;
-}
-
-.tech-node img {
-  width: 48px;
-  height: 48px;
-  object-fit: contain;
+/* SVGアイコンラッパー */
+.tech-icon-wrapper {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   pointer-events: none;
-  /* 画像が壊れた時にaltテキストが溢れるのを防ぐ */
-  font-size: 0;
-  overflow: hidden;
 }
+
+/* ホバー時にSVGアイコンを青く光らせる */
+.tech-node:hover .tech-icon-wrapper svg {
+  stroke: #79c0ff;
+  filter: drop-shadow(0 0 3px rgba(88, 166, 255, 0.6));
+}
+
 
 .tech-title {
   position: absolute;
