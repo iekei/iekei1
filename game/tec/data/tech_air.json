@@ -3,24 +3,16 @@
     "id": "early_fighter",
     "title": "初期型戦闘機 (I-16/I-153)",
     "year": 1936, "x": 200, "y": 50, "research_time": 140,
-    "icon": "https://hoi4.paradoxwikis.com/images/4/41/Early_fighter.png",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20'/><path d='M2 9h20'/><path d='M7 20h10'/><path d='M12 2l2 4h-4z'/></svg>",
     "effects": ["空対空攻撃: +18.0", "機動性: +22.0", "最高速度: +420km/h"],
     "prerequisites": []
   },
   {
-    "id": "interwar_cas",
-    "title": "対地攻撃機 (Il-2 シュトゥルモヴィク)",
-    "year": 1939, "x": 450, "y": 360, "research_time": 160,
-    "icon": "https://hoi4.paradoxwikis.com/images/d/d4/Interwar_cas.png",
-    "effects": ["対地攻撃: +16.0", "対空防御: +12.0", "信頼性: +80%"],
+    "id": "heavy_plane_3",
+    "title": "大型飛行機 III (Tu-4 / Pe-8)",
+    "year": 1944, "x": 450, "y": 1060, "research_time": 210,
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 1v22'/><path d='M1 8h22'/><path d='M5 19h14'/><circle cx='6' cy='8' r='1'/><circle cx='9' cy='8' r='1'/><circle cx='15' cy='8' r='1'/><circle cx='18' cy='8' r='1'/></svg>",
+    "effects": ["爆撃能力: +85.0", "航続距離: +3500km"],
     "prerequisites": []
-  },
-  {
-    "id": "fighter_1",
-    "title": "単発戦闘機 I (Yak-1/LaGG-3)",
-    "year": 1940, "x": 200, "y": 500, "research_time": 170,
-    "icon": "https://hoi4.paradoxwikis.com/images/0/06/Fighter_1.png",
-    "effects": ["空対空攻撃: +28.0", "機動性: +38.0", "最高速度: +580km/h"],
-    "prerequisites": ["early_fighter"]
   }
 ]
