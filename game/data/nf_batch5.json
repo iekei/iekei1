@@ -1,0 +1,101 @@
+[
+  {
+    "id": "SOV_military_reorganization",
+    "title": "赤軍の再編",
+    "x": 5100,
+    "y": 50,
+    "cost": 70,
+    "effect": "・陸軍の経験値: +50\n・ドクトリンの研究速度: +10.00%",
+    "prerequisites": []
+  },
+  {
+    "id": "SOV_deep_battle_doctrine",
+    "title": "縦深戦略（ディープ・バトル）の追求",
+    "x": 4600,
+    "y": 180,
+    "cost": 70,
+    "effect": "・陸軍ドクトリン研究時間: -20.00%\n・師団回復率: +10.00%",
+    "prerequisites": ["SOV_military_reorganization"]
+  },
+  {
+    "id": "SOV_red_navy",
+    "title": "赤色海軍の再建",
+    "x": 5100,
+    "y": 180,
+    "cost": 70,
+    "effect": "・海軍の経験値: +50\n・造船所建設速度: +15.00%",
+    "prerequisites": ["SOV_military_reorganization"]
+  },
+  {
+    "id": "SOV_red_air_force",
+    "title": "赤色空軍の近代化",
+    "x": 5600,
+    "y": 180,
+    "cost": 70,
+    "effect": "・空軍の経験値: +50\n・戦闘機・爆撃機研究速度: +15.00%",
+    "prerequisites": ["SOV_military_reorganization"]
+  },
+  {
+    "id": "SOV_t34_development",
+    "title": "T-34中戦車開発計画",
+    "x": 4400,
+    "y": 310,
+    "cost": 70,
+    "effect": "・中戦車設計の研究速度: +50.00%\n・陸軍の経験値: +25",
+    "prerequisites": ["SOV_deep_battle_doctrine"]
+  },
+  {
+    "id": "SOV_artillery_modernization",
+    "title": "砲兵技術の近代化",
+    "x": 4800,
+    "y": 310,
+    "cost": 70,
+    "effect": "・砲兵ユニットの対人攻撃力: +10.00%\n・軍需工場: +2",
+    "prerequisites": ["SOV_deep_battle_doctrine"]
+  },
+  {
+    "id": "SOV_ocean_going_navy",
+    "title": "遠洋海軍構想",
+    "x": 5100,
+    "y": 310,
+    "cost": 70,
+    "effect": "・戦艦・巡洋艦の生産コスト: -10.00%\n・造船所: +3",
+    "prerequisites": ["SOV_red_navy"]
+  },
+  {
+    "id": "SOV_close_air_support_focus",
+    "title": "近接航空支援（CAS）の重視",
+    "x": 5600,
+    "y": 310,
+    "cost": 70,
+    "effect": "・対地攻撃機（Il-2等）の生産効率上限: +10.00%\n・対地攻撃力: +15.00%",
+    "prerequisites": ["SOV_red_air_force"]
+  },
+  {
+    "id": "SOV_tank_grad_construction",
+    "title": "「タンコグラード」戦車都市の建設",
+    "x": 4400,
+    "y": 440,
+    "cost": 70,
+    "effect": "・装甲車輌生産効率成長速度: +20.00%\n・軍需工場: +4",
+    "prerequisites": ["SOV_t34_development"]
+  },
+  {
+    "id": "SOV_katyusha_rocket_launchers",
+    "title": "カチューシャ・ロケット砲の発明",
+    "x": 4800,
+    "y": 440,
+    "cost": 70,
+    "effect": "・ロケット砲兵研究の完全開放\n・師団突破力: +10.00%",
+    "prerequisites": ["SOV_artillery_modernization"]
+  },
+  {
+    "id": "SOV_heroic_red_army",
+    "title": "無敵の赤軍",
+    "x": 5100,
+    "y": 570,
+    "cost": 70,
+    "effect": "・陸軍全体の士気: +15.00%\n・最大指揮権上限: +20\n・戦争協力度: +10.00%",
+    "prerequisites": ["SOV_tank_grad_construction", "SOV_katyusha_rocket_launchers", "SOV_close_air_support_focus"]
+  }
+]
