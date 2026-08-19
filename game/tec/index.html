@@ -3,64 +3,71 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HOI4 研究ツリー (Research Tree)</title>
+  <!-- 画像の直リンクブロック回避 -->
+  <meta name="referrer" content="no-referrer">
+  <title>HOI4 研究ツリー (Soviet Research Tree)</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- 上部カテゴリー切り替えタブ -->
-  <header id="research-header">
-    <div class="category-tabs">
-      <button class="tab-btn active" data-cat="infantry">
-        <span class="tab-icon">🪖</span>歩兵・支援
-      </button>
-      <button class="tab-btn" data-cat="armor">
-        <span class="tab-icon">🚜</span>装甲車輌
-      </button>
-      <button class="tab-btn" data-cat="artillery">
-        <span class="tab-icon">💥</span>砲兵
-      </button>
-      <button class="tab-btn" data-cat="naval">
-        <span class="tab-icon">⚓</span>海軍
-      </button>
-      <button class="tab-btn" data-cat="air">
-        <span class="tab-icon">✈️</span>航空機
-      </button>
-      <button class="tab-btn" data-cat="engineering">
-        <span class="tab-icon">🛠️</span>工学・原子核
-      </button>
-      <button class="tab-btn" data-cat="industry">
-        <span class="tab-icon">🏭</span>産業
-      </button>
+  <!-- 上部ヘッダー：日付・速度コントロール & 研究スロット -->
+  <header id="top-bar">
+    <div id="game-clock">
+      <span id="calendar-display">1936年1月1日</span>
+      <div id="speed-controls">
+        <button id="btn-pause" class="speed-btn active">⏸</button>
+        <button class="speed-btn" data-speed="1">▶</button>
+        <button class="speed-btn" data-speed="2">▶▶</button>
+        <button class="speed-btn" data-speed="3">▶▶▶</button>
+        <button class="speed-btn" data-speed="4">⚡</button>
+        <button class="speed-btn" data-speed="5">🚀</button>
+      </div>
+    </div>
+
+    <!-- 研究スロット (3枠デフォルト + 解放枠2) -->
+    <div id="research-slots">
+      <div class="slot" data-slot="1"><span class="slot-name">スロット 1:</span> <span class="slot-status">空き</span></div>
+      <div class="slot" data-slot="2"><span class="slot-name">スロット 2:</span> <span class="slot-status">空き</span></div>
+      <div class="slot" data-slot="3"><span class="slot-name">スロット 3:</span> <span class="slot-status">空き</span></div>
+      <div class="slot locked" data-slot="4"><span class="slot-name">スロット 4:</span> <span class="slot-status">🔒 NFで解放</span></div>
+      <div class="slot locked" data-slot="5"><span class="slot-name">スロット 5:</span> <span class="slot-status">🔒 NFで解放</span></div>
     </div>
   </header>
 
-  <!-- メインビューポート（ホイールで縦スクロール、ドラッグで横移動） -->
+  <!-- カテゴリー切替タブ -->
+  <nav id="category-tabs">
+    <button class="tab-btn active" data-cat="infantry">🪖 歩兵・支援</button>
+    <button class="tab-btn" data-cat="armor">🚜 装甲車輌</button>
+    <button class="tab-btn" data-cat="artillery">💥 砲兵</button>
+    <button class="tab-btn" data-cat="naval">⚓ 海軍</button>
+    <button class="tab-btn" data-cat="air">✈️ 航空機</button>
+    <button class="tab-btn" data-cat="engineering">🛠️ 工学・原子核</button>
+    <button class="tab-btn" data-cat="industry">🏭 産業</button>
+  </nav>
+
+  <!-- ツリーエリア -->
   <main id="tree-container">
-    
-    <!-- 左側に固定される「年数タイムライン」 -->
     <div id="year-sidebar">
       <div class="year-label" style="top: 50px;">1936</div>
-      <div class="year-label" style="top: 200px;">1938</div>
-      <div class="year-label" style="top: 320px;">1939</div>
-      <div class="year-label" style="top: 440px;">1940</div>
-      <div class="year-label" style="top: 560px;">1941</div>
-      <div class="year-label" style="top: 680px;">1942</div>
-      <div class="year-label" style="top: 800px;">1943</div>
-      <div class="year-label" style="top: 920px;">1944</div>
+      <div class="year-label" style="top: 220px;">1938</div>
+      <div class="year-label" style="top: 360px;">1939</div>
+      <div class="year-label" style="top: 500px;">1940</div>
+      <div class="year-label" style="top: 640px;">1941</div>
+      <div class="year-label" style="top: 780px;">1942</div>
+      <div class="year-label" style="top: 920px;">1943</div>
+      <div class="year-label" style="top: 1060px;">1944</div>
     </div>
 
-    <!-- ツリー本体（可動エリア） -->
     <div id="tree-viewport">
       <svg id="svg-lines"></svg>
       <div id="tech-nodes"></div>
     </div>
   </main>
 
-  <!-- 本家風ツールチップ -->
+  <!-- ツールチップ -->
   <div id="tech-tooltip" class="hidden">
     <div id="tooltip-title">技術名</div>
-    <div id="tooltip-year">基準年: 1936</div>
+    <div id="tooltip-info"></div>
     <hr>
     <div id="tooltip-effects"></div>
   </div>
