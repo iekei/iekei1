@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>軍需生産管理 (Production Management)</title>
+  <link rel="stylesheet" href="production.css">
+</head>
+<body>
+
+<header id="top-bar">
+  <div id="game-clock">
+    <span id="calendar-display">1936年1月1日</span>
+    <div id="resource-summary">
+      <span class="res-badge">🪨 鋼鉄: <span id="res-steel">500</span></span>
+      <span class="res-badge">✈️ アルミ: <span id="res-aluminum">300</span></span>
+      <span class="res-badge">⚡ 資源カード: <span id="res-cards">10</span>枚 (1000/1000)</span>
+    </div>
+  </div>
+  <div id="nav-links">
+    <a href="../index.html" class="nav-btn">研究ツリーに戻る</a>
+  </div>
+</header>
+
+<main id="production-container">
+  <section id="available-techs" class="panel">
+    <h2>生産可能な装備 (研究完了済み)</h2>
+    <div id="tech-list-to-produce">
+      <!-- 動的生成 -->
+    </div>
+  </section>
+
+  <section id="active-production" class="panel">
+    <h2>生産ライン (最大5ライン / 軍需工場上限: 30)</h2>
+    <div id="total-factories-info">
+      割り当て済み工場: <span id="used-factories">0</span> / 30
+    </div>
+    <div id="production-lines-list">
+      <!-- 動的生成 -->
+    </div>
+  </section>
+</main>
+
+<script src="production.js"></script>
+</body>
+</html>
