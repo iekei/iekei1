@@ -10,8 +10,10 @@ let researchSlots = [
   { id: 5, tech: null, remaining: 0, locked: true }
 ];
 
-let gameDate = new Date(1936, 0, 1);
-let gameSpeed = 0;
+// ★LocalStorageから保存された日付とスピードを復元（なければ初期値）
+let gameDate = localStorage.getItem('gameDate') ? new Date(localStorage.getItem('gameDate')) : new Date(1936, 0, 1);
+let gameSpeed = localStorage.getItem('gameSpeed') ? parseInt(localStorage.getItem('gameSpeed'), 10) : 0;
+
 let isDragging = false, startX, startY, translateX = 0, translateY = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -33,26 +35,71 @@ async function loadAllTechData() {
 }
 
 function initClock() {
+  // 初期スピードボタンの状態を反映
   document.querySelectorAll('.speed-btn').forEach(btn => {
+    const speed = parseInt(btn.getAttribute('data-speed'), 10);
+    if (speed === gameSpeed) {
+      btn.classList.add('active');
+    } else if (gameSpeed === 0 && btn.id === 'btn-pause') {
+      btn.classList.add('active');
+    }
+
     btn.addEventListener('click', (e) => {
-      gameSpeed = parseInt(e.target.getAttribute('data-speed')) || 0;
+      gameSpeed = parseInt(e.target.getAttribute('data-speed'), 10) || 0;
+      
+      // LocalStorageに保存して国家方針や他画面と同期
+      localStorage.setItem('gameSpeed', gameSpeed);
+
       document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
       e.target.classList.add('active');
     });
   });
 
-  setInterval(() => {
-    if (gameSpeed === 0) return;
-    gameDate.setDate(gameDate.getDate() + gameSpeed);
-    document.getElementById('calendar-display').textContent = `${gameDate.getFullYear()}年${gameDate.getMonth() + 1}月${gameDate.getDate()}日`;
-    researchSlots.forEach(slot => {
-      if (slot.tech && slot.remaining > 0) {
-        slot.remaining -= gameSpeed;
-        if (slot.remaining <= 0) completeResearch(slot);
-        else updateSlotDisplay(slot);
-      }
-    });
-  }, 1000);
+  // 日付表示の初期化
+  updateCalendarUI();
+
+  // HOI4風のメインループ（国家方針側と同期した速度間隔）
+  const speedIntervals = { 1: 2000, 2: 1200, 3: 700, 4: 350, 5: 120 };
+  
+  let gameTimer = null;
+  function runTick() {
+    if (gameTimer) clearInterval(gameTimer);
+    if (gameSpeed > 0) {
+      gameTimer = setInterval(() => {
+        // 1日進める
+        gameDate.setDate(gameDate.getDate() + 1);
+        updateCalendarUI();
+
+        // LocalStorageへ保存して他画面と同期
+        localStorage.setItem('gameDate', gameDate.toISOString());
+
+        // 研究スロットの進行
+        researchSlots.forEach(slot => {
+          if (slot.tech && slot.remaining > 0) {
+            slot.remaining -= 1; // 1日ずつ進行
+            if (slot.remaining <= 0) completeResearch(slot);
+            else updateSlotDisplay(slot);
+          }
+        });
+      }, speedIntervals[gameSpeed] || 1000);
+    }
+  }
+
+  // スピード変更時にタイマーを再設定する監視
+  document.querySelectorAll('.speed-btn').forEach(btn => {
+    btn.addEventListener('click', () => runTick());
+  });
+
+  if (gameSpeed > 0) {
+    runTick();
+  }
+}
+
+function updateCalendarUI() {
+  const calEl = document.getElementById('calendar-display');
+  if (calEl) {
+    calEl.textContent = `${gameDate.getFullYear()}年${gameDate.getMonth() + 1}月${gameDate.getDate()}日`;
+  }
 }
 
 // 研究スロットをクリックして研究を中断・変更する機能
@@ -79,7 +126,6 @@ function initResearchSlots() {
 function startResearch(tech) {
   if (completedTechs.includes(tech.id)) return;
 
-  // すでに他のスロットで研究中ではないかチェック
   const isAlreadyResearching = researchSlots.some(slot => slot.tech && slot.tech.id === tech.id);
   if (isAlreadyResearching) {
     alert('この技術はすでに別のスロットで研究中です！');
@@ -106,11 +152,13 @@ function completeResearch(slot) {
   completedTechs.push(slot.tech.id);
   localStorage.setItem('completedTechs', JSON.stringify(completedTechs));
   const notifyArea = document.getElementById('notification-area');
-  const msg = document.createElement('div');
-  msg.className = 'notify-msg';
-  msg.textContent = `${slot.tech.title} 研究完了しました`;
-  notifyArea.appendChild(msg);
-  setTimeout(() => msg.remove(), 5000);
+  if (notifyArea) {
+    const msg = document.createElement('div');
+    msg.className = 'notify-msg';
+    msg.textContent = `${slot.tech.title} 研究完了しました`;
+    notifyArea.appendChild(msg);
+    setTimeout(() => msg.remove(), 5000);
+  }
   slot.tech = null; slot.remaining = 0;
   updateSlotDisplay(slot); renderTree();
 }
@@ -130,6 +178,7 @@ function updateSlotDisplay(slot) {
 function renderTree() {
   const container = document.getElementById('tech-nodes');
   const svg = document.getElementById('svg-lines');
+  if (!container || !svg) return;
   container.innerHTML = ''; svg.innerHTML = '';
   
   const list = techData[currentCategory] || [];
@@ -162,6 +211,7 @@ function renderTree() {
 
 function drawLine(parent, child) {
   const svg = document.getElementById('svg-lines');
+  if (!svg) return;
   const x1 = parent.x + 32;
   const y1 = parent.y + 64;
   const x2 = child.x + 32;
@@ -175,6 +225,7 @@ function drawLine(parent, child) {
 
 function showTooltip(e, tech) {
   const tooltip = document.getElementById('tech-tooltip');
+  if (!tooltip) return;
   document.getElementById('tooltip-title').textContent = tech.title;
   document.getElementById('tooltip-info').innerText = `開発年: ${tech.year}年 | 必要日数: ${tech.research_time || 30}日`;
   
@@ -187,7 +238,9 @@ function showTooltip(e, tech) {
   }
 
   const effects = document.getElementById('tooltip-effects');
-  effects.innerHTML = (tech.effects || []).map(eff => `<div class="effect-item">• ${eff}</div>`).join('');
+  if (effects) {
+    effects.innerHTML = (tech.effects || []).map(eff => `<div class="effect-item">• ${eff}</div>`).join('');
+  }
   
   tooltip.classList.remove('hidden');
   const move = (evt) => { tooltip.style.left = `${evt.clientX + 15}px`; tooltip.style.top = `${evt.clientY + 15}px`; };
@@ -195,11 +248,15 @@ function showTooltip(e, tech) {
   e.currentTarget.addEventListener('mousemove', move);
 }
 
-function hideTooltip() { document.getElementById('tech-tooltip').classList.add('hidden'); }
+function hideTooltip() { 
+  const tooltip = document.getElementById('tech-tooltip');
+  if (tooltip) tooltip.classList.add('hidden'); 
+}
 
 function initPanAndZoom() {
   const container = document.getElementById('tree-container');
   const viewport = document.getElementById('tree-viewport');
+  if (!container || !viewport) return;
   
   container.addEventListener('mousedown', (e) => {
     if (e.target.closest('.tech-node')) return;
