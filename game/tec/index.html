@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<!-- <body>の直後に追加 -->
+<!-- 研究完了通知エリア -->
 <div id="notification-area"></div>
 
   <!-- 上部ヘッダー：日付・速度コントロール & 研究スロット -->
@@ -18,16 +18,17 @@
     <div id="game-clock">
       <span id="calendar-display">1936年1月1日</span>
       <div id="speed-controls">
-        <button id="btn-pause" class="speed-btn active">⏸</button>
-        <button class="speed-btn" data-speed="1">▶</button>
-        <button class="speed-btn" data-speed="2">▶▶</button>
-        <button class="speed-btn" data-speed="3">▶▶▶</button>
-        <button class="speed-btn" data-speed="4">⚡</button>
-        <button class="speed-btn" data-speed="5">🚀</button>
+        <!-- 停止および1速〜5速のボタン -->
+        <button id="btn-pause" class="speed-btn active">停止</button>
+        <button class="speed-btn" data-speed="1">1速</button>
+        <button class="speed-btn" data-speed="2">2速</button>
+        <button class="speed-btn" data-speed="3">3速</button>
+        <button class="speed-btn" data-speed="4">4速</button>
+        <button class="speed-btn" data-speed="5">5速</button>
       </div>
     </div>
 
-    <!-- 研究スロット (3枠デフォルト + 解放枠2) -->
+    <!-- 研究スロット -->
     <div id="research-slots">
       <div class="slot" data-slot="1"><span class="slot-name">スロット 1:</span> <span class="slot-status">空き</span></div>
       <div class="slot" data-slot="2"><span class="slot-name">スロット 2:</span> <span class="slot-status">空き</span></div>
@@ -58,6 +59,18 @@
       <div class="year-label" style="top: 780px;">1942</div>
       <div class="year-label" style="top: 920px;">1943</div>
       <div class="year-label" style="top: 1060px;">1944</div>
+      <div class="year-label" style="top: 1060px;">1945</div>
+      <div class="year-label" style="top: 1060px;">1946</div>
+      <div class="year-label" style="top: 1060px;">1947</div>
+      <div class="year-label" style="top: 1060px;">1948</div>
+      <div class="year-label" style="top: 1060px;">1949</div>
+      <div class="year-label" style="top: 1060px;">1950</div>
+      <div class="year-label" style="top: 1060px;">1951</div>
+      <div class="year-label" style="top: 1060px;">1952</div>
+      <div class="year-label" style="top: 1060px;">1953</div>
+      <div class="year-label" style="top: 1060px;">1954</div>
+      <div class="year-label" style="top: 1060px;">1955</div>
+      <div class="year-label" style="top: 1060px;">1956</div>
     </div>
 
     <div id="tree-viewport">
@@ -66,7 +79,7 @@
     </div>
   </main>
 
-  <!-- ツールチップ -->
+  <!-- ツールチップ (カーソルホバー用) -->
   <div id="tech-tooltip" class="hidden">
     <div id="tooltip-title">技術名</div>
     <div id="tooltip-info"></div>
