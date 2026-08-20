@@ -1,18 +1,332 @@
 [
   {
-    "id": "early_fighter",
-    "title": "初期型戦闘機 (I-16/I-153)",
-    "year": 1936, "x": 200, "y": 50, "research_time": 140,
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20'/><path d='M2 9h20'/><path d='M7 20h10'/><path d='M12 2l2 4h-4z'/></svg>",
-    "effects": ["空対空攻撃: +18.0", "機動性: +22.0", "最高速度: +420km/h"],
+    "id": "sb_2",
+    "title": "SB-2（高速爆撃機）",
+    "year": 1936, "x": 600, "y": 50, "research_time": 100,
+    "reliability": "配備（制式採用）",
+    "desc": "機体概要：全金属製の双発高速爆撃機。開発当時は主力戦闘機を上回る速度を誇り、スペイン内戦や独ソ戦初期に多用された。\n主要兵装：7.62mm ShKAS機関銃（4〜6挺）、爆弾最大1,000kg",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='7' cy='11' r='1.5'/><circle cx='17' cy='11' r='1.5'/></svg>",
+    "effects": ["攻撃力: 35/100", "生存力: 30/100", "機動力: 45/100", "信頼度: 75/100"],
     "prerequisites": []
   },
   {
-    "id": "heavy_plane_3",
-    "title": "大型飛行機 III (Tu-4 / Pe-8)",
-    "year": 1944, "x": 450, "y": 1060, "research_time": 210,
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 1v22'/><path d='M1 8h22'/><path d='M5 19h14'/><circle cx='6' cy='8' r='1'/><circle cx='9' cy='8' r='1'/><circle cx='15' cy='8' r='1'/><circle cx='18' cy='8' r='1'/></svg>",
-    "effects": ["爆撃能力: +85.0", "航続距離: +3500km"],
+    "id": "tb_3",
+    "title": "TB-3（重爆撃機 1936年近代化型）",
+    "year": 1936, "x": 750, "y": 50, "research_time": 120,
+    "reliability": "配備（制式採用）",
+    "desc": "機体概要：ソ連軍のドクトリンを支えた巨型4発重爆撃機。小型戦闘機を翼下に懸架する「ズヴェノー（寄生戦闘機）計画」のマザーシップとしても運用された。\n主要兵装：7.62mm ShKAS機関銃（6〜8挺）、爆弾最大2,000〜5,000kg",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M1 10h22M4 17h16M7 10v3M17 10v3'/></svg>",
+    "effects": ["攻撃力: 50/100", "生存力: 35/100", "機動力: 20/100", "信頼度: 70/100"],
     "prerequisites": []
+  },
+  {
+    "id": "i_16_type24",
+    "title": "I-16 Type 24（戦闘機）",
+    "year": 1939, "x": 100, "y": 200, "research_time": 90,
+    "reliability": "配備（制式採用）",
+    "desc": "機体概要：世界初の引き込み脚を備えた低翼単葉戦闘機I-16の決定版。優れた機敏性を持つが、戦術の進化やドイツ軍機の登場により急速に陳腐化した。\n主要兵装：20mm ShVAK機関砲（2門）、7.62mm ShKAS機関銃（2挺）、RS-82ロケット弾（6発）",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 3v18M4 12h16M8 18h8'/></svg>",
+    "effects": ["攻撃力: 38/100", "生存力: 32/100", "機動力: 55/100", "信頼度: 80/100"],
+    "prerequisites": []
+  },
+  {
+    "id": "i_180",
+    "title": "I-180（試作戦闘機）",
+    "year": 1939, "x": 250, "y": 200, "research_time": 90,
+    "reliability": "低（試作止まり）",
+    "desc": "機体概要：I-16の後継として空冷星型エンジンを搭載した高速単葉戦闘機。開発者ポリカルポフの自信作だったが、試作機の相次ぐ墜落事故により不採用。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8b949e' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 3v18M4 12h16M8 18h8'/></svg>",
+    "effects": ["攻撃力: 42/100", "生存力: 25/100", "機動力: 60/100", "信頼度: 30/100"],
+    "prerequisites": ["i_16_type24"]
+  },
+  {
+    "id": "yak_1",
+    "title": "Yak-1（戦闘機）",
+    "year": 1940, "x": 100, "y": 350, "research_time": 100,
+    "reliability": "配備（制式採用）",
+    "desc": "機体概要：アレクサンドル・ヤコヴレフが設計した木金混合構造の軽量戦闘機。優れた機動性と扱いやすさを兼ね備え、ヤコヴレフ戦闘機シリーズの基礎となった。\n主要兵装：20mm ShVAK機関砲（1門）、12.7mm UB機関銃（1挺）",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M3 11h18M7 18h10'/></svg>",
+    "effects": ["攻撃力: 42/100", "生存力: 40/100", "機動力: 65/100", "信頼度: 85/100"],
+    "prerequisites": ["i_16_type24"]
+  },
+  {
+    "id": "mig_3",
+    "title": "MiG-3（高高度戦闘機）",
+    "year": 1940, "x": 250, "y": 350, "research_time": 100,
+    "reliability": "配備（制式採用）",
+    "desc": "機体概要：高高度での高速性能を追求して設計された戦闘機。高空での性能は高かったが、低空・中空戦が主だった独ソ戦では性能を発揮しきれなかった。\n主要兵装：12.7mm UBS機関銃（1挺）、7.62mm ShKAS機関銃（2挺）",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 13h20M8 19h8'/></svg>",
+    "effects": ["攻撃力: 40/100", "生存力: 38/100", "機動力: 62/100", "信頼度: 78/100"],
+    "prerequisites": []
+  },
+  {
+    "id": "pe_2",
+    "title": "Pe-2（双発急降下爆撃機）",
+    "year": 1940, "x": 600, "y": 350, "research_time": 110,
+    "reliability": "配備（制式採用）",
+    "desc": "機体概要：高度な電気システムと優れた高速・急降下性能を備えた主力双発爆撃機。偵察や夜間戦闘など多用途に活躍した。\n主要兵装：12.7mm UB機関銃（2挺）、7.62mm ShKAS機関銃（2〜4挺）、爆弾最大1,600kg",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M3 11h18M6 18h12'/><circle cx='8' cy='11' r='1'/><circle cx='16' cy='11' r='1'/></svg>",
+    "effects": ["攻撃力: 48/100", "生存力: 45/100", "機動力: 58/100", "信頼度: 88/100"],
+    "prerequisites": ["sb_2"]
+  },
+  {
+    "id": "il_2",
+    "title": "Il-2（対地攻撃機 / シュトルモヴィク）",
+    "year": 1941, "x": 450, "y": 500, "research_time": 110,
+    "reliability": "配備（制式採用）",
+    "desc": "機体概要：「空飛ぶ戦車」と称され、エンジンや操縦席を分厚い装甲板で保護した最強の対地攻撃機。史上最多の生産数を記録した。\n主要兵装：23mm VYa-23機関砲（2門）、7.62mm ShKAS機関銃（2挺）、RS-82/132ロケット弾、爆弾最大600kg",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e3b341' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 12h20M6 18h12'/><path d='M9 8h6v3H9z'/></svg>",
+    "effects": ["攻撃力: 62/100", "生存力: 75/100", "機動力: 42/100", "信頼度: 92/100"],
+    "prerequisites": []
+  },
+  {
+    "id": "pe_8",
+    "title": "Pe-8 / TB-7（4発重爆撃機）",
+    "year": 1941, "x": 750, "y": 500, "research_time": 130,
+    "reliability": "配備（制式採用）",
+    "desc": "機体概要：ソ連が第二次世界大戦中に運用した唯一の本格的4発長距離重爆撃機。ベルリン爆撃などに投入された。\n主要兵装：20mm ShVAK機関砲（2門）、12.7mm UBT機関銃（2挺）、爆弾最大5,000kg",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M1 10h22M5 17h14'/><circle cx='5' cy='10' r='1'/><circle cx='8' cy='10' r='1'/><circle cx='16' cy='10' r='1'/><circle cx='19' cy='10' r='1'/></svg>",
+    "effects": ["攻撃力: 65/100", "生存力: 50/100", "機動力: 28/100", "信頼度: 75/100"],
+    "prerequisites": ["tb_3"]
+  },
+  {
+    "id": "la_5",
+    "title": "La-5（戦闘機）",
+    "year": 1942, "x": 150, "y": 650, "research_time": 110,
+    "reliability": "配備（制式採用）",
+    "desc": "機体概要：LaGG-3の水冷エンジンを強力な空冷星型エンジンに換装した傑作戦闘機。低空での機動性に優れ、ドイツのBf109やFw190に対抗した。\n主要兵装：20mm ShVAK機関砲（2門）",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M3 11h18M7 18h10'/></svg>",
+    "effects": ["攻撃力: 52/100", "生存力: 48/100", "機動力: 72/100", "信頼度: 86/100"],
+    "prerequisites": []
+  },
+  {
+    "id": "tu_2",
+    "title": "Tu-2（双発高速爆撃機）",
+    "year": 1942, "x": 600, "y": 650, "research_time": 120,
+    "reliability": "配備（制式採用）",
+    "desc": "機体概要：優れた防護火力、爆載量、高速性を極めて高い次元でバランスさせた傑作爆撃機。戦後も長らく使用された。\n主要兵装：23mm VYa-23機関砲（2門）、12.7mm UBT機関銃（3挺）、爆弾最大3,000kg",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e3b341' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='7' cy='11' r='1.5'/><circle cx='17' cy='11' r='1.5'/></svg>",
+    "effects": ["攻撃力: 60/100", "生存力: 58/100", "機動力: 62/100", "信頼度: 90/100"],
+    "prerequisites": ["pe_2"]
+  },
+  {
+    "id": "bi_1",
+    "title": "BI-1（試作ロケット戦闘機）",
+    "year": 1942, "x": 350, "y": 650, "research_time": 100,
+    "reliability": "低（試作止まり）",
+    "desc": "機体概要：液体燃料ロケットエンジンを搭載した超局地防空用試作迎撃機。圧倒的な上昇力を見せたが、飛行安定性の問題と航続時間の短さから不採用。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8b949e' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2l2 6h3l-3 5 2 9-4-2-4 2 2-9-3-5h3z'/></svg>",
+    "effects": ["攻撃力: 50/100", "生存力: 20/100", "機動力: 80/100", "信頼度: 20/100"],
+    "prerequisites": []
+  },
+  {
+    "id": "yak_3",
+    "title": "Yak-3（軽量戦闘機）",
+    "year": 1943, "x": 50, "y": 800, "research_time": 110,
+    "reliability": "配備（制式採用）",
+    "desc": "機体概要：Yak-1の構造を極限まで軽量化・洗練させた小型戦闘機。低空での驚異的な加速力と運動性を持ち、独ソ戦最優秀の格闘戦機と評された。\n主要兵装：20mm ShVAK機関砲（1門）、12.7mm UBS機関銃（2挺）",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e3b341' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M3 11h18M7 18h10'/></svg>",
+    "effects": ["攻撃力: 55/100", "生存力: 52/100", "機動力: 88/100", "信頼度: 92/100"],
+    "prerequisites": ["yak_1"]
+  },
+  {
+    "id": "la_7",
+    "title": "La-7（戦闘機）",
+    "year": 1943, "x": 150, "y": 800, "research_time": 120,
+    "reliability": "配備（制式採用）",
+    "desc": "機体概要：La-5の空力を徹底的に改善し、最高速度を向上させたラヴォーチキン戦闘機の完成形。ソ連エースパイロットのトップ陣に愛用された。\n主要兵装：20mm ShVAK機関砲（2門または3門）",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e3b341' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M3 11h18M7 18h10'/></svg>",
+    "effects": ["攻撃力: 58/100", "生存力: 55/100", "機動力: 85/100", "信頼度: 94/100"],
+    "prerequisites": ["la_5"]
+  },
+  {
+    "id": "il_10",
+    "title": "Il-10（対地攻撃機）",
+    "year": 1944, "x": 450, "y": 950, "research_time": 120,
+    "reliability": "配備（制式採用）",
+    "desc": "機体概要：Il-2の概念をさらに発展させ、空力特性の改善と装甲・火力の強化を図った後継攻撃機。\n主要兵装：23mm VYa-23機関砲（4門）、20mm B-20機関砲（後方1門）、RS-82/132ロケット弾、爆弾600kg",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 12h20M6 18h12'/><path d='M9 8h6v3H9z'/></svg>",
+    "effects": ["攻撃力: 70/100", "生存力: 82/100", "機動力: 52/100", "信頼度: 90/100"],
+    "prerequisites": ["il_2"]
+  },
+  {
+    "id": "mig_9",
+    "title": "MiG-9（ジェット戦闘機）",
+    "year": 1946, "x": 250, "y": 1100, "research_time": 120,
+    "reliability": "配備（制式採用）",
+    "desc": "機体概要：捕獲したドイツのBMW 003エンジンを解析・搭載して作られた、ソ連最初期の第1世代ジェット戦闘機。\n主要兵装：37mm N-37機関砲（1門）、23mm NS-23機関砲（2門）",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2l3 5v10l-3 5-3-5V7l3-5zM3 13l6-3M21 13l-6-3'/></svg>",
+    "effects": ["攻撃力: 65/100", "生存力: 48/100", "機動力: 70/100", "信頼度: 68/100"],
+    "prerequisites": ["mig_3"]
+  },
+  {
+    "id": "yak_15",
+    "title": "Yak-15（ジェット戦闘機）",
+    "year": 1946, "x": 50, "y": 1100, "research_time": 100,
+    "reliability": "配備（制式採用）",
+    "desc": "機体概要：Yak-3の機体をベースにユモ004エンジン（捕獲品）を搭載した急造ジェット戦闘機。ジェット機の操縦訓練用としても多用された。\n主要兵装：23mm NS-23機関砲（2門）",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M3 11h18M7 18h10'/></svg>",
+    "effects": ["攻撃力: 58/100", "生存力: 45/100", "機動力: 75/100", "信頼度: 72/100"],
+    "prerequisites": ["yak_3"]
+  },
+  {
+    "id": "mig_15",
+    "title": "MiG-15（ジェット戦闘機）",
+    "year": 1947, "x": 250, "y": 1250, "research_time": 140,
+    "reliability": "配備（制式採用）",
+    "desc": "機体概要：後退翼を採用し、英国製ロールス・ロイス・ニン・エンジンのデッドコピーを搭載した高スペック戦闘機。朝鮮戦争で西側航空隊に激しい衝撃を与えた。\n主要兵装：37mm N-37機関砲（1門）、23mm NR-23機関砲（2門）",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e3b341' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2l3 6 6 5-9 1 1 8-3-2-3 2 1-8-9-1 6-5 3-6z'/></svg>",
+    "effects": ["攻撃力: 75/100", "生存力: 65/100", "機動力: 88/100", "信頼度: 90/100"],
+    "prerequisites": ["mig_9"]
+  },
+  {
+    "id": "tu_4",
+    "title": "Tu-4（4発長距離戦略爆撃機）",
+    "year": 1947, "x": 750, "y": 1250, "research_time": 150,
+    "reliability": "配備（制式採用）",
+    "desc": "機体概要：ソ連領内に不時着した米軍のB-29をリバースエンジニアリング（逆設計）して完全模倣・量産したソ連初の核攻撃対応戦略爆撃機。\n主要兵装：23mm NS-23機関砲（10門）、爆弾最大6,000kg（核爆弾対応）",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M1 10h22M5 17h14'/><circle cx='5' cy='10' r='1'/><circle cx='8' cy='10' r='1'/><circle cx='16' cy='10' r='1'/><circle cx='19' cy='10' r='1'/></svg>",
+    "effects": ["攻撃力: 82/100", "生存力: 60/100", "機動力: 35/100", "信頼度: 82/100"],
+    "prerequisites": ["pe_8"]
+  },
+  {
+    "id": "su_9_1947",
+    "title": "Su-9（初代・試作ジェット攻撃機/戦闘機）",
+    "year": 1947, "x": 400, "y": 1250, "research_time": 110,
+    "reliability": "低（試作止まり）",
+    "desc": "機体概要：スホーイ設計局がメッサーシュミットMe262の構造を参考に開発した双発ジェット機。性能は悪くなかったが、政治的理由および他機との競合により不採用。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8b949e' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 12h20M6 18h12'/><circle cx='7' cy='12' r='1.5'/><circle cx='17' cy='12' r='1.5'/></svg>",
+    "effects": ["攻撃力: 68/100", "生存力: 45/100", "機動力: 72/100", "信頼度: 40/100"],
+    "prerequisites": []
+  },
+  {
+    "id": "la_15",
+    "title": "La-15（ジェット戦闘機）",
+    "year": 1948, "x": 150, "y": 1400, "research_time": 120,
+    "reliability": "配備（制式採用）",
+    "desc": "機体概要：MiG-15と同時期に開発された高位置翼（ハイウィング）採用の軽量ジェット戦闘機。操縦性は好評だったが、生産コストと整備性の面でMiG-15に敗れ少量生産にとどまった。\n主要兵装：23mm NS-23機関砲（3門）",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2l3 6 6 5-9 1 1 8-3-2-3 2 1-8-9-1 6-5 3-6z'/></svg>",
+    "effects": ["攻撃力: 70/100", "生存力: 60/100", "機動力: 86/100", "信頼度: 75/100"],
+    "prerequisites": ["la_7"]
+  },
+  {
+    "id": "su_15_1948",
+    "title": "Su-15（初代・試作全天候迎撃機）",
+    "year": 1948, "x": 400, "y": 1400, "research_time": 110,
+    "reliability": "低（試作止まり）",
+    "desc": "機体概要：レーダーを搭載した双発の高高度全天候迎撃機。試作機の脱出事故などにより開発が中止された。\n主要兵装：37mm N-37機関砲（2門）",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8b949e' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 12h20M6 18h12'/><circle cx='7' cy='12' r='1.5'/><circle cx='17' cy='12' r='1.5'/></svg>",
+    "effects": ["攻撃力: 75/100", "生存力: 40/100", "機動力: 78/100", "信頼度: 30/100"],
+    "prerequisites": ["su_9_1947"]
+  },
+  {
+    "id": "mig_17",
+    "title": "MiG-17（ジェット戦闘機）",
+    "year": 1949, "x": 250, "y": 1550, "research_time": 130,
+    "reliability": "配備（制式採用）",
+    "desc": "機体概要：MiG-15の主翼後退角を強め、超音速領域での操作性を高めた発展型。アフターバーナー付きエンジンを搭載し、ベトナム戦争等でも活躍。\n主要兵装：37mm N-37D機関砲（1門）、23mm NR-23機関砲（2門）",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e3b341' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2l3 6 6 5-9 1 1 8-3-2-3 2 1-8-9-1 6-5 3-6z'/></svg>",
+    "effects": ["攻撃力: 78/100", "生存力: 68/100", "機動力: 90/100", "信頼度: 92/100"],
+    "prerequisites": ["mig_15"]
+  },
+  {
+    "id": "il_28",
+    "title": "Il-28（双発ジェット爆撃機）",
+    "year": 1949, "x": 600, "y": 1550, "research_time": 130,
+    "reliability": "配備（制式採用）",
+    "desc": "機体概要：ソ連初の大量生産型双発ジェット爆撃機（NATOコード「ビーグル」）。扱いやすく頑丈で、東側諸国や中国など世界中に輸出された。\n主要兵装：23mm NR-23機関砲（4門/前方・後方各2）、爆弾最大3,000kg",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e3b341' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='7' cy='11' r='1.5'/><circle cx='17' cy='11' r='1.5'/></svg>",
+    "effects": ["攻撃力: 75/100", "生存力: 70/100", "機動力: 68/100", "信頼度: 95/100"],
+    "prerequisites": ["tu_2"]
+  },
+  {
+    "id": "tu_16",
+    "title": "Tu-16（双発大型ジェット爆撃機）",
+    "year": 1952, "x": 600, "y": 1700, "research_time": 150,
+    "reliability": "配備（制式採用）",
+    "desc": "機体概要：後退翼と大型ターボジェットエンジンを備えた中距離ジェット爆撃機（NATOコード「バジャー」）。対艦ミサイル母機などとして冷戦期を通じて運用された。\n主要兵装：23mm AM-23機関砲（7門）、爆弾最大9,000kgまたは対艦ミサイル",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2l2 7 8 4-10 1 1 8-3-2-3 2 1-8-10-1 8-4 2-7z'/></svg>",
+    "effects": ["攻撃力: 85/100", "生存力: 75/100", "機動力: 62/100", "信頼度: 90/100"],
+    "prerequisites": ["il_28"]
+  },
+  {
+    "id": "tu_95",
+    "title": "Tu-95（4発超大型ターボプロップ戦略爆撃機）",
+    "year": 1952, "x": 750, "y": 1700, "research_time": 170,
+    "reliability": "配備（制式採用）",
+    "desc": "機体概要：二重反転プロペラを持ち、ジェット機に匹敵する高速と超長続距離を合わせ持つ巨型戦略爆撃機（NATOコード「ベア」）。現在も現役で運用中。\n主要兵装：23mm AM-23機関砲（6門）、爆弾・長距離巡航ミサイル最大15,000kg",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e3b341' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M1 10h22M5 17h14'/><circle cx='5' cy='10' r='1'/><circle cx='8' cy='10' r='1'/><circle cx='16' cy='10' r='1'/><circle cx='19' cy='10' r='1'/></svg>",
+    "effects": ["攻撃力: 92/100", "生存力: 80/100", "機動力: 50/100", "信頼度: 96/100"],
+    "prerequisites": ["tu_4"]
+  },
+  {
+    "id": "mig_19",
+    "title": "MiG-19（超音速戦闘機）",
+    "year": 1953, "x": 250, "y": 1850, "research_time": 150,
+    "reliability": "配備（制式採用）",
+    "desc": "機体概要：ソ連で初めて水平飛行で音速（マッハ1）を超えることができた量産型超音速ジェット戦闘機。\n主要兵装：30mm NR-30機関砲（3門）、無誘導ロケット弾ポッド",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2l3 6 6 5-9 1 1 8-3-2-3 2 1-8-9-1 6-5 3-6z'/></svg>",
+    "effects": ["攻撃力: 82/100", "生存力: 72/100", "機動力: 92/100", "信頼度: 85/100"],
+    "prerequisites": ["mig_17"]
+  },
+  {
+    "id": "m_4",
+    "title": "M-4（4発ジェット戦略爆撃機）",
+    "year": 1953, "x": 850, "y": 1850, "research_time": 160,
+    "reliability": "配備（制式採用）",
+    "desc": "機体概要：マイシシチェフ設計局が開発したソ連初の純ジェット長距離戦略爆撃機（NATOコード「バイソン」）。航続距離の不足から後に空中給油機などへ転用された。\n主要兵装：23mm AM-23機関砲（6門）、爆弾最大24,000kg",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M1 10h22M5 17h14'/></svg>",
+    "effects": ["攻撃力: 90/100", "生存力: 75/100", "機動力: 58/100", "信頼度: 78/100"],
+    "prerequisites": ["tu_4"]
+  },
+  {
+    "id": "mig_21",
+    "title": "MiG-21（超音速前線戦闘機）",
+    "year": 1955, "x": 250, "y": 2000, "research_time": 170,
+    "reliability": "配備（制式採用）",
+    "desc": "機体概要：デルタ翼を採用しマッハ2級の高速性能と高いコストパフォーマンスを誇る超音速戦闘機（NATOコード「フィッシュベッド」）。1万機以上が生産された。\n主要兵装：30mm NR-30機関砲（1門）、K-13対空ミサイル、ロケット弾",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e3b341' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2l5 12h-4v6l-1 2-1-2v-6H7l5-12z'/></svg>",
+    "effects": ["攻撃力: 88/100", "生存力: 80/100", "機動力: 96/100", "信頼度: 94/100"],
+    "prerequisites": ["mig_19"]
+  },
+  {
+    "id": "yak_25",
+    "title": "Yak-25（双発全天候迎撃機）",
+    "year": 1955, "x": 100, "y": 2000, "research_time": 140,
+    "reliability": "配備（制式採用）",
+    "desc": "機体概要：大型レーダーと双発エンジンを備え、広大なソ連領空を防衛するために開発された全天候型夜間迎撃機。\n主要兵装：37mm N-37L機関砲（2門）、無誘導ロケット弾",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 12h20M6 18h12'/><circle cx='7' cy='12' r='1.5'/><circle cx='17' cy='12' r='1.5'/></svg>",
+    "effects": ["攻撃力: 80/100", "生存力: 78/100", "機動力: 75/100", "信頼度: 88/100"],
+    "prerequisites": []
+  },
+  {
+    "id": "su_7",
+    "title": "Su-7（超音速戦闘爆撃機）",
+    "year": 1956, "x": 400, "y": 2150, "research_time": 150,
+    "reliability": "配備（制式採用）",
+    "desc": "機体概要：強力なエンジンと後退翼を備えた超音速機。当初は戦闘機として開発されたが、後に強力な対地攻撃機（Su-7B）として改修・運用された。\n主要兵装：30mm NR-30機関砲（2門）、無誘導ロケット弾ポッド、爆弾最大2,000kg",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2l3 6 6 5-9 1 1 8-3-2-3 2 1-8-9-1 6-5 3-6z'/></svg>",
+    "effects": ["攻撃力: 86/100", "生存力: 82/100", "機動力: 88/100", "信頼度: 86/100"],
+    "prerequisites": ["il_10"]
+  },
+  {
+    "id": "su_9_1957",
+    "title": "Su-9（超音速全天候迎撃機）",
+    "year": 1957, "x": 400, "y": 2300, "research_time": 160,
+    "reliability": "配備（制式採用）",
+    "desc": "機体概要：デルタ翼とレーダーを組み合わせ、機銃を廃止して対空ミサイル（R-55 / K-5）を主兵装とした純防空迎撃機。\n主要兵装：K-5（RS-2U）またはR-55対空ミサイル（4発）",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2l5 12h-4v6l-1 2-1-2v-6H7l5-12z'/></svg>",
+    "effects": ["攻撃力: 90/100", "生存力: 82/100", "機動力: 92/100", "信頼度: 84/100"],
+    "prerequisites": ["su_7"]
+  },
+  {
+    "id": "il_40",
+    "title": "Il-40（双発ジェット試作攻撃機）",
+    "year": 1957, "x": 550, "y": 2300, "research_time": 130,
+    "reliability": "低（試作止まり）",
+    "desc": "機体概要：Il-10の後継を目指し、装甲で覆われた車体にジェットエンジンを組み込んだ重攻撃機。機関砲の発射ガスをエンジンが吸い込むトラブルが多発し不採用。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8b949e' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 12h20M6 18h12'/><circle cx='7' cy='12' r='1.5'/><circle cx='17' cy='12' r='1.5'/></svg>",
+    "effects": ["攻撃力: 84/100", "生存力: 85/100", "機動力: 65/100", "信頼度: 35/100"],
+    "prerequisites": ["il_10"]
   }
 ]
