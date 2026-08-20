@@ -385,3 +385,31 @@ html, body {
   margin-top: 5px;
   color: #c9d1d9;
 }
+#tree-container {
+  overflow: hidden; /* はみ出した分を隠す */
+  position: relative;
+  width: 100%;
+  height: 800px; /* 固定高さ */
+  cursor: grab;
+}
+
+#tree-viewport {
+  transform-origin: 0 0; /* 左上を基点にズーム */
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#year-sidebar {
+  position: absolute;
+  left: 10px; /* ツリーの左側に配置 */
+  z-index: 10;
+  pointer-events: none; /* マウスイベントを貫通させる */
+}
+
+.year-label {
+  position: absolute;
+  width: 50px;
+  color: #58a6ff;
+  font-weight: bold;
+}
