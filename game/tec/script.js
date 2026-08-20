@@ -4,6 +4,14 @@
 const categories = ['infantry', 'armor', 'artillery', 'naval', 'air', 'engineering', 'industry'];
 let currentCategory = 'infantry';
 let techData = {};
+let completedTechs = []; // 完了した技術IDを保持
+let researchSlots = [
+  { id: 1, tech: null, remaining: 0, locked: false },
+  { id: 2, tech: null, remaining: 0, locked: false },
+  { id: 3, tech: null, remaining: 0, locked: false },
+  { id: 4, tech: null, remaining: 0, locked: true },
+  { id: 5, tech: null, remaining: 0, locked: true }
+];
 
 // ドラッグ & パン・ズーム管理用
 let isDragging = false;
@@ -13,8 +21,8 @@ let translateY = 0;
 let scale = 1;
 
 // 時計・ゲーム進行管理用
-let gameDate = new Date(1936, 0, 1); // 1936年1月1日
-let gameSpeed = 0; // 0 = ポーズ
+let gameDate = new Date(1936, 0, 1);
+let gameSpeed = 0; 
 
 // ------------------------------------------
 // 初期化処理
@@ -35,153 +43,127 @@ async function loadAllTechData() {
       const res = await fetch(`./data/tech_${cat}.json`);
       if (res.ok) {
         techData[cat] = await res.json();
-      } else {
-        console.error(`HTTP error! status: ${res.status} for tech_${cat}.json`);
       }
-    } catch (e) {
-      console.error(`Failed to load tech_${cat}.json`, e);
-    }
+    } catch (e) { console.error(e); }
   }
   renderTree();
 }
 
 // ------------------------------------------
-// 2. タブ・UI制御
+// 2. 時計・研究タイマー
+// ------------------------------------------
+function initClock() {
+  document.querySelectorAll('.speed-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      gameSpeed = parseInt(e.target.getAttribute('data-speed')) || 0;
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+    });
+  });
+
+  setInterval(() => {
+    if (gameSpeed === 0) return;
+    gameDate.setDate(gameDate.getDate() + gameSpeed);
+    document.getElementById('calendar-display').textContent = `${gameDate.getFullYear()}年${gameDate.getMonth() + 1}月${gameDate.getDate()}日`;
+
+    researchSlots.forEach(slot => {
+      if (slot.tech && slot.remaining > 0) {
+        slot.remaining -= gameSpeed;
+        if (slot.remaining <= 0) {
+          completeResearch(slot);
+        } else {
+          updateSlotDisplay(slot);
+        }
+      }
+    });
+  }, 1000);
+}
+
+// ------------------------------------------
+// 3. 研究ロジック
+// ------------------------------------------
+function startResearch(tech) {
+  if (completedTechs.includes(tech.id)) return;
+  if (tech.prerequisites && tech.prerequisites.length > 0) {
+    const missing = tech.prerequisites.filter(id => !completedTechs.includes(id));
+    if (missing.length > 0) {
+      alert('前提技術が完了していません！');
+      return;
+    }
+  }
+
+  const slot = researchSlots.find(s => !s.locked && !s.tech);
+  if (!slot) {
+    alert('空いている研究スロットがありません！');
+    return;
+  }
+
+  slot.tech = tech;
+  slot.remaining = tech.research_time || 30;
+  updateSlotDisplay(slot);
+}
+
+function completeResearch(slot) {
+  completedTechs.push(slot.tech.id);
+  const completedName = slot.tech.title;
+  
+  // 完了通知
+  const notifyArea = document.createElement('div');
+  notifyArea.textContent = `[完了] ${completedName} 研究完了しました`;
+  notifyArea.style.color = '#3fb950';
+  document.body.prepend(notifyArea); // 画面上部に表示
+  setTimeout(() => notifyArea.remove(), 5000);
+  
+  slot.tech = null;
+  slot.remaining = 0;
+  updateSlotDisplay(slot);
+  renderTree(); // 完了したらノードの状態を更新（色を変えるため）
+}
+
+function updateSlotDisplay(slot) {
+  const el = document.querySelector(`.slot[data-slot="${slot.id}"] .slot-status`);
+  if (!el) return;
+  if (slot.tech) {
+    el.textContent = `研究中: ${slot.tech.title} (${Math.ceil(slot.remaining)}日)`;
+    el.style.color = '#e3b341';
+  } else {
+    el.textContent = slot.locked ? '🔒 NFで解放' : '空き';
+    el.style.color = slot.locked ? '#8b949e' : '#3fb950';
+  }
+}
+
+// ------------------------------------------
+// 4. UI制御・描画
 // ------------------------------------------
 function initTabs() {
-  const tabBtns = document.querySelectorAll('.tab-btn');
-  tabBtns.forEach(btn => {
+  document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
-      tabBtns.forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       e.target.classList.add('active');
-      
       currentCategory = e.target.getAttribute('data-cat');
       renderTree();
     });
   });
 }
 
-function initClock() {
-  // スピードボタンのイベント設定
-  document.querySelectorAll('.speed-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const speed = e.target.getAttribute('data-speed');
-      gameSpeed = speed ? parseInt(speed) : 0;
-      
-      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
-      e.target.classList.add('active');
-    });
-  });
-
-  // 時計の更新（毎秒呼び出し）
-  setInterval(() => {
-    if (gameSpeed === 0) return;
-    gameDate.setDate(gameDate.getDate() + gameSpeed);
-    const display = document.getElementById('calendar-display');
-    display.textContent = `${gameDate.getFullYear()}年${gameDate.getMonth() + 1}月${gameDate.getDate()}日`;
-  }, 1000);
-}
-
-// ------------------------------------------
-// 3. ツリーの描画
-// ------------------------------------------
 function renderTree() {
   const container = document.getElementById('tech-nodes');
   const svg = document.getElementById('svg-lines');
-  
   container.innerHTML = '';
   svg.innerHTML = '';
-
+  
   const list = techData[currentCategory] || [];
-  const nodeMap = {};
-  list.forEach(item => { nodeMap[item.id] = item; });
-
   list.forEach(tech => {
     const node = document.createElement('div');
-    node.className = 'tech-node';
-    node.id = `node-${tech.id}`;
+    node.className = `tech-node ${completedTechs.includes(tech.id) ? 'completed' : ''}`;
     node.style.left = `${tech.x}px`;
     node.style.top = `${tech.y}px`;
-
-    const svgContent = tech.svg || `<svg viewBox="0 0 24 24" fill="none" stroke="#58a6ff" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>`;
-
-    node.innerHTML = `
-      <div class="tech-icon-wrapper">${svgContent}</div>
-      <div class="tech-title">${tech.title}</div>
-    `;
-
-    // クリックで研究開始
+    node.innerHTML = `<div class="tech-icon-wrapper">${tech.svg}</div><div class="tech-title">${tech.title}</div>`;
+    
     node.addEventListener('click', () => startResearch(tech));
-
-    // ツールチップイベント
-    node.addEventListener('mouseenter', (e) => showTooltip(e, tech));
-    node.addEventListener('mouseleave', hideTooltip);
-
     container.appendChild(node);
   });
-
-  list.forEach(tech => {
-    if (tech.prerequisites && tech.prerequisites.length > 0) {
-      tech.prerequisites.forEach(preId => {
-        const parentNode = nodeMap[preId];
-        if (parentNode) drawLine(parentNode, tech);
-      });
-    }
-  });
 }
-
-// ------------------------------------------
-// 4. 研究スロット割り当て処理
-// ------------------------------------------
-function startResearch(tech) {
-  const slots = document.querySelectorAll('.slot:not(.locked)');
-  for (let slot of slots) {
-    const status = slot.querySelector('.slot-status');
-    if (status.textContent === '空き') {
-      status.textContent = `研究中: ${tech.title}`;
-      status.style.color = '#e3b341';
-      return;
-    }
-  }
-  alert('空いている研究スロットがありません！');
-}
-
-// ------------------------------------------
-// 5. 接続線・ツールチップ・パン操作
-// ------------------------------------------
-function drawLine(parent, child) {
-  const svg = document.getElementById('svg-lines');
-  const x1 = parent.x + 32;
-  const y1 = parent.y + 64;
-  const x2 = child.x + 32;
-  const y2 = child.y;
-  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  const midY = y1 + (y2 - y1) / 2;
-  path.setAttribute('d', `M ${x1} ${y1} L ${x1} ${midY} L ${x2} ${midY} L ${x2} ${y2}`);
-  path.setAttribute('class', 'tech-line');
-  svg.appendChild(path);
-}
-
-function showTooltip(e, tech) {
-  const tooltip = document.getElementById('tech-tooltip');
-  document.getElementById('tooltip-title').textContent = tech.title;
-  document.getElementById('tooltip-info').innerText = `開発年: ${tech.year}年 ${tech.designer ? '| 設計: ' + tech.designer : ''}`;
-  
-  const effects = document.getElementById('tooltip-effects');
-  effects.innerHTML = '';
-  if (tech.desc) effects.innerHTML += `<div style="font-size:12px; color:#8b949e; margin-bottom:8px;">${tech.desc}</div>`;
-  if (tech.effects) tech.effects.forEach(eff => effects.innerHTML += `<div class="effect-item">• ${eff}</div>`);
-  
-  tooltip.classList.remove('hidden');
-  const move = (evt) => {
-    tooltip.style.left = `${evt.clientX + 15}px`;
-    tooltip.style.top = `${evt.clientY + 15}px`;
-  };
-  move(e);
-  e.target.addEventListener('mousemove', move);
-}
-
-function hideTooltip() { document.getElementById('tech-tooltip').classList.add('hidden'); }
 
 function initPanAndZoom() {
   const container = document.getElementById('tree-container');
@@ -190,7 +172,6 @@ function initPanAndZoom() {
     isDragging = true;
     startX = e.clientX - translateX;
     startY = e.clientY - translateY;
-    container.style.cursor = 'grabbing';
   });
   window.addEventListener('mousemove', (e) => {
     if (!isDragging) return;
@@ -198,14 +179,13 @@ function initPanAndZoom() {
     translateY = e.clientY - startY;
     document.getElementById('tree-viewport').style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
   });
-  window.addEventListener('mouseup', () => { isDragging = false; container.style.cursor = 'grab'; });
+  window.addEventListener('mouseup', () => isDragging = false);
 }
 
 window.unlockResearchSlot = function(slotId) {
-  const slotEl = document.querySelector(`.slot[data-slot="${slotId}"]`);
-  if (slotEl) {
-    slotEl.classList.remove('locked');
-    slotEl.querySelector('.slot-status').textContent = '空き';
-    slotEl.querySelector('.slot-status').style.color = '#3fb950';
+  const slot = researchSlots.find(s => s.id === slotId);
+  if (slot) {
+    slot.locked = false;
+    updateSlotDisplay(slot);
   }
 };
