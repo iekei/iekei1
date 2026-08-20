@@ -315,3 +315,73 @@ html, body {
 #tooltip-title { font-size: 14px; font-weight: bold; color: #58a6ff; }
 #tooltip-info { color: #8b949e; font-size: 11px; margin-top: 2px; }
 .effect-item { color: #3fb950; margin-top: 3px; }
+
+/* 1. 研究完了したノードのスタイル (グレーアウト) */
+.tech-node.completed {
+  opacity: 0.6;
+  filter: grayscale(100%);
+  cursor: not-allowed;
+  border: 1px solid #30363d;
+}
+
+/* 2. 研究完了通知用の簡易スタイル (画面上部) */
+#notification-area {
+  position: fixed;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.notify-msg {
+  background: rgba(30, 30, 30, 0.9);
+  color: #3fb950;
+  padding: 10px 20px;
+  margin-bottom: 5px;
+  border-radius: 4px;
+  border: 1px solid #3fb950;
+  font-weight: bold;
+}
+
+/* 3. スロットの状態変更時用 (既存のstyleがあれば上書き確認) */
+.slot {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border: 1px solid #30363d;
+  margin-bottom: 2px;
+}
+
+.slot.locked {
+  opacity: 0.5;
+  background-color: #161b22;
+}
+
+/* 4. ノードの基本スタイル (もし未定義なら) */
+.tech-node {
+  position: absolute;
+  width: 100px;
+  padding: 5px;
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 4px;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tech-node:hover {
+  border-color: #58a6ff;
+}
+
+.tech-icon-wrapper svg {
+  width: 40px;
+  height: 40px;
+}
+
+.tech-title {
+  font-size: 12px;
+  margin-top: 5px;
+  color: #c9d1d9;
+}
