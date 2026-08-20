@@ -33,6 +33,10 @@ function tickDay() {
   currentDate.setDate(currentDate.getDate() + 1);
   updateCalendarUI();
 
+  // ★追加: 生産画面と時間を同期するために LocalStorage へ保存
+  localStorage.setItem('gameDate', currentDate.toISOString());
+  localStorage.setItem('gameSpeed', gameSpeed);
+
   if (activeFocus) {
     focusDaysRemaining--;
     const activeNodeEl = document.querySelector(`.focus-node[data-id="${activeFocus.id}"]`);
@@ -50,6 +54,9 @@ function tickDay() {
 function setGameSpeed(speed) {
   gameSpeed = speed;
   if (gameTimer) clearInterval(gameTimer);
+
+  // ★追加: スピード変更時も同期
+  localStorage.setItem('gameSpeed', gameSpeed);
 
   document.querySelectorAll('.speed-btn').forEach(btn => btn.classList.remove('active'));
 
@@ -247,7 +254,6 @@ function renderTree() {
     const isParentDone = completedFocuses.has(parentId);
 
     if (children.length === 1) {
-      // 直下または単一の接続
       const child = children[0];
       const childX = child.x + 55;
       const childY = child.y;
@@ -261,24 +267,19 @@ function renderTree() {
         drawDirectLine(childX, midY, childX, childY, svgLines, isParentDone);
       }
     } else {
-      // 本家HOI4スタイル：大元から左右に一気に広がる横幹線
       const childXs = children.map(c => c.x + 55);
       const minChildX = Math.min(...childXs);
       const maxChildX = Math.max(...childXs);
       const minChildY = Math.min(...children.map(c => c.y));
       
-      // 親のすぐ下で横幹線を引く高さ（中間地点）
       const branchY = parentY + Math.max(20, (minChildY - parentY) / 2);
 
-      // ① 親ノードから縦の幹を下ろす
       drawDirectLine(parentX, parentY, parentX, branchY, svgLines, isParentDone);
 
-      // ② 最左から最右（または親のX座標を含む）まで一本の横幹線を引く
       const mainLineLeft = Math.min(parentX, minChildX);
       const mainLineRight = Math.max(parentX, maxChildX);
       drawDirectLine(mainLineLeft, branchY, mainLineRight, branchY, svgLines, isParentDone);
 
-      // ③ 横幹線から各子ノードへ垂れ下げる
       children.forEach(child => {
         const childX = child.x + 55;
         drawDirectLine(childX, branchY, childX, child.y, svgLines, isParentDone);
@@ -286,7 +287,7 @@ function renderTree() {
     }
   });
 
-  // 3. 排他選択（相互ロック）の赤破線描画
+  // 3. 排他選択の赤破線描画
   allFocuses.forEach(nf => {
     if (nf.mutually_exclusive) {
       const targets = Array.isArray(nf.mutually_exclusive) ? nf.mutually_exclusive : [nf.mutually_exclusive];
@@ -300,7 +301,6 @@ function renderTree() {
   });
 }
 
-// 直線描画関数
 function drawDirectLine(x1, y1, x2, y2, svg, isActive) {
   const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
   line.setAttribute('x1', x1);
@@ -311,7 +311,6 @@ function drawDirectLine(x1, y1, x2, y2, svg, isActive) {
   svg.appendChild(line);
 }
 
-// 排他線（赤点線）
 function drawExclusiveLine(x1, y1, x2, y2, svg) {
   const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
   line.setAttribute('x1', x1);
@@ -322,7 +321,6 @@ function drawExclusiveLine(x1, y1, x2, y2, svg) {
   svg.appendChild(line);
 }
 
-// ステータス効果適用
 function applyFocusEffects(effectText) {
   if (!effectText) return;
   const lines = effectText.split('\n');
@@ -346,7 +344,6 @@ function updateStatusBarUI() {
   document.getElementById('val-pp').textContent = `${Math.min(100, Math.max(0, gameStats.politicalPower))} / 100`;
 }
 
-// ツールチップ表示
 const tooltip = document.getElementById('nf-tooltip');
 function showTooltip(e, nf) {
   const isCompleted = completedFocuses.has(nf.id);
@@ -415,7 +412,6 @@ async function init() {
   if (data.length > 0) {
     allFocuses = data;
   } else {
-    // データ未読み込み時のサンプル
     allFocuses = [
       { id: "SOV_1936", title: "1936年5月5日計画", x: 1000, y: 50, cost: 70, effect: "政治力 +50" },
       { id: "SOV_stalin", title: "スターリン主義の確立", x: 600, y: 180, cost: 70, prerequisites: ["SOV_1936"], mutually_exclusive: ["SOV_trotsky"], effect: "安定度 +10" },
