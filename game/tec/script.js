@@ -44,7 +44,7 @@ async function loadAllTechData() {
       if (res.ok) {
         techData[cat] = await res.json();
       }
-    } catch (e) { console.error(e); }
+    } catch (e) { console.error(`Failed to load ${cat}:`, e); }
   }
   renderTree();
 }
@@ -63,9 +63,13 @@ function initClock() {
 
   setInterval(() => {
     if (gameSpeed === 0) return;
+    
+    // 日付の進行
     gameDate.setDate(gameDate.getDate() + gameSpeed);
-    document.getElementById('calendar-display').textContent = `${gameDate.getFullYear()}年${gameDate.getMonth() + 1}月${gameDate.getDate()}日`;
+    document.getElementById('calendar-display').textContent = 
+      `${gameDate.getFullYear()}年${gameDate.getMonth() + 1}月${gameDate.getDate()}日`;
 
+    // 研究スロットのカウントダウン進行
     researchSlots.forEach(slot => {
       if (slot.tech && slot.remaining > 0) {
         slot.remaining -= gameSpeed;
@@ -83,7 +87,10 @@ function initClock() {
 // 3. 研究ロジック
 // ------------------------------------------
 function startResearch(tech) {
+  // すでに完了済みかチェック
   if (completedTechs.includes(tech.id)) return;
+
+  // 前提チェック
   if (tech.prerequisites && tech.prerequisites.length > 0) {
     const missing = tech.prerequisites.filter(id => !completedTechs.includes(id));
     if (missing.length > 0) {
@@ -92,6 +99,7 @@ function startResearch(tech) {
     }
   }
 
+  // 空きスロット検索
   const slot = researchSlots.find(s => !s.locked && !s.tech);
   if (!slot) {
     alert('空いている研究スロットがありません！');
@@ -99,7 +107,7 @@ function startResearch(tech) {
   }
 
   slot.tech = tech;
-  slot.remaining = tech.research_time || 30;
+  slot.remaining = tech.research_time || 30; // JSONの research_time を使用
   updateSlotDisplay(slot);
 }
 
@@ -107,22 +115,24 @@ function completeResearch(slot) {
   completedTechs.push(slot.tech.id);
   const completedName = slot.tech.title;
   
-  // 完了通知
-  const notifyArea = document.createElement('div');
-  notifyArea.textContent = `[完了] ${completedName} 研究完了しました`;
-  notifyArea.style.color = '#3fb950';
-  document.body.prepend(notifyArea); // 画面上部に表示
-  setTimeout(() => notifyArea.remove(), 5000);
+  // 完了通知を画面上部に表示
+  const notifyArea = document.getElementById('notification-area');
+  const msg = document.createElement('div');
+  msg.className = 'notify-msg';
+  msg.textContent = `[完了] ${completedName} 研究完了しました`;
+  notifyArea.appendChild(msg);
+  setTimeout(() => msg.remove(), 5000);
   
   slot.tech = null;
   slot.remaining = 0;
   updateSlotDisplay(slot);
-  renderTree(); // 完了したらノードの状態を更新（色を変えるため）
+  renderTree(); // ノードの状態（完了済みグレーアウト）を反映
 }
 
 function updateSlotDisplay(slot) {
   const el = document.querySelector(`.slot[data-slot="${slot.id}"] .slot-status`);
   if (!el) return;
+  
   if (slot.tech) {
     el.textContent = `研究中: ${slot.tech.title} (${Math.ceil(slot.remaining)}日)`;
     el.style.color = '#e3b341';
@@ -153,6 +163,8 @@ function renderTree() {
   svg.innerHTML = '';
   
   const list = techData[currentCategory] || [];
+  
+  // ノード生成
   list.forEach(tech => {
     const node = document.createElement('div');
     node.className = `tech-node ${completedTechs.includes(tech.id) ? 'completed' : ''}`;
