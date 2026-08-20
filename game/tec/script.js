@@ -12,7 +12,7 @@ let researchSlots = [
 
 let gameDate = new Date(1936, 0, 1);
 let gameSpeed = 0;
-let isDragging = false, startX, startY, translateX = 0, translateY = 0, scale = 1;
+let isDragging = false, startX, startY, translateX = 0, translateY = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
   initTabs();
@@ -91,26 +91,68 @@ function renderTree() {
   const container = document.getElementById('tech-nodes');
   const svg = document.getElementById('svg-lines');
   container.innerHTML = ''; svg.innerHTML = '';
-  (techData[currentCategory] || []).forEach(tech => {
+  
+  const list = techData[currentCategory] || [];
+  const nodeMap = {};
+  list.forEach(item => { nodeMap[item.id] = item; });
+
+  list.forEach(tech => {
     const node = document.createElement('div');
     node.className = `tech-node ${completedTechs.includes(tech.id) ? 'completed' : ''}`;
     node.style.left = `${tech.x}px`; node.style.top = `${tech.y}px`;
-    node.innerHTML = `<div>${tech.svg}</div><div>${tech.title}</div>`;
+    
+    const svgContent = tech.svg || `<svg viewBox="0 0 24 24" fill="none" stroke="#58a6ff" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>`;
+    node.innerHTML = `<div class="tech-icon-wrapper">${svgContent}</div><div class="tech-title">${tech.title}</div>`;
+    
     node.addEventListener('click', () => startResearch(tech));
     node.addEventListener('mouseenter', (e) => showTooltip(e, tech));
     node.addEventListener('mouseleave', hideTooltip);
     container.appendChild(node);
   });
+
+  list.forEach(tech => {
+    if (tech.prerequisites && tech.prerequisites.length > 0) {
+      tech.prerequisites.forEach(preId => {
+        const parentNode = nodeMap[preId];
+        if (parentNode) drawLine(parentNode, tech);
+      });
+    }
+  });
+}
+
+function drawLine(parent, child) {
+  const svg = document.getElementById('svg-lines');
+  const x1 = parent.x + 32;
+  const y1 = parent.y + 64;
+  const x2 = child.x + 32;
+  const y2 = child.y;
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  const midY = y1 + (y2 - y1) / 2;
+  path.setAttribute('d', `M ${x1} ${y1} L ${x1} ${midY} L ${x2} ${midY} L ${x2} ${y2}`);
+  path.setAttribute('class', 'tech-line');
+  svg.appendChild(path);
 }
 
 function showTooltip(e, tech) {
   const tooltip = document.getElementById('tech-tooltip');
   document.getElementById('tooltip-title').textContent = tech.title;
-  document.getElementById('tooltip-info').innerText = `必要日数: ${tech.research_time}日`;
-  document.getElementById('tooltip-effects').innerHTML = (tech.effects || []).map(eff => `<div>• ${eff}</div>`).join('');
+  document.getElementById('tooltip-info').innerText = `開発年: ${tech.year}年 | 必要日数: ${tech.research_time || 30}日`;
+  
+  const descEl = document.getElementById('tooltip-desc');
+  if (tech.desc && tech.desc.trim() !== '') {
+    descEl.textContent = tech.desc;
+    descEl.style.display = 'block';
+  } else {
+    descEl.style.display = 'none';
+  }
+
+  const effects = document.getElementById('tooltip-effects');
+  effects.innerHTML = (tech.effects || []).map(eff => `<div class="effect-item">• ${eff}</div>`).join('');
+  
   tooltip.classList.remove('hidden');
   const move = (evt) => { tooltip.style.left = `${evt.clientX + 15}px`; tooltip.style.top = `${evt.clientY + 15}px`; };
-  move(e); e.currentTarget.addEventListener('mousemove', move);
+  move(e);
+  e.currentTarget.addEventListener('mousemove', move);
 }
 
 function hideTooltip() { document.getElementById('tech-tooltip').classList.add('hidden'); }
@@ -118,21 +160,26 @@ function hideTooltip() { document.getElementById('tech-tooltip').classList.add('
 function initPanAndZoom() {
   const container = document.getElementById('tree-container');
   const viewport = document.getElementById('tree-viewport');
+  
   container.addEventListener('mousedown', (e) => {
     if (e.target.closest('.tech-node')) return;
-    isDragging = true; startX = e.clientX - translateX; startY = e.clientY - translateY;
+    isDragging = true; 
+    startX = e.clientX - translateX; 
+    startY = e.clientY - translateY;
+    container.style.cursor = 'grabbing';
   });
+  
   window.addEventListener('mousemove', (e) => {
     if (!isDragging) return;
-    translateX = e.clientX - startX; translateY = e.clientY - startY;
-    viewport.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    translateX = e.clientX - startX; 
+    translateY = e.clientY - startY;
+    viewport.style.transform = `translate(${translateX}px, ${translateY}px)`;
   });
-  window.addEventListener('mouseup', () => isDragging = false);
-  container.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    scale = Math.min(Math.max(scale + (e.deltaY > 0 ? -0.1 : 0.1), 0.5), 2);
-    viewport.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
-  }, { passive: false });
+  
+  window.addEventListener('mouseup', () => {
+    isDragging = false;
+    container.style.cursor = 'grab';
+  });
 }
 
 function initTabs() {
