@@ -78,10 +78,27 @@ function initResearchSlots() {
 
 function startResearch(tech) {
   if (completedTechs.includes(tech.id)) return;
-  if (tech.prerequisites?.some(id => !completedTechs.includes(id))) { alert('前提技術が完了していません！'); return; }
+
+  // すでに他のスロットで研究中ではないかチェック
+  const isAlreadyResearching = researchSlots.some(slot => slot.tech && slot.tech.id === tech.id);
+  if (isAlreadyResearching) {
+    alert('この技術はすでに別のスロットで研究中です！');
+    return;
+  }
+
+  if (tech.prerequisites?.some(id => !completedTechs.includes(id))) { 
+    alert('前提技術が完了していません！'); 
+    return; 
+  }
+
   const slot = researchSlots.find(s => !s.locked && !s.tech);
-  if (!slot) { alert('空きスロットがありません！上のスロットをクリックして既存の研究を中断するか、空けてください。'); return; }
-  slot.tech = tech; slot.remaining = tech.research_time || 30;
+  if (!slot) { 
+    alert('空きスロットがありません！上のスロットをクリックして既存の研究を中断するか、空けてください。'); 
+    return; 
+  }
+
+  slot.tech = tech; 
+  slot.remaining = tech.research_time || 30;
   updateSlotDisplay(slot);
 }
 
