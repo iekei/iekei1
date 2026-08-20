@@ -12,6 +12,10 @@ let productionLines = [];
 const MAX_FACTORIES = 30;
 const MAX_LINES = 5;
 
+// LocalStorageから保存された日付とスピードを復元（なければ初期値）
+let gameDate = localStorage.getItem('gameDate') ? new Date(localStorage.getItem('gameDate')) : new Date(1936, 0, 1);
+let gameSpeed = localStorage.getItem('gameSpeed') ? parseInt(localStorage.getItem('gameSpeed'), 10) : 0;
+
 document.addEventListener('DOMContentLoaded', async () => {
   await loadAllTechsForProduction();
   initSharedClock();
@@ -40,6 +44,7 @@ function renderProductionView() {
 
 function renderAvailableTechs() {
   const container = document.getElementById('tech-list-to-produce');
+  if (!container) return;
   container.innerHTML = '';
 
   completedTechs = JSON.parse(localStorage.getItem('completedTechs') || '[]');
@@ -53,7 +58,6 @@ function renderAvailableTechs() {
     const tech = techDataAll[techId];
     if (!tech) return;
 
-    // 1工場あたりの基本日産（例: AK-47なら1工場で1日あたり数個など、データまたはデフォルト値）
     const baseDailyRate = tech.base_daily_rate || 2; 
     const resType = tech.resource_type || '鋼鉄';
     const resCost = tech.resource_cost || 2;
@@ -115,8 +119,11 @@ function getTotalUsedFactories() {
 
 function renderProductionLines() {
   const container = document.getElementById('production-lines-list');
+  if (!container) return;
   container.innerHTML = '';
-  document.getElementById('used-factories').textContent = getTotalUsedFactories();
+  
+  const usedFacEl = document.getElementById('used-factories');
+  if (usedFacEl) usedFacEl.textContent = getTotalUsedFactories();
 
   if (productionLines.length === 0) {
     container.innerHTML = '<p style="color: #8b949e; font-size: 13px;">稼働中の生産ラインはありません。</p>';
@@ -128,7 +135,7 @@ function renderProductionLines() {
     if (!tech) return;
 
     const baseRate = tech.base_daily_rate || 2;
-    const currentDailyOutput = baseRate * line.factories; // 工場数に応じた1日あたりの生産量
+    const currentDailyOutput = baseRate * line.factories;
 
     const card = document.createElement('div');
     card.className = 'line-card';
@@ -142,7 +149,7 @@ function renderProductionLines() {
           <button onclick="adjustFactories(${line.id}, 1)">+</button>
         </div>
         <div class="progress-bar-bg">
-          <div class="progress-bar-fill" style="width: ${line.progress}%"></div>
+          <div class="progress-bar-fill" style="width: ${Math.min(100, line.progress)}%"></div>
         </div>
       </div>
       <button class="action-btn danger" onclick="removeLine(${line.id})" style="margin-left: 10px;">廃止</button>
@@ -152,41 +159,88 @@ function renderProductionLines() {
 }
 
 function updateResourceDisplay() {
-  document.getElementById('res-steel').textContent = resources.steel;
-  document.getElementById('res-aluminum').textContent = resources.aluminum;
-  document.getElementById('res-cards').textContent = `${resources.cards}枚 (${resources.cards * 100})`;
+  const steelEl = document.getElementById('res-steel');
+  const alumEl = document.getElementById('res-aluminum');
+  const cardsEl = document.getElementById('res-cards');
+  
+  if (steelEl) steelEl.textContent = resources.steel;
+  if (alumEl) alumEl.textContent = resources.aluminum;
+  if (cardsEl) cardsEl.textContent = `${resources.cards}枚 (${resources.cards * 100})`;
 }
 
-// 研究ツリー側（index.html）と時間を完全同期する時計・処理
+function updateCalendarUI() {
+  const calEl = document.getElementById('calendar-display');
+  if (calEl) {
+    calEl.textContent = `${gameDate.getFullYear()}年${gameDate.getMonth() + 1}月${gameDate.getDate()}日`;
+  }
+}
+
+// 国家方針・研究画面と完全に同期する時計・時間管理システム
 function initSharedClock() {
-  setInterval(() => {
-    // LocalStorageからメイン画面で進められた時間やスピード状態を読み込む（または同期させる）
-    const savedDateStr = localStorage.getItem('gameDate');
-    const speed = parseInt(localStorage.getItem('gameSpeed') || '0');
+  // スピードボタンの初期状態とイベントの設定
+  document.querySelectorAll('.speed-btn').forEach(btn => {
+    const speed = parseInt(btn.getAttribute('data-speed'), 10);
+    if (speed === gameSpeed) {
+      btn.classList.add('active');
+    } else if (gameSpeed === 0 && btn.id === 'btn-pause') {
+      btn.classList.add('active');
+    }
 
-    if (speed === 0) return; // 停止中なら進めない
+    btn.addEventListener('click', (e) => {
+      gameSpeed = parseInt(e.target.getAttribute('data-speed'), 10) || 0;
+      localStorage.setItem('gameSpeed', gameSpeed);
 
-    let currentDate = savedDateStr ? new Date(savedDateStr) : new Date(1936, 0, 1);
-    currentDate.setDate(currentDate.getDate() + speed);
-    
-    localStorage.setItem('gameDate', currentDate.toISOString());
-    document.getElementById('calendar-display').textContent = `${currentDate.getFullYear()}年${currentDate.getMonth() + 1}月${currentDate.getDate()}日`;
-
-    // 1日経過ごとの生産進行処理
-    productionLines.forEach(line => {
-      const tech = techDataAll[line.techId];
-      if (!tech) return;
-
-      const baseRate = tech.base_daily_rate || 2;
-      const dailyProduced = baseRate * line.factories * speed; // スピードと工場数に応じた日産分を加算
-      
-      line.progress += dailyProduced;
-      // 100個たまったら1単位（完成品）としてカウント
-      while (line.progress >= 100) {
-        line.progress -= 100;
-        line.producedCount += 1;
-      }
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      runTick();
     });
-    renderProductionLines();
-  }, 1000);
+  });
+
+  updateCalendarUI();
+
+  const speedIntervals = { 1: 2000, 2: 1200, 3: 700, 4: 350, 5: 120 };
+  let gameTimer = null;
+
+  function runTick() {
+    if (gameTimer) clearInterval(gameTimer);
+    
+    // LocalStorageから最新のスピード状態を再取得
+    gameSpeed = parseInt(localStorage.getItem('gameSpeed') || '0', 10);
+
+    if (gameSpeed > 0) {
+      const interval = speedIntervals[gameSpeed] || 1000;
+      gameTimer = setInterval(() => {
+        // 他画面で進められた可能性も考慮してLocalStorageから最新の日付をロード
+        const savedDateStr = localStorage.getItem('gameDate');
+        if (savedDateStr) {
+          gameDate = new Date(savedDateStr);
+        }
+
+        // 1日進める
+        gameDate.setDate(gameDate.getDate() + 1);
+        localStorage.setItem('gameDate', gameDate.toISOString());
+        updateCalendarUI();
+
+        // 生産ラインの進行処理（1日ごとの生産量を加算）
+        productionLines.forEach(line => {
+          const tech = techDataAll[line.techId];
+          if (!tech) return;
+
+          const baseRate = tech.base_daily_rate || 2;
+          const dailyProduced = baseRate * line.factories;
+          
+          line.progress += dailyProduced;
+          while (line.progress >= 100) {
+            line.progress -= 100;
+            line.producedCount += 1;
+          }
+        });
+        renderProductionLines();
+      }, interval);
+    }
+  }
+
+  if (gameSpeed > 0) {
+    runTick();
+  }
 }
