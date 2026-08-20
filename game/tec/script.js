@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTabs();
   initPanAndZoom();
   initClock();
+  initResearchSlots();
   loadAllTechData();
 });
 
@@ -54,11 +55,32 @@ function initClock() {
   }, 1000);
 }
 
+// 研究スロットをクリックして研究を中断・変更する機能
+function initResearchSlots() {
+  document.querySelectorAll('.slot').forEach(slotEl => {
+    slotEl.addEventListener('click', () => {
+      const slotId = parseInt(slotEl.getAttribute('data-slot'));
+      const slot = researchSlots.find(s => s.id === slotId);
+      
+      if (!slot || slot.locked) return;
+
+      if (slot.tech) {
+        const confirmed = confirm(`「${slot.tech.title}」の研究を中断してスロットを空けますか？\n※これまでの研究進捗（日数）はリセットされます。`);
+        if (confirmed) {
+          slot.tech = null;
+          slot.remaining = 0;
+          updateSlotDisplay(slot);
+        }
+      }
+    });
+  });
+}
+
 function startResearch(tech) {
   if (completedTechs.includes(tech.id)) return;
   if (tech.prerequisites?.some(id => !completedTechs.includes(id))) { alert('前提技術が完了していません！'); return; }
   const slot = researchSlots.find(s => !s.locked && !s.tech);
-  if (!slot) { alert('空きスロットがありません！'); return; }
+  if (!slot) { alert('空きスロットがありません！上のスロットをクリックして既存の研究を中断するか、空けてください。'); return; }
   slot.tech = tech; slot.remaining = tech.research_time || 30;
   updateSlotDisplay(slot);
 }
