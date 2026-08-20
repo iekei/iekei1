@@ -1,26 +1,272 @@
 [
   {
-    "id": "artillery_1",
-    "title": "野砲 (76mm野砲 M1936)",
-    "year": 1936, "x": 200, "y": 50, "research_time": 140,
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='7' cy='17' r='4'/><path d='M8 14l12-8'/><path d='M17 4l4 2'/><path d='M11 18h10'/></svg>",
-    "effects": ["対人攻撃: +25.0", "対物攻撃: +6.0"],
+    "id": "f_22",
+    "title": "F-22 76mm野砲（M1936）",
+    "year": 1936, "x": 100, "y": 50, "research_time": 100,
+    "reliability": "配備（制式採用）",
+    "desc": "師団砲および対戦車砲の役割を兼ねる多目的野砲として開発。後にドイツ軍に多数捕獲され、改修されて対戦車砲PAK 36(r)としても利用された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M18 21H6'/></svg>",
+    "effects": ["対人攻撃: 35/100", "対物攻撃: 30/100", "生存力: 15/100", "機動力: 50/100", "信頼度: 75/100"],
     "prerequisites": []
   },
   {
-    "id": "anti_tank_1",
-    "title": "対戦車砲 (45mm対戦車砲)",
-    "year": 1936, "x": 450, "y": 50, "research_time": 140,
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='6' cy='17' r='3.5'/><path d='M6 14l16-4'/><path d='M10 16l8 5'/></svg>",
-    "effects": ["対物攻撃: +20.0", "貫通力: +30.0"],
+    "id": "45k",
+    "title": "37mm対空砲 45K",
+    "year": 1936, "x": 800, "y": 50, "research_time": 80,
+    "reliability": "低（試作止まり）",
+    "desc": "自動装填機構を備えた小口径対空砲の試作型。作動不良や給弾機構の不具合が多く、改良型のDevelopedモデルへ移行した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8b949e' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L12 3'/><path d='M18 21H6'/></svg>",
+    "effects": ["対人攻撃: 20/100", "対物攻撃: 10/100", "生存力: 10/100", "機動力: 60/100", "信頼度: 30/100"],
     "prerequisites": []
   },
   {
-    "id": "rocket_artillery_1",
-    "title": "ロケット砲 (BM-13 カチューシャ)",
-    "year": 1940, "x": 200, "y": 500, "research_time": 170,
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e3b341' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='13' width='14' height='6'/><circle cx='5' cy='19' r='2'/><circle cx='13' cy='19' r='2'/><path d='M5 13l11-8'/><path d='M8 13l11-8'/><path d='M11 13l11-8'/></svg>",
-    "effects": ["対人攻撃: +38.0", "突破: +12.0"],
-    "prerequisites": ["artillery_1"]
+    "id": "53_k",
+    "title": "53-K 45mm対戦車砲（M1937）",
+    "year": 1937, "x": 400, "y": 200, "research_time": 90,
+    "reliability": "配備（制式採用）",
+    "desc": "独ソ戦初期のソ連軍主力軽対戦車砲。小型で取り回しが良いが、戦車装甲の厚減に伴い貫通力不足となり、後の長砲身モデル（M-42）へ更新された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='10' cy='18' r='2.5'/><path d='M10 15.5L2 10'/><path d='M15 20.5H5'/></svg>",
+    "effects": ["対人攻撃: 20/100", "対物攻撃: 25/100", "生存力: 15/100", "機動力: 75/100", "信頼度: 80/100"],
+    "prerequisites": []
+  },
+  {
+    "id": "ml_20",
+    "title": "ML-20 152mm榴弾砲（M1937）",
+    "year": 1937, "x": 600, "y": 200, "research_time": 140,
+    "reliability": "配備（制式採用）",
+    "desc": "強大な威力を誇る軍団級の主力重榴弾砲。野戦陣地の破壊から戦車への直接射撃まで幅広く活躍し、SU-152などの自走砲主砲としても転用された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='14' cy='17' r='3.5'/><path d='M14 13.5L3 5'/><path d='M20 20.5H8'/></svg>",
+    "effects": ["対人攻撃: 75/100", "対物攻撃: 70/100", "生存力: 20/100", "機動力: 30/100", "信頼度: 85/100"],
+    "prerequisites": []
+  },
+  {
+    "id": "m_10",
+    "title": "M-10 152mm榴弾砲（M1938）",
+    "year": 1938, "x": 600, "y": 350, "research_time": 130,
+    "reliability": "配備（制式採用）",
+    "desc": "軍団砲兵向けに開発された中距離重榴弾砲。大威力を誇ったが重量が大きく、後に製造工程を簡略化したD-1重榴弾砲へ取って代わられた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='14' cy='17' r='3.5'/><path d='M14 13.5L4 6'/><path d='M20 20.5H8'/></svg>",
+    "effects": ["対人攻撃: 72/100", "対物攻撃: 68/100", "生存力: 18/100", "機動力: 25/100", "信頼度: 75/100"],
+    "prerequisites": ["ml_20"]
+  },
+  {
+    "id": "m_30",
+    "title": "M-30 122mm榴弾砲（M1939）",
+    "year": 1939, "x": 250, "y": 350, "research_time": 130,
+    "reliability": "配備（制式採用）",
+    "desc": "師団砲兵の主力として大戦を通じて大量生産された傑作榴弾砲。頑丈で扱いやすく、戦後も長期にわたり世界各国で使用された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L3 8'/><path d='M18 21H6'/></svg>",
+    "effects": ["対人攻撃: 60/100", "対物攻撃: 45/100", "生存力: 20/100", "機動力: 55/100", "信頼度: 95/100"],
+    "prerequisites": ["f_22"]
+  },
+  {
+    "id": "52_k",
+    "title": "52-K 85mm高射砲（M1939）",
+    "year": 1939, "x": 800, "y": 350, "research_time": 120,
+    "reliability": "配備（制式採用）",
+    "desc": "ソ連軍の主力中口径対空砲。優れた高射性能を持ち、対戦車能力も高かったため、T-34/85や85mm対戦車砲のベースとなった。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L15 4'/><path d='M18 21H6'/></svg>",
+    "effects": ["対人攻撃: 45/100", "対物攻撃: 55/100", "生存力: 15/100", "機動力: 40/100", "信頼度: 85/100"],
+    "prerequisites": []
+  },
+  {
+    "id": "61_k",
+    "title": "61-K 37mm対空砲（M1939）",
+    "year": 1939, "x": 950, "y": 350, "research_time": 100,
+    "reliability": "配備（制式採用）",
+    "desc": "スウェーデンのボフォース40mm機関砲を参考に開発された自動対空機関砲。低空で侵入する敵機に対して猛威を振るった。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='2.5'/><path d='M12 15.5L14 5'/><path d='M17 20.5H7'/></svg>",
+    "effects": ["対人攻撃: 35/100", "対物攻撃: 20/100", "生存力: 15/100", "機動力: 65/100", "信頼度: 85/100"],
+    "prerequisites": ["45k"]
+  },
+  {
+    "id": "usv_76",
+    "title": "USV 76mm野砲（M1939）",
+    "year": 1939, "x": 100, "y": 350, "research_time": 100,
+    "reliability": "配備（制式採用）",
+    "desc": "F-22の重量と操作性を改善するために作られた師団野砲。性能は安定していたが、生産工程の複雑さから後のZiS-3へ引き継がれた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M18 21H6'/></svg>",
+    "effects": ["対人攻撃: 38/100", "対物攻撃: 32/100", "生存力: 15/100", "機動力: 58/100", "信頼度: 75/100"],
+    "prerequisites": ["f_22"]
+  },
+  {
+    "id": "zis_2",
+    "title": "ZiS-2 57mm対戦車砲（M1941）",
+    "year": 1940, "x": 400, "y": 500, "research_time": 120,
+    "reliability": "配備（制式採用）",
+    "desc": "非常に高い初速と威力を誇る対戦車砲。開発当初は「貫通力が高すぎて当時の敵装甲を突き抜けてしまう」等の理由で生産一時停止されたが、タイガー戦車等の登場で再生産された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='10' cy='18' r='2.5'/><path d='M10 15.5L1 8'/><path d='M15 20.5H5'/></svg>",
+    "effects": ["対人攻撃: 25/100", "対物攻撃: 60/100", "生存力: 18/100", "機動力: 70/100", "信頼度: 85/100"],
+    "prerequisites": ["53_k"]
+  },
+  {
+    "id": "m1940_128",
+    "title": "128mm高射砲 M1940",
+    "year": 1940, "x": 800, "y": 500, "research_time": 150,
+    "reliability": "低（試作止まり）",
+    "desc": "超高空を飛来する爆撃機を迎撃するために試作された大口径高射砲。砲身の摩耗が激しく重量過多のため不採用。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8b949e' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3.5'/><path d='M12 14.5L16 2'/><path d='M19 21.5H5'/></svg>",
+    "effects": ["対人攻撃: 50/100", "対物攻撃: 65/100", "生存力: 10/100", "機動力: 15/100", "信頼度: 30/100"],
+    "prerequisites": ["52_k"]
+  },
+  {
+    "id": "zis_3",
+    "title": "ZiS-3 76mm野砲（M1942）",
+    "year": 1941, "x": 100, "y": 650, "research_time": 120,
+    "reliability": "配備（制式採用）",
+    "desc": "大戦中最大となる10万門以上が生産された超傑作野砲。野戦砲撃と対戦車射撃の両方で高い威力を発揮し、頑丈で扱いやすかった。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e3b341' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L3 6'/><path d='M18 21H6'/></svg>",
+    "effects": ["対人攻撃: 45/100", "対物攻撃: 42/100", "生存力: 20/100", "機動力: 65/100", "信頼度: 98/100"],
+    "prerequisites": ["usv_76"]
+  },
+  {
+    "id": "m_42",
+    "title": "M-42 45mm対戦車砲（M1942）",
+    "year": 1941, "x": 300, "y": 650, "research_time": 90,
+    "reliability": "配備（制式採用）",
+    "desc": "53-Kの砲身を伸ばし、装薬量を増やして貫通力を強化した長砲身型対戦車砲。軽装甲車両や側面攻撃で威力を発揮した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='10' cy='18' r='2.5'/><path d='M10 15.5L1 9'/><path d='M15 20.5H5'/></svg>",
+    "effects": ["対人攻撃: 22/100", "対物攻撃: 38/100", "生存力: 18/100", "機動力: 80/100", "信頼度: 85/100"],
+    "prerequisites": ["53_k"]
+  },
+  {
+    "id": "d_1",
+    "title": "D-1 152mm榴弾砲（M1943）",
+    "year": 1943, "x": 600, "y": 800, "research_time": 130,
+    "reliability": "配備（制式採用）",
+    "desc": "M-10の砲身にM-30の砲架を組み合わせて軽量化を図った重榴弾砲。機動性が大幅に向上し、終盤の攻勢作戦で活躍した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='14' cy='17' r='3'/><path d='M14 14L4 6'/><path d='M20 20.5H8'/></svg>",
+    "effects": ["対人攻撃: 72/100", "対物攻撃: 68/100", "生存力: 22/100", "機動力: 50/100", "信頼度: 90/100"],
+    "prerequisites": ["m_10", "m_30"]
+  },
+  {
+    "id": "bs_3",
+    "title": "BS-3 100mm野砲/対戦車砲（M1944）",
+    "year": 1943, "x": 450, "y": 800, "research_time": 140,
+    "reliability": "配備（制式採用）",
+    "desc": "海軍砲をベースに開発された強力な対戦車兼野戦砲。重戦車タイガーIIの正面装甲をも脅かす貫通力を持ち、SU-100の主砲のベースにもなった。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='18' r='3'/><path d='M11 15L1 6'/><path d='M17 21H5'/></svg>",
+    "effects": ["対人攻撃: 55/100", "対物攻撃: 78/100", "生存力: 20/100", "機動力: 45/100", "信頼度: 85/100"],
+    "prerequisites": ["zis_2"]
+  },
+  {
+    "id": "zis_1",
+    "title": "ZiS-1 85mm試作対戦車砲",
+    "year": 1943, "x": 300, "y": 800, "research_time": 100,
+    "reliability": "低（試作止まり）",
+    "desc": "52-K高射砲の砲身を野戦砲架に載せた初期の試作対戦車砲。砲架の強度が不足しており射撃反動に耐えられず不採用。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8b949e' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='18' r='2.5'/><path d='M11 15.5L2 7'/><path d='M16 20.5H6'/></svg>",
+    "effects": ["対人攻撃: 40/100", "対物攻撃: 50/100", "生存力: 12/100", "機動力: 40/100", "信頼度: 30/100"],
+    "prerequisites": ["52_k"]
+  },
+  {
+    "id": "d_44",
+    "title": "D-44 85mm野砲",
+    "year": 1944, "x": 200, "y": 950, "research_time": 120,
+    "reliability": "配備（制式採用）",
+    "desc": "戦後の師団砲兵用として開発された多目的野砲。軽量かつ高初速で、野戦砲撃のほか対戦車砲としても非常に優れていた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='18' r='2.5'/><path d='M11 15.5L2 6'/><path d='M16 20.5H6'/></svg>",
+    "effects": ["対人攻撃: 48/100", "対物攻撃: 58/100", "生存力: 22/100", "機動力: 70/100", "信頼度: 90/100"],
+    "prerequisites": ["zis_3"]
+  },
+  {
+    "id": "bl_14",
+    "title": "BL-14 152mm高初速試作加農砲",
+    "year": 1944, "x": 650, "y": 950, "research_time": 150,
+    "reliability": "低（試作止まり）",
+    "desc": "要塞破砕や超遠距離砲撃を目指して試作された長砲身加農砲。砲身寿命の短さと重量の問題から実用化されなかった。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8b949e' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='14' cy='17' r='3.5'/><path d='M14 13.5L2 3'/><path d='M20 20.5H8'/></svg>",
+    "effects": ["対人攻撃: 80/100", "対物攻撃: 82/100", "生存力: 10/100", "機動力: 20/100", "信頼度: 25/100"],
+    "prerequisites": ["d_1"]
+  },
+  {
+    "id": "s_60",
+    "title": "S-60 57mm対空砲",
+    "year": 1945, "x": 850, "y": 1100, "research_time": 130,
+    "reliability": "配備（制式採用）",
+    "desc": "第二次大戦の経験をもとに開発された単装自動対空砲。レーダー射撃指揮装置と連動させることで高い命中率を誇り、冷戦期に世界中で使用された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L14 3'/><path d='M18 21H6'/></svg>",
+    "effects": ["対人攻撃: 45/100", "対物攻撃: 38/100", "生存力: 20/100", "機動力: 60/100", "信頼度: 90/100"],
+    "prerequisites": ["61_k"]
+  },
+  {
+    "id": "b_10",
+    "title": "B-10 82mm無反動砲",
+    "year": 1949, "x": 350, "y": 1250, "research_time": 100,
+    "reliability": "配備（制式採用）",
+    "desc": "歩兵部隊が手軽に運用できるように開発された三脚起倒式の初期型無反動砲。成形炸薬弾（HEAT）を使用して敵装甲車を撃破する。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M4 12h16'/><path d='M7 12l-3 7'/><path d='M17 12l3 7'/><path d='M12 12v7'/></svg>",
+    "effects": ["対人攻撃: 30/100", "対物攻撃: 45/100", "生存力: 30/100", "機動力: 85/100", "信頼度: 80/100"],
+    "prerequisites": ["m_42"]
+  },
+  {
+    "id": "b_11",
+    "title": "B-11 107mm無反動砲",
+    "year": 1949, "x": 350, "y": 1400, "research_time": 110,
+    "reliability": "配備（制式採用）",
+    "desc": "B-10より大口径化し貫通力と射程を伸ばした無反動砲。牽引・移動が容易で歩兵の重火器として長期運用された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 11h18'/><circle cx='8' cy='18' r='2'/><circle cx='16' cy='18' r='2'/><path d='M8 16l4-5 4 5'/></svg>",
+    "effects": ["対人攻撃: 42/100", "対物攻撃: 60/100", "生存力: 25/100", "機動力: 75/100", "信頼度: 82/100"],
+    "prerequisites": ["b_10"]
+  },
+  {
+    "id": "d_74",
+    "title": "D-74 122mm加農砲",
+    "year": 1953, "x": 550, "y": 1550, "research_time": 140,
+    "reliability": "配備（制式採用）",
+    "desc": "戦後の軍団砲兵用に作られた遠距離打撃用加農砲。長射程を誇り、東西冷戦期を通じて多くの東側諸国に供与された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L2 5'/><path d='M18 21H6'/></svg>",
+    "effects": ["対人攻撃: 65/100", "対物攻撃: 65/100", "生存力: 20/100", "機動力: 45/100", "信頼度: 85/100"],
+    "prerequisites": ["bs_3"]
+  },
+  {
+    "id": "m_46",
+    "title": "M-46 130mm加農砲",
+    "year": 1953, "x": 680, "y": 1550, "research_time": 150,
+    "reliability": "配備（制式採用）",
+    "desc": "冷戦期のソ連軍を代表する長射程加農砲（最大射程約27km）。西側の同クラスの野砲を圧倒する射程を持ち、各国で多用された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e3b341' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='13' cy='18' r='3'/><path d='M13 15L1 3'/><path d='M19 21H7'/></svg>",
+    "effects": ["対人攻撃: 75/100", "対物攻撃: 72/100", "生存力: 20/100", "機動力: 40/100", "信頼度: 90/100"],
+    "prerequisites": ["bs_3"]
+  },
+  {
+    "id": "d_30",
+    "title": "D-30 122mm榴弾砲",
+    "year": 1955, "x": 150, "y": 1700, "research_time": 150,
+    "reliability": "配備（制式採用）",
+    "desc": "3本脚の独特な砲架を持ち、360度全周囲への即時射撃が可能な傑作榴弾砲。現代でも世界中の戦場で現役運用されている。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e3b341' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='16' r='2.5'/><path d='M12 13.5L3 6'/><path d='M6 20l6-4 6 4'/></svg>",
+    "effects": ["対人攻撃: 68/100", "対物攻撃: 55/100", "生存力: 25/100", "機動力: 65/100", "信頼度: 95/100"],
+    "prerequisites": ["d_44"]
+  },
+  {
+    "id": "zu_23_2",
+    "title": "ZU-23-2 23mm対空機関砲",
+    "year": 1955, "x": 850, "y": 1700, "research_time": 120,
+    "reliability": "配備（制式採用）",
+    "desc": "2連装の23mm自動砲。極めて高い連射速度を誇り、対空射撃のみならず地上目標や歩兵陣地への直接水平射撃でも凄まじい威力を発揮した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e3b341' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='2.5'/><path d='M10 15.5L11 4'/><path d='M14 15.5L15 4'/><path d='M17 20.5H7'/></svg>",
+    "effects": ["対人攻撃: 60/100", "対物攻撃: 30/100", "生存力: 20/100", "機動力: 80/100", "信頼度: 92/100"],
+    "prerequisites": ["s_60"]
+  },
+  {
+    "id": "taran_2a3",
+    "title": "2A3 タラン（420mm試作自走迫撃砲）",
+    "year": 1957, "x": 550, "y": 1850, "research_time": 200,
+    "reliability": "低（試作止まり）",
+    "desc": "戦術核砲弾を発射するために作られた巨大な車載迫撃砲。車体への負荷が大きく、戦術ミサイルの発達により試作のみで退役した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8b949e' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='14' width='20' height='6' rx='2'/><path d='M7 14L16 2'/><circle cx='6' cy='17.5' r='1'/><circle cx='12' cy='17.5' r='1'/><circle cx='18' cy='17.5' r='1'/></svg>",
+    "effects": ["対人攻撃: 95/100", "対物攻撃: 95/100", "生存力: 40/100", "機動力: 20/100", "信頼度: 25/100"],
+    "prerequisites": ["d_74"]
+  },
+  {
+    "id": "t_12",
+    "title": "T-12 100mm滑滑対戦車砲",
+    "year": 1957, "x": 400, "y": 1850, "research_time": 140,
+    "reliability": "配備（制式採用）",
+    "desc": "世界で初めて滑腔砲（ライフリングのない砲身）を採用した対戦車砲。APFSDS（装弾筒付翼安定徹甲弾）を発射し、冷戦期の新型戦車に対抗した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='10' cy='18' r='2.5'/><path d='M10 15.5L0 7'/><path d='M15 20.5H5'/></svg>",
+    "effects": ["対人攻撃: 35/100", "対物攻撃: 82/100", "生存力: 22/100", "機動力: 60/100", "信頼度: 88/100"],
+    "prerequisites": ["b_11"]
   }
 ]
