@@ -1,4 +1,3 @@
-// LocalStorage から研究完了データを取得（初期値は空配列）
 let completedTechs = JSON.parse(localStorage.getItem('completedTechs') || '[]');
 let techDataAll = {};
 
@@ -9,14 +8,13 @@ let resources = {
   aluminum: 300
 };
 
-// 生産ライン（最大5ライン）
 let productionLines = [];
 const MAX_FACTORIES = 30;
 const MAX_LINES = 5;
 
 document.addEventListener('DOMContentLoaded', async () => {
   await loadAllTechsForProduction();
-  initProductionClock();
+  initSharedClock();
   renderProductionView();
 });
 
@@ -24,7 +22,6 @@ async function loadAllTechsForProduction() {
   const categories = ['infantry', 'armor', 'artillery', 'naval', 'air', 'engineering', 'industry'];
   for (const cat of categories) {
     try {
-      // 親ディレクトリにあるデータフォルダから読み込むため ../data/ を指定
       const res = await fetch(`../data/tech_${cat}.json`);
       if (res.ok) {
         const list = await res.json();
@@ -45,7 +42,6 @@ function renderAvailableTechs() {
   const container = document.getElementById('tech-list-to-produce');
   container.innerHTML = '';
 
-  // LocalStorageから最新の完了データを再取得
   completedTechs = JSON.parse(localStorage.getItem('completedTechs') || '[]');
 
   if (completedTechs.length === 0) {
@@ -57,12 +53,17 @@ function renderAvailableTechs() {
     const tech = techDataAll[techId];
     if (!tech) return;
 
+    // 1工場あたりの基本日産（例: AK-47なら1工場で1日あたり数個など、データまたはデフォルト値）
+    const baseDailyRate = tech.base_daily_rate || 2; 
+    const resType = tech.resource_type || '鋼鉄';
+    const resCost = tech.resource_cost || 2;
+
     const card = document.createElement('div');
     card.className = 'item-card';
     card.innerHTML = `
       <div class="item-info">
         <h4>${tech.title}</h4>
-        <p>必要資源: ${tech.resource_cost || 2} (${tech.resource_type || '鋼鉄'}) / 日</p>
+        <p>1工場あたりの日産: <b>${baseDailyRate}</b> 個/日 | 必要資源: ${resCost} (${resType})</p>
       </div>
       <button class="action-btn" onclick="startProductionLine('${tech.id}')">生産開始</button>
     `;
@@ -76,7 +77,6 @@ function startProductionLine(techId) {
     return;
   }
   
-  // すでに同じ装備のラインがないかチェックしたい場合はここに追加可能
   productionLines.push({
     id: Date.now(),
     techId: techId,
@@ -127,16 +127,18 @@ function renderProductionLines() {
     const tech = techDataAll[line.techId];
     if (!tech) return;
 
+    const baseRate = tech.base_daily_rate || 2;
+    const currentDailyOutput = baseRate * line.factories; // 工場数に応じた1日あたりの生産量
+
     const card = document.createElement('div');
     card.className = 'line-card';
     card.innerHTML = `
       <div class="line-details" style="flex: 1;">
         <strong>${tech.title}</strong>
-        <div>生産数: <b>${line.producedCount}</b> 機/丁</div>
+        <div>生産数: <b>${line.producedCount}</b> 個 (1日あたり: <b>${currentDailyOutput.toFixed(1)}</b> 個)</div>
         <div class="factory-controls">
-          工場: 
+          工場 (${line.factories}個): 
           <button onclick="adjustFactories(${line.id}, -1)">-</button>
-          <span>${line.factories}</span>
           <button onclick="adjustFactories(${line.id}, 1)">+</button>
         </div>
         <div class="progress-bar-bg">
@@ -155,19 +157,33 @@ function updateResourceDisplay() {
   document.getElementById('res-cards').textContent = `${resources.cards}枚 (${resources.cards * 100})`;
 }
 
-// ゲーム内時間の連動
-let prodDate = new Date(1936, 0, 1);
-function initProductionClock() {
+// 研究ツリー側（index.html）と時間を完全同期する時計・処理
+function initSharedClock() {
   setInterval(() => {
-    prodDate.setDate(prodDate.getDate() + 1);
-    document.getElementById('calendar-display').textContent = `${prodDate.getFullYear()}年${prodDate.getMonth() + 1}月${prodDate.getDate()}日`;
+    // LocalStorageからメイン画面で進められた時間やスピード状態を読み込む（または同期させる）
+    const savedDateStr = localStorage.getItem('gameDate');
+    const speed = parseInt(localStorage.getItem('gameSpeed') || '0');
 
-    // 生産処理の進行（工場数に応じて速度アップ）
+    if (speed === 0) return; // 停止中なら進めない
+
+    let currentDate = savedDateStr ? new Date(savedDateStr) : new Date(1936, 0, 1);
+    currentDate.setDate(currentDate.getDate() + speed);
+    
+    localStorage.setItem('gameDate', currentDate.toISOString());
+    document.getElementById('calendar-display').textContent = `${currentDate.getFullYear()}年${currentDate.getMonth() + 1}月${currentDate.getDate()}日`;
+
+    // 1日経過ごとの生産進行処理
     productionLines.forEach(line => {
-      const speedRate = line.factories * 10; // 工場数に応じた進捗率
-      line.progress += speedRate;
-      if (line.progress >= 100) {
-        line.progress = 0;
+      const tech = techDataAll[line.techId];
+      if (!tech) return;
+
+      const baseRate = tech.base_daily_rate || 2;
+      const dailyProduced = baseRate * line.factories * speed; // スピードと工場数に応じた日産分を加算
+      
+      line.progress += dailyProduced;
+      // 100個たまったら1単位（完成品）としてカウント
+      while (line.progress >= 100) {
+        line.progress -= 100;
         line.producedCount += 1;
       }
     });
