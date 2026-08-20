@@ -12,12 +12,17 @@ let translateX = 0;
 let translateY = 0;
 let scale = 1;
 
+// 時計・ゲーム進行管理用
+let gameDate = new Date(1936, 0, 1); // 1936年1月1日
+let gameSpeed = 0; // 0 = ポーズ
+
 // ------------------------------------------
 // 初期化処理
 // ------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
   initTabs();
   initPanAndZoom();
+  initClock();
   loadAllTechData();
 });
 
@@ -41,7 +46,7 @@ async function loadAllTechData() {
 }
 
 // ------------------------------------------
-// 2. タブ切り替え制御
+// 2. タブ・UI制御
 // ------------------------------------------
 function initTabs() {
   const tabBtns = document.querySelectorAll('.tab-btn');
@@ -56,8 +61,29 @@ function initTabs() {
   });
 }
 
+function initClock() {
+  // スピードボタンのイベント設定
+  document.querySelectorAll('.speed-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const speed = e.target.getAttribute('data-speed');
+      gameSpeed = speed ? parseInt(speed) : 0;
+      
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+    });
+  });
+
+  // 時計の更新（毎秒呼び出し）
+  setInterval(() => {
+    if (gameSpeed === 0) return;
+    gameDate.setDate(gameDate.getDate() + gameSpeed);
+    const display = document.getElementById('calendar-display');
+    display.textContent = `${gameDate.getFullYear()}年${gameDate.getMonth() + 1}月${gameDate.getDate()}日`;
+  }, 1000);
+}
+
 // ------------------------------------------
-// 3. ツリーの描画 (JSON内のSVGアイコン表示対応)
+// 3. ツリーの描画
 // ------------------------------------------
 function renderTree() {
   const container = document.getElementById('tech-nodes');
@@ -67,11 +93,9 @@ function renderTree() {
   svg.innerHTML = '';
 
   const list = techData[currentCategory] || [];
-
   const nodeMap = {};
   list.forEach(item => { nodeMap[item.id] = item; });
 
-  // 1. ノードの描画
   list.forEach(tech => {
     const node = document.createElement('div');
     node.className = 'tech-node';
@@ -79,13 +103,15 @@ function renderTree() {
     node.style.left = `${tech.x}px`;
     node.style.top = `${tech.y}px`;
 
-    // JSON内の svg 文字列を読み込み、無い場合はデフォルトの四角形枠を表示
     const svgContent = tech.svg || `<svg viewBox="0 0 24 24" fill="none" stroke="#58a6ff" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>`;
 
     node.innerHTML = `
       <div class="tech-icon-wrapper">${svgContent}</div>
       <div class="tech-title">${tech.title}</div>
     `;
+
+    // クリックで研究開始
+    node.addEventListener('click', () => startResearch(tech));
 
     // ツールチップイベント
     node.addEventListener('mouseenter', (e) => showTooltip(e, tech));
@@ -94,140 +120,87 @@ function renderTree() {
     container.appendChild(node);
   });
 
-  // 2. 依存関係の接続線（SVG）の描画
   list.forEach(tech => {
     if (tech.prerequisites && tech.prerequisites.length > 0) {
       tech.prerequisites.forEach(preId => {
         const parentNode = nodeMap[preId];
-        if (parentNode) {
-          drawLine(parentNode, tech);
-        }
+        if (parentNode) drawLine(parentNode, tech);
       });
     }
   });
 }
 
 // ------------------------------------------
-// 4. SVG接続線の描画
+// 4. 研究スロット割り当て処理
+// ------------------------------------------
+function startResearch(tech) {
+  const slots = document.querySelectorAll('.slot:not(.locked)');
+  for (let slot of slots) {
+    const status = slot.querySelector('.slot-status');
+    if (status.textContent === '空き') {
+      status.textContent = `研究中: ${tech.title}`;
+      status.style.color = '#e3b341';
+      return;
+    }
+  }
+  alert('空いている研究スロットがありません！');
+}
+
+// ------------------------------------------
+// 5. 接続線・ツールチップ・パン操作
 // ------------------------------------------
 function drawLine(parent, child) {
   const svg = document.getElementById('svg-lines');
-  
-  // ノードの中心軸に合わせてオフセット調整 (ノードサイズ 64x64 想定)
   const x1 = parent.x + 32;
   const y1 = parent.y + 64;
   const x2 = child.x + 32;
   const y2 = child.y;
-
   const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  
-  // HOI4風のカギ型ルート描画
   const midY = y1 + (y2 - y1) / 2;
-  const d = `M ${x1} ${y1} L ${x1} ${midY} L ${x2} ${midY} L ${x2} ${y2}`;
-
-  path.setAttribute('d', d);
+  path.setAttribute('d', `M ${x1} ${y1} L ${x1} ${midY} L ${x2} ${midY} L ${x2} ${y2}`);
   path.setAttribute('class', 'tech-line');
   svg.appendChild(path);
 }
 
-// ------------------------------------------
-// 5. ツールチップの制御 (設計者・信頼度・説明の表示)
-// ------------------------------------------
 function showTooltip(e, tech) {
   const tooltip = document.getElementById('tech-tooltip');
-  const title = document.getElementById('tooltip-title');
-  const info = document.getElementById('tooltip-info');
+  document.getElementById('tooltip-title').textContent = tech.title;
+  document.getElementById('tooltip-info').innerText = `開発年: ${tech.year}年 ${tech.designer ? '| 設計: ' + tech.designer : ''}`;
+  
   const effects = document.getElementById('tooltip-effects');
-
-  // タイトル設定
-  title.textContent = tech.title;
-  
-  // 開発年、設計者、信頼度（配備状態）を表示
-  let subInfo = `開発年: ${tech.year}年`;
-  if (tech.designer) subInfo += ` | 設計: ${tech.designer}`;
-  if (tech.reliability) subInfo += `\n状態: ${tech.reliability}`;
-  info.innerText = subInfo;
-  
   effects.innerHTML = '';
-
-  // 銃器の説明文がある場合はスタイルを整えて追加
-  if (tech.desc) {
-    const descDiv = document.createElement('div');
-    descDiv.style.fontSize = '12px';
-    descDiv.style.color = '#8b949e';
-    descDiv.style.marginBottom = '8px';
-    descDiv.style.lineHeight = '1.4';
-    descDiv.style.borderBottom = '1px solid #30363d';
-    descDiv.style.paddingBottom = '6px';
-    descDiv.textContent = tech.desc;
-    effects.appendChild(descDiv);
-  }
-
-  // ステータス効果（対人攻撃、機動力など）のリストを表示
-  if (tech.effects && tech.effects.length > 0) {
-    tech.effects.forEach(eff => {
-      const div = document.createElement('div');
-      div.className = 'effect-item';
-      div.textContent = `• ${eff}`;
-      effects.appendChild(div);
-    });
-  }
-
+  if (tech.desc) effects.innerHTML += `<div style="font-size:12px; color:#8b949e; margin-bottom:8px;">${tech.desc}</div>`;
+  if (tech.effects) tech.effects.forEach(eff => effects.innerHTML += `<div class="effect-item">• ${eff}</div>`);
+  
   tooltip.classList.remove('hidden');
-
-  // マウスカーソルに追従させる処理
-  const updateTooltipPos = (evt) => {
+  const move = (evt) => {
     tooltip.style.left = `${evt.clientX + 15}px`;
     tooltip.style.top = `${evt.clientY + 15}px`;
   };
-
-  updateTooltipPos(e);
-  e.target.addEventListener('mousemove', updateTooltipPos);
+  move(e);
+  e.target.addEventListener('mousemove', move);
 }
 
-function hideTooltip() {
-  const tooltip = document.getElementById('tech-tooltip');
-  tooltip.classList.add('hidden');
-}
+function hideTooltip() { document.getElementById('tech-tooltip').classList.add('hidden'); }
 
-// ------------------------------------------
-// 6. 画面ドラッグ（パン）操作の制御
-// ------------------------------------------
 function initPanAndZoom() {
   const container = document.getElementById('tree-container');
-
   container.addEventListener('mousedown', (e) => {
-    // ノード以外の部分を掴んだ場合のみドラッグ開始
     if (e.target.closest('.tech-node')) return;
-    
     isDragging = true;
     startX = e.clientX - translateX;
     startY = e.clientY - translateY;
     container.style.cursor = 'grabbing';
   });
-
   window.addEventListener('mousemove', (e) => {
     if (!isDragging) return;
     translateX = e.clientX - startX;
     translateY = e.clientY - startY;
-    
-    updateViewportTransform();
+    document.getElementById('tree-viewport').style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
   });
-
-  window.addEventListener('mouseup', () => {
-    isDragging = false;
-    container.style.cursor = 'grab';
-  });
+  window.addEventListener('mouseup', () => { isDragging = false; container.style.cursor = 'grab'; });
 }
 
-function updateViewportTransform() {
-  const viewport = document.getElementById('tree-viewport');
-  viewport.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
-}
-
-// ------------------------------------------
-// 7. 外部・NF（国家方針）側からの連携用関数
-// ------------------------------------------
 window.unlockResearchSlot = function(slotId) {
   const slotEl = document.querySelector(`.slot[data-slot="${slotId}"]`);
   if (slotEl) {
