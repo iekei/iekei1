@@ -4,7 +4,7 @@
 const categories = ['infantry', 'armor', 'artillery', 'naval', 'air', 'engineering', 'industry'];
 let currentCategory = 'infantry';
 let techData = {};
-let completedTechs = []; // 完了した技術IDを保持
+let completedTechs = []; 
 let researchSlots = [
   { id: 1, tech: null, remaining: 0, locked: false },
   { id: 2, tech: null, remaining: 0, locked: false },
@@ -13,19 +13,11 @@ let researchSlots = [
   { id: 5, tech: null, remaining: 0, locked: true }
 ];
 
-// ドラッグ & パン・ズーム管理用
-let isDragging = false;
-let startX, startY;
-let translateX = 0;
-let translateY = 0;
-let scale = 1;
-
-// 時計・ゲーム進行管理用
 let gameDate = new Date(1936, 0, 1);
 let gameSpeed = 0; 
 
 // ------------------------------------------
-// 初期化処理
+// 初期化
 // ------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
   initTabs();
@@ -41,16 +33,14 @@ async function loadAllTechData() {
   for (const cat of categories) {
     try {
       const res = await fetch(`./data/tech_${cat}.json`);
-      if (res.ok) {
-        techData[cat] = await res.json();
-      }
-    } catch (e) { console.error(`Failed to load ${cat}:`, e); }
+      if (res.ok) techData[cat] = await res.json();
+    } catch (e) { console.error(e); }
   }
   renderTree();
 }
 
 // ------------------------------------------
-// 2. 時計・研究タイマー
+// 2. 時計・カウントダウン
 // ------------------------------------------
 function initClock() {
   document.querySelectorAll('.speed-btn').forEach(btn => {
@@ -63,21 +53,15 @@ function initClock() {
 
   setInterval(() => {
     if (gameSpeed === 0) return;
-    
-    // 日付の進行
     gameDate.setDate(gameDate.getDate() + gameSpeed);
     document.getElementById('calendar-display').textContent = 
       `${gameDate.getFullYear()}年${gameDate.getMonth() + 1}月${gameDate.getDate()}日`;
 
-    // 研究スロットのカウントダウン進行
     researchSlots.forEach(slot => {
       if (slot.tech && slot.remaining > 0) {
         slot.remaining -= gameSpeed;
-        if (slot.remaining <= 0) {
-          completeResearch(slot);
-        } else {
-          updateSlotDisplay(slot);
-        }
+        if (slot.remaining <= 0) completeResearch(slot);
+        else updateSlotDisplay(slot);
       }
     });
   }, 1000);
@@ -87,52 +71,37 @@ function initClock() {
 // 3. 研究ロジック
 // ------------------------------------------
 function startResearch(tech) {
-  // すでに完了済みかチェック
   if (completedTechs.includes(tech.id)) return;
-
-  // 前提チェック
-  if (tech.prerequisites && tech.prerequisites.length > 0) {
-    const missing = tech.prerequisites.filter(id => !completedTechs.includes(id));
-    if (missing.length > 0) {
-      alert('前提技術が完了していません！');
-      return;
-    }
-  }
-
-  // 空きスロット検索
-  const slot = researchSlots.find(s => !s.locked && !s.tech);
-  if (!slot) {
-    alert('空いている研究スロットがありません！');
+  if (tech.prerequisites?.length > 0 && tech.prerequisites.some(id => !completedTechs.includes(id))) {
+    alert('前提技術が完了していません！');
     return;
   }
-
+  const slot = researchSlots.find(s => !s.locked && !s.tech);
+  if (!slot) { alert('空きスロットがありません！'); return; }
+  
   slot.tech = tech;
-  slot.remaining = tech.research_time || 30; // JSONの research_time を使用
+  slot.remaining = tech.research_time || 30;
   updateSlotDisplay(slot);
 }
 
 function completeResearch(slot) {
   completedTechs.push(slot.tech.id);
-  const completedName = slot.tech.title;
-  
-  // 完了通知を画面上部に表示
   const notifyArea = document.getElementById('notification-area');
   const msg = document.createElement('div');
   msg.className = 'notify-msg';
-  msg.textContent = `[完了] ${completedName} 研究完了しました`;
+  msg.textContent = `[完了] ${slot.tech.title} 研究完了しました`;
   notifyArea.appendChild(msg);
   setTimeout(() => msg.remove(), 5000);
   
   slot.tech = null;
   slot.remaining = 0;
   updateSlotDisplay(slot);
-  renderTree(); // ノードの状態（完了済みグレーアウト）を反映
+  renderTree();
 }
 
 function updateSlotDisplay(slot) {
   const el = document.querySelector(`.slot[data-slot="${slot.id}"] .slot-status`);
   if (!el) return;
-  
   if (slot.tech) {
     el.textContent = `研究中: ${slot.tech.title} (${Math.ceil(slot.remaining)}日)`;
     el.style.color = '#e3b341';
@@ -143,29 +112,12 @@ function updateSlotDisplay(slot) {
 }
 
 // ------------------------------------------
-// 4. UI制御・描画
+// 4. ツリー描画・ツールチップ
 // ------------------------------------------
-function initTabs() {
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      e.target.classList.add('active');
-      currentCategory = e.target.getAttribute('data-cat');
-      renderTree();
-    });
-  });
-}
-
 function renderTree() {
   const container = document.getElementById('tech-nodes');
-  const svg = document.getElementById('svg-lines');
   container.innerHTML = '';
-  svg.innerHTML = '';
-  
-  const list = techData[currentCategory] || [];
-  
-  // ノード生成
-  list.forEach(tech => {
+  (techData[currentCategory] || []).forEach(tech => {
     const node = document.createElement('div');
     node.className = `tech-node ${completedTechs.includes(tech.id) ? 'completed' : ''}`;
     node.style.left = `${tech.x}px`;
@@ -173,8 +125,36 @@ function renderTree() {
     node.innerHTML = `<div class="tech-icon-wrapper">${tech.svg}</div><div class="tech-title">${tech.title}</div>`;
     
     node.addEventListener('click', () => startResearch(tech));
+    node.addEventListener('mouseenter', (e) => showTooltip(e, tech));
+    node.addEventListener('mouseleave', hideTooltip);
     container.appendChild(node);
   });
+}
+
+function showTooltip(e, tech) {
+  const tooltip = document.getElementById('tech-tooltip');
+  document.getElementById('tooltip-title').textContent = tech.title;
+  document.getElementById('tooltip-info').innerText = `開発年: ${tech.year}年 | 必要日数: ${tech.research_time}日`;
+  const effects = document.getElementById('tooltip-effects');
+  effects.innerHTML = (tech.effects || []).map(eff => `<div class="effect-item">• ${eff}</div>`).join('');
+  tooltip.classList.remove('hidden');
+  const move = (evt) => { tooltip.style.left = `${evt.clientX + 15}px`; tooltip.style.top = `${evt.clientY + 15}px`; };
+  move(e);
+  e.target.addEventListener('mousemove', move);
+}
+
+function hideTooltip() { document.getElementById('tech-tooltip').classList.add('hidden'); }
+
+// ------------------------------------------
+// 5. 操作・ユーティリティ
+// ------------------------------------------
+function initTabs() {
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', (e) => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+    currentCategory = e.target.getAttribute('data-cat');
+    renderTree();
+  }));
 }
 
 function initPanAndZoom() {
@@ -189,15 +169,7 @@ function initPanAndZoom() {
     if (!isDragging) return;
     translateX = e.clientX - startX;
     translateY = e.clientY - startY;
-    document.getElementById('tree-viewport').style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    document.getElementById('tech-nodes').style.transform = `translate(${translateX}px, ${translateY}px)`;
   });
   window.addEventListener('mouseup', () => isDragging = false);
 }
-
-window.unlockResearchSlot = function(slotId) {
-  const slot = researchSlots.find(s => s.id === slotId);
-  if (slot) {
-    slot.locked = false;
-    updateSlotDisplay(slot);
-  }
-};
