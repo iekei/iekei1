@@ -104,6 +104,7 @@ function startResearch(tech) {
 
 function completeResearch(slot) {
   completedTechs.push(slot.tech.id);
+  localStorage.setItem('completedTechs', JSON.stringify(completedTechs));
   const notifyArea = document.getElementById('notification-area');
   const msg = document.createElement('div');
   msg.className = 'notify-msg';
