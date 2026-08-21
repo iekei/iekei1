@@ -77,3 +77,34 @@ body {
 .progress-bar-fill {
   background: #3fb950; height: 100%; width: 0%; transition: width 0.2s;
 }
+
+/* スピード変更ボタンのスタイル */
+#speed-controls {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.speed-btn {
+  background-color: #21262d;
+  color: #c9d1d9;
+  border: 1px solid #30363d;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.speed-btn:hover {
+  background-color: #30363d;
+  border-color: #8b949e;
+}
+
+/* 選択中（アクティブ）のスピードボタンの色 */
+.speed-btn.active {
+  background-color: #1f6feb;
+  color: #ffffff;
+  border-color: #388bfd;
+  font-weight: bold;
+}
