@@ -140,3 +140,37 @@ html, body {
   background: rgba(30, 30, 30, 0.9); color: #3fb950;
   padding: 10px 20px; border-radius: 4px; border: 1px solid #3fb950;
 }
+
+/* ヘッダーの資源バッジ内アイコン */
+.res-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #c9d1d9;
+}
+
+.res-icon {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+}
+
+/* 装備カード内のインラインアイコン */
+.res-icon-inline {
+  width: 12px;
+  height: 12px;
+  object-fit: contain;
+  vertical-align: middle;
+  margin-right: 2px;
+}
+
+/* 資源不足ラインのハイライト */
+.line-card.shortage-line {
+  border-color: #f85149;
+  background-color: rgba(248, 81, 73, 0.05);
+}
