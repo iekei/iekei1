@@ -151,3 +151,27 @@ body {
   transform: translateY(-1px);
   margin-right: 3px;
 }
+
+/* 資源アイコンの共通設定 */
+.res-icon, .res-icon-tab {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px; /* 右側に余白 */
+    vertical-align: middle;
+    display: inline-block;
+}
+
+/* バッジ内のレイアウト */
+.res-badge {
+    display: inline-flex;
+    align-items: center; /* 垂直方向の中央揃え */
+    padding: 2px 8px;
+}
+
+/* タブボタン */
+.tab-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 10px;
+    cursor: pointer;
+}
