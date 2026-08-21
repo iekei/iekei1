@@ -11,7 +11,6 @@
 <header id="top-bar">
   <div id="game-clock">
     <span id="calendar-display">1936年1月1日</span>
-    <!-- スピード変更ボタン -->
     <div id="speed-controls" style="margin-top: 5px; display: flex; gap: 4px;">
       <button class="speed-btn" id="btn-pause" data-speed="0">停止</button>
       <button class="speed-btn" data-speed="1">1速</button>
@@ -20,47 +19,51 @@
       <button class="speed-btn" data-speed="4">4速</button>
       <button class="speed-btn" data-speed="5">5速</button>
     </div>
-    <!-- 7種類の拡張資源表示欄（パスを同階層の image/ に修正） -->
+
+    <!-- 資源表示欄 -->
     <div id="resource-summary" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
-      <span class="res-badge">石油: <span id="res-oil">500</span><img src="image/石油.png" class="res-icon" alt="石油"></span>
-      <span class="res-badge">アルミ: <span id="res-aluminum">500</span><img src="image/アルミ.png" class="res-icon" alt="アルミ"></span>
-      <span class="res-badge">ゴム: <span id="res-ゴム">500</span><img src="image/ゴム.png" class="res-icon" alt="ゴム"></span>
-      <span class="res-badge">タングステン: <span id="res-タングステン">300</span><img src="image/タングステン.png" class="res-icon" alt="タングステン"></span>
-      <span class="res-badge">鋼材: <span id="res-鋼材">1000</span><img src="image/鋼材.png" class="res-icon" alt="鋼材"></span>
-      <span class="res-badge">クロム: <span id="res-クロム">300</span><img src="image/クロム.png" class="res-icon" alt="クロム"></span>
-      <span class="res-badge">石炭: <span id="res-石炭">800</span><img src="image/石炭.png" class="res-icon" alt="石炭"></span>
+      <span class="res-badge"><img src="image/石油.png" class="res-icon"> 石油: <span id="res-oil">500</span></span>
+      <span class="res-badge"><img src="image/アルミ.png" class="res-icon"> アルミ: <span id="res-aluminum">500</span></span>
+      <span class="res-badge"><img src="image/ゴム.png" class="res-icon"> ゴム: <span id="res-ゴム">500</span></span>
+      <span class="res-badge"><img src="image/タングステン.png" class="res-icon"> タングステン: <span id="res-タングステン">300</span></span>
+      <span class="res-badge"><img src="image/鋼材.png" class="res-icon"> 鋼材: <span id="res-鋼材">1000</span></span>
+      <span class="res-badge"><img src="image/クロム.png" class="res-icon"> クロム: <span id="res-クロム">300</span></span>
+      <span class="res-badge"><img src="image/石炭.png" class="res-icon"> 石炭: <span id="res-石炭">800</span></span>
     </div>
   </div>
+
+  <!-- 資源輸入タブ -->
+  <div id="import-tabs" style="display: flex; gap: 5px; margin-top: 10px; background: #0d1117; padding: 5px;">
+    <button class="tab-btn" onclick="openImport('石油')"><img src="image/石油.png" class="res-icon-tab"> 石油</button>
+    <button class="tab-btn" onclick="openImport('アルミ')"><img src="image/アルミ.png" class="res-icon-tab"> アルミ</button>
+    <button class="tab-btn" onclick="openImport('ゴム')"><img src="image/ゴム.png" class="res-icon-tab"> ゴム</button>
+    <button class="tab-btn" onclick="openImport('タングステン')"><img src="image/タングステン.png" class="res-icon-tab"> タングステン</button>
+    <button class="tab-btn" onclick="openImport('鋼材')"><img src="image/鋼材.png" class="res-icon-tab"> 鋼材</button>
+    <button class="tab-btn" onclick="openImport('クロム')"><img src="image/クロム.png" class="res-icon-tab"> クロム</button>
+    <button class="tab-btn" onclick="openImport('石炭')"><img src="image/石炭.png" class="res-icon-tab"> 石炭</button>
+  </div>
+
   <div id="nav-links">
     <a href="../index.html" class="nav-btn">研究ツリーに戻る</a>
   </div>
 </header>
 
+<!-- 輸入パネル (初期非表示) -->
+<section id="import-panel" class="panel" style="display:none; margin: 10px;">
+  <h2 id="import-title">輸入設定: 選択なし</h2>
+  <div id="country-list" style="max-height: 200px; overflow-y: auto;"></div>
+  <div id="import-slider-area" style="margin-top: 15px; padding: 10px; border: 1px solid #30363d;">
+    <input type="range" id="import-slider" min="50" max="500" step="50" style="width: 100%;">
+    <p>輸入量: <span id="slider-value">50</span></p>
+    <p>消費民需工場: <span id="req-civ">1</span> / 輸送船: <span id="req-convoy">5</span></p>
+    <button id="exec-import-btn" class="action-btn">輸入を開始 (3日後に到着)</button>
+  </div>
+</section>
+
 <main id="production-container">
-  <section id="available-techs" class="panel">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-      <h2 style="margin: 0;">生産可能な装備 (研究完了済み)</h2>
-      <button id="toggle-old-equip-btn" class="action-btn" style="font-size: 11px; padding: 4px 8px;">旧式装備を表示</button>
-    </div>
-    <div id="tech-list-to-produce">
-      <!-- 動的生成 -->
-    </div>
-  </section>
-
-  <section id="active-production" class="panel">
-    <h2>生産ライン (無制限)</h2>
-    <div id="total-factories-info" style="margin-bottom: 8px;">
-      割り当て済み工場: <span id="used-factories">0</span> 個
-    </div>
-
-    <div id="current-stats-summary" style="background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 10px; margin-bottom: 12px;">
-      <span style="color: #8b949e;">現在稼働中の生産ラインがありません</span>
-    </div>
-
-    <div id="production-lines-list">
-      <!-- 動的生成 -->
-    </div>
-  </section>
+  <!-- 既存の生産管理エリア -->
+  <section id="available-techs" class="panel">...</section>
+  <section id="active-production" class="panel">...</section>
 </main>
 
 <script src="production.js"></script>
