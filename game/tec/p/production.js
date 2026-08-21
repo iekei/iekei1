@@ -8,9 +8,9 @@ let resources = {
   aluminum: 300
 };
 
-// LocalStorageから生産ラインのデータを復元（リログ対策）
+// LocalStorageから生産ラインのデータを復元
 let productionLines = JSON.parse(localStorage.getItem('productionLines') || '[]');
-let showOldEquipment = false; // 旧式装備を表示するかどうか
+let showOldEquipment = false;
 
 // LocalStorageから時間・スピードを復元
 let gameDate = localStorage.getItem('gameDate') ? new Date(localStorage.getItem('gameDate')) : new Date(1936, 0, 1);
@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   initSharedClock();
   renderProductionView();
 
-  // 別画面（研究ツリーなど）で研究が完了した際、自動でリアルタイム反映
   window.addEventListener('storage', (e) => {
     if (e.key === 'completedTechs') {
       completedTechs = JSON.parse(e.newValue || '[]');
@@ -56,7 +55,6 @@ async function loadAllTechsForProduction() {
 }
 
 function initProductionUIControls() {
-  // 旧式表示切り替えボタンのバインド
   const toggleOldBtn = document.getElementById('toggle-old-equip-btn');
   if (toggleOldBtn) {
     toggleOldBtn.addEventListener('click', () => {
@@ -78,9 +76,6 @@ function renderProductionView() {
   updateTotalStatsSummary();
 }
 
-// ==========================================
-// 最新兵器フィルタリング & 旧式表示ロジック
-// ==========================================
 function renderAvailableTechs() {
   const container = document.getElementById('tech-list-to-produce');
   if (!container) return;
@@ -127,19 +122,18 @@ function renderAvailableTechs() {
   });
 }
 
-// 兵器カテゴリやタイプに応じた生産スピードの自動調整（基本は整数〜小数、表示は切り捨てに対応）
 function getBaseDailyRate(tech) {
   if (tech.base_daily_rate) return tech.base_daily_rate;
-  if (tech.title.includes('AVS') || tech.title.includes('小銃') || tech.title.includes('歩兵')) return 3;
+  if (tech.title.includes('AVS') || tech.title.includes('小銃') || tech.title.includes('歩兵')) return 10; // ご要望に合わせ歩兵等は10個/日に設定
   const cat = tech.category;
-  if (cat === 'infantry' || cat === 'artillery') return 3;
+  if (cat === 'infantry' || cat === 'artillery') return 10;
   if (cat === 'armor') {
-    if (tech.title.includes('重') || tech.title.includes('駆逐')) return 0.8;
-    return 1.5;
+    if (tech.title.includes('重') || tech.title.includes('駆逐')) return 1;
+    return 3;
   }
-  if (cat === 'air') return 0.6;
-  if (cat === 'naval') return 0.05;
-  return 1.0;
+  if (cat === 'air') return 2;
+  if (cat === 'naval') return 0.1;
+  return 5;
 }
 
 function startProductionLine(techId) {
@@ -150,7 +144,6 @@ function startProductionLine(techId) {
     id: Date.now(),
     techId: techId,
     factories: 1,
-    progress: 0,
     producedCount: 0
   });
   saveProductionLines();
@@ -177,9 +170,6 @@ function getTotalUsedFactories() {
   return productionLines.reduce((sum, l) => sum + l.factories, 0);
 }
 
-// ==========================================
-// 生産ライン & 総合ステータス自動集計
-// ==========================================
 function renderProductionLines() {
   const container = document.getElementById('production-lines-list');
   if (!container) return;
@@ -199,21 +189,20 @@ function renderProductionLines() {
     if (!tech) return;
 
     const baseRate = getBaseDailyRate(tech);
-    const dailyOutput = Math.floor(baseRate * line.factories); // 小数点切り捨て
+    const dailyOutput = Math.floor(baseRate * line.factories); // 1日あたりの生産量（切り捨て整数）
 
     const card = document.createElement('div');
     card.className = 'line-card';
     card.innerHTML = `
       <div class="line-details" style="flex: 1;">
         <strong>${tech.title}</strong>
-        <div>生産数: <b>${line.producedCount}</b> 個 (1日あたり: <b>${dailyOutput}</b> 個)</div>
-        <div class="factory-controls">
-          工場 (${line.factories}個): 
+        <div>生産ストック数: <b style="color: #3fb950; font-size: 15px;">${line.producedCount}</b> 個</div>
+        <div style="font-size: 12px; color: #8b949e; margin-top: 2px;">1日あたりの生産量: <b>${dailyOutput}</b> 個 (工場数: ${line.factories})</div>
+        <div class="factory-controls" style="margin-top: 6px;">
+          工場割当: 
           <button onclick="adjustFactories(${line.id}, -1)">-</button>
+          <span>${line.factories}</span>
           <button onclick="adjustFactories(${line.id}, 1)">+</button>
-        </div>
-        <div class="progress-bar-bg">
-          <div class="progress-bar-fill" style="width: ${Math.min(100, line.progress)}%"></div>
         </div>
       </div>
       <button class="action-btn danger" onclick="removeLine(${line.id})" style="margin-left: 10px;">廃止</button>
@@ -228,17 +217,15 @@ function renderProductionLines() {
   updateTotalStatsSummary();
 }
 
-// 稼働中の最新生産ラインからステータスを自動計算して反映
 function updateTotalStatsSummary() {
   const summaryContainer = document.getElementById('current-stats-summary');
   if (!summaryContainer) return;
 
-  // 生産中のユニークな装備を抽出
   const activeTechsMap = {};
   productionLines.forEach(line => {
     const tech = techDataAll[line.techId];
     if (tech) {
-      activeTechsMap[tech.category || 'other'] = tech; // 各カテゴリの最新生産装備に置き換え
+      activeTechsMap[tech.category || 'other'] = tech;
     }
   });
 
@@ -257,14 +244,13 @@ function updateTotalStatsSummary() {
     if (tech.effects && Array.isArray(tech.effects)) {
       tech.effects.forEach(eff => {
         const matchNum = eff.match(/([+-]?\d+(?:\.\d+)?)/);
-        const val = matchNum ? parseFloat(matchNum[1]) : 5; // デフォルト数値フォールバック
+        const val = matchNum ? parseFloat(matchNum[1]) : 5;
         if (eff.includes('対人') || eff.includes('攻撃')) totalAntiInfantry += val;
         if (eff.includes('対物') || eff.includes('貫通') || eff.includes('装甲')) totalAntiArmor += val;
         if (eff.includes('機動') || eff.includes('速度')) totalMobility += val;
         if (eff.includes('防御') || eff.includes('生存') || eff.includes('信頼')) totalSurvivability += val;
       });
     } else {
-      // 効果定義がない場合のデフォルト推計値
       totalAntiInfantry += 10;
       totalMobility += 5;
       totalSurvivability += 5;
@@ -284,9 +270,6 @@ function updateTotalStatsSummary() {
   `;
 }
 
-// ==========================================
-// ツールチップ機能
-// ==========================================
 function showTooltip(e, tech) {
   let tooltip = document.getElementById('production-tooltip');
   if (!tooltip) {
@@ -338,9 +321,7 @@ function updateCalendarUI() {
   }
 }
 
-// ==========================================
-// 国家方針・研究画面と完全に同期する時計システム
-// ==========================================
+// 速度変更ボタン・時間同期システム（1日経過するごとに生産数を直接加算）
 function initSharedClock() {
   document.querySelectorAll('.speed-btn').forEach(btn => {
     const speed = parseInt(btn.getAttribute('data-speed'), 10);
@@ -388,11 +369,12 @@ function initSharedClock() {
           gameDate = new Date(savedDateStr);
         }
 
+        // 1日進める
         gameDate.setDate(gameDate.getDate() + 1);
         localStorage.setItem('gameDate', gameDate.toISOString());
         updateCalendarUI();
 
-        // 生産ラインの進行処理（日産は切り捨てた整数値を加算）
+        // 1日進んだタイミングで、各生産ラインの日産量をそのまま生産数ストックに加算
         productionLines.forEach(line => {
           const tech = techDataAll[line.techId];
           if (!tech) return;
@@ -400,12 +382,9 @@ function initSharedClock() {
           const baseRate = getBaseDailyRate(tech);
           const dailyProduced = Math.floor(baseRate * line.factories);
           
-          line.progress += dailyProduced;
-          while (line.progress >= 100) {
-            line.progress -= 100;
-            line.producedCount += 1;
-          }
+          line.producedCount += dailyProduced; // 1日経つごとに日産量がまるごと増える
         });
+
         saveProductionLines();
         renderProductionLines();
       }, interval);
