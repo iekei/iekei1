@@ -124,7 +124,7 @@ function renderAvailableTechs() {
 
 function getBaseDailyRate(tech) {
   if (tech.base_daily_rate) return tech.base_daily_rate;
-  if (tech.title.includes('AVS') || tech.title.includes('小銃') || tech.title.includes('歩兵')) return 10; // ご要望に合わせ歩兵等は10個/日に設定
+  if (tech.title.includes('AVS') || tech.title.includes('小銃') || tech.title.includes('歩兵')) return 10;
   const cat = tech.category;
   if (cat === 'infantry' || cat === 'artillery') return 10;
   if (cat === 'armor') {
@@ -189,7 +189,7 @@ function renderProductionLines() {
     if (!tech) return;
 
     const baseRate = getBaseDailyRate(tech);
-    const dailyOutput = Math.floor(baseRate * line.factories); // 1日あたりの生産量（切り捨て整数）
+    const dailyOutput = Math.floor(baseRate * line.factories);
 
     const card = document.createElement('div');
     card.className = 'line-card';
@@ -217,10 +217,12 @@ function renderProductionLines() {
   updateTotalStatsSummary();
 }
 
+// 稼働中の最新生産ラインからステータス（総合攻撃力、機動力、生存力など）を自動計算して反映
 function updateTotalStatsSummary() {
   const summaryContainer = document.getElementById('current-stats-summary');
   if (!summaryContainer) return;
 
+  // 同じカテゴリ（歩兵、戦車など）で複数のラインがある場合、最新の生産装備のものを優先して合計する
   const activeTechsMap = {};
   productionLines.forEach(line => {
     const tech = techDataAll[line.techId];
@@ -262,10 +264,10 @@ function updateTotalStatsSummary() {
   summaryContainer.innerHTML = `
     <div style="font-weight: bold; margin-bottom: 6px; color: #58a6ff; font-size: 13px;">📊 現在生産中装備の総合ステータス</div>
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; font-size: 12px; color: #c9d1d9;">
-      <div>⚔️ 総合攻撃力: <b>+${totalAttack.toFixed(0)}</b></div>
-      <div>🎯 対人/対物攻撃: <b>+${totalAntiInfantry.toFixed(0)} / +${totalAntiArmor.toFixed(0)}</b></div>
+      <div>⚔️ 総合攻撃力: <b>+${totalAttack.toFixed(0)}</b> (対人: ${totalAntiInfantry.toFixed(0)} / 対物: ${totalAntiArmor.toFixed(0)})</div>
       <div>🏃 機動力: <b>+${totalMobility.toFixed(0)}</b></div>
       <div>🛡️ 生存力(防御): <b>+${totalSurvivability.toFixed(0)}</b></div>
+      <div>📦 稼働中の最新系統数: <b>${activeTechs.length}</b> 種</div>
     </div>
   `;
 }
@@ -321,7 +323,6 @@ function updateCalendarUI() {
   }
 }
 
-// 速度変更ボタン・時間同期システム（1日経過するごとに生産数を直接加算）
 function initSharedClock() {
   document.querySelectorAll('.speed-btn').forEach(btn => {
     const speed = parseInt(btn.getAttribute('data-speed'), 10);
@@ -369,12 +370,10 @@ function initSharedClock() {
           gameDate = new Date(savedDateStr);
         }
 
-        // 1日進める
         gameDate.setDate(gameDate.getDate() + 1);
         localStorage.setItem('gameDate', gameDate.toISOString());
         updateCalendarUI();
 
-        // 1日進んだタイミングで、各生産ラインの日産量をそのまま生産数ストックに加算
         productionLines.forEach(line => {
           const tech = techDataAll[line.techId];
           if (!tech) return;
@@ -382,7 +381,7 @@ function initSharedClock() {
           const baseRate = getBaseDailyRate(tech);
           const dailyProduced = Math.floor(baseRate * line.factories);
           
-          line.producedCount += dailyProduced; // 1日経つごとに日産量がまるごと増える
+          line.producedCount += dailyProduced;
         });
 
         saveProductionLines();
