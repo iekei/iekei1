@@ -11,6 +11,15 @@
 <header id="top-bar">
   <div id="game-clock">
     <span id="calendar-display">1936年1月1日</span>
+    <!-- スピード変更ボタン -->
+    <div id="speed-controls" style="margin-top: 5px; display: flex; gap: 4px;">
+      <button class="speed-btn" id="btn-pause" data-speed="0">⏸ 停止</button>
+      <button class="speed-btn" data-speed="1">▶ 1速</button>
+      <button class="speed-btn" data-speed="2">▶▶ 2速</button>
+      <button class="speed-btn" data-speed="3">▶▶▶ 3速</button>
+      <button class="speed-btn" data-speed="4">⚡ 4速</button>
+      <button class="speed-btn" data-speed="5">🔥 5速</button>
+    </div>
     <div id="resource-summary">
       <span class="res-badge">🪨 鋼鉄: <span id="res-steel">500</span></span>
       <span class="res-badge">✈️ アルミ: <span id="res-aluminum">300</span></span>
@@ -24,17 +33,26 @@
 
 <main id="production-container">
   <section id="available-techs" class="panel">
-    <h2>生産可能な装備 (研究完了済み)</h2>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+      <h2 style="margin: 0;">生産可能な装備 (研究完了済み)</h2>
+      <button id="toggle-old-equip-btn" class="action-btn" style="font-size: 11px; padding: 4px 8px;">旧式装備を表示</button>
+    </div>
     <div id="tech-list-to-produce">
       <!-- 動的生成 -->
     </div>
   </section>
 
   <section id="active-production" class="panel">
-    <h2>生産ライン (最大5ライン / 軍需工場上限: 30)</h2>
-    <div id="total-factories-info">
-      割り当て済み工場: <span id="used-factories">0</span> / 30
+    <h2>生産ライン (無制限)</h2>
+    <div id="total-factories-info" style="margin-bottom: 8px;">
+      割り当て済み工場: <span id="used-factories">0</span> 個
     </div>
+
+    <!-- ★ここに現在の総合ステータス表示欄を追加しました -->
+    <div id="current-stats-summary" style="background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 10px; margin-bottom: 12px;">
+      <span style="color: #8b949e;">現在稼働中の生産ラインがありません</span>
+    </div>
+
     <div id="production-lines-list">
       <!-- 動的生成 -->
     </div>
