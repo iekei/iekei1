@@ -123,10 +123,10 @@ function renderAvailableTechs() {
     const baseDailyRate = getBaseDailyRate(tech);
     const resCost = getTechResourceCost(tech);
     
-    // 必要資源のアイコン付きHTML文字列を生成
-    let costHtml = Object.entries(resCost).map(([resName, amt]) => {
-      return `<span style="margin-right: 6px;"><img src="tec/p/image/${resName}.png" class="res-icon-inline" alt="${resName}">${amt}</span>`;
-    }).join('');
+    // 生産カード内のアイコン生成部分（production.js内）
+let costHtml = Object.entries(resCost).map(([resName, amt]) => {
+  return `<span style="margin-right: 6px;"><img src="image/${resName}.png" class="res-icon-inline" alt="${resName}">${amt}</span>`;
+}).join('');
 
     const card = document.createElement('div');
     card.className = `item-card ${isLatest ? 'latest-equip' : 'old-equip'}`;
