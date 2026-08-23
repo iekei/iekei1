@@ -1,9 +1,11 @@
+// --- tec/p/production.js (生産側の修正完全版) ---
 let completedTechs = [];
 function loadCompletedTechsFromStorage() {
   try {
     const raw = localStorage.getItem('completedTechs');
     if (raw) {
       const parsed = JSON.parse(raw);
+      // オブジェクトであっても文字列であっても確実にIDを取り出す
       completedTechs = parsed.map(item => String(typeof item === 'object' && item !== null ? (item.id || item.techId) : item)).filter(Boolean);
     } else {
       completedTechs = [];
@@ -97,7 +99,7 @@ function openImport(resName) {
   }
 }
 
-// --- 技術データのロード（柔軟なID取得に対応） ---
+// --- 技術データのロード（tec/p/ から tec/data/ を正確に参照） ---
 async function loadAllTechsForProduction() {
   const categories = ['infantry', 'armor', 'artillery', 'naval', 'air', 'engineering', 'industry'];
   for (const cat of categories) {
