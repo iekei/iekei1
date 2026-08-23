@@ -1,7 +1,10 @@
 const categories = ['infantry', 'armor', 'artillery', 'naval', 'air', 'engineering', 'industry'];
 let currentCategory = 'infantry';
 let techData = {};
-let completedTechs = [];
+
+// LocalStorageから完了した技術を同期して復元
+let completedTechs = JSON.parse(localStorage.getItem('completedTechs') || '[]');
+
 let researchSlots = [
   { id: 1, tech: null, remaining: 0, locked: false },
   { id: 2, tech: null, remaining: 0, locked: false },
@@ -10,18 +13,43 @@ let researchSlots = [
   { id: 5, tech: null, remaining: 0, locked: true }
 ];
 
-// ★LocalStorageから保存された日付とスピードを復元（なければ初期値）
+// LocalStorageから保存された日付とスピードを復元（なければ初期値）
 let gameDate = localStorage.getItem('gameDate') ? new Date(localStorage.getItem('gameDate')) : new Date(1936, 0, 1);
 let gameSpeed = localStorage.getItem('gameSpeed') ? parseInt(localStorage.getItem('gameSpeed'), 10) : 0;
 
 let isDragging = false, startX, startY, translateX = 0, translateY = 0;
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   initTabs();
   initPanAndZoom();
   initClock();
   initResearchSlots();
-  loadAllTechData();
+  await loadAllTechData();
+
+  // ★他画面（生産やNFなど）からのストレージ変更をリアルタイム検知
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'completedTechs') {
+      completedTechs = JSON.parse(e.newValue || '[]');
+      renderTree();
+    }
+    if (e.key === 'gameSpeed') {
+      gameSpeed = parseInt(e.newValue || '0', 10);
+      updateSpeedButtonUI();
+    }
+    if (e.key === 'gameDate') {
+      gameDate = new Date(e.newValue);
+      updateCalendarUI();
+    }
+  });
+
+  // 定期ポーリングによる確実な同期
+  setInterval(() => {
+    const latestTechs = JSON.parse(localStorage.getItem('completedTechs') || '[]');
+    if (JSON.stringify(latestTechs) !== JSON.stringify(completedTechs)) {
+      completedTechs = latestTechs;
+      renderTree();
+    }
+  }, 1000);
 });
 
 async function loadAllTechData() {
@@ -34,44 +62,56 @@ async function loadAllTechData() {
   renderTree();
 }
 
+function updateSpeedButtonUI() {
+  document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+  if (gameSpeed === 0) {
+    const pauseBtn = document.getElementById('btn-pause');
+    if (pauseBtn) pauseBtn.classList.add('active');
+  } else {
+    const targetBtn = document.querySelector(`.speed-btn[data-speed="${gameSpeed}"]`);
+    if (targetBtn) targetBtn.classList.add('active');
+  }
+}
+
 function initClock() {
   // 初期スピードボタンの状態を反映
+  updateSpeedButtonUI();
+
   document.querySelectorAll('.speed-btn').forEach(btn => {
-    const speed = parseInt(btn.getAttribute('data-speed'), 10);
-    if (speed === gameSpeed) {
-      btn.classList.add('active');
-    } else if (gameSpeed === 0 && btn.id === 'btn-pause') {
-      btn.classList.add('active');
-    }
-
     btn.addEventListener('click', (e) => {
-      gameSpeed = parseInt(e.target.getAttribute('data-speed'), 10) || 0;
+      const speedAttr = e.target.getAttribute('data-speed');
+      gameSpeed = speedAttr !== null ? parseInt(speedAttr, 10) : 0;
       
-      // LocalStorageに保存して国家方針や他画面と同期
+      // LocalStorageに保存して生産や他画面と同期
       localStorage.setItem('gameSpeed', gameSpeed);
-
-      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
-      e.target.classList.add('active');
+      updateSpeedButtonUI();
+      runTick();
     });
   });
 
   // 日付表示の初期化
   updateCalendarUI();
 
-  // HOI4風のメインループ（国家方針側と同期した速度間隔）
+  // HOI4風のメインループ（他画面と同期した速度間隔）
   const speedIntervals = { 1: 2000, 2: 1200, 3: 700, 4: 350, 5: 120 };
-  
   let gameTimer = null;
+
   function runTick() {
     if (gameTimer) clearInterval(gameTimer);
+    gameSpeed = parseInt(localStorage.getItem('gameSpeed') || '0', 10);
+
     if (gameSpeed > 0) {
       gameTimer = setInterval(() => {
+        // 他画面で進んだ日付をローカルストレージから取得して同期
+        const savedDateStr = localStorage.getItem('gameDate');
+        if (savedDateStr) {
+          gameDate = new Date(savedDateStr);
+        }
+
         // 1日進める
         gameDate.setDate(gameDate.getDate() + 1);
-        updateCalendarUI();
-
-        // LocalStorageへ保存して他画面と同期
         localStorage.setItem('gameDate', gameDate.toISOString());
+        updateCalendarUI();
 
         // 研究スロットの進行
         researchSlots.forEach(slot => {
@@ -84,11 +124,6 @@ function initClock() {
       }, speedIntervals[gameSpeed] || 1000);
     }
   }
-
-  // スピード変更時にタイマーを再設定する監視
-  document.querySelectorAll('.speed-btn').forEach(btn => {
-    btn.addEventListener('click', () => runTick());
-  });
 
   if (gameSpeed > 0) {
     runTick();
@@ -106,7 +141,7 @@ function updateCalendarUI() {
 function initResearchSlots() {
   document.querySelectorAll('.slot').forEach(slotEl => {
     slotEl.addEventListener('click', () => {
-      const slotId = parseInt(slotEl.getAttribute('data-slot'));
+      const slotId = parseInt(slotEl.getAttribute('data-slot'), 10);
       const slot = researchSlots.find(s => s.id === slotId);
       
       if (!slot || slot.locked) return;
@@ -149,8 +184,11 @@ function startResearch(tech) {
 }
 
 function completeResearch(slot) {
-  completedTechs.push(slot.tech.id);
+  if (!completedTechs.includes(slot.tech.id)) {
+    completedTechs.push(slot.tech.id);
+  }
   localStorage.setItem('completedTechs', JSON.stringify(completedTechs));
+
   const notifyArea = document.getElementById('notification-area');
   if (notifyArea) {
     const msg = document.createElement('div');
@@ -159,8 +197,10 @@ function completeResearch(slot) {
     notifyArea.appendChild(msg);
     setTimeout(() => msg.remove(), 5000);
   }
-  slot.tech = null; slot.remaining = 0;
-  updateSlotDisplay(slot); renderTree();
+  slot.tech = null; 
+  slot.remaining = 0;
+  updateSlotDisplay(slot); 
+  renderTree();
 }
 
 function updateSlotDisplay(slot) {
@@ -179,7 +219,8 @@ function renderTree() {
   const container = document.getElementById('tech-nodes');
   const svg = document.getElementById('svg-lines');
   if (!container || !svg) return;
-  container.innerHTML = ''; svg.innerHTML = '';
+  container.innerHTML = ''; 
+  svg.innerHTML = '';
   
   const list = techData[currentCategory] || [];
   const nodeMap = {};
@@ -188,7 +229,8 @@ function renderTree() {
   list.forEach(tech => {
     const node = document.createElement('div');
     node.className = `tech-node ${completedTechs.includes(tech.id) ? 'completed' : ''}`;
-    node.style.left = `${tech.x}px`; node.style.top = `${tech.y}px`;
+    node.style.left = `${tech.x}px`; 
+    node.style.top = `${tech.y}px`;
     
     const svgContent = tech.svg || `<svg viewBox="0 0 24 24" fill="none" stroke="#58a6ff" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>`;
     node.innerHTML = `<div class="tech-icon-wrapper">${svgContent}</div><div class="tech-title">${tech.title}</div>`;
@@ -243,7 +285,10 @@ function showTooltip(e, tech) {
   }
   
   tooltip.classList.remove('hidden');
-  const move = (evt) => { tooltip.style.left = `${evt.clientX + 15}px`; tooltip.style.top = `${evt.clientY + 15}px`; };
+  const move = (evt) => { 
+    tooltip.style.left = `${evt.clientX + 15}px`; 
+    tooltip.style.top = `${evt.clientY + 15}px`; 
+  };
   move(e);
   e.currentTarget.addEventListener('mousemove', move);
 }
