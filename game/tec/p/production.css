@@ -216,3 +216,179 @@ body {
   transform: translateY(-1px);
   margin-right: 5px;
 }
+
+* { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+
+body {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #0b0c0e;
+  color: #e5e7eb;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+#top-bar {
+  background: #15181c;
+  border-bottom: 2px solid #2d333b;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#game-clock { display: flex; align-items: center; gap: 20px; }
+#calendar-display {
+  font-family: monospace; font-size: 16px; font-weight: bold;
+  color: #f3f4f6; background: #21262d; padding: 6px 14px; border-radius: 4px; border: 1px solid #30363d;
+}
+
+/* ヘッダーの資源バッジの調整 */
+#resource-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.res-badge {
+  display: inline-flex;
+  align-items: center; /* 縦方向の中央揃え */
+  gap: 5px;            /* アイコンと文字の間隔 */
+  background: #161b22;
+  border: 1px solid #30363d;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #c9d1d9;
+  vertical-align: middle;
+}
+.res-badge span { color: #58a6ff; font-weight: bold; }
+
+.nav-btn {
+  background: #21262d; color: #58a6ff; border: 1px solid #30363d; padding: 6px 14px; border-radius: 4px; text-decoration: none; font-size: 13px; font-weight: bold;
+}
+.nav-btn:hover { background: #30363d; }
+
+#production-container {
+  flex: 1; display: flex; gap: 16px; padding: 16px; overflow: hidden; background: #0d1117;
+}
+
+.panel {
+  flex: 1; background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 16px; display: flex; flex-direction: column; overflow-y: auto;
+}
+
+.panel h2 { font-size: 15px; margin-bottom: 12px; border-bottom: 1px solid #30363d; padding-bottom: 8px; color: #f0f6fc; }
+
+#total-factories-info { font-size: 13px; margin-bottom: 10px; color: #8b949e; }
+#total-factories-info span { color: #3fb950; font-weight: bold; }
+
+/* カードスタイル */
+.item-card, .line-card {
+  background: #1f242c; border: 1px solid #30363d; border-radius: 6px; padding: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;
+}
+.item-info h4 { color: #58a6ff; font-size: 14px; margin-bottom: 4px; }
+.item-info p { font-size: 11px; color: #8b949e; }
+
+.action-btn {
+  background: #238636; color: #fff; border: 1px solid #2ea043; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px;
+}
+.action-btn:hover { background: #2ea043; }
+.action-btn.danger { background: #da3633; border-color: #f85149; }
+.action-btn.danger:hover { background: #f85149; }
+
+.line-details { font-size: 12px; color: #c9d1d9; display: flex; flex-direction: column; gap: 4px; }
+.factory-controls { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+.factory-controls button {
+  background: #21262d; color: #c9d1d9; border: 1px solid #30363d; width: 24px; height: 24px; border-radius: 4px; cursor: pointer; font-weight: bold;
+}
+.factory-controls button:hover { background: #30363d; color: #fff; }
+
+.progress-bar-bg {
+  width: 100%; background: #0d1117; height: 6px; border-radius: 3px; margin-top: 6px; overflow: hidden; border: 1px solid #30363d;
+}
+.progress-bar-fill {
+  background: #3fb950; height: 100%; width: 0%; transition: width 0.2s;
+}
+
+/* スピード変更ボタンのスタイル */
+#speed-controls {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.speed-btn {
+  background-color: #21262d;
+  color: #c9d1d9;
+  border: 1px solid #30363d;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.speed-btn:hover {
+  background-color: #30363d;
+  border-color: #8b949e;
+}
+
+.speed-btn.active {
+  background-color: #1f6feb;
+  color: #ffffff;
+  border-color: #388bfd;
+  font-weight: bold;
+}
+
+/* アイコン共通設定（左側に配置・Y座標微調整） */
+.res-icon, .res-icon-tab, .res-icon-inline {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  display: inline-block;
+  vertical-align: middle;
+  transform: translateY(-1px);
+}
+
+.res-icon {
+  margin-right: 4px;
+}
+
+.res-icon-inline {
+  width: 14px;
+  height: 14px;
+  margin-right: 3px;
+}
+
+/* タブボタン */
+.tab-btn {
+  display: inline-flex;
+  align-items: center;
+  background: #21262d;
+  border: 1px solid #30363d;
+  color: #c9d1d9;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.2s;
+}
+
+.tab-btn:hover {
+  background: #30363d;
+  color: #ffffff;
+}
+
+#import-tabs {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  background: #161b22;
+  padding: 6px;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  flex-wrap: wrap;
+}
