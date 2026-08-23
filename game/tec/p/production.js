@@ -49,7 +49,6 @@ function openImport(resName) {
   panel.style.display = 'block';
   document.getElementById('import-title').textContent = `輸入設定: ${resName}`;
   
-  // 1936年時点の主要産出国データ例 (順不同から輸入量順などに拡張可能)
   const list = document.getElementById('country-list');
   list.innerHTML = `
     <div class="country-row" style="padding: 6px; border-bottom: 1px solid #30363d; display: flex; justify-content: space-between; align-items: center; font-size: 13px;">
@@ -88,11 +87,12 @@ function openImport(resName) {
   }
 }
 
-// --- 技術データのロード ---
+// --- 技術データのロード（ファイル構造にあわせたパス修正） ---
 async function loadAllTechsForProduction() {
   const categories = ['infantry', 'armor', 'artillery', 'naval', 'air', 'engineering', 'industry'];
   for (const cat of categories) {
     try {
+      // フォルダ構造 "tec/p/production.js" から "tec/data/" を参照するためのパス
       const res = await fetch(`../data/tech_${cat}.json`);
       if (res.ok) {
         const list = await res.json();
@@ -100,10 +100,19 @@ async function loadAllTechsForProduction() {
           tech.category = cat; 
           techDataAll[tech.id] = tech; 
         });
+      } else {
+        // もし直上のdataで見つからない場合のフォールバック（ルートからの相対など）
+        const resAlt = await fetch(`../../data/tech_${cat}.json`);
+        if (resAlt.ok) {
+          const list = await resAlt.json();
+          list.forEach(tech => { 
+            tech.category = cat; 
+            techDataAll[tech.id] = tech; 
+          });
+        }
       }
-    } catch (e) { console.error(e); }
+    } catch (e) { console.error(`Failed to load tech_${cat}.json`, e); }
   }
-  renderAvailableTechs();
 }
 
 function initProductionUIControls() {
@@ -154,7 +163,7 @@ function renderAvailableTechs() {
 
     const resCost = getTechResourceCost(tech);
     let costHtml = Object.entries(resCost).map(([resName, amt]) => {
-      return `<span style="margin-right: 6px;"><img src="image/${resName}.png" class="res-icon-inline" alt="${resName}">${amt}</span>`;
+      return `<span style="margin-right: 6px;"><img src="../image/${resName}.png" class="res-icon-inline" alt="${resName}">${amt}</span>`;
     }).join('');
 
     const card = document.createElement('div');
@@ -323,18 +332,15 @@ function initSharedClock() {
     if (gameSpeed > 0) {
       const interval = speedIntervals[gameSpeed] || 1000;
       gameTimer = setInterval(() => {
-        // ローカルストレージから最新の日時と速度を同期取得
         const savedDateStr = localStorage.getItem('gameDate');
         if (savedDateStr) {
           gameDate = new Date(savedDateStr);
         }
 
-        // 1日進行
         gameDate.setDate(gameDate.getDate() + 1);
         localStorage.setItem('gameDate', gameDate.toISOString());
         updateCalendarUI();
 
-        // 3日後の輸入反映チェック
         tradeQueue = tradeQueue.filter(order => {
           if (new Date(order.deliveryDate) <= gameDate) {
             resources[order.res] = (resources[order.res] || 0) + order.amount;
@@ -344,7 +350,6 @@ function initSharedClock() {
         });
         localStorage.setItem('tradeQueue', JSON.stringify(tradeQueue));
 
-        // 生産と資源消費の処理
         productionLines.forEach(line => {
           const tech = techDataAll[line.techId];
           if (!tech) return;
