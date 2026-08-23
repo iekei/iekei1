@@ -1,176 +1,88 @@
-/* ==========================================
-   リセット・基本設定
-   ========================================== */
-* { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
-
-html, body {
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-  background-color: #0b0c0e;
-  color: #e5e7eb;
-  font-family: 'Segoe UI', sans-serif;
-  display: flex;
-  flex-direction: column;
+/* --- 研究画面用スタイル (tec/style.css) --- */
+body {
+  background-color: #0d1117;
+  color: #c9d1d9;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
 }
 
-/* ==========================================
-   1. 上部ヘッダー
-   ========================================== */
-#top-bar {
-  flex-shrink: 0;
-  background: #15181c;
-  border-bottom: 2px solid #2d333b;
-  padding: 8px 16px;
+.game-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 100;
+  border-bottom: 1px solid #30363d;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
 }
 
-#game-clock { display: flex; align-items: center; gap: 12px; }
-#calendar-display {
-  font-family: monospace; font-size: 15px; font-weight: bold;
-  color: #f3f4f6; background: #21262d; padding: 5px 12px;
-  border-radius: 4px; border: 1px solid #30363d;
+.game-header h1 {
+  margin: 0;
+  font-size: 22px;
+  color: #f0f6fc;
 }
 
-#speed-controls { display: flex; gap: 2px; }
-.speed-btn {
-  background: #21262d; color: #8b949e; border: 1px solid #30363d;
-  padding: 5px 10px; cursor: pointer; font-size: 11px;
-}
-.speed-btn.active { background: #238636; color: #fff; border-color: #2ea043; }
-
-#research-slots { display: flex; gap: 8px; }
-.slot {
-  background: #1c2128; border: 1px solid #30363d; border-radius: 4px;
-  padding: 4px 10px; font-size: 12px; display: flex; align-items: center; gap: 6px;
-}
-.slot-status { font-weight: bold; color: #3fb950; }
-
-/* ==========================================
-   2. カテゴリー切替タブ
-   ========================================== */
-#category-tabs {
-  flex-shrink: 0; background: #1c2128; display: flex; gap: 4px;
-  padding: 6px 16px; border-bottom: 1px solid #30363d;
-}
-.tab-btn {
-  background: #21262d; color: #8b949e; border: 1px solid #30363d;
-  padding: 6px 14px; border-radius: 4px; cursor: pointer; font-weight: bold;
-}
-.tab-btn.active { background: #30363d; color: #58a6ff; border-color: #58a6ff; }
-
-/* ==========================================
-   3. メインツリーエリア（パン操作対応）
-   ========================================== */
-#tree-container {
-  flex: 1;
-  position: relative;
-  overflow: hidden;
-  background-color: #0d1117;
-  background-image: radial-gradient(#21262d 1px, transparent 0);
-  background-size: 24px 24px;
-  cursor: grab;
-}
-
-/* ツリー本体の表示領域 */
-#tree-viewport {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 3500px;
-  height: 2500px;
-}
-
-/* 左側の年数バー（ツリーと一緒に動く） */
-#year-sidebar {
-  position: absolute;
-  left: 10px;
-  width: 50px;
-  z-index: 10;
-  pointer-events: none;
-}
-.year-label {
-  position: absolute;
-  font-size: 13px; font-weight: bold; color: #6e7681; font-family: monospace;
-}
-
-/* 技術ノード */
-.tech-node {
-  position: absolute;
-  width: 64px; height: 64px;
-  background: #161b22; border: 2px solid #30363d;
-  border-radius: 6px; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; cursor: pointer;
-}
-.tech-node:hover { border-color: #58a6ff; }
-.tech-node.completed { opacity: 0.6; filter: grayscale(100%); }
-
-.tech-icon-wrapper { width: 36px; height: 36px; pointer-events: none; }
-.tech-title {
-  position: absolute; bottom: -22px; font-size: 10px;
-  white-space: nowrap; color: #c9d1d9; background: rgba(0,0,0,0.85);
-  padding: 2px 5px; border-radius: 3px; pointer-events: none;
-}
-
-/* SVG回線 */
-#svg-lines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
-.tech-line { stroke: #30363d; stroke-width: 3; fill: none; }
-
-/* ==========================================
-   4. ツールチップ・通知
-   ========================================== */
-#tech-tooltip {
-  position: fixed; background: rgba(22, 27, 34, 0.95);
-  border: 1px solid #484f58; border-radius: 6px; padding: 10px;
-  color: #f0f6fc; font-size: 12px; pointer-events: none; z-index: 1000;
-  max-width: 280px; box-shadow: 0 8px 16px rgba(0,0,0,0.5);
-}
-#tech-tooltip.hidden { display: none; }
-#tooltip-title { font-size: 14px; font-weight: bold; color: #58a6ff; }
-.effect-item { color: #3fb950; margin-top: 3px; }
-
-#notification-area {
-  position: fixed; top: 60px; left: 50%; transform: translateX(-50%);
-  z-index: 1000; pointer-events: none;
-}
-.notify-msg {
-  background: rgba(30, 30, 30, 0.9); color: #3fb950;
-  padding: 10px 20px; border-radius: 4px; border: 1px solid #3fb950;
-}
-
-/* ヘッダーの資源バッジ内アイコン */
-.res-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background: #161b22;
+.nav-btn {
+  background: #21262d;
+  color: #c9d1d9;
   border: 1px solid #30363d;
-  padding: 3px 8px;
-  border-radius: 4px;
-  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.nav-btn:hover {
+  background: #30363d;
+  color: #ffffff;
+}
+
+.research-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.category-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.cat-tab {
+  background: #21262d;
+  color: #8b949e;
+  border: 1px solid #30363d;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.cat-tab:hover {
+  background: #30363d;
   color: #c9d1d9;
 }
 
-.res-icon {
-  width: 14px;
-  height: 14px;
-  object-fit: contain;
+.cat-tab.active {
+  background: #1f6feb;
+  color: #ffffff;
+  border-color: #1f6feb;
 }
 
-/* 装備カード内のインラインアイコン */
-.res-icon-inline {
-  width: 12px;
-  height: 12px;
-  object-fit: contain;
-  vertical-align: middle;
-  margin-right: 2px;
+.tech-tree-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-/* 資源不足ラインのハイライト */
-.line-card.shortage-line {
-  border-color: #f85149;
-  background-color: rgba(248, 81, 73, 0.05);
+.tech-card {
+  transition: transform 0.1s;
+}
+
+.tech-card:hover {
+  border-color: #8b949e;
 }
