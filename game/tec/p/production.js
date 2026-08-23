@@ -97,11 +97,12 @@ function openImport(resName) {
   }
 }
 
-// --- 技術データのロード（tec/p/ から tec/data/ を参照） ---
+// --- 技術データのロード（tec/p/ から tec/data/ を確実につなぐ修正版） ---
 async function loadAllTechsForProduction() {
   const categories = ['infantry', 'armor', 'artillery', 'naval', 'air', 'engineering', 'industry'];
   for (const cat of categories) {
     try {
+      // production.html は tec/p/ にあるため、親フォルダの data/ を参照するように '../data/' を指定
       const res = await fetch(`../data/tech_${cat}.json`);
       if (res.ok) {
         const list = await res.json();
@@ -111,7 +112,7 @@ async function loadAllTechsForProduction() {
         });
       }
     } catch (e) { 
-      console.error(e); 
+      console.error(`Failed to load tech_${cat}.json`, e); 
     }
   }
   renderProductionView();
