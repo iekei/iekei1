@@ -97,18 +97,20 @@ function openImport(resName) {
   }
 }
 
-// --- 技術データのロード（tec/p/ から tec/data/ を確実につなぐ修正版） ---
+// --- 技術データのロード（柔軟なID取得に対応） ---
 async function loadAllTechsForProduction() {
   const categories = ['infantry', 'armor', 'artillery', 'naval', 'air', 'engineering', 'industry'];
   for (const cat of categories) {
     try {
-      // production.html は tec/p/ にあるため、親フォルダの data/ を参照するように '../data/' を指定
       const res = await fetch(`../data/tech_${cat}.json`);
       if (res.ok) {
         const list = await res.json();
         list.forEach(tech => { 
           tech.category = cat; 
-          techDataAll[String(tech.id)] = tech; 
+          const uniqueId = tech.id || tech.techId;
+          if (uniqueId) {
+            techDataAll[String(uniqueId)] = tech; 
+          }
         });
       }
     } catch (e) { 
@@ -176,7 +178,7 @@ function renderAvailableTechs() {
         <h4>${tech.title}</h4>
         <div style="font-size: 11px; color: #8b949e; margin-top: 4px;">必要資源(1日分/1工場あたり): ${costHtml}</div>
       </div>
-      <button class="action-btn" onclick="startProductionLine('${tech.id}')">生産開始</button>
+      <button class="action-btn" onclick="startProductionLine('${tech.id || tech.techId}')">生産開始</button>
     `;
     container.appendChild(card);
   });
