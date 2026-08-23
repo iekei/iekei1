@@ -1,4 +1,17 @@
-let completedTechs = JSON.parse(localStorage.getItem('completedTechs') || '[]');
+// --- データの安全な読み込み ---
+let completedTechs = [];
+try {
+  const rawCompleted = localStorage.getItem('completedTechs');
+  if (rawCompleted) {
+    const parsed = JSON.parse(rawCompleted);
+    // IDがオブジェクトで保存されている場合などの揺れを完全に正規化する
+    completedTechs = parsed.map(item => (typeof item === 'object' && item !== null ? (item.id || item.techId) : item)).filter(Boolean);
+  }
+} catch (e) {
+  console.error('completedTechsのパースに失敗しました:', e);
+  completedTechs = [];
+}
+
 let techDataAll = {};
 let resources = JSON.parse(localStorage.getItem('resources') || JSON.stringify({
   石油: 500, アルミ: 500, ゴム: 500, タングステン: 300, 鋼材: 1000, クロム: 300, 石炭: 800
@@ -19,7 +32,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 他のタブ（研究・NFなど）からのストレージ変更をリアルタイム検知
   window.addEventListener('storage', (e) => {
     if (e.key === 'completedTechs') {
-      completedTechs = JSON.parse(e.newValue || '[]');
+      try {
+        const parsed = JSON.parse(e.newValue || '[]');
+        completedTechs = parsed.map(item => (typeof item === 'object' && item !== null ? (item.id || item.techId) : item)).filter(Boolean);
+      } catch (err) {
+        completedTechs = [];
+      }
       renderProductionView();
     }
     if (e.key === 'gameSpeed') {
@@ -34,10 +52,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // 定期ポーリングによる確実な同期
   setInterval(() => {
-    const latestTechs = JSON.parse(localStorage.getItem('completedTechs') || '[]');
-    if (JSON.stringify(latestTechs) !== JSON.stringify(completedTechs)) {
-      completedTechs = latestTechs;
-      renderProductionView();
+    const rawLatest = localStorage.getItem('completedTechs');
+    if (rawLatest) {
+      try {
+        const parsed = JSON.parse(rawLatest);
+        const latestTechs = parsed.map(item => (typeof item === 'object' && item !== null ? (item.id || item.techId) : item)).filter(Boolean);
+        if (JSON.stringify(latestTechs) !== JSON.stringify(completedTechs)) {
+          completedTechs = latestTechs;
+          renderProductionView();
+        }
+      } catch (err) {}
     }
   }, 1000);
 });
@@ -87,32 +111,25 @@ function openImport(resName) {
   }
 }
 
-// --- 技術データのロード（ファイル構造にあわせたパス修正） ---
+// --- 技術データのロード（ファイル構造 "tec/p/" から "tec/data/" を正確に指す） ---
 async function loadAllTechsForProduction() {
   const categories = ['infantry', 'armor', 'artillery', 'naval', 'air', 'engineering', 'industry'];
   for (const cat of categories) {
     try {
-      // フォルダ構造 "tec/p/production.js" から "tec/data/" を参照するためのパス
+      // tec/p/ から見た tec/data/ への相対パス
       const res = await fetch(`../data/tech_${cat}.json`);
       if (res.ok) {
         const list = await res.json();
         list.forEach(tech => { 
           tech.category = cat; 
-          techDataAll[tech.id] = tech; 
+          techDataAll[String(tech.id)] = tech; // IDを文字列に統一して突合ミスを防ぐ
         });
-      } else {
-        // もし直上のdataで見つからない場合のフォールバック（ルートからの相対など）
-        const resAlt = await fetch(`../../data/tech_${cat}.json`);
-        if (resAlt.ok) {
-          const list = await resAlt.json();
-          list.forEach(tech => { 
-            tech.category = cat; 
-            techDataAll[tech.id] = tech; 
-          });
-        }
       }
-    } catch (e) { console.error(`Failed to load tech_${cat}.json`, e); }
+    } catch (e) { 
+      console.error(`Failed to load tech_${cat}.json`, e); 
+    }
   }
+  renderProductionView();
 }
 
 function initProductionUIControls() {
@@ -158,7 +175,7 @@ function renderAvailableTechs() {
   }
 
   completedTechs.forEach(id => {
-    const tech = techDataAll[id];
+    const tech = techDataAll[String(id)]; // 文字列キーで安全に取得
     if (!tech) return;
 
     const resCost = getTechResourceCost(tech);
@@ -190,12 +207,12 @@ function getBaseDailyRate(tech) {
 }
 
 function startProductionLine(techId) {
-  const tech = techDataAll[techId];
+  const tech = techDataAll[String(techId)];
   if (!tech) return;
 
   productionLines.push({
     id: Date.now(),
-    techId: techId,
+    techId: String(techId),
     factories: 1,
     producedCount: 0,
     isShortage: false
@@ -238,7 +255,7 @@ function renderProductionLines() {
   }
 
   productionLines.forEach(line => {
-    const tech = techDataAll[line.techId];
+    const tech = techDataAll[String(line.techId)];
     if (!tech) return;
 
     const baseRate = getBaseDailyRate(tech);
@@ -338,54 +355,4 @@ function initSharedClock() {
         }
 
         gameDate.setDate(gameDate.getDate() + 1);
-        localStorage.setItem('gameDate', gameDate.toISOString());
-        updateCalendarUI();
-
-        tradeQueue = tradeQueue.filter(order => {
-          if (new Date(order.deliveryDate) <= gameDate) {
-            resources[order.res] = (resources[order.res] || 0) + order.amount;
-            return false;
-          }
-          return true;
-        });
-        localStorage.setItem('tradeQueue', JSON.stringify(tradeQueue));
-
-        productionLines.forEach(line => {
-          const tech = techDataAll[line.techId];
-          if (!tech) return;
-
-          const resCost = getTechResourceCost(tech);
-          let canProduce = true;
-
-          for (const [resName, costPerFac] of Object.entries(resCost)) {
-            const totalNeeded = costPerFac * line.factories;
-            if ((resources[resName] || 0) < totalNeeded) {
-              canProduce = false;
-              break;
-            }
-          }
-
-          if (canProduce) {
-            for (const [resName, costPerFac] of Object.entries(resCost)) {
-              resources[resName] -= costPerFac * line.factories;
-            }
-            line.isShortage = false;
-
-            const baseRate = getBaseDailyRate(tech);
-            const dailyProduced = Math.floor(baseRate * line.factories);
-            line.producedCount += dailyProduced;
-          } else {
-            line.isShortage = true;
-          }
-        });
-
-        saveProductionData();
-        renderProductionView();
-      }, interval);
-    }
-  }
-
-  if (gameSpeed > 0) {
-    runTick();
-  }
-}
+        localStorage.setItem(
