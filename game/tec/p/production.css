@@ -175,3 +175,44 @@ body {
     padding: 5px 10px;
     cursor: pointer;
 }
+
+/* --- 輸入切り替えタブのスタイル --- */
+#import-tabs {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  background: #161b22;
+  padding: 6px;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  display: inline-flex;
+  align-items: center;
+  background: #21262d;
+  border: 1px solid #30363d;
+  color: #c9d1d9;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.2s;
+}
+
+.tab-btn:hover {
+  background: #30363d;
+  color: #ffffff;
+}
+
+/* タブおよび各種アイコンの左側配置・Y座標微調整 */
+.res-icon, .res-icon-tab, .res-icon-inline {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  display: inline-block;
+  vertical-align: middle;
+  transform: translateY(-1px);
+  margin-right: 5px;
+}
