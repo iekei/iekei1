@@ -1,16 +1,18 @@
-// --- データの安全な読み込み ---
 let completedTechs = [];
-try {
-  const rawCompleted = localStorage.getItem('completedTechs');
-  if (rawCompleted) {
-    const parsed = JSON.parse(rawCompleted);
-    // IDがオブジェクトで保存されている場合などの揺れを完全に正規化する
-    completedTechs = parsed.map(item => (typeof item === 'object' && item !== null ? (item.id || item.techId) : item)).filter(Boolean);
+function loadCompletedTechsFromStorage() {
+  try {
+    const raw = localStorage.getItem('completedTechs');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      completedTechs = parsed.map(item => String(typeof item === 'object' && item !== null ? (item.id || item.techId) : item)).filter(Boolean);
+    } else {
+      completedTechs = [];
+    }
+  } catch (e) {
+    completedTechs = [];
   }
-} catch (e) {
-  console.error('completedTechsのパースに失敗しました:', e);
-  completedTechs = [];
 }
+loadCompletedTechsFromStorage();
 
 let techDataAll = {};
 let resources = JSON.parse(localStorage.getItem('resources') || JSON.stringify({
@@ -29,15 +31,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   initSharedClock();
   renderProductionView();
 
-  // 他のタブ（研究・NFなど）からのストレージ変更をリアルタイム検知
   window.addEventListener('storage', (e) => {
     if (e.key === 'completedTechs') {
-      try {
-        const parsed = JSON.parse(e.newValue || '[]');
-        completedTechs = parsed.map(item => (typeof item === 'object' && item !== null ? (item.id || item.techId) : item)).filter(Boolean);
-      } catch (err) {
-        completedTechs = [];
-      }
+      loadCompletedTechsFromStorage();
       renderProductionView();
     }
     if (e.key === 'gameSpeed') {
@@ -50,19 +46,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // 定期ポーリングによる確実な同期
   setInterval(() => {
-    const rawLatest = localStorage.getItem('completedTechs');
-    if (rawLatest) {
-      try {
-        const parsed = JSON.parse(rawLatest);
-        const latestTechs = parsed.map(item => (typeof item === 'object' && item !== null ? (item.id || item.techId) : item)).filter(Boolean);
-        if (JSON.stringify(latestTechs) !== JSON.stringify(completedTechs)) {
-          completedTechs = latestTechs;
-          renderProductionView();
-        }
-      } catch (err) {}
-    }
+    loadCompletedTechsFromStorage();
+    renderProductionView();
   }, 1000);
 });
 
@@ -111,22 +97,21 @@ function openImport(resName) {
   }
 }
 
-// --- 技術データのロード（ファイル構造 "tec/p/" から "tec/data/" を正確に指す） ---
+// --- 技術データのロード（tec/p/ から tec/data/ を参照） ---
 async function loadAllTechsForProduction() {
   const categories = ['infantry', 'armor', 'artillery', 'naval', 'air', 'engineering', 'industry'];
   for (const cat of categories) {
     try {
-      // tec/p/ から見た tec/data/ への相対パス
       const res = await fetch(`../data/tech_${cat}.json`);
       if (res.ok) {
         const list = await res.json();
         list.forEach(tech => { 
           tech.category = cat; 
-          techDataAll[String(tech.id)] = tech; // IDを文字列に統一して突合ミスを防ぐ
+          techDataAll[String(tech.id)] = tech; 
         });
       }
     } catch (e) { 
-      console.error(`Failed to load tech_${cat}.json`, e); 
+      console.error(e); 
     }
   }
   renderProductionView();
@@ -175,7 +160,7 @@ function renderAvailableTechs() {
   }
 
   completedTechs.forEach(id => {
-    const tech = techDataAll[String(id)]; // 文字列キーで安全に取得
+    const tech = techDataAll[String(id)];
     if (!tech) return;
 
     const resCost = getTechResourceCost(tech);
@@ -323,7 +308,6 @@ function updateSpeedButtonUI() {
   }
 }
 
-// --- 共通クロック・全画面時間/速度連動システム ---
 function initSharedClock() {
   document.querySelectorAll('.speed-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -355,4 +339,54 @@ function initSharedClock() {
         }
 
         gameDate.setDate(gameDate.getDate() + 1);
-        localStorage.setItem(
+        localStorage.setItem('gameDate', gameDate.toISOString());
+        updateCalendarUI();
+
+        tradeQueue = tradeQueue.filter(order => {
+          if (new Date(order.deliveryDate) <= gameDate) {
+            resources[order.res] = (resources[order.res] || 0) + order.amount;
+            return false;
+          }
+          return true;
+        });
+        localStorage.setItem('tradeQueue', JSON.stringify(tradeQueue));
+
+        productionLines.forEach(line => {
+          const tech = techDataAll[String(line.techId)];
+          if (!tech) return;
+
+          const resCost = getTechResourceCost(tech);
+          let canProduce = true;
+
+          for (const [resName, costPerFac] of Object.entries(resCost)) {
+            const totalNeeded = costPerFac * line.factories;
+            if ((resources[resName] || 0) < totalNeeded) {
+              canProduce = false;
+              break;
+            }
+          }
+
+          if (canProduce) {
+            for (const [resName, costPerFac] of Object.entries(resCost)) {
+              resources[resName] -= costPerFac * line.factories;
+            }
+            line.isShortage = false;
+
+            const baseRate = getBaseDailyRate(tech);
+            const dailyProduced = Math.floor(baseRate * line.factories);
+            line.producedCount += dailyProduced;
+          } else {
+            line.isShortage = true;
+          }
+        });
+
+        saveProductionData();
+        renderProductionView();
+      }, interval);
+    }
+  }
+
+  if (gameSpeed > 0) {
+    runTick();
+  }
+}
