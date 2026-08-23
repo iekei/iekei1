@@ -1,29 +1,18 @@
-// --- tec/p/production.js (生産側の修正完全版) ---
-let completedTechs = [];
-function loadCompletedTechsFromStorage() {
-  try {
-    const raw = localStorage.getItem('completedTechs');
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      // オブジェクトであっても文字列であっても確実にIDを取り出す
-      completedTechs = parsed.map(item => String(typeof item === 'object' && item !== null ? (item.id || item.techId) : item)).filter(Boolean);
-    } else {
-      completedTechs = [];
-    }
-  } catch (e) {
-    completedTechs = [];
-  }
-}
-loadCompletedTechsFromStorage();
-
+let completedTechs = JSON.parse(localStorage.getItem('completedTechs') || '[]');
 let techDataAll = {};
-let resources = JSON.parse(localStorage.getItem('resources') || JSON.stringify({
-  石油: 500, アルミ: 500, ゴム: 500, タングステン: 300, 鋼材: 1000, クロム: 300, 石炭: 800
-}));
+
+// 資源データ
+let resources = {
+  cards: 10,
+  steel: 500,
+  aluminum: 300
+};
+
+// LocalStorageから生産ラインのデータを復元
 let productionLines = JSON.parse(localStorage.getItem('productionLines') || '[]');
-let tradeQueue = JSON.parse(localStorage.getItem('tradeQueue') || '[]');
 let showOldEquipment = false;
 
+// LocalStorageから時間・スピードを復元
 let gameDate = localStorage.getItem('gameDate') ? new Date(localStorage.getItem('gameDate')) : new Date(1936, 0, 1);
 let gameSpeed = localStorage.getItem('gameSpeed') ? parseInt(localStorage.getItem('gameSpeed'), 10) : 0;
 
@@ -35,71 +24,20 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   window.addEventListener('storage', (e) => {
     if (e.key === 'completedTechs') {
-      loadCompletedTechsFromStorage();
+      completedTechs = JSON.parse(e.newValue || '[]');
       renderProductionView();
-    }
-    if (e.key === 'gameSpeed') {
-      gameSpeed = parseInt(e.newValue || '0', 10);
-      updateSpeedButtonUI();
-    }
-    if (e.key === 'gameDate') {
-      gameDate = new Date(e.newValue);
-      updateCalendarUI();
     }
   });
 
   setInterval(() => {
-    loadCompletedTechsFromStorage();
-    renderProductionView();
+    const latestTechs = JSON.parse(localStorage.getItem('completedTechs') || '[]');
+    if (JSON.stringify(latestTechs) !== JSON.stringify(completedTechs)) {
+      completedTechs = latestTechs;
+      renderProductionView();
+    }
   }, 1000);
 });
 
-// --- 資源輸入システム ---
-function openImport(resName) {
-  const panel = document.getElementById('import-panel');
-  if (!panel) return;
-  panel.style.display = 'block';
-  document.getElementById('import-title').textContent = `輸入設定: ${resName}`;
-  
-  const list = document.getElementById('country-list');
-  list.innerHTML = `
-    <div class="country-row" style="padding: 6px; border-bottom: 1px solid #30363d; display: flex; justify-content: space-between; align-items: center; font-size: 13px;">
-      <span>🇺🇸 アメリカ</span><span style="color: #8b949e;">産出量: <b>500</b></span>
-    </div>
-    <div class="country-row" style="padding: 6px; border-bottom: 1px solid #30363d; display: flex; justify-content: space-between; align-items: center; font-size: 13px;">
-      <span>🇩🇪 ドイツ</span><span style="color: #8b949e;">産出量: <b>400</b></span>
-    </div>
-    <div class="country-row" style="padding: 6px; border-bottom: 1px solid #30363d; display: flex; justify-content: space-between; align-items: center; font-size: 13px;">
-      <span>🇬🇧 イギリス</span><span style="color: #8b949e;">産出量: <b>300</b></span>
-    </div>
-  `;
-
-  const slider = document.getElementById('import-slider');
-  if (slider) {
-    slider.oninput = (e) => {
-      const val = parseInt(e.target.value, 10);
-      document.getElementById('slider-value').textContent = val;
-      document.getElementById('req-civ').textContent = Math.floor(val / 50);
-      document.getElementById('req-convoy').textContent = Math.ceil(val / 50) * 5;
-    };
-  }
-
-  const execBtn = document.getElementById('exec-import-btn');
-  if (execBtn) {
-    execBtn.onclick = () => {
-      const amount = parseInt(slider.value, 10);
-      const deliveryDate = new Date(gameDate);
-      deliveryDate.setDate(deliveryDate.getDate() + 3);
-      
-      tradeQueue.push({ res: resName, amount: amount, deliveryDate: deliveryDate.toISOString() });
-      localStorage.setItem('tradeQueue', JSON.stringify(tradeQueue));
-      alert(`${resName} を ${amount} 輸入手配しました。3日後に到着します。`);
-      panel.style.display = 'none';
-    };
-  }
-}
-
-// --- 技術データのロード（tec/p/ から tec/data/ を正確に参照） ---
 async function loadAllTechsForProduction() {
   const categories = ['infantry', 'armor', 'artillery', 'naval', 'air', 'engineering', 'industry'];
   for (const cat of categories) {
@@ -108,18 +46,12 @@ async function loadAllTechsForProduction() {
       if (res.ok) {
         const list = await res.json();
         list.forEach(tech => { 
-          tech.category = cat; 
-          const uniqueId = tech.id || tech.techId;
-          if (uniqueId) {
-            techDataAll[String(uniqueId)] = tech; 
-          }
+          tech.category = cat;
+          techDataAll[tech.id] = tech; 
         });
       }
-    } catch (e) { 
-      console.error(`Failed to load tech_${cat}.json`, e); 
-    }
+    } catch (e) { console.error(e); }
   }
-  renderProductionView();
 }
 
 function initProductionUIControls() {
@@ -133,9 +65,8 @@ function initProductionUIControls() {
   }
 }
 
-function saveProductionData() {
+function saveProductionLines() {
   localStorage.setItem('productionLines', JSON.stringify(productionLines));
-  localStorage.setItem('resources', JSON.stringify(resources));
 }
 
 function renderProductionView() {
@@ -143,15 +74,6 @@ function renderProductionView() {
   renderProductionLines();
   updateResourceDisplay();
   updateTotalStatsSummary();
-}
-
-function getTechResourceCost(tech) {
-  const cat = tech.category;
-  if (cat === 'air') return { アルミ: 2, 石油: 1, 鋼材: 1 };
-  if (cat === 'armor') return { 鋼材: 3, ゴム: 1, 石油: 1 };
-  if (cat === 'naval') return { 鋼材: 6, クロム: 2, 石油: 2 };
-  if (cat === 'artillery') return { 鋼材: 2, タングステン: 1 };
-  return { 鋼材: 1, 石炭: 1 };
 }
 
 function renderAvailableTechs() {
@@ -164,50 +86,67 @@ function renderAvailableTechs() {
     return;
   }
 
-  completedTechs.forEach(id => {
-    const tech = techDataAll[String(id)];
-    if (!tech) return;
+  const unlockedTechs = completedTechs.map(id => techDataAll[id]).filter(Boolean);
 
-    const resCost = getTechResourceCost(tech);
-    let costHtml = Object.entries(resCost).map(([resName, amt]) => {
-      return `<span style="margin-right: 6px;"><img src="../image/${resName}.png" class="res-icon-inline" alt="${resName}">${amt}</span>`;
-    }).join('');
+  const latestTechsMap = {};
+  unlockedTechs.forEach(tech => {
+    const cat = tech.category || 'other';
+    const year = tech.year || 1936;
+    if (!latestTechsMap[cat] || year > latestTechsMap[cat].year) {
+      latestTechsMap[cat] = { year: year };
+    }
+  });
 
+  unlockedTechs.forEach(tech => {
+    const cat = tech.category || 'other';
+    const maxYearInCat = latestTechsMap[cat] ? latestTechsMap[cat].year : 1936;
+    const isLatest = (tech.year || 1936) >= maxYearInCat;
+
+    if (!showOldEquipment && !isLatest) return;
+
+    const baseDailyRate = getBaseDailyRate(tech);
     const card = document.createElement('div');
-    card.className = 'item-card';
+    card.className = `item-card ${isLatest ? 'latest-equip' : 'old-equip'}`;
     card.innerHTML = `
       <div class="item-info">
-        <h4>${tech.title}</h4>
-        <div style="font-size: 11px; color: #8b949e; margin-top: 4px;">必要資源(1日分/1工場あたり): ${costHtml}</div>
+        <h4>${tech.title} ${isLatest ? '<span class="badge-latest">最新</span>' : '<span class="badge-old">旧式</span>'}</h4>
+        <p>1工場日産: <b>${Math.floor(baseDailyRate)}</b> 個/日 | 開発年: ${tech.year || 1936}年</p>
       </div>
-      <button class="action-btn" onclick="startProductionLine('${tech.id || tech.techId}')">生産開始</button>
+      <button class="action-btn" onclick="startProductionLine('${tech.id}')">生産開始</button>
     `;
+
+    card.addEventListener('mouseenter', (e) => showTooltip(e, tech));
+    card.addEventListener('mouseleave', hideTooltip);
+
     container.appendChild(card);
   });
 }
 
 function getBaseDailyRate(tech) {
   if (tech.base_daily_rate) return tech.base_daily_rate;
+  if (tech.title.includes('AVS') || tech.title.includes('小銃') || tech.title.includes('歩兵')) return 10;
   const cat = tech.category;
   if (cat === 'infantry' || cat === 'artillery') return 10;
-  if (cat === 'armor') return 3;
+  if (cat === 'armor') {
+    if (tech.title.includes('重') || tech.title.includes('駆逐')) return 1;
+    return 3;
+  }
   if (cat === 'air') return 2;
   if (cat === 'naval') return 0.1;
   return 5;
 }
 
 function startProductionLine(techId) {
-  const tech = techDataAll[String(techId)];
+  const tech = techDataAll[techId];
   if (!tech) return;
 
   productionLines.push({
     id: Date.now(),
-    techId: String(techId),
+    techId: techId,
     factories: 1,
-    producedCount: 0,
-    isShortage: false
+    producedCount: 0
   });
-  saveProductionData();
+  saveProductionLines();
   renderProductionLines();
 }
 
@@ -215,14 +154,15 @@ function adjustFactories(lineId, delta) {
   const line = productionLines.find(l => l.id === lineId);
   if (!line) return;
   if (line.factories + delta < 1) return;
+
   line.factories += delta;
-  saveProductionData();
+  saveProductionLines();
   renderProductionLines();
 }
 
 function removeLine(lineId) {
   productionLines = productionLines.filter(l => l.id !== lineId);
-  saveProductionData();
+  saveProductionLines();
   renderProductionLines();
 }
 
@@ -245,24 +185,19 @@ function renderProductionLines() {
   }
 
   productionLines.forEach(line => {
-    const tech = techDataAll[String(line.techId)];
+    const tech = techDataAll[line.techId];
     if (!tech) return;
 
     const baseRate = getBaseDailyRate(tech);
     const dailyOutput = Math.floor(baseRate * line.factories);
 
-    let statusText = `生産数: <b style="color: #3fb950; font-size: 15px;">${line.producedCount}</b> 個`;
-    if (line.isShortage) {
-      statusText = `<span style="color: #f85149; font-weight: bold;">⚠️ 資源不足により生産停止中</span>`;
-    }
-
     const card = document.createElement('div');
-    card.className = `line-card ${line.isShortage ? 'shortage-line' : ''}`;
+    card.className = 'line-card';
     card.innerHTML = `
       <div class="line-details" style="flex: 1;">
         <strong>${tech.title}</strong>
-        <div>${statusText}</div>
-        <div style="font-size: 12px; color: #8b949e; margin-top: 2px;">1日生産量: <b>${dailyOutput}</b> 個 (工場数: ${line.factories})</div>
+        <div>生産ストック数: <b style="color: #3fb950; font-size: 15px;">${line.producedCount}</b> 個</div>
+        <div style="font-size: 12px; color: #8b949e; margin-top: 2px;">1日あたりの生産量: <b>${dailyOutput}</b> 個 (工場数: ${line.factories})</div>
         <div class="factory-controls" style="margin-top: 6px;">
           工場割当: 
           <button onclick="adjustFactories(${line.id}, -1)">-</button>
@@ -272,27 +207,113 @@ function renderProductionLines() {
       </div>
       <button class="action-btn danger" onclick="removeLine(${line.id})" style="margin-left: 10px;">廃止</button>
     `;
+
+    card.addEventListener('mouseenter', (e) => showTooltip(e, tech));
+    card.addEventListener('mouseleave', hideTooltip);
+
     container.appendChild(card);
   });
 
   updateTotalStatsSummary();
 }
 
+// 稼働中の最新生産ラインからステータス（総合攻撃力、機動力、生存力など）を自動計算して反映
 function updateTotalStatsSummary() {
   const summaryContainer = document.getElementById('current-stats-summary');
   if (!summaryContainer) return;
-  if (productionLines.length === 0) {
+
+  // 同じカテゴリ（歩兵、戦車など）で複数のラインがある場合、最新の生産装備のものを優先して合計する
+  const activeTechsMap = {};
+  productionLines.forEach(line => {
+    const tech = techDataAll[line.techId];
+    if (tech) {
+      activeTechsMap[tech.category || 'other'] = tech;
+    }
+  });
+
+  const activeTechs = Object.values(activeTechsMap);
+  if (activeTechs.length === 0) {
     summaryContainer.innerHTML = '<span style="color: #8b949e;">現在稼働中の生産ラインがありません</span>';
     return;
   }
-  summaryContainer.innerHTML = `<span style="color: #58a6ff; font-size: 13px;">📦 稼働中生産ライン数: <b>${productionLines.length}</b> 枠</span>`;
+
+  let totalAntiInfantry = 0;
+  let totalAntiArmor = 0;
+  let totalMobility = 0;
+  let totalSurvivability = 0;
+
+  activeTechs.forEach(tech => {
+    if (tech.effects && Array.isArray(tech.effects)) {
+      tech.effects.forEach(eff => {
+        const matchNum = eff.match(/([+-]?\d+(?:\.\d+)?)/);
+        const val = matchNum ? parseFloat(matchNum[1]) : 5;
+        if (eff.includes('対人') || eff.includes('攻撃')) totalAntiInfantry += val;
+        if (eff.includes('対物') || eff.includes('貫通') || eff.includes('装甲')) totalAntiArmor += val;
+        if (eff.includes('機動') || eff.includes('速度')) totalMobility += val;
+        if (eff.includes('防御') || eff.includes('生存') || eff.includes('信頼')) totalSurvivability += val;
+      });
+    } else {
+      totalAntiInfantry += 10;
+      totalMobility += 5;
+      totalSurvivability += 5;
+    }
+  });
+
+  const totalAttack = totalAntiInfantry + totalAntiArmor;
+
+  summaryContainer.innerHTML = `
+    <div style="font-weight: bold; margin-bottom: 6px; color: #58a6ff; font-size: 13px;">📊 現在生産中装備の総合ステータス</div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; font-size: 12px; color: #c9d1d9;">
+      <div>⚔️ 総合攻撃力: <b>+${totalAttack.toFixed(0)}</b> (対人: ${totalAntiInfantry.toFixed(0)} / 対物: ${totalAntiArmor.toFixed(0)})</div>
+      <div>🏃 機動力: <b>+${totalMobility.toFixed(0)}</b></div>
+      <div>🛡️ 生存力(防御): <b>+${totalSurvivability.toFixed(0)}</b></div>
+      <div>📦 稼働中の最新系統数: <b>${activeTechs.length}</b> 種</div>
+    </div>
+  `;
+}
+
+function showTooltip(e, tech) {
+  let tooltip = document.getElementById('production-tooltip');
+  if (!tooltip) {
+    tooltip = document.createElement('div');
+    tooltip.id = 'production-tooltip';
+    tooltip.className = 'custom-tooltip hidden';
+    document.body.appendChild(tooltip);
+  }
+
+  const effectsHtml = (tech.effects || []).map(eff => `<div>• ${eff}</div>`).join('');
+  tooltip.innerHTML = `
+    <div style="font-weight: bold; border-bottom: 1px solid #30363d; margin-bottom: 4px; padding-bottom: 2px;">${tech.title} (${tech.year || 1936}年)</div>
+    <div style="font-size: 11px; color: #8b949e; margin-bottom: 4px;">${tech.desc || '詳細データなし'}</div>
+    <div style="font-size: 11px; color: #3fb950;">${effectsHtml || '特殊効果なし'}</div>
+  `;
+
+  tooltip.classList.remove('hidden');
+  moveTooltip(e);
+  e.currentTarget.addEventListener('mousemove', moveTooltip);
+}
+
+function moveTooltip(e) {
+  const tooltip = document.getElementById('production-tooltip');
+  if (tooltip) {
+    tooltip.style.left = `${e.clientX + 15}px`;
+    tooltip.style.top = `${e.clientY + 15}px`;
+  }
+}
+
+function hideTooltip() {
+  const tooltip = document.getElementById('production-tooltip');
+  if (tooltip) tooltip.classList.add('hidden');
 }
 
 function updateResourceDisplay() {
-  for (const [resName, val] of Object.entries(resources)) {
-    const el = document.getElementById(`res-${resName}`);
-    if (el) el.textContent = val;
-  }
+  const steelEl = document.getElementById('res-steel');
+  const alumEl = document.getElementById('res-aluminum');
+  const cardsEl = document.getElementById('res-cards');
+  
+  if (steelEl) steelEl.textContent = resources.steel;
+  if (alumEl) alumEl.textContent = resources.aluminum;
+  if (cardsEl) cardsEl.textContent = `${resources.cards}枚 (${resources.cards * 100})`;
 }
 
 function updateCalendarUI() {
@@ -302,31 +323,37 @@ function updateCalendarUI() {
   }
 }
 
-function updateSpeedButtonUI() {
-  document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
-  if (gameSpeed === 0) {
-    const pauseBtn = document.getElementById('btn-pause');
-    if (pauseBtn) pauseBtn.classList.add('active');
-  } else {
-    const targetBtn = document.querySelector(`.speed-btn[data-speed="${gameSpeed}"]`);
-    if (targetBtn) targetBtn.classList.add('active');
-  }
-}
-
 function initSharedClock() {
   document.querySelectorAll('.speed-btn').forEach(btn => {
+    const speed = parseInt(btn.getAttribute('data-speed'), 10);
+    if (speed === gameSpeed) {
+      btn.classList.add('active');
+    } else if (gameSpeed === 0 && btn.id === 'btn-pause') {
+      btn.classList.add('active');
+    }
+
     btn.addEventListener('click', (e) => {
-      const speedAttr = e.target.getAttribute('data-speed');
-      gameSpeed = speedAttr !== null ? parseInt(speedAttr, 10) : 0;
-      
+      gameSpeed = parseInt(e.target.getAttribute('data-speed'), 10) || 0;
       localStorage.setItem('gameSpeed', gameSpeed);
-      updateSpeedButtonUI();
+
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
       runTick();
     });
   });
 
+  const pauseBtn = document.getElementById('btn-pause');
+  if (pauseBtn) {
+    pauseBtn.addEventListener('click', () => {
+      gameSpeed = 0;
+      localStorage.setItem('gameSpeed', 0);
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      pauseBtn.classList.add('active');
+      runTick();
+    });
+  }
+
   updateCalendarUI();
-  updateSpeedButtonUI();
 
   const speedIntervals = { 1: 2000, 2: 1200, 3: 700, 4: 350, 5: 120 };
   let gameTimer = null;
@@ -347,46 +374,18 @@ function initSharedClock() {
         localStorage.setItem('gameDate', gameDate.toISOString());
         updateCalendarUI();
 
-        tradeQueue = tradeQueue.filter(order => {
-          if (new Date(order.deliveryDate) <= gameDate) {
-            resources[order.res] = (resources[order.res] || 0) + order.amount;
-            return false;
-          }
-          return true;
-        });
-        localStorage.setItem('tradeQueue', JSON.stringify(tradeQueue));
-
         productionLines.forEach(line => {
-          const tech = techDataAll[String(line.techId)];
+          const tech = techDataAll[line.techId];
           if (!tech) return;
 
-          const resCost = getTechResourceCost(tech);
-          let canProduce = true;
-
-          for (const [resName, costPerFac] of Object.entries(resCost)) {
-            const totalNeeded = costPerFac * line.factories;
-            if ((resources[resName] || 0) < totalNeeded) {
-              canProduce = false;
-              break;
-            }
-          }
-
-          if (canProduce) {
-            for (const [resName, costPerFac] of Object.entries(resCost)) {
-              resources[resName] -= costPerFac * line.factories;
-            }
-            line.isShortage = false;
-
-            const baseRate = getBaseDailyRate(tech);
-            const dailyProduced = Math.floor(baseRate * line.factories);
-            line.producedCount += dailyProduced;
-          } else {
-            line.isShortage = true;
-          }
+          const baseRate = getBaseDailyRate(tech);
+          const dailyProduced = Math.floor(baseRate * line.factories);
+          
+          line.producedCount += dailyProduced;
         });
 
-        saveProductionData();
-        renderProductionView();
+        saveProductionLines();
+        renderProductionLines();
       }, interval);
     }
   }
