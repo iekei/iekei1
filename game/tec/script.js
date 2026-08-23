@@ -2,8 +2,17 @@ const categories = ['infantry', 'armor', 'artillery', 'naval', 'air', 'engineeri
 let currentCategory = 'infantry';
 let techData = {};
 
-// LocalStorageから完了した技術を同期して復元
-let completedTechs = JSON.parse(localStorage.getItem('completedTechs') || '[]');
+// LocalStorageから完了した技術を安全にロード
+let completedTechs = [];
+try {
+  const raw = localStorage.getItem('completedTechs');
+  if (raw) {
+    const parsed = JSON.parse(raw);
+    completedTechs = parsed.map(item => String(typeof item === 'object' && item !== null ? (item.id || item.techId) : item)).filter(Boolean);
+  }
+} catch (e) {
+  completedTechs = [];
+}
 
 let researchSlots = [
   { id: 1, tech: null, remaining: 0, locked: false },
@@ -13,7 +22,6 @@ let researchSlots = [
   { id: 5, tech: null, remaining: 0, locked: true }
 ];
 
-// LocalStorageから保存された日付とスピードを復元（なければ初期値）
 let gameDate = localStorage.getItem('gameDate') ? new Date(localStorage.getItem('gameDate')) : new Date(1936, 0, 1);
 let gameSpeed = localStorage.getItem('gameSpeed') ? parseInt(localStorage.getItem('gameSpeed'), 10) : 0;
 
@@ -26,12 +34,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initResearchSlots();
   await loadAllTechData();
 
-  // ★他画面（生産やNFなど）からのストレージ変更をリアルタイム検知
   window.addEventListener('storage', (e) => {
-    if (e.key === 'completedTechs') {
-      completedTechs = JSON.parse(e.newValue || '[]');
-      renderTree();
-    }
     if (e.key === 'gameSpeed') {
       gameSpeed = parseInt(e.newValue || '0', 10);
       updateSpeedButtonUI();
@@ -41,15 +44,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       updateCalendarUI();
     }
   });
-
-  // 定期ポーリングによる確実な同期
-  setInterval(() => {
-    const latestTechs = JSON.parse(localStorage.getItem('completedTechs') || '[]');
-    if (JSON.stringify(latestTechs) !== JSON.stringify(completedTechs)) {
-      completedTechs = latestTechs;
-      renderTree();
-    }
-  }, 1000);
 });
 
 async function loadAllTechData() {
@@ -74,25 +68,19 @@ function updateSpeedButtonUI() {
 }
 
 function initClock() {
-  // 初期スピードボタンの状態を反映
   updateSpeedButtonUI();
+  updateCalendarUI();
 
   document.querySelectorAll('.speed-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const speedAttr = e.target.getAttribute('data-speed');
       gameSpeed = speedAttr !== null ? parseInt(speedAttr, 10) : 0;
-      
-      // LocalStorageに保存して生産や他画面と同期
       localStorage.setItem('gameSpeed', gameSpeed);
       updateSpeedButtonUI();
       runTick();
     });
   });
 
-  // 日付表示の初期化
-  updateCalendarUI();
-
-  // HOI4風のメインループ（他画面と同期した速度間隔）
   const speedIntervals = { 1: 2000, 2: 1200, 3: 700, 4: 350, 5: 120 };
   let gameTimer = null;
 
@@ -102,21 +90,18 @@ function initClock() {
 
     if (gameSpeed > 0) {
       gameTimer = setInterval(() => {
-        // 他画面で進んだ日付をローカルストレージから取得して同期
         const savedDateStr = localStorage.getItem('gameDate');
         if (savedDateStr) {
           gameDate = new Date(savedDateStr);
         }
 
-        // 1日進める
         gameDate.setDate(gameDate.getDate() + 1);
         localStorage.setItem('gameDate', gameDate.toISOString());
         updateCalendarUI();
 
-        // 研究スロットの進行
         researchSlots.forEach(slot => {
           if (slot.tech && slot.remaining > 0) {
-            slot.remaining -= 1; // 1日ずつ進行
+            slot.remaining -= 1;
             if (slot.remaining <= 0) completeResearch(slot);
             else updateSlotDisplay(slot);
           }
@@ -137,18 +122,15 @@ function updateCalendarUI() {
   }
 }
 
-// 研究スロットをクリックして研究を中断・変更する機能
 function initResearchSlots() {
   document.querySelectorAll('.slot').forEach(slotEl => {
     slotEl.addEventListener('click', () => {
       const slotId = parseInt(slotEl.getAttribute('data-slot'), 10);
       const slot = researchSlots.find(s => s.id === slotId);
-      
       if (!slot || slot.locked) return;
 
       if (slot.tech) {
-        const confirmed = confirm(`「${slot.tech.title}」の研究を中断してスロットを空けますか？\n※これまでの研究進捗（日数）はリセットされます。`);
-        if (confirmed) {
+        if (confirm(`「${slot.tech.title}」の研究を中断しますか？`)) {
           slot.tech = null;
           slot.remaining = 0;
           updateSlotDisplay(slot);
@@ -159,22 +141,22 @@ function initResearchSlots() {
 }
 
 function startResearch(tech) {
-  if (completedTechs.includes(tech.id)) return;
+  const techIdStr = String(tech.id);
+  if (completedTechs.includes(techIdStr)) return;
 
-  const isAlreadyResearching = researchSlots.some(slot => slot.tech && slot.tech.id === tech.id);
-  if (isAlreadyResearching) {
+  if (researchSlots.some(slot => slot.tech && String(slot.tech.id) === techIdStr)) {
     alert('この技術はすでに別のスロットで研究中です！');
     return;
   }
 
-  if (tech.prerequisites?.some(id => !completedTechs.includes(id))) { 
+  if (tech.prerequisites?.some(id => !completedTechs.includes(String(id)))) { 
     alert('前提技術が完了していません！'); 
     return; 
   }
 
   const slot = researchSlots.find(s => !s.locked && !s.tech);
   if (!slot) { 
-    alert('空きスロットがありません！上のスロットをクリックして既存の研究を中断するか、空けてください。'); 
+    alert('空きスロットがありません！'); 
     return; 
   }
 
@@ -184,9 +166,11 @@ function startResearch(tech) {
 }
 
 function completeResearch(slot) {
-  if (!completedTechs.includes(slot.tech.id)) {
-    completedTechs.push(slot.tech.id);
+  const techIdStr = String(slot.tech.id);
+  if (!completedTechs.includes(techIdStr)) {
+    completedTechs.push(techIdStr);
   }
+  // 文字列配列として確実に保存
   localStorage.setItem('completedTechs', JSON.stringify(completedTechs));
 
   const notifyArea = document.getElementById('notification-area');
@@ -224,11 +208,12 @@ function renderTree() {
   
   const list = techData[currentCategory] || [];
   const nodeMap = {};
-  list.forEach(item => { nodeMap[item.id] = item; });
+  list.forEach(item => { nodeMap[String(item.id)] = item; });
 
   list.forEach(tech => {
     const node = document.createElement('div');
-    node.className = `tech-node ${completedTechs.includes(tech.id) ? 'completed' : ''}`;
+    const isComp = completedTechs.includes(String(tech.id));
+    node.className = `tech-node ${isComp ? 'completed' : ''}`;
     node.style.left = `${tech.x}px`; 
     node.style.top = `${tech.y}px`;
     
@@ -244,7 +229,7 @@ function renderTree() {
   list.forEach(tech => {
     if (tech.prerequisites && tech.prerequisites.length > 0) {
       tech.prerequisites.forEach(preId => {
-        const parentNode = nodeMap[preId];
+        const parentNode = nodeMap[String(preId)];
         if (parentNode) drawLine(parentNode, tech);
       });
     }
