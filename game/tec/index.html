@@ -1,88 +1,88 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="referrer" content="no-referrer">
-  <title>研究ツリー (Soviet Research Tree)</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+// --- グローバル変数 ---
+let completedTechs = [];
+let researchingTech = null; // 現在研究中の技術
+let researchProgress = 0;   // 研究の進捗（0〜100など）
+let allTechsMap = {};       // 全技術データのマップ
 
-<div id="notification-area"></div>
+// ローカルストレージから完了した研究をロード
+function loadCompletedTechs() {
+  try {
+    const raw = localStorage.getItem('completedTechs');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      completedTechs = parsed.map(item => String(typeof item === 'object' && item !== null ? (item.id || item.techId) : item)).filter(Boolean);
+    } else {
+      completedTechs = [];
+    }
+  } catch (e) {
+    completedTechs = [];
+  }
+}
 
-<header id="top-bar">
-  <div id="game-clock">
-    <span id="calendar-display">1936年1月1日</span>
-    <div id="speed-controls">
-      <button id="btn-pause" class="speed-btn active" data-speed="0">停止</button>
-      <button class="speed-btn" data-speed="1">1速</button>
-      <button class="speed-btn" data-speed="2">2速</button>
-      <button class="speed-btn" data-speed="3">3速</button>
-      <button class="speed-btn" data-speed="4">4速</button>
-      <button class="speed-btn" data-speed="5">5速</button>
-    </div>
-  </div>
+// 完了した研究をローカルストレージに保存
+function saveCompletedTechs() {
+  const unique = Array.from(new Set(completedTechs.map(String)));
+  localStorage.setItem('completedTechs', JSON.stringify(unique));
+  window.dispatchEvent(new Event('storage'));
+}
 
-  <div id="research-slots">
-    <div class="slot" data-slot="1"><span class="slot-name">スロット 1:</span> <span class="slot-status">空き</span></div>
-    <div class="slot" data-slot="2"><span class="slot-name">スロット 2:</span> <span class="slot-status">空き</span></div>
-    <div class="slot" data-slot="3"><span class="slot-name">スロット 3:</span> <span class="slot-status">空き</span></div>
-    <div class="slot locked" data-slot="4"><span class="slot-name">スロット 4:</span> <span class="slot-status">🔒 NFで解放</span></div>
-    <div class="slot locked" data-slot="5"><span class="slot-name">スロット 5:</span> <span class="slot-status">🔒 NFで解放</span></div>
-  </div>
-</header>
+// 全カテゴリの技術データをロード
+async function loadAllTechsData() {
+  const categories = ['infantry', 'armor', 'artillery', 'naval', 'air', 'engineering', 'industry'];
+  for (const cat of categories) {
+    try {
+      // tec/ フォルダ内から data/ フォルダを参照するため相対パスを指定
+      const res = await fetch(`data/tech_${cat}.json`);
+      if (res.ok) {
+        const list = await res.json();
+        list.forEach(tech => {
+          const uniqueId = String(tech.id || tech.techId);
+          if (uniqueId) {
+            tech.category = cat;
+            allTechsMap[uniqueId] = tech;
+          }
+        });
+      }
+    } catch (e) {
+      console.error(`Failed to load data/tech_${cat}.json`, e);
+    }
+  }
+}
 
-<nav id="category-tabs">
-  <button class="tab-btn active" data-cat="infantry">🪖 歩兵・支援</button>
-  <button class="tab-btn" data-cat="armor">🚜 装甲車輌</button>
-  <button class="tab-btn" data-cat="artillery">💥 砲兵</button>
-  <button class="tab-btn" data-cat="naval">⚓ 海軍</button>
-  <button class="tab-btn" data-cat="air">✈️ 航空機</button>
-  <button class="tab-btn" data-cat="engineering">🛠️ 工学・原子核</button>
-</nav>
+// 研究を完了させる関数（ボタンなどから呼び出される想定）
+window.completeTech = function(techId) {
+  const strId = String(techId);
+  if (!completedTechs.includes(strId)) {
+    completedTechs.push(strId);
+    saveCompletedTechs();
+    console.log(`研究が完了し、生産画面に連携されました: ${strId}`);
+  }
+  // 画面の再描画処理（もし元々存在していればここで呼ぶ）
+  if (typeof renderResearchTree === 'function') {
+    renderResearchTree();
+  }
+};
 
-<main id="tree-container">
-  <div id="tree-viewport">
-    <div id="year-sidebar">
-      <div class="year-label" style="top: 50px;">1936</div>
-      <div class="year-label" style="top: 200px;">1937</div>
-      <div class="year-label" style="top: 350px;">1938</div>
-      <div class="year-label" style="top: 500px;">1939</div>
-      <div class="year-label" style="top: 650px;">1940</div>
-      <div class="year-label" style="top: 800px;">1941</div>
-      <div class="year-label" style="top: 950px;">1942</div>
-      <div class="year-label" style="top: 1100px;">1943</div>
-      <div class="year-label" style="top: 1250px;">1944</div>
-      <div class="year-label" style="top: 1400px;">1945</div>
-      <div class="year-label" style="top: 1550px;">1946</div>
-      <div class="year-label" style="top: 1700px;">1947</div>
-      <div class="year-label" style="top: 1850px;">1948</div>
-      <div class="year-label" style="top: 2000px;">1949</div>
-      <div class="year-label" style="top: 2150px;">1950</div>
-      <div class="year-label" style="top: 2300px;">1951</div>
-      <div class="year-label" style="top: 2450px;">1952</div>
-      <div class="year-label" style="top: 2600px;">1953</div>
-      <div class="year-label" style="top: 2750px;">1954</div>
-      <div class="year-label" style="top: 2900px;">1955</div>
-      <div class="year-label" style="top: 3050px;">1956</div>
-      <div class="year-label" style="top: 3200px;">1957</div>
-      <div class="year-label" style="top: 3350px;">1958</div>
-      <div class="year-label" style="top: 3500px;">1959</div>
-    </div>
-    <svg id="svg-lines"></svg>
-    <div id="tech-nodes"></div>
-  </div>
-</main>
+// --- 初期化処理 ---
+document.addEventListener('DOMContentLoaded', async () => {
+  loadCompletedTechs();
+  await loadAllTechsData();
 
-<div id="tech-tooltip" class="hidden">
-  <div id="tooltip-title">技術名</div>
-  <div id="tooltip-info"></div>
-  <hr style="border-color: #30363d; margin: 6px 0;">
-  <div id="tooltip-desc" style="color: #8b949e; font-size: 11px; margin-bottom: 6px;"></div>
-  <div id="tooltip-effects"></div>
-</div>
+  // もし元々のコードに研究ツリーの初期描画関数があればここで実行します
+  if (typeof renderResearchTree === 'function') {
+    renderResearchTree();
+  }
 
-<script src="script.js"></script>
-</body>
-</html>
+  // 例：もし研究ツリーのボタンにクリックイベントを紐付ける仕組みがある場合はここに記述されます
+  // 各ボタンが正しく動作するようにイベントリスナーを設定
+  const researchButtons = document.querySelectorAll('.research-btn, [data-tech-id]');
+  researchButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const techId = e.target.getAttribute('data-tech-id') || e.target.id;
+      if (techId) {
+        // 研究開始や完了のロジック
+        console.log(`技術ボタンが押されました: ${techId}`);
+      }
+    });
+  });
+});
