@@ -57,11 +57,11 @@
     },
     {
       "id": "vasiliy_grabin",
-      "name": "ヴァシーリー・グラビン",
+      "name": "ウラジーミル・コテルニコフ",
       "name_en": "Vasiliy Grabin",
       "category": "artillery",
       "category_name": "陸上兵器砲術分野",
-      "icon": "special/data/image/Portrait_SOV_vasiliy_grabin.png",
+      "icon": "special/data/image/Portrait_SOV_vladimir_kotelnikov.png",
       "project_icon": "special/data/image/tank.png",
       "overview": "ZiSシリーズなどを手掛けたソ連屈指の大砲設計技師。",
       "weapons": "大口径対戦車砲（BS-3）、超重戦車砲、自走迫撃砲（2A3タラン）"
