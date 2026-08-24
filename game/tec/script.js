@@ -148,7 +148,7 @@ function startResearch(tech) {
   // 基本の研究日数
   let totalDays = tech.research_time || 30;
 
-  // ★ 先行研究ペナルティの計算 (1年先ごとに250日追加)
+  // 先行研究ペナルティの計算 (1年先ごとに250日追加)
   const currentYear = gameDate.getFullYear();
   if (tech.year && tech.year > currentYear) {
     const yearDiff = tech.year - currentYear;
@@ -238,9 +238,22 @@ function drawLine(parent, child) {
 function showTooltip(e, tech) {
   const tooltip = document.getElementById('tech-tooltip');
   if (!tooltip) return;
+  
   document.getElementById('tooltip-title').textContent = tech.title;
   document.getElementById('tooltip-info').innerText = `開発年: ${tech.year}年 | 必要日数: ${tech.research_time || 30}日`;
   
+  // ★ 先行研究ペナルティの計算とツールチップ表示
+  const penaltyEl = document.getElementById('tooltip-penalty');
+  const currentYear = gameDate.getFullYear();
+  if (tech.year && tech.year > currentYear) {
+    const yearDiff = tech.year - currentYear;
+    const penaltyDays = yearDiff * 250;
+    penaltyEl.textContent = `⚠️ ${yearDiff}年先の技術！ペナルティ ${penaltyDays}日 が発生します`;
+    penaltyEl.style.display = 'block';
+  } else {
+    if (penaltyEl) penaltyEl.style.display = 'none';
+  }
+
   const descEl = document.getElementById('tooltip-desc');
   if (tech.desc && tech.desc.trim() !== '') {
     descEl.textContent = tech.desc;
