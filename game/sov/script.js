@@ -25,10 +25,9 @@ let focusDaysRemaining = 0;
 // ローカライズデータを保持する辞書
 let localizationMap = {};
 
-// ★ 読み込ませたいローカライズファイル（.yml）のリスト
-// ファイルを追加したい場合はここにファイル名を追加していくことで自動一括読み込みされます
+// 取得したすべての yml ファイルのリスト
 const localisationFiles = [
-"Juno_bop_l_japanese.yml",
+  "Juno_bop_l_japanese.yml",
   "POL_equipment_l_japanese.yml",
   "SEA_characters_l_japanese.yml",
   "SEA_decisions_l_japanese.yml",
@@ -235,36 +234,26 @@ const localisationFiles = [
   "wtt_infiltration_l_japanese.yml",
   "wtt_political_power_struggle_l_japanese.yml",
   "wtt_ss_recruitment_l_japanese.yml"
-  // 例: "parties_l_japanese.yml",
-  // 例: "events_l_japanese.yml"
 ];
 
 // すべての.ymlファイルを非同期で一括読み込みしてパースする関数
 async function loadLocalisation() {
   try {
-    // リストにあるすべてのファイルを並行してフェッチ
     const promises = localisationFiles.map(async (filename) => {
       const res = await fetch(`../data/localisation/japanese/${filename}`);
-      if (!res.ok) {
-        console.warn(`ローカライズファイルの読み込みスキップまたは未配置: ${filename}`);
-        return "";
-      }
+      if (!res.ok) return "";
       return await res.text();
     });
 
     const texts = await Promise.all(promises);
 
-    // 取得したすべてのテキストをパースして localizationMap に統合
     texts.forEach(text => {
       if (!text) return;
       const lines = text.split('\n');
       lines.forEach(line => {
-        // 形式: KEY:0 "日本語テキスト" を正規表現で抽出
         const match = line.match(/^\s*([A-Za-z0-9_]+):\d+\s+"(.*)"/);
         if (match) {
-          const key = match[1];
-          const val = match[2];
-          localizationMap[key] = val;
+          localizationMap[match[1]] = match[2];
         }
       });
     });
@@ -460,10 +449,8 @@ function renderTree() {
       ? `<div class="focus-progress">残り ${focusDaysRemaining}日</div>` 
       : `<div class="focus-cost">${nf.cost || 70}日</div>`;
 
-    // 日本語ローカライズがあれば優先して適用、なければJSONのタイトルやIDを表示
     const displayName = localizationMap[nf.id] || nf.title || nf.id;
     
-    // アイコン画像のパス設定 & ファイル名揺れ・互換サフィックスの吸収処理
     let iconHtml = `<div class="focus-symbol">⭐</div>`;
     const rawIcon = nf.icon || nf.iconPath;
     
@@ -474,10 +461,8 @@ function renderTree() {
         fileName = fileName.slice(4);
       }
       
-      // 互換用サフィックスを削除
       fileName = fileName.replace(/_ccp_2d_sov_compatibility$/, "");
 
-      // ファイル名の揺れ（alt → alternative など）をここで吸収・経由
       const filenameOverrides = {
         "SOV_the_glory_of_the_red_army_alt": "SOV_the_glory_of_the_red_army_alternative"
       };
@@ -529,8 +514,8 @@ function renderTree() {
     if (!parent) return;
 
     const children = parentGroups[parentId];
-    const parentX = parent.x + 55; // ノード中央
-    const parentY = parent.y + 75; // ノード底面
+    const parentX = parent.x + 55;
+    const parentY = parent.y + 75;
     const isParentDone = completedFocuses.has(parentId);
 
     if (children.length === 1) {
@@ -662,7 +647,7 @@ document.querySelectorAll('.speed-btn[data-speed]').forEach(btn => {
 });
 
 async function init() {
-  // 1. ローカライズ（複数の .yml）の読み込みを並行実行してマップにマージ
+  // 1. すべてのローカライズファイル群を読み込む
   await loadLocalisation();
 
   let rawData = [];
@@ -685,6 +670,17 @@ async function init() {
       { id: "SOV_stalin", title: "スターリン主義", relative_position_id: "SOV_1936", offsetX: -1, offsetY: 1, cost: 70, prerequisites: ["SOV_1936"], effect: "安定度 +10" }
     ];
   }
+
+  // ★ soviet.json の各データ（国家方針）に localizationMap の日本語を自動適用する
+  rawData.forEach(nf => {
+    if (localizationMap[nf.id]) {
+      nf.title = localizationMap[nf.id];
+    }
+    const effectKey = `${nf.id}_effect`;
+    if (localizationMap[effectKey]) {
+      nf.effect = localizationMap[effectKey];
+    }
+  });
 
   // 座標のピクセル換算
   const GRID_SIZE_X = 220; 
