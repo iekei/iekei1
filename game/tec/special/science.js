@@ -37,7 +37,7 @@ function ensureScienceCSSLoaded() {
     const link = document.createElement('link');
     link.id = cssId;
     link.rel = 'stylesheet';
-    link.href = 'special/science.css'; // 必要に応じてパス調整
+    link.href = 'special/science.css';
     document.head.appendChild(link);
   }
 }
@@ -75,7 +75,6 @@ function renderScienceList() {
 
   container.innerHTML = '';
 
-  // 分野ごとにグループ化
   const categoriesMap = {};
   scienceData.scientists.forEach(sci => {
     if (!categoriesMap[sci.category]) {
@@ -93,11 +92,12 @@ function renderScienceList() {
 
     group.items.forEach(sci => {
       const isHired = hiredScientists[catKey] === sci.id;
+      
       groupHtml += `
         <div class="science-card ${isHired ? 'hired' : ''}">
           <div class="science-card-header">
-            <img src="${sci.icon}" alt="icon" class="science-icon" onerror="this.src='image/tech_default.png'">
-            <div>
+            <img src="${sci.icon}" alt="${sci.name}" class="science-icon" onerror="this.onerror=null; this.src='image/tech_default.png';">
+            <div class="science-name-group">
               <div class="science-name">${sci.name}</div>
               <div class="science-name-en">${sci.name_en}</div>
             </div>
@@ -120,10 +120,8 @@ function renderScienceList() {
 
 function toggleHireScience(categoryKey, sciId) {
   if (hiredScientists[categoryKey] === sciId) {
-    // 既に雇用中なら解任
     delete hiredScientists[categoryKey];
   } else {
-    // 別の人なら交代（その分野の主任は1名）
     hiredScientists[categoryKey] = sciId;
   }
 
