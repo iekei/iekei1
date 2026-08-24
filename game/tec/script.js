@@ -1,4 +1,4 @@
-const categories = ['infantry', 'armor', 'artillery', 'naval', 'air', 'engineering', 'industry'];
+const categories = ['infantry', 'armor', 'artillery', 'naval', 'air', 'engineering', 'industry', 'nuclear'];
 let currentCategory = 'infantry';
 let techData = {};
 let completedTechs = JSON.parse(localStorage.getItem('completedTechs')) || [];
