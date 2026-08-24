@@ -1,130 +1,289 @@
-// special/science.js - 特別研究計画・科学者雇用システム
+const categories = ['infantry', 'armor', 'artillery', 'naval', 'air', 'engineering', 'industry'];
+let currentCategory = 'infantry';
+let techData = {};
+let completedTechs = [];
+let researchSlots = [
+  { id: 1, tech: null, remaining: 0, locked: false },
+  { id: 2, tech: null, remaining: 0, locked: false },
+  { id: 3, tech: null, remaining: 0, locked: false },
+  { id: 4, tech: null, remaining: 0, locked: true },
+  { id: 5, tech: null, remaining: 0, locked: true }
+];
 
-let scienceData = null;
-let hiredScientists = JSON.parse(localStorage.getItem('hiredScientists')) || {};
+// ★LocalStorageから保存された日付とスピードを復元（なければ初期値）
+let gameDate = localStorage.getItem('gameDate') ? new Date(localStorage.getItem('gameDate')) : new Date(1936, 0, 1);
+let gameSpeed = localStorage.getItem('gameSpeed') ? parseInt(localStorage.getItem('gameSpeed'), 10) : 0;
 
-// 初期化およびDOM挿入
-async function initScienceSystem() {
-  ensureScienceCSSLoaded();
-  if (document.getElementById('science-modal-overlay')) return;
+let isDragging = false, startX, startY, translateX = 0, translateY = 0;
 
-  const overlayHtml = `
-    <div id="science-modal-overlay" class="science-overlay hidden">
-      <div class="science-modal-content">
-        <div class="science-modal-header">
-          <h3>特別研究計画 (主任科学者配属)</h3>
-          <button id="close-science-modal" class="close-btn">&times;</button>
-        </div>
-        <div class="science-modal-body" id="science-list-container">
-          <p class="loading-text">科学者データをロード中...</p>
-        </div>
-      </div>
-    </div>
-  `;
-  document.body.insertAdjacentHTML('beforeend', overlayHtml);
+document.addEventListener('DOMContentLoaded', () => {
+  initTabs();
+  initPanAndZoom();
+  initClock();
+  initResearchSlots();
+  loadAllTechData();
+});
 
-  document.getElementById('close-science-modal').addEventListener('click', closeScienceModal);
-  document.getElementById('science-modal-overlay').addEventListener('click', (e) => {
-    if (e.target.id === 'science-modal-overlay') closeScienceModal();
-  });
-
-  await loadScienceJSON();
-}
-
-function ensureScienceCSSLoaded() {
-  const cssId = 'science-css-link';
-  if (!document.getElementById(cssId)) {
-    const link = document.createElement('link');
-    link.id = cssId;
-    link.rel = 'stylesheet';
-    link.href = 'special/science.css';
-    document.head.appendChild(link);
+async function loadAllTechData() {
+  for (const cat of categories) {
+    try {
+      const res = await fetch(`./data/tech_${cat}.json`);
+      if (res.ok) techData[cat] = await res.json();
+    } catch (e) { console.error(e); }
   }
+  renderTree();
 }
 
-async function loadScienceJSON() {
-  try {
-    const res = await fetch('special/data/science.json');
-    if (res.ok) {
-      scienceData = await res.json();
-      renderScienceList();
-    } else {
-      document.getElementById('science-list-container').innerHTML = '<p class="error-text">科学者データの読み込みに失敗しました。</p>';
+function initClock() {
+  // 初期スピードボタンの状態を反映
+  document.querySelectorAll('.speed-btn').forEach(btn => {
+    const speed = parseInt(btn.getAttribute('data-speed'), 10);
+    if (speed === gameSpeed) {
+      btn.classList.add('active');
+    } else if (gameSpeed === 0 && btn.id === 'btn-pause') {
+      btn.classList.add('active');
     }
-  } catch (e) {
-    console.error(e);
-    document.getElementById('science-list-container').innerHTML = '<p class="error-text">科学者データの取得中にエラーが発生しました。</p>';
-  }
-}
 
-function openScienceModal() {
-  initScienceSystem().then(() => {
-    document.getElementById('science-modal-overlay').classList.remove('hidden');
-    renderScienceList();
-  });
-}
-
-function closeScienceModal() {
-  const overlay = document.getElementById('science-modal-overlay');
-  if (overlay) overlay.classList.add('hidden');
-}
-
-function renderScienceList() {
-  const container = document.getElementById('science-list-container');
-  if (!container || !scienceData) return;
-
-  container.innerHTML = '';
-
-  const categoriesMap = {};
-  scienceData.scientists.forEach(sci => {
-    if (!categoriesMap[sci.category]) {
-      categoriesMap[sci.category] = { name: sci.category_name, items: [] };
-    }
-    categoriesMap[sci.category].items.push(sci);
-  });
-
-  for (const [catKey, group] of Object.entries(categoriesMap)) {
-    let groupHtml = `
-      <div class="science-category-section">
-        <h4 class="science-cat-title">📁 ${group.name}</h4>
-        <div class="science-cards-grid">
-    `;
-
-    group.items.forEach(sci => {
-      const isHired = hiredScientists[catKey] === sci.id;
+    btn.addEventListener('click', (e) => {
+      gameSpeed = parseInt(e.target.getAttribute('data-speed'), 10) || 0;
       
-      groupHtml += `
-        <div class="science-card ${isHired ? 'hired' : ''}">
-          <div class="science-card-header">
-            <img src="${sci.icon}" alt="${sci.name}" class="science-icon" onerror="this.onerror=null; this.src='image/tech_default.png';">
-            <div class="science-name-group">
-              <div class="science-name">${sci.name}</div>
-              <div class="science-name-en">${sci.name_en}</div>
-            </div>
-          </div>
-          <div class="science-desc">
-            <p><strong>概要:</strong> ${sci.overview}</p>
-            <p><strong>制作兵器:</strong> ${sci.weapons}</p>
-          </div>
-          <button class="hire-btn ${isHired ? 'hired-btn' : ''}" onclick="toggleHireScience('${catKey}', '${sci.id}')">
-            ${isHired ? '雇用中 (解任する)' : '雇用する'}
-          </button>
-        </div>
-      `;
-    });
+      // LocalStorageに保存して国家方針や他画面と同期
+      localStorage.setItem('gameSpeed', gameSpeed);
 
-    groupHtml += `</div></div>`;
-    container.insertAdjacentHTML('beforeend', groupHtml);
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+    });
+  });
+
+  // 日付表示の初期化
+  updateCalendarUI();
+
+  // HOI4風のメインループ（国家方針側と同期した速度間隔）
+  const speedIntervals = { 1: 2000, 2: 1200, 3: 700, 4: 350, 5: 120 };
+  
+  let gameTimer = null;
+  function runTick() {
+    if (gameTimer) clearInterval(gameTimer);
+    if (gameSpeed > 0) {
+      gameTimer = setInterval(() => {
+        // 1日進める
+        gameDate.setDate(gameDate.getDate() + 1);
+        updateCalendarUI();
+
+        // LocalStorageへ保存して他画面と同期
+        localStorage.setItem('gameDate', gameDate.toISOString());
+
+        // 研究スロットの進行
+        researchSlots.forEach(slot => {
+          if (slot.tech && slot.remaining > 0) {
+            slot.remaining -= 1; // 1日ずつ進行
+            if (slot.remaining <= 0) completeResearch(slot);
+            else updateSlotDisplay(slot);
+          }
+        });
+      }, speedIntervals[gameSpeed] || 1000);
+    }
+  }
+
+  // スピード変更時にタイマーを再設定する監視
+  document.querySelectorAll('.speed-btn').forEach(btn => {
+    btn.addEventListener('click', () => runTick());
+  });
+
+  if (gameSpeed > 0) {
+    runTick();
   }
 }
 
-function toggleHireScience(categoryKey, sciId) {
-  if (hiredScientists[categoryKey] === sciId) {
-    delete hiredScientists[categoryKey];
-  } else {
-    hiredScientists[categoryKey] = sciId;
+function updateCalendarUI() {
+  const calEl = document.getElementById('calendar-display');
+  if (calEl) {
+    calEl.textContent = `${gameDate.getFullYear()}年${gameDate.getMonth() + 1}月${gameDate.getDate()}日`;
+  }
+}
+
+// 研究スロットをクリックして研究を中断・変更する機能
+function initResearchSlots() {
+  document.querySelectorAll('.slot').forEach(slotEl => {
+    slotEl.addEventListener('click', () => {
+      const slotId = parseInt(slotEl.getAttribute('data-slot'));
+      const slot = researchSlots.find(s => s.id === slotId);
+      
+      if (!slot || slot.locked) return;
+
+      if (slot.tech) {
+        const confirmed = confirm(`「${slot.tech.title}」の研究を中断してスロットを空けますか？\n※これまでの研究進捗（日数）はリセットされます。`);
+        if (confirmed) {
+          slot.tech = null;
+          slot.remaining = 0;
+          updateSlotDisplay(slot);
+        }
+      }
+    });
+  });
+}
+
+function startResearch(tech) {
+  if (completedTechs.includes(tech.id)) return;
+
+  const isAlreadyResearching = researchSlots.some(slot => slot.tech && slot.tech.id === tech.id);
+  if (isAlreadyResearching) {
+    alert('この技術はすでに別のスロットで研究中です！');
+    return;
   }
 
-  localStorage.setItem('hiredScientists', JSON.stringify(hiredScientists));
-  renderScienceList();
+  if (tech.prerequisites?.some(id => !completedTechs.includes(id))) { 
+    alert('前提技術が完了していません！'); 
+    return; 
+  }
+
+  const slot = researchSlots.find(s => !s.locked && !s.tech);
+  if (!slot) { 
+    alert('空きスロットがありません！上のスロットをクリックして既存の研究を中断するか、空けてください。'); 
+    return; 
+  }
+
+  slot.tech = tech; 
+  slot.remaining = tech.research_time || 30;
+  updateSlotDisplay(slot);
+}
+
+function completeResearch(slot) {
+  completedTechs.push(slot.tech.id);
+  localStorage.setItem('completedTechs', JSON.stringify(completedTechs));
+  const notifyArea = document.getElementById('notification-area');
+  if (notifyArea) {
+    const msg = document.createElement('div');
+    msg.className = 'notify-msg';
+    msg.textContent = `${slot.tech.title} 研究完了しました`;
+    notifyArea.appendChild(msg);
+    setTimeout(() => msg.remove(), 5000);
+  }
+  slot.tech = null; slot.remaining = 0;
+  updateSlotDisplay(slot); renderTree();
+}
+
+function updateSlotDisplay(slot) {
+  const el = document.querySelector(`.slot[data-slot="${slot.id}"] .slot-status`);
+  if (!el) return;
+  if (slot.tech) {
+    el.textContent = `研究中: ${slot.tech.title} (${Math.ceil(slot.remaining)}日)`;
+    el.style.color = '#e3b341';
+  } else {
+    el.textContent = slot.locked ? '🔒 NFで解放' : '空き';
+    el.style.color = slot.locked ? '#8b949e' : '#3fb950';
+  }
+}
+
+function renderTree() {
+  const container = document.getElementById('tech-nodes');
+  const svg = document.getElementById('svg-lines');
+  if (!container || !svg) return;
+  container.innerHTML = ''; svg.innerHTML = '';
+  
+  const list = techData[currentCategory] || [];
+  const nodeMap = {};
+  list.forEach(item => { nodeMap[item.id] = item; });
+
+  list.forEach(tech => {
+    const node = document.createElement('div');
+    node.className = `tech-node ${completedTechs.includes(tech.id) ? 'completed' : ''}`;
+    node.style.left = `${tech.x}px`; node.style.top = `${tech.y}px`;
+    
+    const svgContent = tech.svg || `<svg viewBox="0 0 24 24" fill="none" stroke="#58a6ff" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>`;
+    node.innerHTML = `<div class="tech-icon-wrapper">${svgContent}</div><div class="tech-title">${tech.title}</div>`;
+    
+    node.addEventListener('click', () => startResearch(tech));
+    node.addEventListener('mouseenter', (e) => showTooltip(e, tech));
+    node.addEventListener('mouseleave', hideTooltip);
+    container.appendChild(node);
+  });
+
+  list.forEach(tech => {
+    if (tech.prerequisites && tech.prerequisites.length > 0) {
+      tech.prerequisites.forEach(preId => {
+        const parentNode = nodeMap[preId];
+        if (parentNode) drawLine(parentNode, tech);
+      });
+    }
+  });
+}
+
+function drawLine(parent, child) {
+  const svg = document.getElementById('svg-lines');
+  if (!svg) return;
+  const x1 = parent.x + 32;
+  const y1 = parent.y + 64;
+  const x2 = child.x + 32;
+  const y2 = child.y;
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  const midY = y1 + (y2 - y1) / 2;
+  path.setAttribute('d', `M ${x1} ${y1} L ${x1} ${midY} L ${x2} ${midY} L ${x2} ${y2}`);
+  path.setAttribute('class', 'tech-line');
+  svg.appendChild(path);
+}
+
+function showTooltip(e, tech) {
+  const tooltip = document.getElementById('tech-tooltip');
+  if (!tooltip) return;
+  document.getElementById('tooltip-title').textContent = tech.title;
+  document.getElementById('tooltip-info').innerText = `開発年: ${tech.year}年 | 必要日数: ${tech.research_time || 30}日`;
+  
+  const descEl = document.getElementById('tooltip-desc');
+  if (tech.desc && tech.desc.trim() !== '') {
+    descEl.textContent = tech.desc;
+    descEl.style.display = 'block';
+  } else {
+    descEl.style.display = 'none';
+  }
+
+  const effects = document.getElementById('tooltip-effects');
+  if (effects) {
+    effects.innerHTML = (tech.effects || []).map(eff => `<div class="effect-item">• ${eff}</div>`).join('');
+  }
+  
+  tooltip.classList.remove('hidden');
+  const move = (evt) => { tooltip.style.left = `${evt.clientX + 15}px`; tooltip.style.top = `${evt.clientY + 15}px`; };
+  move(e);
+  e.currentTarget.addEventListener('mousemove', move);
+}
+
+function hideTooltip() { 
+  const tooltip = document.getElementById('tech-tooltip');
+  if (tooltip) tooltip.classList.add('hidden'); 
+}
+
+function initPanAndZoom() {
+  const container = document.getElementById('tree-container');
+  const viewport = document.getElementById('tree-viewport');
+  if (!container || !viewport) return;
+  
+  container.addEventListener('mousedown', (e) => {
+    if (e.target.closest('.tech-node')) return;
+    isDragging = true; 
+    startX = e.clientX - translateX; 
+    startY = e.clientY - translateY;
+    container.style.cursor = 'grabbing';
+  });
+  
+  window.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    translateX = e.clientX - startX; 
+    translateY = e.clientY - startY;
+    viewport.style.transform = `translate(${translateX}px, ${translateY}px)`;
+  });
+  
+  window.addEventListener('mouseup', () => {
+    isDragging = false;
+    container.style.cursor = 'grab';
+  });
+}
+
+function initTabs() {
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', (e) => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+    currentCategory = e.target.getAttribute('data-cat');
+    renderTree();
+  }));
 }
