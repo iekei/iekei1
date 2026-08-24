@@ -3,8 +3,8 @@
 // 資源ごとの年代別主要産出国データ（1936～1950年代）
 const importDatabase = {
   石油: {
-    "1936〜1940": [{ country: "アメリカ", amount: 200 }, { "ソ連": 100 }, { country: "ベネズエラ", amount: 80 }],
-    "1941〜1945": [{ country: "アメリカ", amount: 300 }, { country: "ベネズエラ", amount: 120 }, { "ソ連": 90 }],
+    "1936〜1940": [{ country: "アメリカ", amount: 200 }, { country: "ソ連", amount: 100 }, { country: "ベネズエラ", amount: 80 }],
+    "1941〜1945": [{ country: "アメリカ", amount: 300 }, { country: "ベネズエラ", amount: 120 }, { country: "ソ連", amount: 90 }],
     "1946〜1950": [{ country: "アメリカ", amount: 250 }, { country: "中東(イラン等)", amount: 150 }, { country: "ベネズエラ", amount: 100 }]
   },
   石炭: {
@@ -41,7 +41,21 @@ const importDatabase = {
 
 let currentSelectedResource = '石油';
 
+// 初回読み込み時に import.css を動的にリンクする処理を追加
+function ensureImportCSSLoaded() {
+  const cssId = 'import-css-link';
+  if (!document.getElementById(cssId)) {
+    const link = document.createElement('link');
+    link.id = cssId;
+    link.rel = 'stylesheet';
+    link.href = 'import.css'; // 同階層にある import.css を読み込む
+    document.head.appendChild(link);
+  }
+}
+
 function initImportModal() {
+  ensureImportCSSLoaded();
+
   // すでに存在していなければDOMを挿入
   if (document.getElementById('import-modal-overlay')) return;
 
@@ -62,55 +76,6 @@ function initImportModal() {
     </div>
   `;
   document.body.insertAdjacentHTML('beforeend', overlayHtml);
-
-  // スタイル適用
-  const style = document.createElement('style');
-  style.innerHTML = `
-    .import-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.7); display: flex; justify-content: center;
-      align-items: center; z-index: 9999;
-    }
-    .import-overlay.hidden { display: none; }
-    .import-modal-content {
-      background: #161b22; border: 1px solid #30363d; border-radius: 8px;
-      width: 500px; padding: 20px; color: #c9d1d9; font-family: sans-serif;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-    }
-    .import-modal-header {
-      display: flex; justify-content: space-between; align-items: center;
-      border-bottom: 1px solid #30363d; padding-bottom: 10px; margin-bottom: 15px;
-    }
-    .import-modal-header h3 { margin: 0; font-size: 16px; color: #58a6ff; }
-    .close-btn { background: none; border: none; color: #8b949e; font-size: 20px; cursor: pointer; }
-    .close-btn:hover { color: #f85149; }
-    .import-resource-icons {
-      display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap;
-    }
-    .import-icon-btn {
-      background: #21262d; border: 1px solid #30363d; border-radius: 6px; padding: 8px;
-      cursor: pointer; display: flex; flex-direction: column; align-items: center; width: 55px;
-    }
-    .import-icon-btn.active { border-color: #58a6ff; background: #1f6feb33; }
-    .import-icon-btn img { width: 24px; height: 24px; object-fit: contain; margin-bottom: 4px; }
-    .import-icon-btn span { font-size: 10px; color: #c9d1d9; }
-    .era-section {
-      background: #0d1117; border: 1px solid #30363d; border-radius: 6px;
-      padding: 10px; margin-bottom: 10px; font-size: 13px;
-    }
-    .era-title { font-weight: bold; color: #58a6ff; margin-bottom: 6px; }
-    .country-row {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 4px 0; border-bottom: 1px dashed #21262d;
-    }
-    .country-row:last-child { border-bottom: none; }
-    .import-exec-btn {
-      background: #238636; color: white; border: none; padding: 4px 10px;
-      border-radius: 4px; cursor: pointer; font-size: 11px;
-    }
-    .import-exec-btn:hover { background: #2ea043; }
-  `;
-  document.head.appendChild(style);
 
   // イベント設定
   document.getElementById('close-import-modal').addEventListener('click', closeImportModal);
