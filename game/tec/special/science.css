@@ -1,7 +1,9 @@
+/* style.css - 特別研究計画・科学者システム用スタイル */
+
 .science-overlay {
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.75);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,13 +15,14 @@
 .science-modal-content {
   background: #161b22;
   border: 1px solid #30363d;
-  width: 750px;
+  width: 800px;
   max-height: 85vh;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
   color: #c9d1d9;
   font-family: sans-serif;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
 }
 .science-modal-header {
   padding: 15px 20px;
@@ -28,52 +31,69 @@
   justify-content: space-between;
   align-items: center;
 }
+.science-modal-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #f0f6fc;
+}
 .science-modal-body {
   padding: 20px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 .science-cat-title {
-  font-size: 15px;
+  font-size: 14px;
   color: #58a6ff;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   border-bottom: 1px solid #21262d;
-  padding-bottom: 5px;
+  padding-bottom: 6px;
+  letter-spacing: 0.5px;
 }
 .science-cards-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 12px;
 }
 .science-card {
   background: #0d1117;
   border: 1px solid #30363d;
   border-radius: 6px;
-  padding: 12px;
+  padding: 14px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  transition: border-color 0.2s;
+  justify-content: space-between;
+  gap: 10px;
+  transition: border-color 0.2s, background-color 0.2s;
 }
 .science-card.hired {
   border-color: #3fb950;
-  background: #111a14;
+  background: #0f1c14;
 }
 .science-card-header {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
 }
 .science-icon {
-  width: 36px;
-  height: 36px;
-  object-fit: contain;
+  width: 50px;
+  height: 60px;
+  object-fit: cover;
+  border: 1px solid #30363d;
+  border-radius: 4px;
+  background: #21262d;
+  flex-shrink: 0;
+}
+.science-name-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 .science-name {
   font-weight: bold;
   font-size: 14px;
+  color: #f0f6fc;
 }
 .science-name-en {
   font-size: 11px;
@@ -83,19 +103,27 @@
   font-size: 12px;
   color: #8b949e;
   line-height: 1.4;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 .science-desc p {
-  margin: 2px 0;
+  margin: 0;
+}
+.science-desc strong {
+  color: #c9d1d9;
 }
 .hire-btn {
   align-self: flex-end;
   background: #21262d;
   border: 1px solid #30363d;
   color: #c9d1d9;
-  padding: 5px 12px;
+  padding: 6px 14px;
   border-radius: 4px;
   cursor: pointer;
   font-size: 12px;
+  font-weight: 500;
+  transition: background 0.2s;
 }
 .hire-btn:hover {
   background: #30363d;
