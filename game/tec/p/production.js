@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadAllTechsForProduction();
   initProductionUIControls();
   initSharedClock();
+  checkAllLinesShortage(); // 起動時にも資源不足をチェック
   renderProductionView();
 
   window.addEventListener('storage', (e) => {
@@ -75,10 +76,32 @@ function saveProductionData() {
 }
 
 function renderProductionView() {
+  checkAllLinesShortage();
   renderAvailableTechs();
   renderProductionLines();
   updateResourceDisplay();
   updateTotalStatsSummary();
+}
+
+// 各ラインの資源が足りているかを事前に判定する関数
+function checkAllLinesShortage() {
+  productionLines.forEach(line => {
+    const tech = techDataAll[line.techId];
+    if (!tech) return;
+
+    const resCost = getTechResourceCost(tech);
+    let canProduce = true;
+
+    for (const [resName, costPerFac] of Object.entries(resCost)) {
+      const totalNeeded = costPerFac * line.factories;
+      if ((resources[resName] || 0) < totalNeeded) {
+        canProduce = false;
+        break;
+      }
+    }
+
+    line.isShortage = !canProduce;
+  });
 }
 
 // 装備ごとに適した資源と消費量（1工場・1日あたり）を自動割り当て
@@ -191,7 +214,7 @@ function startProductionLine(techId) {
     isShortage: false
   });
   saveProductionData();
-  renderProductionLines();
+  renderProductionView();
 }
 
 function adjustFactories(lineId, delta) {
@@ -201,13 +224,13 @@ function adjustFactories(lineId, delta) {
 
   line.factories += delta;
   saveProductionData();
-  renderProductionLines();
+  renderProductionView();
 }
 
 function removeLine(lineId) {
   productionLines = productionLines.filter(l => l.id !== lineId);
   saveProductionData();
-  renderProductionLines();
+  renderProductionView();
 }
 
 function getTotalUsedFactories() {
@@ -240,9 +263,10 @@ function renderProductionLines() {
       return `<span style="margin-right: 6px;"><img src="image/${resName}.png" class="res-icon-inline" alt="${resName}">${amt * line.factories}</span>`;
     }).join('');
 
+    // 資源不足時の表示変更
     let statusText = `生産ストック数: <b style="color: #3fb950; font-size: 15px;">${line.producedCount}</b> 個`;
     if (line.isShortage) {
-      statusText = `<span style="color: #f85149; font-weight: bold;">⚠️ 資源不足により生産停止中</span>`;
+      statusText = `<span style="color: #f85149; font-weight: bold;">⚠️ 資源不足により生産不可</span>`;
     }
 
     const card = document.createElement('div');
@@ -454,7 +478,7 @@ function initSharedClock() {
             const dailyProduced = Math.floor(baseRate * line.factories);
             line.producedCount += dailyProduced;
           } else {
-            // 資源不足により生産一時停止
+            // 資源不足により生産不可
             line.isShortage = true;
           }
         });
