@@ -106,10 +106,13 @@ function renderScienceList() {
               <div class="science-name">${sci.name}</div>
               <div class="science-name-en">${sci.name_en}</div>
             </div>
+          </div>
 
-            <!-- 特別研究（プロジェクト）アイコン -->
+          <!-- 大きく表示する特別研究アイコン用のコンテナ -->
+          <div class="science-project-icon-container">
             <img src="${projIconPath}" alt="Project Icon" class="science-project-icon" onerror="this.onerror=null; this.src='image/tech_default.png';">
           </div>
+
           <div class="science-desc">
             <p><strong>概要:</strong> ${sci.overview}</p>
             <p><strong>制作兵器:</strong> ${sci.weapons}</p>
