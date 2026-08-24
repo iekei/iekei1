@@ -1,7 +1,7 @@
 const categories = ['infantry', 'armor', 'artillery', 'naval', 'air', 'engineering', 'industry'];
 let currentCategory = 'infantry';
 let techData = {};
-let completedTechs = [];
+let completedTechs = JSON.parse(localStorage.getItem('completedTechs')) || [];
 let researchSlots = [
   { id: 1, tech: null, remaining: 0, locked: false },
   { id: 2, tech: null, remaining: 0, locked: false },
@@ -88,6 +88,12 @@ function initClock() {
             else updateSlotDisplay(slot);
           }
         });
+
+        // ★追加：日付が1日進むごとに科学者モーダルの進捗UIをリアルタイム更新
+        if (typeof updateScienceProgressUI === 'function') {
+          updateScienceProgressUI();
+        }
+
       }, speedIntervals[gameSpeed] || 1000);
     }
   }
@@ -134,7 +140,7 @@ function calculateEffectiveResearchDays(tech) {
   const hiredScientists = JSON.parse(localStorage.getItem('hiredScientists')) || {};
   const activeScientistId = hiredScientists[currentCategory]; // 現在のタブに特別研究が配属されているか
 
-  // 特別研究計画が配属されている場合は「一律2年（720日）」ですべての研究が終わるように設定
+  // 特別研究計画が配属されている場合は「一律2年（720日）」ですべてが終わるように設定
   if (activeScientistId) {
     return 720; 
   }
