@@ -30,13 +30,13 @@ async function initScienceSystem() {
 
   await loadScienceJSON();
 
-  // モーダルが開いている間、ゲーム時間に合わせて進捗表示を定期更新
+  // モーダルが開いている間、ゲーム時間に合わせて進捗表示をリアルタイム更新
   setInterval(() => {
     const overlay = document.getElementById('science-modal-overlay');
     if (overlay && !overlay.classList.contains('hidden')) {
       updateScienceProgressUI();
     }
-  }, 1000);
+  }, 500); // 0.5秒おきにスムーズに更新
 }
 
 function ensureScienceCSSLoaded() {
@@ -95,28 +95,30 @@ function formatScienceRemaining(totalDays) {
   return `残り: ${result.join('')}`;
 }
 
-// 現在進行中の研究スロットから、該当カテゴリの残り日数と進捗率を計算する
+// ★ 修正: script.js 側の researchSlots から、現在研究中の進捗を正確に取得する
 function getCategoryProgressInfo(catKey) {
-  // script.js 側で管理されている researchSlots や hiredScientists を参照
-  // 特別研究は一律2年（720日）で設定されているため、進行状況を算出
-  if (typeof researchSlots === 'undefined') return null;
-
-  // 雇用中の科学者ID
+  // hiredScientists は script.js と共通の localStorage変数を参照
   const hiredId = hiredScientists[catKey];
   if (!hiredId) return null;
 
-  // 該当カテゴリ（または現在進行中のスロットで、その特別研究に関連するもの）を探索
-  // ここではシンプルに、雇用中でアクティブなスロットがあればその残日数を使用、
-  // なければ一律720日（未着手）として扱います
-  let activeSlot = researchSlots.find(s => s.tech && s.remaining > 0);
-  
-  const totalDays = 720; // 特別研究計画の一律期間
-  let remaining = 720;
-  
-  if (activeSlot) {
+  // script.js 側のグローバル変数 researchSlots を参照
+  if (typeof researchSlots === 'undefined') return null;
+
+  // 現在動いているスロットの中で、対象カテゴリ（currentCategory が一致している場合、または現在アクティブな研究）を探す
+  // ここでは「現在そのカテゴリを開いているか、あるいはそのカテゴリに紐づく研究」を判定
+  let activeSlot = null;
+  if (typeof currentCategory !== 'undefined' && currentCategory === catKey) {
+    activeSlot = researchSlots.find(s => s.tech && s.remaining > 0);
+  }
+
+  const totalDays = 720; // 特別研究計画の一律期間（2年）
+  let remaining = totalDays;
+
+  if (activeSlot && activeSlot.tech) {
     remaining = activeSlot.remaining;
   }
 
+  // 経過日数と進捗率（%）を算出
   const elapsed = Math.max(0, totalDays - remaining);
   const percent = Math.min(100, Math.max(0, (elapsed / totalDays) * 100));
 
@@ -168,7 +170,7 @@ function renderScienceList() {
                 <circle cx="22" cy="22" r="${radius}" stroke="#30363d" stroke-width="4" fill="none"></circle>
                 <circle cx="22" cy="22" r="${radius}" stroke="#3fb950" stroke-width="4" fill="none"
                   stroke-dasharray="${circ}" stroke-dashoffset="${strokeDashoffset}"
-                  style="transition: stroke-dashoffset 0.5s ease; transform: rotate(-90deg); transform-origin: 50% 50%;">
+                  style="transform: rotate(-90deg); transform-origin: 50% 50%;">
                 </circle>
               </svg>
               <div class="science-progress-text">${Math.round(info.percent)}%</div>
@@ -188,7 +190,7 @@ function renderScienceList() {
               <div class="science-name-en">${sci.name_en}</div>
             </div>
 
-            <!-- ★ 名前の右側余白に配置する残り時間＆円形グラフ -->
+            <!-- 名前の右側余白に配置する残り時間＆円形グラフ -->
             ${progressHtml}
           </div>
 
@@ -213,7 +215,7 @@ function renderScienceList() {
   }
 }
 
-// モーダルが開いている間に数秒おきに数値をリアルタイム更新する関数
+// モーダルが開いている間に進捗数値をリアルタイム更新する関数
 function updateScienceProgressUI() {
   document.querySelectorAll('.science-progress-badge').forEach(badge => {
     const catKey = badge.getAttribute('data-cat');
