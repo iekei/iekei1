@@ -394,3 +394,9 @@ html, body {
 .special-science-btn:hover {
   background: #30363d;
 }
+/* 先行研究ペナルティの警告表示 */
+#tooltip-penalty {
+  color: #f85149;
+  font-weight: bold;
+  margin-top: 4px;
+}
