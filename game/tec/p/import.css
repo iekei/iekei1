@@ -138,3 +138,45 @@
 .import-exec-btn:hover {
   background: #2ea043;
 }
+
+.import-global-status {
+  display: flex;
+  gap: 15px;
+  font-size: 12px;
+}
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.status-item img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+.country-import-box {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 8px;
+}
+.country-row-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+.country-slider-row input[type="range"] {
+  width: 100%;
+  accent-color: #58a6ff;
+  cursor: pointer;
+  margin-bottom: 6px;
+}
+.country-cost-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: #8b949e;
+}
