@@ -214,3 +214,30 @@
 .special-science-btn:hover {
   background: #30363d;
 }
+.science-card-header {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.science-progress-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  font-size: 11px;
+  color: #e3b341;
+}
+.science-progress-ring {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.science-progress-text {
+  position: absolute;
+  font-size: 9px;
+  font-weight: bold;
+  color: #c9d1d9;
+}
