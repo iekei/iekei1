@@ -18,7 +18,7 @@
 .science-modal-content {
   background: #161b22;
   border: 1px solid #30363d;
-  width: 840px;
+  width: 880px; /* 少しモーダル幅を広げてゆとりを持たせました */
   max-height: 85vh;
   border-radius: 8px;
   display: flex;
@@ -79,7 +79,7 @@
 
 .science-cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   gap: 12px;
 }
 
@@ -135,10 +135,10 @@
   color: #8b949e;
 }
 
-/* 特別研究（プロジェクト）アイコン */
+/* 特別研究（プロジェクト）アイコン：サイズを大きく変更しました */
 .science-project-icon {
-  width: 56px;
-  height: 42px;
+  width: 88px;  /* 横幅を拡大 */
+  height: 56px; /* 高さを拡大 */
   object-fit: cover;
   border: 1px solid #30363d;
   border-radius: 4px;
