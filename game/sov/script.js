@@ -204,7 +204,7 @@ const localisationFiles = [
   "tank_modules_l_japanese.yml",
   "technology_sharing_l_japanese.yml",
   "terrain_l_japanese.yml",
-  "tfv_events_l_japanese.yml",
+    "tfv_events_l_japanese.yml",
   "theater_l_japanese.yml",
   "toa_characters_l_japanese.yml",
   "toa_decisions_l_japanese.yml",
@@ -236,7 +236,7 @@ const localisationFiles = [
   "wtt_ss_recruitment_l_japanese.yml"
 ];
 
-// すべての.ymlファイルを非同期で一括読み込みしてパースする関数
+// すべての.ymlファイルを非同期で一括読み込みしてパースする関数（バージョン番号の有無両方に対応）
 async function loadLocalisation() {
   try {
     const promises = localisationFiles.map(async (filename) => {
@@ -251,7 +251,8 @@ async function loadLocalisation() {
       if (!text) return;
       const lines = text.split('\n');
       lines.forEach(line => {
-        const match = line.match(/^\s*([A-Za-z0-9_]+):\d+\s+"(.*)"/);
+        // 例: SOV_heavy_industry:0 "日本語" や SOV_heavy_industry: "日本語"、または数字なしに対応
+        const match = line.match(/^\s*([A-Za-z0-9_]+)(?::\d*)?\s+"(.*)"/);
         if (match) {
           localizationMap[match[1]] = match[2];
         }
@@ -449,7 +450,11 @@ function renderTree() {
       ? `<div class="focus-progress">残り ${focusDaysRemaining}日</div>` 
       : `<div class="focus-cost">${nf.cost || 70}日</div>`;
 
-    const displayName = localizationMap[nf.id] || nf.title || nf.id;
+    // 表示名の決定（yml、jsonのtitle、またはIDをきれいに成形した文字列）
+    let displayName = localizationMap[nf.id] || nf.title;
+    if (!displayName) {
+      displayName = nf.id.replace(/_/g, ' ');
+    }
     
     let iconHtml = `<div class="focus-symbol">⭐</div>`;
     const rawIcon = nf.icon || nf.iconPath;
@@ -615,7 +620,11 @@ function showTooltip(e, nf) {
   const isActive = activeFocus && activeFocus.id === nf.id;
   const isLocked = lockedFocuses.has(nf.id) || !isUnlocked(nf);
   
-  const titleName = localizationMap[nf.id] || nf.title || nf.id;
+  let titleName = localizationMap[nf.id] || nf.title;
+  if (!titleName) {
+    titleName = nf.id.replace(/_/g, ' ');
+  }
+
   let status = isCompleted ? "【達成済み】" : (isActive ? "【実行中】" : (isLocked ? "🔒【選択不可/排他】" : "🔓【選択可能】"));
   
   document.getElementById('tooltip-title').textContent = `${titleName} ${status}`;
