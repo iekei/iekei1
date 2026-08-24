@@ -10,7 +10,7 @@ let researchSlots = [
   { id: 5, tech: null, remaining: 0, locked: true }
 ];
 
-// ★LocalStorageから保存された日付とスピードを復元（なければ初期値）
+// LocalStorageから保存された日付とスピードを復元（なければ初期値）
 let gameDate = localStorage.getItem('gameDate') ? new Date(localStorage.getItem('gameDate')) : new Date(1936, 0, 1);
 let gameSpeed = localStorage.getItem('gameSpeed') ? parseInt(localStorage.getItem('gameSpeed'), 10) : 0;
 
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadAllTechData();
 });
 
-// ★日数を「○年○ヶ月○日」の文字列に変換するヘルパー関数
+// 日数を「○年○ヶ月○日」の文字列に変換するヘルパー関数
 function formatDaysToYMD(totalDays) {
   if (totalDays <= 0) return '0日';
   const daysInYear = 360; // 簡易的に1年を360日（1ヶ月30日×12）として計算
@@ -53,7 +53,6 @@ async function loadAllTechData() {
 }
 
 function initClock() {
-  // 初期スピードボタンの状態を反映
   document.querySelectorAll('.speed-btn').forEach(btn => {
     const speed = parseInt(btn.getAttribute('data-speed'), 10);
     if (speed === gameSpeed) {
@@ -64,37 +63,27 @@ function initClock() {
 
     btn.addEventListener('click', (e) => {
       gameSpeed = parseInt(e.target.getAttribute('data-speed'), 10) || 0;
-      
-      // LocalStorageに保存して他画面と同期
       localStorage.setItem('gameSpeed', gameSpeed);
-
       document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
       e.target.classList.add('active');
     });
   });
 
-  // 日付表示の初期化
   updateCalendarUI();
 
-  // HOI4風のメインループ（国家方針側と同期した速度間隔）
   const speedIntervals = { 1: 2000, 2: 1200, 3: 700, 4: 350, 5: 120 };
-  
   let gameTimer = null;
   function runTick() {
     if (gameTimer) clearInterval(gameTimer);
     if (gameSpeed > 0) {
       gameTimer = setInterval(() => {
-        // 1日進める
         gameDate.setDate(gameDate.getDate() + 1);
         updateCalendarUI();
-
-        // LocalStorageへ保存して他画面と同期
         localStorage.setItem('gameDate', gameDate.toISOString());
 
-        // 研究スロットの進行
         researchSlots.forEach(slot => {
           if (slot.tech && slot.remaining > 0) {
-            slot.remaining -= 1; // 1日ずつ進行
+            slot.remaining -= 1;
             if (slot.remaining <= 0) completeResearch(slot);
             else updateSlotDisplay(slot);
           }
@@ -103,7 +92,6 @@ function initClock() {
     }
   }
 
-  // スピード変更時にタイマーを再設定する監視
   document.querySelectorAll('.speed-btn').forEach(btn => {
     btn.addEventListener('click', () => runTick());
   });
@@ -120,7 +108,6 @@ function updateCalendarUI() {
   }
 }
 
-// 研究スロットをクリックして研究を中断・変更する機能
 function initResearchSlots() {
   document.querySelectorAll('.slot').forEach(slotEl => {
     slotEl.addEventListener('click', () => {
@@ -141,41 +128,23 @@ function initResearchSlots() {
   });
 }
 
-// ★ 特別研究計画（科学者雇用）によるペナルティ計算・日数補正を行う関数
+// ★ 特別研究計画（核・ロケットなど全カテゴリ共通）による日数計算
 function calculateEffectiveResearchDays(tech) {
-  let totalDays = tech.research_time || 30;
   const currentYear = gameDate.getFullYear();
-  
-  // 雇用中の科学者データを取得 (LocalStorageから直接安全に読み込み)
   const hiredScientists = JSON.parse(localStorage.getItem('hiredScientists')) || {};
-  const activeScientistId = hiredScientists[currentCategory]; // 現在のタブカテゴリに配属されている科学者
+  const activeScientistId = hiredScientists[currentCategory]; // 現在のタブに特別研究が配属されているか
 
-  // 例：工学カテゴリなどで特定の特別研究計画（核など）が有効な場合
-  // 1940年ペナルティの剥奪・免除、あるいは2年（720日）ですべて終わる特殊ルールの適用
-  let isSpecialNuclearProject = (currentCategory === 'engineering' && activeScientistId); 
-
-  if (tech.year && tech.year > currentYear) {
-    let yearDiff = tech.year - currentYear;
-
-    // もし核などの特別研究計画が適用されていて、対象が1940年関連（または未来技術）の場合の特例処理
-    if (isSpecialNuclearProject && tech.year === 1940) {
-      // 1940年のペナルティを完全に剥奪（0にする）
-      yearDiff = 0;
-    }
-
-    const penaltyDays = yearDiff * 250;
-    totalDays += penaltyDays;
+  // 特別研究計画が配属されている場合は「一律2年（720日）」ですべての研究が終わるように設定
+  if (activeScientistId) {
+    return 720; 
   }
 
-  // 特別研究計画が有効な場合、2年（720日）ですべての研究が強制的に最適化・完了するように調整する、
-  // もしくは1941年に研究した際の特殊ペナルティ・制限の適用
-  if (activeScientistId) {
-    // 例：特別研究計画によって基本日数が短縮される、あるいは上限・下限の調整
-    // 仮に「特別研究計画なら最大でも2年（720日）で終わらせる（またはベースを720日に固定）」といった調整を行う場合：
-    if (currentYear >= 1941 && tech.year === 1940) {
-      // 1941年に1940年ペナルティ付き（あるいは過去の技術・当年の技術）を研究する場合の調整
-      // ここで必要に応じた日数の再計算を行えます
-    }
+  // 通常時の研究日数・ペナルティ計算
+  let totalDays = tech.research_time || 30;
+  if (tech.year && tech.year > currentYear) {
+    const yearDiff = tech.year - currentYear;
+    const penaltyDays = yearDiff * 250;
+    totalDays += penaltyDays;
   }
 
   return Math.max(30, totalDays);
@@ -289,20 +258,17 @@ function showTooltip(e, tech) {
   document.getElementById('tooltip-title').textContent = tech.title;
   document.getElementById('tooltip-info').innerText = `開発年: ${tech.year}年 | 必要日数: ${tech.research_time || 30}日`;
   
-  // ★ ツールチップ側のペナルティ表示も、特別研究計画の雇用状態を反映して判定
   const penaltyEl = document.getElementById('tooltip-penalty');
   const currentYear = gameDate.getFullYear();
   const hiredScientists = JSON.parse(localStorage.getItem('hiredScientists')) || {};
   const activeScientistId = hiredScientists[currentCategory];
-  let isSpecialNuclearProject = (currentCategory === 'engineering' && activeScientistId);
 
-  if (tech.year && tech.year > currentYear) {
-    let yearDiff = tech.year - currentYear;
-    if (isSpecialNuclearProject && tech.year === 1940) {
-      yearDiff = 0; // 1940年ペナルティ剥奪
-    }
-
-    if (yearDiff > 0) {
+  // 特別研究計画が有効な場合は、ペナルティ表示を非表示（剥奪・免除）にする
+  if (activeScientistId) {
+    if (penaltyEl) penaltyEl.style.display = 'none';
+  } else {
+    if (tech.year && tech.year > currentYear) {
+      const yearDiff = tech.year - currentYear;
       const penaltyDays = yearDiff * 250;
       const penaltyStr = formatDaysToYMD(penaltyDays);
       penaltyEl.textContent = `⚠️ ${yearDiff}年先の技術！ペナルティ ${penaltyStr} が発生します`;
@@ -310,8 +276,6 @@ function showTooltip(e, tech) {
     } else {
       if (penaltyEl) penaltyEl.style.display = 'none';
     }
-  } else {
-    if (penaltyEl) penaltyEl.style.display = 'none';
   }
 
   const descEl = document.getElementById('tooltip-desc');
