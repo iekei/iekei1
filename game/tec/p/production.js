@@ -1,12 +1,16 @@
 let completedTechs = JSON.parse(localStorage.getItem('completedTechs') || '[]');
 let techDataAll = {};
 
-// 資源データ
-let resources = {
-  cards: 10,
-  steel: 500,
-  aluminum: 300
-};
+// 7種類の資源データ
+let resources = JSON.parse(localStorage.getItem('resources') || JSON.stringify({
+  石油: 500,
+  石炭: 800,
+  鋼材: 1000,
+  アルミ: 500,
+  クロム: 300,
+  ゴム: 500,
+  タングステン: 300
+}));
 
 // LocalStorageから生産ラインのデータを復元
 let productionLines = JSON.parse(localStorage.getItem('productionLines') || '[]');
@@ -65,8 +69,9 @@ function initProductionUIControls() {
   }
 }
 
-function saveProductionLines() {
+function saveProductionData() {
   localStorage.setItem('productionLines', JSON.stringify(productionLines));
+  localStorage.setItem('resources', JSON.stringify(resources));
 }
 
 function renderProductionView() {
@@ -74,6 +79,36 @@ function renderProductionView() {
   renderProductionLines();
   updateResourceDisplay();
   updateTotalStatsSummary();
+}
+
+// 装備ごとに適した資源と消費量（1工場・1日あたり）を自動割り当て
+function getTechResourceCost(tech) {
+  const title = tech.title || '';
+  const cat = tech.category;
+
+  if (cat === 'air') {
+    return { アルミ: 2, 鋼材: 1, 石油: 1 };
+  }
+  if (cat === 'armor') {
+    if (title.includes('重') || title.includes('駆逐') || title.includes('超重')) {
+      return { 鋼材: 5, タングステン: 2, 石油: 1 };
+    } else if (title.includes('軽') || title.includes('偵察')) {
+      return { 鋼材: 2, ゴム: 1, 石油: 1 };
+    }
+    // 中戦車など標準
+    return { 鋼材: 3, ゴム: 1, 石油: 1 };
+  }
+  if (cat === 'naval') {
+    if (title.includes('戦艦') || title.includes('空母')) {
+      return { 鋼材: 8, クロム: 3, 石油: 2 };
+    }
+    return { 鋼材: 5, クロム: 2, 石油: 1 };
+  }
+  if (cat === 'artillery') {
+    return { 鋼材: 2, タングステン: 1 };
+  }
+  // 歩兵装備など
+  return { 鋼材: 1, 石炭: 1 };
 }
 
 function renderAvailableTechs() {
@@ -105,12 +140,20 @@ function renderAvailableTechs() {
     if (!showOldEquipment && !isLatest) return;
 
     const baseDailyRate = getBaseDailyRate(tech);
+    const resCost = getTechResourceCost(tech);
+    
+    // 必要資源のアイコン付きHTML生成
+    let costHtml = Object.entries(resCost).map(([resName, amt]) => {
+      return `<span style="margin-right: 8px;"><img src="image/${resName}.png" class="res-icon-inline" alt="${resName}">${amt}</span>`;
+    }).join('');
+
     const card = document.createElement('div');
     card.className = `item-card ${isLatest ? 'latest-equip' : 'old-equip'}`;
     card.innerHTML = `
       <div class="item-info">
         <h4>${tech.title} ${isLatest ? '<span class="badge-latest">最新</span>' : '<span class="badge-old">旧式</span>'}</h4>
         <p>1工場日産: <b>${Math.floor(baseDailyRate)}</b> 個/日 | 開発年: ${tech.year || 1936}年</p>
+        <div style="font-size: 11px; color: #8b949e; margin-top: 4px;">必要資源(1日/1工場): ${costHtml}</div>
       </div>
       <button class="action-btn" onclick="startProductionLine('${tech.id}')">生産開始</button>
     `;
@@ -144,9 +187,10 @@ function startProductionLine(techId) {
     id: Date.now(),
     techId: techId,
     factories: 1,
-    producedCount: 0
+    producedCount: 0,
+    isShortage: false
   });
-  saveProductionLines();
+  saveProductionData();
   renderProductionLines();
 }
 
@@ -156,13 +200,13 @@ function adjustFactories(lineId, delta) {
   if (line.factories + delta < 1) return;
 
   line.factories += delta;
-  saveProductionLines();
+  saveProductionData();
   renderProductionLines();
 }
 
 function removeLine(lineId) {
   productionLines = productionLines.filter(l => l.id !== lineId);
-  saveProductionLines();
+  saveProductionData();
   renderProductionLines();
 }
 
@@ -190,14 +234,25 @@ function renderProductionLines() {
 
     const baseRate = getBaseDailyRate(tech);
     const dailyOutput = Math.floor(baseRate * line.factories);
+    const resCost = getTechResourceCost(tech);
+
+    let costHtml = Object.entries(resCost).map(([resName, amt]) => {
+      return `<span style="margin-right: 6px;"><img src="image/${resName}.png" class="res-icon-inline" alt="${resName}">${amt * line.factories}</span>`;
+    }).join('');
+
+    let statusText = `生産ストック数: <b style="color: #3fb950; font-size: 15px;">${line.producedCount}</b> 個`;
+    if (line.isShortage) {
+      statusText = `<span style="color: #f85149; font-weight: bold;">⚠️ 資源不足により生産停止中</span>`;
+    }
 
     const card = document.createElement('div');
-    card.className = 'line-card';
+    card.className = `line-card ${line.isShortage ? 'shortage-line' : ''}`;
     card.innerHTML = `
       <div class="line-details" style="flex: 1;">
         <strong>${tech.title}</strong>
-        <div>生産ストック数: <b style="color: #3fb950; font-size: 15px;">${line.producedCount}</b> 個</div>
-        <div style="font-size: 12px; color: #8b949e; margin-top: 2px;">1日あたりの生産量: <b>${dailyOutput}</b> 個 (工場数: ${line.factories})</div>
+        <div>${statusText}</div>
+        <div style="font-size: 12px; color: #8b949e; margin-top: 2px;">1日生産量: <b>${dailyOutput}</b> 個 (工場数: ${line.factories})</div>
+        <div style="font-size: 11px; color: #8b949e; margin-top: 2px;">消費資源(1日合計): ${costHtml}</div>
         <div class="factory-controls" style="margin-top: 6px;">
           工場割当: 
           <button onclick="adjustFactories(${line.id}, -1)">-</button>
@@ -217,23 +272,21 @@ function renderProductionLines() {
   updateTotalStatsSummary();
 }
 
-// 稼働中の最新生産ラインからステータス（総合攻撃力、機動力、生存力など）を自動計算して反映
 function updateTotalStatsSummary() {
   const summaryContainer = document.getElementById('current-stats-summary');
   if (!summaryContainer) return;
 
-  // 同じカテゴリ（歩兵、戦車など）で複数のラインがある場合、最新の生産装備のものを優先して合計する
   const activeTechsMap = {};
   productionLines.forEach(line => {
     const tech = techDataAll[line.techId];
-    if (tech) {
+    if (tech && !line.isShortage) {
       activeTechsMap[tech.category || 'other'] = tech;
     }
   });
 
   const activeTechs = Object.values(activeTechsMap);
   if (activeTechs.length === 0) {
-    summaryContainer.innerHTML = '<span style="color: #8b949e;">現在稼働中の生産ラインがありません</span>';
+    summaryContainer.innerHTML = '<span style="color: #8b949e;">現在稼働中の生産ラインがありません（または資源不足）</span>';
     return;
   }
 
@@ -307,13 +360,10 @@ function hideTooltip() {
 }
 
 function updateResourceDisplay() {
-  const steelEl = document.getElementById('res-steel');
-  const alumEl = document.getElementById('res-aluminum');
-  const cardsEl = document.getElementById('res-cards');
-  
-  if (steelEl) steelEl.textContent = resources.steel;
-  if (alumEl) alumEl.textContent = resources.aluminum;
-  if (cardsEl) cardsEl.textContent = `${resources.cards}枚 (${resources.cards * 100})`;
+  for (const [resName, val] of Object.entries(resources)) {
+    const el = document.getElementById(`res-${resName}`);
+    if (el) el.textContent = val;
+  }
 }
 
 function updateCalendarUI() {
@@ -370,22 +420,47 @@ function initSharedClock() {
           gameDate = new Date(savedDateStr);
         }
 
+        // 1日進める
         gameDate.setDate(gameDate.getDate() + 1);
         localStorage.setItem('gameDate', gameDate.toISOString());
         updateCalendarUI();
 
+        // 各生産ラインの資源消費チェック＆生産処理
         productionLines.forEach(line => {
           const tech = techDataAll[line.techId];
           if (!tech) return;
 
-          const baseRate = getBaseDailyRate(tech);
-          const dailyProduced = Math.floor(baseRate * line.factories);
-          
-          line.producedCount += dailyProduced;
+          const resCost = getTechResourceCost(tech);
+          let canProduce = true;
+
+          // 工場数に応じた総消費量をチェック
+          for (const [resName, costPerFac] of Object.entries(resCost)) {
+            const totalNeeded = costPerFac * line.factories;
+            if ((resources[resName] || 0) < totalNeeded) {
+              canProduce = false;
+              break;
+            }
+          }
+
+          if (canProduce) {
+            // 資源を実際に消費する
+            for (const [resName, costPerFac] of Object.entries(resCost)) {
+              resources[resName] -= costPerFac * line.factories;
+            }
+            line.isShortage = false;
+
+            // 生産物をカウント
+            const baseRate = getBaseDailyRate(tech);
+            const dailyProduced = Math.floor(baseRate * line.factories);
+            line.producedCount += dailyProduced;
+          } else {
+            // 資源不足により生産一時停止
+            line.isShortage = true;
+          }
         });
 
-        saveProductionLines();
-        renderProductionLines();
+        saveProductionData();
+        renderProductionView();
       }, interval);
     }
   }
