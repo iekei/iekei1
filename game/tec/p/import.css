@@ -1,0 +1,140 @@
+/* 資源輸入モーダル用CSS */
+.import-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.import-overlay.hidden {
+  display: none;
+}
+
+.import-modal-content {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 20px;
+  color: #c9d1d9;
+  font-family: sans-serif;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.import-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #30363d;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.import-modal-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #58a6ff;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #8b949e;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  color: #f85149;
+}
+
+.import-resource-icons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.import-icon-btn {
+  background: #21262d;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  padding: 6px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 52px;
+  transition: 0.2s;
+}
+
+.import-icon-btn:hover {
+  background: #30363d;
+}
+
+.import-icon-btn.active {
+  border-color: #58a6ff;
+  background: #1f6feb33;
+}
+
+.import-icon-btn img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  margin-bottom: 4px;
+}
+
+.import-icon-btn span {
+  font-size: 10px;
+  color: #c9d1d9;
+}
+
+.era-section {
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+
+.era-title {
+  font-weight: bold;
+  color: #58a6ff;
+  margin-bottom: 6px;
+}
+
+.country-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px dashed #21262d;
+}
+
+.country-row:last-child {
+  border-bottom: none;
+}
+
+.import-exec-btn {
+  background: #238636;
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.import-exec-btn:hover {
+  background: #2ea043;
+}
