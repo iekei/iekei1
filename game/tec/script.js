@@ -24,6 +24,24 @@ document.addEventListener('DOMContentLoaded', () => {
   loadAllTechData();
 });
 
+// ★日数を「○年○ヶ月○日」の文字列に変換するヘルパー関数
+function formatDaysToYMD(totalDays) {
+  if (totalDays <= 0) return '0日';
+  const daysInYear = 360; // 簡易的に1年を360日（1ヶ月30日×12）として計算
+  const daysInMonth = 30;
+
+  const years = Math.floor(totalDays / daysInYear);
+  const months = Math.floor((totalDays % daysInYear) / daysInMonth);
+  const days = Math.floor((totalDays % daysInYear) % daysInMonth);
+
+  let result = [];
+  if (years > 0) result.push(`${years}年`);
+  if (months > 0) result.push(`${months}ヶ月`);
+  if (days > 0 || result.length === 0) result.push(`${days}日`);
+
+  return result.join('');
+}
+
 async function loadAllTechData() {
   for (const cat of categories) {
     try {
@@ -179,7 +197,9 @@ function updateSlotDisplay(slot) {
   const el = document.querySelector(`.slot[data-slot="${slot.id}"] .slot-status`);
   if (!el) return;
   if (slot.tech) {
-    el.textContent = `研究中: ${slot.tech.title} (${Math.ceil(slot.remaining)}日)`;
+    // ★残りの日数表記を「○年○ヶ月○日」に変換
+    const remainingStr = formatDaysToYMD(Math.ceil(slot.remaining));
+    el.textContent = `研究中: ${slot.tech.title} (${remainingStr})`;
     el.style.color = '#e3b341';
   } else {
     el.textContent = slot.locked ? '🔒 NFで解放' : '空き';
@@ -242,13 +262,14 @@ function showTooltip(e, tech) {
   document.getElementById('tooltip-title').textContent = tech.title;
   document.getElementById('tooltip-info').innerText = `開発年: ${tech.year}年 | 必要日数: ${tech.research_time || 30}日`;
   
-  // ★ 先行研究ペナルティの計算とツールチップ表示
+  // ★ 先行研究ペナルティの計算とツールチップ表示（日数部分を「○年○ヶ月○日」に変換）
   const penaltyEl = document.getElementById('tooltip-penalty');
   const currentYear = gameDate.getFullYear();
   if (tech.year && tech.year > currentYear) {
     const yearDiff = tech.year - currentYear;
     const penaltyDays = yearDiff * 250;
-    penaltyEl.textContent = `⚠️ ${yearDiff}年先の技術！ペナルティ ${penaltyDays}日 が発生します`;
+    const penaltyStr = formatDaysToYMD(penaltyDays);
+    penaltyEl.textContent = `⚠️ ${yearDiff}年先の技術！ペナルティ ${penaltyStr} が発生します`;
     penaltyEl.style.display = 'block';
   } else {
     if (penaltyEl) penaltyEl.style.display = 'none';
