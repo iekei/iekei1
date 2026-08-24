@@ -93,14 +93,22 @@ function renderScienceList() {
     group.items.forEach(sci => {
       const isHired = hiredScientists[catKey] === sci.id;
       
+      // プロジェクトアイコンのパス補正（設定されていない場合はデフォルト）
+      let projIconPath = sci.project_icon || 'image/tech_default.png';
+
       groupHtml += `
         <div class="science-card ${isHired ? 'hired' : ''}">
           <div class="science-card-header">
+            <!-- 科学者肖像画 -->
             <img src="${sci.icon}" alt="${sci.name}" class="science-icon" onerror="this.onerror=null; this.src='image/tech_default.png';">
+            
             <div class="science-name-group">
               <div class="science-name">${sci.name}</div>
               <div class="science-name-en">${sci.name_en}</div>
             </div>
+
+            <!-- 特別研究（プロジェクト）アイコン -->
+            <img src="${projIconPath}" alt="Project Icon" class="science-project-icon" onerror="this.onerror=null; this.src='image/tech_default.png';">
           </div>
           <div class="science-desc">
             <p><strong>概要:</strong> ${sci.overview}</p>
