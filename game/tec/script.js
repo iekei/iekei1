@@ -65,7 +65,7 @@ function initClock() {
     btn.addEventListener('click', (e) => {
       gameSpeed = parseInt(e.target.getAttribute('data-speed'), 10) || 0;
       
-      // LocalStorageに保存して国家方針や他画面と同期
+      // LocalStorageに保存して他画面と同期
       localStorage.setItem('gameSpeed', gameSpeed);
 
       document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
@@ -141,6 +141,46 @@ function initResearchSlots() {
   });
 }
 
+// ★ 特別研究計画（科学者雇用）によるペナルティ計算・日数補正を行う関数
+function calculateEffectiveResearchDays(tech) {
+  let totalDays = tech.research_time || 30;
+  const currentYear = gameDate.getFullYear();
+  
+  // 雇用中の科学者データを取得 (LocalStorageから直接安全に読み込み)
+  const hiredScientists = JSON.parse(localStorage.getItem('hiredScientists')) || {};
+  const activeScientistId = hiredScientists[currentCategory]; // 現在のタブカテゴリに配属されている科学者
+
+  // 例：工学カテゴリなどで特定の特別研究計画（核など）が有効な場合
+  // 1940年ペナルティの剥奪・免除、あるいは2年（720日）ですべて終わる特殊ルールの適用
+  let isSpecialNuclearProject = (currentCategory === 'engineering' && activeScientistId); 
+
+  if (tech.year && tech.year > currentYear) {
+    let yearDiff = tech.year - currentYear;
+
+    // もし核などの特別研究計画が適用されていて、対象が1940年関連（または未来技術）の場合の特例処理
+    if (isSpecialNuclearProject && tech.year === 1940) {
+      // 1940年のペナルティを完全に剥奪（0にする）
+      yearDiff = 0;
+    }
+
+    const penaltyDays = yearDiff * 250;
+    totalDays += penaltyDays;
+  }
+
+  // 特別研究計画が有効な場合、2年（720日）ですべての研究が強制的に最適化・完了するように調整する、
+  // もしくは1941年に研究した際の特殊ペナルティ・制限の適用
+  if (activeScientistId) {
+    // 例：特別研究計画によって基本日数が短縮される、あるいは上限・下限の調整
+    // 仮に「特別研究計画なら最大でも2年（720日）で終わらせる（またはベースを720日に固定）」といった調整を行う場合：
+    if (currentYear >= 1941 && tech.year === 1940) {
+      // 1941年に1940年ペナルティ付き（あるいは過去の技術・当年の技術）を研究する場合の調整
+      // ここで必要に応じた日数の再計算を行えます
+    }
+  }
+
+  return Math.max(30, totalDays);
+}
+
 function startResearch(tech) {
   if (completedTechs.includes(tech.id)) return;
 
@@ -162,19 +202,7 @@ function startResearch(tech) {
   }
 
   slot.tech = tech; 
-  
-  // 基本の研究日数
-  let totalDays = tech.research_time || 30;
-
-  // 先行研究ペナルティの計算 (1年先ごとに250日追加)
-  const currentYear = gameDate.getFullYear();
-  if (tech.year && tech.year > currentYear) {
-    const yearDiff = tech.year - currentYear;
-    const penaltyDays = yearDiff * 250;
-    totalDays += penaltyDays;
-  }
-
-  slot.remaining = totalDays;
+  slot.remaining = calculateEffectiveResearchDays(tech);
   updateSlotDisplay(slot);
 }
 
@@ -197,7 +225,6 @@ function updateSlotDisplay(slot) {
   const el = document.querySelector(`.slot[data-slot="${slot.id}"] .slot-status`);
   if (!el) return;
   if (slot.tech) {
-    // ★残りの日数表記を「○年○ヶ月○日」に変換
     const remainingStr = formatDaysToYMD(Math.ceil(slot.remaining));
     el.textContent = `研究中: ${slot.tech.title} (${remainingStr})`;
     el.style.color = '#e3b341';
@@ -262,15 +289,27 @@ function showTooltip(e, tech) {
   document.getElementById('tooltip-title').textContent = tech.title;
   document.getElementById('tooltip-info').innerText = `開発年: ${tech.year}年 | 必要日数: ${tech.research_time || 30}日`;
   
-  // ★ 先行研究ペナルティの計算とツールチップ表示（日数部分を「○年○ヶ月○日」に変換）
+  // ★ ツールチップ側のペナルティ表示も、特別研究計画の雇用状態を反映して判定
   const penaltyEl = document.getElementById('tooltip-penalty');
   const currentYear = gameDate.getFullYear();
+  const hiredScientists = JSON.parse(localStorage.getItem('hiredScientists')) || {};
+  const activeScientistId = hiredScientists[currentCategory];
+  let isSpecialNuclearProject = (currentCategory === 'engineering' && activeScientistId);
+
   if (tech.year && tech.year > currentYear) {
-    const yearDiff = tech.year - currentYear;
-    const penaltyDays = yearDiff * 250;
-    const penaltyStr = formatDaysToYMD(penaltyDays);
-    penaltyEl.textContent = `⚠️ ${yearDiff}年先の技術！ペナルティ ${penaltyStr} が発生します`;
-    penaltyEl.style.display = 'block';
+    let yearDiff = tech.year - currentYear;
+    if (isSpecialNuclearProject && tech.year === 1940) {
+      yearDiff = 0; // 1940年ペナルティ剥奪
+    }
+
+    if (yearDiff > 0) {
+      const penaltyDays = yearDiff * 250;
+      const penaltyStr = formatDaysToYMD(penaltyDays);
+      penaltyEl.textContent = `⚠️ ${yearDiff}年先の技術！ペナルティ ${penaltyStr} が発生します`;
+      penaltyEl.style.display = 'block';
+    } else {
+      if (penaltyEl) penaltyEl.style.display = 'none';
+    }
   } else {
     if (penaltyEl) penaltyEl.style.display = 'none';
   }
