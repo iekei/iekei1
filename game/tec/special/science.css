@@ -18,7 +18,7 @@
 .science-modal-content {
   background: #161b22;
   border: 1px solid #30363d;
-  width: 880px; /* 少しモーダル幅を広げてゆとりを持たせました */
+  width: 920px;
   max-height: 85vh;
   border-radius: 8px;
   display: flex;
@@ -79,8 +79,8 @@
 
 .science-cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+  gap: 14px;
 }
 
 .science-card {
@@ -104,12 +104,14 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  border-bottom: 1px solid #21262d;
+  padding-bottom: 10px;
 }
 
 /* 科学者の肖像画アイコン */
 .science-icon {
-  width: 48px;
-  height: 60px;
+  width: 56px;
+  height: 70px;
   object-fit: cover;
   border: 1px solid #30363d;
   border-radius: 4px;
@@ -126,7 +128,7 @@
 
 .science-name {
   font-weight: bold;
-  font-size: 14px;
+  font-size: 15px;
   color: #f0f6fc;
 }
 
@@ -135,15 +137,24 @@
   color: #8b949e;
 }
 
-/* 特別研究（プロジェクト）アイコン：サイズを大きく変更しました */
+/* 特別研究（プロジェクト）アイコン：大幅に大きく表示 */
+.science-project-icon-container {
+  display: flex;
+  justify-content: center;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  padding: 8px;
+}
+
 .science-project-icon {
-  width: 88px;  /* 横幅を拡大 */
-  height: 56px; /* 高さを拡大 */
+  width: 100%;
+  max-width: 360px; /* カード幅に合わせて大きく広がるように設定 */
+  height: 140px;    /* 高さを出して設計図やイラストがしっかり見えるように変更 */
   object-fit: cover;
   border: 1px solid #30363d;
   border-radius: 4px;
-  background: #161b22;
-  flex-shrink: 0;
+  background: #0d1117;
 }
 
 .science-desc {
