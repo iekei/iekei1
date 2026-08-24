@@ -29,14 +29,6 @@ async function initScienceSystem() {
   });
 
   await loadScienceJSON();
-
-  // モーダルが開いている間、ゲーム時間に合わせて進捗表示をリアルタイム更新
-  setInterval(() => {
-    const overlay = document.getElementById('science-modal-overlay');
-    if (overlay && !overlay.classList.contains('hidden')) {
-      updateScienceProgressUI();
-    }
-  }, 500); // 0.5秒おきにスムーズに更新
 }
 
 function ensureScienceCSSLoaded() {
@@ -95,21 +87,17 @@ function formatScienceRemaining(totalDays) {
   return `残り: ${result.join('')}`;
 }
 
-// ★ 修正: script.js 側の researchSlots から、現在研究中の進捗を正確に取得する
+// 各カテゴリにおける、特別研究の進捗情報を取得
 function getCategoryProgressInfo(catKey) {
-  // hiredScientists は script.js と共通の localStorage変数を参照
   const hiredId = hiredScientists[catKey];
   if (!hiredId) return null;
 
-  // script.js 側のグローバル変数 researchSlots を参照
+  // script.js 側のグローバル変数 researchSlots を安全に参照
   if (typeof researchSlots === 'undefined') return null;
 
-  // 現在動いているスロットの中で、対象カテゴリ（currentCategory が一致している場合、または現在アクティブな研究）を探す
-  // ここでは「現在そのカテゴリを開いているか、あるいはそのカテゴリに紐づく研究」を判定
-  let activeSlot = null;
-  if (typeof currentCategory !== 'undefined' && currentCategory === catKey) {
-    activeSlot = researchSlots.find(s => s.tech && s.remaining > 0);
-  }
+  // 該当カテゴリで現在進行中の研究スロットを探す
+  // （※どのスロットで動いていても、そのカテゴリの特別研究として残り日数を追跡）
+  let activeSlot = researchSlots.find(s => s.tech && s.remaining > 0);
 
   const totalDays = 720; // 特別研究計画の一律期間（2年）
   let remaining = totalDays;
@@ -118,7 +106,6 @@ function getCategoryProgressInfo(catKey) {
     remaining = activeSlot.remaining;
   }
 
-  // 経過日数と進捗率（%）を算出
   const elapsed = Math.max(0, totalDays - remaining);
   const percent = Math.min(100, Math.max(0, (elapsed / totalDays) * 100));
 
@@ -154,7 +141,6 @@ function renderScienceList() {
       const isHired = hiredScientists[catKey] === sci.id;
       let projIconPath = sci.project_icon || 'image/tech_default.png';
 
-      // 雇用中の場合の進捗情報
       let progressHtml = '';
       if (isHired) {
         const info = getCategoryProgressInfo(catKey) || { timeText: '残り: 2年0ヶ月', percent: 0 };
@@ -215,8 +201,11 @@ function renderScienceList() {
   }
 }
 
-// モーダルが開いている間に進捗数値をリアルタイム更新する関数
+// script.js から呼び出されて、モーダル内の進捗をリアルタイムに書き換える関数
 function updateScienceProgressUI() {
+  const overlay = document.getElementById('science-modal-overlay');
+  if (!overlay || overlay.classList.contains('hidden')) return;
+
   document.querySelectorAll('.science-progress-badge').forEach(badge => {
     const catKey = badge.getAttribute('data-cat');
     const info = getCategoryProgressInfo(catKey);
