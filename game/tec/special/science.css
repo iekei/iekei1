@@ -18,7 +18,7 @@
 .science-modal-content {
   background: #161b22;
   border: 1px solid #30363d;
-  width: 820px;
+  width: 840px;
   max-height: 85vh;
   border-radius: 8px;
   display: flex;
@@ -77,10 +77,9 @@
   letter-spacing: 0.5px;
 }
 
-/* 科学者カードを2列または綺麗に配置するグリッド */
 .science-cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(370px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
   gap: 12px;
 }
 
@@ -104,13 +103,13 @@
 .science-card-header {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
 }
 
-/* 科学者の肖像画アイコン設定（HoI4風の縦長比率） */
+/* 科学者の肖像画アイコン */
 .science-icon {
-  width: 52px;
-  height: 64px;
+  width: 48px;
+  height: 60px;
   object-fit: cover;
   border: 1px solid #30363d;
   border-radius: 4px;
@@ -122,6 +121,7 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
+  flex-grow: 1;
 }
 
 .science-name {
@@ -133,6 +133,17 @@
 .science-name-en {
   font-size: 11px;
   color: #8b949e;
+}
+
+/* 特別研究（プロジェクト）アイコン */
+.science-project-icon {
+  width: 56px;
+  height: 42px;
+  object-fit: cover;
+  border: 1px solid #30363d;
+  border-radius: 4px;
+  background: #161b22;
+  flex-shrink: 0;
 }
 
 .science-desc {
