@@ -219,7 +219,7 @@ function renderTree() {
       if (fileName.startsWith('GFX_')) {
         fileName = fileName.slice(4);
       }
-      iconHtml = `<img class="focus-icon" src="/iekei1/game/data/image/goals/${fileName}.png" alt="" onerror="this.style.display='none'">`;
+      iconHtml = `<img class="focus-icon" src="/iekei1/game/data/image/goals/focus_${fileName}.png" alt="" onerror="this.style.display='none'">`;
     }
 
     node.innerHTML = `
