@@ -1,0 +1,4056 @@
+[
+  {
+    "id": "SOV_infrastructure_effort_nsb",
+    "icon": "GFX_SOV_infrastructure_effort_nsb_ccp_2d_sov_compatibility",
+    "title": "SOV_infrastructure_effort_nsb",
+    "cost": 5.0,
+    "offsetX": 1,
+    "offsetY": 0,
+    "iconPath": "goals/SOV_infrastructure_effort_nsb_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_heavy_industry",
+    "icon": "GFX_SOV_heavy_industry_ccp_2d_sov_compatibility",
+    "title": "SOV_heavy_industry",
+    "cost": 5.0,
+    "offsetX": 2,
+    "offsetY": 0,
+    "relative_position_id": "SOV_infrastructure_effort_nsb",
+    "iconPath": "goals/SOV_heavy_industry_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_finish_the_five_year_plan",
+    "icon": "GFX_SOV_finish_the_five_year_plan_ccp_2d_sov_compatibility",
+    "title": "SOV_finish_the_five_year_plan",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_infrastructure_effort_nsb",
+    "prerequisites": [
+      "SOV_infrastructure_effort_nsb",
+      "SOV_heavy_industry"
+    ],
+    "iconPath": "goals/SOV_finish_the_five_year_plan_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_improve_railway_network",
+    "icon": "GFX_goal_generic_construct_infrastructure",
+    "title": "SOV_improve_railway_network",
+    "cost": 10.0,
+    "offsetX": -2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_finish_the_five_year_plan",
+    "prerequisites": [
+      "SOV_finish_the_five_year_plan"
+    ],
+    "iconPath": "goals/goal_generic_construct_infrastructure.png"
+  },
+  {
+    "id": "SOV_third_five_year_plan",
+    "icon": "GFX_SOV_third_five_year_plan_ccp_2d_sov_compatibility",
+    "title": "SOV_third_five_year_plan",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_finish_the_five_year_plan",
+    "prerequisites": [
+      "SOV_finish_the_five_year_plan"
+    ],
+    "iconPath": "goals/SOV_third_five_year_plan_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_reorganize_the_pc_of_heavy_industry",
+    "icon": "GFX_SOV_reorganize_the_pc_of_heavy_industry_ccp_2d_sov_compatibility",
+    "title": "SOV_reorganize_the_pc_of_heavy_industry",
+    "cost": 10.0,
+    "offsetX": -2,
+    "offsetY": 2,
+    "relative_position_id": "SOV_third_five_year_plan",
+    "prerequisites": [
+      "SOV_third_five_year_plan"
+    ],
+    "iconPath": "goals/SOV_reorganize_the_pc_of_heavy_industry_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_industrial_modernization",
+    "icon": "GFX_SOV_industrial_modernization_ccp_2d_sov_compatibility",
+    "title": "SOV_industrial_modernization",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 3,
+    "relative_position_id": "SOV_reorganize_the_pc_of_heavy_industry",
+    "prerequisites": [
+      "SOV_reorganize_the_pc_of_heavy_industry"
+    ],
+    "iconPath": "goals/SOV_industrial_modernization_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_increase_state_reserves",
+    "icon": "GFX_SOV_increase_state_reserves_ccp_2d_sov_compatibility",
+    "title": "SOV_increase_state_reserves",
+    "cost": 5.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_third_five_year_plan",
+    "prerequisites": [
+      "SOV_third_five_year_plan"
+    ],
+    "iconPath": "goals/SOV_increase_state_reserves_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_shift_to_armaments_production",
+    "icon": "GFX_SOV_shift_to_armaments_production_ccp_2d_sov_compatibility",
+    "title": "SOV_shift_to_armaments_production",
+    "cost": 10.0,
+    "offsetX": 2,
+    "offsetY": 2,
+    "relative_position_id": "SOV_third_five_year_plan",
+    "prerequisites": [
+      "SOV_third_five_year_plan"
+    ],
+    "iconPath": "goals/SOV_shift_to_armaments_production_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_optimize_production_lines",
+    "icon": "GFX_SOV_optimize_production_lines_ccp_2d_sov_compatibility",
+    "title": "SOV_optimize_production_lines",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 3,
+    "relative_position_id": "SOV_shift_to_armaments_production",
+    "prerequisites": [
+      "SOV_shift_to_armaments_production"
+    ],
+    "iconPath": "goals/SOV_optimize_production_lines_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_steel_casting_industry",
+    "icon": "GFX_SOV_steel_casting_industry_ccp_2d_sov_compatibility",
+    "title": "SOV_steel_casting_industry",
+    "cost": 10.0,
+    "offsetX": 2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_reorganize_the_pc_of_heavy_industry",
+    "prerequisites": [
+      "SOV_reorganize_the_pc_of_heavy_industry"
+    ],
+    "iconPath": "goals/SOV_steel_casting_industry_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_synthetic_rubber",
+    "icon": "GFX_SOV_synthetic_rubber_ccp_2d_sov_compatibility",
+    "title": "SOV_synthetic_rubber",
+    "cost": 5.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_steel_casting_industry",
+    "prerequisites": [
+      "SOV_steel_casting_industry"
+    ],
+    "iconPath": "goals/SOV_synthetic_rubber_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_oil_production",
+    "icon": "GFX_SOV_oil_production_ccp_2d_sov_compatibility",
+    "title": "SOV_oil_production",
+    "cost": 5.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_steel_casting_industry",
+    "prerequisites": [
+      "SOV_steel_casting_industry"
+    ],
+    "iconPath": "goals/SOV_oil_production_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_restoration_and_development",
+    "icon": "GFX_SOV_restoration_and_development_ccp_2d_sov_compatibility",
+    "title": "SOV_restoration_and_development",
+    "cost": 5.0,
+    "offsetX": 2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_industrial_modernization",
+    "prerequisites": [
+      "SOV_industrial_modernization"
+    ],
+    "iconPath": "goals/SOV_restoration_and_development_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_fourth_five_year_plan",
+    "icon": "GFX_SOV_fourth_five_year_plan_ccp_2d_sov_compatibility",
+    "title": "SOV_fourth_five_year_plan",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_restoration_and_development",
+    "prerequisites": [
+      "SOV_restoration_and_development"
+    ],
+    "iconPath": "goals/SOV_fourth_five_year_plan_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_found_the_comecon",
+    "icon": "GFX_focus_SOV_the_comecon",
+    "title": "SOV_found_the_comecon",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_fourth_five_year_plan",
+    "prerequisites": [
+      "SOV_fourth_five_year_plan"
+    ],
+    "iconPath": "goals/focus_SOV_the_comecon.png"
+  },
+  {
+    "id": "SOV_the_common_economic_space_initiative",
+    "icon": "GFX_goal_anschluss",
+    "title": "SOV_the_common_economic_space_initiative",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_fourth_five_year_plan",
+    "prerequisites": [
+      "SOV_fourth_five_year_plan"
+    ],
+    "iconPath": "goals/goal_anschluss.png"
+  },
+  {
+    "id": "SOV_found_the_warsaw_pact",
+    "icon": "GFX_focus_SOV_found_the_warsaw_pact",
+    "title": "SOV_found_the_warsaw_pact",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_found_the_comecon",
+    "prerequisites": [
+      "SOV_found_the_comecon"
+    ],
+    "iconPath": "goals/focus_SOV_found_the_warsaw_pact.png"
+  },
+  {
+    "id": "SOV_no_time_for_peace",
+    "icon": "GFX_SOV_no_time_for_peace_ccp_2d_sov_compatibility",
+    "title": "SOV_no_time_for_peace",
+    "cost": 10.0,
+    "offsetX": 3,
+    "offsetY": 1,
+    "relative_position_id": "SOV_fourth_five_year_plan",
+    "prerequisites": [
+      "SOV_fourth_five_year_plan",
+      "SOV_national_academies_of_sciences"
+    ],
+    "iconPath": "goals/SOV_no_time_for_peace_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_national_specialists",
+    "icon": "GFX_SOV_national_specialists_ccp_2d_sov_compatibility",
+    "title": "SOV_national_specialists",
+    "cost": 5.0,
+    "offsetX": 3,
+    "offsetY": 1,
+    "relative_position_id": "SOV_finish_the_five_year_plan",
+    "prerequisites": [
+      "SOV_finish_the_five_year_plan"
+    ],
+    "iconPath": "goals/SOV_national_specialists_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_foreign_experts",
+    "icon": "GFX_SOV_foreign_experts_ccp_2d_sov_compatibility",
+    "title": "SOV_foreign_experts",
+    "cost": 5.0,
+    "offsetX": 2,
+    "offsetY": 0,
+    "relative_position_id": "SOV_national_specialists",
+    "prerequisites": [
+      "SOV_finish_the_five_year_plan"
+    ],
+    "iconPath": "goals/SOV_foreign_experts_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_eastern_development",
+    "icon": "GFX_SOV_eastern_development_ccp_2d_sov_compatibility",
+    "title": "SOV_eastern_development",
+    "cost": 5.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_national_specialists",
+    "prerequisites": [
+      "SOV_national_specialists"
+    ],
+    "iconPath": "goals/SOV_eastern_development_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_develop_the_urals",
+    "icon": "GFX_SOV_develop_the_urals_ccp_2d_sov_compatibility",
+    "title": "SOV_develop_the_urals",
+    "cost": 5.0,
+    "offsetX": 2,
+    "offsetY": 0,
+    "relative_position_id": "SOV_eastern_development",
+    "prerequisites": [
+      "SOV_national_specialists"
+    ],
+    "iconPath": "goals/SOV_develop_the_urals_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_the_ussr_academy_of_sciences",
+    "icon": "GFX_SOV_the_ussr_academy_of_sciences_ccp_2d_sov_compatibility",
+    "title": "SOV_the_ussr_academy_of_sciences",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_eastern_development",
+    "prerequisites": [
+      "SOV_eastern_development",
+      "SOV_develop_the_urals"
+    ],
+    "iconPath": "goals/SOV_the_ussr_academy_of_sciences_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_national_academies_of_sciences",
+    "icon": "GFX_SOV_national_academies_of_sciences_ccp_2d_sov_compatibility",
+    "title": "SOV_national_academies_of_sciences",
+    "cost": 5.0,
+    "offsetX": 0,
+    "offsetY": 3,
+    "relative_position_id": "SOV_the_ussr_academy_of_sciences",
+    "prerequisites": [
+      "SOV_the_ussr_academy_of_sciences"
+    ],
+    "iconPath": "goals/SOV_national_academies_of_sciences_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_transformation_of_nature",
+    "icon": "GFX_SOV_transformation_of_nature_ccp_2d_sov_compatibility",
+    "title": "SOV_transformation_of_nature",
+    "cost": 12.0,
+    "offsetX": 2,
+    "offsetY": 0,
+    "relative_position_id": "SOV_no_time_for_peace",
+    "prerequisites": [
+      "SOV_fourth_five_year_plan",
+      "SOV_national_academies_of_sciences"
+    ],
+    "iconPath": "goals/SOV_transformation_of_nature_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_transformation_of_nature_alt",
+    "icon": "GFX_goal_generic_construction2",
+    "title": "SOV_transformation_of_nature_alt",
+    "cost": 10.0,
+    "offsetX": 2,
+    "offsetY": 0,
+    "relative_position_id": "SOV_no_time_for_peace",
+    "prerequisites": [
+      "SOV_fourth_five_year_plan",
+      "SOV_national_academies_of_sciences"
+    ],
+    "iconPath": "goals/goal_generic_construction2.png"
+  },
+  {
+    "id": "SOV_transpolar_flights",
+    "icon": "GFX_SOV_transpolar_flights_ccp_2d_sov_compatibility",
+    "title": "SOV_transpolar_flights",
+    "cost": 5.0,
+    "offsetX": 10,
+    "offsetY": 0,
+    "relative_position_id": "SOV_infrastructure_effort_nsb",
+    "iconPath": "goals/SOV_transpolar_flights_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_expand_the_aircraft_industry",
+    "icon": "GFX_SOV_expand_the_aircraft_industry_ccp_2d_sov_compatibility",
+    "title": "SOV_expand_the_aircraft_industry",
+    "cost": 10.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_transpolar_flights",
+    "prerequisites": [
+      "SOV_transpolar_flights"
+    ],
+    "iconPath": "goals/SOV_expand_the_aircraft_industry_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_modernize_aircraft_facilities",
+    "icon": "GFX_SOV_modernize_aircraft_facilities_ccp_2d_sov_compatibility",
+    "title": "SOV_modernize_aircraft_facilities",
+    "cost": 10.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_expand_the_aircraft_industry",
+    "prerequisites": [
+      "SOV_expand_the_aircraft_industry"
+    ],
+    "iconPath": "goals/SOV_modernize_aircraft_facilities_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_merge_aircraft_plants",
+    "icon": "GFX_focus_SOV_merge_plants",
+    "title": "SOV_merge_aircraft_plants",
+    "cost": 5.0,
+    "offsetX": -1,
+    "offsetY": 2,
+    "relative_position_id": "SOV_modernize_aircraft_facilities",
+    "prerequisites": [
+      "SOV_modernize_aircraft_facilities"
+    ],
+    "iconPath": "goals/focus_SOV_merge_plants.png"
+  },
+  {
+    "id": "SOV_found_the_jet_institute",
+    "icon": "GFX_SOV_found_the_jet_institute_ccp_2d_sov_compatibility",
+    "title": "SOV_found_the_jet_institute",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 2,
+    "relative_position_id": "SOV_merge_aircraft_plants",
+    "prerequisites": [
+      "SOV_the_ussr_academy_of_sciences",
+      "SOV_merge_aircraft_plants"
+    ],
+    "iconPath": "goals/SOV_found_the_jet_institute_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_increase_aircraft_production",
+    "icon": "GFX_SOV_increase_aircraft_production_ccp_2d_sov_compatibility",
+    "title": "SOV_increase_aircraft_production",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 2,
+    "relative_position_id": "SOV_expand_the_aircraft_industry",
+    "prerequisites": [
+      "SOV_expand_the_aircraft_industry"
+    ],
+    "iconPath": "goals/SOV_increase_aircraft_production_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_foster_flying_clubs",
+    "icon": "GFX_focus_SOV_flying_clubs",
+    "title": "SOV_foster_flying_clubs",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_transpolar_flights",
+    "prerequisites": [
+      "SOV_transpolar_flights"
+    ],
+    "iconPath": "goals/focus_SOV_flying_clubs.png"
+  },
+  {
+    "id": "SOV_women_in_aviation",
+    "icon": "GFX_focus_SOV_women_in_aviation",
+    "title": "SOV_women_in_aviation",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_foster_flying_clubs",
+    "prerequisites": [
+      "SOV_foster_flying_clubs"
+    ],
+    "iconPath": "goals/focus_SOV_women_in_aviation.png"
+  },
+  {
+    "id": "SOV_raskovas_aviation_group",
+    "icon": "GFX_SOV_raskovas_aviation_group_ccp_2d_sov_compatibility",
+    "title": "SOV_raskovas_aviation_group",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_women_in_aviation",
+    "prerequisites": [
+      "SOV_women_in_aviation"
+    ],
+    "iconPath": "goals/SOV_raskovas_aviation_group_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_intensify_pilot_training_program",
+    "icon": "GFX_SOV_intensify_pilot_training_program_ccp_2d_sov_compatibility",
+    "title": "SOV_intensify_pilot_training_program",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 2,
+    "relative_position_id": "SOV_foster_flying_clubs",
+    "prerequisites": [
+      "SOV_foster_flying_clubs"
+    ],
+    "iconPath": "goals/SOV_intensify_pilot_training_program_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_expand_aviation_institutes",
+    "icon": "GFX_SOV_expand_aviation_institutes_ccp_2d_sov_compatibility",
+    "title": "SOV_expand_aviation_institutes",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_expand_the_aircraft_industry",
+    "prerequisites": [
+      "SOV_expand_the_aircraft_industry"
+    ],
+    "iconPath": "goals/SOV_expand_aviation_institutes_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_ground_support",
+    "icon": "GFX_SOV_ground_support_ccp_2d_sov_compatibility",
+    "title": "SOV_ground_support",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_increase_aircraft_production",
+    "prerequisites": [
+      "SOV_increase_aircraft_production"
+    ],
+    "iconPath": "goals/SOV_ground_support_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_long_range_aircraft",
+    "icon": "GFX_SOV_long_range_aircraft_ccp_2d_sov_compatibility",
+    "title": "SOV_long_range_aircraft",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_intensify_pilot_training_program",
+    "prerequisites": [
+      "SOV_increase_aircraft_production"
+    ],
+    "iconPath": "goals/SOV_long_range_aircraft_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_the_modern_war_in_the_skies",
+    "icon": "GFX_SOV_the_modern_war_in_the_skies_ccp_2d_sov_compatibility",
+    "title": "SOV_the_modern_war_in_the_skies",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_ground_support",
+    "prerequisites": [
+      "SOV_ground_support"
+    ],
+    "iconPath": "goals/SOV_the_modern_war_in_the_skies_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_expand_the_red_fleet",
+    "icon": "GFX_SOV_expand_the_red_fleet_ccp_2d_sov_compatibility",
+    "title": "SOV_expand_the_red_fleet",
+    "cost": 5.0,
+    "offsetX": 6,
+    "offsetY": 0,
+    "relative_position_id": "SOV_transpolar_flights",
+    "iconPath": "goals/SOV_expand_the_red_fleet_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_reinforce_western_naval_bases",
+    "icon": "GFX_SOV_reinforce_western_naval_bases_ccp_2d_sov_compatibility",
+    "title": "SOV_reinforce_western_naval_bases",
+    "cost": 5.0,
+    "offsetX": -3,
+    "offsetY": 1,
+    "relative_position_id": "SOV_expand_the_red_fleet",
+    "prerequisites": [
+      "SOV_expand_the_red_fleet"
+    ],
+    "iconPath": "goals/SOV_reinforce_western_naval_bases_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_reinforce_northern_naval_bases",
+    "icon": "GFX_SOV_reinforce_northern_naval_bases_ccp_2d_sov_compatibility",
+    "title": "SOV_reinforce_northern_naval_bases",
+    "cost": 5.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_expand_the_red_fleet",
+    "prerequisites": [
+      "SOV_expand_the_red_fleet"
+    ],
+    "iconPath": "goals/SOV_reinforce_northern_naval_bases_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_reinforce_southern_naval_bases",
+    "icon": "GFX_SOV_reinforce_southern_naval_bases_ccp_2d_sov_compatibility",
+    "title": "SOV_reinforce_southern_naval_bases",
+    "cost": 5.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_expand_the_red_fleet",
+    "prerequisites": [
+      "SOV_expand_the_red_fleet"
+    ],
+    "iconPath": "goals/SOV_reinforce_southern_naval_bases_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_reinforce_eastern_naval_bases",
+    "icon": "GFX_SOV_reinforce_eastern_naval_bases_ccp_2d_sov_compatibility",
+    "title": "SOV_reinforce_eastern_naval_bases",
+    "cost": 5.0,
+    "offsetX": 3,
+    "offsetY": 1,
+    "relative_position_id": "SOV_expand_the_red_fleet",
+    "prerequisites": [
+      "SOV_expand_the_red_fleet"
+    ],
+    "iconPath": "goals/SOV_reinforce_eastern_naval_bases_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_expand_shipbuilding_plants",
+    "icon": "GFX_SOV_expand_shipbuilding_plants_ccp_2d_sov_compatibility",
+    "title": "SOV_expand_shipbuilding_plants",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_reinforce_northern_naval_bases",
+    "prerequisites": [
+      "SOV_reinforce_western_naval_bases"
+    ],
+    "iconPath": "goals/SOV_expand_shipbuilding_plants_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_merge_naval_plants",
+    "icon": "GFX_focus_SOV_merge_plants",
+    "title": "SOV_merge_naval_plants",
+    "cost": 5.0,
+    "offsetX": -1,
+    "offsetY": 2,
+    "relative_position_id": "SOV_expand_shipbuilding_plants",
+    "prerequisites": [
+      "SOV_expand_shipbuilding_plants"
+    ],
+    "iconPath": "goals/focus_SOV_merge_plants.png"
+  },
+  {
+    "id": "SOV_pc_of_the_ussr_navy",
+    "icon": "GFX_SOV_pc_of_the_ussr_navy_ccp_2d_sov_compatibility",
+    "title": "SOV_pc_of_the_ussr_navy",
+    "cost": 5.0,
+    "offsetX": 4,
+    "offsetY": 2,
+    "relative_position_id": "SOV_expand_the_red_fleet",
+    "prerequisites": [
+      "SOV_expand_the_red_fleet"
+    ],
+    "iconPath": "goals/SOV_pc_of_the_ussr_navy_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_surface_warfare",
+    "icon": "GFX_SOV_surface_warfare_ccp_2d_sov_compatibility",
+    "title": "SOV_surface_warfare",
+    "cost": 10.0,
+    "offsetX": -2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_pc_of_the_ussr_navy",
+    "prerequisites": [
+      "SOV_pc_of_the_ussr_navy"
+    ],
+    "iconPath": "goals/SOV_surface_warfare_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_submarine_warfare",
+    "icon": "GFX_SOV_submarine_warfare_ccp_2d_sov_compatibility",
+    "title": "SOV_submarine_warfare",
+    "cost": 10.0,
+    "offsetX": 2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_pc_of_the_ussr_navy",
+    "prerequisites": [
+      "SOV_pc_of_the_ussr_navy"
+    ],
+    "iconPath": "goals/SOV_submarine_warfare_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_offensive_maritime_strategy",
+    "icon": "GFX_SOV_offensive_maritime_strategy_ccp_2d_sov_compatibility",
+    "title": "SOV_offensive_maritime_strategy",
+    "cost": 10.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_surface_warfare",
+    "prerequisites": [
+      "SOV_surface_warfare"
+    ],
+    "iconPath": "goals/SOV_offensive_maritime_strategy_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_an_oceangoing_navy",
+    "icon": "GFX_SOV_an_oceangoing_navy_ccp_2d_sov_compatibility",
+    "title": "SOV_an_oceangoing_navy",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_surface_warfare",
+    "prerequisites": [
+      "SOV_surface_warfare"
+    ],
+    "iconPath": "goals/SOV_an_oceangoing_navy_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_mine_warfare",
+    "icon": "GFX_focus_generic_mine_warfare",
+    "title": "SOV_mine_warfare",
+    "cost": 10.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_submarine_warfare",
+    "prerequisites": [
+      "SOV_surface_warfare"
+    ],
+    "iconPath": "goals/focus_generic_mine_warfare.png"
+  },
+  {
+    "id": "SOV_long_range_raiders",
+    "icon": "GFX_SOV_long_range_raiders_ccp_2d_sov_compatibility",
+    "title": "SOV_long_range_raiders",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_submarine_warfare",
+    "prerequisites": [
+      "SOV_submarine_warfare"
+    ],
+    "iconPath": "goals/SOV_long_range_raiders_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_advanced_maneuvers",
+    "icon": "GFX_goal_generic_navy_doctrines_tactics",
+    "title": "SOV_advanced_maneuvers",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 3,
+    "relative_position_id": "SOV_expand_shipbuilding_plants",
+    "prerequisites": [
+      "SOV_expand_shipbuilding_plants",
+      "SOV_an_oceangoing_navy"
+    ],
+    "iconPath": "goals/goal_generic_navy_doctrines_tactics.png"
+  },
+  {
+    "id": "SOV_expand_the_morskaya_aviatsiya",
+    "icon": "GFX_SOV_expand_the_morskaya_aviatsiya_ccp_2d_sov_compatibility",
+    "title": "SOV_expand_the_morskaya_aviatsiya",
+    "cost": 10.0,
+    "offsetX": -2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_advanced_maneuvers",
+    "prerequisites": [
+      "SOV_increase_aircraft_production",
+      "SOV_advanced_maneuvers"
+    ],
+    "iconPath": "goals/SOV_expand_the_morskaya_aviatsiya_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_naval_infantry",
+    "icon": "GFX_SOV_naval_infantry_ccp_2d_sov_compatibility",
+    "title": "SOV_naval_infantry",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_advanced_maneuvers",
+    "prerequisites": [
+      "SOV_advanced_maneuvers"
+    ],
+    "iconPath": "goals/SOV_naval_infantry_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_found_the_pcdi",
+    "icon": "GFX_SOV_found_the_pcdi_ccp_2d_sov_compatibility",
+    "title": "SOV_found_the_pcdi",
+    "cost": 5.0,
+    "offsetX": 15,
+    "offsetY": 0,
+    "relative_position_id": "SOV_expand_the_red_fleet",
+    "iconPath": "goals/SOV_found_the_pcdi_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_pc_of_mechanical_engineering",
+    "icon": "GFX_SOV_pc_of_mechanical_engineering_ccp_2d_sov_compatibility",
+    "title": "SOV_pc_of_mechanical_engineering",
+    "cost": 10.0,
+    "offsetX": -5,
+    "offsetY": 1,
+    "relative_position_id": "SOV_found_the_pcdi",
+    "prerequisites": [
+      "SOV_found_the_pcdi"
+    ],
+    "iconPath": "goals/SOV_pc_of_mechanical_engineering_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_superior_war_machines",
+    "icon": "GFX_SOV_superior_war_machines_ccp_2d_sov_compatibility",
+    "title": "SOV_superior_war_machines",
+    "cost": 5.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_pc_of_mechanical_engineering",
+    "prerequisites": [
+      "SOV_pc_of_mechanical_engineering"
+    ],
+    "iconPath": "goals/SOV_superior_war_machines_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_the_means_to_wage_war",
+    "icon": "GFX_SOV_the_means_to_wage_war_ccp_2d_sov_compatibility",
+    "title": "SOV_the_means_to_wage_war",
+    "cost": 5.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_pc_of_mechanical_engineering",
+    "prerequisites": [
+      "SOV_pc_of_mechanical_engineering"
+    ],
+    "iconPath": "goals/SOV_the_means_to_wage_war_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_soviet_artillery",
+    "icon": "GFX_SOV_soviet_artillery_ccp_2d_sov_compatibility",
+    "title": "SOV_soviet_artillery",
+    "cost": 10.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_superior_war_machines",
+    "prerequisites": [
+      "SOV_superior_war_machines"
+    ],
+    "iconPath": "goals/SOV_soviet_artillery_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_pc_of_mortar_armament",
+    "icon": "GFX_SOV_pc_of_mortar_armament_ccp_2d_sov_compatibility",
+    "title": "SOV_pc_of_mortar_armament",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 2,
+    "relative_position_id": "SOV_pc_of_mechanical_engineering",
+    "prerequisites": [
+      "SOV_pc_of_mechanical_engineering"
+    ],
+    "iconPath": "goals/SOV_pc_of_mortar_armament_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_development_of_tankograd",
+    "icon": "GFX_SOV_development_of_tankograd_ccp_2d_sov_compatibility",
+    "title": "SOV_development_of_tankograd",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_means_to_wage_war",
+    "prerequisites": [
+      "SOV_the_means_to_wage_war"
+    ],
+    "iconPath": "goals/SOV_development_of_tankograd_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_merge_tank_and_materiel_plants",
+    "icon": "GFX_focus_SOV_merge_plants",
+    "title": "SOV_merge_tank_and_materiel_plants",
+    "cost": 5.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_pc_of_mortar_armament",
+    "prerequisites": [
+      "SOV_development_of_tankograd"
+    ],
+    "iconPath": "goals/focus_SOV_merge_plants.png"
+  },
+  {
+    "id": "SOV_strengthen_the_mobilization_plan",
+    "icon": "GFX_SOV_strengthen_the_mobilization_plan_ccp_2d_sov_compatibility",
+    "title": "SOV_strengthen_the_mobilization_plan",
+    "cost": 5.0,
+    "offsetX": 7,
+    "offsetY": 0,
+    "relative_position_id": "SOV_found_the_pcdi",
+    "iconPath": "goals/SOV_strengthen_the_mobilization_plan_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_military_engineering_university",
+    "icon": "GFX_SOV_military_engineering_university_ccp_2d_sov_compatibility",
+    "title": "SOV_military_engineering_university",
+    "cost": 5.0,
+    "offsetX": 2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_found_the_pcdi",
+    "prerequisites": [
+      "SOV_found_the_pcdi",
+      "SOV_strengthen_the_mobilization_plan"
+    ],
+    "iconPath": "goals/SOV_military_engineering_university_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_leningrad_polytechnical_institute",
+    "icon": "GFX_SOV_leningrad_polytechnical_institute_ccp_2d_sov_compatibility",
+    "title": "SOV_leningrad_polytechnical_institute",
+    "cost": 10.0,
+    "offsetX": 2,
+    "offsetY": 2,
+    "relative_position_id": "SOV_the_means_to_wage_war",
+    "prerequisites": [
+      "SOV_the_means_to_wage_war",
+      "SOV_military_engineering_university"
+    ],
+    "iconPath": "goals/SOV_leningrad_polytechnical_institute_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_soviet_atomic_bomb_project",
+    "icon": "GFX_SOV_soviet_atomic_bomb_project_ccp_2d_sov_compatibility",
+    "title": "SOV_soviet_atomic_bomb_project",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 2,
+    "relative_position_id": "SOV_leningrad_polytechnical_institute",
+    "prerequisites": [
+      "SOV_leningrad_polytechnical_institute"
+    ],
+    "iconPath": "goals/SOV_soviet_atomic_bomb_project_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_move_industry_to_the_urals",
+    "icon": "GFX_SOV_move_industry_to_the_urals_ccp_2d_sov_compatibility",
+    "title": "SOV_move_industry_to_the_urals",
+    "cost": 10.0,
+    "offsetX": -3,
+    "offsetY": 1,
+    "relative_position_id": "SOV_military_engineering_university",
+    "prerequisites": [
+      "SOV_military_engineering_university"
+    ],
+    "iconPath": "goals/SOV_move_industry_to_the_urals_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_the_road_of_life",
+    "icon": "GFX_focus_SOV_the_road_of_life",
+    "title": "SOV_the_road_of_life",
+    "cost": 5.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_leningrad_polytechnical_institute",
+    "prerequisites": [
+      "SOV_leningrad_polytechnical_institute",
+      "SOV_move_industry_to_the_urals"
+    ],
+    "iconPath": "goals/focus_SOV_the_road_of_life.png"
+  },
+  {
+    "id": "SOV_the_molotov_line",
+    "icon": "GFX_SOV_the_molotov_line_ccp_2d_sov_compatibility",
+    "title": "SOV_the_molotov_line",
+    "cost": 10.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_military_engineering_university",
+    "prerequisites": [
+      "SOV_military_engineering_university"
+    ],
+    "iconPath": "goals/SOV_the_molotov_line_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_improve_the_stalin_line",
+    "icon": "GFX_SOV_improve_the_stalin_line_ccp_2d_sov_compatibility",
+    "title": "SOV_improve_the_stalin_line",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_military_engineering_university",
+    "prerequisites": [
+      "SOV_military_engineering_university"
+    ],
+    "iconPath": "goals/SOV_improve_the_stalin_line_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_the_defense_of_moscow",
+    "icon": "GFX_SOV_the_defense_of_moscow_ccp_2d_sov_compatibility",
+    "title": "SOV_the_defense_of_moscow",
+    "cost": 5.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_move_industry_to_the_urals",
+    "prerequisites": [
+      "SOV_move_industry_to_the_urals"
+    ],
+    "iconPath": "goals/SOV_the_defense_of_moscow_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_impregnable_forts",
+    "icon": "GFX_goal_generic_fortify_city",
+    "title": "SOV_impregnable_forts",
+    "cost": 10.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_improve_the_stalin_line",
+    "prerequisites": [
+      "SOV_improve_the_stalin_line"
+    ],
+    "iconPath": "goals/goal_generic_fortify_city.png"
+  },
+  {
+    "id": "SOV_protect_the_white_sea_baltic_canal",
+    "icon": "GFX_SOV_protect_the_white_sea_baltic_canal_ccp_2d_sov_compatibility",
+    "title": "SOV_protect_the_white_sea_baltic_canal",
+    "cost": 5.0,
+    "offsetX": 2,
+    "offsetY": 2,
+    "relative_position_id": "SOV_military_engineering_university",
+    "prerequisites": [
+      "SOV_military_engineering_university"
+    ],
+    "iconPath": "goals/SOV_protect_the_white_sea_baltic_canal_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_far_east_fortification",
+    "icon": "GFX_SOV_far_east_fortification_ccp_2d_sov_compatibility",
+    "title": "SOV_far_east_fortification",
+    "cost": 10.0,
+    "offsetX": 3,
+    "offsetY": 1,
+    "relative_position_id": "SOV_military_engineering_university",
+    "prerequisites": [
+      "SOV_military_engineering_university"
+    ],
+    "iconPath": "goals/SOV_far_east_fortification_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_restore_cossack_units",
+    "icon": "GFX_focus_SOV_restore_cossack_units",
+    "title": "SOV_restore_cossack_units",
+    "cost": 5.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_strengthen_the_mobilization_plan",
+    "prerequisites": [
+      "SOV_strengthen_the_mobilization_plan"
+    ],
+    "iconPath": "goals/focus_SOV_restore_cossack_units.png"
+  },
+  {
+    "id": "SOV_cohesion_first",
+    "icon": "GFX_SOV_cohesion_first_ccp_2d_sov_compatibility",
+    "title": "SOV_cohesion_first",
+    "cost": 5.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_strengthen_the_mobilization_plan",
+    "prerequisites": [
+      "SOV_strengthen_the_mobilization_plan"
+    ],
+    "iconPath": "goals/SOV_cohesion_first_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_rehabilitated_military",
+    "icon": "GFX_SOV_rehabilitated_military_ccp_2d_sov_compatibility",
+    "title": "SOV_rehabilitated_military",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 2,
+    "relative_position_id": "SOV_strengthen_the_mobilization_plan",
+    "prerequisites": [
+      "SOV_restore_cossack_units"
+    ],
+    "iconPath": "goals/SOV_rehabilitated_military_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_military_reorganization",
+    "icon": "GFX_SOV_military_reorganization_ccp_2d_sov_compatibility",
+    "title": "SOV_military_reorganization",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 2,
+    "relative_position_id": "SOV_rehabilitated_military",
+    "prerequisites": [
+      "SOV_rehabilitated_military"
+    ],
+    "iconPath": "goals/SOV_military_reorganization_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_desperate_measures",
+    "icon": "GFX_SOV_desperate_measures_ccp_2d_sov_compatibility",
+    "title": "SOV_desperate_measures",
+    "cost": 5.0,
+    "offsetX": 3,
+    "offsetY": 2,
+    "relative_position_id": "SOV_strengthen_the_mobilization_plan",
+    "prerequisites": [
+      "SOV_strengthen_the_mobilization_plan"
+    ],
+    "iconPath": "goals/SOV_desperate_measures_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_an_adaptable_army",
+    "icon": "GFX_SOV_an_adaptable_army_ccp_2d_sov_compatibility",
+    "title": "SOV_an_adaptable_army",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_rehabilitated_military",
+    "prerequisites": [
+      "SOV_rehabilitated_military",
+      "SOV_desperate_measures"
+    ],
+    "iconPath": "goals/SOV_an_adaptable_army_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_lessons_of_war",
+    "icon": "GFX_SOV_lessons_of_war_ccp_2d_sov_compatibility",
+    "title": "SOV_lessons_of_war",
+    "cost": 5.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_desperate_measures",
+    "prerequisites": [
+      "SOV_rehabilitated_military",
+      "SOV_desperate_measures"
+    ],
+    "iconPath": "goals/SOV_lessons_of_war_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_penal_battalions",
+    "icon": "GFX_focus_SOV_penal_battalions",
+    "title": "SOV_penal_battalions",
+    "cost": 5.0,
+    "offsetX": 2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_desperate_measures",
+    "prerequisites": [
+      "SOV_desperate_measures"
+    ],
+    "iconPath": "goals/focus_SOV_penal_battalions.png"
+  },
+  {
+    "id": "SOV_organization_of_the_partisans",
+    "icon": "GFX_focus_focus_fra_maquis",
+    "title": "SOV_organization_of_the_partisans",
+    "cost": 10.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_lessons_of_war",
+    "prerequisites": [
+      "SOV_lessons_of_war"
+    ],
+    "iconPath": "goals/focus_focus_fra_maquis.png"
+  },
+  {
+    "id": "SOV_smersh",
+    "icon": "GFX_SOV_smersh_ccp_2d_sov_compatibility",
+    "title": "SOV_smersh",
+    "cost": 10.0,
+    "offsetX": 2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_lessons_of_war",
+    "prerequisites": [
+      "SOV_lessons_of_war"
+    ],
+    "iconPath": "goals/SOV_smersh_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_barrier_troops",
+    "icon": "GFX_SOV_barrier_troops_ccp_2d_sov_compatibility",
+    "title": "SOV_barrier_troops",
+    "cost": 5.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_smersh",
+    "prerequisites": [
+      "SOV_smersh"
+    ],
+    "iconPath": "goals/SOV_barrier_troops_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_experts_in_camouflage",
+    "icon": "GFX_SOV_experts_in_camouflage_ccp_2d_sov_compatibility",
+    "title": "SOV_experts_in_camouflage",
+    "cost": 5.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_military_reorganization",
+    "prerequisites": [
+      "SOV_military_reorganization"
+    ],
+    "iconPath": "goals/SOV_experts_in_camouflage_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_keep_commissars_organization",
+    "icon": "GFX_SOV_keep_commissars_organization_ccp_2d_sov_compatibility",
+    "title": "SOV_keep_commissars_organization",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_military_reorganization",
+    "prerequisites": [
+      "SOV_military_reorganization",
+      "SOV_lessons_of_war"
+    ],
+    "iconPath": "goals/SOV_keep_commissars_organization_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_adjoined_battle_priests",
+    "icon": "GFX_focus_GRE_an_orthodox_state",
+    "title": "SOV_adjoined_battle_priests",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_military_reorganization",
+    "prerequisites": [
+      "SOV_military_reorganization",
+      "SOV_lessons_of_war"
+    ],
+    "iconPath": "goals/focus_GRE_an_orthodox_state.png"
+  },
+  {
+    "id": "SOV_swap_to_political_advisors",
+    "icon": "GFX_SOV_swap_to_political_advisors_ccp_2d_sov_compatibility",
+    "title": "SOV_swap_to_political_advisors",
+    "cost": 10.0,
+    "offsetX": 3,
+    "offsetY": 1,
+    "relative_position_id": "SOV_military_reorganization",
+    "prerequisites": [
+      "SOV_military_reorganization",
+      "SOV_lessons_of_war"
+    ],
+    "iconPath": "goals/SOV_swap_to_political_advisors_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_the_glory_of_the_red_army",
+    "icon": "GFX_SOV_the_glory_of_the_red_army_ccp_2d_sov_compatibility",
+    "title": "SOV_the_glory_of_the_red_army",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_keep_commissars_organization",
+    "prerequisites": [
+      "SOV_keep_commissars_organization"
+    ],
+    "iconPath": "goals/SOV_the_glory_of_the_red_army_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_the_glory_of_the_red_army_alt",
+    "icon": "GFX_SOV_the_glory_of_the_red_army_alt_ccp_2d_sov_compatibility",
+    "title": "SOV_the_glory_of_the_red_army_alt",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_keep_commissars_organization",
+    "prerequisites": [
+      "SOV_keep_commissars_organization"
+    ],
+    "iconPath": "goals/SOV_the_glory_of_the_red_army_alt_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_the_path_of_marxism_leninism",
+    "icon": "GFX_focus_SOV_the_path_of_marxism_leninism",
+    "title": "SOV_the_path_of_marxism_leninism",
+    "cost": 5.0,
+    "offsetX": 16,
+    "offsetY": 0,
+    "relative_position_id": "SOV_strengthen_the_mobilization_plan",
+    "iconPath": "goals/focus_SOV_the_path_of_marxism_leninism.png"
+  },
+  {
+    "id": "SOV_the_centre",
+    "icon": "GFX_focus_fra_loyalty_stalin",
+    "title": "SOV_the_centre",
+    "cost": 5.0,
+    "offsetX": -8,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_path_of_marxism_leninism",
+    "prerequisites": [
+      "SOV_the_path_of_marxism_leninism"
+    ],
+    "iconPath": "goals/focus_fra_loyalty_stalin.png"
+  },
+  {
+    "id": "SOV_socialism_in_one_country",
+    "icon": "GFX_focus_SOV_socialism_in_one_country",
+    "title": "SOV_socialism_in_one_country",
+    "cost": 5.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_centre",
+    "prerequisites": [
+      "SOV_the_centre"
+    ],
+    "iconPath": "goals/focus_SOV_socialism_in_one_country.png"
+  },
+  {
+    "id": "SOV_the_stalin_constitution",
+    "icon": "GFX_SOV_the_stalin_constitutiony_ccp_2d_sov_compatibility",
+    "title": "SOV_the_stalin_constitution",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_centre",
+    "prerequisites": [
+      "SOV_the_centre"
+    ],
+    "iconPath": "goals/SOV_the_stalin_constitutiony_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_the_zinovyevite_terrorist_center",
+    "icon": "GFX_focus_SOV_purge_zinovyevists",
+    "title": "SOV_the_zinovyevite_terrorist_center",
+    "cost": 5.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_stalin_constitution",
+    "prerequisites": [
+      "SOV_the_stalin_constitution"
+    ],
+    "iconPath": "goals/focus_SOV_purge_zinovyevists.png"
+  },
+  {
+    "id": "SOV_secure_the_administration",
+    "icon": "GFX_focus_generic_join_comintern",
+    "title": "SOV_secure_the_administration",
+    "cost": 10.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_zinovyevite_terrorist_center",
+    "prerequisites": [
+      "SOV_the_zinovyevite_terrorist_center"
+    ],
+    "iconPath": "goals/focus_generic_join_comintern.png"
+  },
+  {
+    "id": "SOV_the_collectivization_process",
+    "icon": "GFX_focus_prc_agrarian_socialism",
+    "title": "SOV_the_collectivization_process",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 3,
+    "relative_position_id": "SOV_socialism_in_one_country",
+    "prerequisites": [
+      "SOV_socialism_in_one_country",
+      "SOV_secure_the_administration"
+    ],
+    "iconPath": "goals/focus_prc_agrarian_socialism.png"
+  },
+  {
+    "id": "SOV_the_anti_soviet_trotskyist_center",
+    "icon": "GFX_focus_SOV_purge_trotskyists",
+    "title": "SOV_the_anti_soviet_trotskyist_center",
+    "cost": 5.0,
+    "offsetX": 0,
+    "offsetY": 2,
+    "relative_position_id": "SOV_the_zinovyevite_terrorist_center",
+    "prerequisites": [
+      "SOV_the_zinovyevite_terrorist_center"
+    ],
+    "iconPath": "goals/focus_SOV_purge_trotskyists.png"
+  },
+  {
+    "id": "SOV_the_workers_dictatorship",
+    "icon": "GFX_SOV_the_workers_dictatorship_ccp_2d_sov_compatibility",
+    "title": "SOV_the_workers_dictatorship",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_anti_soviet_trotskyist_center",
+    "prerequisites": [
+      "SOV_the_anti_soviet_trotskyist_center"
+    ],
+    "iconPath": "goals/SOV_the_workers_dictatorship_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_organization_centralization_discipline",
+    "icon": "GFX_focus_SOV_organization_centralization_discipline",
+    "title": "SOV_organization_centralization_discipline",
+    "cost": 5.0,
+    "offsetX": -2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_workers_dictatorship",
+    "prerequisites": [
+      "SOV_the_collectivization_process",
+      "SOV_the_workers_dictatorship"
+    ],
+    "iconPath": "goals/focus_SOV_organization_centralization_discipline.png"
+  },
+  {
+    "id": "SOV_war_economy",
+    "icon": "GFX_SOV_war_economy_ccp_2d_sov_compatibility",
+    "title": "SOV_war_economy",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_organization_centralization_discipline",
+    "prerequisites": [
+      "SOV_organization_centralization_discipline"
+    ],
+    "iconPath": "goals/SOV_war_economy_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_the_military_conspiracy",
+    "icon": "GFX_focus_SOV_military_purge",
+    "title": "SOV_the_military_conspiracy",
+    "cost": 5.0,
+    "offsetX": 0,
+    "offsetY": 2,
+    "relative_position_id": "SOV_the_anti_soviet_trotskyist_center",
+    "prerequisites": [
+      "SOV_the_workers_dictatorship"
+    ],
+    "iconPath": "goals/focus_SOV_military_purge.png"
+  },
+  {
+    "id": "SOV_the_bloc_of_rights_and_trotskyites",
+    "icon": "GFX_focus_SOV_purge_bukharinists",
+    "title": "SOV_the_bloc_of_rights_and_trotskyites",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_military_conspiracy",
+    "prerequisites": [
+      "SOV_the_military_conspiracy"
+    ],
+    "iconPath": "goals/focus_SOV_purge_bukharinists.png"
+  },
+  {
+    "id": "SOV_behead_the_snake",
+    "icon": "GFX_focus_SOV_behead_the_snake",
+    "title": "SOV_behead_the_snake",
+    "cost": 5.0,
+    "offsetX": 2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_military_conspiracy",
+    "prerequisites": [
+      "SOV_the_military_conspiracy"
+    ],
+    "iconPath": "goals/focus_SOV_behead_the_snake.png"
+  },
+  {
+    "id": "SOV_stalins_cult_of_personality",
+    "icon": "GFX_focus_SOV_stalins_cult_of_personality",
+    "title": "SOV_stalins_cult_of_personality",
+    "cost": 5.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_bloc_of_rights_and_trotskyites",
+    "prerequisites": [
+      "SOV_the_bloc_of_rights_and_trotskyites"
+    ],
+    "iconPath": "goals/focus_SOV_stalins_cult_of_personality.png"
+  },
+  {
+    "id": "SOV_they_will_know_fear",
+    "icon": "GFX_SOV_they_will_know_fear_ccp_2d_sov_compatibility",
+    "title": "SOV_they_will_know_fear",
+    "cost": 5.0,
+    "offsetX": -3,
+    "offsetY": 1,
+    "relative_position_id": "SOV_stalins_cult_of_personality",
+    "prerequisites": [
+      "SOV_stalins_cult_of_personality"
+    ],
+    "iconPath": "goals/SOV_they_will_know_fear_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_inheritor_of_the_mantle_of_lenin",
+    "icon": "GFX_SOV_inheritor_of_the_mantle_of_lenin_ccp_2d_sov_compatibility",
+    "title": "SOV_inheritor_of_the_mantle_of_lenin",
+    "cost": 5.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_stalins_cult_of_personality",
+    "prerequisites": [
+      "SOV_stalins_cult_of_personality"
+    ],
+    "iconPath": "goals/SOV_inheritor_of_the_mantle_of_lenin_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_brilliant_genius",
+    "icon": "GFX_focus_generic_socialist_science",
+    "title": "SOV_brilliant_genius",
+    "cost": 10.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_inheritor_of_the_mantle_of_lenin",
+    "prerequisites": [
+      "SOV_inheritor_of_the_mantle_of_lenin"
+    ],
+    "iconPath": "goals/focus_generic_socialist_science.png"
+  },
+  {
+    "id": "SOV_the_faithful_servant_of_lenin",
+    "icon": "GFX_SOV_the_faithful_servant_of_lenin_ccp_2d_sov_compatibility",
+    "title": "SOV_the_faithful_servant_of_lenin",
+    "cost": 5.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_stalins_cult_of_personality",
+    "prerequisites": [
+      "SOV_stalins_cult_of_personality"
+    ],
+    "iconPath": "goals/SOV_the_faithful_servant_of_lenin_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_ban_excessive_hero_worship",
+    "icon": "GFX_focus_renounce_the_treaty_of_trianon",
+    "title": "SOV_ban_excessive_hero_worship",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_faithful_servant_of_lenin",
+    "prerequisites": [
+      "SOV_the_faithful_servant_of_lenin"
+    ],
+    "iconPath": "goals/focus_renounce_the_treaty_of_trianon.png"
+  },
+  {
+    "id": "SOV_leader_of_the_party_and_the_people",
+    "icon": "GFX_SOV_leader_of_the_party_and_the_people_ccp_2d_sov_compatibility",
+    "title": "SOV_leader_of_the_party_and_the_people",
+    "cost": 5.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_inheritor_of_the_mantle_of_lenin",
+    "prerequisites": [
+      "SOV_inheritor_of_the_mantle_of_lenin"
+    ],
+    "iconPath": "goals/SOV_leader_of_the_party_and_the_people_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_great_commander",
+    "icon": "GFX_SOV_great_commander_ccp_2d_sov_compatibility",
+    "title": "SOV_great_commander",
+    "cost": 5.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_leader_of_the_party_and_the_people",
+    "prerequisites": [
+      "SOV_inheritor_of_the_mantle_of_lenin",
+      "SOV_leader_of_the_party_and_the_people"
+    ],
+    "iconPath": "goals/SOV_great_commander_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_architect_of_communism",
+    "icon": "GFX_SOV_architect_of_communism_ccp_2d_sov_compatibility",
+    "title": "SOV_architect_of_communism",
+    "cost": 5.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_leader_of_the_party_and_the_people",
+    "prerequisites": [
+      "SOV_the_faithful_servant_of_lenin",
+      "SOV_leader_of_the_party_and_the_people"
+    ],
+    "iconPath": "goals/SOV_architect_of_communism_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_father_of_nations",
+    "icon": "GFX_SOV_father_of_nations_ccp_2d_sov_compatibility",
+    "title": "SOV_father_of_nations",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_great_commander",
+    "prerequisites": [
+      "SOV_great_commander"
+    ],
+    "iconPath": "goals/SOV_father_of_nations_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_freedom_of_debate_unity_of_action",
+    "icon": "GFX_focus_generic_soviet_politics",
+    "title": "SOV_freedom_of_debate_unity_of_action",
+    "cost": 10.0,
+    "offsetX": 3,
+    "offsetY": 1,
+    "relative_position_id": "SOV_stalins_cult_of_personality",
+    "prerequisites": [
+      "SOV_stalins_cult_of_personality"
+    ],
+    "iconPath": "goals/focus_generic_soviet_politics.png"
+  },
+  {
+    "id": "SOV_the_construction_of_communism",
+    "icon": "GFX_focus_ger_great_red_menace",
+    "title": "SOV_the_construction_of_communism",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 2,
+    "relative_position_id": "SOV_freedom_of_debate_unity_of_action",
+    "prerequisites": [
+      "SOV_freedom_of_debate_unity_of_action"
+    ],
+    "iconPath": "goals/focus_ger_great_red_menace.png"
+  },
+  {
+    "id": "SOV_the_left_opposition",
+    "icon": "GFX_focus_fra_loyalty_trotzky",
+    "title": "SOV_the_left_opposition",
+    "cost": 5.0,
+    "offsetX": 2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_path_of_marxism_leninism",
+    "prerequisites": [
+      "SOV_the_path_of_marxism_leninism"
+    ],
+    "iconPath": "goals/focus_fra_loyalty_trotzky.png"
+  },
+  {
+    "id": "SOV_the_fourth_international",
+    "icon": "GFX_SOV_the_fourth_international_ccp_2d_sov_compatibility",
+    "title": "SOV_the_fourth_international",
+    "cost": 10.0,
+    "offsetX": -4,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_left_opposition",
+    "prerequisites": [
+      "SOV_the_left_opposition"
+    ],
+    "iconPath": "goals/SOV_the_fourth_international_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_bring_old_trotskyists_back",
+    "icon": "GFX_SOV_bring_old_trotskyists_back_ccp_2d_sov_compatibility",
+    "title": "SOV_bring_old_trotskyists_back",
+    "cost": 5.0,
+    "offsetX": -2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_left_opposition",
+    "prerequisites": [
+      "SOV_the_left_opposition"
+    ],
+    "iconPath": "goals/SOV_bring_old_trotskyists_back_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_organize_the_wreckers",
+    "icon": "GFX_focus_SOV_organize_wreckers",
+    "title": "SOV_organize_the_wreckers",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_left_opposition",
+    "prerequisites": [
+      "SOV_the_left_opposition"
+    ],
+    "iconPath": "goals/focus_SOV_organize_wreckers.png"
+  },
+  {
+    "id": "SOV_integrate_smirnovs_bloc",
+    "icon": "GFX_focus_YUG_pan_slavic_congress",
+    "title": "SOV_integrate_smirnovs_bloc",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 2,
+    "relative_position_id": "SOV_the_left_opposition",
+    "prerequisites": [
+      "SOV_the_left_opposition"
+    ],
+    "iconPath": "goals/focus_YUG_pan_slavic_congress.png"
+  },
+  {
+    "id": "SOV_left_eliminate_right",
+    "icon": "GFX_focus_SOV_purge_bukharinists",
+    "title": "SOV_left_eliminate_right",
+    "cost": 5.0,
+    "offsetX": 2,
+    "offsetY": 2,
+    "relative_position_id": "SOV_the_left_opposition",
+    "prerequisites": [
+      "SOV_the_left_opposition"
+    ],
+    "iconPath": "goals/focus_SOV_purge_bukharinists.png"
+  },
+  {
+    "id": "SOV_committee_in_exile",
+    "icon": "GFX_SOV_committee_in_exile_ccp_2d_sov_compatibility",
+    "title": "SOV_committee_in_exile",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 2,
+    "relative_position_id": "SOV_the_fourth_international",
+    "prerequisites": [
+      "SOV_the_fourth_international",
+      "SOV_bring_old_trotskyists_back"
+    ],
+    "iconPath": "goals/SOV_committee_in_exile_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_approach_tukhachevsky",
+    "icon": "GFX_focus_SOV_approach_tukahchevsky",
+    "title": "SOV_approach_tukhachevsky",
+    "cost": 10.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_integrate_smirnovs_bloc",
+    "prerequisites": [
+      "SOV_integrate_smirnovs_bloc"
+    ],
+    "iconPath": "goals/focus_SOV_approach_tukahchevsky.png"
+  },
+  {
+    "id": "SOV_approach_primakov",
+    "icon": "GFX_focus_SOV_approach_primakov",
+    "title": "SOV_approach_primakov",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_integrate_smirnovs_bloc",
+    "prerequisites": [
+      "SOV_integrate_smirnovs_bloc"
+    ],
+    "iconPath": "goals/focus_SOV_approach_primakov.png"
+  },
+  {
+    "id": "SOV_funds_for_the_cause",
+    "icon": "GFX_SOV_funds_for_the_cause_ccp_2d_sov_compatibility",
+    "title": "SOV_funds_for_the_cause",
+    "cost": 5.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_approach_tukhachevsky",
+    "prerequisites": [
+      "SOV_approach_tukhachevsky"
+    ],
+    "iconPath": "goals/SOV_funds_for_the_cause_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_left_opposition_coup",
+    "icon": "GFX_SOV_left_opposition_coup_ccp_2d_sov_compatibility",
+    "title": "SOV_left_opposition_coup",
+    "cost": 5.0,
+    "offsetX": 1,
+    "offsetY": 2,
+    "relative_position_id": "SOV_approach_tukhachevsky",
+    "prerequisites": [
+      "SOV_approach_tukhachevsky"
+    ],
+    "iconPath": "goals/SOV_left_opposition_coup_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_the_vanguard_of_the_true_revolution",
+    "icon": "GFX_focus_spr_torchbearers_of_tomorrow",
+    "title": "SOV_the_vanguard_of_the_true_revolution",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 2,
+    "relative_position_id": "SOV_funds_for_the_cause",
+    "prerequisites": [
+      "SOV_left_opposition_coup",
+      "SOV_funds_for_the_cause"
+    ],
+    "iconPath": "goals/focus_spr_torchbearers_of_tomorrow.png"
+  },
+  {
+    "id": "SOV_long_live_the_workers_government",
+    "icon": "GFX_focus_generic_join_comintern",
+    "title": "SOV_long_live_the_workers_government",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_left_opposition_coup",
+    "prerequisites": [
+      "SOV_left_opposition_coup"
+    ],
+    "iconPath": "goals/focus_generic_join_comintern.png"
+  },
+  {
+    "id": "SOV_left_purges",
+    "icon": "GFX_focus_SOV_the_last_purge",
+    "title": "SOV_left_purges",
+    "cost": 10.0,
+    "offsetX": 3,
+    "offsetY": 1,
+    "relative_position_id": "SOV_left_opposition_coup",
+    "prerequisites": [
+      "SOV_left_opposition_coup"
+    ],
+    "iconPath": "goals/focus_SOV_the_last_purge.png"
+  },
+  {
+    "id": "SOV_the_builder_of_the_red_army",
+    "icon": "GFX_focus_SOV_builder_of_the_red_army",
+    "title": "SOV_the_builder_of_the_red_army",
+    "cost": 10.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_long_live_the_workers_government",
+    "prerequisites": [
+      "SOV_long_live_the_workers_government"
+    ],
+    "iconPath": "goals/focus_SOV_builder_of_the_red_army.png"
+  },
+  {
+    "id": "SOV_reigniting_the_revolutionary_spirit",
+    "icon": "GFX_goal_generic_war_with_comintern",
+    "title": "SOV_reigniting_the_revolutionary_spirit",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_long_live_the_workers_government",
+    "prerequisites": [
+      "SOV_long_live_the_workers_government"
+    ],
+    "iconPath": "goals/goal_generic_war_with_comintern.png"
+  },
+  {
+    "id": "SOV_the_permanent_revolution",
+    "icon": "GFX_SOV_the_permanent_revolution_ccp_2d_sov_compatibility",
+    "title": "SOV_the_permanent_revolution",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 4,
+    "relative_position_id": "SOV_committee_in_exile",
+    "prerequisites": [
+      "SOV_left_opposition_coup",
+      "SOV_committee_in_exile"
+    ],
+    "iconPath": "goals/SOV_the_permanent_revolution_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_depoliticize_the_military",
+    "icon": "GFX_SOV_depoliticize_the_military_ccp_2d_sov_compatibility",
+    "title": "SOV_depoliticize_the_military",
+    "cost": 10.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_builder_of_the_red_army",
+    "prerequisites": [
+      "SOV_the_builder_of_the_red_army"
+    ],
+    "iconPath": "goals/SOV_depoliticize_the_military_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_system_decentralization",
+    "icon": "GFX_goal_generic_forceful_treaty",
+    "title": "SOV_system_decentralization",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_builder_of_the_red_army",
+    "prerequisites": [
+      "SOV_the_builder_of_the_red_army"
+    ],
+    "iconPath": "goals/goal_generic_forceful_treaty.png"
+  },
+  {
+    "id": "SOV_strengthen_heavy_industry",
+    "icon": "GFX_goal_generic_soviet_construction",
+    "title": "SOV_strengthen_heavy_industry",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_reigniting_the_revolutionary_spirit",
+    "prerequisites": [
+      "SOV_the_builder_of_the_red_army"
+    ],
+    "iconPath": "goals/goal_generic_soviet_construction.png"
+  },
+  {
+    "id": "SOV_a_global_class_struggle",
+    "icon": "GFX_SOV_a_global_class_struggle_ccp_2d_sov_compatibility",
+    "title": "SOV_a_global_class_struggle",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_permanent_revolution",
+    "prerequisites": [
+      "SOV_the_permanent_revolution"
+    ],
+    "iconPath": "goals/SOV_a_global_class_struggle_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_all_power_to_the_soviets",
+    "icon": "GFX_goal_support_communism",
+    "title": "SOV_all_power_to_the_soviets",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_system_decentralization",
+    "prerequisites": [
+      "SOV_system_decentralization"
+    ],
+    "iconPath": "goals/goal_support_communism.png"
+  },
+  {
+    "id": "SOV_regional_development",
+    "icon": "GFX_focus_generic_soviet_politics",
+    "title": "SOV_regional_development",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_all_power_to_the_soviets",
+    "prerequisites": [
+      "SOV_all_power_to_the_soviets"
+    ],
+    "iconPath": "goals/focus_generic_soviet_politics.png"
+  },
+  {
+    "id": "SOV_autonomous_soviet_republics",
+    "icon": "GFX_SOV_autonomous_soviet_republics_ccp_2d_sov_compatibility",
+    "title": "SOV_autonomous_soviet_republics",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_regional_development",
+    "prerequisites": [
+      "SOV_regional_development"
+    ],
+    "iconPath": "goals/SOV_autonomous_soviet_republics_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_international_union_of_soviet_republics",
+    "icon": "GFX_focus_SOV_international_union_of_soviet_republics",
+    "title": "SOV_international_union_of_soviet_republics",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_autonomous_soviet_republics",
+    "prerequisites": [
+      "SOV_autonomous_soviet_republics"
+    ],
+    "iconPath": "goals/focus_SOV_international_union_of_soviet_republics.png"
+  },
+  {
+    "id": "SOV_the_onslaught_on_colonialism",
+    "icon": "GFX_SOV_the_onslaught_on_colonialism_ccp_2d_sov_compatibility",
+    "title": "SOV_the_onslaught_on_colonialism",
+    "cost": 10.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_a_global_class_struggle",
+    "prerequisites": [
+      "SOV_a_global_class_struggle"
+    ],
+    "iconPath": "goals/SOV_the_onslaught_on_colonialism_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_carry_revolution_east",
+    "icon": "GFX_SOV_carry_revolution_east_ccp_2d_sov_compatibility",
+    "title": "SOV_carry_revolution_east",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_a_global_class_struggle",
+    "prerequisites": [
+      "SOV_a_global_class_struggle"
+    ],
+    "iconPath": "goals/SOV_carry_revolution_east_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_the_end_of_the_imperialist_era",
+    "icon": "GFX_SOV_the_end_of_the_imperialist_era_ccp_2d_sov_compatibility",
+    "title": "SOV_the_end_of_the_imperialist_era",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_onslaught_on_colonialism",
+    "prerequisites": [
+      "SOV_the_onslaught_on_colonialism"
+    ],
+    "iconPath": "goals/SOV_the_end_of_the_imperialist_era_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_the_right_opposition",
+    "icon": "GFX_focus_SOV_bukharinists",
+    "title": "SOV_the_right_opposition",
+    "cost": 5.0,
+    "offsetX": 15,
+    "offsetY": 0,
+    "relative_position_id": "SOV_the_left_opposition",
+    "prerequisites": [
+      "SOV_the_path_of_marxism_leninism"
+    ],
+    "iconPath": "goals/focus_SOV_bukharinists.png"
+  },
+  {
+    "id": "SOV_the_need_for_policy_changes",
+    "icon": "GFX_focus_hol_abandon_the_gold_standard",
+    "title": "SOV_the_need_for_policy_changes",
+    "cost": 5.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_right_opposition",
+    "prerequisites": [
+      "SOV_the_right_opposition"
+    ],
+    "iconPath": "goals/focus_hol_abandon_the_gold_standard.png"
+  },
+  {
+    "id": "SOV_reverse_the_collectivization_process",
+    "icon": "GFX_SOV_reverse_the_collectivization_process_ccp_2d_sov_compatibility",
+    "title": "SOV_reverse_the_collectivization_process",
+    "cost": 10.0,
+    "offsetX": 2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_right_opposition",
+    "prerequisites": [
+      "SOV_the_right_opposition"
+    ],
+    "iconPath": "goals/SOV_reverse_the_collectivization_process_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_organize_uprisings_in_the_country",
+    "icon": "GFX_SOV_organize_uprisings_in_the_country_ccp_2d_sov_compatibility",
+    "title": "SOV_organize_uprisings_in_the_country",
+    "cost": 10.0,
+    "offsetX": -2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_need_for_policy_changes",
+    "prerequisites": [
+      "SOV_the_need_for_policy_changes"
+    ],
+    "iconPath": "goals/SOV_organize_uprisings_in_the_country_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_dissent_in_the_party",
+    "icon": "GFX_goal_generic_forceful_treaty",
+    "title": "SOV_dissent_in_the_party",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_need_for_policy_changes",
+    "prerequisites": [
+      "SOV_the_need_for_policy_changes"
+    ],
+    "iconPath": "goals/goal_generic_forceful_treaty.png"
+  },
+  {
+    "id": "SOV_eliminate_the_left",
+    "icon": "GFX_focus_SOV_purge_trotskyists",
+    "title": "SOV_eliminate_the_left",
+    "cost": 5.0,
+    "offsetX": -4,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_need_for_policy_changes",
+    "prerequisites": [
+      "SOV_the_need_for_policy_changes"
+    ],
+    "iconPath": "goals/focus_SOV_purge_trotskyists.png"
+  },
+  {
+    "id": "SOV_concessions_to_foreign_powers",
+    "icon": "GFX_goal_generic_dangerous_deal",
+    "title": "SOV_concessions_to_foreign_powers",
+    "cost": 5.0,
+    "offsetX": -1,
+    "offsetY": 2,
+    "relative_position_id": "SOV_reverse_the_collectivization_process",
+    "prerequisites": [
+      "SOV_reverse_the_collectivization_process"
+    ],
+    "iconPath": "goals/goal_generic_dangerous_deal.png"
+  },
+  {
+    "id": "SOV_covert_support_for_spanish_poum",
+    "icon": "GFX_focus_SOV_support_spanish_poum",
+    "title": "SOV_covert_support_for_spanish_poum",
+    "cost": 5.0,
+    "offsetX": 1,
+    "offsetY": 2,
+    "relative_position_id": "SOV_reverse_the_collectivization_process",
+    "prerequisites": [
+      "SOV_reverse_the_collectivization_process"
+    ],
+    "iconPath": "goals/focus_SOV_support_spanish_poum.png"
+  },
+  {
+    "id": "SOV_undermine_stalins_authority",
+    "icon": "GFX_focus_ger_bulwark_against_bolshevism",
+    "title": "SOV_undermine_stalins_authority",
+    "cost": 10.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_organize_uprisings_in_the_country",
+    "prerequisites": [
+      "SOV_organize_uprisings_in_the_country"
+    ],
+    "iconPath": "goals/focus_ger_bulwark_against_bolshevism.png"
+  },
+  {
+    "id": "SOV_clandestine_cells",
+    "icon": "GFX_goal_generic_more_territorial_claims",
+    "title": "SOV_clandestine_cells",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_organize_uprisings_in_the_country",
+    "prerequisites": [
+      "SOV_organize_uprisings_in_the_country"
+    ],
+    "iconPath": "goals/goal_generic_more_territorial_claims.png"
+  },
+  {
+    "id": "SOV_the_plan_for_the_coup",
+    "icon": "GFX_goal_generic_major_war",
+    "title": "SOV_the_plan_for_the_coup",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_undermine_stalins_authority",
+    "prerequisites": [
+      "SOV_undermine_stalins_authority",
+      "SOV_clandestine_cells"
+    ],
+    "iconPath": "goals/goal_generic_major_war.png"
+  },
+  {
+    "id": "SOV_the_socialist_bulwark",
+    "icon": "GFX_goal_generic_war_with_comintern",
+    "title": "SOV_the_socialist_bulwark",
+    "cost": 5.0,
+    "offsetX": 0,
+    "offsetY": 2,
+    "relative_position_id": "SOV_covert_support_for_spanish_poum",
+    "prerequisites": [
+      "SOV_covert_support_for_spanish_poum"
+    ],
+    "iconPath": "goals/goal_generic_war_with_comintern.png"
+  },
+  {
+    "id": "SOV_coup_detat",
+    "icon": "GFX_SOV_coup_detat_ccp_2d_sov_compatibility",
+    "title": "SOV_coup_detat",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 3,
+    "relative_position_id": "SOV_dissent_in_the_party",
+    "prerequisites": [
+      "SOV_dissent_in_the_party"
+    ],
+    "iconPath": "goals/SOV_coup_detat_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_right_purges",
+    "icon": "GFX_focus_SOV_the_last_purge",
+    "title": "SOV_right_purges",
+    "cost": 10.0,
+    "offsetX": -4,
+    "offsetY": 1,
+    "relative_position_id": "SOV_coup_detat",
+    "prerequisites": [
+      "SOV_coup_detat"
+    ],
+    "iconPath": "goals/focus_SOV_the_last_purge.png"
+  },
+  {
+    "id": "SOV_the_power_of_the_peasantry",
+    "icon": "GFX_focus_SOV_breadbasket_of_the_union",
+    "title": "SOV_the_power_of_the_peasantry",
+    "cost": 10.0,
+    "offsetX": -2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_coup_detat",
+    "prerequisites": [
+      "SOV_coup_detat"
+    ],
+    "iconPath": "goals/focus_SOV_breadbasket_of_the_union.png"
+  },
+  {
+    "id": "SOV_curtailment_of_the_collective_farms",
+    "icon": "GFX_focus_renounce_the_treaty_of_trianon",
+    "title": "SOV_curtailment_of_the_collective_farms",
+    "cost": 10.0,
+    "offsetX": 2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_coup_detat",
+    "prerequisites": [
+      "SOV_coup_detat"
+    ],
+    "iconPath": "goals/focus_renounce_the_treaty_of_trianon.png"
+  },
+  {
+    "id": "SOV_administrative_reforms",
+    "icon": "GFX_focus_generic_soviet_politics",
+    "title": "SOV_administrative_reforms",
+    "cost": 10.0,
+    "offsetX": -4,
+    "offsetY": 1,
+    "relative_position_id": "SOV_curtailment_of_the_collective_farms",
+    "prerequisites": [
+      "SOV_curtailment_of_the_collective_farms"
+    ],
+    "iconPath": "goals/focus_generic_soviet_politics.png"
+  },
+  {
+    "id": "SOV_a_new_theory_of_revolution",
+    "icon": "GFX_SOV_a_new_theory_of_revolution_ccp_2d_sov_compatibility",
+    "title": "SOV_a_new_theory_of_revolution",
+    "cost": 10.0,
+    "offsetX": -2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_curtailment_of_the_collective_farms",
+    "prerequisites": [
+      "SOV_curtailment_of_the_collective_farms"
+    ],
+    "iconPath": "goals/SOV_a_new_theory_of_revolution_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_back_to_the_nep",
+    "icon": "GFX_focus_generic_treaty",
+    "title": "SOV_back_to_the_nep",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_curtailment_of_the_collective_farms",
+    "prerequisites": [
+      "SOV_curtailment_of_the_collective_farms"
+    ],
+    "iconPath": "goals/focus_generic_treaty.png"
+  },
+  {
+    "id": "SOV_planned_economy",
+    "icon": "GFX_SOV_planned_economy_ccp_2d_sov_compatibility",
+    "title": "SOV_planned_economy",
+    "cost": 10.0,
+    "offsetX": -2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_back_to_the_nep",
+    "prerequisites": [
+      "SOV_back_to_the_nep"
+    ],
+    "iconPath": "goals/SOV_planned_economy_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_paced_industrialization",
+    "icon": "GFX_SOV_paced_industrialization_ccp_2d_sov_compatibility",
+    "title": "SOV_paced_industrialization",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_back_to_the_nep",
+    "prerequisites": [
+      "SOV_back_to_the_nep"
+    ],
+    "iconPath": "goals/SOV_paced_industrialization_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_the_trade_union_as_labor_organizer",
+    "icon": "GFX_SOV_the_trade_union_as_labor_organizer_ccp_2d_sov_compatibility",
+    "title": "SOV_the_trade_union_as_labor_organizer",
+    "cost": 10.0,
+    "offsetX": 2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_back_to_the_nep",
+    "prerequisites": [
+      "SOV_back_to_the_nep"
+    ],
+    "iconPath": "goals/SOV_the_trade_union_as_labor_organizer_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_incorporate_local_organizations",
+    "icon": "GFX_goal_generic_major_alliance",
+    "title": "SOV_incorporate_local_organizations",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 2,
+    "relative_position_id": "SOV_administrative_reforms",
+    "prerequisites": [
+      "SOV_administrative_reforms"
+    ],
+    "iconPath": "goals/goal_generic_major_alliance.png"
+  },
+  {
+    "id": "SOV_for_the_common_good",
+    "icon": "GFX_focus_eng_concessions_to_the_trade_unions",
+    "title": "SOV_for_the_common_good",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_incorporate_local_organizations",
+    "prerequisites": [
+      "SOV_incorporate_local_organizations",
+      "SOV_international_revolutionary_marxist_centre"
+    ],
+    "iconPath": "goals/focus_eng_concessions_to_the_trade_unions.png"
+  },
+  {
+    "id": "SOV_victory_over_devastation",
+    "icon": "GFX_focus_generic_support_the_left_right",
+    "title": "SOV_victory_over_devastation",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_for_the_common_good",
+    "prerequisites": [
+      "SOV_for_the_common_good"
+    ],
+    "iconPath": "goals/focus_generic_support_the_left_right.png"
+  },
+  {
+    "id": "SOV_socialist_humanism",
+    "icon": "GFX_SOV_socialist_humanism_ccp_2d_sov_compatibility",
+    "title": "SOV_socialist_humanism",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_victory_over_devastation",
+    "prerequisites": [
+      "SOV_victory_over_devastation"
+    ],
+    "iconPath": "goals/SOV_socialist_humanism_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_international_revolutionary_marxist_centre",
+    "icon": "GFX_focus_spr_unify_the_london_bureau",
+    "title": "SOV_international_revolutionary_marxist_centre",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 2,
+    "relative_position_id": "SOV_a_new_theory_of_revolution",
+    "prerequisites": [
+      "SOV_a_new_theory_of_revolution",
+      "SOV_planned_economy"
+    ],
+    "iconPath": "goals/focus_spr_unify_the_london_bureau.png"
+  },
+  {
+    "id": "SOV_a_sustainable_economy",
+    "icon": "GFX_focus_prc_agrarian_socialism",
+    "title": "SOV_a_sustainable_economy",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_paced_industrialization",
+    "prerequisites": [
+      "SOV_paced_industrialization"
+    ],
+    "iconPath": "goals/focus_prc_agrarian_socialism.png"
+  },
+  {
+    "id": "SOV_the_enemies_of_the_people",
+    "icon": "GFX_focus_spr_the_anti_fascist_workers_revolution",
+    "title": "SOV_the_enemies_of_the_people",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_international_revolutionary_marxist_centre",
+    "prerequisites": [
+      "SOV_international_revolutionary_marxist_centre"
+    ],
+    "iconPath": "goals/focus_spr_the_anti_fascist_workers_revolution.png"
+  },
+  {
+    "id": "SOV_proclaim_soviet_hegemony",
+    "icon": "GFX_focus_SOV_proclaim_soviet_hegemony",
+    "title": "SOV_proclaim_soviet_hegemony",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_enemies_of_the_people",
+    "prerequisites": [
+      "SOV_the_enemies_of_the_people"
+    ],
+    "iconPath": "goals/focus_SOV_proclaim_soviet_hegemony.png"
+  },
+  {
+    "id": "SOV_military_support",
+    "icon": "GFX_goal_generic_army_doctrines",
+    "title": "SOV_military_support",
+    "cost": 10.0,
+    "offsetX": 9,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_left_opposition",
+    "prerequisites": [
+      "SOV_the_left_opposition"
+    ],
+    "iconPath": "goals/goal_generic_army_doctrines.png"
+  },
+  {
+    "id": "SOV_divert_attention_towards_military",
+    "icon": "GFX_focus_SOV_military_purge",
+    "title": "SOV_divert_attention_towards_military",
+    "cost": 5.0,
+    "offsetX": 11,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_left_opposition",
+    "prerequisites": [
+      "SOV_the_left_opposition"
+    ],
+    "iconPath": "goals/focus_SOV_military_purge.png"
+  },
+  {
+    "id": "SOV_gain_support_from_party_members",
+    "icon": "GFX_focus_generic_soviet_politics",
+    "title": "SOV_gain_support_from_party_members",
+    "cost": 10.0,
+    "offsetX": 7,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_left_opposition",
+    "prerequisites": [
+      "SOV_the_left_opposition"
+    ],
+    "iconPath": "goals/focus_generic_soviet_politics.png"
+  },
+  {
+    "id": "SOV_sway_the_railway_workers",
+    "icon": "GFX_goal_generic_construction2",
+    "title": "SOV_sway_the_railway_workers",
+    "cost": 5.0,
+    "offsetX": 3,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_left_opposition",
+    "prerequisites": [
+      "SOV_the_left_opposition"
+    ],
+    "iconPath": "goals/goal_generic_construction2.png"
+  },
+  {
+    "id": "SOV_infiltrate_the_nkvd",
+    "icon": "GFX_SOV_infiltrate_the_nkvd_ccp_2d_sov_compatibility",
+    "title": "SOV_infiltrate_the_nkvd",
+    "cost": 10.0,
+    "offsetX": 5,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_left_opposition",
+    "prerequisites": [
+      "SOV_the_left_opposition"
+    ],
+    "iconPath": "goals/SOV_infiltrate_the_nkvd_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_cooperation_against_stalin",
+    "icon": "GFX_goal_generic_national_unity",
+    "title": "SOV_cooperation_against_stalin",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_gain_support_from_party_members",
+    "prerequisites": [
+      "SOV_gain_support_from_party_members"
+    ],
+    "iconPath": "goals/goal_generic_national_unity.png"
+  },
+  {
+    "id": "SOV_align_the_zinovyevites",
+    "icon": "GFX_focus_SOV_zinovyevists",
+    "title": "SOV_align_the_zinovyevites",
+    "cost": 10.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_cooperation_against_stalin",
+    "prerequisites": [
+      "SOV_cooperation_against_stalin"
+    ],
+    "iconPath": "goals/focus_SOV_zinovyevists.png"
+  },
+  {
+    "id": "SOV_liberate_ryutin",
+    "icon": "GFX_SOV_liberate_ryutin_ccp_2d_sov_compatibility",
+    "title": "SOV_liberate_ryutin",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_cooperation_against_stalin",
+    "prerequisites": [
+      "SOV_cooperation_against_stalin"
+    ],
+    "iconPath": "goals/SOV_liberate_ryutin_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_return_democracy_to_the_party",
+    "icon": "GFX_SOV_return_democracy_to_the_party_ccp_2d_sov_compatibility",
+    "title": "SOV_return_democracy_to_the_party",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 4,
+    "relative_position_id": "SOV_cooperation_against_stalin",
+    "prerequisites": [
+      "SOV_cooperation_against_stalin"
+    ],
+    "iconPath": "goals/SOV_return_democracy_to_the_party_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_strengthen_the_trade_unions",
+    "icon": "GFX_focus_generic_treaty",
+    "title": "SOV_strengthen_the_trade_unions",
+    "cost": 10.0,
+    "offsetX": 6,
+    "offsetY": 1,
+    "relative_position_id": "SOV_all_power_to_the_soviets",
+    "prerequisites": [
+      "SOV_all_power_to_the_soviets"
+    ],
+    "iconPath": "goals/focus_generic_treaty.png"
+  },
+  {
+    "id": "SOV_the_peoples_revolution",
+    "icon": "GFX_focus_por_workers_of_iberia",
+    "title": "SOV_the_peoples_revolution",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_strengthen_the_trade_unions",
+    "prerequisites": [
+      "SOV_strengthen_the_trade_unions"
+    ],
+    "iconPath": "goals/focus_por_workers_of_iberia.png"
+  },
+  {
+    "id": "SOV_the_supreme_soviet",
+    "icon": "GFX_focus_SOV_the_supreme_soviet",
+    "title": "SOV_the_supreme_soviet",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_peoples_revolution",
+    "prerequisites": [
+      "SOV_the_peoples_revolution"
+    ],
+    "iconPath": "goals/focus_SOV_the_supreme_soviet.png"
+  },
+  {
+    "id": "SOV_addressing_internal_affairs",
+    "icon": "GFX_focus_generic_self_management",
+    "title": "SOV_addressing_internal_affairs",
+    "cost": 5.0,
+    "offsetX": 24,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_path_of_marxism_leninism",
+    "prerequisites": [
+      "SOV_the_path_of_marxism_leninism"
+    ],
+    "iconPath": "goals/focus_generic_self_management.png"
+  },
+  {
+    "id": "SOV_nkvd_primacy",
+    "icon": "GFX_SOV_nkvd_primacy_ccp_2d_sov_compatibility",
+    "title": "SOV_nkvd_primacy",
+    "cost": 5.0,
+    "offsetX": -2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_addressing_internal_affairs",
+    "prerequisites": [
+      "SOV_addressing_internal_affairs"
+    ],
+    "iconPath": "goals/SOV_nkvd_primacy_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_the_new_soviet_woman",
+    "icon": "GFX_SOV_the_new_soviet_woman_ccp_2d_sov_compatibility",
+    "title": "SOV_the_new_soviet_woman",
+    "cost": 5.0,
+    "offsetX": 2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_addressing_internal_affairs",
+    "prerequisites": [
+      "SOV_addressing_internal_affairs"
+    ],
+    "iconPath": "goals/SOV_the_new_soviet_woman_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_expand_the_agitprop",
+    "icon": "GFX_SOV_expand_the_agitprop_ccp_2d_sov_compatibility",
+    "title": "SOV_expand_the_agitprop",
+    "cost": 5.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_addressing_internal_affairs",
+    "prerequisites": [
+      "SOV_addressing_internal_affairs"
+    ],
+    "iconPath": "goals/SOV_expand_the_agitprop_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_positive_heroism",
+    "icon": "GFX_SOV_positive_heroism_ccp_2d_sov_compatibility",
+    "title": "SOV_positive_heroism",
+    "cost": 10.0,
+    "offsetX": -2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_expand_the_agitprop",
+    "prerequisites": [
+      "SOV_expand_the_agitprop"
+    ],
+    "iconPath": "goals/SOV_positive_heroism_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_revive_the_stakhanovite_movement",
+    "icon": "GFX_SOV_revive_the_stakhanovite_movement_ccp_2d_sov_compatibility",
+    "title": "SOV_revive_the_stakhanovite_movement",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_positive_heroism",
+    "prerequisites": [
+      "SOV_positive_heroism"
+    ],
+    "iconPath": "goals/SOV_revive_the_stakhanovite_movement_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_war_heroes",
+    "icon": "GFX_SOV_war_heroes_ccp_2d_sov_compatibility",
+    "title": "SOV_war_heroes",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_revive_the_stakhanovite_movement",
+    "prerequisites": [
+      "SOV_revive_the_stakhanovite_movement"
+    ],
+    "iconPath": "goals/SOV_war_heroes_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_collectivist_propaganda",
+    "icon": "GFX_SOV_collectivist_propaganda_ccp_2d_sov_compatibility",
+    "title": "SOV_collectivist_propaganda",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_expand_the_agitprop",
+    "prerequisites": [
+      "SOV_expand_the_agitprop"
+    ],
+    "iconPath": "goals/SOV_collectivist_propaganda_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_socialist_emulation",
+    "icon": "GFX_SOV_socialist_emulation_ccp_2d_sov_compatibility",
+    "title": "SOV_socialist_emulation",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_collectivist_propaganda",
+    "prerequisites": [
+      "SOV_collectivist_propaganda"
+    ],
+    "iconPath": "goals/SOV_socialist_emulation_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_socialist_realism",
+    "icon": "GFX_SOV_socialist_realism_ccp_2d_sov_compatibility",
+    "title": "SOV_socialist_realism",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_socialist_emulation",
+    "prerequisites": [
+      "SOV_socialist_emulation"
+    ],
+    "iconPath": "goals/SOV_socialist_realism_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_the_komsomol",
+    "icon": "GFX_SOV_the_komsomol_ccp_2d_sov_compatibility",
+    "title": "SOV_the_komsomol",
+    "cost": 5.0,
+    "offsetX": 2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_expand_the_agitprop",
+    "prerequisites": [
+      "SOV_expand_the_agitprop"
+    ],
+    "iconPath": "goals/SOV_the_komsomol_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_patriarch_of_all_russia",
+    "icon": "GFX_SOV_patriarch_of_all_russia_ccp_2d_sov_compatibility",
+    "title": "SOV_patriarch_of_all_russia",
+    "cost": 5.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_war_heroes",
+    "prerequisites": [
+      "SOV_war_heroes"
+    ],
+    "iconPath": "goals/SOV_patriarch_of_all_russia_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_the_comintern",
+    "icon": "GFX_goal_support_communism",
+    "title": "SOV_the_comintern",
+    "cost": 5.0,
+    "offsetX": 9,
+    "offsetY": 0,
+    "relative_position_id": "SOV_addressing_internal_affairs",
+    "prerequisites": [
+      "SOV_the_path_of_marxism_leninism"
+    ],
+    "iconPath": "goals/goal_support_communism.png"
+  },
+  {
+    "id": "SOV_development_aid_for_eastern_allies",
+    "icon": "GFX_SOV_development_aid_for_eastern_allies_ccp_2d_sov_compatibility",
+    "title": "SOV_development_aid_for_eastern_allies",
+    "cost": 5.0,
+    "offsetX": -5,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_comintern",
+    "prerequisites": [
+      "SOV_the_comintern"
+    ],
+    "iconPath": "goals/SOV_development_aid_for_eastern_allies_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_war_measures_in_the_east",
+    "icon": "GFX_SOV_war_measures_in_the_east_ccp_2d_sov_compatibility",
+    "title": "SOV_war_measures_in_the_east",
+    "cost": 5.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_development_aid_for_eastern_allies",
+    "prerequisites": [
+      "SOV_development_aid_for_eastern_allies"
+    ],
+    "iconPath": "goals/SOV_war_measures_in_the_east_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_annex_tannu_tuva",
+    "icon": "GFX_SOV_annex_tannu_tuva_ccp_2d_sov_compatibility",
+    "title": "SOV_annex_tannu_tuva",
+    "cost": 5.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_war_measures_in_the_east",
+    "prerequisites": [
+      "SOV_war_measures_in_the_east"
+    ],
+    "iconPath": "goals/SOV_annex_tannu_tuva_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_fortify_mongolian_border",
+    "icon": "GFX_SOV_fortify_mongolian_border_ccp_2d_sov_compatibility",
+    "title": "SOV_fortify_mongolian_border",
+    "cost": 5.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_war_measures_in_the_east",
+    "prerequisites": [
+      "SOV_war_measures_in_the_east"
+    ],
+    "iconPath": "goals/SOV_fortify_mongolian_border_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_send_military_advisors_to_spain",
+    "icon": "GFX_focus_intervention_spain_republic",
+    "title": "SOV_send_military_advisors_to_spain",
+    "cost": 5.0,
+    "offsetX": -3,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_comintern",
+    "prerequisites": [
+      "SOV_the_comintern"
+    ],
+    "iconPath": "goals/focus_intervention_spain_republic.png"
+  },
+  {
+    "id": "SOV_policy_of_collective_security",
+    "icon": "GFX_SOV_policy_of_collective_security_ccp_2d_sov_compatibility",
+    "title": "SOV_policy_of_collective_security",
+    "cost": 5.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_comintern",
+    "prerequisites": [
+      "SOV_the_comintern"
+    ],
+    "iconPath": "goals/SOV_policy_of_collective_security_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_anti_fascist_policies",
+    "icon": "GFX_focus_generic_anti_fascist_diplomacy",
+    "title": "SOV_anti_fascist_policies",
+    "cost": 5.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_policy_of_collective_security",
+    "prerequisites": [
+      "SOV_policy_of_collective_security"
+    ],
+    "iconPath": "goals/focus_generic_anti_fascist_diplomacy.png"
+  },
+  {
+    "id": "SOV_seek_a_defense_pact_with_the_allies",
+    "icon": "GFX_goal_generic_major_alliance",
+    "title": "SOV_seek_a_defense_pact_with_the_allies",
+    "cost": 5.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_anti_fascist_policies",
+    "prerequisites": [
+      "SOV_anti_fascist_policies"
+    ],
+    "iconPath": "goals/goal_generic_major_alliance.png"
+  },
+  {
+    "id": "SOV_the_khakimov_proposal",
+    "icon": "GFX_focus_generic_befriend_saudi_arabia",
+    "title": "SOV_the_khakimov_proposal",
+    "cost": 5.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_seek_a_defense_pact_with_the_allies",
+    "prerequisites": [
+      "SOV_seek_a_defense_pact_with_the_allies"
+    ],
+    "iconPath": "goals/focus_generic_befriend_saudi_arabia.png"
+  },
+  {
+    "id": "SOV_eradicate_western_fascism",
+    "icon": "GFX_focus_generic_strike_at_democracy1",
+    "title": "SOV_eradicate_western_fascism",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 2,
+    "relative_position_id": "SOV_seek_a_defense_pact_with_the_allies",
+    "prerequisites": [
+      "SOV_seek_a_defense_pact_with_the_allies"
+    ],
+    "iconPath": "goals/focus_generic_strike_at_democracy1.png"
+  },
+  {
+    "id": "SOV_policy_of_individual_security",
+    "icon": "GFX_SOV_policy_of_individual_security_ccp_2d_sov_compatibility",
+    "title": "SOV_policy_of_individual_security",
+    "cost": 5.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_comintern",
+    "prerequisites": [
+      "SOV_the_comintern"
+    ],
+    "iconPath": "goals/SOV_policy_of_individual_security_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_approach_germany",
+    "icon": "GFX_goal_molotov_ribbentrop_pact",
+    "title": "SOV_approach_germany",
+    "cost": 5.0,
+    "offsetX": 0,
+    "offsetY": 2,
+    "relative_position_id": "SOV_policy_of_individual_security",
+    "prerequisites": [
+      "SOV_policy_of_individual_security",
+      "SOV_anti_capitalist_policies"
+    ],
+    "iconPath": "goals/goal_molotov_ribbentrop_pact.png"
+  },
+  {
+    "id": "SOV_liberation_of_the_european_proletariat",
+    "icon": "GFX_focus_spr_torchbearers_of_tomorrow",
+    "title": "SOV_liberation_of_the_european_proletariat",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 2,
+    "relative_position_id": "SOV_approach_germany",
+    "prerequisites": [
+      "SOV_approach_germany"
+    ],
+    "iconPath": "goals/focus_spr_torchbearers_of_tomorrow.png"
+  },
+  {
+    "id": "SOV_anti_capitalist_policies",
+    "icon": "GFX_focus_spr_class_war",
+    "title": "SOV_anti_capitalist_policies",
+    "cost": 5.0,
+    "offsetX": 2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_policy_of_individual_security",
+    "prerequisites": [
+      "SOV_the_comintern"
+    ],
+    "iconPath": "goals/focus_spr_class_war.png"
+  },
+  {
+    "id": "SOV_recover_alaska",
+    "icon": "GFX_focus_SOV_recover_alaska",
+    "title": "SOV_recover_alaska",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_anti_capitalist_policies",
+    "prerequisites": [
+      "SOV_anti_capitalist_policies"
+    ],
+    "iconPath": "goals/focus_SOV_recover_alaska.png"
+  },
+  {
+    "id": "SOV_the_fight_for_the_pacific",
+    "icon": "GFX_SOV_the_fight_for_the_pacific_ccp_2d_sov_compatibility",
+    "title": "SOV_the_fight_for_the_pacific",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_recover_alaska",
+    "prerequisites": [
+      "SOV_recover_alaska"
+    ],
+    "iconPath": "goals/SOV_the_fight_for_the_pacific_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_baltic_security",
+    "icon": "GFX_focus_SOV_baltic_security",
+    "title": "SOV_baltic_security",
+    "cost": 5.0,
+    "offsetX": 3,
+    "offsetY": -1,
+    "relative_position_id": "SOV_anti_capitalist_policies",
+    "prerequisites": [
+      "SOV_the_comintern"
+    ],
+    "iconPath": "goals/focus_SOV_baltic_security.png"
+  },
+  {
+    "id": "SOV_respect_baltic_self_determination",
+    "icon": "GFX_SOV_respect_baltic_self_determination_ccp_2d_sov_compatibility",
+    "title": "SOV_respect_baltic_self_determination",
+    "cost": 5.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_baltic_security",
+    "prerequisites": [
+      "SOV_baltic_security"
+    ],
+    "iconPath": "goals/SOV_respect_baltic_self_determination_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_claims_in_baltic",
+    "icon": "GFX_SOV_claims_in_baltic_ccp_2d_sov_compatibility",
+    "title": "SOV_claims_in_baltic",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_baltic_security",
+    "prerequisites": [
+      "SOV_baltic_security"
+    ],
+    "iconPath": "goals/SOV_claims_in_baltic_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_secure_leningrad",
+    "icon": "GFX_focus_generic_attack_finland",
+    "title": "SOV_secure_leningrad",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_respect_baltic_self_determination",
+    "prerequisites": [
+      "SOV_respect_baltic_self_determination"
+    ],
+    "iconPath": "goals/focus_generic_attack_finland.png"
+  },
+  {
+    "id": "SOV_control_scandinavia",
+    "icon": "GFX_SOV_control_scandinavia_ccp_2d_sov_compatibility",
+    "title": "SOV_control_scandinavia",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 2,
+    "relative_position_id": "SOV_secure_leningrad",
+    "prerequisites": [
+      "SOV_secure_leningrad"
+    ],
+    "iconPath": "goals/SOV_control_scandinavia_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_claims_on_poland",
+    "icon": "GFX_SOV_claims_on_poland_ccp_2d_sov_compatibility",
+    "title": "SOV_claims_on_poland",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_claims_in_baltic",
+    "prerequisites": [
+      "SOV_respect_baltic_self_determination"
+    ],
+    "iconPath": "goals/SOV_claims_on_poland_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_demand_eastern_poland",
+    "icon": "GFX_SOV_demand_eastern_poland_ccp_2d_sov_compatibility",
+    "title": "SOV_demand_eastern_poland",
+    "cost": 10.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_claims_on_poland",
+    "prerequisites": [
+      "SOV_claims_on_poland"
+    ],
+    "iconPath": "goals/SOV_demand_eastern_poland_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_offer_poland_protection",
+    "icon": "GFX_focus_generic_polish_deal",
+    "title": "SOV_offer_poland_protection",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_claims_on_poland",
+    "prerequisites": [
+      "SOV_claims_on_poland"
+    ],
+    "iconPath": "goals/focus_generic_polish_deal.png"
+  },
+  {
+    "id": "SOV_claim_on_bessarabia",
+    "icon": "GFX_focus_generic_attack_romania",
+    "title": "SOV_claim_on_bessarabia",
+    "cost": 10.0,
+    "offsetX": 3,
+    "offsetY": 1,
+    "relative_position_id": "SOV_claims_on_poland",
+    "prerequisites": [
+      "SOV_claims_on_poland"
+    ],
+    "iconPath": "goals/focus_generic_attack_romania.png"
+  },
+  {
+    "id": "SOV_demand_balkan_submission",
+    "icon": "GFX_SOV_demand_balkan_submission_ccp_2d_sov_compatibility",
+    "title": "SOV_demand_balkan_submission",
+    "cost": 10.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_claim_on_bessarabia",
+    "prerequisites": [
+      "SOV_claim_on_bessarabia"
+    ],
+    "iconPath": "goals/SOV_demand_balkan_submission_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_seek_balkan_cooperation",
+    "icon": "GFX_focus_BUL_free_balkan_states",
+    "title": "SOV_seek_balkan_cooperation",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_claim_on_bessarabia",
+    "prerequisites": [
+      "SOV_claim_on_bessarabia"
+    ],
+    "iconPath": "goals/focus_BUL_free_balkan_states.png"
+  },
+  {
+    "id": "SOV_middle_east_diplomacy",
+    "icon": "GFX_focus_TUR_treaty_of_saadabad",
+    "title": "SOV_middle_east_diplomacy",
+    "cost": 5.0,
+    "offsetX": 4,
+    "offsetY": 0,
+    "relative_position_id": "SOV_baltic_security",
+    "prerequisites": [
+      "SOV_the_comintern"
+    ],
+    "iconPath": "goals/focus_TUR_treaty_of_saadabad.png"
+  },
+  {
+    "id": "SOV_the_southern_thrust",
+    "icon": "GFX_SOV_the_southern_thrust_ccp_2d_sov_compatibility",
+    "title": "SOV_the_southern_thrust",
+    "cost": 10.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_middle_east_diplomacy",
+    "prerequisites": [
+      "SOV_middle_east_diplomacy"
+    ],
+    "iconPath": "goals/SOV_the_southern_thrust_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_support_afghan_ideology",
+    "icon": "GFX_focus_generic_befriend_afghanistan",
+    "title": "SOV_support_afghan_ideology",
+    "cost": 5.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_middle_east_diplomacy",
+    "prerequisites": [
+      "SOV_middle_east_diplomacy"
+    ],
+    "iconPath": "goals/focus_generic_befriend_afghanistan.png"
+  },
+  {
+    "id": "SOV_preemptive_invasion_of_iran",
+    "icon": "GFX_focus_generic_attack_iran",
+    "title": "SOV_preemptive_invasion_of_iran",
+    "cost": 5.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_support_afghan_ideology",
+    "prerequisites": [
+      "SOV_support_afghan_ideology"
+    ],
+    "iconPath": "goals/focus_generic_attack_iran.png"
+  },
+  {
+    "id": "SOV_the_threat_from_the_land_of_the_rising_sun",
+    "icon": "GFX_focus_attack_japan",
+    "title": "SOV_the_threat_from_the_land_of_the_rising_sun",
+    "cost": 5.0,
+    "offsetX": 5,
+    "offsetY": 0,
+    "relative_position_id": "SOV_middle_east_diplomacy",
+    "prerequisites": [
+      "SOV_the_comintern"
+    ],
+    "iconPath": "goals/focus_attack_japan.png"
+  },
+  {
+    "id": "SOV_the_gobi_gambit",
+    "icon": "GFX_focus_generic_befriend_sinkiang",
+    "title": "SOV_the_gobi_gambit",
+    "cost": 5.0,
+    "offsetX": -2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_threat_from_the_land_of_the_rising_sun",
+    "prerequisites": [
+      "SOV_the_threat_from_the_land_of_the_rising_sun"
+    ],
+    "iconPath": "goals/focus_generic_befriend_sinkiang.png"
+  },
+  {
+    "id": "SOV_two_red_flags",
+    "icon": "GFX_focus_chi_cooperation_with_the_communists",
+    "title": "SOV_two_red_flags",
+    "cost": 5.0,
+    "offsetX": 2,
+    "offsetY": 0,
+    "relative_position_id": "SOV_the_gobi_gambit",
+    "prerequisites": [
+      "SOV_the_threat_from_the_land_of_the_rising_sun"
+    ],
+    "iconPath": "goals/focus_chi_cooperation_with_the_communists.png"
+  },
+  {
+    "id": "SOV_support_the_kuomintang",
+    "icon": "GFX_focus_chi_cooperation_with_the_nationalists",
+    "title": "SOV_support_the_kuomintang",
+    "cost": 5.0,
+    "offsetX": 2,
+    "offsetY": 0,
+    "relative_position_id": "SOV_two_red_flags",
+    "prerequisites": [
+      "SOV_the_threat_from_the_land_of_the_rising_sun"
+    ],
+    "iconPath": "goals/focus_chi_cooperation_with_the_nationalists.png"
+  },
+  {
+    "id": "SOV_intervention_in_china",
+    "icon": "GFX_SOV_intervention_in_china_ccp_2d_sov_compatibility",
+    "title": "SOV_intervention_in_china",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_gobi_gambit",
+    "prerequisites": [
+      "SOV_the_gobi_gambit"
+    ],
+    "iconPath": "goals/SOV_intervention_in_china_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_prepare_a_war_with_japan",
+    "icon": "GFX_focus_AST_war_japan",
+    "title": "SOV_prepare_a_war_with_japan",
+    "cost": 5.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_two_red_flags",
+    "prerequisites": [
+      "SOV_the_gobi_gambit"
+    ],
+    "iconPath": "goals/focus_AST_war_japan.png"
+  },
+  {
+    "id": "SOV_end_the_khalkhin_gol_conflict",
+    "icon": "GFX_goal_generic_occupy_states_ongoing_war",
+    "title": "SOV_end_the_khalkhin_gol_conflict",
+    "cost": 5.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_prepare_a_war_with_japan",
+    "prerequisites": [
+      "SOV_prepare_a_war_with_japan"
+    ],
+    "iconPath": "goals/goal_generic_occupy_states_ongoing_war.png"
+  },
+  {
+    "id": "SOV_recover_the_kuril_islands",
+    "icon": "GFX_goal_generic_political_pressure",
+    "title": "SOV_recover_the_kuril_islands",
+    "cost": 5.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_prepare_a_war_with_japan",
+    "prerequisites": [
+      "SOV_prepare_a_war_with_japan"
+    ],
+    "iconPath": "goals/goal_generic_political_pressure.png"
+  },
+  {
+    "id": "SOV_reconcile_japan",
+    "icon": "GFX_focus_chi_collaboration_with_the_japanese",
+    "title": "SOV_reconcile_japan",
+    "cost": 10.0,
+    "offsetX": 3,
+    "offsetY": 0,
+    "relative_position_id": "SOV_the_threat_from_the_land_of_the_rising_sun",
+    "prerequisites": [
+      "SOV_the_comintern"
+    ],
+    "iconPath": "goals/focus_chi_collaboration_with_the_japanese.png"
+  },
+  {
+    "id": "SOV_spheres_of_influence_in_china",
+    "icon": "GFX_goal_generic_position_armies",
+    "title": "SOV_spheres_of_influence_in_china",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_reconcile_japan",
+    "prerequisites": [
+      "SOV_reconcile_japan"
+    ],
+    "iconPath": "goals/goal_generic_position_armies.png"
+  },
+  {
+    "id": "SOV_soviet_japanese_pact_against_usa_focus",
+    "icon": "GFX_goal_generic_military_deal",
+    "title": "SOV_soviet_japanese_pact_against_usa_focus",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 4,
+    "relative_position_id": "SOV_reconcile_japan",
+    "prerequisites": [
+      "SOV_reconcile_japan"
+    ],
+    "iconPath": "goals/goal_generic_military_deal.png"
+  },
+  {
+    "id": "SOV_beaten_but_not_defeated",
+    "icon": "GFX_SOV_beaten_but_not_defeated_ccp_2d_sov_compatibility",
+    "title": "SOV_beaten_but_not_defeated",
+    "cost": 5.0,
+    "offsetX": 61,
+    "offsetY": 0,
+    "relative_position_id": "SOV_the_path_of_marxism_leninism",
+    "iconPath": "goals/SOV_beaten_but_not_defeated_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_unification_of_the_exiles",
+    "icon": "GFX_goal_generic_major_alliance",
+    "title": "SOV_unification_of_the_exiles",
+    "cost": 10.0,
+    "offsetX": -4,
+    "offsetY": 1,
+    "relative_position_id": "SOV_beaten_but_not_defeated",
+    "prerequisites": [
+      "SOV_beaten_but_not_defeated"
+    ],
+    "iconPath": "goals/goal_generic_major_alliance.png"
+  },
+  {
+    "id": "SOV_womens_fascist_movement",
+    "icon": "GFX_focus_SOV_womens_fascist_movement",
+    "title": "SOV_womens_fascist_movement",
+    "cost": 5.0,
+    "offsetX": -2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_unification_of_the_exiles",
+    "prerequisites": [
+      "SOV_unification_of_the_exiles"
+    ],
+    "iconPath": "goals/focus_SOV_womens_fascist_movement.png"
+  },
+  {
+    "id": "SOV_the_true_tsars",
+    "icon": "GFX_focus_SOV_the_true_tsars",
+    "title": "SOV_the_true_tsars",
+    "cost": 5.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_unification_of_the_exiles",
+    "prerequisites": [
+      "SOV_unification_of_the_exiles"
+    ],
+    "iconPath": "goals/focus_SOV_the_true_tsars.png"
+  },
+  {
+    "id": "SOV_national_unification",
+    "icon": "GFX_SOV_national_unification_ccp_2d_sov_compatibility",
+    "title": "SOV_national_unification",
+    "cost": 5.0,
+    "offsetX": 2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_unification_of_the_exiles",
+    "prerequisites": [
+      "SOV_unification_of_the_exiles"
+    ],
+    "iconPath": "goals/SOV_national_unification_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_embrace_the_black_hundreds",
+    "icon": "GFX_focus_generic_little_entente",
+    "title": "SOV_embrace_the_black_hundreds",
+    "cost": 5.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_true_tsars",
+    "prerequisites": [
+      "SOV_womens_fascist_movement"
+    ],
+    "iconPath": "goals/focus_generic_little_entente.png"
+  },
+  {
+    "id": "SOV_covert_operations",
+    "icon": "GFX_goal_generic_more_territorial_claims",
+    "title": "SOV_covert_operations",
+    "cost": 5.0,
+    "offsetX": -3,
+    "offsetY": 1,
+    "relative_position_id": "SOV_embrace_the_black_hundreds",
+    "prerequisites": [
+      "SOV_embrace_the_black_hundreds"
+    ],
+    "iconPath": "goals/goal_generic_more_territorial_claims.png"
+  },
+  {
+    "id": "SOV_muster_the_old_guard",
+    "icon": "GFX_SOV_muster_the_old_guard_ccp_2d_sov_compatibility",
+    "title": "SOV_muster_the_old_guard",
+    "cost": 10.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_embrace_the_black_hundreds",
+    "prerequisites": [
+      "SOV_embrace_the_black_hundreds"
+    ],
+    "iconPath": "goals/SOV_muster_the_old_guard_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_approach_semyonov",
+    "icon": "GFX_focus_SOV_approach_semyonov",
+    "title": "SOV_approach_semyonov",
+    "cost": 5.0,
+    "offsetX": 3,
+    "offsetY": 1,
+    "relative_position_id": "SOV_embrace_the_black_hundreds",
+    "prerequisites": [
+      "SOV_embrace_the_black_hundreds"
+    ],
+    "iconPath": "goals/focus_SOV_approach_semyonov.png"
+  },
+  {
+    "id": "SOV_fascist_youth_union",
+    "icon": "GFX_SOV_fascist_youth_union_ccp_2d_sov_compatibility",
+    "title": "SOV_fascist_youth_union",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_embrace_the_black_hundreds",
+    "prerequisites": [
+      "SOV_embrace_the_black_hundreds"
+    ],
+    "iconPath": "goals/SOV_fascist_youth_union_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_tolkachi",
+    "icon": "GFX_goal_generic_intelligence_exchange",
+    "title": "SOV_tolkachi",
+    "cost": 5.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_muster_the_old_guard",
+    "prerequisites": [
+      "SOV_muster_the_old_guard"
+    ],
+    "iconPath": "goals/goal_generic_intelligence_exchange.png"
+  },
+  {
+    "id": "SOV_south_manchuria_railway",
+    "icon": "GFX_focus_SOV_south_manchuria_railway",
+    "title": "SOV_south_manchuria_railway",
+    "cost": 5.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_fascist_youth_union",
+    "prerequisites": [
+      "SOV_muster_the_old_guard"
+    ],
+    "iconPath": "goals/focus_SOV_south_manchuria_railway.png"
+  },
+  {
+    "id": "SOV_organize_wreckers",
+    "icon": "GFX_focus_SOV_organize_wreckers",
+    "title": "SOV_organize_wreckers",
+    "cost": 5.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_muster_the_old_guard",
+    "prerequisites": [
+      "SOV_muster_the_old_guard"
+    ],
+    "iconPath": "goals/focus_SOV_organize_wreckers.png"
+  },
+  {
+    "id": "SOV_the_eyes_fear",
+    "icon": "GFX_SOV_the_eyes_fear_ccp_2d_sov_compatibility",
+    "title": "SOV_the_eyes_fear",
+    "cost": 5.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_tolkachi",
+    "prerequisites": [
+      "SOV_tolkachi"
+    ],
+    "iconPath": "goals/SOV_the_eyes_fear_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_the_hands_do",
+    "icon": "GFX_SOV_the_hands_do_ccp_2d_sov_compatibility",
+    "title": "SOV_the_hands_do",
+    "cost": 5.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_eyes_fear",
+    "prerequisites": [
+      "SOV_the_eyes_fear"
+    ],
+    "iconPath": "goals/SOV_the_hands_do_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_call_for_aid",
+    "icon": "GFX_SOV_call_for_aid_ccp_2d_sov_compatibility",
+    "title": "SOV_call_for_aid",
+    "cost": 5.0,
+    "offsetX": -3,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_hands_do",
+    "prerequisites": [
+      "SOV_the_hands_do"
+    ],
+    "iconPath": "goals/SOV_call_for_aid_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_request_imperial_protection",
+    "icon": "GFX_SOV_request_imperial_protection_ccp_2d_sov_compatibility",
+    "title": "SOV_request_imperial_protection",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_call_for_aid",
+    "prerequisites": [
+      "SOV_call_for_aid"
+    ],
+    "iconPath": "goals/SOV_request_imperial_protection_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_sabotage_behind_enemy_lines",
+    "icon": "GFX_focus_prc_infiltration",
+    "title": "SOV_sabotage_behind_enemy_lines",
+    "cost": 5.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_hands_do",
+    "prerequisites": [
+      "SOV_the_hands_do"
+    ],
+    "iconPath": "goals/focus_prc_infiltration.png"
+  },
+  {
+    "id": "SOV_aristocratic_investments",
+    "icon": "GFX_SOV_aristocratic_investments_ccp_2d_sov_compatibility",
+    "title": "SOV_aristocratic_investments",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_hands_do",
+    "prerequisites": [
+      "SOV_the_hands_do"
+    ],
+    "iconPath": "goals/SOV_aristocratic_investments_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_consolidate_power",
+    "icon": "GFX_SOV_consolidate_power_ccp_2d_sov_compatibility",
+    "title": "SOV_consolidate_power",
+    "cost": 5.0,
+    "offsetX": 0,
+    "offsetY": 2,
+    "relative_position_id": "SOV_the_hands_do",
+    "prerequisites": [
+      "SOV_the_hands_do"
+    ],
+    "iconPath": "goals/SOV_consolidate_power_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_rebuild_the_nation",
+    "icon": "GFX_SOV_rebuild_the_nation_ccp_2d_sov_compatibility",
+    "title": "SOV_rebuild_the_nation",
+    "cost": 5.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_consolidate_power",
+    "prerequisites": [
+      "SOV_consolidate_power"
+    ],
+    "iconPath": "goals/SOV_rebuild_the_nation_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_bringing_breakaways_back_to_the_fold",
+    "icon": "GFX_SOV_bringing_breakaways_back_to_the_fold_ccp_2d_sov_compatibility",
+    "title": "SOV_bringing_breakaways_back_to_the_fold",
+    "cost": 10.0,
+    "offsetX": -2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_consolidate_power",
+    "prerequisites": [
+      "SOV_consolidate_power"
+    ],
+    "iconPath": "goals/SOV_bringing_breakaways_back_to_the_fold_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_offer_autonomy_to_former_soviet_republics",
+    "icon": "GFX_SOV_offer_autonomy_to_former_soviet_republics_ccp_2d_sov_compatibility",
+    "title": "SOV_offer_autonomy_to_former_soviet_republics",
+    "cost": 5.0,
+    "offsetX": -4,
+    "offsetY": 1,
+    "relative_position_id": "SOV_consolidate_power",
+    "prerequisites": [
+      "SOV_consolidate_power"
+    ],
+    "iconPath": "goals/SOV_offer_autonomy_to_former_soviet_republics_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_restore_the_glory_of_the_motherland",
+    "icon": "GFX_SOV_restore_the_glory_of_the_motherland_ccp_2d_sov_compatibility",
+    "title": "SOV_restore_the_glory_of_the_motherland",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_rebuild_the_nation",
+    "prerequisites": [
+      "SOV_rebuild_the_nation"
+    ],
+    "iconPath": "goals/SOV_restore_the_glory_of_the_motherland_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_article_124",
+    "icon": "GFX_focus_generic_treaty",
+    "title": "SOV_article_124",
+    "cost": 5.0,
+    "offsetX": 4,
+    "offsetY": 1,
+    "relative_position_id": "SOV_beaten_but_not_defeated",
+    "prerequisites": [
+      "SOV_beaten_but_not_defeated"
+    ],
+    "iconPath": "goals/focus_generic_treaty.png"
+  },
+  {
+    "id": "SOV_reopen_novodevichi",
+    "icon": "GFX_goal_generic_dangerous_deal",
+    "title": "SOV_reopen_novodevichi",
+    "cost": 5.0,
+    "offsetX": 0,
+    "offsetY": 2,
+    "relative_position_id": "SOV_article_124",
+    "prerequisites": [
+      "SOV_article_124"
+    ],
+    "iconPath": "goals/goal_generic_dangerous_deal.png"
+  },
+  {
+    "id": "SOV_rebuild_the_savior_cathedral",
+    "icon": "GFX_focus_SOV_rebuild_the_savior_cathedral",
+    "title": "SOV_rebuild_the_savior_cathedral",
+    "cost": 10.0,
+    "offsetX": -2,
+    "offsetY": 2,
+    "relative_position_id": "SOV_reopen_novodevichi",
+    "prerequisites": [
+      "SOV_reopen_novodevichi"
+    ],
+    "iconPath": "goals/focus_SOV_rebuild_the_savior_cathedral.png"
+  },
+  {
+    "id": "SOV_the_synod",
+    "icon": "GFX_goal_generic_national_unity",
+    "title": "SOV_the_synod",
+    "cost": 5.0,
+    "offsetX": 2,
+    "offsetY": 2,
+    "relative_position_id": "SOV_reopen_novodevichi",
+    "prerequisites": [
+      "SOV_reopen_novodevichi"
+    ],
+    "iconPath": "goals/goal_generic_national_unity.png"
+  },
+  {
+    "id": "SOV_the_declaration",
+    "icon": "GFX_goal_generic_forceful_treaty",
+    "title": "SOV_the_declaration",
+    "cost": 5.0,
+    "offsetX": 0,
+    "offsetY": 2,
+    "relative_position_id": "SOV_the_synod",
+    "prerequisites": [
+      "SOV_the_synod"
+    ],
+    "iconPath": "goals/goal_generic_forceful_treaty.png"
+  },
+  {
+    "id": "SOV_return_of_the_rocor",
+    "icon": "GFX_SOV_return_of_the_rocor_ccp_2d_sov_compatibility",
+    "title": "SOV_return_of_the_rocor",
+    "cost": 5.0,
+    "offsetX": 0,
+    "offsetY": 3,
+    "relative_position_id": "SOV_the_declaration",
+    "prerequisites": [
+      "SOV_the_declaration",
+      "SOV_consolidate_power",
+      "SOV_reformalize_the_role_of_the_patriarchate"
+    ],
+    "iconPath": "goals/SOV_return_of_the_rocor_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_reformalize_the_role_of_the_patriarchate",
+    "icon": "GFX_SOV_reformalize_the_role_of_the_patriarchate_ccp_2d_sov_compatibility",
+    "title": "SOV_reformalize_the_role_of_the_patriarchate",
+    "cost": 5.0,
+    "offsetX": 2,
+    "offsetY": 4,
+    "relative_position_id": "SOV_rebuild_the_savior_cathedral",
+    "prerequisites": [
+      "SOV_rebuild_the_savior_cathedral",
+      "SOV_the_synod"
+    ],
+    "iconPath": "goals/SOV_reformalize_the_role_of_the_patriarchate_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_reconvene_the_zemsky_sobor",
+    "icon": "GFX_focus_SOV_zemsky_sobor",
+    "title": "SOV_reconvene_the_zemsky_sobor",
+    "cost": 10.0,
+    "offsetX": 4,
+    "offsetY": 2,
+    "relative_position_id": "SOV_consolidate_power",
+    "prerequisites": [
+      "SOV_consolidate_power",
+      "SOV_reformalize_the_role_of_the_patriarchate"
+    ],
+    "iconPath": "goals/focus_SOV_zemsky_sobor.png"
+  },
+  {
+    "id": "SOV_dismantle_the_zemsky_sobor",
+    "icon": "GFX_SOV_dismantle_the_zemsky_sobor_ccp_2d_sov_compatibility",
+    "title": "SOV_dismantle_the_zemsky_sobor",
+    "cost": 10.0,
+    "offsetX": 5,
+    "offsetY": 1,
+    "relative_position_id": "SOV_reconvene_the_zemsky_sobor",
+    "prerequisites": [
+      "SOV_reconvene_the_zemsky_sobor"
+    ],
+    "iconPath": "goals/SOV_dismantle_the_zemsky_sobor_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_russian_corporate_state",
+    "icon": "GFX_SOV_russian_corporate_state_ccp_2d_sov_compatibility",
+    "title": "SOV_russian_corporate_state",
+    "cost": 10.0,
+    "offsetX": 2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_dismantle_the_zemsky_sobor",
+    "prerequisites": [
+      "SOV_dismantle_the_zemsky_sobor"
+    ],
+    "iconPath": "goals/SOV_russian_corporate_state_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_romanov_reconstruction",
+    "icon": "GFX_SOV_romanov_reconstruction_ccp_2d_sov_compatibility",
+    "title": "SOV_romanov_reconstruction",
+    "cost": 10.0,
+    "offsetX": -5,
+    "offsetY": 1,
+    "relative_position_id": "SOV_reconvene_the_zemsky_sobor",
+    "prerequisites": [
+      "SOV_reconvene_the_zemsky_sobor"
+    ],
+    "iconPath": "goals/SOV_romanov_reconstruction_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_capital_of_the_tsars",
+    "icon": "GFX_SOV_capital_of_the_tsars_ccp_2d_sov_compatibility",
+    "title": "SOV_capital_of_the_tsars",
+    "cost": 10.0,
+    "offsetX": -2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_romanov_reconstruction",
+    "prerequisites": [
+      "SOV_romanov_reconstruction"
+    ],
+    "iconPath": "goals/SOV_capital_of_the_tsars_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_church_candidates",
+    "icon": "GFX_focus_generic_diplomatic_treaty",
+    "title": "SOV_church_candidates",
+    "cost": 10.0,
+    "offsetX": 5,
+    "offsetY": 1,
+    "relative_position_id": "SOV_romanov_reconstruction",
+    "prerequisites": [
+      "SOV_romanov_reconstruction"
+    ],
+    "iconPath": "goals/focus_generic_diplomatic_treaty.png"
+  },
+  {
+    "id": "SOV_reinstitute_the_mestnichestvo",
+    "icon": "GFX_SOV_reinstitute_the_mestnichestvo_ccp_2d_sov_compatibility",
+    "title": "SOV_reinstitute_the_mestnichestvo",
+    "cost": 10.0,
+    "offsetX": -5,
+    "offsetY": 1,
+    "relative_position_id": "SOV_romanov_reconstruction",
+    "prerequisites": [
+      "SOV_romanov_reconstruction"
+    ],
+    "iconPath": "goals/SOV_reinstitute_the_mestnichestvo_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_the_iron_wall_of_russian_resolve",
+    "icon": "GFX_SOV_the_iron_wall_of_russian_resolve_ccp_2d_sov_compatibility",
+    "title": "SOV_the_iron_wall_of_russian_resolve",
+    "cost": 10.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_reinstitute_the_mestnichestvo",
+    "prerequisites": [
+      "SOV_reinstitute_the_mestnichestvo"
+    ],
+    "iconPath": "goals/SOV_the_iron_wall_of_russian_resolve_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_my_brothers_keeper",
+    "icon": "GFX_focus_SOV_my_brothers_keeper",
+    "title": "SOV_my_brothers_keeper",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 2,
+    "relative_position_id": "SOV_reinstitute_the_mestnichestvo",
+    "prerequisites": [
+      "SOV_reinstitute_the_mestnichestvo",
+      "SOV_the_triple_entente"
+    ],
+    "iconPath": "goals/focus_SOV_my_brothers_keeper.png"
+  },
+  {
+    "id": "SOV_the_rightful_heir_to_the_empire",
+    "icon": "GFX_SOV_the_rightful_heir_to_the_empire_ccp_2d_sov_compatibility",
+    "title": "SOV_the_rightful_heir_to_the_empire",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 2,
+    "relative_position_id": "SOV_church_candidates",
+    "prerequisites": [
+      "SOV_church_candidates"
+    ],
+    "iconPath": "goals/SOV_the_rightful_heir_to_the_empire_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_the_third_rome",
+    "icon": "GFX_focus_SOV_third_rome",
+    "title": "SOV_the_third_rome",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_rightful_heir_to_the_empire",
+    "prerequisites": [
+      "SOV_the_rightful_heir_to_the_empire"
+    ],
+    "iconPath": "goals/focus_SOV_third_rome.png"
+  },
+  {
+    "id": "SOV_vengeance_for_the_yoke",
+    "icon": "GFX_focus_generic_attack_mongolia",
+    "title": "SOV_vengeance_for_the_yoke",
+    "cost": 5.0,
+    "offsetX": -3,
+    "offsetY": 1,
+    "relative_position_id": "SOV_dismantle_the_zemsky_sobor",
+    "prerequisites": [
+      "SOV_romanov_reconstruction"
+    ],
+    "iconPath": "goals/focus_generic_attack_mongolia.png"
+  },
+  {
+    "id": "SOV_reclaim_uryankhay_krai",
+    "icon": "GFX_focus_generic_attack_tannu_tuva",
+    "title": "SOV_reclaim_uryankhay_krai",
+    "cost": 5.0,
+    "offsetX": -7,
+    "offsetY": 1,
+    "relative_position_id": "SOV_dismantle_the_zemsky_sobor",
+    "prerequisites": [
+      "SOV_romanov_reconstruction"
+    ],
+    "iconPath": "goals/focus_generic_attack_tannu_tuva.png"
+  },
+  {
+    "id": "SOV_westward_bound",
+    "icon": "GFX_SOV_westward_bound_ccp_2d_sov_compatibility",
+    "title": "SOV_westward_bound",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_romanov_reconstruction",
+    "prerequisites": [
+      "SOV_romanov_reconstruction"
+    ],
+    "iconPath": "goals/SOV_westward_bound_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_the_triple_entente",
+    "icon": "GFX_SOV_the_triple_entente_ccp_2d_sov_compatibility",
+    "title": "SOV_the_triple_entente",
+    "cost": 10.0,
+    "offsetX": -4,
+    "offsetY": 1,
+    "relative_position_id": "SOV_westward_bound",
+    "prerequisites": [
+      "SOV_westward_bound",
+      "SOV_romanov_reconstruction"
+    ],
+    "iconPath": "goals/SOV_the_triple_entente_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_our_slavic_commitments",
+    "icon": "GFX_SOV_our_slavic_commitments_ccp_2d_sov_compatibility",
+    "title": "SOV_our_slavic_commitments",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_triple_entente",
+    "prerequisites": [
+      "SOV_the_triple_entente"
+    ],
+    "iconPath": "goals/SOV_our_slavic_commitments_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_the_old_enemy",
+    "icon": "GFX_SOV_the_old_enemy_ccp_2d_sov_compatibility",
+    "title": "SOV_the_old_enemy",
+    "cost": 10.0,
+    "offsetX": -2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_westward_bound",
+    "prerequisites": [
+      "SOV_westward_bound"
+    ],
+    "iconPath": "goals/SOV_the_old_enemy_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_secure_finland",
+    "icon": "GFX_SOV_secure_finland_ccp_2d_sov_compatibility",
+    "title": "SOV_secure_finland",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_westward_bound",
+    "prerequisites": [
+      "SOV_westward_bound"
+    ],
+    "iconPath": "goals/SOV_secure_finland_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_secure_the_baltics",
+    "icon": "GFX_SOV_secure_the_baltics_ccp_2d_sov_compatibility",
+    "title": "SOV_secure_the_baltics",
+    "cost": 10.0,
+    "offsetX": 2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_westward_bound",
+    "prerequisites": [
+      "SOV_westward_bound"
+    ],
+    "iconPath": "goals/SOV_secure_the_baltics_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_panslavic_nationalism",
+    "icon": "GFX_focus_SOV_panslavic_nationalism",
+    "title": "SOV_panslavic_nationalism",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_secure_finland",
+    "prerequisites": [
+      "SOV_secure_the_baltics",
+      "SOV_secure_finland",
+      "SOV_the_old_enemy"
+    ],
+    "iconPath": "goals/focus_SOV_panslavic_nationalism.png"
+  },
+  {
+    "id": "SOV_the_fate_of_romania",
+    "icon": "GFX_SOV_the_fate_of_romania_ccp_2d_sov_compatibility",
+    "title": "SOV_the_fate_of_romania",
+    "cost": 10.0,
+    "offsetX": 2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_our_slavic_commitments",
+    "prerequisites": [
+      "SOV_our_slavic_commitments"
+    ],
+    "iconPath": "goals/SOV_the_fate_of_romania_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_pacify_the_rim",
+    "icon": "GFX_SOV_pacify_the_rim_ccp_2d_sov_compatibility",
+    "title": "SOV_pacify_the_rim",
+    "cost": 10.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_dismantle_the_zemsky_sobor",
+    "prerequisites": [
+      "SOV_dismantle_the_zemsky_sobor"
+    ],
+    "iconPath": "goals/SOV_pacify_the_rim_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_eastern_expansion",
+    "icon": "GFX_SOV_eastern_expansion_ccp_2d_sov_compatibility",
+    "title": "SOV_eastern_expansion",
+    "cost": 10.0,
+    "offsetX": 5,
+    "offsetY": 1,
+    "relative_position_id": "SOV_pacify_the_rim",
+    "prerequisites": [
+      "SOV_pacify_the_rim",
+      "SOV_dismantle_the_zemsky_sobor"
+    ],
+    "iconPath": "goals/SOV_eastern_expansion_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_intervention_in_the_americas",
+    "icon": "GFX_focus_SOV_ivan_plays_baseball",
+    "title": "SOV_intervention_in_the_americas",
+    "cost": 10.0,
+    "offsetX": 1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_eastern_expansion",
+    "prerequisites": [
+      "SOV_eastern_expansion"
+    ],
+    "iconPath": "goals/focus_SOV_ivan_plays_baseball.png"
+  },
+  {
+    "id": "SOV_restore_the_old_eastern_empire",
+    "icon": "GFX_focus_SOV_old_eastern_empire",
+    "title": "SOV_restore_the_old_eastern_empire",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_intervention_in_the_americas",
+    "prerequisites": [
+      "SOV_intervention_in_the_americas"
+    ],
+    "iconPath": "goals/focus_SOV_old_eastern_empire.png"
+  },
+  {
+    "id": "SOV_into_central_asia",
+    "icon": "GFX_SOV_into_central_asia_ccp_2d_sov_compatibility",
+    "title": "SOV_into_central_asia",
+    "cost": 10.0,
+    "offsetX": -1,
+    "offsetY": 1,
+    "relative_position_id": "SOV_eastern_expansion",
+    "prerequisites": [
+      "SOV_eastern_expansion"
+    ],
+    "iconPath": "goals/SOV_into_central_asia_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_the_last_break_southward",
+    "icon": "GFX_SOV_the_last_break_southward_ccp_2d_sov_compatibility",
+    "title": "SOV_the_last_break_southward",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_into_central_asia",
+    "prerequisites": [
+      "SOV_into_central_asia"
+    ],
+    "iconPath": "goals/SOV_the_last_break_southward_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_rebuild_the_far_eastern_fleet",
+    "icon": "GFX_SOV_rebuild_the_far_eastern_fleet_ccp_2d_sov_compatibility",
+    "title": "SOV_rebuild_the_far_eastern_fleet",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_pacify_the_rim",
+    "prerequisites": [
+      "SOV_pacify_the_rim"
+    ],
+    "iconPath": "goals/SOV_rebuild_the_far_eastern_fleet_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_modernize_the_far_eastern_fleet",
+    "icon": "GFX_SOV_modernize_the_far_eastern_fleet_ccp_2d_sov_compatibility",
+    "title": "SOV_modernize_the_far_eastern_fleet",
+    "cost": 10.0,
+    "offsetX": -2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_rebuild_the_far_eastern_fleet",
+    "prerequisites": [
+      "SOV_rebuild_the_far_eastern_fleet"
+    ],
+    "iconPath": "goals/SOV_modernize_the_far_eastern_fleet_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_memories_of_1905",
+    "icon": "GFX_SOV_memories_of_1905_ccp_2d_sov_compatibility",
+    "title": "SOV_memories_of_1905",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_rebuild_the_far_eastern_fleet",
+    "prerequisites": [
+      "SOV_rebuild_the_far_eastern_fleet"
+    ],
+    "iconPath": "goals/SOV_memories_of_1905_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_the_lonely_island",
+    "icon": "GFX_SOV_the_lonely_island_ccp_2d_sov_compatibility",
+    "title": "SOV_the_lonely_island",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_memories_of_1905",
+    "prerequisites": [
+      "SOV_memories_of_1905"
+    ],
+    "iconPath": "goals/SOV_the_lonely_island_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_an_empire_in_the_pacific",
+    "icon": "GFX_focus_SOV_pacific_empire",
+    "title": "SOV_an_empire_in_the_pacific",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_lonely_island",
+    "prerequisites": [
+      "SOV_the_lonely_island"
+    ],
+    "iconPath": "goals/focus_SOV_pacific_empire.png"
+  },
+  {
+    "id": "SOV_the_berlin_moscow_axis",
+    "icon": "GFX_SOV_the_berlin_moscow_axis_ccp_2d_sov_compatibility",
+    "title": "SOV_the_berlin_moscow_axis",
+    "cost": 10.0,
+    "offsetX": 2,
+    "offsetY": 1,
+    "relative_position_id": "SOV_pacify_the_rim",
+    "prerequisites": [
+      "SOV_pacify_the_rim"
+    ],
+    "iconPath": "goals/SOV_the_berlin_moscow_axis_ccp_2d_sov_compatibility.png"
+  },
+  {
+    "id": "SOV_japanese_overtures",
+    "icon": "GFX_SOV_japanese_overtures_ccp_2d_sov_compatibility",
+    "title": "SOV_japanese_overtures",
+    "cost": 10.0,
+    "offsetX": 0,
+    "offsetY": 1,
+    "relative_position_id": "SOV_the_berlin_moscow_axis",
+    "prerequisites": [
+      "SOV_the_berlin_moscow_axis"
+    ],
+    "iconPath": "goals/SOV_japanese_overtures_ccp_2d_sov_compatibility.png"
+  }
+]

@@ -1,0 +1,92 @@
+[
+  {
+    "id": "SOV_the_path_of_marxism_leninism",
+    "title": "マルクス・レーニン主義の道",
+    "x": 2000,
+    "y": 50,
+    "cost": 70,
+    "effect": "・政治力: +100\n・日々の政治力獲得量: +0.10",
+    "prerequisites": []
+  },
+  {
+    "id": "SOV_center",
+    "title": "中央派の堅持",
+    "x": 2000,
+    "y": 180,
+    "cost": 70,
+    "effect": "・スターリン派の支持率: +10%\n・政治力: +120",
+    "prerequisites": ["SOV_the_path_of_marxism_leninism"]
+  },
+  {
+    "id": "SOV_socialism_in_one_country",
+    "title": "一国社会主義論",
+    "x": 1850,
+    "y": 310,
+    "cost": 70,
+    "effect": "・安定度: +10.00%\n・工場出力: +5.00%",
+    "prerequisites": ["SOV_center"]
+  },
+  {
+    "id": "SOV_collectivization_process",
+    "title": "集団化の推進",
+    "x": 2150,
+    "y": 310,
+    "cost": 70,
+    "effect": "・消費財工場負担率: -3.00%\n・安定度: -5.00%",
+    "prerequisites": ["SOV_center"]
+  },
+  {
+    "id": "SOV_stalin_cult_of_personality",
+    "title": "個人崇拝の強化",
+    "x": 1850,
+    "y": 440,
+    "cost": 70,
+    "effect": "・スターリンの政治的影響力増大\n・安定度: +15.00%",
+    "prerequisites": ["SOV_socialism_in_one_country"]
+  },
+  {
+    "id": "SOV_strengthen_nkvd",
+    "title": "NKVDの強化",
+    "x": 2150,
+    "y": 440,
+    "cost": 70,
+    "effect": "・対スパイ防衛: +2.00\n・政治力: +50",
+    "prerequisites": ["SOV_collectivization_process"]
+  },
+  {
+    "id": "SOV_securing_the_regime",
+    "title": "体制の絶対的確立",
+    "x": 2000,
+    "y": 570,
+    "cost": 70,
+    "effect": "・安定度: +10.00%\n・戦争協力度: +10.00%\n・政治力: +150",
+    "prerequisites": ["SOV_stalin_cult_of_personality", "SOV_strengthen_nkvd"]
+  },
+  {
+    "id": "SOV_supreme_soviet",
+    "title": "最高会議の改革",
+    "x": 1850,
+    "y": 700,
+    "cost": 70,
+    "effect": "・日々の政治力獲得量: +0.15\n・安定度: +5.00%",
+    "prerequisites": ["SOV_securing_the_regime"]
+  },
+  {
+    "id": "SOV_agitprop",
+    "title": "アギトプロプ（宣伝・煽動部）",
+    "x": 2150,
+    "y": 700,
+    "cost": 70,
+    "effect": "・戦争協力度: +15.00%\n・宣伝決定コマンドの解放",
+    "prerequisites": ["SOV_securing_the_regime"]
+  },
+  {
+    "id": "SOV_new_soviet_man",
+    "title": "新しいソ連人の創造",
+    "x": 2000,
+    "y": 830,
+    "cost": 70,
+    "effect": "・可動人口比率: +1.50%\n・研究速度: +5.00%",
+    "prerequisites": ["SOV_supreme_soviet", "SOV_agitprop"]
+  }
+]

@@ -1,0 +1,85 @@
+[
+  {
+    "id": "SOV_foreign_policy",
+    "title": "ソ連外交政策の策定",
+    "x": 6900,
+    "y": 50,
+    "cost": 70,
+    "effect": "・政治力: +100\n・外交関係の修正能力向上",
+    "prerequisites": []
+  },
+  {
+    "id": "SOV_molotov_ribbentrop_pact",
+    "title": "モロトフ＝リッベントロップ協定",
+    "x": 6600,
+    "y": 180,
+    "cost": 70,
+    "effect": "・ドイツとの不可侵条約締結\n・東欧における勢力圏（ポーランド東部・バルト三国など）の割譲主張を獲得",
+    "prerequisites": ["SOV_foreign_policy"],
+    "mutually_exclusive": ["SOV_anti_fascist_diplomacy"]
+  },
+  {
+    "id": "SOV_anti_fascist_diplomacy",
+    "title": "反ファシズム外交の推進",
+    "x": 7200,
+    "y": 180,
+    "cost": 70,
+    "effect": "・民主主義国家（英仏）との関係改善: +30\n・ファシズム国家への正当化コスト: -20%",
+    "prerequisites": ["SOV_foreign_policy"],
+    "mutually_exclusive": ["SOV_molotov_ribbentrop_pact"]
+  },
+  {
+    "id": "SOV_claims_on_baltic",
+    "title": "バルト三国への要求",
+    "x": 6400,
+    "y": 310,
+    "cost": 35,
+    "effect": "・エストニア、ラトビア、リトアニアへの併合または傀儡化要求ディシジョン開放",
+    "prerequisites": ["SOV_molotov_ribbentrop_pact"]
+  },
+  {
+    "id": "SOV_ultimatum_to_romania",
+    "title": "ルーマニアへの最後通牒（ベッサラビア獲得）",
+    "x": 6800,
+    "y": 310,
+    "cost": 35,
+    "effect": "・ルーマニアからベッサラビア/北ブコヴィナの領土割譲を獲得",
+    "prerequisites": ["SOV_molotov_ribbentrop_pact"]
+  },
+  {
+    "id": "SOV_winter_war",
+    "title": "フィンランド問題の解決（冬戦争）",
+    "x": 6600,
+    "y": 440,
+    "cost": 70,
+    "effect": "・フィンランドに対する領土割譲（カレリア地方）戦争の口実を獲得",
+    "prerequisites": ["SOV_claims_on_baltic", "SOV_ultimatum_to_romania"]
+  },
+  {
+    "id": "SOV_containment_of_germany",
+    "title": "ドイツ封じ込め協定",
+    "x": 7200,
+    "y": 310,
+    "cost": 70,
+    "effect": "・連合国勢力との軍事同盟結成可能性の拡大\n・緊張度上昇: +10.00%",
+    "prerequisites": ["SOV_anti_fascist_diplomacy"]
+  },
+  {
+    "id": "SOV_claims_on_hokkaido",
+    "title": "極東の権益確保",
+    "x": 6900,
+    "y": 570,
+    "cost": 70,
+    "effect": "・日本に対する不可侵条約または領土要求の獲得\n・極東軍の師団回復率: +10.00%",
+    "prerequisites": ["SOV_winter_war"]
+  },
+  {
+    "id": "SOV_comintern_expansion",
+    "title": "コミンテルンの世界展開",
+    "x": 7400,
+    "y": 440,
+    "cost": 70,
+    "effect": "・全世界でのイデオロギー支援能力強化\n・陣営「コミンテルン」への他国勧誘コスト軽減",
+    "prerequisites": ["SOV_containment_of_germany"]
+  }
+]

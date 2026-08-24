@@ -1,0 +1,271 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+body {
+  background-color: #0e1217;
+  color: #e1e6eb;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  overflow: hidden;
+}
+
+/* トップバー & 速度コントロール */
+#top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #161c24;
+  padding: 8px 20px;
+  border-bottom: 2px solid #2a3545;
+  height: 50px;
+}
+
+.stats-group {
+  display: flex;
+  gap: 20px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.stat-item {
+  background: #0d1117;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid #2a3545;
+}
+
+.time-control-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#calendar-display {
+  font-family: monospace;
+  font-size: 15px;
+  font-weight: bold;
+  background: #090c10;
+  padding: 5px 12px;
+  border: 1px solid #00ffcc;
+  border-radius: 4px;
+  color: #00ffcc;
+}
+
+.speed-buttons {
+  display: flex;
+  gap: 3px;
+}
+
+.speed-btn {
+  background: #212b36;
+  border: 1px solid #3b485a;
+  color: #8a99ad;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.speed-btn.active {
+  background: #00ffcc;
+  color: #0d1117;
+  border-color: #00ffcc;
+}
+
+/* ログ */
+#log-banner {
+  background: #090c10;
+  padding: 6px 20px;
+  font-size: 13px;
+  border-bottom: 1px solid #2a3545;
+  color: #ffcc00;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+}
+
+/* ツリー表示エリア */
+#tree-container {
+  width: 100vw;
+  height: calc(100vh - 80px);
+  cursor: grab;
+  position: relative;
+  overflow: hidden;
+  background-color: #0e1217;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+#tree-viewport {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  width: 6000px;
+  height: 6000px;
+}
+
+#svg-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6000px;
+  height: 6000px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+#focus-nodes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+/* NFカードデザイン */
+.focus-node {
+  position: absolute;
+  width: 110px;
+  height: 75px;
+  background: #1c2531;
+  border: 2px solid #3b485a;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 4px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.focus-symbol { font-size: 16px; }
+.focus-title { font-size: 11px; font-weight: bold; margin-top: 3px; color: #fff; }
+.focus-cost, .focus-progress { font-size: 10px; color: #8a99ad; margin-top: 3px; }
+
+/* 状態別スタイル */
+.focus-node.available { border-color: #4a90e2; }
+.focus-node.available:hover { border-color: #64b5f6; box-shadow: 0 0 10px rgba(74, 144, 226, 0.5); }
+
+.focus-node.in-progress {
+  border-color: #ffcc00;
+  background: #262215;
+  animation: focus-pulse 1.2s infinite alternate;
+}
+.focus-node.in-progress .focus-progress { color: #ffcc00; font-weight: bold; }
+
+@keyframes focus-pulse {
+  0% { box-shadow: 0 0 4px #ffcc00; }
+  100% { box-shadow: 0 0 16px #ffcc00; }
+}
+
+.focus-node.completed {
+  border-color: #00ffcc;
+  background: #0f2d27;
+}
+
+.check-mark {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #00ffcc;
+  color: #0d1117;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 13px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 8px rgba(0, 255, 204, 0.8);
+}
+
+.focus-node.locked {
+  opacity: 0.4;
+  filter: grayscale(1);
+  cursor: not-allowed;
+}
+
+/* 相互排他バツ印 */
+.focus-node.mutually-blocked::after {
+  content: "✖";
+  position: absolute;
+  color: #ff4d4d;
+  font-size: 38px;
+  font-weight: bold;
+  text-shadow: 0 0 6px #000;
+}
+
+/* SVGライン */
+line.nf-line, path.nf-line {
+  fill: none;
+  stroke: #3a4856;
+  stroke-width: 3;
+}
+
+line.nf-line.active, path.nf-line.active {
+  stroke: #00ffcc;
+  stroke-width: 3.5;
+  filter: drop-shadow(0px 0px 3px rgba(0, 255, 204, 0.6));
+}
+
+/* 相互排他破線 */
+line.nf-exclusive-line {
+  stroke: #ff4d4d;
+  stroke-width: 2;
+  stroke-dasharray: 6, 6;
+}
+
+/* ツールチップ */
+#nf-tooltip {
+  position: fixed;
+  background: rgba(13, 17, 23, 0.95);
+  border: 1px solid #00ffcc;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 1000;
+  max-width: 280px;
+}
+
+#tooltip-title { font-weight: bold; color: #00ffcc; margin-bottom: 4px; }
+#tooltip-time { color: #8a99ad; margin-bottom: 6px; font-size: 11px; }
+#tooltip-effect { color: #ffffff; white-space: pre-line; border-top: 1px solid #2a3545; padding-top: 6px; }
+.hidden { display: none !important; }
+
+/* 国家方針のアイコン画像用スタイル */
+.focus-icon {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  margin-top: 2px;
+}
+
+/* アイコンがある場合にタイトルやコストのレイアウトが崩れないように調整する場合 */
+.focus-node {
+  justify-content: space-between; /* 要素を上下に綺麗に分散配置 */
+  padding: 6px 4px;
+}
+
+.focus-title {
+  font-size: 10px;
+  line-height: 1.1;
+  max-height: 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* 2行以上は省略表示 */
+  -webkit-box-orient: vertical;
+}

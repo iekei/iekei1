@@ -1,0 +1,74 @@
+[
+  {
+    "id": "SOV_post_war_reconstruction",
+    "title": "戦後復興計画",
+    "x": 10100,
+    "y": 50,
+    "cost": 70,
+    "effect": "・民需工場建設速度: +20.00%\n・インフラ修復速度: +50.00%\n・政治力: +100",
+    "prerequisites": []
+  },
+  {
+    "id": "SOV_comecon_formation",
+    "title": "コメコン（経済相互援助会議）の結成",
+    "x": 9800,
+    "y": 180,
+    "cost": 70,
+    "effect": "・東欧衛星国からの資源・工場補正獲得\n・民需工場: +4",
+    "prerequisites": ["SOV_post_war_reconstruction"]
+  },
+  {
+    "id": "SOV_iron_curtain",
+    "title": "鉄のカーテンの降下",
+    "x": 10400,
+    "y": 180,
+    "cost": 70,
+    "effect": "・イデオロギー変化耐性: +100%\n・対スパイ防衛能力: +30%\n・緊張度上昇: +10.00%",
+    "prerequisites": ["SOV_post_war_reconstruction"]
+  },
+  {
+    "id": "SOV_warsaw_pact",
+    "title": "ワルシャワ条約機構の創設",
+    "x": 9600,
+    "y": 310,
+    "cost": 70,
+    "effect": "・東欧諸国との軍事同盟強化\n・陣営加盟国の陸軍組織率: +10.00%",
+    "prerequisites": ["SOV_comecon_formation"]
+  },
+  {
+    "id": "SOV_soviet_space_program",
+    "title": "ソ連宇宙計画の立ち上げ",
+    "x": 10100,
+    "y": 310,
+    "cost": 70,
+    "effect": "・ロケット技術・ミサイル研究速度: +40.00%\n・研究スロット: +1",
+    "prerequisites": ["SOV_comecon_formation", "SOV_iron_curtain"]
+  },
+  {
+    "id": "SOV_sputnik_1",
+    "title": "スプートニク1号の打ち上げ",
+    "x": 10100,
+    "y": 440,
+    "cost": 70,
+    "effect": "・世界初の人工衛星打ち上げ達成\n・国家の威信（安定度）: +15.00%\n・政治力: +150",
+    "prerequisites": ["SOV_soviet_space_program"]
+  },
+  {
+    "id": "SOV_vostok_1_gagarin",
+    "title": "ボストーク1号（ガガーリンの挑戦）",
+    "x": 10100,
+    "y": 570,
+    "cost": 70,
+    "effect": "・「地球は青かった」人類初の有人宇宙飛行成功\n・全世界へのイデオロギー影響力向上\n・安定度: +20.00%",
+    "prerequisites": ["SOV_sputnik_1"]
+  },
+  {
+    "id": "SOV_cold_war_hegemony",
+    "title": "超大国としての覇権確立",
+    "x": 9800,
+    "y": 700,
+    "cost": 70,
+    "effect": "・グローバルな陣営バフの獲得\n・毎日の政治力獲得量: +0.50\n・戦争協力度: +15.00%",
+    "prerequisites": ["SOV_warsaw_pact", "SOV_vostok_1_gagarin"]
+  }
+]

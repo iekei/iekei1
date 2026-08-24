@@ -1,0 +1,312 @@
+[
+  {
+    "id": "bt_7",
+    "title": "BT-7",
+    "year": 1936, "x": 100, "y": 50, "research_time": 100,
+    "reliability": "配備（制式採用）",
+    "desc": "クリスティー式サスペンションを搭載した軽量・高速の主爆突撃用戦車。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='13' width='20' height='7' rx='3'/><path d='M5 13l3-6h8l3 6'/><circle cx='6' cy='16.5' r='1.5'/><circle cx='12' cy='16.5' r='1.5'/><circle cx='18' cy='16.5' r='1.5'/><path d='M16 10h5'/></svg>",
+    "effects": ["対人攻撃: 22/100", "対物攻撃: 18/100", "生存力: 15/100", "機動力: 78/100", "信頼度: 75/100"],
+    "prerequisites": []
+  },
+  {
+    "id": "t_35",
+    "title": "T-35 (1936年型)",
+    "year": 1936, "x": 500, "y": 50, "research_time": 150,
+    "reliability": "配備（制式採用）",
+    "desc": "5つの砲塔を備えた巨大な重戦車。移動要塞を目指したが機動性が低くトラブルが多発した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='1' y='12' width='22' height='8' rx='2'/><path d='M7 12l2-5h6l2 5'/><path d='M3 12v-3h3v3'/><path d='M18 12v-3h3v3'/><circle cx='5' cy='16' r='1'/><circle cx='9' cy='16' r='1'/><circle cx='13' cy='16' r='1'/><circle cx='17' cy='16' r='1'/><path d='M17 9.5h5'/></svg>",
+    "effects": ["対人攻撃: 38/100", "対物攻撃: 25/100", "生存力: 30/100", "機動力: 15/100", "信頼度: 30/100"],
+    "prerequisites": []
+  },
+  {
+    "id": "ba_10",
+    "title": "BA-10",
+    "year": 1938, "x": 800, "y": 200, "research_time": 80,
+    "reliability": "配備（制式採用）",
+    "desc": "GAZ-AAA 6輪トラックのシャシーをベースに作られた、戦前ソ連軍の代表的な重装甲車。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 13h18l-2-5h-8l-2 2h-4z'/><circle cx='6' cy='16' r='2'/><circle cx='14' cy='16' r='2'/><circle cx='18' cy='16' r='2'/><path d='M13 10h4'/></svg>",
+    "effects": ["対人攻撃: 25/100", "対物攻撃: 20/100", "生存力: 12/100", "機動力: 82/100", "信頼度: 80/100"],
+    "prerequisites": []
+  },
+  {
+    "id": "t_100",
+    "title": "T-100",
+    "year": 1938, "x": 400, "y": 200, "research_time": 140,
+    "reliability": "低（試作止まり）",
+    "desc": "T-35の後継を目指して開発された副砲塔付きの試作重戦車。冬戦争に投入されたが採用は見送られた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8b949e' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='7' rx='2'/><path d='M8 12l2-5h5l2 5'/><path d='M4 12v-3h3v3'/><circle cx='6' cy='15.5' r='1'/><circle cx='12' cy='15.5' r='1'/><circle cx='18' cy='15.5' r='1'/><path d='M15 9.5h5'/></svg>",
+    "effects": ["対人攻撃: 42/100", "対物攻撃: 32/100", "生存力: 40/100", "機動力: 22/100", "信頼度: 40/100"],
+    "prerequisites": ["t_35"]
+  },
+  {
+    "id": "smk",
+    "title": "SMK",
+    "year": 1939, "x": 600, "y": 200, "research_time": 140,
+    "reliability": "低（試作止まり）",
+    "desc": "T-100と競合した2砲塔式の試作重戦車。大重量と使い勝手の悪さから不採用。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8b949e' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='7' rx='2'/><path d='M8 12l2-5h5l2 5'/><path d='M4 12v-3h3v3'/><circle cx='6' cy='15.5' r='1'/><circle cx='12' cy='15.5' r='1'/><circle cx='18' cy='15.5' r='1'/><path d='M15 9.5h5'/></svg>",
+    "effects": ["対人攻撃: 42/100", "対物攻撃: 32/100", "生存力: 42/100", "機動力: 22/100", "信頼度: 40/100"],
+    "prerequisites": ["t_35"]
+  },
+  {
+    "id": "t_34_76",
+    "title": "T-34/76",
+    "year": 1939, "x": 100, "y": 350, "research_time": 150,
+    "reliability": "配備（制式採用）",
+    "desc": "傾斜装甲、ディーゼルエンジン、避弾経始に優れた設計を持ち、第二次世界大戦の潮流を変えた傑作中戦車。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 14l3-4h13l2 4v3H3z'/><path d='M8 10l2-4h5l2 4'/><circle cx='6' cy='17' r='1.5'/><circle cx='12' cy='17' r='1.5'/><circle cx='18' cy='17' r='1.5'/><path d='M15 8h7'/></svg>",
+    "effects": ["対人攻撃: 45/100", "対物攻撃: 42/100", "生存力: 48/100", "機動力: 72/100", "信頼度: 80/100"],
+    "prerequisites": ["bt_7"]
+  },
+  {
+    "id": "kv_1",
+    "title": "KV-1",
+    "year": 1939, "x": 500, "y": 350, "research_time": 160,
+    "reliability": "配備（制式採用）",
+    "desc": "重装甲でドイツ軍の対戦車砲を跳ね返した大型重戦車。重量による駆動系のトラブルが初期の課題だった。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='2'/><path d='M6 12l2-5h8l2 5'/><circle cx='6' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='18' cy='16' r='1.5'/><path d='M16 9.5h6'/></svg>",
+    "effects": ["対人攻撃: 48/100", "対物攻撃: 45/100", "生存力: 62/100", "機動力: 35/100", "信頼度: 60/100"],
+    "prerequisites": ["smk", "t_100"]
+  },
+  {
+    "id": "t_40",
+    "title": "T-40",
+    "year": 1940, "x": 280, "y": 350, "research_time": 90,
+    "reliability": "配備（制式採用）",
+    "desc": "水上航行能力を持つ小型軽戦車。偵察用に配備されたが、独ソ戦初期に急造歩兵支援用としても投入された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='13' width='18' height='6' rx='2'/><path d='M7 13l2-4h6l2 4'/><circle cx='7' cy='16' r='1'/><circle cx='12' cy='16' r='1'/><circle cx='17' cy='16' r='1'/><path d='M15 11h4'/></svg>",
+    "effects": ["対人攻撃: 28/100", "対物攻撃: 20/100", "生存力: 22/100", "機動力: 80/100", "信頼度: 75/100"],
+    "prerequisites": ["bt_7"]
+  },
+  {
+    "id": "kv_2",
+    "title": "KV-2",
+    "year": 1940, "x": 500, "y": 500, "research_time": 140,
+    "reliability": "配備（制式採用）",
+    "desc": "KV-1の車体に巨大な砲塔を載せ、敵の強固な陣地や壕を粉砕するために開発された自走重砲的戦車。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='13' width='20' height='7' rx='2'/><rect x='6' y='5' width='10' height='8'/><path d='M16 8h7'/><circle cx='6' cy='16.5' r='1.5'/><circle cx='12' cy='16.5' r='1.5'/><circle cx='18' cy='16.5' r='1.5'/></svg>",
+    "effects": ["対人攻撃: 65/100", "対物攻撃: 58/100", "生存力: 64/100", "機動力: 25/100", "信頼度: 50/100"],
+    "prerequisites": ["kv_1"]
+  },
+  {
+    "id": "t_60",
+    "title": "T-60",
+    "year": 1941, "x": 280, "y": 500, "research_time": 80,
+    "reliability": "配備（制式採用）",
+    "desc": "T-40の設計を簡略化・非水陸両用化し、生産効率を高めた緊急量産型軽戦車。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='13' width='18' height='6' rx='2'/><path d='M7 13l2-4h6l2 4'/><circle cx='7' cy='16' r='1'/><circle cx='12' cy='16' r='1'/><circle cx='17' cy='16' r='1'/><path d='M15 11h4'/></svg>",
+    "effects": ["対人攻撃: 32/100", "対物攻撃: 24/100", "生存力: 26/100", "機動力: 78/100", "信頼度: 80/100"],
+    "prerequisites": ["t_40"]
+  },
+  {
+    "id": "su_85a",
+    "title": "SU-85A",
+    "year": 1941, "x": 700, "y": 500, "research_time": 100,
+    "reliability": "低（試作止まり）",
+    "desc": "T-60/T-70の車体をベースに85mm砲の搭載を試みた小型対戦車自走砲。反動やスペースの問題で採用見送り。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8b949e' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='13' width='20' height='7' rx='2'/><path d='M5 13l2-5h9l2 5'/><path d='M11 10H1'/><circle cx='6' cy='16.5' r='1.5'/><circle cx='12' cy='16.5' r='1.5'/><circle cx='18' cy='16.5' r='1.5'/></svg>",
+    "effects": ["対人攻撃: 38/100", "対物攻撃: 52/100", "生存力: 22/100", "機動力: 65/100", "信頼度: 35/100"],
+    "prerequisites": ["t_60"]
+  },
+  {
+    "id": "t_70",
+    "title": "T-70",
+    "year": 1942, "x": 280, "y": 650, "research_time": 90,
+    "reliability": "配備（制式採用）",
+    "desc": "T-60の威力を向上させるため、走行系を強化し45mm砲を搭載した軽戦車。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='13' width='18' height='6' rx='2'/><path d='M7 13l2-4h6l2 4'/><circle cx='7' cy='16' r='1'/><circle cx='12' cy='16' r='1'/><circle cx='17' cy='16' r='1'/><path d='M15 11h4'/></svg>",
+    "effects": ["対人攻撃: 36/100", "対物攻撃: 32/100", "生存力: 32/100", "機動力: 75/100", "信頼度: 85/100"],
+    "prerequisites": ["t_60"]
+  },
+  {
+    "id": "su_122",
+    "title": "SU-122",
+    "year": 1942, "x": 700, "y": 650, "research_time": 130,
+    "reliability": "配備（制式採用）",
+    "desc": "T-34の車体をベースに固定戦闘室を設け、大口径榴弾砲を搭載した歩兵支援用自走砲。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='13' width='20' height='7' rx='2'/><path d='M5 13l2-5h9l2 5'/><path d='M11 10H1'/><circle cx='6' cy='16.5' r='1.5'/><circle cx='12' cy='16.5' r='1.5'/><circle cx='18' cy='16.5' r='1.5'/></svg>",
+    "effects": ["対人攻撃: 68/100", "対物攻撃: 55/100", "生存力: 50/100", "機動力: 68/100", "信頼度: 80/100"],
+    "prerequisites": ["t_34_76"]
+  },
+  {
+    "id": "t_43",
+    "title": "T-43",
+    "year": 1942, "x": 100, "y": 650, "research_time": 130,
+    "reliability": "低（試作止まり）",
+    "desc": "T-34の装甲と居住性を大幅に強化するために作られた試作中戦車。重量増加とT-34/85登場により不採用。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8b949e' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 14l3-4h13l2 4v3H3z'/><path d='M8 10l2-4h5l2 4'/><circle cx='6' cy='17' r='1.5'/><circle cx='12' cy='17' r='1.5'/><circle cx='18' cy='17' r='1.5'/><path d='M15 8h7'/></svg>",
+    "effects": ["対人攻撃: 48/100", "対物攻撃: 50/100", "生存力: 62/100", "機動力: 62/100", "信頼度: 65/100"],
+    "prerequisites": ["t_34_76"]
+  },
+  {
+    "id": "t_34_85",
+    "title": "T-34/85",
+    "year": 1943, "x": 100, "y": 800, "research_time": 160,
+    "reliability": "配備（制式採用）",
+    "desc": "大型の3人乗り砲塔と85mm砲を搭載し、ドイツ軍の重戦車に対抗できるように改善したT-34の決定版。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e3b341' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 14l3-4h13l2 4v3H3z'/><path d='M7 10l2-4h6l2 4'/><circle cx='6' cy='17' r='1.5'/><circle cx='12' cy='17' r='1.5'/><circle cx='18' cy='17' r='1.5'/><path d='M15 8h8'/></svg>",
+    "effects": ["対人攻撃: 55/100", "対物攻撃: 62/100", "生存力: 58/100", "機動力: 75/100", "信頼度: 90/100"],
+    "prerequisites": ["t_34_76"]
+  },
+  {
+    "id": "is_2",
+    "title": "IS-2",
+    "year": 1943, "x": 500, "y": 800, "research_time": 170,
+    "reliability": "配備（制式採用）",
+    "desc": "スターリンの名を冠した重戦車。圧倒的な威力を誇る122mm砲を持ち、敵重戦車や要塞陣地を打ち破った。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='2'/><path d='M5 12l3-5h7l2 5'/><circle cx='6' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='18' cy='16' r='1.5'/><path d='M14 9.5h9'/></svg>",
+    "effects": ["対人攻撃: 72/100", "対物攻撃: 78/100", "生存力: 78/100", "機動力: 42/100", "信頼度: 78/100"],
+    "prerequisites": ["kv_1"]
+  },
+  {
+    "id": "su_85",
+    "title": "SU-85",
+    "year": 1943, "x": 700, "y": 800, "research_time": 140,
+    "reliability": "配備（制式採用）",
+    "desc": "T-34の車体に高初速の85mm対戦車砲を搭載した自走砲。敵重戦車を遠距離から撃破するために開発。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='13' width='20' height='7' rx='2'/><path d='M5 13l2-5h9l2 5'/><path d='M11 10H1'/><circle cx='6' cy='16.5' r='1.5'/><circle cx='12' cy='16.5' r='1.5'/><circle cx='18' cy='16.5' r='1.5'/></svg>",
+    "effects": ["対人攻撃: 42/100", "対物攻撃: 65/100", "生存力: 52/100", "機動力: 70/100", "信頼度: 85/100"],
+    "prerequisites": ["su_122"]
+  },
+  {
+    "id": "su_152",
+    "title": "SU-152",
+    "year": 1943, "x": 900, "y": 800, "research_time": 150,
+    "reliability": "配備（制式採用）",
+    "desc": "KV-1sの車体に152mm重榴弾砲を固定配備した自走砲。その破壊力から「猛獣ハンター」と呼ばれた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='13' width='20' height='7' rx='2'/><path d='M5 13l2-5h9l2 5'/><path d='M11 10H0'/><circle cx='6' cy='16.5' r='1.5'/><circle cx='12' cy='16.5' r='1.5'/><circle cx='18' cy='16.5' r='1.5'/></svg>",
+    "effects": ["対人攻撃: 82/100", "対物攻撃: 80/100", "生存力: 65/100", "機動力: 38/100", "信頼度: 72/100"],
+    "prerequisites": ["kv_2"]
+  },
+  {
+    "id": "isu_152",
+    "title": "ISU-152",
+    "year": 1944, "x": 900, "y": 950, "research_time": 160,
+    "reliability": "配備（制式採用）",
+    "desc": "IS重戦車の車体をベースに生産性と防護力を高めたSU-152の後継型。戦後も長く使用された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='13' width='20' height='7' rx='2'/><path d='M5 13l2-5h9l2 5'/><path d='M11 10H0'/><circle cx='6' cy='16.5' r='1.5'/><circle cx='12' cy='16.5' r='1.5'/><circle cx='18' cy='16.5' r='1.5'/></svg>",
+    "effects": ["対人攻撃: 85/100", "対物攻撃: 86/100", "生存力: 75/100", "機動力: 45/100", "信頼度: 82/100"],
+    "prerequisites": ["su_152", "is_2"]
+  },
+  {
+    "id": "su_100",
+    "title": "SU-100",
+    "year": 1944, "x": 700, "y": 950, "research_time": 150,
+    "reliability": "配備（制式採用）",
+    "desc": "SU-85の主砲をより貫通力の高い100mm砲に打ち替えた対戦車自走砲。戦後も世界各国で配備された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='13' width='20' height='7' rx='2'/><path d='M5 13l2-5h9l2 5'/><path d='M11 10H0'/><circle cx='6' cy='16.5' r='1.5'/><circle cx='12' cy='16.5' r='1.5'/><circle cx='18' cy='16.5' r='1.5'/></svg>",
+    "effects": ["対人攻撃: 48/100", "対物攻撃: 78/100", "生存力: 58/100", "機動力: 72/100", "信頼度: 88/100"],
+    "prerequisites": ["su_85"]
+  },
+  {
+    "id": "t_44",
+    "title": "T-44",
+    "year": 1944, "x": 100, "y": 950, "research_time": 160,
+    "reliability": "配備（制式採用）",
+    "desc": "エンジンを横置きにして車体をコンパクト化し、垂直装甲を排した先進的設計の中戦車。T-54の直接の前身。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 14l3-4h13l2 4v3H3z'/><path d='M7 10l2-4h6l2 4'/><circle cx='6' cy='17' r='1.5'/><circle cx='12' cy='17' r='1.5'/><circle cx='18' cy='17' r='1.5'/><path d='M15 8h8'/></svg>",
+    "effects": ["対人攻撃: 58/100", "対物攻撃: 68/100", "生存力: 68/100", "機動力: 78/100", "信頼度: 82/100"],
+    "prerequisites": ["t_34_85"]
+  },
+  {
+    "id": "is_3",
+    "title": "IS-3",
+    "year": 1945, "x": 500, "y": 1100, "research_time": 180,
+    "reliability": "配備（制式採用）",
+    "desc": "極度に傾斜した「お椀型砲塔」と「ウエッジ型前部装甲」を採用した先進的重戦車。西側に強烈な衝撃を与えた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e3b341' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='13' width='20' height='7' rx='2'/><path d='M6 13c1-4 4-5 6-5s5 1 6 5'/><circle cx='6' cy='16.5' r='1.5'/><circle cx='12' cy='16.5' r='1.5'/><circle cx='18' cy='16.5' r='1.5'/><path d='M14 10h9'/></svg>",
+    "effects": ["対人攻撃: 76/100", "対物攻撃: 82/100", "生存力: 86/100", "機動力: 48/100", "信頼度: 72/100"],
+    "prerequisites": ["is_2"]
+  },
+  {
+    "id": "is_7",
+    "title": "IS-7",
+    "year": 1945, "x": 380, "y": 1100, "research_time": 200,
+    "reliability": "低（試作止まり）",
+    "desc": "重量約68トンに130mm艦砲級の大砲と超強固な装甲を備えた怪物重戦車。重量過多により不採用。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8b949e' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='1' y='13' width='22' height='7' rx='2'/><path d='M5 13c1-4 5-5 7-5s6 1 7 5'/><circle cx='5' cy='16.5' r='1.5'/><circle cx='12' cy='16.5' r='1.5'/><circle cx='19' cy='16.5' r='1.5'/><path d='M14 9.5h10'/></svg>",
+    "effects": ["対人攻撃: 88/100", "対物攻撃: 90/100", "生存力: 94/100", "機動力: 38/100", "信頼度: 40/100"],
+    "prerequisites": ["is_2"]
+  },
+  {
+    "id": "t_54",
+    "title": "T-54",
+    "year": 1947, "x": 100, "y": 1250, "research_time": 190,
+    "reliability": "配備（制式採用）",
+    "desc": "100mm砲とお椀型砲塔を備え、冷戦初期のソ連軍の主力を担った第1世代主力戦車（MBT）。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e3b341' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='13' width='20' height='7' rx='2'/><path d='M6 13c1-4 4-5 6-5s5 1 6 5'/><circle cx='6' cy='16.5' r='1.5'/><circle cx='12' cy='16.5' r='1.5'/><circle cx='18' cy='16.5' r='1.5'/><path d='M14 10h9'/></svg>",
+    "effects": ["対人攻撃: 68/100", "対物攻撃: 78/100", "生存力: 78/100", "機動力: 80/100", "信頼度: 90/100"],
+    "prerequisites": ["t_44"]
+  },
+  {
+    "id": "pt_76",
+    "title": "PT-76",
+    "year": 1950, "x": 280, "y": 1400, "research_time": 120,
+    "reliability": "配備（制式採用）",
+    "desc": "ウォータージェット推進を備え、高い水上走行能力を持つ軽戦車。偵察部隊や海兵隊に広く配備された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 14l2-3h16l2 3v4H2z'/><path d='M8 11l2-3h5l2 3'/><circle cx='6' cy='18' r='1'/><circle cx='12' cy='18' r='1'/><circle cx='18' cy='18' r='1'/><path d='M15 9.5h6'/></svg>",
+    "effects": ["対人攻撃: 42/100", "対物攻撃: 45/100", "生存力: 30/100", "機動力: 86/100", "信頼度: 88/100"],
+    "prerequisites": ["t_70"]
+  },
+  {
+    "id": "btr_50",
+    "title": "BTR-50",
+    "year": 1951, "x": 280, "y": 1550, "research_time": 110,
+    "reliability": "配備（制式採用）",
+    "desc": "PT-76の水陸両用車体をベースに開発された、ソ連初の追跡（履帯）式兵員輸送車。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='7' rx='2'/><path d='M4 12l2-4h12l2 4'/><circle cx='6' cy='15.5' r='1'/><circle cx='12' cy='15.5' r='1'/><circle cx='18' cy='15.5' r='1'/></svg>",
+    "effects": ["対人攻撃: 20/100", "対物攻撃: 12/100", "生存力: 35/100", "機動力: 82/100", "信頼度: 85/100"],
+    "prerequisites": ["pt_76"]
+  },
+  {
+    "id": "t_10",
+    "title": "T-10 (IS-8)",
+    "year": 1953, "x": 500, "y": 1550, "research_time": 180,
+    "reliability": "配備（制式採用）",
+    "desc": "IS-3やIS-4の改良発展型。ソ連が最後に制式採用した「最後の重戦車」。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='13' width='20' height='7' rx='2'/><path d='M6 13c1-4 4-5 6-5s5 1 6 5'/><circle cx='6' cy='16.5' r='1.5'/><circle cx='12' cy='16.5' r='1.5'/><circle cx='18' cy='16.5' r='1.5'/><path d='M14 10h9'/></svg>",
+    "effects": ["対人攻撃: 80/100", "対物攻撃: 88/100", "生存力: 90/100", "機動力: 52/100", "信頼度: 82/100"],
+    "prerequisites": ["is_3"]
+  },
+  {
+    "id": "t_55",
+    "title": "T-55",
+    "year": 1955, "x": 100, "y": 1700, "research_time": 190,
+    "reliability": "配備（制式採用）",
+    "desc": "T-54に核戦争下の対NBC防護能力を追加し、エンジン出力や砲弾搭載数を強化したベストセラー中戦車。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e3b341' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='13' width='20' height='7' rx='2'/><path d='M6 13c1-4 4-5 6-5s5 1 6 5'/><circle cx='6' cy='16.5' r='1.5'/><circle cx='12' cy='16.5' r='1.5'/><circle cx='18' cy='16.5' r='1.5'/><path d='M14 10h9'/></svg>",
+    "effects": ["対人攻撃: 72/100", "対物攻撃: 82/100", "生存力: 84/100", "機動力: 82/100", "信頼度: 95/100"],
+    "prerequisites": ["t_54"]
+  },
+  {
+    "id": "su_122_54",
+    "title": "SU-122-54",
+    "year": 1955, "x": 700, "y": 1700, "research_time": 160,
+    "reliability": "配備（制式採用）",
+    "desc": "T-54の車体を利用して作られた全閉鎖式戦闘室を持つ自走砲。ミサイル兵器の発達に伴い生産数は少数。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='13' width='20' height='7' rx='2'/><path d='M5 13l2-5h9l2 5'/><path d='M11 10H0'/><circle cx='6' cy='16.5' r='1.5'/><circle cx='12' cy='16.5' r='1.5'/><circle cx='18' cy='16.5' r='1.5'/></svg>",
+    "effects": ["対人攻撃: 78/100", "対物攻撃: 90/100", "生存力: 78/100", "機動力: 72/100", "信頼度: 80/100"],
+    "prerequisites": ["su_100", "t_54"]
+  },
+  {
+    "id": "obj_279",
+    "title": "オブイェークト279",
+    "year": 1957, "x": 500, "y": 1850, "research_time": 220,
+    "reliability": "低（試作止まり）",
+    "desc": "核爆発の爆風に耐えられる流線型車体と、悪路踏破性のために4本の履帯を備えた異形重戦車。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8b949e' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 15c2-3 8-4 10-4s8 1 10 4v2H2z'/><path d='M7 11c1-3 3-4 5-4s4 1 5 4'/><circle cx='5' cy='17' r='1'/><circle cx='9' cy='17' r='1'/><circle cx='15' cy='17' r='1'/><circle cx='19' cy='17' r='1'/><path d='M14 9h9'/></svg>",
+    "effects": ["対人攻撃: 90/100", "対物攻撃: 96/100", "生存力: 100/100", "機動力: 42/100", "信頼度: 30/100"],
+    "prerequisites": ["t_10"]
+  },
+  {
+    "id": "btr_60",
+    "title": "BTR-60",
+    "year": 1959, "x": 850, "y": 1850, "research_time": 130,
+    "reliability": "配備（制式採用）",
+    "desc": "8輪駆動の水陸両用装甲車。機械化歩兵の足として大量生産され、ソ連装甲車シリーズの基礎となった。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 13h20l-2-4h-10l-2 2h-6z'/><circle cx='5' cy='16' r='1.5'/><circle cx='9' cy='16' r='1.5'/><circle cx='15' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "effects": ["対人攻撃: 30/100", "対物攻撃: 20/100", "生存力: 38/100", "機動力: 92/100", "信頼度: 85/100"],
+    "prerequisites": ["ba_10"]
+  }
+]

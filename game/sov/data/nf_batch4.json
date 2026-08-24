@@ -1,0 +1,94 @@
+[
+  {
+    "id": "SOV_third_five_year_plan",
+    "title": "第3次5ヵ年計画",
+    "x": 3300,
+    "y": 50,
+    "cost": 70,
+    "effect": "・民需工場建設速度: +10.00%\n・軍需工場建設速度: +10.00%\n・政治力: +50",
+    "prerequisites": []
+  },
+  {
+    "id": "SOV_heavy_industry",
+    "title": "重工業の優先",
+    "x": 3000,
+    "y": 180,
+    "cost": 70,
+    "effect": "・鉄鋼・資源出力を強化\n・民需工場: +3",
+    "prerequisites": ["SOV_third_five_year_plan"],
+    "mutually_exclusive": ["SOV_consumer_goods_focus"]
+  },
+  {
+    "id": "SOV_consumer_goods_focus",
+    "title": "消費財生産の重視",
+    "x": 3600,
+    "y": 180,
+    "cost": 70,
+    "effect": "・消費財工場負担率: -5.00%\n・安定度: +10.00%",
+    "prerequisites": ["SOV_third_five_year_plan"],
+    "mutually_exclusive": ["SOV_heavy_industry"]
+  },
+  {
+    "id": "SOV_magnitogorsk_complex",
+    "title": "マグニトゴルスクコンビナートの拡張",
+    "x": 2850,
+    "y": 310,
+    "cost": 70,
+    "effect": "・鉄資源出力を大幅強化\n・民需工場: +2",
+    "prerequisites": ["SOV_heavy_industry"]
+  },
+  {
+    "id": "SOV_industrialization_of_the_urals",
+    "title": "ウラル地方の工業化",
+    "x": 3150,
+    "y": 310,
+    "cost": 70,
+    "effect": "・ウラル地域のインフラ: +2\n・軍需工場: +2",
+    "prerequisites": ["SOV_heavy_industry"]
+  },
+  {
+    "id": "SOV_collectivized_agriculture",
+    "title": "集団農場の近代化",
+    "x": 3450,
+    "y": 310,
+    "cost": 70,
+    "effect": "・可動人口比率: +0.50%\n・安定度: +5.00%",
+    "prerequisites": ["SOV_consumer_goods_focus"]
+  },
+  {
+    "id": "SOV_expand_trans_siberian",
+    "title": "シベリア鉄道の拡張",
+    "x": 3750,
+    "y": 310,
+    "cost": 70,
+    "effect": "・シベリア全域のインフラ: +2\n・補給ハブ建設補正",
+    "prerequisites": ["SOV_consumer_goods_focus"]
+  },
+  {
+    "id": "SOV_conversion_of_tractor_factories",
+    "title": "トラクター工場の軍需転換",
+    "x": 3000,
+    "y": 440,
+    "cost": 35,
+    "effect": "・戦車・装甲車生産効率: +15.00%\n・軍需工場: +3",
+    "prerequisites": ["SOV_magnitogorsk_complex", "SOV_industrialization_of_the_urals"]
+  },
+  {
+    "id": "SOV_resource_extraction",
+    "title": "シベリア資源開発",
+    "x": 3600,
+    "y": 440,
+    "cost": 70,
+    "effect": "・石油・アルミニウム・クロム等の産出量大幅増",
+    "prerequisites": ["SOV_collectivized_agriculture", "SOV_expand_trans_siberian"]
+  },
+  {
+    "id": "SOV_ural_evacuation_plan",
+    "title": "ウラル工場疎開計画準備",
+    "x": 3300,
+    "y": 570,
+    "cost": 70,
+    "effect": "・開戦時、西部領土から東部・ウラルへの工場移転ディシジョン開放\n・工場移転速度: +50%",
+    "prerequisites": ["SOV_conversion_of_tractor_factories", "SOV_resource_extraction"]
+  }
+]
