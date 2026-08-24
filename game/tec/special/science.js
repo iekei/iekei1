@@ -87,23 +87,38 @@ function formatScienceRemaining(totalDays) {
   return `残り: ${result.join('')}`;
 }
 
-// 各カテゴリにおける、特別研究の進捗情報を取得
+// 各カテゴリ（タブ）における、特別研究の進捗情報を取得
 function getCategoryProgressInfo(catKey) {
   const hiredId = hiredScientists[catKey];
   if (!hiredId) return null;
 
-  // script.js 側のグローバル変数 researchSlots を安全に参照
-  if (typeof researchSlots === 'undefined') return null;
+  // script.js 側のグローバル変数からスロットと技術データを安全に参照
+  if (typeof researchSlots === 'undefined' || typeof techData === 'undefined') return null;
 
-  // 該当カテゴリで現在進行中の研究スロットを探す
-  // （※どのスロットで動いていても、そのカテゴリの特別研究として残り日数を追跡）
-  let activeSlot = researchSlots.find(s => s.tech && s.remaining > 0);
+  // 1. まず「現在そのカテゴリで進められている研究」がスロットにあるか探す
+  let activeSlot = researchSlots.find(slot => {
+    if (!slot.tech) return false;
+    // techData から、この技術がどのカテゴリに属しているかを特定
+    for (const [categoryName, techList] of Object.entries(techData)) {
+      if (techList.some(t => t.id === slot.tech.id)) {
+        return categoryName === catKey;
+      }
+    }
+    return false;
+  });
 
   const totalDays = 720; // 特別研究計画の一律期間（2年）
   let remaining = totalDays;
 
   if (activeSlot && activeSlot.tech) {
     remaining = activeSlot.remaining;
+  } else {
+    // もしそのカテゴリで現在研究していなければ、デフォルト値を表示
+    return {
+      remainingDays: totalDays,
+      percent: 0,
+      timeText: '残り: 2年0ヶ月 (未着手)'
+    };
   }
 
   const elapsed = Math.max(0, totalDays - remaining);
@@ -133,7 +148,7 @@ function renderScienceList() {
   for (const [catKey, group] of Object.entries(categoriesMap)) {
     let groupHtml = `
       <div class="science-category-section">
-        <h4 class="science-cat-title">📁 ${group.name}</h4>
+        <h4 class="science-cat-title">📁 ${group.name} (${catKey})</h4>
         <div class="science-cards-grid">
     `;
 
