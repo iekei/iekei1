@@ -22,6 +22,56 @@ const lockedFocuses = new Set();
 let activeFocus = null;
 let focusDaysRemaining = 0;
 
+// ローカライズデータを保持する辞書
+let localizationMap = {};
+
+// ★ 読み込ませたいローカライズファイル（.yml）のリスト
+// ファイルを追加したい場合はここにファイル名を追加していくことで自動一括読み込みされます
+const localisationFiles = [
+  "focus_l_japanese.yml",
+  "focus_l_japanese.yml",
+  "focus_l_japanese.yml",
+  "focus_l_japanese.yml",
+  // 例: "parties_l_japanese.yml",
+  // 例: "events_l_japanese.yml"
+];
+
+// すべての.ymlファイルを非同期で一括読み込みしてパースする関数
+async function loadLocalisation() {
+  try {
+    // リストにあるすべてのファイルを並行してフェッチ
+    const promises = localisationFiles.map(async (filename) => {
+      const res = await fetch(`../data/localisation/japanese/${filename}`);
+      if (!res.ok) {
+        console.warn(`ローカライズファイルの読み込みスキップまたは未配置: ${filename}`);
+        return "";
+      }
+      return await res.text();
+    });
+
+    const texts = await Promise.all(promises);
+
+    // 取得したすべてのテキストをパースして localizationMap に統合
+    texts.forEach(text => {
+      if (!text) return;
+      const lines = text.split('\n');
+      lines.forEach(line => {
+        // 形式: KEY:0 "日本語テキスト" を正規表現で抽出
+        const match = line.match(/^\s*([A-Za-z0-9_]+):\d+\s+"(.*)"/);
+        if (match) {
+          const key = match[1];
+          const val = match[2];
+          localizationMap[key] = val;
+        }
+      });
+    });
+
+    console.log(`全ローカライズ読み込み完了: 合計 ${Object.keys(localizationMap).length} 件`);
+  } catch (e) {
+    console.log("ローカライズファイルの読み込みエラー:", e);
+  }
+}
+
 function updateCalendarUI() {
   const y = currentDate.getFullYear();
   const m = currentDate.getMonth() + 1;
@@ -70,7 +120,7 @@ function setGameSpeed(speed) {
 // 2. NF進行 & 排他ロック・報酬適用
 // ==========================================
 function startFocus(nf) {
-  const title = nf.title || nf.id;
+  const title = localizationMap[nf.id] || nf.title || nf.id;
   if (activeFocus) {
     setLogText(`【変更】国家方針を「${title}」に変更しました。`);
   } else {
@@ -95,7 +145,7 @@ function completeActiveFocus() {
 
   applyFocusEffects(completedNf.effect);
 
-  const title = completedNf.title || completedNf.id;
+  const title = localizationMap[completedNf.id] || completedNf.title || completedNf.id;
   const effectClean = completedNf.effect ? completedNf.effect.replace(/\n/g, ' / ') : '特記事項なし';
   setLogText(`🎉【国家方針完了】「${title}」を達成！ 報酬: [ ${effectClean} ]`);
 
@@ -207,9 +257,10 @@ function renderTree() {
       ? `<div class="focus-progress">残り ${focusDaysRemaining}日</div>` 
       : `<div class="focus-cost">${nf.cost || 70}日</div>`;
 
-    const displayName = nf.title || nf.id;
+    // 日本語ローカライズがあれば優先して適用、なければJSONのタイトルやIDを表示
+    const displayName = localizationMap[nf.id] || nf.title || nf.id;
     
-    // アイコン画像のパス設定 (icon または iconPath から綺麗にファイル名を抽出)
+    // アイコン画像のパス設定 & ファイル名揺れ・互換サフィックスの吸収処理
     let iconHtml = `<div class="focus-symbol">⭐</div>`;
     const rawIcon = nf.icon || nf.iconPath;
     
@@ -219,7 +270,19 @@ function renderTree() {
       if (fileName.startsWith('GFX_')) {
         fileName = fileName.slice(4);
       }
-      iconHtml = `<img class="focus-icon" src="/iekei1/game/data/image/goals/focus_${fileName}.png" alt="" onerror="this.style.display='none'">`;
+      
+      // 互換用サフィックスを削除
+      fileName = fileName.replace(/_ccp_2d_sov_compatibility$/, "");
+
+      // ファイル名の揺れ（alt → alternative など）をここで吸収・経由
+      const filenameOverrides = {
+        "SOV_the_glory_of_the_red_army_alt": "SOV_the_glory_of_the_red_army_alternative"
+      };
+      if (filenameOverrides[fileName]) {
+        fileName = filenameOverrides[fileName];
+      }
+
+      iconHtml = `<img class="focus-icon" src="/iekei1/game/data/image/goals/focus_${fileName}_result.png" alt="" onerror="this.style.display='none'">`;
     }
 
     node.innerHTML = `
@@ -364,8 +427,10 @@ function showTooltip(e, nf) {
   const isActive = activeFocus && activeFocus.id === nf.id;
   const isLocked = lockedFocuses.has(nf.id) || !isUnlocked(nf);
   
+  const titleName = localizationMap[nf.id] || nf.title || nf.id;
   let status = isCompleted ? "【達成済み】" : (isActive ? "【実行中】" : (isLocked ? "🔒【選択不可/排他】" : "🔓【選択可能】"));
-  document.getElementById('tooltip-title').textContent = `${nf.title || nf.id} ${status}`;
+  
+  document.getElementById('tooltip-title').textContent = `${titleName} ${status}`;
   document.getElementById('tooltip-time').textContent = `⏱️ 必要時間: ${isActive ? focusDaysRemaining + "日 (進行中)" : (nf.cost || 70) + "日"}`;
   document.getElementById('tooltip-effect').textContent = nf.effect || "効果なし";
   
@@ -383,7 +448,7 @@ function hideTooltip() {
 }
 
 // ==========================================
-// 5. 初期化 & soviet.json 読み込み処理
+// 5. 初期化 & ローカライズ・soviet.json 読み込み処理
 // ==========================================
 document.getElementById('btn-pause').addEventListener('click', () => setGameSpeed(0));
 document.querySelectorAll('.speed-btn[data-speed]').forEach(btn => {
@@ -394,6 +459,9 @@ document.querySelectorAll('.speed-btn[data-speed]').forEach(btn => {
 });
 
 async function init() {
+  // 1. ローカライズ（複数の .yml）の読み込みを並行実行してマップにマージ
+  await loadLocalisation();
+
   let rawData = [];
 
   try {
@@ -415,7 +483,7 @@ async function init() {
     ];
   }
 
-  // 座標のピクセル換算（グリッド間隔の調整はこちらで行えます）
+  // 座標のピクセル換算
   const GRID_SIZE_X = 220; 
   const GRID_SIZE_Y = 130; 
 
