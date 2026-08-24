@@ -144,7 +144,19 @@ function startResearch(tech) {
   }
 
   slot.tech = tech; 
-  slot.remaining = tech.research_time || 30;
+  
+  // 基本の研究日数
+  let totalDays = tech.research_time || 30;
+
+  // ★ 先行研究ペナルティの計算 (1年先ごとに250日追加)
+  const currentYear = gameDate.getFullYear();
+  if (tech.year && tech.year > currentYear) {
+    const yearDiff = tech.year - currentYear;
+    const penaltyDays = yearDiff * 250;
+    totalDays += penaltyDays;
+  }
+
+  slot.remaining = totalDays;
   updateSlotDisplay(slot);
 }
 
