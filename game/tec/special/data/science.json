@@ -6,7 +6,7 @@
       "name_en": "Boris Stechkin",
       "category": "air",
       "category_name": "航空・ロケット分野",
-      "icon": "image/ジェットエンジン.png",
+      "icon": "image/Portrait_SOV_boris_stechkin.png",
       "overview": "ジェット推進・熱機関の専門家。",
       "weapons": "初期型ジェット戦闘機（MiG-9、Yak-15）、後退翼ジェット戦闘機（MiG-15）"
     },
@@ -16,7 +16,7 @@
       "name_en": "Sergey Korolyov",
       "category": "air",
       "category_name": "航空・ロケット分野",
-      "icon": "image/ジェットエンジン.png",
+      "icon": "image/Portrait_SOV_sergei_korolev.png",
       "overview": "ソ連の宇宙開発・ロケット工学の父。",
       "weapons": "長距離ロケット（V2相当）、ICBM（R-7）、試作ロケット戦闘機（BI-1）"
     },
@@ -26,7 +26,7 @@
       "name_en": "Arkady Nazarov",
       "category": "air",
       "category_name": "航空・ロケット分野",
-      "icon": "image/ジェットエンジン.png",
+      "icon": "image/Portrait_SOV_arkady_nazarov.png",
       "overview": "先進的機体構造および航空エンジンの研究者。",
       "weapons": "試作超音速機、ジェット爆撃機（Il-28、Tu-16）"
     },
@@ -36,7 +36,7 @@
       "name_en": "Igor Kurchatov",
       "category": "nuclear",
       "category_name": "原子核分野",
-      "icon": "image/nuclear.png",
+      "icon": "image/Portrait_SOV_igor_kurchatov.png",
       "overview": "ソ連の原爆開発（RDS-1計画）を主導した核物理学者。",
       "weapons": "原子爆弾（RDS-1）、水爆（RDS-6s）"
     },
@@ -46,7 +46,7 @@
       "name_en": "Abram Ioffe",
       "category": "nuclear",
       "category_name": "原子核分野",
-      "icon": "image/nuclear.png",
+      "icon": "image/Portrait_SOV_abram_ioffe.png",
       "overview": "ソ連の物理学・半導体・原子核研究の先駆者。",
       "weapons": "原子力駆動装置（原子力潜水艦ノヴェンバー級用）"
     },
@@ -56,7 +56,7 @@
       "name_en": "Vasiliy Grabin",
       "category": "artillery",
       "category_name": "陸上兵器砲術分野",
-      "icon": "image/artillery.png",
+      "icon": "image/Portrait_SOV_vasiliy_grabin.png",
       "overview": "ZiSシリーズなどを手掛けたソ連屈指の大砲設計技師。",
       "weapons": "大口径対戦車砲（BS-3）、超重戦車砲、自走迫撃砲（2A3タラン）"
     }
