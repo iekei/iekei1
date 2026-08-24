@@ -7,7 +7,6 @@
   <title>研究ツリー (Soviet Research Tree)</title>
   <link rel="stylesheet" href="style.css">
 </head>
-  <script src="special/science.js"></script>
 <body>
 
 <div id="notification-area"></div>
@@ -23,10 +22,10 @@
       <button class="speed-btn" data-speed="4">4速</button>
       <button class="speed-btn" data-speed="5">5速</button>
     </div>
+  </div>
 
-  <!-- ★追加：特別研究計画ボタン -->
+  <!-- ★特別研究計画ボタン（時計の横・スロットの上に配置） -->
   <button id="open-science-btn" class="special-science-btn" onclick="openScienceModal()">特別研究計画</button>
-</div>
 
   <div id="research-slots">
     <div class="slot" data-slot="1"><span class="slot-name">スロット 1:</span> <span class="slot-status">空き</span></div>
@@ -87,6 +86,8 @@
   <div id="tooltip-effects"></div>
 </div>
 
+<!-- スクリプトの読み込み順序を修正（bodyの最後に配置） -->
+<script src="special/science.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
