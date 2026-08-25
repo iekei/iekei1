@@ -240,56 +240,76 @@ const localisationFiles = [
   "wtt_ss_recruitment_l_japanese.yml"
 ];
 
-// 現在の国家が共産主義かどうかを判定する関数（状況に応じて切り替え可能）
+// 現在の国家が共産主義かどうかを判定する関数
 function isCurrentGovernmentCommunism() {
-  return true; // ソ連初期設定（共産主義）
+  return true; // 共産主義（ソ連初期）
 }
 
-// 動的テキスト（Get...Name）を解決して実際の翻訳文を返す関数
-function resolveDynamicLoc(rawTitle) {
-  if (!rawTitle) return "";
+// フォーカスIDやタグから動的テキストやymlを解決して実際の翻訳文を返す関数
+function resolveDynamicLoc(targetId) {
+  if (!targetId) return "";
 
-  let locName = rawTitle.trim();
-  // 角括弧 [GetFinishTheFiveYearPlanName] が付いている場合は中身を取り出す
-  if (locName.startsWith('[') && locName.endsWith(']')) {
-    locName = locName.slice(1, -1);
+  let cleanId = targetId.trim();
+  if (cleanId.startsWith('[') && cleanId.endsWith(']')) {
+    cleanId = cleanId.slice(1, -1);
   }
 
-  // scripted_localisation に定義がある場合
-  if (scriptedLocMap[locName]) {
-    const rules = scriptedLocMap[locName];
-    const isCommunism = isCurrentGovernmentCommunism();
+  // 1. すでにダイレクトに yml の翻訳が存在する場合はそれを優先
+  if (localizationMap[cleanId]) {
+    return localizationMap[cleanId];
+  }
 
-    let targetKey = "";
-    for (const rule of rules) {
-      // 1. 共産主義専用条件のチェック
-      if (isCommunism && rule.isCommunismOnly) {
-        targetKey = rule.key;
-        break;
-      }
-      // 2. 共産主義ではない条件のチェック (NOT = { has_government = communism })
-      if (!isCommunism && rule.isNotCommunism) {
-        targetKey = rule.key;
-        break;
-      }
-      // 3. デフォルト条件（トリガーがない、またはフォールバック）をキープ
-      if (rule.isDefault && !targetKey) {
-        targetKey = rule.key;
-      }
-    }
-
-    // 見つかったキーに対応する yml の翻訳文を返す
-    if (targetKey && localizationMap[targetKey]) {
-      return localizationMap[targetKey];
-    }
-    // キーはあるが翻訳が見つからない場合はキー名をそのまま返すかフォールバック
-    if (targetKey && localizationMap[rawTitle]) {
-      return localizationMap[rawTitle];
+  // 2. IDが "SOV_finish_the_five_year_plan" の場合、対応する動的テキスト名（GetFinishTheFiveYearPlanName）を生成して紐付けを試みる
+  if (!cleanId.startsWith('Get')) {
+    const pascalName = cleanId.toLowerCase().split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
+    const guessedDynamicName = `Get${pascalName}Name`;
+    
+    if (scriptedLocMap[guessedDynamicName]) {
+      const translated = resolveScriptedLocRules(guessedDynamicName);
+      if (translated) return translated;
     }
   }
 
-  // scripted_locに無い場合は通常のlocalizationMapまたはそのままの文字列を返す
-  return localizationMap[rawTitle] || rawTitle;
+  // 3. すでに Get... の形式である場合
+  if (scriptedLocMap[cleanId]) {
+    const translated = resolveScriptedLocRules(cleanId);
+    if (translated) return translated;
+  }
+
+  // 4. どれにもヒットしない場合は、余計な置換をせず元のIDをそのまま返す
+  return targetId;
+}
+
+// scriptedLocMap のルール（条件分岐）に従って最適な localization_key を探し、yml から日本語訳を引く内部関数
+function resolveScriptedLocRules(locName) {
+  const rules = scriptedLocMap[locName];
+  if (!rules) return null;
+
+  const isCommunism = isCurrentGovernmentCommunism();
+  let targetKey = "";
+
+  for (const rule of rules) {
+    if (isCommunism && rule.isCommunismOnly) {
+      targetKey = rule.key;
+      break;
+    }
+    if (!isCommunism && rule.isNotCommunism) {
+      targetKey = rule.key;
+      break;
+    }
+    if (rule.isDefault && !targetKey) {
+      targetKey = rule.key;
+    }
+  }
+
+  if (!targetKey && rules.length > 0) {
+    targetKey = rules[0].key;
+  }
+
+  if (targetKey && localizationMap[targetKey]) {
+    return localizationMap[targetKey];
+  }
+  return null;
 }
 
 // すべてのローカライズファイル（ymlおよびtxt）を非同期で一括読み込みしてパースする関数
@@ -329,7 +349,6 @@ async function loadLocalisation() {
 
             const hasCommunism = tbBody.includes('communism') && !tbBody.includes('NOT');
             const hasNotCommunism = tbBody.includes('NOT') && tbBody.includes('communism');
-            // トリガーが存在しない（=条件なしのデフォルトブロック）判定
             const hasTrigger = tbBody.includes('trigger');
 
             texts.push({
@@ -407,8 +426,7 @@ function setGameSpeed(speed) {
 // 2. NF進行 & 排他ロック・報酬適用
 // ==========================================
 function startFocus(nf) {
-  const rawTitle = localizationMap[nf.id] || nf.title || nf.id;
-  const title = resolveDynamicLoc(rawTitle);
+  const title = resolveDynamicLoc(nf.id);
   if (activeFocus) {
     setLogText(`【変更】国家方針を「${title}」に変更しました。`);
   } else {
@@ -433,8 +451,7 @@ function completeActiveFocus() {
 
   applyFocusEffects(completedNf.effect);
 
-  const rawTitle = localizationMap[completedNf.id] || completedNf.title || completedNf.id;
-  const title = resolveDynamicLoc(rawTitle);
+  const title = resolveDynamicLoc(completedNf.id);
   const effectClean = completedNf.effect ? completedNf.effect.replace(/\n/g, ' / ') : '特記事項なし';
   setLogText(`🎉【国家方針完了】「${title}」を達成！ 報酬: [ ${effectClean} ]`);
 
@@ -546,11 +563,10 @@ function renderTree() {
       ? `<div class="focus-progress">残り ${focusDaysRemaining}日</div>` 
       : `<div class="focus-cost">${nf.cost || 70}日</div>`;
 
-    // 表示名の決定（動的テキストの解決を含む）
-    let rawTitle = localizationMap[nf.id] || nf.title;
-    let displayName = resolveDynamicLoc(rawTitle);
-    if (!displayName || (displayName === rawTitle && rawTitle.includes('Get'))) {
-      displayName = nf.id.replace(/_/g, ' ');
+    // 表示名の決定（アンダーバーを勝手に消さないよう修正）
+    let displayName = resolveDynamicLoc(nf.id);
+    if (!displayName || displayName === nf.id) {
+      displayName = nf.title || nf.id; 
     }
     
     let iconHtml = `<div class="focus-symbol">⭐</div>`;
@@ -717,10 +733,9 @@ function showTooltip(e, nf) {
   const isActive = activeFocus && activeFocus.id === nf.id;
   const isLocked = lockedFocuses.has(nf.id) || !isUnlocked(nf);
   
-  let rawTitle = localizationMap[nf.id] || nf.title;
-  let titleName = resolveDynamicLoc(rawTitle);
-  if (!titleName || (titleName === rawTitle && rawTitle.includes('Get'))) {
-    titleName = nf.id.replace(/_/g, ' ');
+  let titleName = resolveDynamicLoc(nf.id);
+  if (!titleName || titleName === nf.id) {
+    titleName = nf.title || nf.id;
   }
 
   let status = isCompleted ? "【達成済み】" : (isActive ? "【実行中】" : (isLocked ? "🔒【選択不可/排他】" : "🔓【選択可能】"));
@@ -778,11 +793,9 @@ async function init() {
     ];
   }
 
-  // ★ soviet.json の各データに localizationMap / 動的テキストの日本語を自動適用する
+  // ★ soviet.json の各データに自動で動的テキスト / 翻訳を適用する
   rawData.forEach(nf => {
-    if (localizationMap[nf.id] || nf.id.startsWith('Get')) {
-      nf.title = resolveDynamicLoc(localizationMap[nf.id] || nf.id);
-    }
+    nf.title = resolveDynamicLoc(nf.id);
     const effectKey = `${nf.id}_effect`;
     if (localizationMap[effectKey]) {
       nf.effect = localizationMap[effectKey];
