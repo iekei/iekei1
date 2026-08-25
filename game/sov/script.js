@@ -240,7 +240,9 @@ const localisationFiles = [
   "wtt_ss_recruitment_l_japanese.yml"
 ];
 
-// 動的ローカライズ解決関数
+// ==========================================
+// 動的ローカライズ解決関数 (エラー対策として追加・定義)
+// ==========================================
 function resolveDynamicLoc(targetId) {
   if (!targetId) return "";
 
@@ -249,10 +251,12 @@ function resolveDynamicLoc(targetId) {
     cleanId = cleanId.slice(1, -1);
   }
 
+  // 1. そのままのキーで検索
   if (localizationMap[cleanId]) {
     return localizationMap[cleanId];
   }
 
+  // 2. よくあるサフィックス付きのキーで検索
   const subKeys = [
     `${cleanId}`,
     `${cleanId}_name`,
@@ -291,7 +295,6 @@ function resolveDynamicLoc(targetId) {
 async function loadLocalisation() {
   try {
     const promises = localisationFiles.map(async (filename) => {
-      // ご指定のフォルダ構造（japanese フォルダ内に scripted_localisation がある形）に対応
       let url = "";
       if (filename.startsWith('scripted_localisation/')) {
         url = `/iekei1/game/data/localisation/japanese/${filename}`;
@@ -301,7 +304,6 @@ async function loadLocalisation() {
 
       const res = await fetch(url);
       if (!res.ok) {
-        // フォールバック（相対パス）
         const fallbackUrl = filename.startsWith('scripted_localisation/') 
           ? `../data/localisation/japanese/${filename}` 
           : `../data/localisation/japanese/${filename}`;
