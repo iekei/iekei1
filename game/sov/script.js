@@ -24,7 +24,7 @@ let focusDaysRemaining = 0;
 
 // ローカライズデータを保持する辞書（ymlのキーと値）
 let localizationMap = {};
-// 動的テキスト（scripted_localisation）の定義を保持するマップ（txtの name と、そこから抽出した _default の localization_key を紐付け）
+// 動的テキスト（scripted_localisation）の定義を保持するマップ
 let scriptedLocMap = {};
 
 // 取得したすべての yml / txt ファイルのリスト
@@ -240,8 +240,7 @@ const localisationFiles = [
   "wtt_ss_recruitment_l_japanese.yml"
 ];
 
-// ご指定のフローを正確に再現する関数
-// 【フロー】yml(フォーカスID) -> ローカライズ(Get...Name取得) -> txt(defined_text) -> 末尾_defaultのキーを抽出 -> yml(再度探しに行く) -> 表示
+// 動的ローカライズ解決関数
 function resolveDynamicLoc(targetId) {
   if (!targetId) return "";
 
@@ -250,12 +249,10 @@ function resolveDynamicLoc(targetId) {
     cleanId = cleanId.slice(1, -1);
   }
 
-  // 1. まず、渡されたIDがそのまま yml（localizationMap）に存在すれば、それを最優先で返す
   if (localizationMap[cleanId]) {
     return localizationMap[cleanId];
   }
 
-  // 2. yml にそのままのIDがない場合、通常のフォーカス名用キー（例: SOV_finish_the_five_year_plan_name や SOV_finish_the_five_year_plan など）も試す
   const subKeys = [
     `${cleanId}`,
     `${cleanId}_name`,
@@ -266,7 +263,6 @@ function resolveDynamicLoc(targetId) {
     if (localizationMap[k]) return localizationMap[k];
   }
 
-  // 3. 動的ローカライズ（Get...Name系）の解決を試みる
   let dynamicLocKey = localizationMap[cleanId];
   
   if (!dynamicLocKey) {
@@ -282,7 +278,6 @@ function resolveDynamicLoc(targetId) {
     }
   }
 
-  // 4. scripted_locMap から末尾 _default のキーを引く
   if (scriptedLocMap[dynamicLocKey]) {
     const defaultKey = scriptedLocMap[dynamicLocKey];
     if (defaultKey && localizationMap[defaultKey]) {
@@ -290,31 +285,30 @@ function resolveDynamicLoc(targetId) {
     }
   }
 
-  // 5. どうしても見つからない場合は元のIDを返す
   return targetId;
 }
 
 async function loadLocalisation() {
   try {
     const promises = localisationFiles.map(async (filename) => {
+      // ご指定のフォルダ構造（japanese フォルダ内に scripted_localisation がある形）に対応
       let url = "";
-      
-      // ご提示いただいた正確なフォルダ構成に基づき、絶対URLを組み立てる
       if (filename.startsWith('scripted_localisation/')) {
-        // 例: scripted_localisation/NSB_soviet_scripted_loc.txt の場合
-        // 実際のパス: iekei1/game/data/localisation/japanese/scripted_localisation/NSB_soviet_scripted_loc.txt
-        const subPath = filename.replace('scripted_localisation/', '');
-        url = `https://iekei.github.io/iekei1/game/data/localisation/japanese/scripted_localisation/${subPath}`;
+        url = `/iekei1/game/data/localisation/japanese/${filename}`;
       } else {
-        // 通常の yml の場合
-        // 実際のパス: iekei1/game/data/localisation/japanese/xxx.yml
-        url = `https://iekei.github.io/iekei1/game/data/localisation/japanese/${filename}`;
+        url = `/iekei1/game/data/localisation/japanese/${filename}`;
       }
 
       const res = await fetch(url);
       if (!res.ok) {
-        console.warn(`読み込み失敗 (404): ${url}`);
-        return { text: "", isTxt: filename.endsWith('.txt') };
+        // フォールバック（相対パス）
+        const fallbackUrl = filename.startsWith('scripted_localisation/') 
+          ? `../data/localisation/japanese/${filename}` 
+          : `../data/localisation/japanese/${filename}`;
+        
+        const res2 = await fetch(fallbackUrl);
+        if (!res2.ok) return { text: "", isTxt: filename.endsWith('.txt') };
+        return { text: await res2.text(), isTxt: filename.endsWith('.txt') };
       }
       return { text: await res.text(), isTxt: filename.endsWith('.txt') };
     });
@@ -325,14 +319,13 @@ async function loadLocalisation() {
       if (!text) return;
 
       if (isTxt) {
-        // txtファイル（defined_text）のパース処理
         const definedTextMatches = text.matchAll(/defined_text\s*=\s*\{([\s\S]*?)\}/g);
         for (const dtMatch of definedTextMatches) {
           const body = dtMatch[1];
           const nameMatch = body.match(/name\s*=\s*([A-Za-z0-9_]+)/);
           if (!nameMatch) continue;
           
-          const locName = nameMatch[1]; // 例: GetFinishTheFiveYearPlanName
+          const locName = nameMatch[1];
           let defaultKey = "";
           
           const textBlockMatches = body.matchAll(/text\s*=\s*\{([\s\S]*?)\}/g);
@@ -342,11 +335,9 @@ async function loadLocalisation() {
             if (!keyMatch) continue;
 
             const foundKey = keyMatch[1];
-
-            // 末尾が _default のものだけを抽出する
             if (foundKey.endsWith('_default')) {
               defaultKey = foundKey;
-              break; 
+              break;
             }
           }
           
@@ -355,7 +346,6 @@ async function loadLocalisation() {
           }
         }
       } else {
-        // 通常の yml パース
         const lines = text.split('\n');
         lines.forEach(line => {
           const match = line.match(/^\s*([A-Za-z0-9_]+)(?::\d*)?\s+"(.*)"/);
@@ -366,61 +356,13 @@ async function loadLocalisation() {
       }
     });
 
-    console.log(`ローカライズ読み込み完了: yml ${Object.keys(localizationMap).length} 件, scripted_loc ${Object.keys(scriptedLocMap).length} 件`);
+    const debugMsg = `ローカライズ読み込み完了: yml ${Object.keys(localizationMap).length} 件, scripted_loc _default抽出済み ${Object.keys(scriptedLocMap).length} 件`;
+    console.log(debugMsg);
+    setLogText(debugMsg);
+
   } catch (e) {
     console.log("ローカライズファイルの読み込みエラー:", e);
-  }
-}
-    const results = await Promise.all(promises);
-
-    results.forEach(({ text, isTxt }) => {
-      if (!text) return;
-
-      if (isTxt) {
-        // txtファイル（defined_text）のパース処理
-        const definedTextMatches = text.matchAll(/defined_text\s*=\s*\{([\s\S]*?)\}/g);
-        for (const dtMatch of definedTextMatches) {
-          const body = dtMatch[1];
-          const nameMatch = body.match(/name\s*=\s*([A-Za-z0-9_]+)/);
-          if (!nameMatch) continue;
-          
-          const locName = nameMatch[1]; // 例: GetFinishTheFiveYearPlanName
-          let defaultKey = "";
-          
-          const textBlockMatches = body.matchAll(/text\s*=\s*\{([\s\S]*?)\}/g);
-          for (const tb of textBlockMatches) {
-            const tbBody = tb[1];
-            const keyMatch = tbBody.match(/localization_key\s*=\s*([A-Za-z0-9_]+)/);
-            if (!keyMatch) continue;
-
-            const foundKey = keyMatch[1];
-
-            // ★要望通り：見つかった localization_key のうち、末尾が _default のものだけを厳密に抽出する
-            if (foundKey.endsWith('_default')) {
-              defaultKey = foundKey;
-              break; // _default が見つかったら決定
-            }
-          }
-          
-          if (defaultKey) {
-            scriptedLocMap[locName] = defaultKey;
-          }
-        }
-      } else {
-        // 通常の yml パース
-        const lines = text.split('\n');
-        lines.forEach(line => {
-          const match = line.match(/^\s*([A-Za-z0-9_]+)(?::\d*)?\s+"(.*)"/);
-          if (match) {
-            localizationMap[match[1]] = match[2];
-          }
-        });
-      }
-    });
-
-    console.log(`ローカライズ読み込み完了: yml ${Object.keys(localizationMap).length} 件, scripted_loc _default抽出済み ${Object.keys(scriptedLocMap).length} 件`);
-  } catch (e) {
-    console.log("ローカライズファイルの読み込みエラー:", e);
+    setLogText("ローカライズファイルの読み込みに失敗しました。");
   }
 }
 
@@ -580,7 +522,6 @@ function renderTree() {
   nodesContainer.innerHTML = '';
   svgLines.innerHTML = '';
 
-  // 1. ノードを描画
   allFocuses.forEach(nf => {
     const node = document.createElement('div');
     node.className = 'focus-node';
@@ -660,7 +601,6 @@ function renderTree() {
     nodesContainer.appendChild(node);
   });
 
-  // 2. 親ごとにグループ化してHOI4風の「横幹線＋下分岐」を描画
   const parentGroups = {};
 
   allFocuses.forEach(nf => {
@@ -715,7 +655,6 @@ function renderTree() {
     }
   });
 
-  // 3. 排他選択の赤破線描画
   allFocuses.forEach(nf => {
     if (nf.mutually_exclusive) {
       const targets = Array.isArray(nf.mutually_exclusive) ? nf.mutually_exclusive : [nf.mutually_exclusive];
@@ -814,7 +753,6 @@ document.querySelectorAll('.speed-btn[data-speed]').forEach(btn => {
 });
 
 async function init() {
-  // 1. すべてのローカライズファイル群（yml & txt）を読み込む
   await loadLocalisation();
 
   let rawData = [];
