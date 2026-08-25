@@ -295,10 +295,18 @@ function resolveDynamicLoc(targetId) {
 async function loadLocalisation() {
   try {
     const promises = localisationFiles.map(async (filename) => {
-      let url = `../data/localisation/japanese/${filename}`;
+      // 修正版：上位階層の正しい data/ フォルダを指すように変更
+      let url = `../../data/localisation/japanese/${filename}`;
       if (filename.includes('scripted_localisation/')) {
-        url = `../data/localisation/${filename}`;
+        url = `../../data/localisation/${filename}`;
       }
+      
+      // もし上記でもダメな場合（dataフォルダが同じ sov/ の中にある場合など）は、以下を試してください
+      // let url = `../data/localisation/japanese/${filename}`;
+      // if (filename.includes('scripted_localisation/')) {
+      //   url = `../data/localisation/${filename}`;
+      // }
+
       const res = await fetch(url);
       if (!res.ok) return { text: "", isTxt: filename.endsWith('.txt') };
       return { text: await res.text(), isTxt: filename.endsWith('.txt') };
