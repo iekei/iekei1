@@ -295,27 +295,35 @@ function resolveDynamicLoc(targetId) {
 async function loadLocalisation() {
   try {
     const promises = localisationFiles.map(async (filename) => {
-      let url = "";
-      if (filename.startsWith('scripted_localisation/')) {
-        url = `/iekei1/game/data/localisation/japanese/${filename}`;
-      } else {
-        url = `/iekei1/game/data/localisation/japanese/${filename}`;
-      }
+      // 基本のパス（絶対パス）
+      const primaryUrl = `/iekei1/game/data/localisation/japanese/${filename}`;
+      // フォールバック用の相対パス
+      const fallbackUrl = `./data/localisation/japanese/${filename}`;
 
-      const res = await fetch(url);
-      if (!res.ok) {
-        const fallbackUrl = filename.startsWith('scripted_localisation/') 
-          ? `../data/localisation/japanese/${filename}` 
-          : `../data/localisation/japanese/${filename}`;
+      try {
+        let res = await fetch(primaryUrl);
         
-        const res2 = await fetch(fallbackUrl);
-        if (!res2.ok) return { text: "", isTxt: filename.endsWith('.txt') };
-        return { text: await res2.text(), isTxt: filename.endsWith('.txt') };
+        // 1回目の取得に失敗した場合はフォールバックを試す
+        if (!res.ok) {
+          res = await fetch(fallbackUrl);
+          if (!res.ok) {
+            console.warn(`ファイルの取得に失敗しました: ${filename}`);
+            return { text: "", isTxt: filename.endsWith('.txt') };
+          }
+        }
+
+        const text = await res.text();
+        return { text, isTxt: filename.endsWith('.txt') };
+
+      } catch (err) {
+        // ネットワークエラー等の例外をキャッチ
+        console.warn(`通信エラー (${filename}):`, err);
+        return { text: "", isTxt: filename.endsWith('.txt') };
       }
-      return { text: await res.text(), isTxt: filename.endsWith('.txt') };
     });
 
     const results = await Promise.all(promises);
+    // 以降の処理（resultsを使ったパース処理へ続く...）
 
     results.forEach(({ text, isTxt }) => {
       if (!text) return;
