@@ -22,7 +22,7 @@ const lockedFocuses = new Set();
 let activeFocus = null;
 let focusDaysRemaining = 0;
 
-// ローカライズデータを保持する辞書（ymlのキーと値）
+// ローカライズデータを保持する辞書
 let localizationMap = {};
 // 動的テキスト（scripted_localisation）の定義を保持するマップ
 let scriptedLocMap = {};
@@ -240,9 +240,6 @@ const localisationFiles = [
   "wtt_ss_recruitment_l_japanese.yml"
 ];
 
-// ==========================================
-// 動的ローカライズ解決関数 (エラー対策として追加・定義)
-// ==========================================
 function resolveDynamicLoc(targetId) {
   if (!targetId) return "";
 
@@ -251,12 +248,10 @@ function resolveDynamicLoc(targetId) {
     cleanId = cleanId.slice(1, -1);
   }
 
-  // 1. そのままのキーで検索
   if (localizationMap[cleanId]) {
     return localizationMap[cleanId];
   }
 
-  // 2. よくあるサフィックス付きのキーで検索
   const subKeys = [
     `${cleanId}`,
     `${cleanId}_name`,
@@ -292,38 +287,43 @@ function resolveDynamicLoc(targetId) {
   return targetId;
 }
 
+function setLogText(text) {
+  const target = document.getElementById("typewriter-text");
+  if (target) target.textContent = text;
+}
+
+// 確実に読み込めるよう、絶対URLベースに設定
 async function loadLocalisation() {
+  setLogText("ローカライズファイルを読み込み中...");
+  let successTxtCount = 0;
+  let successYmlCount = 0;
+
   try {
     const promises = localisationFiles.map(async (filename) => {
-      // ベースとなるドメイン・パスを指定
-      const baseUrl = "https://iekei.github.io/iekei1/game/data/localisation/japanese/";
-      
-      // filename にすでに 'scripted_localisation/' が含まれているのでそのまま結合できる
-      const url = baseUrl + filename;
+      // GitHub Pagesの絶対URLを指定して404を回避
+      const url = `https://iekei.github.io/iekei1/game/data/localisation/japanese/${filename}`;
 
       try {
         const res = await fetch(url);
         if (!res.ok) {
-          console.warn(`ファイルの取得に失敗しました (404等): ${url}`);
-          return { text: "", isTxt: filename.endsWith('.txt') };
+          return { text: "", isTxt: filename.endsWith('.txt'), filename, error: "404 Not Found" };
         }
-
         const text = await res.text();
-        return { text, isTxt: filename.endsWith('.txt') };
-
+        return { text, isTxt: filename.endsWith('.txt'), filename, error: null };
       } catch (err) {
-        console.warn(`通信エラー (${url}):`, err);
-        return { text: "", isTxt: filename.endsWith('.txt') };
+        return { text: "", isTxt: filename.endsWith('.txt'), filename, error: err.message };
       }
     });
 
     const results = await Promise.all(promises);
-    // 以降の処理（resultsを使ったパース処理へ続く...）
 
-    results.forEach(({ text, isTxt }) => {
-      if (!text) return;
+    results.forEach(({ text, isTxt, filename, error }) => {
+      if (error || !text) {
+        return;
+      }
 
       if (isTxt) {
+        successTxtCount++;
         const definedTextMatches = text.matchAll(/defined_text\s*=\s*\{([\s\S]*?)\}/g);
         for (const dtMatch of definedTextMatches) {
           const body = dtMatch[1];
@@ -351,6 +351,7 @@ async function loadLocalisation() {
           }
         }
       } else {
+        successYmlCount++;
         const lines = text.split('\n');
         lines.forEach(line => {
           const match = line.match(/^\s*([A-Za-z0-9_]+)(?::\d*)?\s+"(.*)"/);
@@ -361,13 +362,11 @@ async function loadLocalisation() {
       }
     });
 
-    const debugMsg = `ローカライズ読み込み完了: yml ${Object.keys(localizationMap).length} 件, scripted_loc _default抽出済み ${Object.keys(scriptedLocMap).length} 件`;
-    console.log(debugMsg);
+    const debugMsg = `読込成功: txt ${successTxtCount}件 / yml ${successYmlCount}件 (scripted_loc抽出: ${Object.keys(scriptedLocMap).length}件)`;
     setLogText(debugMsg);
 
   } catch (e) {
-    console.log("ローカライズファイルの読み込みエラー:", e);
-    setLogText("ローカライズファイルの読み込みに失敗しました。");
+    setLogText("ローカライズ読み込み致命的エラー: " + e.message);
   }
 }
 
@@ -451,11 +450,6 @@ function completeActiveFocus() {
   activeFocus = null;
   focusDaysRemaining = 0;
   renderTree();
-}
-
-function setLogText(text) {
-  const target = document.getElementById("typewriter-text");
-  if (target) target.textContent = text;
 }
 
 // ==========================================
@@ -579,7 +573,7 @@ function renderTree() {
         fileName = filenameOverrides[fileName];
       }
 
-      iconHtml = `<img class="focus-icon" src="/iekei1/game/data/image/goals/focus_${fileName}_result.png" alt="" onerror="this.style.display='none'">`;
+      iconHtml = `<img class="focus-icon" src="https://iekei.github.io/iekei1/game/data/image/goals/focus_${fileName}_result.png" alt="" onerror="this.style.display='none'">`;
     }
 
     node.innerHTML = `
@@ -747,7 +741,7 @@ function hideTooltip() {
 }
 
 // ==========================================
-// 5. 初期化 & ローカライズ・soviet.json 読み込み処理
+// 5. 初期化処理
 // ==========================================
 document.getElementById('btn-pause').addEventListener('click', () => setGameSpeed(0));
 document.querySelectorAll('.speed-btn[data-speed]').forEach(btn => {
@@ -763,7 +757,7 @@ async function init() {
   let rawData = [];
 
   try {
-    const res = await fetch('./data/soviet.json');
+    const res = await fetch('https://iekei.github.io/iekei1/game/data/soviet.json');
     if (res.ok) {
       rawData = await res.json();
     } else {
