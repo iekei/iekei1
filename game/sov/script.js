@@ -240,9 +240,9 @@ const localisationFiles = [
   "wtt_ss_recruitment_l_japanese.yml"
 ];
 
-// 現在の国家が共産主義かどうかを判定する関数（デフォルトはソ連なのでtrue）
+// 現在の国家が共産主義かどうかを判定する関数（状況に応じて切り替え可能）
 function isCurrentGovernmentCommunism() {
-  return true; 
+  return true; // ソ連初期設定（共産主義）
 }
 
 // 動的テキスト（Get...Name）を解決して実際の翻訳文を返す関数
@@ -250,34 +250,45 @@ function resolveDynamicLoc(rawTitle) {
   if (!rawTitle) return "";
 
   let locName = rawTitle.trim();
+  // 角括弧 [GetFinishTheFiveYearPlanName] が付いている場合は中身を取り出す
   if (locName.startsWith('[') && locName.endsWith(']')) {
     locName = locName.slice(1, -1);
   }
 
+  // scripted_localisation に定義がある場合
   if (scriptedLocMap[locName]) {
     const rules = scriptedLocMap[locName];
     const isCommunism = isCurrentGovernmentCommunism();
 
     let targetKey = "";
     for (const rule of rules) {
+      // 1. 共産主義専用条件のチェック
       if (isCommunism && rule.isCommunismOnly) {
         targetKey = rule.key;
         break;
       }
+      // 2. 共産主義ではない条件のチェック (NOT = { has_government = communism })
       if (!isCommunism && rule.isNotCommunism) {
         targetKey = rule.key;
         break;
       }
+      // 3. デフォルト条件（トリガーがない、またはフォールバック）をキープ
       if (rule.isDefault && !targetKey) {
         targetKey = rule.key;
       }
     }
 
+    // 見つかったキーに対応する yml の翻訳文を返す
     if (targetKey && localizationMap[targetKey]) {
       return localizationMap[targetKey];
     }
+    // キーはあるが翻訳が見つからない場合はキー名をそのまま返すかフォールバック
+    if (targetKey && localizationMap[rawTitle]) {
+      return localizationMap[rawTitle];
+    }
   }
 
+  // scripted_locに無い場合は通常のlocalizationMapまたはそのままの文字列を返す
   return localizationMap[rawTitle] || rawTitle;
 }
 
@@ -318,18 +329,20 @@ async function loadLocalisation() {
 
             const hasCommunism = tbBody.includes('communism') && !tbBody.includes('NOT');
             const hasNotCommunism = tbBody.includes('NOT') && tbBody.includes('communism');
+            // トリガーが存在しない（=条件なしのデフォルトブロック）判定
+            const hasTrigger = tbBody.includes('trigger');
 
             texts.push({
               key: keyMatch[1],
               isCommunismOnly: hasCommunism,
               isNotCommunism: hasNotCommunism,
-              isDefault: !tbBody.includes('trigger')
+              isDefault: !hasTrigger
             });
           }
           scriptedLocMap[locName] = texts;
         }
       } else {
-        // 通常のymlパース
+        // 通常の yml パース
         const lines = text.split('\n');
         lines.forEach(line => {
           const match = line.match(/^\s*([A-Za-z0-9_]+)(?::\d*)?\s+"(.*)"/);
