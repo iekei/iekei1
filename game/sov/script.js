@@ -29,8 +29,8 @@ let scriptedLocMap = {};
 
 // 取得したすべての yml / txt ファイルのリスト
 const localisationFiles = [
-  "scripted_localisation/00_scripted_localisation.txt",
-  "scripted_localisation/NSB_soviet_scripted_loc.txt",
+  "00_scripted_localisation.txt",
+  "NSB_soviet_scripted_loc.txt",
   "Juno_bop_l_japanese.yml",
   "POL_equipment_l_japanese.yml",
   "SEA_characters_l_japanese.yml",
