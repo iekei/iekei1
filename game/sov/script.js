@@ -240,6 +240,79 @@ const localisationFiles = [
   "wtt_ss_recruitment_l_japanese.yml"
 ];
 
+/**
+ * YML形式のローカライズテキストをパースする
+ * @param {string} text - YMLファイルの内容
+ */
+function parseYmlLocalization(text) {
+  const lines = text.split('\n');
+  lines.forEach(line => {
+    // YML形式: "KEY:0" "translation" または KEY:0 "translation"
+    const match = line.match(/^\s*([A-Za-z0-9_]+)(?::\d*)?\s*[:"]\s*(.*)["']?\s*$/);
+    if (match) {
+      const key = match[1].trim();
+      const value = match[2].trim().replace(/^["']|["']$/g, '');
+      if (key && value) {
+        localizationMap[key] = value;
+      }
+    }
+  });
+}
+
+/**
+ * TXT形式（scripted_localisation）の動的テキスト定義をパースする
+ * @param {string} text - TXTファイルの内容
+ */
+function parseScriptedLocalization(text) {
+  // defined_text = { ... } ブロックを抽出
+  const definedTextRegex = /defined_text\s*=\s*\{([\s\S]*?)\n\}/g;
+  let match;
+
+  while ((match = definedTextRegex.exec(text)) !== null) {
+    const blockContent = match[1];
+    
+    // ブロック内の name = XXX を取得
+    const nameMatch = blockContent.match(/name\s*=\s*([A-Za-z0-9_]+)/);
+    if (!nameMatch) continue;
+    
+    const scriptedLocName = nameMatch[1];
+    
+    // text = { ... } ブロックを検出
+    const textBlockRegex = /text\s*=\s*\{([\s\S]*?)\n\t\}/g;
+    let textMatch;
+    let defaultLocKey = null;
+
+    while ((textMatch = textBlockRegex.exec(blockContent)) !== null) {
+      const textBlockContent = textMatch[1];
+      
+      // localization_key = XXX_default を検出
+      const locKeyMatch = textBlockContent.match(/localization_key\s*=\s*([A-Za-z0-9_]+)/);
+      if (!locKeyMatch) continue;
+
+      const locKey = locKeyMatch[1];
+      
+      // _default で終わるキーを優先的に記録
+      if (locKey.endsWith('_default')) {
+        defaultLocKey = locKey;
+        break; // _default を見つけたらループを抜ける
+      } else if (!defaultLocKey) {
+        defaultLocKey = locKey; // まだ _default が見つかっていなければこれを使用
+      }
+    }
+
+    if (defaultLocKey) {
+      scriptedLocMap[scriptedLocName] = defaultLocKey;
+      console.log(`[Scripted Loc] ${scriptedLocName} => ${defaultLocKey}`);
+    }
+  }
+}
+
+/**
+ * 動的ローカライズ解決関数
+ * focus IDから実際の表示名を取得する
+ * @param {string} targetId - focus ID
+ * @returns {string} - ローカライズされたテキスト
+ */
 function resolveDynamicLoc(targetId) {
   if (!targetId) return "";
 
@@ -248,10 +321,12 @@ function resolveDynamicLoc(targetId) {
     cleanId = cleanId.slice(1, -1);
   }
 
+  // ステップ1: 直接的なキーを探す
   if (localizationMap[cleanId]) {
     return localizationMap[cleanId];
   }
 
+  // ステップ2: 共通のサフィックスバリエーションを試す
   const subKeys = [
     `${cleanId}`,
     `${cleanId}_name`,
@@ -262,28 +337,42 @@ function resolveDynamicLoc(targetId) {
     if (localizationMap[k]) return localizationMap[k];
   }
 
-  let dynamicLocKey = localizationMap[cleanId];
-  
-  if (!dynamicLocKey) {
+  // ステップ3: 動的テキスト（scripted_localisation）を確認
+  // focus IDに対応する GetXXXName 形式のキーを探す
+  let dynamicLocKey = null;
+
+  // scriptedLocMapで直接マッピングされているか確認
+  if (scriptedLocMap[cleanId]) {
+    dynamicLocKey = scriptedLocMap[cleanId];
+  } else {
+    // PascalCase変換してGetXXXName形式を生成
     if (cleanId.startsWith('Get')) {
       dynamicLocKey = cleanId;
     } else {
-      const pascalName = cleanId.toLowerCase().split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
+      const pascalName = cleanId
+        .toLowerCase()
+        .split('_')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join('');
       dynamicLocKey = `Get${pascalName}Name`;
-    }
-  } else {
-    if (dynamicLocKey.startsWith('[') && dynamicLocKey.endsWith(']')) {
-      dynamicLocKey = dynamicLocKey.slice(1, -1);
     }
   }
 
+  // ステップ4: scriptedLocMap から対応する _default キーを取得
   if (scriptedLocMap[dynamicLocKey]) {
     const defaultKey = scriptedLocMap[dynamicLocKey];
-    if (defaultKey && localizationMap[defaultKey]) {
+    if (localizationMap[defaultKey]) {
       return localizationMap[defaultKey];
     }
   }
 
+  // ステップ5: _default 形式を直接試す
+  const defaultKeyVariant = `${cleanId}_default`;
+  if (localizationMap[defaultKeyVariant]) {
+    return localizationMap[defaultKeyVariant];
+  }
+
+  // フォールバック：元のIDを返す
   return targetId;
 }
 
@@ -323,50 +412,24 @@ async function loadLocalisation() {
       }
 
       if (isTxt) {
+        // TXT形式：scripted_localisation ファイル
         successTxtCount++;
-        const definedTextMatches = text.matchAll(/defined_text\s*=\s*\{([\s\S]*?)\}/g);
-        for (const dtMatch of definedTextMatches) {
-          const body = dtMatch[1];
-          const nameMatch = body.match(/name\s*=\s*([A-Za-z0-9_]+)/);
-          if (!nameMatch) continue;
-          
-          const locName = nameMatch[1];
-          let defaultKey = "";
-          
-          const textBlockMatches = body.matchAll(/text\s*=\s*\{([\s\S]*?)\}/g);
-          for (const tb of textBlockMatches) {
-            const tbBody = tb[1];
-            const keyMatch = tbBody.match(/localization_key\s*=\s*([A-Za-z0-9_]+)/);
-            if (!keyMatch) continue;
-
-            const foundKey = keyMatch[1];
-            if (foundKey.endsWith('_default')) {
-              defaultKey = foundKey;
-              break;
-            }
-          }
-          
-          if (defaultKey) {
-            scriptedLocMap[locName] = defaultKey;
-          }
-        }
+        parseScriptedLocalization(text);
       } else {
+        // YML形式：通常のローカライズファイル
         successYmlCount++;
-        const lines = text.split('\n');
-        lines.forEach(line => {
-          const match = line.match(/^\s*([A-Za-z0-9_]+)(?::\d*)?\s+"(.*)"/);
-          if (match) {
-            localizationMap[match[1]] = match[2];
-          }
-        });
+        parseYmlLocalization(text);
       }
     });
 
-    const debugMsg = `読込成功: txt ${successTxtCount}件 / yml ${successYmlCount}件 (scripted_loc抽出: ${Object.keys(scriptedLocMap).length}件)`;
+    const debugMsg = `読込成功: txt ${successTxtCount}件 / yml ${successYmlCount}件 | Scripted Loc: ${Object.keys(scriptedLocMap).length}件 | Localization: ${Object.keys(localizationMap).length}件`;
     setLogText(debugMsg);
+    console.log(debugMsg);
+    console.log("Scripted Loc Map:", scriptedLocMap);
 
   } catch (e) {
     setLogText("ローカライズ読み込み致命的エラー: " + e.message);
+    console.error(e);
   }
 }
 
@@ -774,8 +837,19 @@ async function init() {
     ];
   }
 
+  // focus IDのローカライズ処理
   rawData.forEach(nf => {
-    nf.title = resolveDynamicLoc(nf.id);
+    // ステップ1: resolveDynamicLoc で動的ローカライズを試す
+    const resolvedTitle = resolveDynamicLoc(nf.id);
+    
+    // ステップ2: 解決できなかった場合は既存の title を使用
+    if (resolvedTitle && resolvedTitle !== nf.id) {
+      nf.title = resolvedTitle;
+    } else if (!nf.title) {
+      nf.title = nf.id; // タイトルがない場合は ID そのものを使う
+    }
+
+    // ステップ3: effect キーのローカライズを試す
     const effectKey = `${nf.id}_effect`;
     if (localizationMap[effectKey]) {
       nf.effect = localizationMap[effectKey];
