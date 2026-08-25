@@ -291,25 +291,27 @@ function resolveDynamicLoc(targetId) {
   return targetId;
 }
 
-// ローカライズファイル（ymlおよびtxt）の読み込み・パース処理
 async function loadLocalisation() {
   try {
     const promises = localisationFiles.map(async (filename) => {
+      // GitHub PagesのURL構成（/iekei1/game/）に合わせた絶対パスで直接指定する
       let url = "";
-      
-      // フォルダの配置関係（game/sov/ から game/data/ への正確なパス）に修正
       if (filename.startsWith('scripted_localisation/')) {
-        // scripted_localisation の場合： game/sov/ から一つ戻って data/localisation/ へ
-        url = `../data/localisation/${filename}`;
+        url = `/iekei1/game/data/localisation/${filename}`;
       } else {
-        // 通常の yml の場合： game/sov/ から一つ戻って data/localisation/japanese/ へ
-        url = `../data/localisation/japanese/${filename}`;
+        url = `/iekei1/game/data/localisation/japanese/${filename}`;
       }
 
       const res = await fetch(url);
       if (!res.ok) {
-        console.warn(`404 失敗: ${url}`); // どのファイルが読み込めなかったか分かるように
-        return { text: "", isTxt: filename.endsWith('.txt') };
+        // もし上のパスでダメだった場合のフォールバックとして相対パスも試す
+        const fallbackUrl = filename.startsWith('scripted_localisation/') 
+          ? `../data/localisation/${filename}` 
+          : `../data/localisation/japanese/${filename}`;
+        
+        const res2 = await fetch(fallbackUrl);
+        if (!res2.ok) return { text: "", isTxt: filename.endsWith('.txt') };
+        return { text: await res2.text(), isTxt: filename.endsWith('.txt') };
       }
       return { text: await res.text(), isTxt: filename.endsWith('.txt') };
     });
