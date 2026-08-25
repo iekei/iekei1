@@ -25,6 +25,7 @@ let focusDaysRemaining = 0;
 // ローカライズデータを保持する辞書
 let localizationMap = {};
 // 動的テキスト（scripted_localisation）の定義を保持するマップ
+// キー: scriptedLocName（GetXXX形式）、値: _default で終わるローカライズキー
 let scriptedLocMap = {};
 
 // 取得したすべての yml / txt ファイルのリスト
@@ -261,6 +262,7 @@ function parseYmlLocalization(text) {
 
 /**
  * TXT形式（scripted_localisation）の動的テキスト定義をパースする
+ * _default で終わるローカライズキーのみを抽出
  * @param {string} text - TXTファイルの内容
  */
 function parseScriptedLocalization(text) {
@@ -285,18 +287,16 @@ function parseScriptedLocalization(text) {
     while ((textMatch = textBlockRegex.exec(blockContent)) !== null) {
       const textBlockContent = textMatch[1];
       
-      // localization_key = XXX_default を検出
+      // localization_key = XXX を検出
       const locKeyMatch = textBlockContent.match(/localization_key\s*=\s*([A-Za-z0-9_]+)/);
       if (!locKeyMatch) continue;
 
       const locKey = locKeyMatch[1];
       
-      // _default で終わるキーを優先的に記録
+      // _default で終わるキーのみを採用
       if (locKey.endsWith('_default')) {
         defaultLocKey = locKey;
         break; // _default を見つけたらループを抜ける
-      } else if (!defaultLocKey) {
-        defaultLocKey = locKey; // まだ _default が見つかっていなければこれを使用
       }
     }
 
@@ -308,8 +308,16 @@ function parseScriptedLocalization(text) {
 }
 
 /**
- * 動的ローカライズ解決関数
+ * 動的ローカライズ解決関数（2段階解決）
  * focus IDから実際の表示名を取得する
+ * 
+ * ステップ:
+ * 1. 直接的なキーを localizationMap で探す
+ * 2. 共通サフィックス（_name, _title等）を試す
+ * 3. scriptedLocMap で GetXXXName 形式を探す
+ * 4. scriptedLocMap で見つかったら、その _default キーを localizationMap で解決
+ * 5. フォールバック: 元のIDを返す
+ * 
  * @param {string} targetId - focus ID
  * @returns {string} - ローカライズされたテキスト
  */
@@ -337,13 +345,19 @@ function resolveDynamicLoc(targetId) {
     if (localizationMap[k]) return localizationMap[k];
   }
 
-  // ステップ3: 動的テキスト（scripted_localisation）を確認
-  // focus IDに対応する GetXXXName 形式のキーを探す
+  // ステップ3 & 4: 動的テキスト（scripted_localisation）を確認
+  // scriptedLocMapで GetXXXName 形式のキーを探す
   let dynamicLocKey = null;
 
   // scriptedLocMapで直接マッピングされているか確認
   if (scriptedLocMap[cleanId]) {
-    dynamicLocKey = scriptedLocMap[cleanId];
+    const defaultKey = scriptedLocMap[cleanId];
+    console.log(`[resolveDynamicLoc] ${cleanId} found in scriptedLocMap => ${defaultKey}`);
+    // ここで _default キーを localizationMap で解決
+    if (localizationMap[defaultKey]) {
+      console.log(`[resolveDynamicLoc] ${defaultKey} resolved to: ${localizationMap[defaultKey]}`);
+      return localizationMap[defaultKey];
+    }
   } else {
     // PascalCase変換してGetXXXName形式を生成
     if (cleanId.startsWith('Get')) {
@@ -356,13 +370,16 @@ function resolveDynamicLoc(targetId) {
         .join('');
       dynamicLocKey = `Get${pascalName}Name`;
     }
-  }
 
-  // ステップ4: scriptedLocMap から対応する _default キーを取得
-  if (scriptedLocMap[dynamicLocKey]) {
-    const defaultKey = scriptedLocMap[dynamicLocKey];
-    if (localizationMap[defaultKey]) {
-      return localizationMap[defaultKey];
+    // 生成した GetXXXName を scriptedLocMap で探す
+    if (scriptedLocMap[dynamicLocKey]) {
+      const defaultKey = scriptedLocMap[dynamicLocKey];
+      console.log(`[resolveDynamicLoc] Generated ${dynamicLocKey} found in scriptedLocMap => ${defaultKey}`);
+      // ここで _default キーを localizationMap で解決
+      if (localizationMap[defaultKey]) {
+        console.log(`[resolveDynamicLoc] ${defaultKey} resolved to: ${localizationMap[defaultKey]}`);
+        return localizationMap[defaultKey];
+      }
     }
   }
 
@@ -839,17 +856,17 @@ async function init() {
 
   // focus IDのローカライズ処理
   rawData.forEach(nf => {
-    // ステップ1: resolveDynamicLoc で動的ローカライズを試す
+    // resolveDynamicLoc で動的ローカライズを試す（2段階解決含む）
     const resolvedTitle = resolveDynamicLoc(nf.id);
     
-    // ステップ2: 解決できなかった場合は既存の title を使用
+    // 解決できた場合は使用
     if (resolvedTitle && resolvedTitle !== nf.id) {
       nf.title = resolvedTitle;
     } else if (!nf.title) {
       nf.title = nf.id; // タイトルがない場合は ID そのものを使う
     }
 
-    // ステップ3: effect キーのローカライズを試す
+    // effect キーのローカライズを試す
     const effectKey = `${nf.id}_effect`;
     if (localizationMap[effectKey]) {
       nf.effect = localizationMap[effectKey];
