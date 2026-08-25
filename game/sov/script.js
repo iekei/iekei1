@@ -29,8 +29,8 @@ let scriptedLocMap = {};
 
 // 取得したすべての yml / txt ファイルのリスト
 const localisationFiles = [
-  "00_scripted_localisation.txt",
-  "NSB_soviet_scripted_loc.txt",
+  "scripted_localisation/00_scripted_localisation.txt",
+  "scripted_localisation/NSB_soviet_scripted_loc.txt",
   "Juno_bop_l_japanese.yml",
   "POL_equipment_l_japanese.yml",
   "SEA_characters_l_japanese.yml",
@@ -295,29 +295,24 @@ function resolveDynamicLoc(targetId) {
 async function loadLocalisation() {
   try {
     const promises = localisationFiles.map(async (filename) => {
-      // 基本のパス（絶対パス）
-      const primaryUrl = `/iekei1/game/data/localisation/japanese/${filename}`;
-      // フォールバック用の相対パス
-      const fallbackUrl = `./data/localisation/japanese/${filename}`;
+      // ベースとなるドメイン・パスを指定
+      const baseUrl = "https://iekei.github.io/iekei1/game/data/localisation/japanese/";
+      
+      // filename にすでに 'scripted_localisation/' が含まれているのでそのまま結合できる
+      const url = baseUrl + filename;
 
       try {
-        let res = await fetch(primaryUrl);
-        
-        // 1回目の取得に失敗した場合はフォールバックを試す
+        const res = await fetch(url);
         if (!res.ok) {
-          res = await fetch(fallbackUrl);
-          if (!res.ok) {
-            console.warn(`ファイルの取得に失敗しました: ${filename}`);
-            return { text: "", isTxt: filename.endsWith('.txt') };
-          }
+          console.warn(`ファイルの取得に失敗しました (404等): ${url}`);
+          return { text: "", isTxt: filename.endsWith('.txt') };
         }
 
         const text = await res.text();
         return { text, isTxt: filename.endsWith('.txt') };
 
       } catch (err) {
-        // ネットワークエラー等の例外をキャッチ
-        console.warn(`通信エラー (${filename}):`, err);
+        console.warn(`通信エラー (${url}):`, err);
         return { text: "", isTxt: filename.endsWith('.txt') };
       }
     });
