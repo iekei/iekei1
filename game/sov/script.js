@@ -22,9 +22,9 @@ const lockedFocuses = new Set();
 let activeFocus = null;
 let focusDaysRemaining = 0;
 
-// ローカライズデータを保持する辞書
+// ローカライズデータを保持する辞書（ymlのキーと値）
 let localizationMap = {};
-// 動的テキスト（scripted_localisation）の定義を保持するマップ（デフォルトのlocalization_keyを直接格納）
+// 動的テキスト（scripted_localisation）の定義を保持するマップ（txtの name と localization_key の紐付け）
 let scriptedLocMap = {};
 
 // 取得したすべての yml / txt ファイルのリスト
@@ -240,7 +240,11 @@ const localisationFiles = [
   "wtt_ss_recruitment_l_japanese.yml"
 ];
 
-// フォーカスIDやタグから動的テキストやymlを解決して実際の翻訳文を返す関数
+// ご要望通りのリレー解決を行う関数
+// 【流れ】 focus ID (SOV_finish_the_five_year_plan) 
+//      -> 1. 直接ymlにあればそれを返す
+//      -> 2. なければGet...Nameに変換してtxt(scriptedLocMap)から `_default` などの localization_key を探す
+//      -> 3. 見つかったキーをもう一回 yml(localizationMap) にぶつけて日本語訳にする
 function resolveDynamicLoc(targetId) {
   if (!targetId) return "";
 
@@ -249,31 +253,37 @@ function resolveDynamicLoc(targetId) {
     cleanId = cleanId.slice(1, -1);
   }
 
-  // 1. すでにダイレクトに yml の翻訳が存在する場合はそれを優先
+  // ステップ1: 直接 yml のキーとして存在するか確認
   if (localizationMap[cleanId]) {
     return localizationMap[cleanId];
   }
 
-  // 2. IDから対応する動的テキスト名（例: GetFinishTheFiveYearPlanName）を生成
+  // ステップ2: 動的テキスト名（Get...Name）の推測または直接一致をチェック
   let guessedDynamicName = cleanId;
   if (!cleanId.startsWith('Get')) {
     const pascalName = cleanId.toLowerCase().split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
     guessedDynamicName = `Get${pascalName}Name`;
   }
   
-  // 3. 動的テキストの定義があれば、そこに紐づくデフォルトキー（_default側など）を強制的にひっぱり、ymlから日本語訳を探す
+  // txt側（scriptedLocMap）に動的テキストの定義があるか？
   if (scriptedLocMap[guessedDynamicName]) {
-    const defaultKey = scriptedLocMap[guessedDynamicName];
-    if (localizationMap[defaultKey]) {
-      return localizationMap[defaultKey];
+    // txtから抜き出した localization_key（例: SOV_finish_the_five_year_plan_default）を取得
+    const targetKeyFromTxt = scriptedLocMap[guessedDynamicName];
+    
+    // ステップ3: そのキーを yml の辞書で再度検索して日本語訳を返す
+    if (localizationMap[targetKeyFromTxt]) {
+      return localizationMap[targetKeyFromTxt];
     }
+    
+    //もしyml側にキーそのものが見つからない場合はキー名をフォールバックとして返す
+    return targetKeyFromTxt;
   }
 
-  // 4. どれにもヒットしない場合は元のIDをそのまま返す
+  // どこにもヒットしない場合は元のIDを返す
   return targetId;
 }
 
-// すべてのローカライズファイル（ymlおよびtxt）を非同期で一括読み込みしてパースする関数
+// ローカライズファイル（ymlおよびtxt）の読み込み・パース
 async function loadLocalisation() {
   try {
     const promises = localisationFiles.map(async (filename) => {
@@ -292,14 +302,14 @@ async function loadLocalisation() {
       if (!text) return;
 
       if (isTxt) {
-        // defined_text ブロックのパース処理（デフォルトまたは最後の localization_key を强制採用）
+        // txtファイル（defined_text）のパース処理
         const definedTextMatches = text.matchAll(/defined_text\s*=\s*\{([\s\S]*?)\}/g);
         for (const dtMatch of definedTextMatches) {
           const body = dtMatch[1];
           const nameMatch = body.match(/name\s*=\s*([A-Za-z0-9_]+)/);
           if (!nameMatch) continue;
           
-          const locName = nameMatch[1];
+          const locName = nameMatch[1]; // 例: GetFinishTheFiveYearPlanName
           let defaultKey = "";
           let firstKey = "";
           
@@ -312,13 +322,13 @@ async function loadLocalisation() {
             const foundKey = keyMatch[1];
             if (!firstKey) firstKey = foundKey;
 
-            // トリガーがない（＝デフォルト）か、_defaultが含まれているものを優先候補にする
+            // _default で終わるもの、またはトリガー条件のないものを優先的に選ぶ
             if (!tbBody.includes('trigger') || foundKey.endsWith('_default')) {
               defaultKey = foundKey;
             }
           }
           
-          // 決定したキーを登録（defaultKeyがなければfirstKeyをフォールバック）
+          // txtの name と、そこから辿るべき `_default` などのキーを紐付けて保存
           scriptedLocMap[locName] = defaultKey || firstKey;
         }
       } else {
@@ -333,7 +343,7 @@ async function loadLocalisation() {
       }
     });
 
-    console.log(`全ローカライズ読み込み完了: 通常 ${Object.keys(localizationMap).length} 件, 動的テキスト ${Object.keys(scriptedLocMap).length} 件`);
+    console.log(`ローカライズ読み込み完了: yml ${Object.keys(localizationMap).length} 件, scripted_loc ${Object.keys(scriptedLocMap).length} 件`);
   } catch (e) {
     console.log("ローカライズファイルの読み込みエラー:", e);
   }
@@ -745,7 +755,6 @@ async function init() {
     console.error("fetchエラー:", e);
   }
 
-  // フォールバック（データがない場合）
   if (rawData.length === 0) {
     rawData = [
       { id: "SOV_1936", title: "1936年計画", x: 4, y: 0, cost: 70, effect: "政治力 +50" },
@@ -753,7 +762,6 @@ async function init() {
     ];
   }
 
-  // soviet.json の各データに自動で動的テキスト / 翻訳を適用する
   rawData.forEach(nf => {
     nf.title = resolveDynamicLoc(nf.id);
     const effectKey = `${nf.id}_effect`;
@@ -762,14 +770,12 @@ async function init() {
     }
   });
 
-  // 座標のピクセル換算
   const GRID_SIZE_X = 220; 
   const GRID_SIZE_Y = 130; 
 
   const tempMap = {};
   rawData.forEach(nf => tempMap[nf.id] = nf);
 
-  // 相対座標・絶対座標の解決
   rawData.forEach(nf => {
     if (nf.relative_position_id && tempMap[nf.relative_position_id]) {
       const parent = tempMap[nf.relative_position_id];
