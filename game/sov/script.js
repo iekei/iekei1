@@ -297,28 +297,80 @@ function resolveDynamicLoc(targetId) {
 async function loadLocalisation() {
   try {
     const promises = localisationFiles.map(async (filename) => {
-      // GitHub PagesのURL構成（/iekei1/game/）に合わせた絶対パスで直接指定する
       let url = "";
+      
+      // ご提示いただいた正確なフォルダ構成に基づき、絶対URLを組み立てる
       if (filename.startsWith('scripted_localisation/')) {
-        url = `/iekei1/game/data/localisation/${filename}`;
+        // 例: scripted_localisation/NSB_soviet_scripted_loc.txt の場合
+        // 実際のパス: iekei1/game/data/localisation/japanese/scripted_localisation/NSB_soviet_scripted_loc.txt
+        const subPath = filename.replace('scripted_localisation/', '');
+        url = `https://iekei.github.io/iekei1/game/data/localisation/japanese/scripted_localisation/${subPath}`;
       } else {
-        url = `/iekei1/game/data/localisation/japanese/${filename}`;
+        // 通常の yml の場合
+        // 実際のパス: iekei1/game/data/localisation/japanese/xxx.yml
+        url = `https://iekei.github.io/iekei1/game/data/localisation/japanese/${filename}`;
       }
 
       const res = await fetch(url);
       if (!res.ok) {
-        // もし上のパスでダメだった場合のフォールバックとして相対パスも試す
-        const fallbackUrl = filename.startsWith('scripted_localisation/') 
-          ? `../data/localisation/${filename}` 
-          : `../data/localisation/japanese/${filename}`;
-        
-        const res2 = await fetch(fallbackUrl);
-        if (!res2.ok) return { text: "", isTxt: filename.endsWith('.txt') };
-        return { text: await res2.text(), isTxt: filename.endsWith('.txt') };
+        console.warn(`読み込み失敗 (404): ${url}`);
+        return { text: "", isTxt: filename.endsWith('.txt') };
       }
       return { text: await res.text(), isTxt: filename.endsWith('.txt') };
     });
 
+    const results = await Promise.all(promises);
+
+    results.forEach(({ text, isTxt }) => {
+      if (!text) return;
+
+      if (isTxt) {
+        // txtファイル（defined_text）のパース処理
+        const definedTextMatches = text.matchAll(/defined_text\s*=\s*\{([\s\S]*?)\}/g);
+        for (const dtMatch of definedTextMatches) {
+          const body = dtMatch[1];
+          const nameMatch = body.match(/name\s*=\s*([A-Za-z0-9_]+)/);
+          if (!nameMatch) continue;
+          
+          const locName = nameMatch[1]; // 例: GetFinishTheFiveYearPlanName
+          let defaultKey = "";
+          
+          const textBlockMatches = body.matchAll(/text\s*=\s*\{([\s\S]*?)\}/g);
+          for (const tb of textBlockMatches) {
+            const tbBody = tb[1];
+            const keyMatch = tbBody.match(/localization_key\s*=\s*([A-Za-z0-9_]+)/);
+            if (!keyMatch) continue;
+
+            const foundKey = keyMatch[1];
+
+            // 末尾が _default のものだけを抽出する
+            if (foundKey.endsWith('_default')) {
+              defaultKey = foundKey;
+              break; 
+            }
+          }
+          
+          if (defaultKey) {
+            scriptedLocMap[locName] = defaultKey;
+          }
+        }
+      } else {
+        // 通常の yml パース
+        const lines = text.split('\n');
+        lines.forEach(line => {
+          const match = line.match(/^\s*([A-Za-z0-9_]+)(?::\d*)?\s+"(.*)"/);
+          if (match) {
+            localizationMap[match[1]] = match[2];
+          }
+        });
+      }
+    });
+
+    console.log(`ローカライズ読み込み完了: yml ${Object.keys(localizationMap).length} 件, scripted_loc ${Object.keys(scriptedLocMap).length} 件`);
+  } catch (e) {
+    console.log("ローカライズファイルの読み込みエラー:", e);
+  }
+}
     const results = await Promise.all(promises);
 
     results.forEach(({ text, isTxt }) => {
