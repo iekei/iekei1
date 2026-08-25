@@ -50,5 +50,35 @@
   </div>
 
   <script src="script.js"></script>
+
+  <!-- ▼ ここから追加した簡易デバッグスクリプト ▼ -->
+  <script>
+    // ページの読み込み完了後、1.5秒待ってからローカライズの結合テスト結果をログエリアに強制的に出力する
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const targetFocusId = "SOV_finish_the_five_year_plan"; // 例としてソ連の5ヵ年計画IDでテスト
+        
+        // window側やscript.jsのグローバル変数にアクセスできるか確認
+        const ymlCount = typeof localizationMap !== 'undefined' ? Object.keys(localizationMap).length : "不明(未定義)";
+        const txtCount = typeof scriptedLocMap !== 'undefined' ? Object.keys(scriptedLocMap).length : "不明(未定義)";
+        
+        // 実際の解決関数をテスト
+        let resolvedName = "";
+        if (typeof resolveDynamicLoc === 'function') {
+          resolvedName = resolveDynamicLoc(targetFocusId);
+        } else {
+          resolvedName = "resolveDynamicLoc関数が見つかりません";
+        }
+
+        // 画面のログ欄（#typewriter-text）に結果を強制上書き表示
+        const logTarget = document.getElementById("typewriter-text");
+        if (logTarget) {
+          logTarget.innerHTML = `<b style="color:yellow;">[デバッグ結果]</b> yml:${ymlCount}件 / txt:${txtCount}件 | 変換テスト(${targetFocusId}) ➔ <b>${resolvedName}</b>`;
+        }
+      }, 1500);
+    });
+  </script>
+  <!-- ▲ ここまで追加 ▲ -->
+
 </body>
 </html>
