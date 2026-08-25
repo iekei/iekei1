@@ -250,15 +250,25 @@ function resolveDynamicLoc(targetId) {
     cleanId = cleanId.slice(1, -1);
   }
 
-  // 1. まず yml（localizationMap）にそのままのIDがあるか確認する
+  // 1. まず、渡されたIDがそのまま yml（localizationMap）に存在すれば、それを最優先で返す
   if (localizationMap[cleanId]) {
     return localizationMap[cleanId];
   }
 
-  // 2. なければ、yml側から対応する値（例: "[GetFinishTheFiveYearPlanName]" など）を一度引いてみる
+  // 2. yml にそのままのIDがない場合、通常のフォーカス名用キー（例: SOV_finish_the_five_year_plan_name や SOV_finish_the_five_year_plan など）も試す
+  const subKeys = [
+    `${cleanId}`,
+    `${cleanId}_name`,
+    `${cleanId}_title`,
+    `HOI4_${cleanId}`
+  ];
+  for (const k of subKeys) {
+    if (localizationMap[k]) return localizationMap[k];
+  }
+
+  // 3. 動的ローカライズ（Get...Name系）の解決を試みる
   let dynamicLocKey = localizationMap[cleanId];
   
-  // もし yml にキー自体がない、または値が登録されていない場合は、IDから直接 Get...Name の形式を推測する
   if (!dynamicLocKey) {
     if (cleanId.startsWith('Get')) {
       dynamicLocKey = cleanId;
@@ -267,27 +277,20 @@ function resolveDynamicLoc(targetId) {
       dynamicLocKey = `Get${pascalName}Name`;
     }
   } else {
-    // yml から取得した値が [GetFinishTheFiveYearPlanName] のようになっている場合、括弧を外す
     if (dynamicLocKey.startsWith('[') && dynamicLocKey.endsWith(']')) {
       dynamicLocKey = dynamicLocKey.slice(1, -1);
     }
   }
 
-  // 3. scripted_localisation（txt側）から、その動的テキスト名に一致するものを探し、末尾が `_default` の localization_key だけを抽出する
+  // 4. scripted_locMap から末尾 _default のキーを引く
   if (scriptedLocMap[dynamicLocKey]) {
-    const defaultKey = scriptedLocMap[dynamicLocKey]; // 内部で _default で終わるものだけを保持させています
-    
-    if (defaultKey) {
-      // 4. 抽出した末尾 _default のキーを、もう一度 yml（localizationMap）に探しに行く
-      if (localizationMap[defaultKey]) {
-        // 5. 見つかったローカライズを返す
-        return localizationMap[defaultKey];
-      }
-      return defaultKey; // ymlに見つからなければキー名をフォールバック
+    const defaultKey = scriptedLocMap[dynamicLocKey];
+    if (defaultKey && localizationMap[defaultKey]) {
+      return localizationMap[defaultKey];
     }
   }
 
-  // どこにもヒットしない場合は元のIDを返す
+  // 5. どうしても見つからない場合は元のIDを返す
   return targetId;
 }
 
