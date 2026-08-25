@@ -757,7 +757,7 @@ async function init() {
   let rawData = [];
 
   try {
-    const res = await fetch('https://iekei.github.io/iekei1/game/data/soviet.json');
+    const res = await fetch('https://iekei.github.io/iekei1/game/sov/data/soviet.json');
     if (res.ok) {
       rawData = await res.json();
     } else {
