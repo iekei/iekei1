@@ -24,7 +24,7 @@ let focusDaysRemaining = 0;
 
 // ローカライズデータを保持する辞書（ymlのキーと値）
 let localizationMap = {};
-// 動的テキスト（scripted_localisation）の定義を保持するマップ（txtの name と localization_key の紐付け）
+// 動的テキスト（scripted_localisation）の定義を保持するマップ（txtの name と、そこから抽出した _default の localization_key を紐付け）
 let scriptedLocMap = {};
 
 // 取得したすべての yml / txt ファイルのリスト
@@ -240,11 +240,8 @@ const localisationFiles = [
   "wtt_ss_recruitment_l_japanese.yml"
 ];
 
-// ご要望通りのリレー解決を行う関数
-// 【流れ】 focus ID (SOV_finish_the_five_year_plan) 
-//      -> 1. 直接ymlにあればそれを返す
-//      -> 2. なければGet...Nameに変換してtxt(scriptedLocMap)から `_default` などの localization_key を探す
-//      -> 3. 見つかったキーをもう一回 yml(localizationMap) にぶつけて日本語訳にする
+// ご指定のフローを正確に再現する関数
+// 【フロー】yml(フォーカスID) -> ローカライズ(Get...Name取得) -> txt(defined_text) -> 末尾_defaultのキーを抽出 -> yml(再度探しに行く) -> 表示
 function resolveDynamicLoc(targetId) {
   if (!targetId) return "";
 
@@ -253,37 +250,48 @@ function resolveDynamicLoc(targetId) {
     cleanId = cleanId.slice(1, -1);
   }
 
-  // ステップ1: 直接 yml のキーとして存在するか確認
+  // 1. まず yml（localizationMap）にそのままのIDがあるか確認する
   if (localizationMap[cleanId]) {
     return localizationMap[cleanId];
   }
 
-  // ステップ2: 動的テキスト名（Get...Name）の推測または直接一致をチェック
-  let guessedDynamicName = cleanId;
-  if (!cleanId.startsWith('Get')) {
-    const pascalName = cleanId.toLowerCase().split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
-    guessedDynamicName = `Get${pascalName}Name`;
-  }
+  // 2. なければ、yml側から対応する値（例: "[GetFinishTheFiveYearPlanName]" など）を一度引いてみる
+  let dynamicLocKey = localizationMap[cleanId];
   
-  // txt側（scriptedLocMap）に動的テキストの定義があるか？
-  if (scriptedLocMap[guessedDynamicName]) {
-    // txtから抜き出した localization_key（例: SOV_finish_the_five_year_plan_default）を取得
-    const targetKeyFromTxt = scriptedLocMap[guessedDynamicName];
-    
-    // ステップ3: そのキーを yml の辞書で再度検索して日本語訳を返す
-    if (localizationMap[targetKeyFromTxt]) {
-      return localizationMap[targetKeyFromTxt];
+  // もし yml にキー自体がない、または値が登録されていない場合は、IDから直接 Get...Name の形式を推測する
+  if (!dynamicLocKey) {
+    if (cleanId.startsWith('Get')) {
+      dynamicLocKey = cleanId;
+    } else {
+      const pascalName = cleanId.toLowerCase().split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('');
+      dynamicLocKey = `Get${pascalName}Name`;
     }
+  } else {
+    // yml から取得した値が [GetFinishTheFiveYearPlanName] のようになっている場合、括弧を外す
+    if (dynamicLocKey.startsWith('[') && dynamicLocKey.endsWith(']')) {
+      dynamicLocKey = dynamicLocKey.slice(1, -1);
+    }
+  }
+
+  // 3. scripted_localisation（txt側）から、その動的テキスト名に一致するものを探し、末尾が `_default` の localization_key だけを抽出する
+  if (scriptedLocMap[dynamicLocKey]) {
+    const defaultKey = scriptedLocMap[dynamicLocKey]; // 内部で _default で終わるものだけを保持させています
     
-    //もしyml側にキーそのものが見つからない場合はキー名をフォールバックとして返す
-    return targetKeyFromTxt;
+    if (defaultKey) {
+      // 4. 抽出した末尾 _default のキーを、もう一度 yml（localizationMap）に探しに行く
+      if (localizationMap[defaultKey]) {
+        // 5. 見つかったローカライズを返す
+        return localizationMap[defaultKey];
+      }
+      return defaultKey; // ymlに見つからなければキー名をフォールバック
+    }
   }
 
   // どこにもヒットしない場合は元のIDを返す
   return targetId;
 }
 
-// ローカライズファイル（ymlおよびtxt）の読み込み・パース
+// ローカライズファイル（ymlおよびtxt）の読み込み・パース処理
 async function loadLocalisation() {
   try {
     const promises = localisationFiles.map(async (filename) => {
@@ -311,7 +319,6 @@ async function loadLocalisation() {
           
           const locName = nameMatch[1]; // 例: GetFinishTheFiveYearPlanName
           let defaultKey = "";
-          let firstKey = "";
           
           const textBlockMatches = body.matchAll(/text\s*=\s*\{([\s\S]*?)\}/g);
           for (const tb of textBlockMatches) {
@@ -320,16 +327,17 @@ async function loadLocalisation() {
             if (!keyMatch) continue;
 
             const foundKey = keyMatch[1];
-            if (!firstKey) firstKey = foundKey;
 
-            // _default で終わるもの、またはトリガー条件のないものを優先的に選ぶ
-            if (!tbBody.includes('trigger') || foundKey.endsWith('_default')) {
+            // ★要望通り：見つかった localization_key のうち、末尾が _default のものだけを厳密に抽出する
+            if (foundKey.endsWith('_default')) {
               defaultKey = foundKey;
+              break; // _default が見つかったら決定
             }
           }
           
-          // txtの name と、そこから辿るべき `_default` などのキーを紐付けて保存
-          scriptedLocMap[locName] = defaultKey || firstKey;
+          if (defaultKey) {
+            scriptedLocMap[locName] = defaultKey;
+          }
         }
       } else {
         // 通常の yml パース
@@ -343,7 +351,7 @@ async function loadLocalisation() {
       }
     });
 
-    console.log(`ローカライズ読み込み完了: yml ${Object.keys(localizationMap).length} 件, scripted_loc ${Object.keys(scriptedLocMap).length} 件`);
+    console.log(`ローカライズ読み込み完了: yml ${Object.keys(localizationMap).length} 件, scripted_loc _default抽出済み ${Object.keys(scriptedLocMap).length} 件`);
   } catch (e) {
     console.log("ローカライズファイルの読み込みエラー:", e);
   }
