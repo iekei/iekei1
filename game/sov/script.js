@@ -24,9 +24,13 @@ let focusDaysRemaining = 0;
 
 // ローカライズデータを保持する辞書
 let localizationMap = {};
+// 動的テキスト（scripted_localisation）の定義を保持するマップ
+let scriptedLocMap = {};
 
-// 取得したすべての yml ファイルのリスト
+// 取得したすべての yml / txt ファイルのリスト
 const localisationFiles = [
+  "scripted_localisation/00_scripted_localisation.txt",
+  "scripted_localisation/NSB_soviet_scripted_loc.txt",
   "Juno_bop_l_japanese.yml",
   "POL_equipment_l_japanese.yml",
   "SEA_characters_l_japanese.yml",
@@ -204,7 +208,7 @@ const localisationFiles = [
   "tank_modules_l_japanese.yml",
   "technology_sharing_l_japanese.yml",
   "terrain_l_japanese.yml",
-    "tfv_events_l_japanese.yml",
+  "tfv_events_l_japanese.yml",
   "theater_l_japanese.yml",
   "toa_characters_l_japanese.yml",
   "toa_decisions_l_japanese.yml",
@@ -236,30 +240,107 @@ const localisationFiles = [
   "wtt_ss_recruitment_l_japanese.yml"
 ];
 
-// すべての.ymlファイルを非同期で一括読み込みしてパースする関数（バージョン番号の有無両方に対応）
+// 現在の国家が共産主義かどうかを判定する関数（デフォルトはソ連なのでtrue）
+function isCurrentGovernmentCommunism() {
+  return true; 
+}
+
+// 動的テキスト（Get...Name）を解決して実際の翻訳文を返す関数
+function resolveDynamicLoc(rawTitle) {
+  if (!rawTitle) return "";
+
+  let locName = rawTitle.trim();
+  if (locName.startsWith('[') && locName.endsWith(']')) {
+    locName = locName.slice(1, -1);
+  }
+
+  if (scriptedLocMap[locName]) {
+    const rules = scriptedLocMap[locName];
+    const isCommunism = isCurrentGovernmentCommunism();
+
+    let targetKey = "";
+    for (const rule of rules) {
+      if (isCommunism && rule.isCommunismOnly) {
+        targetKey = rule.key;
+        break;
+      }
+      if (!isCommunism && rule.isNotCommunism) {
+        targetKey = rule.key;
+        break;
+      }
+      if (rule.isDefault && !targetKey) {
+        targetKey = rule.key;
+      }
+    }
+
+    if (targetKey && localizationMap[targetKey]) {
+      return localizationMap[targetKey];
+    }
+  }
+
+  return localizationMap[rawTitle] || rawTitle;
+}
+
+// すべてのローカライズファイル（ymlおよびtxt）を非同期で一括読み込みしてパースする関数
 async function loadLocalisation() {
   try {
     const promises = localisationFiles.map(async (filename) => {
-      const res = await fetch(`../data/localisation/japanese/${filename}`);
-      if (!res.ok) return "";
-      return await res.text();
+      let url = `../data/localisation/japanese/${filename}`;
+      if (filename.includes('scripted_localisation/')) {
+        url = `../data/localisation/${filename}`;
+      }
+      const res = await fetch(url);
+      if (!res.ok) return { text: "", isTxt: filename.endsWith('.txt') };
+      return { text: await res.text(), isTxt: filename.endsWith('.txt') };
     });
 
-    const texts = await Promise.all(promises);
+    const results = await Promise.all(promises);
 
-    texts.forEach(text => {
+    results.forEach(({ text, isTxt }) => {
       if (!text) return;
-      const lines = text.split('\n');
-      lines.forEach(line => {
-        // 例: SOV_heavy_industry:0 "日本語" や SOV_heavy_industry: "日本語"、または数字なしに対応
-        const match = line.match(/^\s*([A-Za-z0-9_]+)(?::\d*)?\s+"(.*)"/);
-        if (match) {
-          localizationMap[match[1]] = match[2];
+
+      if (isTxt) {
+        // defined_text ブロックのパース処理
+        const definedTextMatches = text.matchAll(/defined_text\s*=\s*\{([\s\S]*?)\}/g);
+        for (const dtMatch of definedTextMatches) {
+          const body = dtMatch[1];
+          const nameMatch = body.match(/name\s*=\s*([A-Za-z0-9_]+)/);
+          if (!nameMatch) continue;
+          
+          const locName = nameMatch[1];
+          const texts = [];
+          
+          const textBlockMatches = body.matchAll(/text\s*=\s*\{([\s\S]*?)\}/g);
+          for (const tb of textBlockMatches) {
+            const tbBody = tb[1];
+            const keyMatch = tbBody.match(/localization_key\s*=\s*([A-Za-z0-9_]+)/);
+            if (!keyMatch) continue;
+
+            const hasCommunism = tbBody.includes('communism') && !tbBody.includes('NOT');
+            const hasNotCommunism = tbBody.includes('NOT') && tbBody.includes('communism');
+
+            texts.push({
+              key: keyMatch[1],
+              isCommunismOnly: hasCommunism,
+              isNotCommunism: hasNotCommunism,
+              isDefault: !tbBody.includes('trigger')
+            });
+          }
+          scriptedLocMap[locName] = texts;
         }
-      });
+      } else {
+        // 通常のymlパース
+        const lines = text.split('\n');
+        lines.forEach(line => {
+          const match = line.match(/^\s*([A-Za-z0-9_]+)(?::\d*)?\s+"(.*)"/);
+          if (match) {
+            localizationMap[match[1]] = match[2];
+          }
+        });
+      }
     });
 
-    console.log(`全ローカライズ読み込み完了: 合計 ${Object.keys(localizationMap).length} 件`);
+    console.log(`全ローカライズ読み込み完了: 通常 ${Object.keys(localizationMap).length} 件, 動的テキスト ${Object.keys(scriptedLocMap).length} 件`);
   } catch (e) {
     console.log("ローカライズファイルの読み込みエラー:", e);
   }
@@ -313,7 +394,8 @@ function setGameSpeed(speed) {
 // 2. NF進行 & 排他ロック・報酬適用
 // ==========================================
 function startFocus(nf) {
-  const title = localizationMap[nf.id] || nf.title || nf.id;
+  const rawTitle = localizationMap[nf.id] || nf.title || nf.id;
+  const title = resolveDynamicLoc(rawTitle);
   if (activeFocus) {
     setLogText(`【変更】国家方針を「${title}」に変更しました。`);
   } else {
@@ -338,7 +420,8 @@ function completeActiveFocus() {
 
   applyFocusEffects(completedNf.effect);
 
-  const title = localizationMap[completedNf.id] || completedNf.title || completedNf.id;
+  const rawTitle = localizationMap[completedNf.id] || completedNf.title || completedNf.id;
+  const title = resolveDynamicLoc(rawTitle);
   const effectClean = completedNf.effect ? completedNf.effect.replace(/\n/g, ' / ') : '特記事項なし';
   setLogText(`🎉【国家方針完了】「${title}」を達成！ 報酬: [ ${effectClean} ]`);
 
@@ -450,9 +533,10 @@ function renderTree() {
       ? `<div class="focus-progress">残り ${focusDaysRemaining}日</div>` 
       : `<div class="focus-cost">${nf.cost || 70}日</div>`;
 
-    // 表示名の決定（yml、jsonのtitle、またはIDをきれいに成形した文字列）
-    let displayName = localizationMap[nf.id] || nf.title;
-    if (!displayName) {
+    // 表示名の決定（動的テキストの解決を含む）
+    let rawTitle = localizationMap[nf.id] || nf.title;
+    let displayName = resolveDynamicLoc(rawTitle);
+    if (!displayName || (displayName === rawTitle && rawTitle.includes('Get'))) {
       displayName = nf.id.replace(/_/g, ' ');
     }
     
@@ -620,8 +704,9 @@ function showTooltip(e, nf) {
   const isActive = activeFocus && activeFocus.id === nf.id;
   const isLocked = lockedFocuses.has(nf.id) || !isUnlocked(nf);
   
-  let titleName = localizationMap[nf.id] || nf.title;
-  if (!titleName) {
+  let rawTitle = localizationMap[nf.id] || nf.title;
+  let titleName = resolveDynamicLoc(rawTitle);
+  if (!titleName || (titleName === rawTitle && rawTitle.includes('Get'))) {
     titleName = nf.id.replace(/_/g, ' ');
   }
 
@@ -656,7 +741,7 @@ document.querySelectorAll('.speed-btn[data-speed]').forEach(btn => {
 });
 
 async function init() {
-  // 1. すべてのローカライズファイル群を読み込む
+  // 1. すべてのローカライズファイル群（yml & txt）を読み込む
   await loadLocalisation();
 
   let rawData = [];
@@ -680,10 +765,10 @@ async function init() {
     ];
   }
 
-  // ★ soviet.json の各データ（国家方針）に localizationMap の日本語を自動適用する
+  // ★ soviet.json の各データに localizationMap / 動的テキストの日本語を自動適用する
   rawData.forEach(nf => {
-    if (localizationMap[nf.id]) {
-      nf.title = localizationMap[nf.id];
+    if (localizationMap[nf.id] || nf.id.startsWith('Get')) {
+      nf.title = resolveDynamicLoc(localizationMap[nf.id] || nf.id);
     }
     const effectKey = `${nf.id}_effect`;
     if (localizationMap[effectKey]) {
