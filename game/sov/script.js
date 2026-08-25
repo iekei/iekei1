@@ -315,9 +315,6 @@ async function loadLocalisation() {
     });
 
     const results = await Promise.all(promises);
-    // (以降のパース処理はそのまま)
-
-    const results = await Promise.all(promises);
 
     results.forEach(({ text, isTxt }) => {
       if (!text) return;
