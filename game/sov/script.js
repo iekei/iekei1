@@ -243,18 +243,38 @@ const localisationFiles = [
 
 /**
  * YML形式のローカライズテキストをパースする
+ * 複数の形式に対応：
+ * - KEY:0 "value"
+ * - KEY: "value"
+ * - KEY "value"
  * @param {string} text - YMLファイルの内容
  */
 function parseYmlLocalization(text) {
   const lines = text.split('\n');
   lines.forEach(line => {
-    // YML形式: "KEY:0" "translation" または KEY:0 "translation"
-    const match = line.match(/^\s*([A-Za-z0-9_]+)(?::\d*)?\s*[:"]\s*(.*)["']?\s*$/);
-    if (match) {
-      const key = match[1].trim();
-      const value = match[2].trim().replace(/^["']|["']$/g, '');
-      if (key && value) {
-        localizationMap[key] = value;
+    // 空行やコメント行をスキップ
+    if (!line.trim() || line.trim().startsWith('#')) {
+      return;
+    }
+
+    // YML形式の複数パターンに対応
+    // パターン1: KEY:0 "value" または KEY:数字 "value"
+    // パターン2: KEY: "value"
+    // パターン3: KEY "value"
+    const patterns = [
+      /^\s*([A-Za-z0-9_]+)(?::\d+)?\s*:\s*"(.+)"/, // KEY:0 "value" または KEY: "value"
+      /^\s*([A-Za-z0-9_]+)(?::\d+)?\s+"(.+)"/      // KEY:0 "value" (コロンなし)
+    ];
+
+    for (const pattern of patterns) {
+      const match = line.match(pattern);
+      if (match) {
+        const key = match[1].trim();
+        const value = match[2].trim();
+        if (key && value) {
+          localizationMap[key] = value;
+          break; // マッチしたらループを抜ける
+        }
       }
     }
   });
@@ -308,29 +328,32 @@ function parseScriptedLocalization(text) {
 }
 
 /**
- * 動的ローカライズ解決関数（2段階解決）
+ * 動的ローカライズ解決関数（3段階解決）
  * focus IDから実際の表示名を取得する
  * 
  * ステップ:
  * 1. 直接的なキーを localizationMap で探す
  * 2. 共通サフィックス（_name, _title等）を試す
- * 3. scriptedLocMap で GetXXXName 形式を探す
- * 4. scriptedLocMap で見つかったら、その _default キーを localizationMap で解決
+ * 3. focus IDをPascalCase変換して GetXXXName 形式で scriptedLocMap を探す
+ * 4. scriptedLocMap で見つかった _default キーを localizationMap で解決
  * 5. フォールバック: 元のIDを返す
  * 
- * @param {string} targetId - focus ID
+ * @param {string} focusId - focus ID (例: SOV_raskovas_aviation_group)
  * @returns {string} - ローカライズされたテキスト
  */
-function resolveDynamicLoc(targetId) {
-  if (!targetId) return "";
+function resolveDynamicLoc(focusId) {
+  if (!focusId) return "";
 
-  let cleanId = targetId.trim();
+  let cleanId = focusId.trim();
   if (cleanId.startsWith('[') && cleanId.endsWith(']')) {
     cleanId = cleanId.slice(1, -1);
   }
 
+  console.log(`\n[resolveDynamicLoc] START: ${cleanId}`);
+
   // ステップ1: 直接的なキーを探す
   if (localizationMap[cleanId]) {
+    console.log(`[Step1] Direct key found: ${cleanId} => "${localizationMap[cleanId]}"`);
     return localizationMap[cleanId];
   }
 
@@ -342,55 +365,49 @@ function resolveDynamicLoc(targetId) {
     `HOI4_${cleanId}`
   ];
   for (const k of subKeys) {
-    if (localizationMap[k]) return localizationMap[k];
+    if (localizationMap[k]) {
+      console.log(`[Step2] Suffix key found: ${k} => "${localizationMap[k]}"`);
+      return localizationMap[k];
+    }
   }
 
-  // ステップ3 & 4: 動的テキスト（scripted_localisation）を確認
-  // scriptedLocMapで GetXXXName 形式のキーを探す
-  let dynamicLocKey = null;
+  // ステップ3: PascalCase変換して GetXXXName 形式を生成
+  const pascalName = cleanId
+    .toLowerCase()
+    .split('_')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join('');
+  const dynamicLocKey = `Get${pascalName}Name`;
+  
+  console.log(`[Step3] Generated dynamic key: ${dynamicLocKey}`);
 
-  // scriptedLocMapで直接マッピングされているか確認
-  if (scriptedLocMap[cleanId]) {
-    const defaultKey = scriptedLocMap[cleanId];
-    console.log(`[resolveDynamicLoc] ${cleanId} found in scriptedLocMap => ${defaultKey}`);
-    // ここで _default キーを localizationMap で解決
+  // ステップ4: scriptedLocMap で動的キーを探す
+  if (scriptedLocMap[dynamicLocKey]) {
+    const defaultKey = scriptedLocMap[dynamicLocKey];
+    console.log(`[Step4a] Found in scriptedLocMap: ${dynamicLocKey} => ${defaultKey}`);
+    
+    // ステップ4b: _default キーを localizationMap で解決（最終翻訳）
     if (localizationMap[defaultKey]) {
-      console.log(`[resolveDynamicLoc] ${defaultKey} resolved to: ${localizationMap[defaultKey]}`);
-      return localizationMap[defaultKey];
+      const finalTranslation = localizationMap[defaultKey];
+      console.log(`[Step4b] Resolved _default key: ${defaultKey} => "${finalTranslation}"`);
+      return finalTranslation;
+    } else {
+      console.warn(`[Step4b] WARNING: ${defaultKey} not found in localizationMap`);
     }
   } else {
-    // PascalCase変換してGetXXXName形式を生成
-    if (cleanId.startsWith('Get')) {
-      dynamicLocKey = cleanId;
-    } else {
-      const pascalName = cleanId
-        .toLowerCase()
-        .split('_')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-        .join('');
-      dynamicLocKey = `Get${pascalName}Name`;
-    }
-
-    // 生成した GetXXXName を scriptedLocMap で探す
-    if (scriptedLocMap[dynamicLocKey]) {
-      const defaultKey = scriptedLocMap[dynamicLocKey];
-      console.log(`[resolveDynamicLoc] Generated ${dynamicLocKey} found in scriptedLocMap => ${defaultKey}`);
-      // ここで _default キーを localizationMap で解決
-      if (localizationMap[defaultKey]) {
-        console.log(`[resolveDynamicLoc] ${defaultKey} resolved to: ${localizationMap[defaultKey]}`);
-        return localizationMap[defaultKey];
-      }
-    }
+    console.log(`[Step4a] NOT found in scriptedLocMap: ${dynamicLocKey}`);
   }
 
   // ステップ5: _default 形式を直接試す
   const defaultKeyVariant = `${cleanId}_default`;
   if (localizationMap[defaultKeyVariant]) {
+    console.log(`[Step5] Direct _default key: ${defaultKeyVariant} => "${localizationMap[defaultKeyVariant]}"`);
     return localizationMap[defaultKeyVariant];
   }
 
   // フォールバック：元のIDを返す
-  return targetId;
+  console.warn(`[FALLBACK] Could not resolve: ${focusId}`);
+  return focusId;
 }
 
 function setLogText(text) {
@@ -442,7 +459,8 @@ async function loadLocalisation() {
     const debugMsg = `読込成功: txt ${successTxtCount}件 / yml ${successYmlCount}件 | Scripted Loc: ${Object.keys(scriptedLocMap).length}件 | Localization: ${Object.keys(localizationMap).length}件`;
     setLogText(debugMsg);
     console.log(debugMsg);
-    console.log("Scripted Loc Map:", scriptedLocMap);
+    console.log("Sample Scripted Loc entries:", Object.entries(scriptedLocMap).slice(0, 5));
+    console.log("Sample Localization entries:", Object.entries(localizationMap).slice(0, 5));
 
   } catch (e) {
     setLogText("ローカライズ読み込み致命的エラー: " + e.message);
@@ -856,7 +874,7 @@ async function init() {
 
   // focus IDのローカライズ処理
   rawData.forEach(nf => {
-    // resolveDynamicLoc で動的ローカライズを試す（2段階解決含む）
+    // resolveDynamicLoc で3段階ローカライズを試す
     const resolvedTitle = resolveDynamicLoc(nf.id);
     
     // 解決できた場合は使用
