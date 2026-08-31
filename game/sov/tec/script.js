@@ -15,9 +15,10 @@ let gameDate = localStorage.getItem('gameDate') ? new Date(localStorage.getItem(
 let gameSpeed = localStorage.getItem('gameSpeed') ? parseInt(localStorage.getItem('gameSpeed'), 10) : 0;
 
 let isDragging = false, startX, startY, translateX = 0, translateY = 0;
+let gameTimer = null; // タイマー管理用
 
 // ==========================================
-// 1. 親画面（window.opener）連携ヘパー関数
+// 1. 親画面（window.opener）連携ヘルパー関数・受信インターフェース
 // ==========================================
 /**
  * 親画面（メイン画面）が開かれているか判定
@@ -45,9 +46,39 @@ function syncWithParentDate() {
       gameSpeed = window.opener.gameSpeed;
     }
     updateCalendarUI();
+    updateSpeedButtonsUI();
   }
 }
 
+/**
+ * 【親画面からの呼び出し用】親画面で日付が進んだ際・変更された際に直接呼び出す関数
+ */
+window.onParentDateChanged = function(newDateStr) {
+  if (newDateStr) {
+    gameDate = new Date(newDateStr);
+  } else if (isParentAvailable() && window.opener.currentDate) {
+    gameDate = new Date(window.opener.currentDate);
+  }
+  updateCalendarUI();
+  localStorage.setItem('gameDate', gameDate.toISOString());
+  
+  // 日付更新に伴う研究進捗処理（親画面の1日進行イベントで同期する場合）
+  processResearchTick();
+};
+
+/**
+ * 【親画面からの呼び出し用】親画面でゲームスピードが変更された際に呼び出す関数
+ */
+window.onParentSpeedChanged = function(newSpeed) {
+  gameSpeed = parseInt(newSpeed, 10) || 0;
+  localStorage.setItem('gameSpeed', gameSpeed);
+  updateSpeedButtonsUI();
+  runTick();
+};
+
+// ==========================================
+// 2. 初期化処理
+// ==========================================
 document.addEventListener('DOMContentLoaded', () => {
   syncWithParentDate();
   initTabs();
@@ -85,66 +116,73 @@ async function loadAllTechData() {
   renderTree();
 }
 
-function initClock() {
+function updateSpeedButtonsUI() {
   document.querySelectorAll('.speed-btn').forEach(btn => {
+    btn.classList.remove('active');
     const speed = parseInt(btn.getAttribute('data-speed'), 10);
     if (speed === gameSpeed) {
       btn.classList.add('active');
     } else if (gameSpeed === 0 && btn.id === 'btn-pause') {
       btn.classList.add('active');
     }
+  });
+}
 
+function processResearchTick() {
+  researchSlots.forEach(slot => {
+    if (slot.tech && slot.remaining > 0) {
+      slot.remaining -= 1;
+      if (slot.remaining <= 0) completeResearch(slot);
+      else updateSlotDisplay(slot);
+    }
+  });
+
+  // 科学者モーダルの進捗UIをリアルタイム更新
+  if (typeof updateScienceProgressUI === 'function') {
+    updateScienceProgressUI();
+  }
+}
+
+function runTick() {
+  if (gameTimer) clearInterval(gameTimer);
+  const speedIntervals = { 1: 2000, 2: 1200, 3: 700, 4: 350, 5: 120 };
+
+  if (gameSpeed > 0) {
+    gameTimer = setInterval(() => {
+      // 親画面が存在していれば日付を同期取得
+      if (isParentAvailable() && window.opener.currentDate) {
+        gameDate = new Date(window.opener.currentDate);
+      } else {
+        gameDate.setDate(gameDate.getDate() + 1);
+      }
+
+      updateCalendarUI();
+      localStorage.setItem('gameDate', gameDate.toISOString());
+
+      processResearchTick();
+
+    }, speedIntervals[gameSpeed] || 1000);
+  }
+}
+
+function initClock() {
+  document.querySelectorAll('.speed-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       gameSpeed = parseInt(e.target.getAttribute('data-speed'), 10) || 0;
       localStorage.setItem('gameSpeed', gameSpeed);
-      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
-      e.target.classList.add('active');
+      updateSpeedButtonsUI();
 
       // 親画面の速度変更関数が存在すれば同期実行
       if (isParentAvailable() && typeof window.opener.setGameSpeed === 'function') {
         window.opener.setGameSpeed(gameSpeed);
       }
+
+      runTick();
     });
   });
 
   updateCalendarUI();
-
-  const speedIntervals = { 1: 2000, 2: 1200, 3: 700, 4: 350, 5: 120 };
-  let gameTimer = null;
-  function runTick() {
-    if (gameTimer) clearInterval(gameTimer);
-    if (gameSpeed > 0) {
-      gameTimer = setInterval(() => {
-        // 親画面が存在していれば日付を同期取得
-        if (isParentAvailable() && window.opener.currentDate) {
-          gameDate = new Date(window.opener.currentDate);
-        } else {
-          gameDate.setDate(gameDate.getDate() + 1);
-        }
-
-        updateCalendarUI();
-        localStorage.setItem('gameDate', gameDate.toISOString());
-
-        researchSlots.forEach(slot => {
-          if (slot.tech && slot.remaining > 0) {
-            slot.remaining -= 1;
-            if (slot.remaining <= 0) completeResearch(slot);
-            else updateSlotDisplay(slot);
-          }
-        });
-
-        // 科学者モーダルの進捗UIをリアルタイム更新
-        if (typeof updateScienceProgressUI === 'function') {
-          updateScienceProgressUI();
-        }
-
-      }, speedIntervals[gameSpeed] || 1000);
-    }
-  }
-
-  document.querySelectorAll('.speed-btn').forEach(btn => {
-    btn.addEventListener('click', () => runTick());
-  });
+  updateSpeedButtonsUI();
 
   if (gameSpeed > 0) {
     runTick();
