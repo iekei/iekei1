@@ -578,14 +578,15 @@ function setGameSpeed(speed) {
 // ==========================================
 function startFocus(nf) {
   const title = resolveDynamicLoc(nf.id);
+  const costDays = nf.cost || 490;
   if (activeFocus) {
     setLogText(`【変更】国家方針を「${title}」に変更しました。`);
   } else {
-    setLogText(`【国家方針開始】「${title}」の実行を開始。（必要日数: ${nf.cost || 70}日）`);
+    setLogText(`【国家方針開始】「${title}」の実行を開始。（必要日数: ${costDays}日）`);
   }
 
   activeFocus = nf;
-  focusDaysRemaining = nf.cost || 70;
+  focusDaysRemaining = costDays;
   renderTree();
 }
 
@@ -706,7 +707,7 @@ function renderTree() {
     const checkMarkHtml = isCompleted ? `<div class="check-mark">✔</div>` : '';
     const progressTextHtml = isActive 
       ? `<div class="focus-progress">残り ${focusDaysRemaining}日</div>` 
-      : `<div class="focus-cost">${nf.cost || 70}日</div>`;
+      : `<div class="focus-cost">${nf.cost || 490}日</div>`;
 
     let displayName = resolveDynamicLoc(nf.id);
     if (!displayName || displayName === nf.id) {
@@ -887,7 +888,7 @@ function showTooltip(e, nf) {
   const expandedEffect = expandDynamicTags(rawEffect);
 
   document.getElementById('tooltip-title').textContent = `${titleName} ${status}`;
-  document.getElementById('tooltip-time').textContent = `⏱️ 必要時間: ${isActive ? focusDaysRemaining + "日 (進行中)" : (nf.cost || 70) + "日"}`;
+  document.getElementById('tooltip-time').textContent = `⏱️ 必要時間: ${isActive ? focusDaysRemaining + "日 (進行中)" : (nf.cost || 490) + "日"}`;
   document.getElementById('tooltip-effect').textContent = expandedEffect;
   
   tooltip.classList.remove('hidden');
@@ -936,6 +937,12 @@ async function init() {
       { id: "SOV_stalin", title: "スターリン主義", relative_position_id: "SOV_1936", offsetX: -1, offsetY: 1, cost: 70, prerequisites: ["SOV_1936"], effect: "安定度 +10" }
     ];
   }
+
+  // ★ 国家方針（NF）の所要時間を7倍に一括補正
+  rawData.forEach(nf => {
+    const baseCost = nf.cost || 70;
+    nf.cost = baseCost * 7;
+  });
 
   rawData.forEach(nf => {
     const resolvedTitle = resolveDynamicLoc(nf.id);
