@@ -21,8 +21,12 @@ let gameDate = localStorage.getItem('gameDate') ? new Date(localStorage.getItem(
 let gameSpeed = localStorage.getItem('gameSpeed') ? parseInt(localStorage.getItem('gameSpeed'), 10) : 0;
 
 // ==========================================
-// 1. 親画面（window.opener）連携ヘルパー関数
+// 1. 同期・親画面（window.opener）連携機能
 // ==========================================
+
+// BroadcastChannel によるウインドウ/タブ間同期チャンネル
+const syncChannel = new BroadcastChannel('game_sync_channel');
+
 /**
  * 親画面（メイン画面）が開かれているか判定
  */
@@ -48,12 +52,22 @@ function syncWithParentDate() {
     if (typeof window.opener.gameSpeed !== 'undefined') {
       gameSpeed = window.opener.gameSpeed;
     }
-    updateCalendarUI();
+  } else {
+    const savedDateStr = localStorage.getItem('gameDate');
+    if (savedDateStr) {
+      gameDate = new Date(savedDateStr);
+    }
+    const savedSpeed = localStorage.getItem('gameSpeed');
+    if (savedSpeed !== null) {
+      gameSpeed = parseInt(savedSpeed, 10);
+    }
   }
+  updateCalendarUI();
+  updateSpeedUI();
 }
 
 /**
- * 親画面からの直接呼び出し・再描画用グローバル関数
+ * 全体のデータと表示を最新化する（外部からの同期用）
  */
 window.refreshProductionView = function() {
   completedTechs = JSON.parse(localStorage.getItem('completedTechs') || '[]');
@@ -63,6 +77,26 @@ window.refreshProductionView = function() {
   renderProductionView();
 };
 
+/**
+ * 親画面や他のコンポーネントにデータ変更を通知する
+ */
+function notifyDataChange(type = 'SYNC_PRODUCTION') {
+  // LocalStorageに最新状態を保存
+  saveProductionData();
+
+  // 1. postMessage で親画面に通知
+  if (isParentAvailable()) {
+    window.opener.postMessage({ type: type }, '*');
+  }
+
+  // 2. BroadcastChannel で他のタブ/ウインドウに通知
+  syncChannel.postMessage({ type: type, timestamp: Date.now() });
+}
+
+// ==========================================
+// 2. 初期化処理
+// ==========================================
+
 document.addEventListener('DOMContentLoaded', async () => {
   syncWithParentDate();
   await loadAllTechsForProduction();
@@ -71,20 +105,28 @@ document.addEventListener('DOMContentLoaded', async () => {
   checkAllLinesShortage(); // 起動時にも資源不足をチェック
   renderProductionView();
 
-  // 別タブ/親画面での LocalStorage 更新イベントを監視
+  // A. LocalStorage 更新イベントの監視
   window.addEventListener('storage', (e) => {
-    if (e.key === 'completedTechs' || e.key === 'resources' || e.key === 'productionLines') {
+    if (['completedTechs', 'resources', 'productionLines', 'gameDate', 'gameSpeed'].includes(e.key)) {
       window.refreshProductionView();
     }
   });
 
-  // postMessage 経由の親画面命令受信処理
+  // B. postMessage 経由の受信処理
   window.addEventListener('message', (event) => {
-    if (event.data && event.data.type === 'SYNC_PRODUCTION') {
+    if (event.data && (event.data.type === 'SYNC_PRODUCTION' || event.data.type === 'SYNC_ALL')) {
       window.refreshProductionView();
     }
   });
 
+  // C. BroadcastChannel 経由の受信処理
+  syncChannel.onmessage = (event) => {
+    if (event.data && (event.data.type === 'SYNC_PRODUCTION' || event.data.type === 'SYNC_ALL')) {
+      window.refreshProductionView();
+    }
+  };
+
+  // 研究完了データなどの定期差分チェックポーリング
   setInterval(() => {
     const latestTechs = JSON.parse(localStorage.getItem('completedTechs') || '[]');
     if (JSON.stringify(latestTechs) !== JSON.stringify(completedTechs)) {
@@ -126,6 +168,10 @@ function saveProductionData() {
   localStorage.setItem('resources', JSON.stringify(resources));
 }
 
+// ==========================================
+// 3. 描画・ビュー制御
+// ==========================================
+
 function renderProductionView() {
   checkAllLinesShortage();
   renderAvailableTechs();
@@ -134,7 +180,6 @@ function renderProductionView() {
   updateTotalStatsSummary();
 }
 
-// 各ラインの資源が足りているかを事前に判定する関数
 function checkAllLinesShortage() {
   productionLines.forEach(line => {
     const tech = techDataAll[line.techId];
@@ -155,7 +200,6 @@ function checkAllLinesShortage() {
   });
 }
 
-// 装備ごとに適した資源と消費量（1工場・1日あたり）を自動割り当て
 function getTechResourceCost(tech) {
   const title = tech.title || '';
   const cat = tech.category;
@@ -169,7 +213,6 @@ function getTechResourceCost(tech) {
     } else if (title.includes('軽') || title.includes('偵察')) {
       return { 鋼材: 2, ゴム: 1, 石油: 1 };
     }
-    // 中戦車など標準
     return { 鋼材: 3, ゴム: 1, 石油: 1 };
   }
   if (cat === 'naval') {
@@ -181,7 +224,6 @@ function getTechResourceCost(tech) {
   if (cat === 'artillery') {
     return { 鋼材: 2, タングステン: 1 };
   }
-  // 歩兵装備など
   return { 鋼材: 1, 石炭: 1 };
 }
 
@@ -216,7 +258,6 @@ function renderAvailableTechs() {
     const baseDailyRate = getBaseDailyRate(tech);
     const resCost = getTechResourceCost(tech);
     
-    // 必要資源のアイコン付きHTML生成
     let costHtml = Object.entries(resCost).map(([resName, amt]) => {
       return `<span style="margin-right: 8px;"><img src="image/${resName}.png" class="res-icon-inline" alt="${resName}">${amt}</span>`;
     }).join('');
@@ -253,6 +294,10 @@ function getBaseDailyRate(tech) {
   return 5;
 }
 
+// ==========================================
+// 4. 生産ライン操作関数
+// ==========================================
+
 function startProductionLine(techId) {
   const tech = techDataAll[techId];
   if (!tech) return;
@@ -264,7 +309,8 @@ function startProductionLine(techId) {
     producedCount: 0,
     isShortage: false
   });
-  saveProductionData();
+
+  notifyDataChange('SYNC_PRODUCTION');
   renderProductionView();
 
   sendLogToParent(`⚙️【生産開始】「${tech.title}」の軍需生産ラインを割り当てました（初期: 1工場）。`);
@@ -276,7 +322,8 @@ function adjustFactories(lineId, delta) {
   if (line.factories + delta < 1) return;
 
   line.factories += delta;
-  saveProductionData();
+
+  notifyDataChange('SYNC_PRODUCTION');
   renderProductionView();
 
   const tech = techDataAll[line.techId];
@@ -289,7 +336,8 @@ function removeLine(lineId) {
   const tech = line ? techDataAll[line.techId] : null;
 
   productionLines = productionLines.filter(l => l.id !== lineId);
-  saveProductionData();
+
+  notifyDataChange('SYNC_PRODUCTION');
   renderProductionView();
 
   if (tech) {
@@ -327,7 +375,6 @@ function renderProductionLines() {
       return `<span style="margin-right: 6px;"><img src="image/${resName}.png" class="res-icon-inline" alt="${resName}">${amt * line.factories}</span>`;
     }).join('');
 
-    // 資源不足時の表示変更
     let statusText = `生産ストック数: <b style="color: #3fb950; font-size: 15px;">${line.producedCount}</b> 個`;
     if (line.isShortage) {
       statusText = `<span style="color: #f85149; font-weight: bold;">⚠️ 資源不足により生産不可</span>`;
@@ -461,27 +508,29 @@ function updateCalendarUI() {
   }
 }
 
-function initSharedClock() {
+function updateSpeedUI() {
   document.querySelectorAll('.speed-btn').forEach(btn => {
     const speed = parseInt(btn.getAttribute('data-speed'), 10);
-    if (speed === gameSpeed) {
-      btn.classList.add('active');
-    } else if (gameSpeed === 0 && btn.id === 'btn-pause') {
-      btn.classList.add('active');
-    }
+    btn.classList.toggle('active', speed === gameSpeed || (gameSpeed === 0 && btn.id === 'btn-pause'));
+  });
+}
 
+// ==========================================
+// 5. 時計・時間進行管理
+// ==========================================
+
+function initSharedClock() {
+  document.querySelectorAll('.speed-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       gameSpeed = parseInt(e.target.getAttribute('data-speed'), 10) || 0;
       localStorage.setItem('gameSpeed', gameSpeed);
+      updateSpeedUI();
 
-      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
-      e.target.classList.add('active');
-
-      // 親画面のスピードも同期変更
       if (isParentAvailable() && typeof window.opener.setGameSpeed === 'function') {
         window.opener.setGameSpeed(gameSpeed);
       }
 
+      notifyDataChange('SYNC_SPEED');
       runTick();
     });
   });
@@ -491,13 +540,13 @@ function initSharedClock() {
     pauseBtn.addEventListener('click', () => {
       gameSpeed = 0;
       localStorage.setItem('gameSpeed', 0);
-      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
-      pauseBtn.classList.add('active');
+      updateSpeedUI();
 
       if (isParentAvailable() && typeof window.opener.setGameSpeed === 'function') {
         window.opener.setGameSpeed(0);
       }
 
+      notifyDataChange('SYNC_SPEED');
       runTick();
     });
   }
@@ -514,7 +563,6 @@ function initSharedClock() {
     if (gameSpeed > 0) {
       const interval = speedIntervals[gameSpeed] || 1000;
       gameTimer = setInterval(() => {
-        // 親画面が開いていれば日付を親画面から最新同期
         if (isParentAvailable() && window.opener.currentDate) {
           gameDate = new Date(window.opener.currentDate);
         } else {
@@ -536,7 +584,6 @@ function initSharedClock() {
           const resCost = getTechResourceCost(tech);
           let canProduce = true;
 
-          // 工場数に応じた総消費量をチェック
           for (const [resName, costPerFac] of Object.entries(resCost)) {
             const totalNeeded = costPerFac * line.factories;
             if ((resources[resName] || 0) < totalNeeded) {
@@ -546,18 +593,15 @@ function initSharedClock() {
           }
 
           if (canProduce) {
-            // 資源を実際に消費する
             for (const [resName, costPerFac] of Object.entries(resCost)) {
               resources[resName] -= costPerFac * line.factories;
             }
             line.isShortage = false;
 
-            // 生産物をカウント
             const baseRate = getBaseDailyRate(tech);
             const dailyProduced = Math.floor(baseRate * line.factories);
             line.producedCount += dailyProduced;
           } else {
-            // 資源不足により生産不可（新たに不足した場合に親画面へ警告ログ）
             if (!line.isShortage) {
               sendLogToParent(`⚠️【資源不足】「${tech.title}」の生産が資源不足により停止しました。`);
             }
@@ -565,7 +609,7 @@ function initSharedClock() {
           }
         });
 
-        saveProductionData();
+        notifyDataChange('SYNC_PRODUCTION');
         renderProductionView();
       }, interval);
     }
