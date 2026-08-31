@@ -1,4 +1,23 @@
 // ==========================================
+// 0. BroadcastChannel 定義（メイン・サブ画面間連携）
+// ==========================================
+const gameChannel = new BroadcastChannel('game_sync_channel');
+
+// 他ウィンドウ／モーダル iframe からのメッセージ受信処理
+gameChannel.onmessage = (event) => {
+  const { type, data } = event.data || {};
+  
+  if (type === 'CLOSE_SUB_WINDOW') {
+    closeGameSubWindow();
+  } else if (type === 'UPDATE_STATS') {
+    if (data) {
+      Object.assign(gameStats, data);
+      updateStatusBarUI();
+    }
+  }
+};
+
+// ==========================================
 // 1. サブウィンドウモーダル表示システム（研究・生産）
 // ==========================================
 /**
