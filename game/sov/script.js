@@ -1,33 +1,38 @@
 // ==========================================
-// 1. サブウィンドウ表示システム（研究・生産）
+// 1. サブウィンドウモーダル表示システム（研究・生産）
 // ==========================================
 /**
- * 研究・生産画面をサブウィンドウで開く関数
+ * 研究・生産画面をサイト内モーダルで開く関数
  * @param {string} type - 'research' または 'production'
  */
 function openGameSubWindow(type) {
   let url = '';
-  let windowName = '';
 
   if (type === 'research') {
     url = 'tec/index.html';
-    windowName = 'ResearchWindow';
   } else if (type === 'production') {
     url = 'tec/p/production.html';
-    windowName = 'ProductionWindow';
   }
 
   if (url) {
-    const width = 1100;
-    const height = 750;
-    const left = (window.screen.width - width) / 2;
-    const top = (window.screen.height - height) / 2;
+    const overlay = document.getElementById('game-modal-overlay');
+    const iframe = document.getElementById('modal-iframe');
+    if (overlay && iframe) {
+      iframe.src = url;
+      overlay.classList.remove('hidden');
+    }
+  }
+}
 
-    window.open(
-      url,
-      windowName,
-      `width=${width},height=${height},top=${top},left=${left},resizable=yes,scrollbars=yes`
-    );
+/**
+ * モーダルを閉じる関数（バツボタンや子画面からの呼び出し用）
+ */
+function closeGameSubWindow() {
+  const overlay = document.getElementById('game-modal-overlay');
+  const iframe = document.getElementById('modal-iframe');
+  if (overlay && iframe) {
+    overlay.classList.add('hidden');
+    iframe.src = ''; // 読み込み解除
   }
 }
 
