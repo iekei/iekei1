@@ -12,6 +12,13 @@
       <div class="stat-item">安定度: <span id="val-stability">85 / 100</span></div>
       <div class="stat-item">戦争協力度: <span id="val-war-support">60 / 100</span></div>
       <div class="stat-item">攻撃性: <span id="val-aggression">42 / 100</span></div>
+      
+      <!-- 【追加】政治力の左側に配置されたボタン群 -->
+      <div class="nav-btn-group">
+        <button class="nav-btn" onclick="openGameSubWindow('research')">研究</button>
+        <button class="nav-btn" onclick="openGameSubWindow('production')">生産</button>
+      </div>
+
       <div class="stat-item">政治力: <span id="val-pp">120 / 100</span></div>
     </div>
 
@@ -51,18 +58,45 @@
 
   <script src="script.js"></script>
 
+  <!-- サブウィンドウ呼び出し関数 -->
+  <script>
+    function openGameSubWindow(type) {
+      let url = '';
+      let windowName = '';
+
+      // game/sov/index.html からの相対パス指定
+      if (type === 'research') {
+        url = 'tec/index.html';
+        windowName = 'ResearchWindow';
+      } else if (type === 'production') {
+        url = 'tec/p/production.html';
+        windowName = 'ProductionWindow';
+      }
+
+      if (url) {
+        const width = 1100;
+        const height = 750;
+        const left = (window.screen.width - width) / 2;
+        const top = (window.screen.height - height) / 2;
+
+        window.open(
+          url,
+          windowName,
+          `width=${width},height=${height},top=${top},left=${left},resizable=yes,scrollbars=yes`
+        );
+      }
+    }
+  </script>
+
   <!-- ▼ ここから追加した簡易デバッグスクリプト ▼ -->
   <script>
-    // ページの読み込み完了後、1.5秒待ってからローカライズの結合テスト結果をログエリアに強制的に出力する
     window.addEventListener('load', () => {
       setTimeout(() => {
-        const targetFocusId = "SOV_finish_the_five_year_plan"; // 例としてソ連の5ヵ年計画IDでテスト
+        const targetFocusId = "SOV_finish_the_five_year_plan";
         
-        // window側やscript.jsのグローバル変数にアクセスできるか確認
         const ymlCount = typeof localizationMap !== 'undefined' ? Object.keys(localizationMap).length : "不明(未定義)";
         const txtCount = typeof scriptedLocMap !== 'undefined' ? Object.keys(scriptedLocMap).length : "不明(未定義)";
         
-        // 実際の解決関数をテスト
         let resolvedName = "";
         if (typeof resolveDynamicLoc === 'function') {
           resolvedName = resolveDynamicLoc(targetFocusId);
@@ -70,7 +104,6 @@
           resolvedName = "resolveDynamicLoc関数が見つかりません";
         }
 
-        // 画面のログ欄（#typewriter-text）に結果を強制上書き表示
         const logTarget = document.getElementById("typewriter-text");
         if (logTarget) {
           logTarget.innerHTML = `<b style="color:yellow;">[デバッグ結果]</b> yml:${ymlCount}件 / txt:${txtCount}件 | 変換テスト(${targetFocusId}) ➔ <b>${resolvedName}</b>`;
@@ -78,7 +111,5 @@
       }, 1500);
     });
   </script>
-  <!-- ▲ ここまで追加 ▲ -->
-
 </body>
 </html>
