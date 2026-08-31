@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>ソ連国家方針</title>
+  <title>ソ連</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,7 +13,7 @@
       <div class="stat-item">戦争協力度: <span id="val-war-support">60 / 100</span></div>
       <div class="stat-item">攻撃性: <span id="val-aggression">42 / 100</span></div>
       <div class="stat-item">政治力: <span id="val-pp">120 / 100</span></div>
-            <div class="nav-btn-group">
+      <div class="nav-btn-group">
         <button class="nav-btn" onclick="openGameSubWindow('research')">研究</button>
         <button class="nav-btn" onclick="openGameSubWindow('production')">生産</button>
       </div>
@@ -53,39 +53,57 @@
     <div id="tooltip-effect"></div>
   </div>
 
+  <!-- サイト内完結用モーダル（ポップアップ） -->
+  <div id="game-modal-overlay" class="modal-overlay hidden">
+    <div class="modal-window">
+      <button id="modal-close-btn" class="modal-close-btn" onclick="closeGameSubWindow()">&times;</button>
+      <iframe id="modal-iframe" src="" frameborder="0"></iframe>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 
-  <!-- サブウィンドウ呼び出し関数 -->
+  <!-- サブウィンドウモーダル制御関数 -->
   <script>
     function openGameSubWindow(type) {
       let url = '';
-      let windowName = '';
 
       // game/sov/index.html からの相対パス指定
       if (type === 'research') {
         url = 'tec/index.html';
-        windowName = 'ResearchWindow';
       } else if (type === 'production') {
         url = 'tec/p/production.html';
-        windowName = 'ProductionWindow';
       }
 
       if (url) {
-        const width = 1100;
-        const height = 750;
-        const left = (window.screen.width - width) / 2;
-        const top = (window.screen.height - height) / 2;
-
-        window.open(
-          url,
-          windowName,
-          `width=${width},height=${height},top=${top},left=${left},resizable=yes,scrollbars=yes`
-        );
+        const overlay = document.getElementById('game-modal-overlay');
+        const iframe = document.getElementById('modal-iframe');
+        iframe.src = url;
+        overlay.classList.remove('hidden');
       }
     }
+
+    function closeGameSubWindow() {
+      const overlay = document.getElementById('game-modal-overlay');
+      const iframe = document.getElementById('modal-iframe');
+      overlay.classList.add('hidden');
+      iframe.src = ''; // 読み込み解除
+    }
+
+    // 背景オーバーレイのクリックで閉じる処理
+    document.addEventListener('DOMContentLoaded', () => {
+      const overlay = document.getElementById('game-modal-overlay');
+      if (overlay) {
+        overlay.addEventListener('click', (e) => {
+          if (e.target === overlay) {
+            closeGameSubWindow();
+          }
+        });
+      }
+    });
   </script>
 
-  <!-- ▼ ここから追加した簡易デバッグスクリプト ▼ -->
+  <!-- ▼ 簡易デバッグスクリプト ▼ -->
   <script>
     window.addEventListener('load', () => {
       setTimeout(() => {
