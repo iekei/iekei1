@@ -109,16 +109,16 @@ body {
   top: 0;
   left: 0;
   transform-origin: 0 0;
-  width: 15000px;
-  height: 15000px;
+  width: 50000px;
+  height: 50000px;
 }
 
 #svg-lines {
   position: absolute;
   top: 0;
   left: 0;
-  width: 15000px;
-  height: 15000px;
+  width: 50000px;
+  height: 50000px;
   pointer-events: none;
   z-index: 1;
 }
