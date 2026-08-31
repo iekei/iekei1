@@ -25,7 +25,7 @@ let focusDaysRemaining = 0;
 // ローカライズデータを保持する辞書
 let localizationMap = {};
 // 動的テキスト（scripted_localisation）の定義を保持するマップ
-// キー: scriptedLocName（GetXXX形式）、値: _default で終わるローカライズキー
+// キー: scriptedLocName（GetXXX形式）、値: _default または優先されるローカライズキー
 let scriptedLocMap = {};
 
 // 取得したすべての yml / txt ファイルのリスト
@@ -243,27 +243,17 @@ const localisationFiles = [
 
 /**
  * YML形式のローカライズテキストをパースする
- * 複数の形式に対応：
- * - KEY:0 "value"
- * - KEY: "value"
- * - KEY "value"
- * @param {string} text - YMLファイルの内容
  */
 function parseYmlLocalization(text) {
   const lines = text.split('\n');
   lines.forEach(line => {
-    // 空行やコメント行をスキップ
     if (!line.trim() || line.trim().startsWith('#')) {
       return;
     }
 
-    // YML形式の複数パターンに対応
-    // パターン1: KEY:0 "value" または KEY:数字 "value"
-    // パターン2: KEY: "value"
-    // パターン3: KEY "value"
     const patterns = [
-      /^\s*([A-Za-z0-9_]+)(?::\d+)?\s*:\s*"(.+)"/, // KEY:0 "value" または KEY: "value"
-      /^\s*([A-Za-z0-9_]+)(?::\d+)?\s+"(.+)"/      // KEY:0 "value" (コロンなし)
+      /^\s*([A-Za-z0-9_.-]+)(?::\d+)?\s*:\s*"(.+)"/,
+      /^\s*([A-Za-z0-9_.-]+)(?::\d+)?\s+"(.+)"/
     ];
 
     for (const pattern of patterns) {
@@ -273,7 +263,7 @@ function parseYmlLocalization(text) {
         const value = match[2].trim();
         if (key && value) {
           localizationMap[key] = value;
-          break; // マッチしたらループを抜ける
+          break;
         }
       }
     }
@@ -281,64 +271,129 @@ function parseYmlLocalization(text) {
 }
 
 /**
- * TXT形式（scripted_localisation）の動的テキスト定義をパースする
- * _default で終わるローカライズキーのみを抽出
+ * 【機能1】NSB_soviet_scripted_loc.txt 用のパーサー関数
+ * defined_text ブロック構造を解析して scriptedLocMap に登録する
  * @param {string} text - TXTファイルの内容
  */
-function parseScriptedLocalization(text) {
-  // defined_text = { ... } ブロックを抽出
-  const definedTextRegex = /defined_text\s*=\s*\{([\s\S]*?)\n\}/g;
+function parseNsbSovietScriptedLoc(text) {
+  // コメントを除去
+  const cleanText = text.replace(/#.*$/gm, '');
+
+  const definedTextRegex = /defined_text\s*=\s*\{/g;
   let match;
 
-  while ((match = definedTextRegex.exec(text)) !== null) {
-    const blockContent = match[1];
-    
-    // ブロック内の name = XXX を取得
+  while ((match = definedTextRegex.exec(cleanText)) !== null) {
+    let startIndex = match.index + match[0].length;
+    let braceCount = 1;
+    let endIndex = startIndex;
+
+    // 波括弧のネストをカウントして defined_text ブロック終端を特定
+    while (braceCount > 0 && endIndex < cleanText.length) {
+      const char = cleanText[endIndex];
+      if (char === '{') braceCount++;
+      else if (char === '}') braceCount--;
+      endIndex++;
+    }
+
+    const blockContent = cleanText.substring(startIndex, endIndex - 1);
+
+    // name = GetXXX の取得
     const nameMatch = blockContent.match(/name\s*=\s*([A-Za-z0-9_]+)/);
     if (!nameMatch) continue;
-    
+
     const scriptedLocName = nameMatch[1];
-    
-    // text = { ... } ブロックを検出
-    const textBlockRegex = /text\s*=\s*\{([\s\S]*?)\n\t\}/g;
-    let textMatch;
+    let selectedLocKey = null;
     let defaultLocKey = null;
 
-    while ((textMatch = textBlockRegex.exec(blockContent)) !== null) {
-      const textBlockContent = textMatch[1];
-      
-      // localization_key = XXX を検出
-      const locKeyMatch = textBlockContent.match(/localization_key\s*=\s*([A-Za-z0-9_]+)/);
-      if (!locKeyMatch) continue;
+    // text = { ... } の各要素を走査
+    const textBlockRegex = /text\s*=\s*\{/g;
+    let textMatch;
 
-      const locKey = locKeyMatch[1];
-      
-      // _default で終わるキーのみを採用
-      if (locKey.endsWith('_default')) {
-        defaultLocKey = locKey;
-        break; // _default を見つけたらループを抜ける
+    while ((textMatch = textBlockRegex.exec(blockContent)) !== null) {
+      let tStartIndex = textMatch.index + textMatch[0].length;
+      let tBraceCount = 1;
+      let tEndIndex = tStartIndex;
+
+      while (tBraceCount > 0 && tEndIndex < blockContent.length) {
+        const char = blockContent[tEndIndex];
+        if (char === '{') tBraceCount++;
+        else if (char === '}') tBraceCount--;
+        tEndIndex++;
+      }
+
+      const textBlockContent = blockContent.substring(tStartIndex, tEndIndex - 1);
+      const locKeyMatch = textBlockContent.match(/localization_key\s*=\s*([A-Za-z0-9_.-]+)/);
+
+      if (locKeyMatch) {
+        const locKey = locKeyMatch[1];
+        if (locKey.endsWith('_default')) {
+          defaultLocKey = locKey;
+        } else if (!selectedLocKey) {
+          selectedLocKey = locKey;
+        }
       }
     }
 
-    if (defaultLocKey) {
-      scriptedLocMap[scriptedLocName] = defaultLocKey;
-      console.log(`[Scripted Loc] ${scriptedLocName} => ${defaultLocKey}`);
+    // _default があれば優先、なければ先頭で見つかったキーを採用
+    const finalKey = defaultLocKey || selectedLocKey;
+    if (finalKey) {
+      scriptedLocMap[scriptedLocName] = finalKey;
+      console.log(`[NSB Scripted Loc] ${scriptedLocName} => ${finalKey}`);
     }
   }
 }
 
 /**
- * 動的ローカライズ解決関数（3段階解決）
- * focus IDから実際の表示名を取得する
- * 
- * ステップ:
- * 1. 直接的なキーを localizationMap で探す
- * 2. 共通サフィックス（_name, _title等）を試す
- * 3. focus IDをPascalCase変換して GetXXXName 形式で scriptedLocMap を探す
- * 4. scriptedLocMap で見つかった _default キーを localizationMap で解決
- * 5. フォールバック: 元のIDを返す
- * 
- * @param {string} focusId - focus ID (例: SOV_raskovas_aviation_group)
+ * 汎用 scripted_localisation パース用（既存ロジックと補完）
+ */
+function parseScriptedLocalization(text) {
+  parseNsbSovietScriptedLoc(text);
+}
+
+/**
+ * 【機能2】動的タグ [Get...] や [Root...] を展開・置換する関数
+ * @param {string} text - 置換対象のテキスト
+ * @param {number} depth - 再帰制限用の深さ
+ * @returns {string} - タグ置換後のテキスト
+ */
+function expandDynamicTags(text, depth = 0) {
+  if (!text || typeof text !== 'string' || depth > 5) return text;
+
+  let result = text;
+
+  // 1. [GetXXX] または [Root.GetXXX] 形式の動的タグ展開
+  const tagRegex = /\[(?:[A-Za-z0-9_]+\.)?([A-Za-z0-9_]+)\]/g;
+  result = result.replace(tagRegex, (fullMatch, tagName) => {
+    // scriptedLocMap から置換キーを取得
+    if (scriptedLocMap[tagName]) {
+      const targetLocKey = scriptedLocMap[tagName];
+      const translated = localizationMap[targetLocKey];
+      if (translated) {
+        return expandDynamicTags(translated, depth + 1);
+      }
+    }
+
+    // localizationMap に直で定義されているか検証
+    if (localizationMap[tagName]) {
+      return expandDynamicTags(localizationMap[tagName], depth + 1);
+    }
+
+    // 特殊な標準文言のフォールバック
+    if (tagName === 'GetRuler' || tagName === 'GetLeader') return '指導者';
+    if (tagName === 'GetName') return 'ソ連';
+
+    return fullMatch;
+  });
+
+  // 2. HOI4固有のカラーコード (§Y, §R, §G, §! 等) のクリーンアップ/HTML装飾
+  result = result.replace(/§[A-Z0-9!]/g, '');
+
+  return result;
+}
+
+/**
+ * 動的ローカライズ解決関数（3段階解決 + タグ展開）
+ * @param {string} focusId - focus ID
  * @returns {string} - ローカライズされたテキスト
  */
 function resolveDynamicLoc(focusId) {
@@ -353,8 +408,8 @@ function resolveDynamicLoc(focusId) {
 
   // ステップ1: 直接的なキーを探す
   if (localizationMap[cleanId]) {
-    console.log(`[Step1] Direct key found: ${cleanId} => "${localizationMap[cleanId]}"`);
-    return localizationMap[cleanId];
+    console.log(`[Step1] Direct key found: ${cleanId}`);
+    return expandDynamicTags(localizationMap[cleanId]);
   }
 
   // ステップ2: 共通のサフィックスバリエーションを試す
@@ -366,8 +421,8 @@ function resolveDynamicLoc(focusId) {
   ];
   for (const k of subKeys) {
     if (localizationMap[k]) {
-      console.log(`[Step2] Suffix key found: ${k} => "${localizationMap[k]}"`);
-      return localizationMap[k];
+      console.log(`[Step2] Suffix key found: ${k}`);
+      return expandDynamicTags(localizationMap[k]);
     }
   }
 
@@ -378,19 +433,18 @@ function resolveDynamicLoc(focusId) {
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join('');
   const dynamicLocKey = `Get${pascalName}Name`;
-  
+
   console.log(`[Step3] Generated dynamic key: ${dynamicLocKey}`);
 
   // ステップ4: scriptedLocMap で動的キーを探す
   if (scriptedLocMap[dynamicLocKey]) {
     const defaultKey = scriptedLocMap[dynamicLocKey];
     console.log(`[Step4a] Found in scriptedLocMap: ${dynamicLocKey} => ${defaultKey}`);
-    
-    // ステップ4b: _default キーを localizationMap で解決（最終翻訳）
+
     if (localizationMap[defaultKey]) {
       const finalTranslation = localizationMap[defaultKey];
-      console.log(`[Step4b] Resolved _default key: ${defaultKey} => "${finalTranslation}"`);
-      return finalTranslation;
+      console.log(`[Step4b] Resolved _default key: ${defaultKey}`);
+      return expandDynamicTags(finalTranslation);
     } else {
       console.warn(`[Step4b] WARNING: ${defaultKey} not found in localizationMap`);
     }
@@ -401,8 +455,8 @@ function resolveDynamicLoc(focusId) {
   // ステップ5: _default 形式を直接試す
   const defaultKeyVariant = `${cleanId}_default`;
   if (localizationMap[defaultKeyVariant]) {
-    console.log(`[Step5] Direct _default key: ${defaultKeyVariant} => "${localizationMap[defaultKeyVariant]}"`);
-    return localizationMap[defaultKeyVariant];
+    console.log(`[Step5] Direct _default key: ${defaultKeyVariant}`);
+    return expandDynamicTags(localizationMap[defaultKeyVariant]);
   }
 
   // フォールバック：元のIDを返す
@@ -423,7 +477,6 @@ async function loadLocalisation() {
 
   try {
     const promises = localisationFiles.map(async (filename) => {
-      // GitHub Pagesの絶対URLを指定して404を回避
       const url = `https://iekei.github.io/iekei1/game/data/localisation/japanese/${filename}`;
 
       try {
@@ -446,9 +499,9 @@ async function loadLocalisation() {
       }
 
       if (isTxt) {
-        // TXT形式：scripted_localisation ファイル
+        // TXT形式：NSBおよびscripted_localisation ファイルのパース
         successTxtCount++;
-        parseScriptedLocalization(text);
+        parseNsbSovietScriptedLoc(text);
       } else {
         // YML形式：通常のローカライズファイル
         successYmlCount++;
@@ -542,7 +595,7 @@ function completeActiveFocus() {
   applyFocusEffects(completedNf.effect);
 
   const title = resolveDynamicLoc(completedNf.id);
-  const effectClean = completedNf.effect ? completedNf.effect.replace(/\n/g, ' / ') : '特記事項なし';
+  const effectClean = completedNf.effect ? expandDynamicTags(completedNf.effect).replace(/\n/g, ' / ') : '特記事項なし';
   setLogText(`🎉【国家方針完了】「${title}」を達成！ 報酬: [ ${effectClean} ]`);
 
   activeFocus = null;
@@ -787,7 +840,8 @@ function drawExclusiveLine(x1, y1, x2, y2, svg) {
 
 function applyFocusEffects(effectText) {
   if (!effectText) return;
-  const lines = effectText.split('\n');
+  const expandedText = expandDynamicTags(effectText);
+  const lines = expandedText.split('\n');
   lines.forEach(line => {
     const match = line.match(/([+-]?\d+(?:\.\d+)?)/);
     if (!match) return;
@@ -821,9 +875,13 @@ function showTooltip(e, nf) {
 
   let status = isCompleted ? "【達成済み】" : (isActive ? "【実行中】" : (isLocked ? "🔒【選択不可/排他】" : "🔓【選択可能】"));
   
+  // 【機能3の展開処理例】効果文の中の [Get...] タグを展開してツールチップに表示
+  const rawEffect = nf.effect || "効果なし";
+  const expandedEffect = expandDynamicTags(rawEffect);
+
   document.getElementById('tooltip-title').textContent = `${titleName} ${status}`;
   document.getElementById('tooltip-time').textContent = `⏱️ 必要時間: ${isActive ? focusDaysRemaining + "日 (進行中)" : (nf.cost || 70) + "日"}`;
-  document.getElementById('tooltip-effect').textContent = nf.effect || "効果なし";
+  document.getElementById('tooltip-effect').textContent = expandedEffect;
   
   tooltip.classList.remove('hidden');
   moveTooltip(e);
@@ -872,22 +930,22 @@ async function init() {
     ];
   }
 
-  // focus IDのローカライズ処理
+  // focus IDおよびテキストのローカライズ処理
   rawData.forEach(nf => {
-    // resolveDynamicLoc で3段階ローカライズを試す
     const resolvedTitle = resolveDynamicLoc(nf.id);
     
-    // 解決できた場合は使用
     if (resolvedTitle && resolvedTitle !== nf.id) {
       nf.title = resolvedTitle;
     } else if (!nf.title) {
-      nf.title = nf.id; // タイトルがない場合は ID そのものを使う
+      nf.title = nf.id;
     }
 
-    // effect キーのローカライズを試す
+    // effect キーのローカライズと動的タグ置換を試す
     const effectKey = `${nf.id}_effect`;
     if (localizationMap[effectKey]) {
-      nf.effect = localizationMap[effectKey];
+      nf.effect = expandDynamicTags(localizationMap[effectKey]);
+    } else if (nf.effect) {
+      nf.effect = expandDynamicTags(nf.effect);
     }
   });
 
