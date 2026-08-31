@@ -52,6 +52,17 @@ function syncWithParentDate() {
   }
 }
 
+/**
+ * 親画面からの直接呼び出し・再描画用グローバル関数
+ */
+window.refreshProductionView = function() {
+  completedTechs = JSON.parse(localStorage.getItem('completedTechs') || '[]');
+  resources = JSON.parse(localStorage.getItem('resources') || JSON.stringify(resources));
+  productionLines = JSON.parse(localStorage.getItem('productionLines') || '[]');
+  syncWithParentDate();
+  renderProductionView();
+};
+
 document.addEventListener('DOMContentLoaded', async () => {
   syncWithParentDate();
   await loadAllTechsForProduction();
@@ -60,10 +71,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   checkAllLinesShortage(); // 起動時にも資源不足をチェック
   renderProductionView();
 
+  // 別タブ/親画面での LocalStorage 更新イベントを監視
   window.addEventListener('storage', (e) => {
-    if (e.key === 'completedTechs') {
-      completedTechs = JSON.parse(e.newValue || '[]');
-      renderProductionView();
+    if (e.key === 'completedTechs' || e.key === 'resources' || e.key === 'productionLines') {
+      window.refreshProductionView();
+    }
+  });
+
+  // postMessage 経由の親画面命令受信処理
+  window.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'SYNC_PRODUCTION') {
+      window.refreshProductionView();
     }
   });
 
