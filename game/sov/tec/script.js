@@ -1,3 +1,7 @@
+// ==========================================
+// 研究画面用スクリプト (tec/script.js) - 自動同期対応版
+// ==========================================
+
 const categories = ['infantry', 'armor', 'artillery', 'naval', 'air', 'engineering', 'industry', 'nuclear'];
 let currentCategory = 'infantry';
 let techData = {};
@@ -18,56 +22,93 @@ let isDragging = false, startX, startY, translateX = 0, translateY = 0;
 let gameTimer = null; // タイマー管理用
 
 // ==========================================
-// 1. 親画面（window.opener）連携ヘルパー関数・受信インターフェース
+// 1. 画面間自動同期システム (BroadcastChannel & window.opener)
 // ==========================================
+const gameSyncChannel = new BroadcastChannel('hoi4_game_sync');
+
 /**
- * 親画面（メイン画面）が開かれているか判定
+ * 親画面（window.opener または iframe親ウィンドウ）が開かれているか判定
  */
 function isParentAvailable() {
-  return window.opener && !window.opener.closed;
+  return (window.opener && !window.opener.closed) || (window.parent && window.parent !== window);
 }
 
 /**
  * 親画面のログ（setLogText）にメッセージを送信する
  */
 function sendLogToParent(text) {
-  if (isParentAvailable() && typeof window.opener.setLogText === 'function') {
+  if (window.opener && !window.opener.closed && typeof window.opener.setLogText === 'function') {
     window.opener.setLogText(text);
+  } else if (window.parent && window.parent !== window && typeof window.parent.setLogText === 'function') {
+    window.parent.setLogText(text);
   }
 }
+
+/**
+ * BroadcastChannel メッセージ受信ハンドラ（iframeモーダルや別タブ同期用）
+ */
+gameSyncChannel.onmessage = (event) => {
+  if (!event.data) return;
+
+  if (event.data.type === 'DATE_UPDATE') {
+    if (event.data.isoDate) {
+      gameDate = new Date(event.data.isoDate);
+      updateCalendarUI();
+      localStorage.setItem('gameDate', gameDate.toISOString());
+    }
+    if (typeof event.data.speed !== 'undefined' && event.data.speed !== gameSpeed) {
+      gameSpeed = event.data.speed;
+      localStorage.setItem('gameSpeed', gameSpeed);
+      updateSpeedButtonsUI();
+      runTick();
+    }
+    // メイン画面で1日進むごとに研究進捗を進める
+    processResearchTick();
+  }
+};
 
 /**
  * 親画面の日付・ゲームスピードと同期する
  */
 function syncWithParentDate() {
-  if (isParentAvailable() && window.opener.currentDate) {
+  if (window.opener && !window.opener.closed && window.opener.currentDate) {
     gameDate = new Date(window.opener.currentDate);
     if (typeof window.opener.gameSpeed !== 'undefined') {
       gameSpeed = window.opener.gameSpeed;
     }
-    updateCalendarUI();
-    updateSpeedButtonsUI();
+  } else if (window.parent && window.parent !== window && window.parent.currentDate) {
+    gameDate = new Date(window.parent.currentDate);
+    if (typeof window.parent.gameSpeed !== 'undefined') {
+      gameSpeed = window.parent.gameSpeed;
+    }
+  } else {
+    // 親画面へ最新日付のリクエストを送信
+    gameSyncChannel.postMessage({ type: 'REQUEST_INITIAL_STATE' });
   }
+  updateCalendarUI();
+  updateSpeedButtonsUI();
 }
 
 /**
- * 【親画面からの呼び出し用】親画面で日付が進んだ際・変更された際に直接呼び出す関数
+ * 【親画面からの直接呼び出し用】親画面で日付が進んだ際・変更された際に呼び出す関数
  */
 window.onParentDateChanged = function(newDateStr) {
   if (newDateStr) {
     gameDate = new Date(newDateStr);
-  } else if (isParentAvailable() && window.opener.currentDate) {
+  } else if (window.opener && window.opener.currentDate) {
     gameDate = new Date(window.opener.currentDate);
+  } else if (window.parent && window.parent.currentDate) {
+    gameDate = new Date(window.parent.currentDate);
   }
   updateCalendarUI();
   localStorage.setItem('gameDate', gameDate.toISOString());
   
-  // 日付更新に伴う研究進捗処理（親画面の1日進行イベントで同期する場合）
+  // 日付更新に伴う研究進捗処理
   processResearchTick();
 };
 
 /**
- * 【親画面からの呼び出し用】親画面でゲームスピードが変更された際に呼び出す関数
+ * 【親画面からの直接呼び出し用】親画面でゲームスピードが変更された際に呼び出す関数
  */
 window.onParentSpeedChanged = function(newSpeed) {
   gameSpeed = parseInt(newSpeed, 10) || 0;
@@ -147,20 +188,14 @@ function runTick() {
   if (gameTimer) clearInterval(gameTimer);
   const speedIntervals = { 1: 2000, 2: 1200, 3: 700, 4: 350, 5: 120 };
 
-  if (gameSpeed > 0) {
+  // 親画面（メインタイマー）が存在しないスタンドアロン表示時のみ独自タイマーを起動
+  if (!isParentAvailable() && gameSpeed > 0) {
     gameTimer = setInterval(() => {
-      // 親画面が存在していれば日付を同期取得
-      if (isParentAvailable() && window.opener.currentDate) {
-        gameDate = new Date(window.opener.currentDate);
-      } else {
-        gameDate.setDate(gameDate.getDate() + 1);
-      }
-
+      gameDate.setDate(gameDate.getDate() + 1);
       updateCalendarUI();
       localStorage.setItem('gameDate', gameDate.toISOString());
 
       processResearchTick();
-
     }, speedIntervals[gameSpeed] || 1000);
   }
 }
@@ -173,8 +208,10 @@ function initClock() {
       updateSpeedButtonsUI();
 
       // 親画面の速度変更関数が存在すれば同期実行
-      if (isParentAvailable() && typeof window.opener.setGameSpeed === 'function') {
+      if (window.opener && typeof window.opener.setGameSpeed === 'function') {
         window.opener.setGameSpeed(gameSpeed);
+      } else if (window.parent && typeof window.parent.setGameSpeed === 'function') {
+        window.parent.setGameSpeed(gameSpeed);
       }
 
       runTick();
