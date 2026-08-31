@@ -16,7 +16,40 @@ let gameSpeed = localStorage.getItem('gameSpeed') ? parseInt(localStorage.getIte
 
 let isDragging = false, startX, startY, translateX = 0, translateY = 0;
 
+// ==========================================
+// 1. 親画面（window.opener）連携ヘパー関数
+// ==========================================
+/**
+ * 親画面（メイン画面）が開かれているか判定
+ */
+function isParentAvailable() {
+  return window.opener && !window.opener.closed;
+}
+
+/**
+ * 親画面のログ（setLogText）にメッセージを送信する
+ */
+function sendLogToParent(text) {
+  if (isParentAvailable() && typeof window.opener.setLogText === 'function') {
+    window.opener.setLogText(text);
+  }
+}
+
+/**
+ * 親画面の日付・ゲームスピードと同期する
+ */
+function syncWithParentDate() {
+  if (isParentAvailable() && window.opener.currentDate) {
+    gameDate = new Date(window.opener.currentDate);
+    if (typeof window.opener.gameSpeed !== 'undefined') {
+      gameSpeed = window.opener.gameSpeed;
+    }
+    updateCalendarUI();
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  syncWithParentDate();
   initTabs();
   initPanAndZoom();
   initClock();
@@ -66,6 +99,11 @@ function initClock() {
       localStorage.setItem('gameSpeed', gameSpeed);
       document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
       e.target.classList.add('active');
+
+      // 親画面の速度変更関数が存在すれば同期実行
+      if (isParentAvailable() && typeof window.opener.setGameSpeed === 'function') {
+        window.opener.setGameSpeed(gameSpeed);
+      }
     });
   });
 
@@ -77,7 +115,13 @@ function initClock() {
     if (gameTimer) clearInterval(gameTimer);
     if (gameSpeed > 0) {
       gameTimer = setInterval(() => {
-        gameDate.setDate(gameDate.getDate() + 1);
+        // 親画面が存在していれば日付を同期取得
+        if (isParentAvailable() && window.opener.currentDate) {
+          gameDate = new Date(window.opener.currentDate);
+        } else {
+          gameDate.setDate(gameDate.getDate() + 1);
+        }
+
         updateCalendarUI();
         localStorage.setItem('gameDate', gameDate.toISOString());
 
@@ -89,7 +133,7 @@ function initClock() {
           }
         });
 
-        // ★追加：日付が1日進むごとに科学者モーダルの進捗UIをリアルタイム更新
+        // 科学者モーダルの進捗UIをリアルタイム更新
         if (typeof updateScienceProgressUI === 'function') {
           updateScienceProgressUI();
         }
@@ -125,27 +169,28 @@ function initResearchSlots() {
       if (slot.tech) {
         const confirmed = confirm(`「${slot.tech.title}」の研究を中断してスロットを空けますか？\n※これまでの研究進捗（日数）はリセットされます。`);
         if (confirmed) {
+          const canceledTitle = slot.tech.title;
           slot.tech = null;
           slot.remaining = 0;
           updateSlotDisplay(slot);
+          
+          sendLogToParent(`【研究中断】「${canceledTitle}」の研究をキャンセルしました。`);
         }
       }
     });
   });
 }
 
-// ★ 特別研究計画（核・ロケットなど全カテゴリ共通）による日数計算
+// 特別研究計画（核・ロケットなど全カテゴリ共通）による日数計算
 function calculateEffectiveResearchDays(tech) {
   const currentYear = gameDate.getFullYear();
   const hiredScientists = JSON.parse(localStorage.getItem('hiredScientists')) || {};
-  const activeScientistId = hiredScientists[currentCategory]; // 現在のタブに特別研究が配属されているか
+  const activeScientistId = hiredScientists[currentCategory];
 
-  // 特別研究計画が配属されている場合は「一律2年（720日）」ですべてが終わるように設定
   if (activeScientistId) {
     return 720; 
   }
 
-  // 通常時の研究日数・ペナルティ計算
   let totalDays = tech.research_time || 30;
   if (tech.year && tech.year > currentYear) {
     const yearDiff = tech.year - currentYear;
@@ -179,21 +224,33 @@ function startResearch(tech) {
   slot.tech = tech; 
   slot.remaining = calculateEffectiveResearchDays(tech);
   updateSlotDisplay(slot);
+
+  // 親画面のログへ通知
+  sendLogToParent(`🔬【研究開始】「${tech.title}」の研究を開始しました。（必要日数: ${Math.ceil(slot.remaining)}日）`);
 }
 
 function completeResearch(slot) {
   completedTechs.push(slot.tech.id);
   localStorage.setItem('completedTechs', JSON.stringify(completedTechs));
+
+  const techTitle = slot.tech.title;
+
   const notifyArea = document.getElementById('notification-area');
   if (notifyArea) {
     const msg = document.createElement('div');
     msg.className = 'notify-msg';
-    msg.textContent = `${slot.tech.title} 研究完了しました`;
+    msg.textContent = `${techTitle} 研究完了しました`;
     notifyArea.appendChild(msg);
     setTimeout(() => msg.remove(), 5000);
   }
-  slot.tech = null; slot.remaining = 0;
-  updateSlotDisplay(slot); renderTree();
+
+  // 親画面のログへ完了通知
+  sendLogToParent(`🎉【研究完了】技術「${techTitle}」の研究が完了しました！`);
+
+  slot.tech = null;
+  slot.remaining = 0;
+  updateSlotDisplay(slot);
+  renderTree();
 }
 
 function updateSlotDisplay(slot) {
@@ -269,7 +326,6 @@ function showTooltip(e, tech) {
   const hiredScientists = JSON.parse(localStorage.getItem('hiredScientists')) || {};
   const activeScientistId = hiredScientists[currentCategory];
 
-  // 特別研究計画が有効な場合は、ペナルティ表示を非表示（剥奪・免除）にする
   if (activeScientistId) {
     if (penaltyEl) penaltyEl.style.display = 'none';
   } else {
