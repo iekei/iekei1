@@ -266,3 +266,21 @@ line.nf-exclusive-line {
   object-fit: contain;
   margin-top: 2px;
 }
+
+.nav-btn {
+  background: #1c2531;
+  border: 1px solid #00ffcc;
+  color: #00ffcc;
+  padding: 5px 12px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+  background: #00ffcc;
+  color: #0d1117;
+  box-shadow: 0 0 8px rgba(0, 255, 204, 0.6);
+}
