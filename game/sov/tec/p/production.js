@@ -20,7 +20,40 @@ let showOldEquipment = false;
 let gameDate = localStorage.getItem('gameDate') ? new Date(localStorage.getItem('gameDate')) : new Date(1936, 0, 1);
 let gameSpeed = localStorage.getItem('gameSpeed') ? parseInt(localStorage.getItem('gameSpeed'), 10) : 0;
 
+// ==========================================
+// 1. 親画面（window.opener）連携ヘルパー関数
+// ==========================================
+/**
+ * 親画面（メイン画面）が開かれているか判定
+ */
+function isParentAvailable() {
+  return window.opener && !window.opener.closed;
+}
+
+/**
+ * 親画面のログ（setLogText）にメッセージを送信する
+ */
+function sendLogToParent(text) {
+  if (isParentAvailable() && typeof window.opener.setLogText === 'function') {
+    window.opener.setLogText(text);
+  }
+}
+
+/**
+ * 親画面の日付・ゲームスピードと同期する
+ */
+function syncWithParentDate() {
+  if (isParentAvailable() && window.opener.currentDate) {
+    gameDate = new Date(window.opener.currentDate);
+    if (typeof window.opener.gameSpeed !== 'undefined') {
+      gameSpeed = window.opener.gameSpeed;
+    }
+    updateCalendarUI();
+  }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
+  syncWithParentDate();
   await loadAllTechsForProduction();
   initProductionUIControls();
   initSharedClock();
@@ -215,6 +248,8 @@ function startProductionLine(techId) {
   });
   saveProductionData();
   renderProductionView();
+
+  sendLogToParent(`⚙️【生産開始】「${tech.title}」の軍需生産ラインを割り当てました（初期: 1工場）。`);
 }
 
 function adjustFactories(lineId, delta) {
@@ -225,12 +260,23 @@ function adjustFactories(lineId, delta) {
   line.factories += delta;
   saveProductionData();
   renderProductionView();
+
+  const tech = techDataAll[line.techId];
+  const techTitle = tech ? tech.title : '不明な装備';
+  sendLogToParent(`🏭【生産調整】「${techTitle}」の生産工場数を ${line.factories} 工場に変更しました。`);
 }
 
 function removeLine(lineId) {
+  const line = productionLines.find(l => l.id === lineId);
+  const tech = line ? techDataAll[line.techId] : null;
+
   productionLines = productionLines.filter(l => l.id !== lineId);
   saveProductionData();
   renderProductionView();
+
+  if (tech) {
+    sendLogToParent(`🗑️【生産停止】「${tech.title}」の生産ラインを解体・廃止しました。`);
+  }
 }
 
 function getTotalUsedFactories() {
@@ -412,6 +458,12 @@ function initSharedClock() {
 
       document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
       e.target.classList.add('active');
+
+      // 親画面のスピードも同期変更
+      if (isParentAvailable() && typeof window.opener.setGameSpeed === 'function') {
+        window.opener.setGameSpeed(gameSpeed);
+      }
+
       runTick();
     });
   });
@@ -423,6 +475,11 @@ function initSharedClock() {
       localStorage.setItem('gameSpeed', 0);
       document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
       pauseBtn.classList.add('active');
+
+      if (isParentAvailable() && typeof window.opener.setGameSpeed === 'function') {
+        window.opener.setGameSpeed(0);
+      }
+
       runTick();
     });
   }
@@ -439,14 +496,18 @@ function initSharedClock() {
     if (gameSpeed > 0) {
       const interval = speedIntervals[gameSpeed] || 1000;
       gameTimer = setInterval(() => {
-        const savedDateStr = localStorage.getItem('gameDate');
-        if (savedDateStr) {
-          gameDate = new Date(savedDateStr);
+        // 親画面が開いていれば日付を親画面から最新同期
+        if (isParentAvailable() && window.opener.currentDate) {
+          gameDate = new Date(window.opener.currentDate);
+        } else {
+          const savedDateStr = localStorage.getItem('gameDate');
+          if (savedDateStr) {
+            gameDate = new Date(savedDateStr);
+          }
+          gameDate.setDate(gameDate.getDate() + 1);
+          localStorage.setItem('gameDate', gameDate.toISOString());
         }
 
-        // 1日進める
-        gameDate.setDate(gameDate.getDate() + 1);
-        localStorage.setItem('gameDate', gameDate.toISOString());
         updateCalendarUI();
 
         // 各生産ラインの資源消費チェック＆生産処理
@@ -478,7 +539,10 @@ function initSharedClock() {
             const dailyProduced = Math.floor(baseRate * line.factories);
             line.producedCount += dailyProduced;
           } else {
-            // 資源不足により生産不可
+            // 資源不足により生産不可（新たに不足した場合に親画面へ警告ログ）
+            if (!line.isShortage) {
+              sendLogToParent(`⚠️【資源不足】「${tech.title}」の生産が資源不足により停止しました。`);
+            }
             line.isShortage = true;
           }
         });
