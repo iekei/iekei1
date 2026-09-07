@@ -1,0 +1,75 @@
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: radial-gradient(circle, #2c3e50 0%, #000000 100%);
+  color: #fff;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  user-select: none;
+  touch-action: none; /* スマホでのスワイプ時の画面スクロールを防止 */
+}
+
+#ui-container {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  text-align: center;
+  pointer-events: none;
+  width: 100%;
+}
+
+h1 {
+  font-size: 26px;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  margin-bottom: 5px;
+}
+
+#instruction {
+  font-size: 16px;
+  color: #f39c12;
+  font-weight: bold;
+  text-shadow: 0 0 8px rgba(243, 156, 18, 0.6);
+  animation: blink 1.5s infinite alternate;
+}
+
+@keyframes blink {
+  0% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+#result-text {
+  margin-top: 15px;
+  font-size: 22px;
+  font-weight: bold;
+  min-height: 50px;
+  line-height: 1.4;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+}
+
+button {
+  pointer-events: auto;
+  padding: 12px 28px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+  border: none;
+  color: white;
+  border-radius: 25px;
+  box-shadow: 0 0 15px rgba(243, 156, 18, 0.6);
+  transition: all 0.2s ease;
+  margin-top: 10px;
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(243, 156, 18, 0.9);
+}
+
+#canvas-container {
+  width: 100vw;
+  height: 100vh;
+}
