@@ -60,6 +60,16 @@ const leaders = [
  }
 ]; 
 
+// 図鑑の所持状態をLocal Storageから取得
+let unlockedCards = JSON.parse(localStorage.getItem('sov_unlocked_cards') || '[]');
+
+function unlockCard(id) {
+  if (!unlockedCards.includes(id)) {
+    unlockedCards.push(id);
+    localStorage.setItem('sov_unlocked_cards', JSON.stringify(unlockedCards));
+  }
+}
+
 // --- 2. 3Dシーン初期化 ---
 const container = document.getElementById('canvas-container');
 const scene = new THREE.Scene();
@@ -72,7 +82,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 container.appendChild(renderer.domElement);
 
-const ambientLight = new THREE.AmbientLight(0xffffff, 1.1);
+const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
 scene.add(ambientLight);
 
 const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
@@ -83,17 +93,22 @@ const pointLight = new THREE.PointLight(0xffd700, 1.5, 10);
 pointLight.position.set(0, 0, 2);
 scene.add(pointLight);
 
-// --- 3. ソ連パック表紙テクスチャ生成 (真紅×金のマットデザイン) ---
+// --- 3. GERパックテクスチャ生成 ---
 function createPackBodyTexture(callback) {
   const canvas = document.createElement('canvas');
   canvas.width = 512;
   canvas.height = 768;
   const ctx = canvas.getContext('2d');
 
-  ctx.fillStyle = '#8b0000';
+  const packGrad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+  packGrad.addColorStop(0, '#2a2a2a');
+  packGrad.addColorStop(0.5, '#151515');
+  packGrad.addColorStop(1, '#0a0a0a');
+  
+  ctx.fillStyle = packGrad;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillStyle = '#121212';
+  ctx.fillStyle = '#000000';
   ctx.beginPath();
   const teeth = 32;
   const toothWidth = canvas.width / teeth;
@@ -109,8 +124,11 @@ function createPackBodyTexture(callback) {
   ctx.fill();
 
   ctx.strokeStyle = '#ffd700';
-  ctx.lineWidth = 10;
+  ctx.lineWidth = 8;
   ctx.strokeRect(14, 14, canvas.width - 28, canvas.height - 28);
+  ctx.strokeStyle = '#444444';
+  ctx.lineWidth = 4;
+  ctx.strokeRect(24, 24, canvas.width - 48, canvas.height - 48);
 
   const iconImg = new Image();
   iconImg.src = 'data/image/icon/soviet.png';
@@ -129,10 +147,10 @@ function createPackTopTexture() {
   canvas.height = 160;
   const ctx = canvas.getContext('2d');
 
-  ctx.fillStyle = '#8b0000';
+  ctx.fillStyle = '#1e1e1e';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillStyle = '#121212';
+  ctx.fillStyle = '#000000';
   ctx.beginPath();
   const teeth = 32;
   const toothWidth = canvas.width / teeth;
@@ -148,7 +166,7 @@ function createPackTopTexture() {
   ctx.fill();
 
   ctx.strokeStyle = '#ffd700';
-  ctx.lineWidth = 10;
+  ctx.lineWidth = 8;
   ctx.strokeRect(14, 14, canvas.width - 28, canvas.height - 28);
 
   return new THREE.CanvasTexture(canvas);
@@ -184,6 +202,45 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
   ctx.fillText(line, x, currentY);
 }
 
+// 裏面テクスチャ（人物固有カラー ＋ nazi.pngアイコン）
+function createCardBackTexture(leader, callback) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 768;
+  const ctx = canvas.getContext('2d');
+
+  ctx.fillStyle = leader.color;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  const innerGrad = ctx.createRadialGradient(256, 384, 50, 256, 384, 400);
+  innerGrad.addColorStop(0, 'rgba(255, 255, 255, 0.25)');
+  innerGrad.addColorStop(0.8, 'rgba(0, 0, 0, 0.4)');
+  innerGrad.addColorStop(1, 'rgba(0, 0, 0, 0.7)');
+  ctx.fillStyle = innerGrad;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 12;
+  drawRoundedRect(ctx, 16, 16, canvas.width - 32, canvas.height - 32, 24);
+  ctx.stroke();
+
+  ctx.strokeStyle = 'rgba(0, 0, 0, 0.4)';
+  ctx.lineWidth = 4;
+  drawRoundedRect(ctx, 28, 28, canvas.width - 56, canvas.height - 56, 18);
+  ctx.stroke();
+
+  const backIcon = new Image();
+  backIcon.src = 'data/image/icon/soviet.png';
+
+  backIcon.onload = () => {
+    const size = 220;
+    ctx.drawImage(backIcon, (canvas.width - size) / 2, (canvas.height - size) / 2, size, size);
+    callback(new THREE.CanvasTexture(canvas));
+  };
+  backIcon.onerror = () => { callback(new THREE.CanvasTexture(canvas)); };
+}
+
+// 表面テクスチャ生成
 function createCardTexture(leader, callback) {
   const canvas = document.createElement('canvas');
   canvas.width = 512;
@@ -191,14 +248,14 @@ function createCardTexture(leader, callback) {
   const ctx = canvas.getContext('2d');
 
   const bgGrad = ctx.createRadialGradient(256, 384, 50, 256, 384, 400);
-  bgGrad.addColorStop(0, '#3a1c1c');
-  bgGrad.addColorStop(0.7, '#1a0808');
-  bgGrad.addColorStop(1, '#080202');
+  bgGrad.addColorStop(0, '#2c2c2c');
+  bgGrad.addColorStop(0.7, '#141414');
+  bgGrad.addColorStop(1, '#050505');
   
   ctx.fillStyle = bgGrad;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.strokeStyle = 'rgba(255, 215, 0, 0.2)';
+  ctx.strokeStyle = 'rgba(255, 215, 0, 0.25)';
   ctx.lineWidth = 2;
   drawRoundedRect(ctx, 10, 10, canvas.width - 20, canvas.height - 20, 24);
   ctx.stroke();
@@ -259,8 +316,8 @@ function createCardTexture(leader, callback) {
 
     const textAreaX = 35, textAreaY = 545, textAreaW = 442, textAreaH = 185;
     const textAreaGrad = ctx.createLinearGradient(0, textAreaY, 0, textAreaY + textAreaH);
-    textAreaGrad.addColorStop(0, 'rgba(28, 15, 15, 0.92)');
-    textAreaGrad.addColorStop(1, 'rgba(10, 5, 5, 0.95)');
+    textAreaGrad.addColorStop(0, 'rgba(20, 20, 20, 0.92)');
+    textAreaGrad.addColorStop(1, 'rgba(5, 5, 5, 0.95)');
 
     ctx.fillStyle = textAreaGrad;
     drawRoundedRect(ctx, textAreaX, textAreaY, textAreaW, textAreaH, 12);
@@ -272,7 +329,7 @@ function createCardTexture(leader, callback) {
     ctx.stroke();
 
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 28px sans-serif';
+    ctx.font = 'bold 28px serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'alphabetic';
     ctx.fillText(leader.name, 256, 585);
@@ -306,11 +363,11 @@ const packGroup = new THREE.Group();
 mainGroup.add(packGroup);
 
 const packBaseMat = new THREE.MeshPhysicalMaterial({ 
-  color: 0x8b0000, 
-  roughness: 0.45, 
-  metalness: 0.1, 
-  clearcoat: 0.3, 
-  clearcoatRoughness: 0.4
+  color: 0x1f1f1f, 
+  roughness: 0.35, 
+  metalness: 0.3, 
+  clearcoat: 0.5, 
+  clearcoatRoughness: 0.2
 });
 
 const packBody = new THREE.Mesh(new THREE.BoxGeometry(2.5, 3.4, 0.12), packBaseMat);
@@ -322,12 +379,12 @@ packTop.position.set(0, 1.75, 0.1);
 packGroup.add(packTop);
 
 createPackBodyTexture((bodyTexture) => {
-  const bodyFrontMat = new THREE.MeshPhysicalMaterial({ map: bodyTexture, roughness: 0.45, clearcoat: 0.3 });
+  const bodyFrontMat = new THREE.MeshPhysicalMaterial({ map: bodyTexture, roughness: 0.35, clearcoat: 0.5 });
   packBody.material = [packBaseMat, packBaseMat, packBaseMat, packBaseMat, bodyFrontMat, packBaseMat];
 });
 
 const topTexture = createPackTopTexture();
-const topFrontMat = new THREE.MeshPhysicalMaterial({ map: topTexture, roughness: 0.45, clearcoat: 0.3 });
+const topFrontMat = new THREE.MeshPhysicalMaterial({ map: topTexture, roughness: 0.35, clearcoat: 0.5 });
 packTop.material = [packBaseMat, packBaseMat, packBaseMat, packBaseMat, topFrontMat, packBaseMat];
 
 const cutLineMat = new THREE.LineDashedMaterial({ 
@@ -351,7 +408,7 @@ cutHitBox.position.set(0, 1.4, 0.17);
 packGroup.add(cutHitBox);
 
 const cardGeo = new THREE.BoxGeometry(2.2, 3.2, 0.05);
-const backMat = new THREE.MeshStandardMaterial({ color: 0x221111, metalness: 0.5, roughness: 0.5 });
+let backMat = new THREE.MeshStandardMaterial({ color: 0x111111, metalness: 0.3, roughness: 0.4 });
 let frontMat = new THREE.MeshStandardMaterial({ color: 0x222222 });
 
 const cardMaterials = [backMat, backMat, backMat, backMat, frontMat, backMat];
@@ -370,18 +427,18 @@ const particleMat = new THREE.PointsMaterial({ size: 0.06, color: 0xffd700, tran
 const particles = new THREE.Points(particleGeo, particleMat);
 scene.add(particles);
 
-// --- 6. ペルソナ5風カットイン再生機能 (位置調整対応) ---
+// --- 6. カットイン再生機能 ---
 function playP5CutIn(cutinImgUrl, offset, onCompleteCallback) {
   const overlay = document.getElementById('cutin-overlay');
   const banner = document.getElementById('cutin-banner');
   const img = document.getElementById('cutin-img');
 
   img.src = cutinImgUrl;
-  img.style.objectPosition = offset || "center 30%";
+  const pos = offset || "center 30%";
+  img.style.objectPosition = pos;
 
   overlay.style.display = 'block';
-
-  gsap.set(img, { transformOrigin: "center 35%" });
+  gsap.set(img, { transformOrigin: pos });
 
   const tl = gsap.timeline({
     onComplete: () => {
@@ -390,62 +447,101 @@ function playP5CutIn(cutinImgUrl, offset, onCompleteCallback) {
     }
   });
 
-  tl.fromTo(banner, 
-    { xPercent: 100, opacity: 0 }, 
-    { xPercent: 0, opacity: 1, duration: 0.25, ease: "power4.out" }
-  )
-  .fromTo(img, 
-    { scale: 2.2, x: 100 }, 
-    { scale: 1.0, x: 0, duration: 0.3, ease: "back.out(1.4)" }, 
-    "<"
-  )
-  .to(banner, { duration: 1.2 })
-  .to(banner, { xPercent: -100, opacity: 0, duration: 0.2, ease: "power3.in" });
+  tl.fromTo(banner, { xPercent: 100, opacity: 0 }, { xPercent: 0, opacity: 1, duration: 0.25, ease: "power4.out" })
+    .fromTo(img, { scale: 2.2, x: 100 }, { scale: 1.0, x: 0, duration: 0.3, ease: "back.out(1.4)" }, "<")
+    .to(banner, { duration: 1.2 })
+    .to(banner, { xPercent: -100, opacity: 0, duration: 0.2, ease: "power3.in" });
 }
 
-// --- 7. Raycaster & スワイプ処理 ---
+// --- 7. イベント・スワイプ & カード自由回転処理 ---
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
-let isDragging = false, startX = 0, startY = 0, isOpened = false;
+let isDragging = false;
+let startX = 0, startY = 0;
+let isOpened = false;
+let isCardInteractable = false;
+
+// カードドラッグ回転用慣性変数
+let isCardDragging = false;
+let previousMousePosition = { x: 0, y: 0 };
+let cardVelocity = { x: 0, y: 0 };
+
 const instruction = document.getElementById('instruction');
 const resultText = document.getElementById('result-text');
 const resetBtn = document.getElementById('reset-btn');
 
-function checkIntersection(clientX, clientY) {
+function checkIntersection(clientX, clientY, targetObj) {
   mouse.x = (clientX / window.innerWidth) * 2 - 1;
   mouse.y = -(clientY / window.innerHeight) * 2 + 1;
   raycaster.setFromCamera(mouse, camera);
-  const intersects = raycaster.intersectObject(cutHitBox);
+  const intersects = raycaster.intersectObject(targetObj);
   return intersects.length > 0;
 }
 
 function onPointerDown(e) {
-  if (isOpened) return;
   const clientX = e.clientX || (e.touches && e.touches[0].clientX);
   const clientY = e.clientY || (e.touches && e.touches[0].clientY);
 
-  if (checkIntersection(clientX, clientY)) {
-    isDragging = true;
-    startX = clientX;
-    startY = clientY;
+  if (!isOpened) {
+    // パック開封用のタップ判定
+    if (checkIntersection(clientX, clientY, cutHitBox)) {
+      isDragging = true;
+      startX = clientX;
+      startY = clientY;
+    }
+  } else if (isCardInteractable) {
+    // 開封後のカードドラッグ回転判定
+    if (checkIntersection(clientX, clientY, card)) {
+      isCardDragging = true;
+      previousMousePosition = { x: clientX, y: clientY };
+      cardVelocity = { x: 0, y: 0 };
+    }
   }
 }
 
 function onPointerMove(e) {
-  if (!isDragging || isOpened) return;
-  const currentX = e.clientX || (e.touches && e.touches[0].clientX);
-  const currentY = e.clientY || (e.touches && e.touches[0].clientY);
-  const deltaX = currentX - startX;
-  const deltaY = Math.abs(currentY - startY);
+  const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+  const clientY = e.clientY || (e.touches && e.touches[0].clientY);
 
-  if (Math.abs(deltaX) > 80 && deltaY < 60) {
-    isDragging = false;
-    openPack(deltaX > 0 ? 1 : -1);
+  if (isDragging && !isOpened) {
+    const deltaX = clientX - startX;
+    const deltaY = Math.abs(clientY - startY);
+
+    if (Math.abs(deltaX) > 80 && deltaY < 60) {
+      isDragging = false;
+      openPack(deltaX > 0 ? 1 : -1);
+    }
+  } else if (isCardDragging && isCardInteractable) {
+    const deltaMove = {
+      x: clientX - previousMousePosition.x,
+      y: clientY - previousMousePosition.y
+    };
+
+    // 自由回転処理（トラックボール風）
+    const deltaRotationQuaternion = new THREE.Quaternion()
+      .setFromEuler(new THREE.Euler(
+        deltaMove.y * 0.01,
+        deltaMove.x * 0.01,
+        0,
+        'XYZ'
+      ));
+
+    card.quaternion.multiplyQuaternions(deltaRotationQuaternion, card.quaternion);
+
+    cardVelocity = {
+      x: deltaMove.x * 0.008,
+      y: deltaMove.y * 0.008
+    };
+
+    previousMousePosition = { x: clientX, y: clientY };
   }
 }
 
-function onPointerUp() { isDragging = false; }
+function onPointerUp() {
+  isDragging = false;
+  isCardDragging = false;
+}
 
 window.addEventListener('mousedown', onPointerDown);
 window.addEventListener('mousemove', onPointerMove);
@@ -454,52 +550,64 @@ window.addEventListener('touchstart', onPointerDown);
 window.addEventListener('touchmove', onPointerMove);
 window.addEventListener('touchend', onPointerUp);
 
+// 開封アニメーション
 function openPack(direction) {
   isOpened = true;
   instruction.style.display = 'none';
 
   const picked = leaders[Math.floor(Math.random() * leaders.length)];
+  unlockCard(picked.id); // 図鑑解放
 
-  createCardTexture(picked, (texture) => {
-    cardMaterials[4] = new THREE.MeshStandardMaterial({ map: texture, roughness: 0.3 });
-    card.material = cardMaterials;
+  createCardBackTexture(picked, (backTexture) => {
+    cardMaterials[5] = new THREE.MeshStandardMaterial({ map: backTexture, roughness: 0.3 });
 
-    const tl = gsap.timeline({
-      onComplete: () => {
-        resultText.innerHTML = `<span style="color:${picked.color}">【${picked.rank}】${picked.name}</span><br><small>${picked.desc}</small>`;
-        resetBtn.style.display = 'inline-block';
-      }
-    });
+    createCardTexture(picked, (frontTexture) => {
+      cardMaterials[4] = new THREE.MeshStandardMaterial({ map: frontTexture, roughness: 0.3 });
+      card.material = cardMaterials;
 
-    cutLine.visible = false;
-
-    tl.to(packTop.position, { x: direction * 4, y: 3.0, z: -2, duration: 0.6, ease: "power2.out" })
-      .to(packTop.rotation, { z: -direction * Math.PI * 2, duration: 0.6 }, "<")
-      .call(() => {
-        if (picked.rank === "SSR" && picked.cutinUrl) {
-          tl.pause();
-          playP5CutIn(picked.cutinUrl, picked.cutinOffset, () => {
-            tl.resume();
-          });
+      const tl = gsap.timeline({
+        onComplete: () => {
+          resultText.innerHTML = `<span style="color:${picked.color}">【${picked.rank}】${picked.name}</span><br><small>${picked.desc}</small>`;
+          resetBtn.style.display = 'inline-block';
+          isCardInteractable = true; // 開封後に自由ドラッグ回転を有効化
+          instruction.innerText = "カードをドラッグして3D回転！";
+          instruction.style.display = 'block';
         }
+      });
 
-        card.visible = true;
-        pointLight.color.setHex(picked.color);
-      }, null, "-=0.2")
-      .to(card.position, { y: 1.3, z: 0.3, duration: 0.6, ease: "power2.out" })
-      .to(packBody.position, { y: -4.5, duration: 0.5, ease: "power2.in" }, "+=0.1")
-      .to(card.position, { y: 0, z: 2, duration: 0.8, ease: "back.out(1.2)" }, "<")
-      .to(card.scale, { x: 1, y: 1, z: 1, duration: 0.8 }, "<")
-      .to(card.rotation, { y: Math.PI * 6, duration: 1.0, ease: "power2.inOut" }, "<")
-      .to(particleMat, { opacity: 1, duration: 0.4 }, "<")
-      .to(particles.rotation, { y: Math.PI }, "<")
-      .to(particleMat, { opacity: 0, duration: 0.6 });
+      cutLine.visible = false;
+
+      tl.to(packTop.position, { x: direction * 4, y: 3.0, z: -2, duration: 0.6, ease: "power2.out" })
+        .to(packTop.rotation, { z: -direction * Math.PI * 2, duration: 0.6 }, "<")
+        .call(() => {
+          if (picked.rank === "SSR" && picked.cutinUrl) {
+            tl.pause();
+            playP5CutIn(picked.cutinUrl, picked.cutinOffset, () => {
+              tl.resume();
+            });
+          }
+
+          card.visible = true;
+          pointLight.color.setHex(picked.color);
+        }, null, "-=0.2")
+        .to(card.position, { y: 1.3, z: 0.3, duration: 0.6, ease: "power2.out" })
+        .to(packBody.position, { y: -4.5, duration: 0.5, ease: "power2.in" }, "+=0.1")
+        .to(card.position, { y: 0, z: 2, duration: 0.8, ease: "back.out(1.2)" }, "<")
+        .to(card.scale, { x: 1, y: 1, z: 1, duration: 0.8 }, "<")
+        .to(card.rotation, { y: Math.PI * 6, duration: 1.0, ease: "power2.inOut" }, "<")
+        .to(particleMat, { opacity: 1, duration: 0.4 }, "<")
+        .to(particles.rotation, { y: Math.PI }, "<")
+        .to(particleMat, { opacity: 0, duration: 0.6 });
+    });
   });
 }
 
+// リセット処理
 resetBtn.addEventListener('click', () => {
   isOpened = false;
+  isCardInteractable = false;
   resetBtn.style.display = 'none';
+  instruction.innerText = 'パック上部を横にスワイプして開封！';
   instruction.style.display = 'block';
   resultText.innerText = '';
 
@@ -512,9 +620,51 @@ resetBtn.addEventListener('click', () => {
   card.visible = false;
   card.position.set(0, -0.3, 0);
   card.scale.set(0.9, 0.9, 0.9);
-  card.rotation.set(0, 0, 0);
+  card.quaternion.set(0, 0, 0, 1);
+  cardVelocity = { x: 0, y: 0 };
 });
 
+// --- 8. 図鑑モーダル処理 ---
+const zukanBtn = document.getElementById('zukan-btn');
+const zukanModal = document.getElementById('zukan-modal');
+const zukanCloseBtn = document.getElementById('zukan-close-btn');
+const zukanGrid = document.getElementById('zukan-grid');
+
+function renderZukan() {
+  zukanGrid.innerHTML = '';
+  leaders.forEach(leader => {
+    const isUnlocked = unlockedCards.includes(leader.id);
+    const cardEl = document.createElement('div');
+    cardEl.className = `zukan-card ${isUnlocked ? 'unlocked' : 'locked'}`;
+
+    if (isUnlocked) {
+      cardEl.style.borderColor = leader.color;
+      cardEl.innerHTML = `
+        <img src="${leader.imgUrl}" alt="${leader.name}">
+        <div class="card-info" style="border-top:2px solid ${leader.color}">
+          ${leader.rank} ${leader.name}
+        </div>
+      `;
+    } else {
+      cardEl.innerHTML = `
+        <div class="question-mark">?</div>
+        <div class="card-info">未解放</div>
+      `;
+    }
+    zukanGrid.appendChild(cardEl);
+  });
+}
+
+zukanBtn.addEventListener('click', () => {
+  renderZukan();
+  zukanModal.style.display = 'flex';
+});
+
+zukanCloseBtn.addEventListener('click', () => {
+  zukanModal.style.display = 'none';
+});
+
+// --- 9. メインループ ---
 function animate() {
   requestAnimationFrame(animate);
 
@@ -525,8 +675,24 @@ function animate() {
 
     mainGroup.rotation.y = Math.sin(Date.now() * 0.0015) * 0.08;
     mainGroup.rotation.x = Math.cos(Date.now() * 0.001) * 0.04;
-  } else if (card.visible) {
-    card.rotation.y += 0.003;
+  } else if (card.visible && isCardInteractable) {
+    // 慣性回転処理
+    if (!isCardDragging) {
+      if (Math.abs(cardVelocity.x) > 0.0001 || Math.abs(cardVelocity.y) > 0.0001) {
+        const deltaRotationQuaternion = new THREE.Quaternion()
+          .setFromEuler(new THREE.Euler(
+            cardVelocity.y,
+            cardVelocity.x,
+            0,
+            'XYZ'
+          ));
+        card.quaternion.multiplyQuaternions(deltaRotationQuaternion, card.quaternion);
+
+        // 減衰
+        cardVelocity.x *= 0.95;
+        cardVelocity.y *= 0.95;
+      }
+    }
   }
 
   renderer.render(scene, camera);

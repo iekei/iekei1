@@ -122,7 +122,7 @@ function createPackBodyTexture(callback) {
   ctx.strokeRect(24, 24, canvas.width - 48, canvas.height - 48);
 
   const iconImg = new Image();
-  iconImg.src = 'data/image/icon/nazi.png';
+  iconImg.src = 'data/image/icon/jap.png';
 
   iconImg.onload = () => {
     const size = 210;
@@ -221,7 +221,7 @@ function createCardBackTexture(leader, callback) {
   ctx.stroke();
 
   const backIcon = new Image();
-  backIcon.src = 'data/image/icon/nazi.png';
+  backIcon.src = 'data/image/icon/jap.png';
 
   backIcon.onload = () => {
     const size = 220;
