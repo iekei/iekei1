@@ -74,17 +74,19 @@ const pointLight = new THREE.PointLight(0xffd700, 1.5, 10);
 pointLight.position.set(0, 0, 2);
 scene.add(pointLight);
 
-// --- 3. ソ連パック表紙テクスチャ生成 (真紅×金のマットデザイン) ---
+// --- 3. 日本パック表紙テクスチャ生成 (漆黒×漆赤×金の和風デザイン) ---
 function createPackBodyTexture(callback) {
   const canvas = document.createElement('canvas');
   canvas.width = 512;
   canvas.height = 768;
   const ctx = canvas.getContext('2d');
 
-  ctx.fillStyle = '#8b0000';
+  // 背景: 漆黒
+  ctx.fillStyle = '#111111';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillStyle = '#121212';
+  // 切り取りフチのギザギザ（下部）
+  ctx.fillStyle = '#050505';
   ctx.beginPath();
   const teeth = 32;
   const toothWidth = canvas.width / teeth;
@@ -99,10 +101,15 @@ function createPackBodyTexture(callback) {
   ctx.closePath();
   ctx.fill();
 
+  // 金の二重枠線
   ctx.strokeStyle = '#ffd700';
-  ctx.lineWidth = 10;
+  ctx.lineWidth = 8;
   ctx.strokeRect(14, 14, canvas.width - 28, canvas.height - 28);
+  ctx.strokeStyle = '#c0392b';
+  ctx.lineWidth = 4;
+  ctx.strokeRect(24, 24, canvas.width - 48, canvas.height - 48);
 
+  // 日本国旗/家紋風背景アイコンの読み込み
   const iconImg = new Image();
   iconImg.src = 'data/image/icon/jap.png';
 
@@ -120,10 +127,10 @@ function createPackTopTexture() {
   canvas.height = 160;
   const ctx = canvas.getContext('2d');
 
-  ctx.fillStyle = '#8b0000';
+  ctx.fillStyle = '#111111';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillStyle = '#121212';
+  ctx.fillStyle = '#050505';
   ctx.beginPath();
   const teeth = 32;
   const toothWidth = canvas.width / teeth;
@@ -139,7 +146,7 @@ function createPackTopTexture() {
   ctx.fill();
 
   ctx.strokeStyle = '#ffd700';
-  ctx.lineWidth = 10;
+  ctx.lineWidth = 8;
   ctx.strokeRect(14, 14, canvas.width - 28, canvas.height - 28);
 
   return new THREE.CanvasTexture(canvas);
@@ -181,15 +188,16 @@ function createCardTexture(leader, callback) {
   canvas.height = 768;
   const ctx = canvas.getContext('2d');
 
+  // 背景グラデーション（濃い深紅〜漆黒）
   const bgGrad = ctx.createRadialGradient(256, 384, 50, 256, 384, 400);
-  bgGrad.addColorStop(0, '#3a1c1c');
-  bgGrad.addColorStop(0.7, '#1a0808');
-  bgGrad.addColorStop(1, '#080202');
+  bgGrad.addColorStop(0, '#2c0c0c');
+  bgGrad.addColorStop(0.7, '#140505');
+  bgGrad.addColorStop(1, '#050202');
   
   ctx.fillStyle = bgGrad;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.strokeStyle = 'rgba(255, 215, 0, 0.2)';
+  ctx.strokeStyle = 'rgba(255, 215, 0, 0.25)';
   ctx.lineWidth = 2;
   drawRoundedRect(ctx, 10, 10, canvas.width - 20, canvas.height - 20, 24);
   ctx.stroke();
@@ -234,6 +242,7 @@ function createCardTexture(leader, callback) {
     drawRoundedRect(ctx, 12, 12, canvas.width - 24, canvas.height - 24, 28);
     ctx.stroke();
 
+    // レアリティバッジ
     ctx.fillStyle = leader.color;
     ctx.beginPath();
     ctx.arc(65, 65, 34, 0, Math.PI * 2);
@@ -248,10 +257,11 @@ function createCardTexture(leader, callback) {
     ctx.textBaseline = 'middle';
     ctx.fillText(leader.rank, 65, 65);
 
+    // テキスト領域
     const textAreaX = 35, textAreaY = 545, textAreaW = 442, textAreaH = 185;
     const textAreaGrad = ctx.createLinearGradient(0, textAreaY, 0, textAreaY + textAreaH);
-    textAreaGrad.addColorStop(0, 'rgba(28, 15, 15, 0.92)');
-    textAreaGrad.addColorStop(1, 'rgba(10, 5, 5, 0.95)');
+    textAreaGrad.addColorStop(0, 'rgba(20, 10, 10, 0.92)');
+    textAreaGrad.addColorStop(1, 'rgba(5, 2, 2, 0.95)');
 
     ctx.fillStyle = textAreaGrad;
     drawRoundedRect(ctx, textAreaX, textAreaY, textAreaW, textAreaH, 12);
@@ -262,8 +272,9 @@ function createCardTexture(leader, callback) {
     drawRoundedRect(ctx, textAreaX, textAreaY, textAreaW, textAreaH, 12);
     ctx.stroke();
 
+    // 武将/指導者名
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 28px sans-serif';
+    ctx.font = 'bold 28px serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'alphabetic';
     ctx.fillText(leader.name, 256, 585);
@@ -275,6 +286,7 @@ function createCardTexture(leader, callback) {
     ctx.lineTo(457, 600);
     ctx.stroke();
 
+    // 説明文
     ctx.fillStyle = '#dddddd';
     ctx.font = '19px sans-serif';
     ctx.textAlign = 'center';
@@ -297,11 +309,11 @@ const packGroup = new THREE.Group();
 mainGroup.add(packGroup);
 
 const packBaseMat = new THREE.MeshPhysicalMaterial({ 
-  color: 0x8b0000, 
-  roughness: 0.45, 
-  metalness: 0.1, 
-  clearcoat: 0.3, 
-  clearcoatRoughness: 0.4
+  color: 0x111111, 
+  roughness: 0.35, 
+  metalness: 0.2, 
+  clearcoat: 0.5, 
+  clearcoatRoughness: 0.2
 });
 
 const packBody = new THREE.Mesh(new THREE.BoxGeometry(2.5, 3.4, 0.12), packBaseMat);
@@ -313,12 +325,12 @@ packTop.position.set(0, 1.75, 0.1);
 packGroup.add(packTop);
 
 createPackBodyTexture((bodyTexture) => {
-  const bodyFrontMat = new THREE.MeshPhysicalMaterial({ map: bodyTexture, roughness: 0.45, clearcoat: 0.3 });
+  const bodyFrontMat = new THREE.MeshPhysicalMaterial({ map: bodyTexture, roughness: 0.35, clearcoat: 0.5 });
   packBody.material = [packBaseMat, packBaseMat, packBaseMat, packBaseMat, bodyFrontMat, packBaseMat];
 });
 
 const topTexture = createPackTopTexture();
-const topFrontMat = new THREE.MeshPhysicalMaterial({ map: topTexture, roughness: 0.45, clearcoat: 0.3 });
+const topFrontMat = new THREE.MeshPhysicalMaterial({ map: topTexture, roughness: 0.35, clearcoat: 0.5 });
 packTop.material = [packBaseMat, packBaseMat, packBaseMat, packBaseMat, topFrontMat, packBaseMat];
 
 const cutLineMat = new THREE.LineDashedMaterial({ 
@@ -342,7 +354,7 @@ cutHitBox.position.set(0, 1.4, 0.17);
 packGroup.add(cutHitBox);
 
 const cardGeo = new THREE.BoxGeometry(2.2, 3.2, 0.05);
-const backMat = new THREE.MeshStandardMaterial({ color: 0x221111, metalness: 0.5, roughness: 0.5 });
+const backMat = new THREE.MeshStandardMaterial({ color: 0x111111, metalness: 0.5, roughness: 0.5 });
 let frontMat = new THREE.MeshStandardMaterial({ color: 0x222222 });
 
 const cardMaterials = [backMat, backMat, backMat, backMat, frontMat, backMat];
@@ -361,18 +373,21 @@ const particleMat = new THREE.PointsMaterial({ size: 0.06, color: 0xffd700, tran
 const particles = new THREE.Points(particleGeo, particleMat);
 scene.add(particles);
 
-// --- 6. ペルソナ5風カットイン再生機能 (位置調整対応) ---
+// --- 6. ペルソナ5風カットイン再生機能 (ズーム軸連携対応) ---
 function playP5CutIn(cutinImgUrl, offset, onCompleteCallback) {
   const overlay = document.getElementById('cutin-overlay');
   const banner = document.getElementById('cutin-banner');
   const img = document.getElementById('cutin-img');
 
   img.src = cutinImgUrl;
-  img.style.objectPosition = offset || "center 30%";
+  
+  const pos = offset || "center 30%";
+  img.style.objectPosition = pos;
 
   overlay.style.display = 'block';
 
-  gsap.set(img, { transformOrigin: "center 35%" });
+  // GSAPのズーム中心点を画像のobjectPositionと連携させてズレを防ぐ
+  gsap.set(img, { transformOrigin: pos });
 
   const tl = gsap.timeline({
     onComplete: () => {
