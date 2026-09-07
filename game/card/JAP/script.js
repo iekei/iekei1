@@ -63,31 +63,35 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 container.appendChild(renderer.domElement);
 
-// ライティング (白背景に合わせて少し明るめに設定)
-const ambientLight = new THREE.AmbientLight(0xffffff, 1.3);
+const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
 scene.add(ambientLight);
 
-const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
+const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
 dirLight.position.set(5, 10, 7);
 scene.add(dirLight);
 
-const pointLight = new THREE.PointLight(0xffd700, 1.2, 10);
+const pointLight = new THREE.PointLight(0xffd700, 1.5, 10);
 pointLight.position.set(0, 0, 2);
 scene.add(pointLight);
 
-// --- 3. パック表紙テクスチャ生成 (清潔感のあるホワイト×ゴールド) ---
+// --- 3. GERと同色のパック表紙テクスチャ生成 (ジャーマングレー/漆黒×ゴールド) ---
 function createPackBodyTexture(callback) {
   const canvas = document.createElement('canvas');
   canvas.width = 512;
   canvas.height = 768;
   const ctx = canvas.getContext('2d');
 
-  // 背景: 清潔感のある白
-  ctx.fillStyle = '#ffffff';
+  // GERと同じダークグレー/ブラックのグラデーション
+  const packGrad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+  packGrad.addColorStop(0, '#2a2a2a');
+  packGrad.addColorStop(0.5, '#151515');
+  packGrad.addColorStop(1, '#0a0a0a');
+  
+  ctx.fillStyle = packGrad;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // ギザギザフチ（下部）
-  ctx.fillStyle = '#e8e8e8';
+  ctx.fillStyle = '#000000';
   ctx.beginPath();
   const teeth = 32;
   const toothWidth = canvas.width / teeth;
@@ -102,11 +106,11 @@ function createPackBodyTexture(callback) {
   ctx.closePath();
   ctx.fill();
 
-  // 金の二重枠線
-  ctx.strokeStyle = '#d4af37';
+  // 金と銀の二重枠線
+  ctx.strokeStyle = '#ffd700';
   ctx.lineWidth = 8;
   ctx.strokeRect(14, 14, canvas.width - 28, canvas.height - 28);
-  ctx.strokeStyle = '#e0e0e0';
+  ctx.strokeStyle = '#444444';
   ctx.lineWidth = 4;
   ctx.strokeRect(24, 24, canvas.width - 48, canvas.height - 48);
 
@@ -128,10 +132,10 @@ function createPackTopTexture() {
   canvas.height = 160;
   const ctx = canvas.getContext('2d');
 
-  ctx.fillStyle = '#ffffff';
+  ctx.fillStyle = '#1e1e1e';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillStyle = '#e8e8e8';
+  ctx.fillStyle = '#000000';
   ctx.beginPath();
   const teeth = 32;
   const toothWidth = canvas.width / teeth;
@@ -146,14 +150,14 @@ function createPackTopTexture() {
   ctx.closePath();
   ctx.fill();
 
-  ctx.strokeStyle = '#d4af37';
+  ctx.strokeStyle = '#ffd700';
   ctx.lineWidth = 8;
   ctx.strokeRect(14, 14, canvas.width - 28, canvas.height - 28);
 
   return new THREE.CanvasTexture(canvas);
 }
 
-// --- 4. 動的カードテクスチャ生成 (白ベース) ---
+// --- 4. 動的カードテクスチャ生成 (黒ベースに戻す) ---
 function drawRoundedRect(ctx, x, y, width, height, radius) {
   ctx.beginPath();
   ctx.moveTo(x + radius, y);
@@ -189,16 +193,16 @@ function createCardTexture(leader, callback) {
   canvas.height = 768;
   const ctx = canvas.getContext('2d');
 
-  // カード背景グラデーション (ホワイト〜オフホワイト)
+  // これまでの黒ベースのグラデーション
   const bgGrad = ctx.createRadialGradient(256, 384, 50, 256, 384, 400);
-  bgGrad.addColorStop(0, '#ffffff');
-  bgGrad.addColorStop(0.7, '#f4f5f7');
-  bgGrad.addColorStop(1, '#e2e5ec');
+  bgGrad.addColorStop(0, '#2c2c2c');
+  bgGrad.addColorStop(0.7, '#141414');
+  bgGrad.addColorStop(1, '#050505');
   
   ctx.fillStyle = bgGrad;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.strokeStyle = 'rgba(212, 175, 55, 0.4)';
+  ctx.strokeStyle = 'rgba(255, 215, 0, 0.25)';
   ctx.lineWidth = 2;
   drawRoundedRect(ctx, 10, 10, canvas.width - 20, canvas.height - 20, 24);
   ctx.stroke();
@@ -224,9 +228,9 @@ function createCardTexture(leader, callback) {
       }
       ctx.drawImage(img, sX, sY, sW, sH, imgX, imgY, imgW, imgH);
     } else {
-      ctx.fillStyle = '#f0f0f0';
+      ctx.fillStyle = '#222';
       ctx.fillRect(imgX, imgY, imgW, imgH);
-      ctx.fillStyle = '#999';
+      ctx.fillStyle = '#aaa';
       ctx.font = '24px sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText('NO IMAGE', 256, 300);
@@ -252,17 +256,17 @@ function createCardTexture(leader, callback) {
     ctx.strokeStyle = '#ffffff';
     ctx.stroke();
 
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = '#000000';
     ctx.font = 'bold 28px sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(leader.rank, 65, 65);
 
-    // テキストエリア (白の半透明)
+    // テキストエリア (黒の半透明)
     const textAreaX = 35, textAreaY = 545, textAreaW = 442, textAreaH = 185;
     const textAreaGrad = ctx.createLinearGradient(0, textAreaY, 0, textAreaY + textAreaH);
-    textAreaGrad.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
-    textAreaGrad.addColorStop(1, 'rgba(245, 245, 248, 0.98)');
+    textAreaGrad.addColorStop(0, 'rgba(20, 20, 20, 0.92)');
+    textAreaGrad.addColorStop(1, 'rgba(5, 5, 5, 0.95)');
 
     ctx.fillStyle = textAreaGrad;
     drawRoundedRect(ctx, textAreaX, textAreaY, textAreaW, textAreaH, 12);
@@ -273,14 +277,14 @@ function createCardTexture(leader, callback) {
     drawRoundedRect(ctx, textAreaX, textAreaY, textAreaW, textAreaH, 12);
     ctx.stroke();
 
-    // 武将/指導者名
-    ctx.fillStyle = '#222222';
+    // 指導者名 (白文字)
+    ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 28px serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'alphabetic';
     ctx.fillText(leader.name, 256, 585);
 
-    ctx.strokeStyle = 'rgba(212, 175, 55, 0.4)';
+    ctx.strokeStyle = 'rgba(255, 215, 0, 0.3)';
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(55, 600);
@@ -288,7 +292,7 @@ function createCardTexture(leader, callback) {
     ctx.stroke();
 
     // 説明文
-    ctx.fillStyle = '#444444';
+    ctx.fillStyle = '#dddddd';
     ctx.font = '19px sans-serif';
     ctx.textAlign = 'center';
     wrapText(ctx, leader.desc, 256, 630, 410, 26);
@@ -309,12 +313,13 @@ scene.add(mainGroup);
 const packGroup = new THREE.Group();
 mainGroup.add(packGroup);
 
+// GER仕様のダークメタル素材
 const packBaseMat = new THREE.MeshPhysicalMaterial({ 
-  color: 0xffffff, 
-  roughness: 0.2, 
-  metalness: 0.1, 
-  clearcoat: 0.8, 
-  clearcoatRoughness: 0.1
+  color: 0x1f1f1f, 
+  roughness: 0.35, 
+  metalness: 0.3, 
+  clearcoat: 0.5, 
+  clearcoatRoughness: 0.2
 });
 
 const packBody = new THREE.Mesh(new THREE.BoxGeometry(2.5, 3.4, 0.12), packBaseMat);
@@ -326,16 +331,16 @@ packTop.position.set(0, 1.75, 0.1);
 packGroup.add(packTop);
 
 createPackBodyTexture((bodyTexture) => {
-  const bodyFrontMat = new THREE.MeshPhysicalMaterial({ map: bodyTexture, roughness: 0.2, clearcoat: 0.8 });
+  const bodyFrontMat = new THREE.MeshPhysicalMaterial({ map: bodyTexture, roughness: 0.35, clearcoat: 0.5 });
   packBody.material = [packBaseMat, packBaseMat, packBaseMat, packBaseMat, bodyFrontMat, packBaseMat];
 });
 
 const topTexture = createPackTopTexture();
-const topFrontMat = new THREE.MeshPhysicalMaterial({ map: topTexture, roughness: 0.2, clearcoat: 0.8 });
+const topFrontMat = new THREE.MeshPhysicalMaterial({ map: topTexture, roughness: 0.35, clearcoat: 0.5 });
 packTop.material = [packBaseMat, packBaseMat, packBaseMat, packBaseMat, topFrontMat, packBaseMat];
 
 const cutLineMat = new THREE.LineDashedMaterial({ 
-  color: 0xd4af37, 
+  color: 0xffd700, 
   dashSize: 0.1, 
   gapSize: 0.08,
   linewidth: 2 
@@ -355,8 +360,8 @@ cutHitBox.position.set(0, 1.4, 0.17);
 packGroup.add(cutHitBox);
 
 const cardGeo = new THREE.BoxGeometry(2.2, 3.2, 0.05);
-const backMat = new THREE.MeshStandardMaterial({ color: 0xf0f0f0, metalness: 0.2, roughness: 0.3 });
-let frontMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
+const backMat = new THREE.MeshStandardMaterial({ color: 0x111111, metalness: 0.5, roughness: 0.5 });
+let frontMat = new THREE.MeshStandardMaterial({ color: 0x222222 });
 
 const cardMaterials = [backMat, backMat, backMat, backMat, frontMat, backMat];
 const card = new THREE.Mesh(cardGeo, cardMaterials);
@@ -544,4 +549,4 @@ window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
-});f
+});
