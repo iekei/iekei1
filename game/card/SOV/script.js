@@ -90,11 +90,9 @@ function createPackBodyTexture(callback) {
   canvas.height = 768;
   const ctx = canvas.getContext('2d');
 
-  // 深みのある赤色ベース
   ctx.fillStyle = '#8b0000';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // 下端のギザギザ
   ctx.fillStyle = '#121212';
   ctx.beginPath();
   const teeth = 32;
@@ -110,7 +108,6 @@ function createPackBodyTexture(callback) {
   ctx.closePath();
   ctx.fill();
 
-  // 金色の装飾枠線
   ctx.strokeStyle = '#ffd700';
   ctx.lineWidth = 10;
   ctx.strokeRect(14, 14, canvas.width - 28, canvas.height - 28);
@@ -373,16 +370,13 @@ const particleMat = new THREE.PointsMaterial({ size: 0.06, color: 0xffd700, tran
 const particles = new THREE.Points(particleGeo, particleMat);
 scene.add(particles);
 
-// --- 6. ペルソナ5風カットイン再生機能 (右スライドイン＆表示時間長め) ---
-// 引数に cutinOffset を追加
+// --- 6. ペルソナ5風カットイン再生機能 (位置調整対応) ---
 function playP5CutIn(cutinImgUrl, offset, onCompleteCallback) {
   const overlay = document.getElementById('cutin-overlay');
   const banner = document.getElementById('cutin-banner');
   const img = document.getElementById('cutin-img');
 
   img.src = cutinImgUrl;
-  
-  // 個別指定があればそれを使い、なければデフォルトの "center 30%"（目元位置）を使う
   img.style.objectPosition = offset || "center 30%";
 
   overlay.style.display = 'block';
@@ -482,14 +476,12 @@ function openPack(direction) {
     tl.to(packTop.position, { x: direction * 4, y: 3.0, z: -2, duration: 0.6, ease: "power2.out" })
       .to(packTop.rotation, { z: -direction * Math.PI * 2, duration: 0.6 }, "<")
       .call(() => {
-      // openPack 関数内の該当部分
-      if (picked.rank === "SSR" && picked.cutinUrl) {
-        tl.pause();
-        // 割当オフセット値を第2引数として渡す
-        playP5CutIn(picked.cutinUrl, picked.cutinOffset, () => {
-          tl.resume();
-        });
-      }
+        if (picked.rank === "SSR" && picked.cutinUrl) {
+          tl.pause();
+          playP5CutIn(picked.cutinUrl, picked.cutinOffset, () => {
+            tl.resume();
+          });
+        }
 
         card.visible = true;
         pointLight.color.setHex(picked.color);
