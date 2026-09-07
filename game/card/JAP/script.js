@@ -22,7 +22,7 @@ const leaders = [
   color: "#4682B4" 
 },
 { 
-  name: "真崎甚三郎（歴史IF：皇道派クーデター）", 
+  name: "真崎甚三郎", 
   rank: "SSR", 
   desc: "陸軍大将。皇道派の中心人物であり、二・二六事件が成功し軍部過激派が政権を掌握した場合の軍事政権トップ候補。", 
   imgUrl: "data/image/jap/mazaki.png",
@@ -36,14 +36,14 @@ const leaders = [
   color: "#556B2F" 
 },
 { 
-  name: "近衛文麿（歴史IF：革新貴族・挙国一致）", 
+  name: "近衛文麿", 
   rank: "SSR", 
   desc: "貴族院議長。圧倒的な国民的人気と五摂家筆頭の血統を持ち、軍部と政党の対立を収める唯一の「期待の星」として擁立された。", 
   imgUrl: "data/image/jap/konoe.png",
   color: "#2E8B57" 
 },
 { 
-  name: "石原莞爾（歴史IF：満州派・新構想）", 
+  name: "石原莞爾", 
   rank: "SR", 
   desc: "参謀本部作戦課長。満州事変の主謀者であり、「最終戦争論」を掲げ国家総力戦体制への組織改革を推し進めた戦略家。", 
   imgUrl: "data/image/jap/ishiwara.png",
