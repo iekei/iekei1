@@ -8,9 +8,28 @@ body {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  background: radial-gradient(circle at center, #ffffff 0%, #f0f2f5 70%, #e0e4e8 100%);
   font-family: 'Helvetica Neue', Arial, 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', sans-serif;
   color: #333333;
+
+  /* --- マットホワイト パンチボード背景 --- */
+  background-color: #f2f3f5; /* ベースのマットホワイト */
+  background-image:
+    /* 穴の深みと影（内側の凹み感） */
+    radial-gradient(circle, rgba(0, 0, 0, 0.22) 18%, transparent 22%),
+    /* 穴の下側にわずかに入るハイライト（立体感） */
+    radial-gradient(circle, rgba(255, 255, 255, 0.8) 22%, transparent 26%),
+    /* 画面全体のソフトなライティング（中央がほんのり明るい） */
+    radial-gradient(circle at center, rgba(255, 255, 255, 0.6) 0%, rgba(220, 224, 230, 0.4) 100%);
+  
+  /* 穴の配置パターン設定 */
+  background-position: 
+    0 0, 
+    0 1px, 
+    0 0;
+  background-size: 
+    24px 24px, 
+    24px 24px, 
+    100% 100%;
 }
 
 #canvas-container {
