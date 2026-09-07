@@ -2,11 +2,17 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background: radial-gradient(circle, #2c3e50 0%, #000000 100%);
+  /* パンチボード（ドット穴の開いた黒金属プレート）風の背景 */
+  background-color: #121212;
+  background-image: 
+    radial-gradient(#222222 15%, transparent 16%),
+    radial-gradient(#000000 15%, transparent 16%);
+  background-size: 16px 16px;
+  background-position: 0 0, 8px 8px;
   color: #fff;
   font-family: 'Helvetica Neue', Arial, sans-serif;
   user-select: none;
-  touch-action: none; /* スマホでのスワイプ時の画面スクロールを防止 */
+  touch-action: none;
 }
 
 #ui-container {
@@ -23,7 +29,7 @@ body {
 h1 {
   font-size: 26px;
   letter-spacing: 2px;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.8), 0 0 5px rgba(255, 255, 255, 0.3);
   margin-bottom: 5px;
 }
 
@@ -46,7 +52,7 @@ h1 {
   font-weight: bold;
   min-height: 50px;
   line-height: 1.4;
-  text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.9);
 }
 
 button {
