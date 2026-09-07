@@ -112,7 +112,7 @@ function createPackBodyTexture(callback) {
 
   // アイコン読み込み
   const iconImg = new Image();
-  iconImg.src = 'data/image/icon/japan.png';
+  iconImg.src = 'data/image/icon/jap.png';
 
   iconImg.onload = () => {
     const size = 210;
