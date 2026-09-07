@@ -1,63 +1,54 @@
 // --- 1. ソビエト連邦 リーダーデータ ---
 const leaders = [
 { 
-  name: "ヨシフ・スターリン", 
+  name: "昭和天皇（裕仁）", 
   rank: "SSR", 
-  desc: "ソ連共産党書記長。急速な工業化と大粛清により絶対的な権力を確立し、独裁体制を敷いた最高指導者。", 
-  imgUrl: "data/image/sov/stalin.png",
-  cutinUrl: "data/image/cut/stalin.png", // カットイン用画像パス
-  color: "#CC0000" 
+  desc: "大日本帝国の大元帥にして立憲君主。国家の精神的支柱であり、軍・政府の権威の頂点に位置した最高存在。", 
+  imgUrl: "data/image/jap/hirohito.png",
+  color: "#D4AF37" 
 },
 { 
-  name: "ヴャチェスラフ・モロトフ", 
+  name: "広田弘毅", 
   rank: "SR", 
-  desc: "人民委員会議議長（首相）。スターリンの忠実な最側近であり、外交と政権運営を支えた実質的ナンバー2。", 
-  imgUrl: "data/image/sov/molotov.png",
-  cutinUrl: null,
+  desc: "1936年に内閣総理大臣に就任。二・二六事件後の混乱を収拾し、軍部の台頭を抑えつつ文民主導の外交を模索した。", 
+  imgUrl: "data/image/jap/hirota.png",
+  color: "#708090" 
+},
+{ 
+  name: "岡田啓介", 
+  rank: "SR", 
+  desc: "海軍大将にして二・二六事件当時の首相。襲撃を奇跡的に生き延びた重臣であり、軍部の過激派に批判的な穏健派。", 
+  imgUrl: "data/image/jap/okada.png",
+  color: "#4682B4" 
+},
+{ 
+  name: "真崎甚三郎（歴史IF：皇道派クーデター）", 
+  rank: "SSR", 
+  desc: "陸軍大将。皇道派の中心人物であり、二・二六事件が成功し軍部過激派が政権を掌握した場合の軍事政権トップ候補。", 
+  imgUrl: "data/image/jap/mazaki.png",
   color: "#8B0000" 
 },
 { 
-  name: "レオン・トロツキー", 
+  name: "東條英機", 
+  rank: "SR", 
+  desc: "関東軍憲兵司令官（後に参謀長）。1936年当時は満州で徹底した治安維持と規律を統括し、統制派のエリートとして頭角を現す。", 
+  imgUrl: "data/image/jap/tojo.png",
+  color: "#556B2F" 
+},
+{ 
+  name: "近衛文麿（歴史IF：革新貴族・挙国一致）", 
   rank: "SSR", 
-  desc: "赤軍の創設者。国外追放後も永続革命論を掲げ、反スターリン派の象徴的指導者として影響力を持ち続けた。", 
-  imgUrl: "data/image/sov/trotsky.png",
-  cutinUrl: "data/image/cut/trotsky.png",
-  cutinOffset: "center 75%",
-  color: "#D2691E" 
+  desc: "貴族院議長。圧倒的な国民的人気と五摂家筆頭の血統を持ち、軍部と政党の対立を収める唯一の「期待の星」として擁立された。", 
+  imgUrl: "data/image/jap/konoe.png",
+  color: "#2E8B57" 
 },
 { 
-  name: "ミハイル・トゥハチェフスキー", 
-  rank: "SSR", 
-  desc: "ソ連元帥。「赤軍のナポレオン」と称された戦略家。軍の近代化を推進し、軍事クーデターの指導者候補とされる。", 
-  imgUrl: "data/image/sov/tukhachevsky.png",
-  cutinUrl: "data/image/cut/tukhachevsky.png",
-  cutinOffset: "center 10%",
-  color: "#4B5320" 
-},
-{ 
-  name: "ニコライ・イェジョフ", 
+  name: "石原莞爾（歴史IF：満州派・新構想）", 
   rank: "SR", 
-  desc: "内務人民委員（NKVD長官）。大粛清の実行者として秘密警察の暴力装置を掌握し、暗部から権力を振るった。", 
-  imgUrl: "data/image/sov/yezhov.png",
-  cutinUrl: null,
-  color: "#2A2A2A" 
-},
-{ 
-  name: "ニコライ・ブハーリン", 
-  rank: "SR", 
-  desc: "党の理論家にして右翼反対派の指導者。急進的な工業化に反対し、温和な経済政策の継続を訴えた。", 
-  imgUrl: "data/image/sov/bukharin.png",
-  cutinUrl: null,
-  color: "#DAA520" 
-},
-{ 
-  name: "セルゴ・オルジョニキゼ", 
-  rank: "SR", 
-  desc: "重工業人民委員。五カ年計画の重工業化を成功させた立役者であり、党内で屈指の人望を集めた重鎮。", 
-  imgUrl: "data/image/sov/ordzhonikidze.png",
-  cutinUrl: null,
+  desc: "参謀本部作戦課長。満州事変の主謀者であり、「最終戦争論」を掲げ国家総力戦体制への組織改革を推し進めた戦略家。", 
+  imgUrl: "data/image/jap/ishiwara.png",
   color: "#B8860B" 
- }
+}
 ]; 
 
 // --- 2. 3Dシーン初期化 ---
