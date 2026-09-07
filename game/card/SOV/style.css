@@ -154,8 +154,10 @@ button:hover {
 }
 
 .cutin-img {
-  height: 120%;
+  width: 100%;
+  height: 160%; /* 目元を拡大して強調するため少し大きめに設定 */
   object-fit: cover;
+  object-position: center 30%; /* ←★中心よりやや上（目元の位置）に合わせる */
   filter: contrast(130%) drop-shadow(0 0 10px #000);
 }
 
