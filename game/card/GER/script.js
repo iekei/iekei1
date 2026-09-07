@@ -64,9 +64,6 @@ const leaders = [
     color: "#B22222" 
   }
 ];
-
-
-
 // --- 2. 3Dシーン初期化 ---
 const container = document.getElementById('canvas-container');
 const scene = new THREE.Scene();
@@ -380,7 +377,7 @@ const particleMat = new THREE.PointsMaterial({ size: 0.06, color: 0xffd700, tran
 const particles = new THREE.Points(particleGeo, particleMat);
 scene.add(particles);
 
-// --- 6. ペルソナ5風カットイン再生機能 ---
+// --- 6. ペルソナ5風カットイン再生機能 (右スライドイン＆表示時間長め) ---
 function playP5CutIn(cutinImgUrl, onCompleteCallback) {
   const overlay = document.getElementById('cutin-overlay');
   const banner = document.getElementById('cutin-banner');
@@ -396,17 +393,20 @@ function playP5CutIn(cutinImgUrl, onCompleteCallback) {
     }
   });
 
+  // 1. 画面右外 (xPercent: 100) から中央へ一気にスライドイン
   tl.fromTo(banner, 
-    { scaleX: 0, opacity: 0 }, 
-    { scaleX: 1, opacity: 1, duration: 0.18, ease: "power4.out" }
+    { xPercent: 100, opacity: 0 }, 
+    { xPercent: 0, opacity: 1, duration: 0.25, ease: "power4.out" }
   )
   .fromTo(img, 
-    { scale: 2.0, x: -50 }, 
-    { scale: 1.0, x: 0, duration: 0.25, ease: "back.out(1.7)" }, 
+    { scale: 2.2, x: 100 }, 
+    { scale: 1.0, x: 0, duration: 0.3, ease: "back.out(1.4)" }, 
     "<"
   )
-  .to(banner, { duration: 0.4 })
-  .to(banner, { scaleY: 0, opacity: 0, duration: 0.15, ease: "power2.in" });
+  // 2. 表示時間のキープ (1.2秒間)
+  .to(banner, { duration: 1.2 })
+  // 3. 画面左外 (xPercent: -100) へ切り抜けるようにスライドアウト
+  .to(banner, { xPercent: -100, opacity: 0, duration: 0.2, ease: "power3.in" });
 }
 
 // --- 7. Raycaster & スワイプ処理 ---
