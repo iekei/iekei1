@@ -1,4 +1,4 @@
-// --- 1. リーダーデータ (指定の画像パスに変更) ---
+// --- 1. カードデータの量産構造 (ここに追加するだけでカードを増やすことが可能です) ---
 const leaders = [
   { 
     name: "アドルフ・ヒトラー", 
@@ -6,6 +6,34 @@ const leaders = [
     desc: "ナチス・ドイツ最高指導者", 
     imgUrl: "data/image/nazi/hitler.png",
     color: "#ffd700" 
+  },
+  { 
+    name: "マハトマ・ガンディー", 
+    rank: "SSR", 
+    desc: "インド独立の父（非暴力・不服従）", 
+    imgUrl: "data/image/nazi/gandhi.png",
+    color: "#ffd700" 
+  },
+  { 
+    name: "ウインストン・チャーチル", 
+    rank: "SR", 
+    desc: "第二次大戦を率いたイギリス首相", 
+    imgUrl: "data/image/nazi/churchill.png",
+    color: "#c0c0c0" 
+  },
+  { 
+    name: "東條英機", 
+    rank: "SR", 
+    desc: "大日本帝国第40代内閣総理大臣", 
+    imgUrl: "data/image/nazi/tojo.png",
+    color: "#c0c0c0" 
+  },
+  { 
+    name: "シャルル・ド・ゴール", 
+    rank: "R", 
+    desc: "自由フランスを率いた陸軍軍人・大統領", 
+    imgUrl: "data/image/nazi/degaulle.png",
+    color: "#cd7f32" 
   }
 ];
 
@@ -14,66 +42,110 @@ const container = document.getElementById('canvas-container');
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.set(0, 0, 7);
+camera.position.set(0, 0, 7.5);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 container.appendChild(renderer.domElement);
 
-// ライティング (白パックのツヤ感を出す調整)
-const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+// ライティング (マットホワイトの柔らかな光反射を表現)
+const ambientLight = new THREE.AmbientLight(0xffffff, 1.1);
 scene.add(ambientLight);
 
-const dirLight = new THREE.DirectionalLight(0xffffff, 1.0);
+const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
 dirLight.position.set(5, 10, 7);
 scene.add(dirLight);
 
-const pointLight = new THREE.PointLight(0xffd700, 2, 10);
+const pointLight = new THREE.PointLight(0xffffd0, 1.5, 10);
 pointLight.position.set(0, 0, 2);
 scene.add(pointLight);
 
-// --- 3. パック表紙テクスチャ生成 (白いツヤ地 + 中央アイコン) ---
-function createPackTexture(callback) {
+// --- 3. パック表紙テクスチャ生成 (ギザギザギザ＆マットホワイト仕様) ---
+
+// 本体用 (中央にアイコン配置 & 下端にギザギザ)
+function createPackBodyTexture(callback) {
   const canvas = document.createElement('canvas');
   canvas.width = 512;
   canvas.height = 768;
   const ctx = canvas.getContext('2d');
 
-  // 白ベースの背景グラデーション
-  const grad = ctx.createLinearGradient(0, 0, 512, 768);
-  grad.addColorStop(0, '#ffffff');
-  grad.addColorStop(0.5, '#f0f0f0');
-  grad.addColorStop(1, '#e0e0e0');
-  ctx.fillStyle = grad;
+  // マットホワイト基調の上質な背景
+  ctx.fillStyle = '#f5f5f7';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // 金色の枠線
-  ctx.strokeStyle = '#d4af37';
-  ctx.lineWidth = 12;
-  ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
+  // 下端のギザギザ (鋸歯) 描画
+  ctx.fillStyle = '#111111'; // 背景透過風のカットアウト表現
+  ctx.beginPath();
+  const teeth = 32;
+  const toothWidth = canvas.width / teeth;
+  const toothHeight = 16;
+  ctx.moveTo(0, canvas.height);
+  for (let i = 0; i <= teeth; i++) {
+    const x = i * toothWidth;
+    const y = (i % 2 === 0) ? canvas.height : canvas.height - toothHeight;
+    ctx.lineTo(x, y);
+  }
+  ctx.lineTo(canvas.width, canvas.height);
+  ctx.closePath();
+  ctx.fill();
 
-  // 中央アイコンの読み込み (data/image/icon/nazi.png)
+  // 微細なマットグラデーション枠線
+  ctx.strokeStyle = '#d0d0d5';
+  ctx.lineWidth = 8;
+  ctx.strokeRect(12, 12, canvas.width - 24, canvas.height - 24);
+
+  // 中央アイコンの描画 (data/image/icon/nazi.png)
   const iconImg = new Image();
   iconImg.src = 'data/image/icon/nazi.png';
-  
+
   iconImg.onload = () => {
-    const size = 200;
-    ctx.drawImage(iconImg, (canvas.width - size) / 2, (canvas.height - size) / 2, size, size);
+    const size = 210;
+    ctx.drawImage(iconImg, (canvas.width - size) / 2, (canvas.height - size) / 2 - 20, size, size);
     callback(new THREE.CanvasTexture(canvas));
   };
 
   iconImg.onerror = () => {
-    // 画像読み込み失敗時のフォールバック描画
-    ctx.fillStyle = '#000000';
-    ctx.font = 'bold 32px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('PACK', canvas.width / 2, canvas.height / 2);
     callback(new THREE.CanvasTexture(canvas));
   };
 }
 
-// --- 4. 動的カードテクスチャ生成関数 ---
+// 上部（切れる部分）用 (アイコン無し & 上端にギザギザ)
+function createPackTopTexture() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 160;
+  const ctx = canvas.getContext('2d');
+
+  // マットホワイト背景
+  ctx.fillStyle = '#f5f5f7';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // 上端のギザギザ (鋸歯) 描画
+  ctx.fillStyle = '#111111';
+  ctx.beginPath();
+  const teeth = 32;
+  const toothWidth = canvas.width / teeth;
+  const toothHeight = 16;
+  ctx.moveTo(0, 0);
+  for (let i = 0; i <= teeth; i++) {
+    const x = i * toothWidth;
+    const y = (i % 2 === 0) ? 0 : toothHeight;
+    ctx.lineTo(x, y);
+  }
+  ctx.lineTo(canvas.width, 0);
+  ctx.closePath();
+  ctx.fill();
+
+  // 上部外枠
+  ctx.strokeStyle = '#d0d0d5';
+  ctx.lineWidth = 8;
+  ctx.strokeRect(12, 12, canvas.width - 24, canvas.height - 24);
+
+  return new THREE.CanvasTexture(canvas);
+}
+
+// --- 4. 動的カードテクスチャ生成 ---
 function createCardTexture(leader, callback) {
   const canvas = document.createElement('canvas');
   canvas.width = 512;
@@ -139,6 +211,28 @@ function createCardTexture(leader, callback) {
 
     callback(new THREE.CanvasTexture(canvas));
   };
+
+  img.onerror = () => {
+    // 画像読み込み失敗時のバックアップ描画
+    ctx.fillStyle = '#333';
+    ctx.fillRect(30, 80, 452, 460);
+    ctx.fillStyle = '#fff';
+    ctx.font = '24px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('NO IMAGE', 256, 310);
+
+    ctx.lineWidth = 16;
+    ctx.strokeStyle = leader.color;
+    ctx.strokeRect(8, 8, canvas.width - 16, canvas.height - 16);
+
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
+    ctx.fillRect(30, 555, 452, 175);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 30px sans-serif';
+    ctx.fillText(leader.name, 256, 595);
+
+    callback(new THREE.CanvasTexture(canvas));
+  };
 }
 
 // --- 5. 3Dオブジェクト構築 ---
@@ -148,57 +242,54 @@ scene.add(mainGroup);
 const packGroup = new THREE.Group();
 mainGroup.add(packGroup);
 
-// ツヤ感のある白色マテリアル (MeshPhysicalMaterial)
-const packMat = new THREE.MeshPhysicalMaterial({ 
-  color: 0xffffff, 
-  roughness: 0.1, 
-  metalness: 0.1,
-  clearcoat: 1.0,
-  clearcoatRoughness: 0.1
+// マットホワイトマテリアル (しっとりした質感と優しい光の反射)
+const packBaseMat = new THREE.MeshPhysicalMaterial({ 
+  color: 0xf2f2f5, 
+  roughness: 0.45,       // 光を拡散させるマット質感
+  metalness: 0.05, 
+  clearcoat: 0.3,         // ほんのりとした表面反射
+  clearcoatRoughness: 0.4
 });
 
-// パック本体 (下部)
-const packBody = new THREE.Mesh(new THREE.BoxGeometry(2.6, 3.0, 0.15), packMat);
-packBody.position.set(0, -0.4, 0.1);
+// 縦長に調整したパックサイズ (横2.5, 縦長化)
+const packBody = new THREE.Mesh(new THREE.BoxGeometry(2.5, 3.4, 0.12), packBaseMat);
+packBody.position.set(0, -0.3, 0.1);
 packGroup.add(packBody);
 
-// パック切り取り部分 (上部)
-const packTop = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.6, 0.15), packMat);
-packTop.position.set(0, 1.4, 0.1);
+const packTop = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.7, 0.12), packBaseMat);
+packTop.position.set(0, 1.75, 0.1);
 packGroup.add(packTop);
 
 // 表紙テクスチャのアタッチ
-createPackTexture((texture) => {
-  const frontPackMat = new THREE.MeshPhysicalMaterial({ 
-    map: texture, 
-    roughness: 0.1, 
-    clearcoat: 1.0 
-  });
-  // 前面にテクスチャを設定
-  packBody.material = [packMat, packMat, packMat, packMat, frontPackMat, packMat];
-  packTop.material = [packMat, packMat, packMat, packMat, frontPackMat, packMat];
+createPackBodyTexture((bodyTexture) => {
+  const bodyFrontMat = new THREE.MeshPhysicalMaterial({ map: bodyTexture, roughness: 0.45, clearcoat: 0.3 });
+  packBody.material = [packBaseMat, packBaseMat, packBaseMat, packBaseMat, bodyFrontMat, packBaseMat];
 });
+
+const topTexture = createPackTopTexture();
+const topFrontMat = new THREE.MeshPhysicalMaterial({ map: topTexture, roughness: 0.45, clearcoat: 0.3 });
+packTop.material = [packBaseMat, packBaseMat, packBaseMat, packBaseMat, topFrontMat, packBaseMat];
 
 // 発光する切り取り破線
 const cutLineMat = new THREE.LineDashedMaterial({ 
-  color: 0x00ffff, 
+  color: 0x00e5ff, 
   dashSize: 0.1, 
   gapSize: 0.08,
   linewidth: 2 
 });
 const cutLine = new THREE.Line(
-  new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-1.3, 1.1, 0.18), new THREE.Vector3(1.3, 1.1, 0.18)]),
+  new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-1.25, 1.4, 0.17), new THREE.Vector3(1.25, 1.4, 0.17)]),
   cutLineMat
 );
 cutLine.computeLineDistances();
 packGroup.add(cutLine);
 
-// 当たり判定専用の不可視ヒットボックス
+// スワイプ判定用ヒットボックス
 const cutHitBox = new THREE.Mesh(
-  new THREE.BoxGeometry(2.8, 0.5, 0.5),
+  new THREE.BoxGeometry(2.7, 0.6, 0.5),
   new THREE.MeshBasicMaterial({ visible: false })
 );
-cutHitBox.position.set(0, 1.1, 0.18);
+cutHitBox.position.set(0, 1.4, 0.17);
 packGroup.add(cutHitBox);
 
 // 3Dカードメッシュ
@@ -208,7 +299,7 @@ let frontMat = new THREE.MeshStandardMaterial({ color: 0x222222 });
 
 const cardMaterials = [backMat, backMat, backMat, backMat, frontMat, backMat];
 const card = new THREE.Mesh(cardGeo, cardMaterials);
-card.position.set(0, -0.4, 0);
+card.position.set(0, -0.3, 0);
 card.scale.set(0.9, 0.9, 0.9);
 card.visible = false;
 mainGroup.add(card);
@@ -223,7 +314,7 @@ const particleMat = new THREE.PointsMaterial({ size: 0.06, color: 0xffd700, tran
 const particles = new THREE.Points(particleGeo, particleMat);
 scene.add(particles);
 
-// --- 6. Raycasterによる当たり判定＆スワイプ処理 ---
+// --- 6. Raycaster & スワイプ処理 ---
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
@@ -245,7 +336,6 @@ function onPointerDown(e) {
   const clientX = e.clientX || (e.touches && e.touches[0].clientX);
   const clientY = e.clientY || (e.touches && e.touches[0].clientY);
 
-  // 破線エリアをタップ/クリックした時のみスワイプを受け付ける
   if (checkIntersection(clientX, clientY)) {
     isDragging = true;
     startX = clientX;
@@ -279,6 +369,7 @@ function openPack(direction) {
   isOpened = true;
   instruction.style.display = 'none';
 
+  // leaders 配列からランダムに1枚を抽出
   const picked = leaders[Math.floor(Math.random() * leaders.length)];
 
   createCardTexture(picked, (texture) => {
@@ -293,14 +384,14 @@ function openPack(direction) {
     });
 
     cutLine.visible = false;
-    tl.to(packTop.position, { x: direction * 4, y: 2.5, z: -2, duration: 0.6, ease: "power2.out" })
+    tl.to(packTop.position, { x: direction * 4, y: 3.0, z: -2, duration: 0.6, ease: "power2.out" })
       .to(packTop.rotation, { z: -direction * Math.PI * 2, duration: 0.6 }, "<")
       .call(() => {
         card.visible = true;
         pointLight.color.setHex(picked.color);
       }, null, "-=0.2")
-      .to(card.position, { y: 1.2, z: 0.3, duration: 0.6, ease: "power2.out" })
-      .to(packBody.position, { y: -4, duration: 0.5, ease: "power2.in" }, "+=0.1")
+      .to(card.position, { y: 1.3, z: 0.3, duration: 0.6, ease: "power2.out" })
+      .to(packBody.position, { y: -4.5, duration: 0.5, ease: "power2.in" }, "+=0.1")
       .to(card.position, { y: 0, z: 2, duration: 0.8, ease: "back.out(1.2)" }, "<")
       .to(card.scale, { x: 1, y: 1, z: 1, duration: 0.8 }, "<")
       .to(card.rotation, { y: Math.PI * 6, duration: 1.0, ease: "power2.inOut" }, "<")
@@ -318,29 +409,28 @@ resetBtn.addEventListener('click', () => {
   resultText.innerText = '';
 
   packGroup.visible = true;
-  packTop.position.set(0, 1.4, 0.1);
+  packTop.position.set(0, 1.75, 0.1);
   packTop.rotation.set(0, 0, 0);
-  packBody.position.set(0, -0.4, 0.1);
+  packBody.position.set(0, -0.3, 0.1);
   cutLine.visible = true;
 
   card.visible = false;
-  card.position.set(0, -0.4, 0);
+  card.position.set(0, -0.3, 0);
   card.scale.set(0.9, 0.9, 0.9);
   card.rotation.set(0, 0, 0);
 });
 
-// 描画ループ（破線の発光アニメーション含む）
+// 描画ループ
 function animate() {
   requestAnimationFrame(animate);
 
-  // 破線の発光（シアン〜青系の脈動効果）
   if (!isOpened) {
     const time = Date.now() * 0.005;
     const glow = (Math.sin(time) + 1) / 2;
     cutLineMat.color.setHSL(0.5, 1.0, 0.3 + glow * 0.4);
 
-    mainGroup.rotation.y = Math.sin(Date.now() * 0.0015) * 0.1;
-    mainGroup.rotation.x = Math.cos(Date.now() * 0.001) * 0.05;
+    mainGroup.rotation.y = Math.sin(Date.now() * 0.0015) * 0.08;
+    mainGroup.rotation.x = Math.cos(Date.now() * 0.001) * 0.04;
   } else if (card.visible) {
     card.rotation.y += 0.003;
   }
