@@ -31,7 +31,7 @@ const leaders = [
   desc: "ソ連元帥。「赤軍のナポレオン」と称された戦略家。軍の近代化を推進し、軍事クーデターの指導者候補とされる。", 
   imgUrl: "data/image/sov/tukhachevsky.png",
   cutinUrl: "data/image/cut/tukhachevsky.png",
-  cutinOffset: "center 20%",
+  cutinOffset: "center 10%",
   color: "#4B5320" 
 },
 { 
