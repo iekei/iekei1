@@ -98,22 +98,23 @@ const pointLight = new THREE.PointLight(0xffd700, 1.5, 10);
 pointLight.position.set(0, 0, 2);
 scene.add(pointLight);
 
-// --- 3. GERパックテクスチャ生成 ---
+// --- ドイツ (GER) パックテクスチャ生成 ---
 function createPackBodyTexture(callback) {
   const canvas = document.createElement('canvas');
   canvas.width = 512;
   canvas.height = 768;
   const ctx = canvas.getContext('2d');
 
+  // マットホワイトベース + 左上からの光源グラデーション
   const packGrad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-  packGrad.addColorStop(0, '#2a2a2a');
-  packGrad.addColorStop(0.5, '#151515');
-  packGrad.addColorStop(1, '#0a0a0a');
-  
+  packGrad.addColorStop(0, '#ffffff');   // ハイライト（左上）
+  packGrad.addColorStop(0.5, '#e6e8eb'); // ミッドトーン
+  packGrad.addColorStop(1, '#cbcfd6');   // シャドウ（右下）
   ctx.fillStyle = packGrad;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillStyle = '#000000';
+  // 圧着ギザギザ（下部）
+  ctx.fillStyle = '#b0b5be';
   ctx.beginPath();
   const teeth = 32;
   const toothWidth = canvas.width / teeth;
@@ -128,16 +129,17 @@ function createPackBodyTexture(callback) {
   ctx.closePath();
   ctx.fill();
 
-  ctx.strokeStyle = '#ffd700';
+  // 枠線デザイン
+  ctx.strokeStyle = '#222222';
   ctx.lineWidth = 8;
   ctx.strokeRect(14, 14, canvas.width - 28, canvas.height - 28);
-  ctx.strokeStyle = '#444444';
+  ctx.strokeStyle = '#888888';
   ctx.lineWidth = 4;
   ctx.strokeRect(24, 24, canvas.width - 48, canvas.height - 48);
 
+  // アイコン描画
   const iconImg = new Image();
   iconImg.src = 'data/image/icon/nazi.png';
-
   iconImg.onload = () => {
     const size = 210;
     ctx.drawImage(iconImg, (canvas.width - size) / 2, (canvas.height - size) / 2 - 20, size, size);
@@ -152,10 +154,13 @@ function createPackTopTexture() {
   canvas.height = 160;
   const ctx = canvas.getContext('2d');
 
-  ctx.fillStyle = '#1e1e1e';
+  const topGrad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+  topGrad.addColorStop(0, '#ffffff');
+  topGrad.addColorStop(1, '#d8dce2');
+  ctx.fillStyle = topGrad;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillStyle = '#000000';
+  ctx.fillStyle = '#b0b5be';
   ctx.beginPath();
   const teeth = 32;
   const toothWidth = canvas.width / teeth;
@@ -170,41 +175,11 @@ function createPackTopTexture() {
   ctx.closePath();
   ctx.fill();
 
-  ctx.strokeStyle = '#ffd700';
+  ctx.strokeStyle = '#222222';
   ctx.lineWidth = 8;
   ctx.strokeRect(14, 14, canvas.width - 28, canvas.height - 28);
 
   return new THREE.CanvasTexture(canvas);
-}
-
-// --- 4. 動的カードテクスチャ生成 ---
-function drawRoundedRect(ctx, x, y, width, height, radius) {
-  ctx.beginPath();
-  ctx.moveTo(x + radius, y);
-  ctx.arcTo(x + width, y, x + width, y + height, radius);
-  ctx.arcTo(x + width, y + height, x, y + height, radius);
-  ctx.arcTo(x, y + height, x, y, radius);
-  ctx.arcTo(x, y, x + width, y, radius);
-  ctx.closePath();
-}
-
-function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
-  const characters = text.split('');
-  let line = '';
-  let currentY = y;
-
-  for (let n = 0; n < characters.length; n++) {
-    const testLine = line + characters[n];
-    const metrics = ctx.measureText(testLine);
-    if (metrics.width > maxWidth && n > 0) {
-      ctx.fillText(line, x, currentY);
-      line = characters[n];
-      currentY += lineHeight;
-    } else {
-      line = testLine;
-    }
-  }
-  ctx.fillText(line, x, currentY);
 }
 
 // 裏面テクスチャ（人物固有カラー ＋ nazi.pngアイコン）
