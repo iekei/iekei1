@@ -13,6 +13,7 @@ const leaders = [
     rank: "SSR", 
     desc: "ヒトラーの後継者筆頭（国家元首次席代理）。空軍総司令官や四カ年計画責任者を兼任し、党・軍・経済の広範囲で圧倒的な権力を持っていた人物。", 
     imgUrl: "data/image/nazi/hermann.png",
+    cutinUrl: null,
     color: "#4682B4" 
   },
   { 
@@ -20,6 +21,7 @@ const leaders = [
     rank: "SR", 
     desc: "SS（親衛隊）全国指導者であり、1936年に全ドイツ警察長官を兼任。警察・治安組織を完璧に手中に収めており、クーデターや政変が起きた場合、暴力装置を背景に実権を握る筆頭候補。", 
     imgUrl: "data/image/nazi/himmler.png",
+    cutinUrl: null,
     color: "#1A1A1A" 
   },
   { 
@@ -27,6 +29,7 @@ const leaders = [
     rank: "SR", 
     desc: "総統代理（副総統）として党務の全般を統括していた人物。史実でもヒトラーに次ぐ「党の顔」であり、ヒトラー不在時には形式的に首班へ繰り上がる第一位の立場にいた。", 
     imgUrl: "data/image/nazi/hess.png",
+    cutinUrl: null,
     color: "#556B2F" 
   },
   { 
@@ -34,6 +37,7 @@ const leaders = [
     rank: "R", 
     desc: "宣伝大臣兼ベルリン管区指導者。メディアと世論を完全に支配しており、政権の正当性を担保する発言力から、クーデター後の黒幕や指導者補佐・代行として擁立される可能性が高かった。", 
     imgUrl: "data/image/nazi/joseph.png",
+    cutinUrl: null,
     color: "#A52A2A" 
   },
   { 
@@ -48,6 +52,7 @@ const leaders = [
     rank: "SR", 
     desc: "国家人民党（DNVP）の党首でメディア王。ナチス連立政権の成立に関与したが追いやられた。ナチス体制が内部崩壊した場合、軍部や旧貴族層が擁立し得る「旧体制派の保守指導者」の筆頭。", 
     imgUrl: "data/image/nazi/alfred.png",
+    cutinUrl: null,
     color: "#708090" 
   },
   { 
@@ -55,6 +60,7 @@ const leaders = [
     rank: "SR", 
     desc: "ナチス左派の指導者（1930年にヒトラーと対立して脱党し「黒い戦線」を結成）。反資本主義的なナチズムを掲げており、反ヒトラー派のナチス構成員や労働者層を巻き込んだクーデターが成功した場合の指導者候補。", 
     imgUrl: "data/image/nazi/otto.png",
+    cutinUrl: null,
     color: "#B22222" 
   }
 ];
