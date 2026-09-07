@@ -63,30 +63,31 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 container.appendChild(renderer.domElement);
 
-const ambientLight = new THREE.AmbientLight(0xffffff, 1.1);
+// ライティング (白背景に合わせて少し明るめに設定)
+const ambientLight = new THREE.AmbientLight(0xffffff, 1.3);
 scene.add(ambientLight);
 
-const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
 dirLight.position.set(5, 10, 7);
 scene.add(dirLight);
 
-const pointLight = new THREE.PointLight(0xffd700, 1.5, 10);
+const pointLight = new THREE.PointLight(0xffd700, 1.2, 10);
 pointLight.position.set(0, 0, 2);
 scene.add(pointLight);
 
-// --- 3. 日本パック表紙テクスチャ生成 (漆黒×漆赤×金の和風デザイン) ---
+// --- 3. パック表紙テクスチャ生成 (清潔感のあるホワイト×ゴールド) ---
 function createPackBodyTexture(callback) {
   const canvas = document.createElement('canvas');
   canvas.width = 512;
   canvas.height = 768;
   const ctx = canvas.getContext('2d');
 
-  // 背景: 漆黒
-  ctx.fillStyle = '#111111';
+  // 背景: 清潔感のある白
+  ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // 切り取りフチのギザギザ（下部）
-  ctx.fillStyle = '#050505';
+  // ギザギザフチ（下部）
+  ctx.fillStyle = '#e8e8e8';
   ctx.beginPath();
   const teeth = 32;
   const toothWidth = canvas.width / teeth;
@@ -102,16 +103,16 @@ function createPackBodyTexture(callback) {
   ctx.fill();
 
   // 金の二重枠線
-  ctx.strokeStyle = '#ffd700';
+  ctx.strokeStyle = '#d4af37';
   ctx.lineWidth = 8;
   ctx.strokeRect(14, 14, canvas.width - 28, canvas.height - 28);
-  ctx.strokeStyle = '#c0392b';
+  ctx.strokeStyle = '#e0e0e0';
   ctx.lineWidth = 4;
   ctx.strokeRect(24, 24, canvas.width - 48, canvas.height - 48);
 
-  // 日本国旗/家紋風背景アイコンの読み込み
+  // アイコン読み込み
   const iconImg = new Image();
-  iconImg.src = 'data/image/icon/jap.png';
+  iconImg.src = 'data/image/icon/japan.png';
 
   iconImg.onload = () => {
     const size = 210;
@@ -127,10 +128,10 @@ function createPackTopTexture() {
   canvas.height = 160;
   const ctx = canvas.getContext('2d');
 
-  ctx.fillStyle = '#111111';
+  ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillStyle = '#050505';
+  ctx.fillStyle = '#e8e8e8';
   ctx.beginPath();
   const teeth = 32;
   const toothWidth = canvas.width / teeth;
@@ -145,14 +146,14 @@ function createPackTopTexture() {
   ctx.closePath();
   ctx.fill();
 
-  ctx.strokeStyle = '#ffd700';
+  ctx.strokeStyle = '#d4af37';
   ctx.lineWidth = 8;
   ctx.strokeRect(14, 14, canvas.width - 28, canvas.height - 28);
 
   return new THREE.CanvasTexture(canvas);
 }
 
-// --- 4. 動的カードテクスチャ生成 ---
+// --- 4. 動的カードテクスチャ生成 (白ベース) ---
 function drawRoundedRect(ctx, x, y, width, height, radius) {
   ctx.beginPath();
   ctx.moveTo(x + radius, y);
@@ -188,16 +189,16 @@ function createCardTexture(leader, callback) {
   canvas.height = 768;
   const ctx = canvas.getContext('2d');
 
-  // 背景グラデーション（濃い深紅〜漆黒）
+  // カード背景グラデーション (ホワイト〜オフホワイト)
   const bgGrad = ctx.createRadialGradient(256, 384, 50, 256, 384, 400);
-  bgGrad.addColorStop(0, '#2c0c0c');
-  bgGrad.addColorStop(0.7, '#140505');
-  bgGrad.addColorStop(1, '#050202');
+  bgGrad.addColorStop(0, '#ffffff');
+  bgGrad.addColorStop(0.7, '#f4f5f7');
+  bgGrad.addColorStop(1, '#e2e5ec');
   
   ctx.fillStyle = bgGrad;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.strokeStyle = 'rgba(255, 215, 0, 0.25)';
+  ctx.strokeStyle = 'rgba(212, 175, 55, 0.4)';
   ctx.lineWidth = 2;
   drawRoundedRect(ctx, 10, 10, canvas.width - 20, canvas.height - 20, 24);
   ctx.stroke();
@@ -223,9 +224,9 @@ function createCardTexture(leader, callback) {
       }
       ctx.drawImage(img, sX, sY, sW, sH, imgX, imgY, imgW, imgH);
     } else {
-      ctx.fillStyle = '#222';
+      ctx.fillStyle = '#f0f0f0';
       ctx.fillRect(imgX, imgY, imgW, imgH);
-      ctx.fillStyle = '#aaa';
+      ctx.fillStyle = '#999';
       ctx.font = '24px sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText('NO IMAGE', 256, 300);
@@ -251,17 +252,17 @@ function createCardTexture(leader, callback) {
     ctx.strokeStyle = '#ffffff';
     ctx.stroke();
 
-    ctx.fillStyle = '#000000';
+    ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 28px sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(leader.rank, 65, 65);
 
-    // テキスト領域
+    // テキストエリア (白の半透明)
     const textAreaX = 35, textAreaY = 545, textAreaW = 442, textAreaH = 185;
     const textAreaGrad = ctx.createLinearGradient(0, textAreaY, 0, textAreaY + textAreaH);
-    textAreaGrad.addColorStop(0, 'rgba(20, 10, 10, 0.92)');
-    textAreaGrad.addColorStop(1, 'rgba(5, 2, 2, 0.95)');
+    textAreaGrad.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
+    textAreaGrad.addColorStop(1, 'rgba(245, 245, 248, 0.98)');
 
     ctx.fillStyle = textAreaGrad;
     drawRoundedRect(ctx, textAreaX, textAreaY, textAreaW, textAreaH, 12);
@@ -273,13 +274,13 @@ function createCardTexture(leader, callback) {
     ctx.stroke();
 
     // 武将/指導者名
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = '#222222';
     ctx.font = 'bold 28px serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'alphabetic';
     ctx.fillText(leader.name, 256, 585);
 
-    ctx.strokeStyle = 'rgba(255, 215, 0, 0.3)';
+    ctx.strokeStyle = 'rgba(212, 175, 55, 0.4)';
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(55, 600);
@@ -287,7 +288,7 @@ function createCardTexture(leader, callback) {
     ctx.stroke();
 
     // 説明文
-    ctx.fillStyle = '#dddddd';
+    ctx.fillStyle = '#444444';
     ctx.font = '19px sans-serif';
     ctx.textAlign = 'center';
     wrapText(ctx, leader.desc, 256, 630, 410, 26);
@@ -309,11 +310,11 @@ const packGroup = new THREE.Group();
 mainGroup.add(packGroup);
 
 const packBaseMat = new THREE.MeshPhysicalMaterial({ 
-  color: 0x111111, 
-  roughness: 0.35, 
-  metalness: 0.2, 
-  clearcoat: 0.5, 
-  clearcoatRoughness: 0.2
+  color: 0xffffff, 
+  roughness: 0.2, 
+  metalness: 0.1, 
+  clearcoat: 0.8, 
+  clearcoatRoughness: 0.1
 });
 
 const packBody = new THREE.Mesh(new THREE.BoxGeometry(2.5, 3.4, 0.12), packBaseMat);
@@ -325,16 +326,16 @@ packTop.position.set(0, 1.75, 0.1);
 packGroup.add(packTop);
 
 createPackBodyTexture((bodyTexture) => {
-  const bodyFrontMat = new THREE.MeshPhysicalMaterial({ map: bodyTexture, roughness: 0.35, clearcoat: 0.5 });
+  const bodyFrontMat = new THREE.MeshPhysicalMaterial({ map: bodyTexture, roughness: 0.2, clearcoat: 0.8 });
   packBody.material = [packBaseMat, packBaseMat, packBaseMat, packBaseMat, bodyFrontMat, packBaseMat];
 });
 
 const topTexture = createPackTopTexture();
-const topFrontMat = new THREE.MeshPhysicalMaterial({ map: topTexture, roughness: 0.35, clearcoat: 0.5 });
+const topFrontMat = new THREE.MeshPhysicalMaterial({ map: topTexture, roughness: 0.2, clearcoat: 0.8 });
 packTop.material = [packBaseMat, packBaseMat, packBaseMat, packBaseMat, topFrontMat, packBaseMat];
 
 const cutLineMat = new THREE.LineDashedMaterial({ 
-  color: 0xffd700, 
+  color: 0xd4af37, 
   dashSize: 0.1, 
   gapSize: 0.08,
   linewidth: 2 
@@ -354,8 +355,8 @@ cutHitBox.position.set(0, 1.4, 0.17);
 packGroup.add(cutHitBox);
 
 const cardGeo = new THREE.BoxGeometry(2.2, 3.2, 0.05);
-const backMat = new THREE.MeshStandardMaterial({ color: 0x111111, metalness: 0.5, roughness: 0.5 });
-let frontMat = new THREE.MeshStandardMaterial({ color: 0x222222 });
+const backMat = new THREE.MeshStandardMaterial({ color: 0xf0f0f0, metalness: 0.2, roughness: 0.3 });
+let frontMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
 
 const cardMaterials = [backMat, backMat, backMat, backMat, frontMat, backMat];
 const card = new THREE.Mesh(cardGeo, cardMaterials);
@@ -373,7 +374,7 @@ const particleMat = new THREE.PointsMaterial({ size: 0.06, color: 0xffd700, tran
 const particles = new THREE.Points(particleGeo, particleMat);
 scene.add(particles);
 
-// --- 6. ペルソナ5風カットイン再生機能 (ズーム軸連携対応) ---
+// --- 6. ペルソナ5風カットイン再生機能 ---
 function playP5CutIn(cutinImgUrl, offset, onCompleteCallback) {
   const overlay = document.getElementById('cutin-overlay');
   const banner = document.getElementById('cutin-banner');
@@ -386,7 +387,6 @@ function playP5CutIn(cutinImgUrl, offset, onCompleteCallback) {
 
   overlay.style.display = 'block';
 
-  // GSAPのズーム中心点を画像のobjectPositionと連携させてズレを防ぐ
   gsap.set(img, { transformOrigin: pos });
 
   const tl = gsap.timeline({
@@ -544,4 +544,4 @@ window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
-});
+});f
