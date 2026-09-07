@@ -30,6 +30,7 @@ const leaders = [
   desc: "ソ連元帥。「赤軍のナポレオン」と称された戦略家。軍の近代化を推進し、軍事クーデターの指導者候補とされる。", 
   imgUrl: "data/image/sov/tukhachevsky.png",
   cutinUrl: "data/image/cut/tukhachevsky.png",
+  cutinOffset: "center 70%",
   color: "#4B5320" 
 },
 { 
@@ -372,15 +373,19 @@ const particles = new THREE.Points(particleGeo, particleMat);
 scene.add(particles);
 
 // --- 6. ペルソナ5風カットイン再生機能 (右スライドイン＆表示時間長め) ---
-function playP5CutIn(cutinImgUrl, onCompleteCallback) {
+// 引数に cutinOffset を追加
+function playP5CutIn(cutinImgUrl, offset, onCompleteCallback) {
   const overlay = document.getElementById('cutin-overlay');
   const banner = document.getElementById('cutin-banner');
   const img = document.getElementById('cutin-img');
 
   img.src = cutinImgUrl;
+  
+  // 個別指定があればそれを使い、なければデフォルトの "center 30%"（目元位置）を使う
+  img.style.objectPosition = offset || "center 30%";
+
   overlay.style.display = 'block';
 
-  // 目元の位置を中心にズームするように基準点を設定
   gsap.set(img, { transformOrigin: "center 35%" });
 
   const tl = gsap.timeline({
@@ -390,7 +395,6 @@ function playP5CutIn(cutinImgUrl, onCompleteCallback) {
     }
   });
 
-  // 1. 画面右外からスライドインしつつ、目元へ迫るズームイン
   tl.fromTo(banner, 
     { xPercent: 100, opacity: 0 }, 
     { xPercent: 0, opacity: 1, duration: 0.25, ease: "power4.out" }
@@ -400,9 +404,7 @@ function playP5CutIn(cutinImgUrl, onCompleteCallback) {
     { scale: 1.0, x: 0, duration: 0.3, ease: "back.out(1.4)" }, 
     "<"
   )
-  // 2. 1.2秒間キープ
   .to(banner, { duration: 1.2 })
-  // 3. 左外へスライドアウト
   .to(banner, { xPercent: -100, opacity: 0, duration: 0.2, ease: "power3.in" });
 }
 
@@ -479,12 +481,14 @@ function openPack(direction) {
     tl.to(packTop.position, { x: direction * 4, y: 3.0, z: -2, duration: 0.6, ease: "power2.out" })
       .to(packTop.rotation, { z: -direction * Math.PI * 2, duration: 0.6 }, "<")
       .call(() => {
-        if (picked.rank === "SSR" && picked.cutinUrl) {
-          tl.pause();
-          playP5CutIn(picked.cutinUrl, () => {
-            tl.resume();
-          });
-        }
+      // openPack 関数内の該当部分
+      if (picked.rank === "SSR" && picked.cutinUrl) {
+        tl.pause();
+        // 割当オフセット値を第2引数として渡す
+        playP5CutIn(picked.cutinUrl, picked.cutinOffset, () => {
+          tl.resume();
+        });
+      }
 
         card.visible = true;
         pointLight.color.setHex(picked.color);
