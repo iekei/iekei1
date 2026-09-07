@@ -85,26 +85,41 @@ camera.position.set(0, 0, 7.5);
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+// 影の設定（立体感の強調）
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 container.appendChild(renderer.domElement);
 
-// ライティング（左上主光源）
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
+// ライティング（光量を小さく調整し、落ち着いた雰囲気に）
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
 scene.add(ambientLight);
 
-const mainDirLight = new THREE.DirectionalLight(0xffffff, 1.2);
-mainDirLight.position.set(-6, 8, 7); // 左上方
+const mainDirLight = new THREE.DirectionalLight(0xffffff, 0.65);
+mainDirLight.position.set(-5, 7, 5); // 左上方
 mainDirLight.castShadow = true;
+mainDirLight.shadow.mapSize.width = 1024;
+mainDirLight.shadow.mapSize.height = 1024;
+mainDirLight.shadow.camera.near = 0.5;
+mainDirLight.shadow.camera.far = 15;
+mainDirLight.shadow.bias = -0.001;
 scene.add(mainDirLight);
 
-const fillLight = new THREE.DirectionalLight(0xd0d5dd, 0.4);
-fillLight.position.set(5, -3, 3);
+const fillLight = new THREE.DirectionalLight(0xd0d5dd, 0.25);
+fillLight.position.set(5, -2, 3);
 scene.add(fillLight);
 
-const pointLight = new THREE.PointLight(0xffffff, 1.2, 10);
+const pointLight = new THREE.PointLight(0xffffff, 0.5, 8);
 pointLight.position.set(0, 0, 3);
 scene.add(pointLight);
+
+// 影を受けるための背面シャドウプレーン
+const shadowPlaneGeo = new THREE.PlaneGeometry(20, 20);
+const shadowPlaneMat = new THREE.ShadowMaterial({ opacity: 0.15 });
+const shadowPlane = new THREE.Mesh(shadowPlaneGeo, shadowPlaneMat);
+shadowPlane.position.z = -0.5;
+shadowPlane.receiveShadow = true;
+scene.add(shadowPlane);
 
 // --- 3. ギザギザ形状（歯形）作成ヘルパー ---
 function createZigZagShape(width, height, teethCount, toothDepth) {
@@ -113,7 +128,6 @@ function createZigZagShape(width, height, teethCount, toothDepth) {
   const toothWidth = width / teethCount;
 
   shape.moveTo(-halfW, 0);
-  // 上部のギザギザ
   for (let i = 0; i < teethCount; i++) {
     const x1 = -halfW + i * toothWidth + toothWidth / 2;
     const y1 = toothDepth;
@@ -321,7 +335,7 @@ function createCardTexture(leader, callback) {
   img.onerror = () => renderCardContent(null);
 }
 
-// --- 6. 3Dオブジェクト構築（立体パック & ギザギザ） ---
+// --- 6. 3Dオブジェクト構築（立体パック & 影生成） ---
 const mainGroup = new THREE.Group();
 scene.add(mainGroup);
 
@@ -331,28 +345,31 @@ mainGroup.add(packGroup);
 // マットホワイト＋ソフト光沢マテリアル
 const packBaseMat = new THREE.MeshPhysicalMaterial({ 
   color: 0xffffff, 
-  roughness: 0.4, 
-  metalness: 0.1, 
-  clearcoat: 0.3,
-  clearcoatRoughness: 0.3
+  roughness: 0.45, 
+  metalness: 0.05, 
+  clearcoat: 0.25,
+  clearcoatRoughness: 0.4
 });
 
-// パック本体（立体感のある立体形状）
+// パック本体（キャストシャドウ有効化）
 const packBody = new THREE.Mesh(new THREE.BoxGeometry(2.6, 3.4, 0.18), packBaseMat);
 packBody.position.set(0, -0.3, 0.09);
+packBody.castShadow = true;
+packBody.receiveShadow = true;
 packGroup.add(packBody);
 
-// パック上部（開封時に分かれるパーツ）
+// パック上部
 const packTopGroup = new THREE.Group();
 packTopGroup.position.set(0, 1.4, 0.09);
 packGroup.add(packTopGroup);
 
-// 上部ベースブロック
 const topBlock = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.5, 0.18), packBaseMat);
 topBlock.position.set(0, 0.25, 0);
+topBlock.castShadow = true;
+topBlock.receiveShadow = true;
 packTopGroup.add(topBlock);
 
-// 上部切り口ギザギザ（ExtrudeGeometryで立体カット面を作成）
+// ギザギザカット面
 const toothShape = createZigZagShape(2.6, 0.3, 26, 0.12);
 const extrudeSettings = { depth: 0.04, bevelEnabled: true, bevelSegments: 2, steps: 1, bevelSize: 0.01, bevelThickness: 0.01 };
 const toothGeo = new THREE.ExtrudeGeometry(toothShape, extrudeSettings);
@@ -360,16 +377,18 @@ toothGeo.center();
 
 const packTooth = new THREE.Mesh(toothGeo, packBaseMat);
 packTooth.position.set(0, 0.65, 0);
+packTooth.castShadow = true;
+packTooth.receiveShadow = true;
 packTopGroup.add(packTooth);
 
 // テクスチャ適用
 createPackBodyTexture((bodyTexture) => {
-  const bodyFrontMat = new THREE.MeshPhysicalMaterial({ map: bodyTexture, roughness: 0.4, clearcoat: 0.3 });
+  const bodyFrontMat = new THREE.MeshPhysicalMaterial({ map: bodyTexture, roughness: 0.4, clearcoat: 0.25 });
   packBody.material = [packBaseMat, packBaseMat, packBaseMat, packBaseMat, bodyFrontMat, packBaseMat];
 });
 
 const topTexture = createPackTopTexture();
-const topFrontMat = new THREE.MeshPhysicalMaterial({ map: topTexture, roughness: 0.4, clearcoat: 0.3 });
+const topFrontMat = new THREE.MeshPhysicalMaterial({ map: topTexture, roughness: 0.4, clearcoat: 0.25 });
 topBlock.material = [packBaseMat, packBaseMat, packBaseMat, packBaseMat, topFrontMat, packBaseMat];
 
 // 切り取り破線
@@ -386,7 +405,7 @@ const cutLine = new THREE.Line(
 cutLine.computeLineDistances();
 packGroup.add(cutLine);
 
-// **レイキャスト判定用の大きめの透明ヒットボックス**
+// 判定用ヒットボックス
 const cutHitBox = new THREE.Mesh(
   new THREE.BoxGeometry(3.0, 0.9, 0.6),
   new THREE.MeshBasicMaterial({ visible: false })
@@ -403,6 +422,8 @@ const cardMaterials = [backMat, backMat, backMat, backMat, frontMat, backMat];
 const card = new THREE.Mesh(cardGeo, cardMaterials);
 card.position.set(0, -0.3, 0);
 card.scale.set(0.9, 0.9, 0.9);
+card.castShadow = true;
+card.receiveShadow = true;
 card.visible = false;
 mainGroup.add(card);
 
@@ -442,7 +463,7 @@ function playP5CutIn(cutinImgUrl, offset, onCompleteCallback) {
     .to(banner, { xPercent: -100, opacity: 0, duration: 0.2, ease: "power3.in" });
 }
 
-// --- 8. イベント・スワイプ & カード自由回転処理 ---
+// --- 8. イベント・スワイプ & 回転処理 ---
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
@@ -472,7 +493,6 @@ function onPointerDown(e) {
   const clientY = e.clientY || (e.touches && e.touches[0].clientY);
 
   if (!isOpened) {
-    // パック上部（cutHitBox）をタップ/スワイプしたか判定
     if (checkIntersection(clientX, clientY, cutHitBox)) {
       isDragging = true;
       startX = clientX;
@@ -536,7 +556,7 @@ window.addEventListener('touchstart', onPointerDown);
 window.addEventListener('touchmove', onPointerMove);
 window.addEventListener('touchend', onPointerUp);
 
-// パック開封処理
+// 開封処理
 function openPack(direction) {
   isOpened = true;
   instruction.style.display = 'none';
@@ -563,7 +583,6 @@ function openPack(direction) {
 
       cutLine.visible = false;
 
-      // パック上部（ギザギザ含め）を吹き飛ばす
       tl.to(packTopGroup.position, { x: direction * 4, y: 3.2, z: -2, duration: 0.6, ease: "power2.out" })
         .to(packTopGroup.rotation, { z: -direction * Math.PI * 2, duration: 0.6 }, "<")
         .call(() => {
@@ -575,7 +594,6 @@ function openPack(direction) {
           }
 
           card.visible = true;
-          pointLight.color.setHex(0xffffff);
         }, null, "-=0.2")
         .to(card.position, { y: 1.3, z: 0.3, duration: 0.6, ease: "power2.out" })
         .to(packBody.position, { y: -4.5, duration: 0.5, ease: "power2.in" }, "+=0.1")
@@ -611,7 +629,24 @@ resetBtn.addEventListener('click', () => {
   cardVelocity = { x: 0, y: 0 };
 });
 
-// --- 9. 図鑑モーダル処理 ---
+// --- 9. 光源 ON / OFF 切り替え処理 ---
+let isLightOn = true;
+const lightBtn = document.getElementById('light-btn');
+
+lightBtn.addEventListener('click', () => {
+  isLightOn = !isLightOn;
+  mainDirLight.visible = isLightOn;
+  fillLight.visible = isLightOn;
+  pointLight.visible = isLightOn;
+  
+  // アンビエントライト（環境光）は消灯時も最低限の明るさを保持
+  ambientLight.intensity = isLightOn ? 0.4 : 0.15;
+
+  lightBtn.innerText = `光源: ${isLightOn ? 'ON' : 'OFF'}`;
+  lightBtn.classList.toggle('off', !isLightOn);
+});
+
+// --- 10. 図鑑モーダル処理（解放式デザイン） ---
 const zukanBtn = document.getElementById('zukan-btn');
 const zukanModal = document.getElementById('zukan-modal');
 const zukanCloseBtn = document.getElementById('zukan-close-btn');
@@ -635,7 +670,7 @@ function renderZukan() {
     } else {
       cardEl.innerHTML = `
         <div class="question-mark">?</div>
-        <div class="card-info">未解放</div>
+        <div class="card-info">まだ出してないカードは？</div>
       `;
     }
     zukanGrid.appendChild(cardEl);
@@ -651,7 +686,7 @@ zukanCloseBtn.addEventListener('click', () => {
   zukanModal.style.display = 'none';
 });
 
-// --- 10. レンダリングループ ---
+// --- 11. レンダリングループ ---
 function animate() {
   requestAnimationFrame(animate);
 
