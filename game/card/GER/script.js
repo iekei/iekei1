@@ -59,6 +59,7 @@ const leaders = [
 ];
 
 
+
 // --- 2. 3Dシーン初期化 ---
 const container = document.getElementById('canvas-container');
 const scene = new THREE.Scene();
@@ -82,7 +83,7 @@ const pointLight = new THREE.PointLight(0xffffd0, 1.5, 10);
 pointLight.position.set(0, 0, 2);
 scene.add(pointLight);
 
-// --- 3. パックテクスチャ生成 ---
+// --- 3. パックテクスチャ生成 (マットホワイト＆ギザギザ加工) ---
 function createPackBodyTexture(callback) {
   const canvas = document.createElement('canvas');
   canvas.width = 512;
@@ -92,7 +93,7 @@ function createPackBodyTexture(callback) {
   ctx.fillStyle = '#f5f5f7';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // 下端のギザギザ
+  // 下端のギザギザ (鋸歯)
   ctx.fillStyle = '#121212';
   ctx.beginPath();
   const teeth = 32;
@@ -132,7 +133,7 @@ function createPackTopTexture() {
   ctx.fillStyle = '#f5f5f7';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // 上端のギザギザ
+  // 上端のギザギザ (鋸歯)
   ctx.fillStyle = '#121212';
   ctx.beginPath();
   const teeth = 32;
@@ -155,9 +156,7 @@ function createPackTopTexture() {
   return new THREE.CanvasTexture(canvas);
 }
 
-// --- 4. 動的カードテクスチャ生成 (角丸・立体色・改行対応) ---
-
-// 角丸矩形を描画するユーティリティ関数
+// --- 4. 動的カードテクスチャ生成 (角丸・立体色・自動改行) ---
 function drawRoundedRect(ctx, x, y, width, height, radius) {
   ctx.beginPath();
   ctx.moveTo(x + radius, y);
@@ -168,7 +167,6 @@ function drawRoundedRect(ctx, x, y, width, height, radius) {
   ctx.closePath();
 }
 
-// 長文テキストの自動折り返し処理
 function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
   const characters = text.split('');
   let line = '';
@@ -177,9 +175,7 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
   for (let n = 0; n < characters.length; n++) {
     const testLine = line + characters[n];
     const metrics = ctx.measureText(testLine);
-    const testWidth = metrics.width;
-
-    if (testWidth > maxWidth && n > 0) {
+    if (metrics.width > maxWidth && n > 0) {
       ctx.fillText(line, x, currentY);
       line = characters[n];
       currentY += lineHeight;
@@ -196,23 +192,21 @@ function createCardTexture(leader, callback) {
   canvas.height = 768;
   const ctx = canvas.getContext('2d');
 
-  // 1. 立体感のある黒系ベースグラデーション（中央から外側へ暗くなる球状感）
+  // 立体感のある背景グラデーション
   const bgGrad = ctx.createRadialGradient(256, 384, 50, 256, 384, 400);
-  bgGrad.addColorStop(0, '#2a2e3d'); // やや明るい暗青灰色
+  bgGrad.addColorStop(0, '#2a2e3d');
   bgGrad.addColorStop(0.7, '#12151e');
-  bgGrad.addColorStop(1, '#080a0f'); // 外縁に向かって深く沈む黒
+  bgGrad.addColorStop(1, '#080a0f');
   
   ctx.fillStyle = bgGrad;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // 外側の立体ハイライト線
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
   ctx.lineWidth = 2;
   drawRoundedRect(ctx, 10, 10, canvas.width - 20, canvas.height - 20, 24);
   ctx.stroke();
 
   const renderCardContent = (img) => {
-    // 2. 偉人画像描画 (角丸でクリッピング)
     const imgX = 35, imgY = 85, imgW = 442, imgH = 440, radius = 16;
 
     ctx.save();
@@ -242,19 +236,16 @@ function createCardTexture(leader, callback) {
     }
     ctx.restore();
 
-    // 画像の立体枠線
     ctx.strokeStyle = leader.color;
     ctx.lineWidth = 4;
     drawRoundedRect(ctx, imgX, imgY, imgW, imgH, radius);
     ctx.stroke();
 
-    // 3. カード本体の外枠 (角丸フレーム)
     ctx.lineWidth = 14;
     ctx.strokeStyle = leader.color;
     drawRoundedRect(ctx, 12, 12, canvas.width - 24, canvas.height - 24, 28);
     ctx.stroke();
 
-    // 4. 左上のレア度バッジ
     ctx.fillStyle = leader.color;
     ctx.beginPath();
     ctx.arc(65, 65, 34, 0, Math.PI * 2);
@@ -269,9 +260,7 @@ function createCardTexture(leader, callback) {
     ctx.textBaseline = 'middle';
     ctx.fillText(leader.rank, 65, 65);
 
-    // 5. 下部のテキストエリア (立体グラデーション＆角丸)
     const textAreaX = 35, textAreaY = 545, textAreaW = 442, textAreaH = 185;
-    
     const textAreaGrad = ctx.createLinearGradient(0, textAreaY, 0, textAreaY + textAreaH);
     textAreaGrad.addColorStop(0, 'rgba(20, 20, 28, 0.92)');
     textAreaGrad.addColorStop(1, 'rgba(5, 5, 10, 0.95)');
@@ -285,14 +274,12 @@ function createCardTexture(leader, callback) {
     drawRoundedRect(ctx, textAreaX, textAreaY, textAreaW, textAreaH, 12);
     ctx.stroke();
 
-    // 6. 偉人の名前（太字）
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 28px sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'alphabetic';
     ctx.fillText(leader.name, 256, 585);
 
-    // 名前と説明文の境界区切り線
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
     ctx.lineWidth = 1;
     ctx.beginPath();
@@ -300,7 +287,6 @@ function createCardTexture(leader, callback) {
     ctx.lineTo(457, 600);
     ctx.stroke();
 
-    // 7. 説明文 (長文の自動折り返し描画)
     ctx.fillStyle = '#dddddd';
     ctx.font = '19px sans-serif';
     ctx.textAlign = 'center';
@@ -367,7 +353,6 @@ const cutHitBox = new THREE.Mesh(
 cutHitBox.position.set(0, 1.4, 0.17);
 packGroup.add(cutHitBox);
 
-// 3Dカードメッシュ
 const cardGeo = new THREE.BoxGeometry(2.2, 3.2, 0.05);
 const backMat = new THREE.MeshStandardMaterial({ color: 0x111122, metalness: 0.5, roughness: 0.5 });
 let frontMat = new THREE.MeshStandardMaterial({ color: 0x222222 });
@@ -379,7 +364,6 @@ card.scale.set(0.9, 0.9, 0.9);
 card.visible = false;
 mainGroup.add(card);
 
-// パーティクル
 const particleCount = 80;
 const particleGeo = new THREE.BufferGeometry();
 const particlePos = new Float32Array(particleCount * 3);
@@ -389,7 +373,36 @@ const particleMat = new THREE.PointsMaterial({ size: 0.06, color: 0xffd700, tran
 const particles = new THREE.Points(particleGeo, particleMat);
 scene.add(particles);
 
-// --- 6. Raycaster & スワイプ処理 ---
+// --- 6. ペルソナ5風カットイン再生機能 ---
+function playP5CutIn(cutinImgUrl, onCompleteCallback) {
+  const overlay = document.getElementById('cutin-overlay');
+  const banner = document.getElementById('cutin-banner');
+  const img = document.getElementById('cutin-img');
+
+  img.src = cutinImgUrl;
+  overlay.style.display = 'block';
+
+  const tl = gsap.timeline({
+    onComplete: () => {
+      overlay.style.display = 'none';
+      if (onCompleteCallback) onCompleteCallback();
+    }
+  });
+
+  tl.fromTo(banner, 
+    { scaleX: 0, opacity: 0 }, 
+    { scaleX: 1, opacity: 1, duration: 0.18, ease: "power4.out" }
+  )
+  .fromTo(img, 
+    { scale: 2.0, x: -50 }, 
+    { scale: 1.0, x: 0, duration: 0.25, ease: "back.out(1.7)" }, 
+    "<"
+  )
+  .to(banner, { duration: 0.4 })
+  .to(banner, { scaleY: 0, opacity: 0, duration: 0.15, ease: "power2.in" });
+}
+
+// --- 7. Raycaster & スワイプ処理 ---
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
@@ -458,9 +471,17 @@ function openPack(direction) {
     });
 
     cutLine.visible = false;
+
     tl.to(packTop.position, { x: direction * 4, y: 3.0, z: -2, duration: 0.6, ease: "power2.out" })
       .to(packTop.rotation, { z: -direction * Math.PI * 2, duration: 0.6 }, "<")
       .call(() => {
+        if (picked.rank === "SSR" && picked.cutinUrl) {
+          tl.pause();
+          playP5CutIn(picked.cutinUrl, () => {
+            tl.resume();
+          });
+        }
+
         card.visible = true;
         pointLight.color.setHex(picked.color);
       }, null, "-=0.2")
@@ -475,7 +496,6 @@ function openPack(direction) {
   });
 }
 
-// リセット処理
 resetBtn.addEventListener('click', () => {
   isOpened = false;
   resetBtn.style.display = 'none';
@@ -494,7 +514,6 @@ resetBtn.addEventListener('click', () => {
   card.rotation.set(0, 0, 0);
 });
 
-// 描画ループ
 function animate() {
   requestAnimationFrame(animate);
 
