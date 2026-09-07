@@ -79,3 +79,22 @@ button:hover {
   width: 100vw;
   height: 100vh;
 }
+
+#back-btn {
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  pointer-events: auto;
+  color: #aaa;
+  text-decoration: none;
+  font-size: 14px;
+  border: 1px solid #555;
+  padding: 6px 14px;
+  border-radius: 15px;
+  background: rgba(0,0,0,0.6);
+  transition: all 0.2s;
+}
+#back-btn:hover {
+  color: #fff;
+  border-color: #fff;
+}
