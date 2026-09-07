@@ -5,6 +5,7 @@ const leaders = [
     rank: "SSR", 
     desc: "1934年のヒンデンブルク大統領死去に伴い大統領権限と首相職を統合し、絶対的な権力を握っていた最高指導者。", 
     imgUrl: "data/image/nazi/hitler.png",
+    cutinUrl: "data/image/cut/hitler.png", // カットイン用画像パス
     color: "#8B0000" 
   },
   { 
