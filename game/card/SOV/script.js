@@ -22,7 +22,7 @@ const leaders = [
   desc: "赤軍の創設者。国外追放後も永続革命論を掲げ、反スターリン派の象徴的指導者として影響力を持ち続けた。", 
   imgUrl: "data/image/sov/trotsky.png",
   cutinUrl: "data/image/cut/trotsky.png",
-  cutinOffset: "center 60%",
+  cutinOffset: "center 75%",
   color: "#D2691E" 
 },
 { 
