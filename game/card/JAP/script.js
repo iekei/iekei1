@@ -104,7 +104,7 @@ function createPackBodyTexture(callback) {
   ctx.strokeRect(14, 14, canvas.width - 28, canvas.height - 28);
 
   const iconImg = new Image();
-  iconImg.src = 'data/image/icon/soviet.png';
+  iconImg.src = 'data/image/icon/jap.png';
 
   iconImg.onload = () => {
     const size = 210;
