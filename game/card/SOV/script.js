@@ -5,6 +5,7 @@ const leaders = [
   rank: "SSR", 
   desc: "ソ連共産党書記長。急速な工業化と大粛清により絶対的な権力を確立し、独裁体制を敷いた最高指導者。", 
   imgUrl: "data/image/sov/stalin.png",
+  cutinUrl: "data/image/cut/stalin.png", // カットイン用画像パス
   color: "#CC0000" 
 },
 { 
@@ -12,6 +13,7 @@ const leaders = [
   rank: "SR", 
   desc: "人民委員会議議長（首相）。スターリンの忠実な最側近であり、外交と政権運営を支えた実質的ナンバー2。", 
   imgUrl: "data/image/sov/molotov.png",
+  cutinUrl: null,
   color: "#8B0000" 
 },
 { 
@@ -19,6 +21,7 @@ const leaders = [
   rank: "SSR", 
   desc: "赤軍の創設者。国外追放後も永続革命論を掲げ、反スターリン派の象徴的指導者として影響力を持ち続けた。", 
   imgUrl: "data/image/sov/trotsky.png",
+  cutinUrl: "data/image/cut/trotsky.png",
   color: "#D2691E" 
 },
 { 
@@ -26,6 +29,7 @@ const leaders = [
   rank: "SSR", 
   desc: "ソ連元帥。「赤軍のナポレオン」と称された戦略家。軍の近代化を推進し、軍事クーデターの指導者候補とされる。", 
   imgUrl: "data/image/sov/tukhachevsky.png",
+  cutinUrl: "data/image/cut/tukhachevsky.png",
   color: "#4B5320" 
 },
 { 
@@ -33,6 +37,7 @@ const leaders = [
   rank: "SR", 
   desc: "内務人民委員（NKVD長官）。大粛清の実行者として秘密警察の暴力装置を掌握し、暗部から権力を振るった。", 
   imgUrl: "data/image/sov/yezhov.png",
+  cutinUrl: null,
   color: "#2A2A2A" 
 },
 { 
@@ -40,6 +45,7 @@ const leaders = [
   rank: "SR", 
   desc: "党の理論家にして右翼反対派の指導者。急進的な工業化に反対し、温和な経済政策の継続を訴えた。", 
   imgUrl: "data/image/sov/bukharin.png",
+  cutinUrl: null,
   color: "#DAA520" 
 },
 { 
@@ -47,6 +53,7 @@ const leaders = [
   rank: "SR", 
   desc: "重工業人民委員。五カ年計画の重工業化を成功させた立役者であり、党内で屈指の人望を集めた重鎮。", 
   imgUrl: "data/image/sov/ordzhonikidze.png",
+  cutinUrl: null,
   color: "#B8860B" 
  }
 ]; 
