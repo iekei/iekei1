@@ -65,7 +65,7 @@ const leaders = [
   }
 ];
 
-// 図鑑の所持状態をLocal Storageから取得
+// 図鑑所持状態
 let unlockedCards = JSON.parse(localStorage.getItem('ger_unlocked_cards') || '[]');
 
 function unlockCard(id) {
@@ -85,51 +85,64 @@ camera.position.set(0, 0, 7.5);
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 container.appendChild(renderer.domElement);
 
-const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+// ライティング（左上主光源）
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
 scene.add(ambientLight);
 
-const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-dirLight.position.set(5, 10, 7);
-scene.add(dirLight);
+const mainDirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+mainDirLight.position.set(-6, 8, 7); // 左上方
+mainDirLight.castShadow = true;
+scene.add(mainDirLight);
 
-const pointLight = new THREE.PointLight(0xffd700, 1.5, 10);
-pointLight.position.set(0, 0, 2);
+const fillLight = new THREE.DirectionalLight(0xd0d5dd, 0.4);
+fillLight.position.set(5, -3, 3);
+scene.add(fillLight);
+
+const pointLight = new THREE.PointLight(0xffffff, 1.2, 10);
+pointLight.position.set(0, 0, 3);
 scene.add(pointLight);
 
-// --- ドイツ (GER) パックテクスチャ生成 ---
+// --- 3. ギザギザ形状（歯形）作成ヘルパー ---
+function createZigZagShape(width, height, teethCount, toothDepth) {
+  const shape = new THREE.Shape();
+  const halfW = width / 2;
+  const toothWidth = width / teethCount;
+
+  shape.moveTo(-halfW, 0);
+  // 上部のギザギザ
+  for (let i = 0; i < teethCount; i++) {
+    const x1 = -halfW + i * toothWidth + toothWidth / 2;
+    const y1 = toothDepth;
+    const x2 = -halfW + (i + 1) * toothWidth;
+    const y2 = 0;
+    shape.lineTo(x1, y1);
+    shape.lineTo(x2, y2);
+  }
+  shape.lineTo(halfW, -height);
+  shape.lineTo(-halfW, -height);
+  shape.closePath();
+
+  return shape;
+}
+
+// --- 4. GER パックテクスチャ生成 ---
 function createPackBodyTexture(callback) {
   const canvas = document.createElement('canvas');
   canvas.width = 512;
   canvas.height = 768;
   const ctx = canvas.getContext('2d');
 
-  // マットホワイトベース + 左上からの光源グラデーション
   const packGrad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-  packGrad.addColorStop(0, '#ffffff');   // ハイライト（左上）
-  packGrad.addColorStop(0.5, '#e6e8eb'); // ミッドトーン
-  packGrad.addColorStop(1, '#cbcfd6');   // シャドウ（右下）
+  packGrad.addColorStop(0, '#ffffff');
+  packGrad.addColorStop(0.5, '#e6e8eb');
+  packGrad.addColorStop(1, '#cbcfd6');
   ctx.fillStyle = packGrad;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // 圧着ギザギザ（下部）
-  ctx.fillStyle = '#b0b5be';
-  ctx.beginPath();
-  const teeth = 32;
-  const toothWidth = canvas.width / teeth;
-  const toothHeight = 16;
-  ctx.moveTo(0, canvas.height);
-  for (let i = 0; i <= teeth; i++) {
-    const x = i * toothWidth;
-    const y = (i % 2 === 0) ? canvas.height : canvas.height - toothHeight;
-    ctx.lineTo(x, y);
-  }
-  ctx.lineTo(canvas.width, canvas.height);
-  ctx.closePath();
-  ctx.fill();
-
-  // 枠線デザイン
   ctx.strokeStyle = '#222222';
   ctx.lineWidth = 8;
   ctx.strokeRect(14, 14, canvas.width - 28, canvas.height - 28);
@@ -137,7 +150,6 @@ function createPackBodyTexture(callback) {
   ctx.lineWidth = 4;
   ctx.strokeRect(24, 24, canvas.width - 48, canvas.height - 48);
 
-  // アイコン描画
   const iconImg = new Image();
   iconImg.src = 'data/image/icon/nazi.png';
   iconImg.onload = () => {
@@ -160,21 +172,6 @@ function createPackTopTexture() {
   ctx.fillStyle = topGrad;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillStyle = '#b0b5be';
-  ctx.beginPath();
-  const teeth = 32;
-  const toothWidth = canvas.width / teeth;
-  const toothHeight = 16;
-  ctx.moveTo(0, 0);
-  for (let i = 0; i <= teeth; i++) {
-    const x = i * toothWidth;
-    const y = (i % 2 === 0) ? 0 : toothHeight;
-    ctx.lineTo(x, y);
-  }
-  ctx.lineTo(canvas.width, 0);
-  ctx.closePath();
-  ctx.fill();
-
   ctx.strokeStyle = '#222222';
   ctx.lineWidth = 8;
   ctx.strokeRect(14, 14, canvas.width - 28, canvas.height - 28);
@@ -182,7 +179,36 @@ function createPackTopTexture() {
   return new THREE.CanvasTexture(canvas);
 }
 
-// 裏面テクスチャ（人物固有カラー ＋ nazi.pngアイコン）
+// --- 5. カードテクスチャ描画 ---
+function drawRoundedRect(ctx, x, y, width, height, radius) {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.arcTo(x + width, y, x + width, y + height, radius);
+  ctx.arcTo(x + width, y + height, x, y + height, radius);
+  ctx.arcTo(x, y + height, x, y, radius);
+  ctx.arcTo(x, y, x + width, y, radius);
+  ctx.closePath();
+}
+
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  const characters = text.split('');
+  let line = '';
+  let currentY = y;
+
+  for (let n = 0; n < characters.length; n++) {
+    const testLine = line + characters[n];
+    const metrics = ctx.measureText(testLine);
+    if (metrics.width > maxWidth && n > 0) {
+      ctx.fillText(line, x, currentY);
+      line = characters[n];
+      currentY += lineHeight;
+    } else {
+      line = testLine;
+    }
+  }
+  ctx.fillText(line, x, currentY);
+}
+
 function createCardBackTexture(leader, callback) {
   const canvas = document.createElement('canvas');
   canvas.width = 512;
@@ -204,11 +230,6 @@ function createCardBackTexture(leader, callback) {
   drawRoundedRect(ctx, 16, 16, canvas.width - 32, canvas.height - 32, 24);
   ctx.stroke();
 
-  ctx.strokeStyle = 'rgba(0, 0, 0, 0.4)';
-  ctx.lineWidth = 4;
-  drawRoundedRect(ctx, 28, 28, canvas.width - 56, canvas.height - 56, 18);
-  ctx.stroke();
-
   const backIcon = new Image();
   backIcon.src = 'data/image/icon/nazi.png';
 
@@ -220,7 +241,6 @@ function createCardBackTexture(leader, callback) {
   backIcon.onerror = () => { callback(new THREE.CanvasTexture(canvas)); };
 }
 
-// 表面テクスチャ生成
 function createCardTexture(leader, callback) {
   const canvas = document.createElement('canvas');
   canvas.width = 512;
@@ -231,14 +251,8 @@ function createCardTexture(leader, callback) {
   bgGrad.addColorStop(0, '#2c2c2c');
   bgGrad.addColorStop(0.7, '#141414');
   bgGrad.addColorStop(1, '#050505');
-  
   ctx.fillStyle = bgGrad;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  ctx.strokeStyle = 'rgba(255, 215, 0, 0.25)';
-  ctx.lineWidth = 2;
-  drawRoundedRect(ctx, 10, 10, canvas.width - 20, canvas.height - 20, 24);
-  ctx.stroke();
 
   const renderCardContent = (img) => {
     const imgX = 35, imgY = 85, imgW = 442, imgH = 440, radius = 16;
@@ -260,13 +274,6 @@ function createCardTexture(leader, callback) {
         sY = (img.height - sH) / 2;
       }
       ctx.drawImage(img, sX, sY, sW, sH, imgX, imgY, imgW, imgH);
-    } else {
-      ctx.fillStyle = '#222';
-      ctx.fillRect(imgX, imgY, imgW, imgH);
-      ctx.fillStyle = '#aaa';
-      ctx.font = '24px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('NO IMAGE', 256, 300);
     }
     ctx.restore();
 
@@ -284,46 +291,25 @@ function createCardTexture(leader, callback) {
     ctx.beginPath();
     ctx.arc(65, 65, 34, 0, Math.PI * 2);
     ctx.fill();
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = '#ffffff';
-    ctx.stroke();
 
-    ctx.fillStyle = '#000000';
+    ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 28px sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(leader.rank, 65, 65);
 
     const textAreaX = 35, textAreaY = 545, textAreaW = 442, textAreaH = 185;
-    const textAreaGrad = ctx.createLinearGradient(0, textAreaY, 0, textAreaY + textAreaH);
-    textAreaGrad.addColorStop(0, 'rgba(20, 20, 20, 0.92)');
-    textAreaGrad.addColorStop(1, 'rgba(5, 5, 5, 0.95)');
-
-    ctx.fillStyle = textAreaGrad;
+    ctx.fillStyle = 'rgba(10, 10, 10, 0.9)';
     drawRoundedRect(ctx, textAreaX, textAreaY, textAreaW, textAreaH, 12);
     ctx.fill();
-
-    ctx.strokeStyle = leader.color;
-    ctx.lineWidth = 2;
-    drawRoundedRect(ctx, textAreaX, textAreaY, textAreaW, textAreaH, 12);
-    ctx.stroke();
 
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 28px serif';
     ctx.textAlign = 'center';
-    ctx.textBaseline = 'alphabetic';
     ctx.fillText(leader.name, 256, 585);
-
-    ctx.strokeStyle = 'rgba(255, 215, 0, 0.3)';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(55, 600);
-    ctx.lineTo(457, 600);
-    ctx.stroke();
 
     ctx.fillStyle = '#dddddd';
     ctx.font = '19px sans-serif';
-    ctx.textAlign = 'center';
     wrapText(ctx, leader.desc, 256, 630, 410, 26);
 
     callback(new THREE.CanvasTexture(canvas));
@@ -335,60 +321,82 @@ function createCardTexture(leader, callback) {
   img.onerror = () => renderCardContent(null);
 }
 
-// --- 5. 3Dオブジェクト構築 ---
+// --- 6. 3Dオブジェクト構築（立体パック & ギザギザ） ---
 const mainGroup = new THREE.Group();
 scene.add(mainGroup);
 
 const packGroup = new THREE.Group();
 mainGroup.add(packGroup);
 
+// マットホワイト＋ソフト光沢マテリアル
 const packBaseMat = new THREE.MeshPhysicalMaterial({ 
-  color: 0x1f1f1f, 
-  roughness: 0.35, 
-  metalness: 0.3, 
-  clearcoat: 0.5, 
-  clearcoatRoughness: 0.2
+  color: 0xffffff, 
+  roughness: 0.4, 
+  metalness: 0.1, 
+  clearcoat: 0.3,
+  clearcoatRoughness: 0.3
 });
 
-const packBody = new THREE.Mesh(new THREE.BoxGeometry(2.5, 3.4, 0.12), packBaseMat);
-packBody.position.set(0, -0.3, 0.1);
+// パック本体（立体感のある立体形状）
+const packBody = new THREE.Mesh(new THREE.BoxGeometry(2.6, 3.4, 0.18), packBaseMat);
+packBody.position.set(0, -0.3, 0.09);
 packGroup.add(packBody);
 
-const packTop = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.7, 0.12), packBaseMat);
-packTop.position.set(0, 1.75, 0.1);
-packGroup.add(packTop);
+// パック上部（開封時に分かれるパーツ）
+const packTopGroup = new THREE.Group();
+packTopGroup.position.set(0, 1.4, 0.09);
+packGroup.add(packTopGroup);
 
+// 上部ベースブロック
+const topBlock = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.5, 0.18), packBaseMat);
+topBlock.position.set(0, 0.25, 0);
+packTopGroup.add(topBlock);
+
+// 上部切り口ギザギザ（ExtrudeGeometryで立体カット面を作成）
+const toothShape = createZigZagShape(2.6, 0.3, 26, 0.12);
+const extrudeSettings = { depth: 0.04, bevelEnabled: true, bevelSegments: 2, steps: 1, bevelSize: 0.01, bevelThickness: 0.01 };
+const toothGeo = new THREE.ExtrudeGeometry(toothShape, extrudeSettings);
+toothGeo.center();
+
+const packTooth = new THREE.Mesh(toothGeo, packBaseMat);
+packTooth.position.set(0, 0.65, 0);
+packTopGroup.add(packTooth);
+
+// テクスチャ適用
 createPackBodyTexture((bodyTexture) => {
-  const bodyFrontMat = new THREE.MeshPhysicalMaterial({ map: bodyTexture, roughness: 0.35, clearcoat: 0.5 });
+  const bodyFrontMat = new THREE.MeshPhysicalMaterial({ map: bodyTexture, roughness: 0.4, clearcoat: 0.3 });
   packBody.material = [packBaseMat, packBaseMat, packBaseMat, packBaseMat, bodyFrontMat, packBaseMat];
 });
 
 const topTexture = createPackTopTexture();
-const topFrontMat = new THREE.MeshPhysicalMaterial({ map: topTexture, roughness: 0.35, clearcoat: 0.5 });
-packTop.material = [packBaseMat, packBaseMat, packBaseMat, packBaseMat, topFrontMat, packBaseMat];
+const topFrontMat = new THREE.MeshPhysicalMaterial({ map: topTexture, roughness: 0.4, clearcoat: 0.3 });
+topBlock.material = [packBaseMat, packBaseMat, packBaseMat, packBaseMat, topFrontMat, packBaseMat];
 
+// 切り取り破線
 const cutLineMat = new THREE.LineDashedMaterial({ 
-  color: 0xffd700, 
-  dashSize: 0.1, 
-  gapSize: 0.08,
+  color: 0x444444, 
+  dashSize: 0.08, 
+  gapSize: 0.06,
   linewidth: 2 
 });
 const cutLine = new THREE.Line(
-  new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-1.25, 1.4, 0.17), new THREE.Vector3(1.25, 1.4, 0.17)]),
+  new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-1.3, 1.4, 0.19), new THREE.Vector3(1.3, 1.4, 0.19)]),
   cutLineMat
 );
 cutLine.computeLineDistances();
 packGroup.add(cutLine);
 
+// **レイキャスト判定用の大きめの透明ヒットボックス**
 const cutHitBox = new THREE.Mesh(
-  new THREE.BoxGeometry(2.7, 0.6, 0.5),
+  new THREE.BoxGeometry(3.0, 0.9, 0.6),
   new THREE.MeshBasicMaterial({ visible: false })
 );
-cutHitBox.position.set(0, 1.4, 0.17);
+cutHitBox.position.set(0, 1.75, 0.1);
 packGroup.add(cutHitBox);
 
+// 3Dカード
 const cardGeo = new THREE.BoxGeometry(2.2, 3.2, 0.05);
-let backMat = new THREE.MeshStandardMaterial({ color: 0x111111, metalness: 0.3, roughness: 0.4 });
+let backMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.4 });
 let frontMat = new THREE.MeshStandardMaterial({ color: 0x222222 });
 
 const cardMaterials = [backMat, backMat, backMat, backMat, frontMat, backMat];
@@ -398,16 +406,17 @@ card.scale.set(0.9, 0.9, 0.9);
 card.visible = false;
 mainGroup.add(card);
 
+// パーティクル
 const particleCount = 80;
 const particleGeo = new THREE.BufferGeometry();
 const particlePos = new Float32Array(particleCount * 3);
 for (let i = 0; i < particleCount * 3; i++) particlePos[i] = (Math.random() - 0.5) * 8;
 particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
-const particleMat = new THREE.PointsMaterial({ size: 0.06, color: 0xffd700, transparent: true, opacity: 0 });
+const particleMat = new THREE.PointsMaterial({ size: 0.06, color: 0xffffff, transparent: true, opacity: 0 });
 const particles = new THREE.Points(particleGeo, particleMat);
 scene.add(particles);
 
-// --- 6. カットイン再生機能 ---
+// --- 7. カットイン再生 ---
 function playP5CutIn(cutinImgUrl, offset, onCompleteCallback) {
   const overlay = document.getElementById('cutin-overlay');
   const banner = document.getElementById('cutin-banner');
@@ -433,7 +442,7 @@ function playP5CutIn(cutinImgUrl, offset, onCompleteCallback) {
     .to(banner, { xPercent: -100, opacity: 0, duration: 0.2, ease: "power3.in" });
 }
 
-// --- 7. イベント・スワイプ & カード自由回転処理 ---
+// --- 8. イベント・スワイプ & カード自由回転処理 ---
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
@@ -442,7 +451,6 @@ let startX = 0, startY = 0;
 let isOpened = false;
 let isCardInteractable = false;
 
-// カードドラッグ回転用慣性変数
 let isCardDragging = false;
 let previousMousePosition = { x: 0, y: 0 };
 let cardVelocity = { x: 0, y: 0 };
@@ -455,7 +463,7 @@ function checkIntersection(clientX, clientY, targetObj) {
   mouse.x = (clientX / window.innerWidth) * 2 - 1;
   mouse.y = -(clientY / window.innerHeight) * 2 + 1;
   raycaster.setFromCamera(mouse, camera);
-  const intersects = raycaster.intersectObject(targetObj);
+  const intersects = raycaster.intersectObject(targetObj, true);
   return intersects.length > 0;
 }
 
@@ -464,14 +472,13 @@ function onPointerDown(e) {
   const clientY = e.clientY || (e.touches && e.touches[0].clientY);
 
   if (!isOpened) {
-    // パック開封用のタップ判定
+    // パック上部（cutHitBox）をタップ/スワイプしたか判定
     if (checkIntersection(clientX, clientY, cutHitBox)) {
       isDragging = true;
       startX = clientX;
       startY = clientY;
     }
   } else if (isCardInteractable) {
-    // 開封後のカードドラッグ回転判定
     if (checkIntersection(clientX, clientY, card)) {
       isCardDragging = true;
       previousMousePosition = { x: clientX, y: clientY };
@@ -488,7 +495,7 @@ function onPointerMove(e) {
     const deltaX = clientX - startX;
     const deltaY = Math.abs(clientY - startY);
 
-    if (Math.abs(deltaX) > 80 && deltaY < 60) {
+    if (Math.abs(deltaX) > 60 && deltaY < 80) {
       isDragging = false;
       openPack(deltaX > 0 ? 1 : -1);
     }
@@ -498,7 +505,6 @@ function onPointerMove(e) {
       y: clientY - previousMousePosition.y
     };
 
-    // 自由回転処理（トラックボール風）
     const deltaRotationQuaternion = new THREE.Quaternion()
       .setFromEuler(new THREE.Euler(
         deltaMove.y * 0.01,
@@ -530,13 +536,13 @@ window.addEventListener('touchstart', onPointerDown);
 window.addEventListener('touchmove', onPointerMove);
 window.addEventListener('touchend', onPointerUp);
 
-// 開封アニメーション
+// パック開封処理
 function openPack(direction) {
   isOpened = true;
   instruction.style.display = 'none';
 
   const picked = leaders[Math.floor(Math.random() * leaders.length)];
-  unlockCard(picked.id); // 図鑑解放
+  unlockCard(picked.id);
 
   createCardBackTexture(picked, (backTexture) => {
     cardMaterials[5] = new THREE.MeshStandardMaterial({ map: backTexture, roughness: 0.3 });
@@ -549,7 +555,7 @@ function openPack(direction) {
         onComplete: () => {
           resultText.innerHTML = `<span style="color:${picked.color}">【${picked.rank}】${picked.name}</span><br><small>${picked.desc}</small>`;
           resetBtn.style.display = 'inline-block';
-          isCardInteractable = true; // 開封後に自由ドラッグ回転を有効化
+          isCardInteractable = true;
           instruction.innerText = "カードをドラッグして3D回転！";
           instruction.style.display = 'block';
         }
@@ -557,8 +563,9 @@ function openPack(direction) {
 
       cutLine.visible = false;
 
-      tl.to(packTop.position, { x: direction * 4, y: 3.0, z: -2, duration: 0.6, ease: "power2.out" })
-        .to(packTop.rotation, { z: -direction * Math.PI * 2, duration: 0.6 }, "<")
+      // パック上部（ギザギザ含め）を吹き飛ばす
+      tl.to(packTopGroup.position, { x: direction * 4, y: 3.2, z: -2, duration: 0.6, ease: "power2.out" })
+        .to(packTopGroup.rotation, { z: -direction * Math.PI * 2, duration: 0.6 }, "<")
         .call(() => {
           if (picked.rank === "SSR" && picked.cutinUrl) {
             tl.pause();
@@ -568,7 +575,7 @@ function openPack(direction) {
           }
 
           card.visible = true;
-          pointLight.color.setHex(picked.color);
+          pointLight.color.setHex(0xffffff);
         }, null, "-=0.2")
         .to(card.position, { y: 1.3, z: 0.3, duration: 0.6, ease: "power2.out" })
         .to(packBody.position, { y: -4.5, duration: 0.5, ease: "power2.in" }, "+=0.1")
@@ -587,14 +594,14 @@ resetBtn.addEventListener('click', () => {
   isOpened = false;
   isCardInteractable = false;
   resetBtn.style.display = 'none';
-  instruction.innerText = 'パック上部を横にスワイプして開封！';
+  instruction.innerText = 'パック上部をスワイプして開封！';
   instruction.style.display = 'block';
   resultText.innerText = '';
 
   packGroup.visible = true;
-  packTop.position.set(0, 1.75, 0.1);
-  packTop.rotation.set(0, 0, 0);
-  packBody.position.set(0, -0.3, 0.1);
+  packTopGroup.position.set(0, 1.4, 0.09);
+  packTopGroup.rotation.set(0, 0, 0);
+  packBody.position.set(0, -0.3, 0.09);
   cutLine.visible = true;
 
   card.visible = false;
@@ -604,7 +611,7 @@ resetBtn.addEventListener('click', () => {
   cardVelocity = { x: 0, y: 0 };
 });
 
-// --- 8. 図鑑モーダル処理 ---
+// --- 9. 図鑑モーダル処理 ---
 const zukanBtn = document.getElementById('zukan-btn');
 const zukanModal = document.getElementById('zukan-modal');
 const zukanCloseBtn = document.getElementById('zukan-close-btn');
@@ -644,19 +651,18 @@ zukanCloseBtn.addEventListener('click', () => {
   zukanModal.style.display = 'none';
 });
 
-// --- 9. メインループ ---
+// --- 10. レンダリングループ ---
 function animate() {
   requestAnimationFrame(animate);
 
   if (!isOpened) {
     const time = Date.now() * 0.005;
     const glow = (Math.sin(time) + 1) / 2;
-    cutLineMat.color.setHSL(0.12, 1.0, 0.3 + glow * 0.4);
+    cutLineMat.color.setHSL(0, 0, 0.2 + glow * 0.4);
 
     mainGroup.rotation.y = Math.sin(Date.now() * 0.0015) * 0.08;
     mainGroup.rotation.x = Math.cos(Date.now() * 0.001) * 0.04;
   } else if (card.visible && isCardInteractable) {
-    // 慣性回転処理
     if (!isCardDragging) {
       if (Math.abs(cardVelocity.x) > 0.0001 || Math.abs(cardVelocity.y) > 0.0001) {
         const deltaRotationQuaternion = new THREE.Quaternion()
@@ -668,7 +674,6 @@ function animate() {
           ));
         card.quaternion.multiplyQuaternions(deltaRotationQuaternion, card.quaternion);
 
-        // 減衰
         cardVelocity.x *= 0.95;
         cardVelocity.y *= 0.95;
       }
