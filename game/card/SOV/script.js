@@ -380,6 +380,9 @@ function playP5CutIn(cutinImgUrl, onCompleteCallback) {
   img.src = cutinImgUrl;
   overlay.style.display = 'block';
 
+  // 目元の位置を中心にズームするように基準点を設定
+  gsap.set(img, { transformOrigin: "center 35%" });
+
   const tl = gsap.timeline({
     onComplete: () => {
       overlay.style.display = 'none';
@@ -387,7 +390,7 @@ function playP5CutIn(cutinImgUrl, onCompleteCallback) {
     }
   });
 
-  // 1. 画面右外 (xPercent: 100) から中央へ一気にスライドイン
+  // 1. 画面右外からスライドインしつつ、目元へ迫るズームイン
   tl.fromTo(banner, 
     { xPercent: 100, opacity: 0 }, 
     { xPercent: 0, opacity: 1, duration: 0.25, ease: "power4.out" }
@@ -397,9 +400,9 @@ function playP5CutIn(cutinImgUrl, onCompleteCallback) {
     { scale: 1.0, x: 0, duration: 0.3, ease: "back.out(1.4)" }, 
     "<"
   )
-  // 2. 表示時間のキープ (1.2秒間)
+  // 2. 1.2秒間キープ
   .to(banner, { duration: 1.2 })
-  // 3. 画面左外 (xPercent: -100) へ切り抜けるようにスライドアウト
+  // 3. 左外へスライドアウト
   .to(banner, { xPercent: -100, opacity: 0, duration: 0.2, ease: "power3.in" });
 }
 
