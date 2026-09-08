@@ -5,6 +5,7 @@ const leaders = [
   rank: "SSR", 
   desc: "大日本帝国の大元帥にして立憲君主。国家の精神的支柱であり、軍・政府の権威の頂点に位置した最高存在。", 
   imgUrl: "data/image/jap/hirohito.png",
+  cutinUrl: "data/image/cut/hirohito.png",
   color: "#D4AF37" 
 },
 { 
