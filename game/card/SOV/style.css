@@ -9,27 +9,16 @@ body {
   height: 100vh;
   overflow: hidden;
   font-family: 'Helvetica Neue', Arial, 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', sans-serif;
-  color: #333333;
+  color: #ffffff;
 
-  /* --- マットホワイト パンチボード背景 --- */
-  background-color: #f2f3f5; /* ベースのマットホワイト */
+  /* --- ソ連風 ダークレッド/スチール背景 --- */
+  background-color: #1a0808;
   background-image:
-    /* 穴の深みと影（内側の凹み感） */
-    radial-gradient(circle, rgba(0, 0, 0, 0.22) 18%, transparent 22%),
-    /* 穴の下側にわずかに入るハイライト（立体感） */
-    radial-gradient(circle, rgba(255, 255, 255, 0.8) 22%, transparent 26%),
-    /* 画面全体のソフトなライティング（中央がほんのり明るい） */
-    radial-gradient(circle at center, rgba(255, 255, 255, 0.6) 0%, rgba(220, 224, 230, 0.4) 100%);
-  
-  /* 穴の配置パターン設定 */
-  background-position: 
-    0 0, 
-    0 1px, 
-    0 0;
-  background-size: 
-    24px 24px, 
-    24px 24px, 
-    100% 100%;
+    radial-gradient(circle, rgba(255, 0, 0, 0.15) 18%, transparent 22%),
+    radial-gradient(circle, rgba(255, 215, 0, 0.15) 22%, transparent 26%),
+    radial-gradient(circle at center, rgba(80, 10, 10, 0.8) 0%, rgba(20, 5, 5, 0.95) 100%);
+  background-position: 0 0, 0 1px, 0 0;
+  background-size: 24px 24px, 24px 24px, 100% 100%;
 }
 
 #canvas-container {
@@ -57,39 +46,44 @@ body {
   padding: 20px;
 }
 
-/* トップバー & 図鑑ボタン */
 #top-bar {
   width: 100%;
   display: flex;
   justify-content: flex-end;
+  gap: 10px;
   pointer-events: auto;
 }
 
-#zukan-btn {
-  padding: 10px 20px;
+#light-btn, #zukan-btn {
+  padding: 10px 18px;
   font-size: 0.95rem;
   font-weight: bold;
-  color: #ffffff;
-  background: #1f1f1f;
-  border: 2px solid #ffd700;
+  color: #ffd700;
+  background: #2b0a0a;
+  border: 2px solid #d4af37;
   border-radius: 20px;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
   transition: all 0.2s ease;
 }
 
-#zukan-btn:hover {
-  background: #ffd700;
-  color: #111111;
+#light-btn:hover, #zukan-btn:hover {
+  background: #4a1010;
+  color: #ffffff;
   transform: translateY(-2px);
 }
 
-/* 操作ガイドテキスト */
+#light-btn.off {
+  background: #444444;
+  border-color: #666666;
+  color: #888888;
+}
+
 #instruction {
   font-size: 1.2rem;
   font-weight: bold;
-  color: #333333;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.9), 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: #ffd700;
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.8), 0 2px 4px rgba(0, 0, 0, 0.8);
   letter-spacing: 2px;
   animation: pulse 2s infinite ease-in-out;
 }
@@ -99,7 +93,6 @@ body {
   50% { opacity: 1; transform: translateY(-5px); }
 }
 
-/* ガチャ結果エリア */
 #result-container {
   text-align: center;
   pointer-events: auto;
@@ -110,42 +103,39 @@ body {
   font-size: 1.4rem;
   font-weight: bold;
   margin-bottom: 15px;
-  color: #222222;
-  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
+  color: #ffffff;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.9);
 }
 
 #result-text small {
   font-size: 0.9rem;
   font-weight: normal;
-  color: #555555;
+  color: #dddddd;
   display: block;
   margin-top: 6px;
   max-width: 400px;
 }
 
-/* リセットボタン */
 #reset-btn {
   display: none;
   padding: 12px 36px;
   font-size: 1rem;
   font-weight: bold;
-  color: #333333;
-  background: #ffffff;
+  color: #ffffff;
+  background: #8b0000;
   border: 2px solid #ffd700;
   border-radius: 30px;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
   transition: all 0.3s ease;
 }
 
 #reset-btn:hover {
-  background: #ffd700;
-  color: #ffffff;
-  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+  background: #a00000;
   transform: translateY(-2px);
 }
 
-/* --- カットインオーバーレイ --- */
+/* カットイン演出 */
 #cutin-overlay {
   display: none;
   position: absolute;
@@ -163,9 +153,9 @@ body {
   left: -10%;
   width: 120%;
   height: 180px;
-  background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+  background: linear-gradient(135deg, #8b0000 0%, #3a0000 100%);
   transform: rotate(-6deg);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
   border-top: 4px solid #ffd700;
   border-bottom: 4px solid #ffd700;
   display: flex;
@@ -191,7 +181,7 @@ body {
   filter: contrast(120%) drop-shadow(0 0 10px #000);
 }
 
-/* --- 図鑑モーダルUI --- */
+/* 図鑑モーダル */
 #zukan-modal {
   display: none;
   position: absolute;
@@ -199,7 +189,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.65);
+  background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(5px);
   z-index: 200;
   align-items: center;
@@ -210,13 +200,13 @@ body {
   width: 90%;
   max-width: 650px;
   max-height: 85vh;
-  background: #ffffff;
-  border: 3px solid #ffd700;
+  background: #1f0808;
+  border: 3px solid #d4af37;
   border-radius: 16px;
   padding: 20px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
 }
 
 .zukan-header {
@@ -224,13 +214,13 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 15px;
-  border-bottom: 2px solid #eee;
+  border-bottom: 2px solid #551111;
   padding-bottom: 10px;
 }
 
 .zukan-header h2 {
   font-size: 1.3rem;
-  color: #222;
+  color: #ffd700;
 }
 
 #zukan-close-btn {
@@ -238,8 +228,12 @@ body {
   border: none;
   font-size: 2rem;
   cursor: pointer;
-  color: #666;
+  color: #aaa;
   line-height: 1;
+}
+
+#zukan-close-btn:hover {
+  color: #fff;
 }
 
 .zukan-grid {
@@ -253,27 +247,32 @@ body {
 .zukan-card {
   aspect-ratio: 2 / 3;
   border-radius: 8px;
-  border: 2px solid #ccc;
   overflow: hidden;
-  background: #111;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   position: relative;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
 }
 
+/* 未解放カード（「？」デザイン） */
 .zukan-card.locked {
-  background: linear-gradient(135deg, #222 0%, #050505 100%);
-  border-color: #555;
+  background: #150505;
+  border: 2px dashed #662222;
 }
 
 .zukan-card.locked .question-mark {
   font-size: 3.5rem;
   font-weight: bold;
-  color: #777;
-  text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+  color: #883333;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+  margin-bottom: -10px;
+}
+
+.zukan-card.unlocked {
+  border: 2px solid #ffd700;
+  background: #111;
 }
 
 .zukan-card.unlocked img {

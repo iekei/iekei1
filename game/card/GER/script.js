@@ -34,7 +34,7 @@ const leaders = [
   },
   { 
     name: "ヨーゼフ・ゲッベルス", 
-    rank: "R", 
+    rank: "SSR", 
     desc: "宣伝大臣兼ベルリン管区指導者。メディアと世論を完全に支配しており、政権の正当性を担保する発言力から、クーデター後の黒幕や指導者補佐・代行として擁立される可能性が高かった。", 
     imgUrl: "data/image/nazi/joseph.png",
     cutinUrl: null,

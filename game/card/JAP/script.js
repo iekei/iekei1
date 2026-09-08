@@ -24,14 +24,14 @@ const leaders = [
 },
 { 
   name: "真崎甚三郎", 
-  rank: "SSR", 
+  rank: "SR", 
   desc: "陸軍大将。皇道派の中心人物であり、二・二六事件が成功し軍部過激派が政権を掌握した場合の軍事政権トップ候補。", 
   imgUrl: "data/image/jap/mazaki.png",
   color: "#8B0000" 
 },
 { 
   name: "東條英機", 
-  rank: "SR", 
+  rank: "SSR", 
   desc: "関東軍憲兵司令官（後に参謀長）。1936年当時は満州で徹底した治安維持と規律を統括し、統制派のエリートとして頭角を現す。", 
   imgUrl: "data/image/jap/tojo.png",
   color: "#556B2F" 
