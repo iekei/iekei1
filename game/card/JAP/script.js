@@ -13,6 +13,7 @@ const leaders = [
   rank: "SR", 
   desc: "1936年に内閣総理大臣に就任。二・二六事件後の混乱を収拾し、軍部の台頭を抑えつつ文民主導の外交を模索した。", 
   imgUrl: "data/image/jap/hirota.png",
+  cutinUrl: null,
   color: "#708090" 
 },
 { 
@@ -20,6 +21,7 @@ const leaders = [
   rank: "SR", 
   desc: "海軍大将にして二・二六事件当時の首相。襲撃を奇跡的に生き延びた重臣であり、軍部の過激派に批判的な穏健派。", 
   imgUrl: "data/image/jap/okada.png",
+  cutinUrl: null,
   color: "#4682B4" 
 },
 { 
@@ -27,6 +29,7 @@ const leaders = [
   rank: "SR", 
   desc: "陸軍大将。皇道派の中心人物であり、二・二六事件が成功し軍部過激派が政権を掌握した場合の軍事政権トップ候補。", 
   imgUrl: "data/image/jap/mazaki.png",
+  cutinUrl: null,
   color: "#8B0000" 
 },
 { 
@@ -34,6 +37,7 @@ const leaders = [
   rank: "SSR", 
   desc: "関東軍憲兵司令官（後に参謀長）。1936年当時は満州で徹底した治安維持と規律を統括し、統制派のエリートとして頭角を現す。", 
   imgUrl: "data/image/jap/tojo.png",
+  cutinUrl: null,
   color: "#556B2F" 
 },
 { 
@@ -41,6 +45,7 @@ const leaders = [
   rank: "SSR", 
   desc: "貴族院議長。圧倒的な国民的人気と五摂家筆頭の血統を持ち、軍部と政党の対立を収める唯一の「期待の星」として擁立された。", 
   imgUrl: "data/image/jap/konoe.png",
+  cutinUrl: null,
   color: "#2E8B57" 
 },
 { 
@@ -48,6 +53,7 @@ const leaders = [
   rank: "SR", 
   desc: "参謀本部作戦課長。満州事変の主謀者であり、「最終戦争論」を掲げ国家総力戦体制への組織改革を推し進めた戦略家。", 
   imgUrl: "data/image/jap/ishiwara.png",
+  cutinUrl: null,
   color: "#B8860B" 
 }
 ]; 
