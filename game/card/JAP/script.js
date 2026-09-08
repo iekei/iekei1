@@ -52,12 +52,12 @@ const leaders = [
 ]; 
 
 // 図鑑所持状態（日本版専用キー jpn_unlocked_cards）
-let unlockedCards = JSON.parse(localStorage.getItem('jpn_unlocked_cards') || '[]');
+let unlockedCards = JSON.parse(localStorage.getItem('jap_unlocked_cards') || '[]');
 
 function unlockCard(id) {
   if (!unlockedCards.includes(id)) {
     unlockedCards.push(id);
-    localStorage.setItem('jpn_unlocked_cards', JSON.stringify(unlockedCards));
+    localStorage.setItem('jap_unlocked_cards', JSON.stringify(unlockedCards));
   }
 }
 
