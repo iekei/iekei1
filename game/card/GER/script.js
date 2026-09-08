@@ -234,13 +234,12 @@ const leaders = [
   }
 ];
 
-// 🚨【エラー対策1】Local Storage の安全な読み込み（try-catch ＆ 配列型判定）
+// 図鑑所持状態（Local Storage ＆ 壊れデータ保護 try-catch）
 let unlockedCards = [];
 try {
   const savedData = localStorage.getItem('ger_unlocked_cards');
   if (savedData) {
     const parsed = JSON.parse(savedData);
-    // 配列の形になっている時だけ変数に代入
     if (Array.isArray(parsed)) {
       unlockedCards = parsed;
     }
@@ -251,11 +250,8 @@ try {
   localStorage.setItem('ger_unlocked_cards', JSON.stringify([]));
 }
 
-// 🚨【エラー対策2】解放関数の防御処理（存在チェック）
 function unlockCard(id) {
-  if (!id) return; // IDが空、undefined、nullなら安全に無視する
-  
-  // 変数が配列であることを再確認してからincludesを実行
+  if (!id) return;
   if (Array.isArray(unlockedCards)) {
     if (!unlockedCards.includes(id)) {
       unlockedCards.push(id);
@@ -383,7 +379,7 @@ function createPackTopTexture() {
   return new THREE.CanvasTexture(canvas);
 }
 
-// --- 5. 動的カードテクスチャ描画 ---
+// --- 5. 動的カードテクスチャ描画 (角丸・立体色・勲章・資源専用枠) ---
 function drawRoundedRect(ctx, x, y, width, height, radius) {
   ctx.beginPath();
   ctx.moveTo(x + radius, y);
@@ -485,6 +481,7 @@ function createCardTexture(leader, callback) {
     const mainImg = loadedImages["main"];
     const medalImg = loadedImages["medal"];
 
+    // 1. 画像描画領域
     const imgX = 35, imgY = 85, imgW = 442, imgH = 440, radius = 16;
     ctx.save();
     drawRoundedRect(ctx, imgX, imgY, imgW, imgH, radius);
@@ -519,6 +516,7 @@ function createCardTexture(leader, callback) {
     drawRoundedRect(ctx, imgX, imgY, imgW, imgH, radius);
     ctx.stroke();
 
+    // 2. カード外枠
     ctx.lineWidth = 14;
     ctx.strokeStyle = leader.color;
     drawRoundedRect(ctx, 12, 12, canvas.width - 24, canvas.height - 24, 28);
@@ -529,6 +527,7 @@ function createCardTexture(leader, callback) {
     drawRoundedRect(ctx, 22, 22, canvas.width - 44, canvas.height - 44, 20);
     ctx.stroke();
 
+    // 将軍専用：勲章
     if (leader.type === "general" && medalImg) {
       const medalW = 76, medalH = 76;
       const medalX = canvas.width - 110, medalY = 32;
@@ -544,12 +543,14 @@ function createCardTexture(leader, callback) {
       ctx.strokeRect(medalX - 4, medalY - 4, medalW + 8, medalH + 8);
     }
 
+    // 資源専用：枠線
     if (leader.type === "resource") {
       ctx.strokeStyle = 'rgba(100, 110, 120, 0.4)';
       ctx.lineWidth = 2;
       ctx.strokeRect(30, 80, canvas.width - 60, canvas.height - 150);
     }
 
+    // 3. レアリティバッジ
     ctx.fillStyle = leader.color;
     ctx.beginPath();
     ctx.arc(65, 65, 34, 0, Math.PI * 2);
@@ -561,6 +562,7 @@ function createCardTexture(leader, callback) {
     ctx.textBaseline = 'middle';
     ctx.fillText(leader.rank, 65, 65);
 
+    // 4. 下部テキストエリア
     const textAreaX = 35, textAreaY = 545, textAreaW = 442, textAreaH = 185;
     const textAreaGrad = ctx.createLinearGradient(0, textAreaY, 0, textAreaY + textAreaH);
     textAreaGrad.addColorStop(0, 'rgba(15, 17, 24, 0.94)');
@@ -605,6 +607,7 @@ scene.add(mainGroup);
 const packGroup = new THREE.Group();
 mainGroup.add(packGroup);
 
+// マットホワイトマテリアル
 const packBaseMat = new THREE.MeshPhysicalMaterial({ 
   color: 0xffffff, 
   roughness: 0.45, 
@@ -613,22 +616,26 @@ const packBaseMat = new THREE.MeshPhysicalMaterial({
   clearcoatRoughness: 0.4
 });
 
+// パック本体 (下半分)
 const packBody = new THREE.Mesh(new THREE.BoxGeometry(2.6, 3.4, 0.18), packBaseMat);
 packBody.position.set(0, -0.3, 0.09);
 packBody.castShadow = true;
 packBody.receiveShadow = true;
 packGroup.add(packBody);
 
+// パック上部 (上半分・スワイプに同期して移動するグループ)
 const packTopGroup = new THREE.Group();
-packTopGroup.position.set(0, 1.4, 0.09);
+packTopGroup.position.set(0, 1.4, 0.09); // Z位置は本体(0.09)に完全に合致
 packGroup.add(packTopGroup);
 
+// 上端の四角いブロック
 const topBlock = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.5, 0.18), packBaseMat);
-topBlock.position.set(0, 0.25, 0);
+topBlock.position.set(0, 0.25, 0); // packTopGroupの中での相対Y位置
 topBlock.castShadow = true;
 topBlock.receiveShadow = true;
 packTopGroup.add(topBlock);
 
+// 3Dギザギザ形状（鋸歯）
 const toothShape = createZigZagShape(2.6, 0.3, 26, 0.12);
 const extrudeSettings = { depth: 0.04, bevelEnabled: true, bevelSegments: 2, steps: 1, bevelSize: 0.01, bevelThickness: 0.01 };
 const toothGeo = new THREE.ExtrudeGeometry(toothShape, extrudeSettings);
@@ -640,6 +647,7 @@ packTooth.castShadow = true;
 packTooth.receiveShadow = true;
 packTopGroup.add(packTooth);
 
+// パック表紙テクスチャ読み込み
 createPackBodyTexture((bodyTexture) => {
   const bodyFrontMat = new THREE.MeshPhysicalMaterial({ map: bodyTexture, roughness: 0.4, clearcoat: 0.25 });
   packBody.material = [packBaseMat, packBaseMat, packBaseMat, packBaseMat, bodyFrontMat, packBaseMat];
@@ -649,26 +657,33 @@ const topTexture = createPackTopTexture();
 const topFrontMat = new THREE.MeshPhysicalMaterial({ map: topTexture, roughness: 0.4, clearcoat: 0.25 });
 topBlock.material = [packBaseMat, packBaseMat, packBaseMat, packBaseMat, topFrontMat, packBaseMat];
 
+// 🚨【修正1】発光する切り取り破線（cutLine）を packTopGroup の子に設定！
 const cutLineMat = new THREE.LineDashedMaterial({ 
-  color: 0x444444, 
-  dashSize: 0.08, 
-  gapSize: 0.06,
+  color: 0x00e5ff, 
+  dashSize: 0.1, 
+  gapSize: 0.08,
   linewidth: 2 
 });
+
+// packTopGroup の座標系（Y=1.4, Z=0.09 が原点）に合わせたローカル座標へコンバート
+// 元のワールド Y=1.4 -> ローカル Y=0 | 元のワールド Z=0.19 -> ローカル Z=0.10
 const cutLine = new THREE.Line(
-  new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-1.3, 1.4, 0.19), new THREE.Vector3(1.3, 1.4, 0.19)]),
+  new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-1.3, 0, 0.10), new THREE.Vector3(1.3, 0, 0.10)]),
   cutLineMat
 );
 cutLine.computeLineDistances();
-packGroup.add(cutLine);
+packTopGroup.add(cutLine); // packTopGroup の中にアタッチ！
 
+// 判定用透明ヒットボックス（スワイプを受け止めるエリア）
 const cutHitBox = new THREE.Mesh(
   new THREE.BoxGeometry(3.2, 1.4, 0.6),
   new THREE.MeshBasicMaterial({ visible: false })
 );
+// ワールド座標 Y=1.4, Z=0.19 に配置し、破線と完全に重ねる
 cutHitBox.position.set(0, 1.4, 0.19);
 packGroup.add(cutHitBox);
 
+// 3Dカードメッシュ配列 (左・中央・右の3枚同時出現)
 const cards = [];
 const cardGeo = new THREE.BoxGeometry(1.95, 2.9, 0.05);
 
@@ -688,6 +703,7 @@ for (let i = 0; i < 3; i++) {
   cards.push(cardMesh);
 }
 
+// パーティクル
 const particleCount = 100;
 const particleGeo = new THREE.BufferGeometry();
 const particlePos = new Float32Array(particleCount * 3);
@@ -723,7 +739,7 @@ function playP5CutIn(cutinImgUrl, offset, onCompleteCallback) {
     .to(banner, { xPercent: -100, opacity: 0, duration: 0.2, ease: "power3.in" });
 }
 
-// --- 8. イベント処理 ---
+// --- 8. 事件判定 & 物理処理 ---
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
@@ -749,9 +765,26 @@ function checkIntersection(clientX, clientY, targetObj) {
   return intersects.length > 0;
 }
 
+// 🚨【修正3】スマホや各種ブラウザでの座標取得バグを防止する安全ヘルパー関数
+function getEventCoords(e) {
+  let clientX, clientY;
+  if (e.touches && e.touches.length > 0) {
+    clientX = e.touches.clientX;
+    clientY = e.touches.clientY;
+  } else if (e.changedTouches && e.changedTouches.length > 0) {
+    clientX = e.changedTouches.clientX;
+    clientY = e.changedTouches.clientY;
+  } else {
+    clientX = e.clientX;
+    clientY = e.clientY;
+  }
+  return { x: clientX, y: clientY };
+}
+
 function onPointerDown(e) {
-  const clientX = e.clientX || (e.touches && e.touches && e.touches.clientX);
-  const clientY = e.clientY || (e.touches && e.touches && e.touches.clientY);
+  const coords = getEventCoords(e);
+  const clientX = coords.x;
+  const clientY = coords.y;
 
   if (clientX === undefined || clientY === undefined) return;
 
@@ -777,8 +810,9 @@ function onPointerDown(e) {
 }
 
 function onPointerMove(e) {
-  const clientX = e.clientX || (e.touches && e.touches && e.touches.clientX);
-  const clientY = e.clientY || (e.touches && e.touches && e.touches.clientY);
+  const coords = getEventCoords(e);
+  const clientX = coords.x;
+  const clientY = coords.y;
 
   if (clientX === undefined || clientY === undefined) return;
 
@@ -786,6 +820,7 @@ function onPointerMove(e) {
     const deltaX = clientX - startX;
     const deltaY = clientY - startY;
 
+    // 大きすぎる縦ズレはドラッグを弾性キャンセル
     if (Math.abs(deltaY) > 100) {
       isDragging = false;
       gsap.to(packTopGroup.position, { x: 0, duration: 0.3, ease: "elastic.out(1.2, 0.5)" });
@@ -797,9 +832,12 @@ function onPointerMove(e) {
     const maxSwipe = 0.7;
     const clampedX = Math.max(-maxSwipe, Math.min(maxSwipe, swipeMoveX));
 
+    // 指の動きにパック上部(および切り取り線)が傾きながら完全追従
     packTopGroup.position.x = clampedX;
     packTopGroup.rotation.z = -clampedX * 0.25;
 
+    // 🚨【修正2】開封トリガー条件の明文化
+    // スワイプ距離(3D空間の移動量換算)がしきい値 0.35 を超えた瞬間に、開封確定で吹き飛ばし演出へ！
     if (Math.abs(swipeMoveX) > 0.35) {
       isDragging = false;
       openPack(swipeMoveX > 0 ? 1 : -1);
@@ -850,7 +888,7 @@ function openPack(direction) {
   isOpened = true;
   instruction.style.display = 'none';
 
-  // 🚨【エラー対策3】プールの不整合対策（空の際にもフォールバック）
+  // 指導者、将軍、資源から確実に1枚ずつ選出するマルチ枠
   const leadersPool = leaders.filter(l => l.type === "leader");
   const generalsPool = leaders.filter(l => l.type === "general");
   const resourcesPool = leaders.filter(l => l.type === "resource");
@@ -861,7 +899,7 @@ function openPack(direction) {
 
   const pickedCards = [pickedResource, pickedLeader, pickedGeneral];
 
-  // 安全に図鑑に登録
+  // 図鑑に安全に登録
   pickedCards.forEach(cardData => {
     if (cardData && cardData.id) {
       unlockCard(cardData.id);
@@ -886,10 +924,9 @@ function openPack(direction) {
 
 function startMultiRevealAnimation(assets, direction) {
   cards.forEach((cMesh, idx) => {
-    // 🚨【エラー対策4】assets[idx]の存在を安全に判定
     if (assets[idx]) {
-      cMesh.material[1] = new THREE.MeshStandardMaterial({ map: assets[idx].front, roughness: 0.3 }); // 表面
-      cMesh.material[2] = new THREE.MeshStandardMaterial({ map: assets[idx].back, roughness: 0.3 });  // 裏面
+      cMesh.material = new THREE.MeshStandardMaterial({ map: assets[idx].front, roughness: 0.3 }); // 表面
+      cMesh.material = new THREE.MeshStandardMaterial({ map: assets[idx].back, roughness: 0.3 });  // 裏面
       cMesh.visible = true;
     }
   });
@@ -913,7 +950,8 @@ function startMultiRevealAnimation(assets, direction) {
 
   cutLine.visible = false;
 
-  tl.to(packTopGroup.position, { x: direction * 4, y: 3.2, z: -2, duration: 0.6, ease: "power2.out" })
+  // 上部パック(破線を含む)がスワイプ方向へねじれながら高速破裂
+  tl.to(packTopGroup.position, { x: packTopGroup.position.x + direction * 4, y: 3.2, z: -2, duration: 0.6, ease: "power2.out" })
     .to(packTopGroup.rotation, { z: -direction * Math.PI * 2, duration: 0.6 }, "<")
     .call(() => {
       pointLight.color.setHex(0xffffff);
@@ -925,6 +963,7 @@ function startMultiRevealAnimation(assets, direction) {
 
   tl.to(packBody.position, { y: -4.5, duration: 0.5, ease: "power2.in" }, "+=0.1");
 
+  // 3枚が左右にスプレッド展開しながらスピン！
   const targetX = [-2.3, 0, 2.3];
   cards.forEach((cMesh, idx) => {
     tl.to(cMesh.position, { x: targetX[idx], y: 0, z: 2.3, duration: 0.8, ease: "back.out(1.2)" }, "<");
@@ -995,7 +1034,6 @@ const zukanGrid = document.getElementById('zukan-grid');
 
 function renderZukan() {
   zukanGrid.innerHTML = '';
-  // 🚨 unlockedCards が正しく読み込まれている場合のみincludesを実行
   const hasUnlocked = Array.isArray(unlockedCards);
   
   leaders.forEach(leader => {
@@ -1037,6 +1075,7 @@ function animate() {
   if (!isOpened) {
     const time = Date.now() * 0.005;
     const glow = (Math.sin(time) + 1) / 2;
+    // 破線の脈動発光（packTopGroupの中にあるのでローカルで安全に発光）
     cutLineMat.color.setHSL(0, 0, 0.2 + glow * 0.4);
 
     mainGroup.rotation.y = Math.sin(Date.now() * 0.0015) * 0.08;
