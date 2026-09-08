@@ -37,7 +37,7 @@ const leaders = [
   rank: "SSR", 
   desc: "関東軍憲兵司令官（後に参謀長）。1936年当時は満州で徹底した治安維持と規律を統括し、統制派のエリートとして頭角を現す。", 
   imgUrl: "data/image/jap/tojo.png",
-  cutinUrl: null,
+  cutinUrl: "data/image/cut/tojo.gif",
   color: "#556B2F" 
 },
 { 
@@ -45,6 +45,7 @@ const leaders = [
   rank: "SSR", 
   desc: "貴族院議長。圧倒的な国民的人気と五摂家筆頭の血統を持ち、軍部と政党の対立を収める唯一の「期待の星」として擁立された。", 
   imgUrl: "data/image/jap/konoe.png",
+  cutinUrl: "data/image/cut/konoe.png",
   cutinUrl: null,
   color: "#2E8B57" 
 },
