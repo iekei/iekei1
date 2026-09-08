@@ -234,42 +234,13 @@ const leaders = [
   }
 ];
 
-// --- 2. 図鑑の安全な永続化システム (エラー保護 try-catch / 配列型保証) ---
-let unlockedCards = [];
-try {
-  const savedData = localStorage.getItem('ger_unlocked_cards');
-  if (savedData) {
-    const parsed = JSON.parse(savedData);
-    if (Array.isArray(parsed)) {
-      unlockedCards = parsed;
-    }
-  }
-} catch (e) {
-  console.warn("localStorage のデータが破損していたためリセットします:", e);
-  unlockedCards = [];
-  localStorage.setItem('ger_unlocked_cards', JSON.stringify([]));
-}
-
-function unlockCard(id) {
-  if (!id) return;
-  if (Array.isArray(unlockedCards)) {
-    if (!unlockedCards.includes(id)) {
-      unlockedCards.push(id);
-      localStorage.setItem('ger_unlocked_cards', JSON.stringify(unlockedCards));
-    }
-  } else {
-    unlockedCards = [id];
-    localStorage.setItem('ger_unlocked_cards', JSON.stringify(unlockedCards));
-  }
-}
-
 // 図鑑所持状態（日本版専用キー jpn_unlocked_cards）
-let unlockedCards = JSON.parse(localStorage.getItem('ger_unlocked_cards') || '[]');
+let unlockedCards = JSON.parse(localStorage.getItem('jap_unlocked_cards') || '[]');
 
 function unlockCard(id) {
   if (!unlockedCards.includes(id)) {
     unlockedCards.push(id);
-    localStorage.setItem('ger_unlocked_cards', JSON.stringify(unlockedCards));
+    localStorage.setItem('jap_unlocked_cards', JSON.stringify(unlockedCards));
   }
 }
 
@@ -363,7 +334,7 @@ function createPackBodyTexture(callback) {
   ctx.strokeRect(24, 24, canvas.width - 48, canvas.height - 48);
 
   const iconImg = new Image();
-  iconImg.src = 'data/image/icon/nazi.png';
+  iconImg.src = 'data/image/icon/jap.png';
   iconImg.onload = () => {
     const size = 210;
     ctx.drawImage(iconImg, (canvas.width - size) / 2, (canvas.height - size) / 2 - 20, size, size);
@@ -443,7 +414,7 @@ function createCardBackTexture(leader, callback) {
   ctx.stroke();
 
   const backIcon = new Image();
-  backIcon.src = 'data/image/icon/nazi.png';
+  backIcon.src = 'data/image/icon/jap.png';
 
   backIcon.onload = () => {
     const size = 220;
