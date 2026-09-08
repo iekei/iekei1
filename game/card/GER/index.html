@@ -2,24 +2,26 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>カードパックガチャ - ドイツ (GER)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>近現代リーダーガチャ 3D - GERパック</title>
   <link rel="stylesheet" href="style.css">
   <!-- Three.js & GSAP -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 </head>
 <body>
+  <!-- 3Dレンダリング用キャンバスコンテナ -->
   <div id="canvas-container"></div>
 
   <!-- UIレイヤー -->
   <div id="ui-layer">
     <div id="top-bar">
+      <a href="../index.html" id="back-btn">パック選択に戻る</a>
       <button id="light-btn">光源: ON</button>
       <button id="zukan-btn">図鑑を見る</button>
     </div>
     
-    <div id="instruction">パック上部をスワイプして開封！</div>
+    <div id="instruction">パック上部の点線をスワイプして開封！</div>
 
     <div id="result-container">
       <div id="result-text"></div>
@@ -27,20 +29,21 @@
     </div>
   </div>
 
-  <!-- カットイン演出オーバーレイ -->
+  <!-- ペルソナ5風カットイン演出オーバーレイ -->
   <div id="cutin-overlay">
     <div class="cutin-banner" id="cutin-banner">
       <div class="cutin-img-wrapper">
-        <img id="cutin-img" class="cutin-img" src="" alt="CutIn">
+        <div class="cutin-frame"></div>
+        <img id="cutin-img" class="cutin-img" src="" alt="SSR CutIn">
       </div>
     </div>
   </div>
 
-  <!-- 図鑑モーダル -->
+  <!-- コレクション図鑑モーダル -->
   <div id="zukan-modal">
     <div class="zukan-content">
       <div class="zukan-header">
-        <h2>ドイツ指導者図鑑</h2>
+        <h2>ドイツカード図鑑</h2>
         <button id="zukan-close-btn">&times;</button>
       </div>
       <div id="zukan-grid" class="zukan-grid"></div>
