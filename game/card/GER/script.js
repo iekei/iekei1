@@ -235,12 +235,12 @@ const leaders = [
 ];
 
 // 図鑑所持状態（日本版専用キー jpn_unlocked_cards）
-let unlockedCards = JSON.parse(localStorage.getItem('jap_unlocked_cards') || '[]');
+let unlockedCards = JSON.parse(localStorage.getItem('ger_unlocked_cards') || '[]');
 
 function unlockCard(id) {
   if (!unlockedCards.includes(id)) {
     unlockedCards.push(id);
-    localStorage.setItem('jap_unlocked_cards', JSON.stringify(unlockedCards));
+    localStorage.setItem('ger_unlocked_cards', JSON.stringify(unlockedCards));
   }
 }
 
@@ -334,7 +334,7 @@ function createPackBodyTexture(callback) {
   ctx.strokeRect(24, 24, canvas.width - 48, canvas.height - 48);
 
   const iconImg = new Image();
-  iconImg.src = 'data/image/icon/jap.png';
+  iconImg.src = 'data/image/icon/nazi.png';
   iconImg.onload = () => {
     const size = 210;
     ctx.drawImage(iconImg, (canvas.width - size) / 2, (canvas.height - size) / 2 - 20, size, size);
@@ -414,7 +414,7 @@ function createCardBackTexture(leader, callback) {
   ctx.stroke();
 
   const backIcon = new Image();
-  backIcon.src = 'data/image/icon/jap.png';
+  backIcon.src = 'data/image/icon/nazi.png';
 
   backIcon.onload = () => {
     const size = 220;
