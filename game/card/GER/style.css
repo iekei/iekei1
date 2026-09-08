@@ -251,7 +251,7 @@ body {
   box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
-/* 未解放カード（指定デザイン） */
+/* 未解放カード（「？」デザイン） */
 .zukan-card.locked {
   background: #2a2c30;
   border: 2px dashed #666666;
