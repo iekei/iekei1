@@ -326,10 +326,10 @@ function createPackBodyTexture(callback) {
   ctx.fillStyle = packGrad;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.strokeStyle = '#b81d24';
+  ctx.strokeStyle = '#363535';
   ctx.lineWidth = 8;
   ctx.strokeRect(14, 14, canvas.width - 28, canvas.height - 28);
-  ctx.strokeStyle = '#e08285';
+  ctx.strokeStyle = '#a5a1a1';
   ctx.lineWidth = 4;
   ctx.strokeRect(24, 24, canvas.width - 48, canvas.height - 48);
 
@@ -355,7 +355,7 @@ function createPackTopTexture() {
   ctx.fillStyle = topGrad;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.strokeStyle = '#b81d24';
+  ctx.strokeStyle = '#232021';
   ctx.lineWidth = 8;
   ctx.strokeRect(14, 14, canvas.width - 28, canvas.height - 28);
 
