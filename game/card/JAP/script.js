@@ -65,8 +65,7 @@ const leaders = [
     rank: "SSR", 
     desc: "1936年当時は海軍航空本部技術部長（海軍中将）。航空主兵論を強力に推進し、後に連合艦隊司令長官を務めた不世出の提督。", 
     imgUrl: "data/image/jap/yamamoto.png",
-    cutinUrl: "data/image/cut/yamamoto.png",
-    cutinOffset: "center 30%",
+    cutinUrl: "data/image/cut/yamamoto.gif",
     color: "#ffd700" // ゴールド
   },
   { 
@@ -76,8 +75,7 @@ const leaders = [
     rank: "SSR", 
     desc: "1936年当時は歩兵第40旅団長（陸軍少将）。後に「マレーの虎」と畏怖され、シンガポール攻略戦などで迅速な電撃戦を展開した陸軍大将。", 
     imgUrl: "data/image/jap/yamashita.png",
-    cutinUrl: "data/image/cut/yamashita.png",
-    cutinOffset: "center 30%",
+    cutinUrl: "data/image/cut/yamashita.gif",
     color: "#ffd700" 
   },
   { 
