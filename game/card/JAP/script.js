@@ -167,17 +167,6 @@ const leaders = [
 ];
 
 // 図鑑所持状態（日本版専用キー jpn_unlocked_cards）
-let unlockedCards = JSON.parse(localStorage.getItem('ger_unlocked_cards') || '[]');
-
-function unlockCard(id) {
-  if (!unlockedCards.includes(id)) {
-    unlockedCards.push(id);
-    localStorage.setItem('ger_unlocked_cards', JSON.stringify(unlockedCards));
-  }
-}
-]; 
-
-// 図鑑所持状態（日本版専用キー jpn_unlocked_cards）
 let unlockedCards = JSON.parse(localStorage.getItem('jap_unlocked_cards') || '[]');
 
 function unlockCard(id) {
@@ -264,15 +253,15 @@ function createPackBodyTexture(callback) {
 
   const packGrad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
   packGrad.addColorStop(0, '#ffffff');
-  packGrad.addColorStop(0.5, '#f5e8e8');
-  packGrad.addColorStop(1, '#e6cece');
+  packGrad.addColorStop(0.5, '#f3a4a4');
+  packGrad.addColorStop(1, '#ff7171');
   ctx.fillStyle = packGrad;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.strokeStyle = '#b81d24';
+  ctx.strokeStyle = '#f85656';
   ctx.lineWidth = 8;
   ctx.strokeRect(14, 14, canvas.width - 28, canvas.height - 28);
-  ctx.strokeStyle = '#e08285';
+  ctx.strokeStyle = '#f79696';
   ctx.lineWidth = 4;
   ctx.strokeRect(24, 24, canvas.width - 48, canvas.height - 48);
 
@@ -298,7 +287,7 @@ function createPackTopTexture() {
   ctx.fillStyle = topGrad;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.strokeStyle = '#b81d24';
+  ctx.strokeStyle = '#232021';
   ctx.lineWidth = 8;
   ctx.strokeRect(14, 14, canvas.width - 28, canvas.height - 28);
 
