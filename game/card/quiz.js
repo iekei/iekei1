@@ -3,20 +3,41 @@
 
   // ===== Coin System =====
   var COIN_KEY = 'card_coins';
-  function getCoins() { return parseInt(localStorage.getItem(COIN_KEY) || '0', 10); }
-  function setCoins(val) { localStorage.setItem(COIN_KEY, String(val)); updateCoinDisplay(); }
-  function addCoins(amount) { setCoins(getCoins() + amount); }
+
+  function getCoins() {
+    return parseInt(localStorage.getItem(COIN_KEY) || '0', 10);
+  }
+
+  function setCoins(val) {
+    localStorage.setItem(COIN_KEY, String(val));
+    updateCoinDisplay();
+  }
+
+  function addCoins(amount) {
+    setCoins(getCoins() + amount);
+  }
+
   function spendCoins(amount) {
-    if (getCoins() >= amount) { setCoins(getCoins() - amount); return true; }
+    if (getCoins() >= amount) {
+      setCoins(getCoins() - amount);
+      return true;
+    }
     return false;
   }
+
   function updateCoinDisplay() {
     var els = document.querySelectorAll('.coin-amount');
     for (var i = 0; i < els.length; i++) els[i].textContent = getCoins();
     var btn = document.getElementById('purchase-btn');
     if (btn) btn.disabled = getCoins() < 100;
   }
-  window.CardShop = { getCoins: getCoins, addCoins: addCoins, spendCoins: spendCoins, updateCoinDisplay: updateCoinDisplay };
+
+  window.CardShop = {
+    getCoins: getCoins,
+    addCoins: addCoins,
+    spendCoins: spendCoins,
+    updateCoinDisplay: updateCoinDisplay
+  };
 
   // ===== Debug Console =====
   function isInputFocused() {
@@ -35,7 +56,7 @@
 
   function executeDebugCommand(cmd) {
     var parts = cmd.trim().split(/\s+/);
-    var command = parts[0];
+    var command = parts;
     if (command === '/coin') {
       var amount = parseInt(parts[1], 10) || 0;
       addCoins(amount);
@@ -46,7 +67,7 @@
       localStorage.removeItem('jap_unlocked_cards');
       localStorage.removeItem('sov_unlocked_cards');
       updateCoinDisplay();
-      debugLog('🗑️ 全データをリセットしました');
+      debugLog('🗑 全データをリセットしました');
     } else if (command === '/all') {
       var nation = document.body.dataset.nation;
       var key = nation ? nation.toLowerCase() + '_unlocked_cards' : null;
@@ -57,17 +78,9 @@
       } else {
         debugLog('❌ カードデータが取得できません');
       }
-    } else if (command === '/aikey') {
-      if (parts[1]) {
-        localStorage.setItem('ai_api_key', parts[1]);
-        debugLog('🤖 AI APIキーを設定しました');
-      } else {
-        localStorage.removeItem('ai_api_key');
-        debugLog('🤖 AI APIキーを削除しました');
-      }
     } else {
       debugLog('❓ 不明: ' + cmd);
-      debugLog('cmds: /coin <n> /reset /all /aikey <key>');
+      debugLog('cmds: /coin [num]  /reset  /all');
     }
   }
 
@@ -86,7 +99,10 @@
       if (e.key === 'Escape') dc.style.display = 'none';
     });
 
-    closeBtn.addEventListener('click', function() { dc.style.display = 'none'; });
+    closeBtn.addEventListener('click', function() {
+      dc.style.display = 'none';
+    });
+
     input.addEventListener('keydown', function(e) {
       if (e.key === 'Enter') {
         executeDebugCommand(input.value);
@@ -95,40 +111,119 @@
     });
   }
 
-  // ===== AI Quiz Generation =====
-  async function generateQuizWithAI(characterName, yearRange) {
-    var apiKey = localStorage.getItem('ai_api_key');
-    if (!apiKey) return null;
-
-    var prompt =
-      '以下の歴史人物に関する穴埋め漢字クイズを15問生成してください。\n' +
-      '人物名: ' + characterName + '\n' +
-      '年代範囲: ' + (yearRange || '1930年代〜1940年代') + '\n' +
-      '条件:\n' +
-      '1. JSON形式: {"questions":[{"id":1,"year":1936,"yearDisplay":"1936年","text":"【 桶狭間 】の戦いで…","blankWord":"桶狭間","options":["桶狭間","長篠","関ヶ原"]}]}\n' +
-      '2. text内の正解単語を【 】で囲む\n' +
-      '3. optionsは3つの選択肢（正解を含む）\n' +
-      '4. 年代順（古い順）に並べる\n' +
-      '5. 高校歴史で重要な語句を使用\n' +
-      '6. 15問すべて異なる内容にする';
-
+  // ===== MediaWiki (Wikipedia) API クイズ自動生成機能 =====
+  async function generateQuizFromMediaWiki(characterName, yearRange) {
     try {
-      var response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey },
-        body: JSON.stringify({
-          model: 'gpt-4o-mini',
-          messages: [{ role: 'user', content: prompt }],
-          response_format: { type: 'json_object' }
-        })
-      });
-      if (!response.ok) throw new Error('API error: ' + response.status);
+      var url =
+        'https://ja.wikipedia.org/w/api.php?origin=*&action=query&format=json&prop=extracts&explaintext=1&titles=' +
+        encodeURIComponent(characterName);
+
+      var response = await fetch(url);
+      if (!response.ok) throw new Error('Wikipedia API error: ' + response.status);
+
       var data = await response.json();
-      var content = data.choices[0].message.content;
-      var parsed = JSON.parse(content);
-      return parsed.questions || parsed;
+      var pages = data.query.pages;
+      var pageId = Object.keys(pages);
+
+      if (pageId === '-1' || !pages[pageId] || !pages[pageId].extract) {
+        console.warn('Wikipedia記事が見つかりませんでした:', characterName);
+        return null;
+      }
+
+      var extractText = pages[pageId].extract;
+
+      // 高校歴史の超重要語句（優先抽出用）
+      var importantKeywords = [
+        '大東亜共栄圏', 'アンシュルス', '日独伊三国同盟', '国家総動員法', '満州事変', 
+        '二・二六事件', '五・一五事件', '真珠湾攻撃', '太平洋戦争', '国際連盟脱退', 
+        'ポツダム宣言', 'カイロ宣言', 'ニューディール', 'ミュンヘン会談', '全権委任法', 
+        'ヴェルサイユ条約', 'ワシントン会議', '国際連盟', '不戦条約', '非暴力・不服従',
+        '国際連合', 'ヤルタ会談', '関東軍', '治安維持法', '政友会', '民政党', '大政翼賛会'
+      ];
+
+      // 文章を「。」で分割（長さを20〜120文字に調整）
+      var sentences = extractText
+        .split(/[。\n]+/)
+        .map(function (s) { return s.trim(); })
+        .filter(function (s) { return s.length >= 20 && s.length <= 120; });
+
+      var questions = [];
+
+      for (var i = 0; i < sentences.length; i++) {
+        var sentence = sentences[i];
+
+        // 年代（西暦）の抽出
+        var yearMatch = sentence.match(/(1\d{3}|20\d{2})年/);
+        var yearNum = yearMatch ? parseInt(yearMatch[1], 10) : null;
+        var yearDisplay = yearMatch ? yearMatch : '';
+
+        var blankWord = null;
+
+        // 超重要語句が含まれていれば最優先で選出
+        for (var k = 0; k < importantKeywords.length; k++) {
+          var kw = importantKeywords[k];
+          if (sentence.indexOf(kw) !== -1 && characterName.indexOf(kw) === -1) {
+            blankWord = kw;
+            break;
+          }
+        }
+
+        // 重要語句がない場合は文中の漢字・カタカナ語句から自動選出
+        if (!blankWord) {
+          var words = sentence.match(/[\u4e00-\u9faf\u30a0-\u30ff]{2,8}/g);
+          if (words) {
+            var candidateWords = words.filter(function (word) {
+              return characterName.indexOf(word) === -1 && word.length >= 2;
+            });
+            if (candidateWords.length > 0) {
+              blankWord = candidateWords[Math.floor(Math.random() * candidateWords.length)];
+            }
+          }
+        }
+
+        if (!blankWord) continue;
+
+        var text = sentence.replace(blankWord, '【 ' + blankWord + ' 】');
+
+        var dummyPool = importantKeywords.concat([
+          '明治維新', '大政奉還', '帝国議会', '日清戦争', '日露戦争', 'サンフランシスコ平和条約'
+        ]);
+
+        var options = [blankWord];
+        var availableDummies = dummyPool.filter(function (d) { return d !== blankWord; });
+
+        while (options.length < 3 && availableDummies.length > 0) {
+          var randomIndex = Math.floor(Math.random() * availableDummies.length);
+          options.push(availableDummies.splice(randomIndex, 1));
+        }
+
+        options.sort(function () { return Math.random() - 0.5; });
+
+        questions.push({
+          id: questions.length + 1,
+          year: yearNum || 0,
+          yearDisplay: yearDisplay || (yearNum ? yearNum + '年' : ''),
+          text: text,
+          blankWord: blankWord,
+          options: options
+        });
+
+        if (questions.length >= 15) break;
+      }
+
+      questions.sort(function (a, b) {
+        if (a.year && b.year) return a.year - b.year;
+        return 0;
+      });
+
+      questions.forEach(function (q, idx) {
+        q.id = idx + 1;
+      });
+
+      return questions;
+
     } catch (e) {
-      console.error('AI quiz generation failed:', e);
+      console.error('MediaWiki quiz generation failed:', e);
       return null;
     }
   }
@@ -150,6 +245,7 @@
     img.src = card.imgUrl || '';
     img.style.display = card.imgUrl ? 'block' : 'none';
     img.onerror = function() { img.style.display = 'none'; };
+
     name.textContent = card.rank + ' ' + card.name;
     name.style.color = card.color || '#fff';
     desc.textContent = card.desc || '';
@@ -160,25 +256,34 @@
       if (z) z.style.display = 'none';
       startQuiz(card, 'easy');
     };
+
     hardBtn.onclick = function() {
       modal.style.display = 'none';
       var z = document.getElementById('zukan-modal');
       if (z) z.style.display = 'none';
       startQuiz(card, 'hard');
     };
+
     modal.style.display = 'flex';
   }
 
   // ===== Quiz System =====
   async function startQuiz(card, mode) {
     var cid = card.id;
-    if (!cid) { alert('このカードにはクイズがありません'); return; }
+    if (!cid) {
+      alert('このカードにはクイズがありません');
+      return;
+    }
 
-    // Try AI generation first
+    // 1. MediaWiki APIによる自動生成を試行
     var questions = null;
-    try { questions = await generateQuizWithAI(card.name); } catch (e) { questions = null; }
+    try {
+      questions = await generateQuizFromMediaWiki(card.name);
+    } catch (e) {
+      questions = null;
+    }
 
-    // Fall back to JSON
+    // 2. 失敗した場合は既存のローカルJSONにフォールバック
     if (!questions || !questions.length) {
       try {
         var response = await fetch('data/json/' + cid + '.json');
@@ -191,13 +296,21 @@
       }
     }
 
-    if (!questions || !questions.length) { alert('問題データがありません'); return; }
+    if (!questions || !questions.length) {
+      alert('問題データがありません');
+      return;
+    }
 
     questions.sort(function(a, b) { return a.year - b.year; });
 
     quizState = {
-      card: card, mode: mode, questions: questions,
-      currentIndex: 0, correctCount: 0, answered: false, lives: 3
+      card: card,
+      mode: mode,
+      questions: questions,
+      currentIndex: 0,
+      correctCount: 0,
+      answered: false,
+      lives: 3
     };
 
     showQuizModal();
@@ -208,13 +321,13 @@
     if (!modal) return;
     var content = modal.querySelector('.quiz-content');
     var result = modal.querySelector('.quiz-result');
+
     if (content) content.style.display = 'flex';
     if (result) result.style.display = 'none';
 
     var ci = modal.querySelector('.quiz-character-info');
     if (ci) ci.textContent = quizState.card.name;
 
-    // Card image
     var cardImg = modal.querySelector('.quiz-card-img');
     if (cardImg) {
       cardImg.src = quizState.card.imgUrl || '';
@@ -222,10 +335,8 @@
       cardImg.onerror = function() { cardImg.style.display = 'none'; };
     }
 
-    // Lives
     updateLivesDisplay();
 
-    // Build depth gauge
     var gauge = modal.querySelector('.depth-gauge');
     if (gauge) {
       gauge.innerHTML = '';
@@ -239,6 +350,7 @@
         gauge.appendChild(mark);
       }
     }
+
     updateBackground(0);
     modal.style.display = 'flex';
     showQuestion();
@@ -270,14 +382,20 @@
 
     var answerArea = modal.querySelector('.quiz-answer-area');
     if (answerArea) answerArea.innerHTML = '';
+
     var feedback = modal.querySelector('.quiz-feedback');
-    if (feedback) { feedback.textContent = ''; feedback.className = 'quiz-feedback'; }
+    if (feedback) {
+      feedback.textContent = '';
+      feedback.className = 'quiz-feedback';
+    }
 
     if (quizState.mode === 'easy') {
       var options = (q.options || []).slice();
       for (var i = options.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
-        var tmp = options[i]; options[i] = options[j]; options[j] = tmp;
+        var tmp = options[i];
+        options[i] = options[j];
+        options[j] = tmp;
       }
       options.forEach(function(opt) {
         var btn = document.createElement('button');
@@ -291,13 +409,19 @@
       input.type = 'text';
       input.className = 'quiz-input';
       input.placeholder = '答えを入力...';
+
       var submitBtn = document.createElement('button');
       submitBtn.className = 'quiz-submit-btn';
       submitBtn.textContent = '回答';
       submitBtn.onclick = function() { handleAnswer(input, input.value.trim() === q.blankWord); };
+
       input.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') { e.preventDefault(); handleAnswer(input, input.value.trim() === q.blankWord); }
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          handleAnswer(input, input.value.trim() === q.blankWord);
+        }
       });
+
       answerArea.appendChild(input);
       answerArea.appendChild(submitBtn);
       setTimeout(function() { input.focus(); }, 100);
@@ -333,7 +457,10 @@
   }
 
   function stopTimer() {
-    if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
     var timerFill = document.querySelector('.quiz-timer-fill');
     if (timerFill) {
       var w = window.getComputedStyle(timerFill).width;
@@ -352,16 +479,24 @@
     var livesEl = document.querySelector('.quiz-lives');
     if (!livesEl || !quizState) return;
     var hearts = '';
-    for (var i = 0; i < quizState.lives; i++) hearts += '❤️';
+    for (var i = 0; i < quizState.lives; i++) hearts += '❤';
     for (var i = quizState.lives; i < 3; i++) hearts += '🖤';
     livesEl.textContent = hearts;
   }
 
   function shakeCard() {
     var card = document.querySelector('.quiz-card-display');
-    if (card) { card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake'); }
+    if (card) {
+      card.classList.remove('shake');
+      void card.offsetWidth;
+      card.classList.add('shake');
+    }
     var img = document.querySelector('.quiz-card-img');
-    if (img) { img.classList.remove('hit-flash'); void img.offsetWidth; img.classList.add('hit-flash'); }
+    if (img) {
+      img.classList.remove('hit-flash');
+      void img.offsetWidth;
+      img.classList.add('hit-flash');
+    }
   }
 
   // ===== Answer Handling =====
@@ -385,14 +520,17 @@
       fb.textContent = isCorrect ? '正解！' : '不正解...';
       fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'incorrect');
     }
+
     var btns = document.querySelectorAll('.quiz-option-btn, .quiz-submit-btn');
     for (var i = 0; i < btns.length; i++) btns[i].disabled = true;
 
     var gameOver = quizState.lives <= 0;
-
     setTimeout(function() {
       quizState.answered = false;
-      if (gameOver) { showQuizResult(true); return; }
+      if (gameOver) {
+        showQuizResult(true);
+        return;
+      }
       quizState.currentIndex++;
       if (quizState.currentIndex < quizState.questions.length) showQuestion();
       else showQuizResult(false);
@@ -405,18 +543,25 @@
     quizState.answered = true;
 
     var fb = document.querySelector('.quiz-feedback');
-    if (fb) { fb.textContent = 'スキップ'; fb.className = 'quiz-feedback incorrect'; }
+    if (fb) {
+      fb.textContent = 'スキップ';
+      fb.className = 'quiz-feedback incorrect';
+    }
+
     var btns = document.querySelectorAll('.quiz-option-btn, .quiz-submit-btn');
     for (var i = 0; i < btns.length; i++) btns[i].disabled = true;
 
     shakeCard();
     quizState.lives--;
     updateLivesDisplay();
-    var gameOver = quizState.lives <= 0;
 
+    var gameOver = quizState.lives <= 0;
     setTimeout(function() {
       quizState.answered = false;
-      if (gameOver) { showQuizResult(true); return; }
+      if (gameOver) {
+        showQuizResult(true);
+        return;
+      }
       quizState.currentIndex++;
       if (quizState.currentIndex < quizState.questions.length) showQuestion();
       else showQuizResult(false);
@@ -429,6 +574,7 @@
     var modal = document.getElementById('quiz-modal');
     var content = modal.querySelector('.quiz-content');
     var result = modal.querySelector('.quiz-result');
+
     if (content) content.style.display = 'none';
     if (result) {
       result.style.display = 'flex';
@@ -439,13 +585,19 @@
       if (isGameOver) {
         if (titleEl) titleEl.textContent = 'ゲームオーバー';
         if (scoreEl) scoreEl.textContent = quizState.correctCount + ' / ' + quizState.questions.length + ' 正解';
-        if (rewardEl) { rewardEl.textContent = '報酬なし'; rewardEl.style.color = '#ef5350'; }
+        if (rewardEl) {
+          rewardEl.textContent = '報酬なし';
+          rewardEl.style.color = '#ef5350';
+        }
       } else {
         if (titleEl) titleEl.textContent = 'クイズ完了！';
         if (scoreEl) scoreEl.textContent = quizState.correctCount + ' / ' + quizState.questions.length + ' 正解';
         var reward = quizState.mode === 'hard' ? 150 : 50;
         addCoins(reward);
-        if (rewardEl) { rewardEl.textContent = '+' + reward + ' コイン獲得！'; rewardEl.style.color = '#ffd700'; }
+        if (rewardEl) {
+          rewardEl.textContent = '+' + reward + ' コイン獲得！';
+          rewardEl.style.color = '#ffd700';
+        }
       }
       var closeBtn = result.querySelector('.quiz-close-result-btn');
       if (closeBtn) closeBtn.onclick = closeQuiz;
@@ -479,8 +631,10 @@
     var modal = document.getElementById('quiz-modal');
     if (!modal) return;
     var colors = [
-      { r: 100, g: 200, b: 230 }, { r: 30, g: 120, b: 180 },
-      { r: 15, g: 50, b: 100 }, { r: 5, g: 10, b: 30 }
+      { r: 100, g: 200, b: 230 },
+      { r: 30, g: 120, b: 180 },
+      { r: 15, g: 50, b: 100 },
+      { r: 5, g: 10, b: 30 }
     ];
     var seg = colors.length - 1;
     var si = Math.min(Math.floor(progress * seg), seg - 1);
@@ -489,7 +643,9 @@
     var r = Math.round(c1.r + (c2.r - c1.r) * sp);
     var g = Math.round(c1.g + (c2.g - c1.g) * sp);
     var b = Math.round(c1.b + (c2.b - c1.b) * sp);
-    modal.style.background = 'radial-gradient(ellipse at center, rgb(' + r + ',' + g + ',' + b + ') 0%, rgb(' + Math.max(0, r - 20) + ',' + Math.max(0, g - 20) + ',' + Math.max(0, b - 20) + ') 100%)';
+    modal.style.background =
+      'radial-gradient(ellipse at center, rgb(' + r + ',' + g + ',' + b + ') 0%, rgb(' +
+      Math.max(0, r - 20) + ',' + Math.max(0, g - 20) + ',' + Math.max(0, b - 20) + ') 100%)';
   }
 
   // ===== Init =====
@@ -497,36 +653,39 @@
     updateCoinDisplay();
     initDebugConsole();
 
-    // Purchase button
     var pb = document.getElementById('purchase-btn');
-    if (pb) pb.addEventListener('click', function() {
-      if (typeof window.openPack === 'function') window.openPack(1);
-    });
+    if (pb) {
+      pb.addEventListener('click', function() {
+        if (typeof window.openPack === 'function') window.openPack(1);
+      });
+    }
 
-    // Zukan grid click delegation
     var zg = document.getElementById('zukan-grid');
-    if (zg) zg.addEventListener('click', function(e) {
-      var cardEl = e.target.closest('.zukan-card.unlocked');
-      if (!cardEl) return;
-      var idx = Array.prototype.indexOf.call(zg.children, cardEl);
-      if (typeof leaders !== 'undefined' && leaders[idx]) openCardDetail(leaders[idx]);
-    });
+    if (zg) {
+      zg.addEventListener('click', function(e) {
+        var cardEl = e.target.closest('.zukan-card.unlocked');
+        if (!cardEl) return;
+        var idx = Array.prototype.indexOf.call(zg.children, cardEl);
+        if (typeof leaders !== 'undefined' && leaders[idx]) openCardDetail(leaders[idx]);
+      });
+    }
 
-    // Card detail close
     var dm = document.getElementById('card-detail-modal');
     if (dm) {
       var dcb = dm.querySelector('.card-detail-close');
-      if (dcb) dcb.addEventListener('click', function() { dm.style.display = 'none'; });
+      if (dcb) {
+        dcb.addEventListener('click', function() {
+          dm.style.display = 'none';
+        });
+      }
     }
 
-    // Quiz close
     var qm = document.getElementById('quiz-modal');
     if (qm) {
       var qcb = qm.querySelector('.quiz-close-btn');
       if (qcb) qcb.addEventListener('click', closeQuiz);
     }
 
-    // Skip with Space key
     document.addEventListener('keydown', function(e) {
       if (e.key === ' ' && quizState && !quizState.answered) {
         var modal = document.getElementById('quiz-modal');
@@ -538,6 +697,9 @@
     });
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();
