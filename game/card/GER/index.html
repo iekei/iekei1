@@ -73,22 +73,42 @@
   <div id="quiz-modal">
     <div class="quiz-container">
       <button class="quiz-close-btn">&times;</button>
-      <div class="quiz-character-info"></div>
-      <div class="quiz-body">
-        <div class="quiz-year"></div>
-        <div class="quiz-text"></div>
-        <div class="quiz-answer-area"></div>
-        <div class="quiz-feedback"></div>
+      <div class="quiz-content">
+        <div class="quiz-top-bar">
+          <div class="quiz-character-info"></div>
+          <div class="quiz-lives"></div>
+        </div>
+        <div class="quiz-card-display">
+          <img class="quiz-card-img" src="" alt="">
+        </div>
+        <div class="quiz-bottom">
+          <div class="quiz-timer">
+            <div class="quiz-timer-bar"><div class="quiz-timer-fill"></div></div>
+            <span class="quiz-timer-text">10</span>
+          </div>
+          <div class="quiz-progress"></div>
+          <div class="quiz-year"></div>
+          <div class="quiz-text"></div>
+          <div class="quiz-answer-area"></div>
+          <div class="quiz-feedback"></div>
+        </div>
       </div>
+      <div class="depth-gauge"></div>
+      <div class="depth-marker"></div>
       <div class="quiz-result">
-        <h2>クイズ完了！</h2>
+        <h2 class="result-title"></h2>
         <p class="result-score"></p>
         <div class="coin-reward"></div>
         <button class="quiz-close-result-btn">閉じる</button>
       </div>
-      <div class="depth-gauge"></div>
-      <div class="depth-marker"></div>
     </div>
+  </div>
+
+  <!-- デバッグコンソール -->
+  <div id="debug-console">
+    <div class="debug-header">DEBUG CONSOLE <button class="debug-close">&times;</button></div>
+    <div class="debug-log"></div>
+    <input class="debug-input" type="text" placeholder="/coin 500  /reset  /all  /aikey <key>">
   </div>
 
   <script src="script.js"></script>
