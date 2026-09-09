@@ -1,0 +1,30 @@
+{
+  "characterId": "hirota",
+  "characterName": "広田弘毅",
+  "questions": [
+    {
+      "id": 1,
+      "year": 1936,
+      "yearDisplay": "1936年",
+      "text": "【 二・二六事件 】の収拾後に内閣総理大臣に就任した。",
+      "blankWord": "二・二六事件",
+      "options": ["二・二六事件", "五・一五事件", "満州事変"]
+    },
+    {
+      "id": 2,
+      "year": 1936,
+      "yearDisplay": "1936年",
+      "text": "【 日独防共協定 】を締結し、ドイツ・イタリアと接近した。",
+      "blankWord": "日独防共協定",
+      "options": ["日独防共協定", "日ソ中立条約", "日英同盟"]
+    },
+    {
+      "id": 3,
+      "year": 1948,
+      "yearDisplay": "1948年",
+      "text": "極東軍事裁判で【 A級戦犯 】として死刑判決を受け、処刑された。",
+      "blankWord": "A級戦犯",
+      "options": ["A級戦犯", "B級戦犯", "無罪"]
+    }
+  ]
+}

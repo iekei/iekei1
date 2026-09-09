@@ -1,0 +1,30 @@
+{
+  "characterId": "yezhov",
+  "characterName": "ニコライ・イェジョフ",
+  "questions": [
+    {
+      "id": 1,
+      "year": 1936,
+      "yearDisplay": "1936年",
+      "text": "【 NKVD 】（内務人民委員部）の長官に就任した。",
+      "blankWord": "NKVD",
+      "options": ["NKVD", "KGB", "GRU"]
+    },
+    {
+      "id": 2,
+      "year": 1937,
+      "yearDisplay": "1937年",
+      "text": "【 大粛清 】を主導し、多数の党幹部や軍人を処刑した。",
+      "blankWord": "大粛清",
+      "options": ["大粛清", "白テロ", "赤テロ"]
+    },
+    {
+      "id": 3,
+      "year": 1939,
+      "yearDisplay": "1939年",
+      "text": "自身も失脚し、翌年【 処刑 】された。",
+      "blankWord": "処刑",
+      "options": ["処刑", "流刑", "自殺"]
+    }
+  ]
+}
