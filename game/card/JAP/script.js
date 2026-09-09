@@ -56,6 +56,124 @@ const leaders = [
   imgUrl: "data/image/jap/ishiwara.png",
   cutinUrl: null,
   color: "#B8860B" 
+},
+//将軍
+{ 
+    id: "yamamoto",
+    type: "general",
+    name: "山本五十六", 
+    rank: "SSR", 
+    desc: "1936年当時は海軍航空本部技術部長（海軍中将）。航空主兵論を強力に推進し、後に連合艦隊司令長官を務めた不世出の提督。", 
+    imgUrl: "data/image/jap/yamamoto.png",
+    cutinUrl: "data/image/cut/yamamoto.png",
+    cutinOffset: "center 30%",
+    color: "#ffd700" // ゴールド
+  },
+  { 
+    id: "yamashita",
+    type: "general",
+    name: "山下奉文", 
+    rank: "SSR", 
+    desc: "1936年当時は歩兵第40旅団長（陸軍少将）。後に「マレーの虎」と畏怖され、シンガポール攻略戦などで迅速な電撃戦を展開した陸軍大将。", 
+    imgUrl: "data/image/jap/yamashita.png",
+    cutinUrl: "data/image/cut/yamashita.png",
+    cutinOffset: "center 30%",
+    color: "#ffd700" 
+  },
+  { 
+    id: "itagaki",
+    type: "general",
+    name: "板垣征四郎", 
+    rank: "SR", 
+    desc: "1936年当時は関東軍参謀副長（陸軍少将）。満州事変を石原莞爾と共に主導し、後に陸軍大臣として国政や軍事作戦を牽引した中心人物の一人。", 
+    imgUrl: "data/image/jap/itagaki.png",
+    cutinUrl: null,
+    color: "#c0c0c0" // シルバー
+  },
+  { 
+    id: "anami",
+    type: "general",
+    name: "阿南惟幾", 
+    rank: "SR", 
+    desc: "1936年当時は陸軍省兵務局長（陸軍少将）。後に終戦時の陸軍大臣を務め、軍の暴発を防ぎつつ最後は「一死以て大罪を謝す」と割腹自決を遂げた。", 
+    imgUrl: "data/image/jap/anami.png",
+    cutinUrl: null,
+    color: "#c0c0c0" 
+  },
+    // --- 【資源カード】 ---
+  { 
+    id: "oil",
+    type: "resource",
+    name: "石油", 
+    rank: "SR", 
+    desc: "機械化部隊や航空・海軍の作戦行動に必須不可欠な黒い血。国内では石炭液化技術（合成石油）での補給も進められている最重要資源。", 
+    imgUrl: "data/image/item/oil.png",
+    color: "#c0c0c0" // シルバー
+  },
+  { 
+    id: "coal",
+    type: "resource",
+    name: "石炭", 
+    rank: "R", 
+    desc: "国内（ルール地方など）で極めて豊富に採掘されるエネルギー源。工業生産・発電だけでなく、合成石油やゴムの原材料としても使われる。", 
+    imgUrl: "data/image/item/coal.png",
+    color: "#cd7f32" // ブロンズ
+  },
+  { 
+    id: "steel",
+    type: "resource",
+    name: "鋼材", 
+    rank: "R", 
+    desc: "戦車、軍艦、火砲、建築などのあらゆる製造業を支える重工業の屋台骨。スウェーデン等からの鉄鉱石輸入が極めて重要な生命線となる。", 
+    imgUrl: "data/image/item/steel.png",
+    color: "#cd7f32" 
+  },
+  { 
+    id: "tungsten",
+    type: "resource",
+    name: "タングステン", 
+    rank: "SR", 
+    desc: "戦車の主砲弾（徹甲弾）の弾芯や、精密機械加工を行う工作機械用の工具鋼に用いられる。極めて高い硬度を誇る大変希少なレアメタル。", 
+    imgUrl: "data/image/item/tungsten.png",
+    color: "#c0c0c0" 
+  },
+  { 
+    id: "chromium",
+    type: "resource",
+    name: "クロム", 
+    rank: "SR", 
+    desc: "戦車や軍艦の装甲板、特殊ステンレス鋼などの製造に不可欠な金属。対腐食性と耐熱性を飛躍的に高める、輸入に深く依存する戦略物資。", 
+    imgUrl: "data/image/item/chromium.png",
+    color: "#c0c0c0" 
+  },
+  { 
+    id: "aluminum",
+    type: "resource",
+    name: "アルミ", 
+    rank: "R", 
+    desc: "航空機（戦闘機や爆撃機など）の機体製造に大量消費される軽金属。主に輸入したボーキサイトから大量の電力を消費して精錬される。", 
+    imgUrl: "data/image/item/aluminum.png",
+    color: "#cd7f32" 
+  },
+  { 
+    id: "rubber",
+    type: "resource",
+    name: "ゴム", 
+    rank: "SR", 
+    desc: "軍用車両のタイヤや各種電気機器の絶縁体に使用される必須物資。東南アジアからの輸入路断絶に備え、合成ゴム（ブナ）の製造が進められている。", 
+    imgUrl: "data/image/item/rubber.png",
+    color: "#c0c0c0" 
+  }
+];
+
+// 図鑑所持状態（日本版専用キー jpn_unlocked_cards）
+let unlockedCards = JSON.parse(localStorage.getItem('ger_unlocked_cards') || '[]');
+
+function unlockCard(id) {
+  if (!unlockedCards.includes(id)) {
+    unlockedCards.push(id);
+    localStorage.setItem('ger_unlocked_cards', JSON.stringify(unlockedCards));
+  }
 }
 ]; 
 
