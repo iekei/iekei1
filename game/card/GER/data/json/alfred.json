@@ -1,0 +1,30 @@
+{
+  "characterId": "alfred",
+  "characterName": "アルフレート・フーゲンベルク",
+  "questions": [
+    {
+      "id": 1,
+      "year": 1933,
+      "yearDisplay": "1933年",
+      "text": "国家人民党（【 DNVP 】）党首としてナチスと連立政権を組んだ。",
+      "blankWord": "DNVP",
+      "options": ["DNVP", "SPD", "KPD"]
+    },
+    {
+      "id": 2,
+      "year": 1933,
+      "yearDisplay": "1933年",
+      "text": "ヒトラー内閣で【 経済大臣 】に就任したが、ナチスに利用され数ヶ月で罷免された。",
+      "blankWord": "経済大臣",
+      "options": ["経済大臣", "内務大臣", "外務大臣"]
+    },
+    {
+      "id": 3,
+      "year": 1945,
+      "yearDisplay": "1945年",
+      "text": "敗戦後、彼が支配していたメディア帝国は【 解体 】された。",
+      "blankWord": "解体",
+      "options": ["解体", "国有化", "統合"]
+    }
+  ]
+}

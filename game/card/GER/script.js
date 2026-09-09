@@ -1,6 +1,8 @@
 // --- 1. カードデータ ---
 const leaders = [
   { 
+    id: "hitler",
+ 
     name: "アドルフ・ヒトラー", 
     rank: "SSR", 
     desc: "1934年のヒンデンブルク大統領死去に伴い大統領権限と首相職を統合し、絶対的な権力を握っていた最高指導者。", 
@@ -9,6 +11,8 @@ const leaders = [
     color: "#8B0000" 
   },
   { 
+    id: "hermann",
+ 
     name: "ヘルマン・ゲーリング", 
     rank: "SSR", 
     desc: "ヒトラーの後継者筆頭（国家元首次席代理）。空軍総司令官や四カ年計画責任者を兼任し、党・軍・経済の広範囲で圧倒的な権力を持っていた人物。", 
@@ -17,6 +21,8 @@ const leaders = [
     color: "#4682B4" 
   },
   { 
+    id: "himmler",
+ 
     name: "ハインリヒ・ヒムラー", 
     rank: "SR", 
     desc: "SS（親衛隊）全国指導者であり、1936年に全ドイツ警察長官を兼任。警察・治安組織を完璧に手中に収めており、クーデターや政変が起きた場合、暴力装置を背景に実権を握る筆頭候補。", 
@@ -25,6 +31,8 @@ const leaders = [
     color: "#1A1A1A" 
   },
   { 
+    id: "hess",
+ 
     name: "ルドルフ・ヘス", 
     rank: "SR", 
     desc: "総統代理（副総統）として党務の全般を統括していた人物。史実でもヒトラーに次ぐ「党の顔」であり、ヒトラー不在時には形式的に首班へ繰り上がる第一位の立場にいた。", 
@@ -33,6 +41,8 @@ const leaders = [
     color: "#556B2F" 
   },
   { 
+    id: "joseph",
+ 
     name: "ヨーゼフ・ゲッベルス", 
     rank: "SSR", 
     desc: "宣伝大臣兼ベルリン管区指導者。メディアと世論を完全に支配しており、政権の正当性を担保する発言力から、クーデター後の黒幕や指導者補佐・代行として擁立される可能性が高かった。", 
@@ -41,6 +51,8 @@ const leaders = [
     color: "#A52A2A" 
   },
   { 
+    id: "beck",
+ 
     name: "ルートヴィヒ・ベック", 
     rank: "SR", 
     desc: "陸軍参謀総長。1936年当時は軍部内で対外冒険政策への警戒感が強まりつつある時期であり、後にヒトラー暗殺計画（1944年）の最高指導者候補となったように、軍事クーデター成立時の暫定国家元首候補。", 
@@ -48,6 +60,8 @@ const leaders = [
     color: "#2E8B57" 
   },
   { 
+    id: "alfred",
+ 
     name: "アルフレート・フーゲンベルク", 
     rank: "SR", 
     desc: "国家人民党（DNVP）の党首でメディア王。ナチス連立政権の成立に関与したが追いやられた。ナチス体制が内部崩壊した場合、軍部や旧貴族層が擁立し得る「旧体制派の保守指導者」の筆頭。", 
@@ -56,6 +70,8 @@ const leaders = [
     color: "#708090" 
   },
   { 
+    id: "otto",
+ 
     name: "オットー・シュトラッサー", 
     rank: "SR", 
     desc: "ナチス左派の指導者（1930年にヒトラーと対立して脱党し「黒い戦線」を結成）。反資本主義的なナチズムを掲げており、反ヒトラー派のナチス構成員や労働者層を巻き込んだクーデターが成功した場合の指導者候補。", 
@@ -717,8 +733,17 @@ window.addEventListener('touchmove', onPointerMove);
 window.addEventListener('touchend', onPointerUp);
 
 function openPack(direction) {
+  if (isOpened) return;
+  if (window.CardShop && !window.CardShop.spendCoins(100)) {
+    instruction.innerText = 'コインが足りません！クイズで獲得できます';
+    instruction.style.display = 'block';
+    setTimeout(function() { if (!isOpened) instruction.innerText = 'パック上部をスワイプして開封！'; }, 2500);
+    return;
+  }
   isOpened = true;
   instruction.style.display = 'none';
+  var pb = document.getElementById('purchase-btn');
+  if (pb) pb.style.display = 'none';
 
   const picked = leaders[Math.floor(Math.random() * leaders.length)];
   unlockCard(picked.id);
@@ -772,6 +797,8 @@ resetBtn.addEventListener('click', () => {
   resetBtn.style.display = 'none';
   instruction.innerText = 'パック上部をスワイプして開封！';
   instruction.style.display = 'block';
+  var pb = document.getElementById('purchase-btn');
+  if (pb) pb.style.display = '';
   resultText.innerText = '';
 
   packGroup.visible = true;
@@ -826,8 +853,8 @@ function renderZukan() {
       `;
     } else {
       cardEl.innerHTML = `
-        <div class="question-mark">?</div>
-        <div class="card-info">まだ出してないカードは？</div>
+        <img class="silhouette-img" src="${leader.imgUrl}" alt="">
+        <div class="lock-label">未獲得</div>
       `;
     }
     zukanGrid.appendChild(cardEl);

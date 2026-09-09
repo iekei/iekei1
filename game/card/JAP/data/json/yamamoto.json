@@ -1,0 +1,30 @@
+{
+  "characterId": "yamamoto",
+  "characterName": "山本五十六",
+  "questions": [
+    {
+      "id": 1,
+      "year": 1941,
+      "yearDisplay": "1941年",
+      "text": "連合艦隊司令長官として【 真珠湾 】攻撃を計画・指揮した。",
+      "blankWord": "真珠湾",
+      "options": ["真珠湾", "ミッドウェー", "トラック島"]
+    },
+    {
+      "id": 2,
+      "year": 1942,
+      "yearDisplay": "1942年",
+      "text": "【 ミッドウェー海戦 】で空母4隻を喪失する大敗北を喫した。",
+      "blankWord": "ミッドウェー海戦",
+      "options": ["ミッドウェー海戦", "珊瑚海海戦", "南太平洋海戦"]
+    },
+    {
+      "id": 3,
+      "year": 1943,
+      "yearDisplay": "1943年",
+      "text": "視察移動中、ソロモン諸島上空で【 P38 】戦闘機に撃墜され戦死した。",
+      "blankWord": "P38",
+      "options": ["P38", "B25", "F6F"]
+    }
+  ]
+}

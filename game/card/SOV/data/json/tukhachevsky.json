@@ -1,0 +1,30 @@
+{
+  "characterId": "tukhachevsky",
+  "characterName": "ミハイル・トゥハチェフスキー",
+  "questions": [
+    {
+      "id": 1,
+      "year": 1935,
+      "yearDisplay": "1935年",
+      "text": "ソ連元帥に昇格し、【 赤軍の近代化 】を推進した。",
+      "blankWord": "赤軍の近代化",
+      "options": ["赤軍の近代化", "空軍の創設", "海軍の拡張"]
+    },
+    {
+      "id": 2,
+      "year": 1937,
+      "yearDisplay": "1937年",
+      "text": "【 大粛清 】により反逆罪で逮捕された。",
+      "blankWord": "大粛清",
+      "options": ["大粛清", "党大会", "軍事クーデター"]
+    },
+    {
+      "id": 3,
+      "year": 1937,
+      "yearDisplay": "1937年",
+      "text": "軍事法廷で死刑判決を受け、即座に【 銃殺 】された。",
+      "blankWord": "銃殺",
+      "options": ["銃殺", "絞首刑", "流刑"]
+    }
+  ]
+}
