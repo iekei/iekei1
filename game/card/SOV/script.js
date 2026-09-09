@@ -567,6 +567,8 @@ function openPack(direction) {
   }
   isOpened = true;
   instruction.style.display = 'none';
+  var pb = document.getElementById('purchase-btn');
+  if (pb) pb.style.display = 'none';
 
   const picked = leaders[Math.floor(Math.random() * leaders.length)];
   unlockCard(picked.id);
@@ -620,6 +622,8 @@ resetBtn.addEventListener('click', () => {
   resetBtn.style.display = 'none';
   instruction.innerText = 'パック上部をスワイプして開封！';
   instruction.style.display = 'block';
+  var pb = document.getElementById('purchase-btn');
+  if (pb) pb.style.display = '';
   resultText.innerText = '';
 
   packGroup.visible = true;
