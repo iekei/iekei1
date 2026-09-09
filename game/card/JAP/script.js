@@ -253,8 +253,8 @@ function createPackBodyTexture(callback) {
 
   const packGrad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
   packGrad.addColorStop(0, '#ffffff');
-  packGrad.addColorStop(0.5, '#f3a4a4');
-  packGrad.addColorStop(1, '#ff7171');
+  packGrad.addColorStop(0.5, '#ffefef');
+  packGrad.addColorStop(1, '#ffb6b6');
   ctx.fillStyle = packGrad;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
