@@ -1,0 +1,30 @@
+{
+  "characterId": "ishiwara",
+  "characterName": "石原莞爾",
+  "questions": [
+    {
+      "id": 1,
+      "year": 1931,
+      "yearDisplay": "1931年",
+      "text": "関東軍作戦参謀として【 柳条湖事件 】を画策し、満州事変を引き起こした。",
+      "blankWord": "柳条湖事件",
+      "options": ["柳条湖事件", "盧溝橋事件", "上海事変"]
+    },
+    {
+      "id": 2,
+      "year": 1936,
+      "yearDisplay": "1936年",
+      "text": "参謀本部【 作戦課長 】に就任し、対ソ戦略の策定にあたった。",
+      "blankWord": "作戦課長",
+      "options": ["作戦課長", "作戦部長", "参謀次長"]
+    },
+    {
+      "id": 3,
+      "year": 1941,
+      "yearDisplay": "1941年",
+      "text": "東條英機と対立し、予備役に編入され【 失脚 】した。",
+      "blankWord": "失脚",
+      "options": ["失脚", "昇進", "左遷"]
+    }
+  ]
+}

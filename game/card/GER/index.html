@@ -5,21 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>カードパックガチャ - ドイツ</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../quiz.css">
   <!-- Three.js & GSAP -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 </head>
-<body>
+<body data-nation="GER">
   <div id="canvas-container"></div>
 
   <!-- UIレイヤー -->
   <div id="ui-layer">
     <div id="top-bar">
+      <div id="coin-display-wrapper">
+        <span class="coin-icon">🪙</span>
+        <span class="coin-amount">0</span>
+      </div>
       <button id="light-btn">光源: ON</button>
       <button id="zukan-btn">図鑑を見る</button>
     </div>
     
-    <div id="instruction">パック上部をスワイプして開封！</div>
+    <div id="center-area">
+      <div id="instruction">パック上部をスワイプして開封！</div>
+      <button id="purchase-btn">🪙 パック購入 (100コイン)</button>
+    </div>
 
     <div id="result-container">
       <div id="result-text"></div>
@@ -47,6 +55,43 @@
     </div>
   </div>
 
+  <!-- カード詳細モーダル -->
+  <div id="card-detail-modal">
+    <div class="card-detail-content">
+      <button class="card-detail-close">&times;</button>
+      <img class="card-detail-img" src="" alt="">
+      <h2 class="card-detail-name"></h2>
+      <p class="card-detail-desc"></p>
+      <div class="quiz-mode-buttons">
+        <button class="quiz-easy-btn">イージーモード<span class="quiz-mode-label">+50コイン</span></button>
+        <button class="quiz-hard-btn">ハードモード<span class="quiz-mode-label">+150コイン</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- クイズモーダル -->
+  <div id="quiz-modal">
+    <div class="quiz-container">
+      <button class="quiz-close-btn">&times;</button>
+      <div class="quiz-character-info"></div>
+      <div class="quiz-body">
+        <div class="quiz-year"></div>
+        <div class="quiz-text"></div>
+        <div class="quiz-answer-area"></div>
+        <div class="quiz-feedback"></div>
+      </div>
+      <div class="quiz-result">
+        <h2>クイズ完了！</h2>
+        <p class="result-score"></p>
+        <div class="coin-reward"></div>
+        <button class="quiz-close-result-btn">閉じる</button>
+      </div>
+      <div class="depth-gauge"></div>
+      <div class="depth-marker"></div>
+    </div>
+  </div>
+
   <script src="script.js"></script>
+  <script src="../quiz.js"></script>
 </body>
 </html>

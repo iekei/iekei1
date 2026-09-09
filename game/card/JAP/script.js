@@ -1,6 +1,8 @@
 // --- 1. ソビエト連邦 リーダーデータ ---
 const leaders = [
 { 
+  id: "hirohito",
+ 
   name: "昭和天皇（裕仁）", 
   rank: "SSR", 
   desc: "大日本帝国の大元帥にして立憲君主。国家の精神的支柱であり、軍・政府の権威の頂点に位置した最高存在。", 
@@ -9,6 +11,8 @@ const leaders = [
   color: "#D4AF37" 
 },
 { 
+  id: "hirota",
+ 
   name: "広田弘毅", 
   rank: "SR", 
   desc: "1936年に内閣総理大臣に就任。二・二六事件後の混乱を収拾し、軍部の台頭を抑えつつ文民主導の外交を模索した。", 
@@ -17,6 +21,8 @@ const leaders = [
   color: "#708090" 
 },
 { 
+  id: "okada",
+ 
   name: "岡田啓介", 
   rank: "SR", 
   desc: "海軍大将にして二・二六事件当時の首相。襲撃を奇跡的に生き延びた重臣であり、軍部の過激派に批判的な穏健派。", 
@@ -25,6 +31,8 @@ const leaders = [
   color: "#4682B4" 
 },
 { 
+  id: "mazaki",
+ 
   name: "真崎甚三郎", 
   rank: "SR", 
   desc: "陸軍大将。皇道派の中心人物であり、二・二六事件が成功し軍部過激派が政権を掌握した場合の軍事政権トップ候補。", 
@@ -33,6 +41,8 @@ const leaders = [
   color: "#8B0000" 
 },
 { 
+  id: "tojo",
+ 
   name: "東條英機", 
   rank: "SSR", 
   desc: "関東軍憲兵司令官（後に参謀長）。1936年当時は満州で徹底した治安維持と規律を統括し、統制派のエリートとして頭角を現す。", 
@@ -41,6 +51,8 @@ const leaders = [
   color: "#556B2F" 
 },
 { 
+  id: "konoe",
+ 
   name: "近衛文麿", 
   rank: "SSR", 
   desc: "貴族院議長。圧倒的な国民的人気と五摂家筆頭の血統を持ち、軍部と政党の対立を収める唯一の「期待の星」として擁立された。", 
@@ -50,6 +62,8 @@ const leaders = [
   color: "#2E8B57" 
 },
 { 
+  id: "ishiwara",
+ 
   name: "石原莞爾", 
   rank: "SR", 
   desc: "参謀本部作戦課長。満州事変の主謀者であり、「最終戦争論」を掲げ国家総力戦体制への組織改革を推し進めた戦略家。", 
@@ -647,6 +661,13 @@ window.addEventListener('touchmove', onPointerMove);
 window.addEventListener('touchend', onPointerUp);
 
 function openPack(direction) {
+  if (isOpened) return;
+  if (window.CardShop && !window.CardShop.spendCoins(100)) {
+    instruction.innerText = 'コインが足りません！クイズで獲得できます';
+    instruction.style.display = 'block';
+    setTimeout(function() { if (!isOpened) instruction.innerText = 'パック上部をスワイプして開封！'; }, 2500);
+    return;
+  }
   isOpened = true;
   instruction.style.display = 'none';
 
@@ -756,8 +777,8 @@ function renderZukan() {
       `;
     } else {
       cardEl.innerHTML = `
-        <div class="question-mark">?</div>
-        <div class="card-info">まだ出してないカードは？</div>
+        <img class="silhouette-img" src="${leader.imgUrl}" alt="">
+        <div class="lock-label">未獲得</div>
       `;
     }
     zukanGrid.appendChild(cardEl);

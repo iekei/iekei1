@@ -1,0 +1,30 @@
+{
+  "characterId": "yamashita",
+  "characterName": "山下奉文",
+  "questions": [
+    {
+      "id": 1,
+      "year": 1941,
+      "yearDisplay": "1941年",
+      "text": "第25軍司令官として【 マレー 】半島を電撃進撃した。",
+      "blankWord": "マレー",
+      "options": ["マレー", "ビルマ", "フィリピン"]
+    },
+    {
+      "id": 2,
+      "year": 1942,
+      "yearDisplay": "1942年",
+      "text": "【 シンガポール 】を陥落させ、イギリス軍を降伏させた。",
+      "blankWord": "シンガポール",
+      "options": ["シンガポール", "香港", "ジャワ"]
+    },
+    {
+      "id": 3,
+      "year": 1946,
+      "yearDisplay": "1946年",
+      "text": "マニラ軍事裁判で【 死刑 】判決を受け、処刑された。",
+      "blankWord": "死刑",
+      "options": ["死刑", "終身刑", "無罪"]
+    }
+  ]
+}
