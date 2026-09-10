@@ -54,36 +54,37 @@
     log.scrollTop = log.scrollHeight;
   }
 
-  // デバッグコマンド実行（バグ修正済み）
-  function executeDebugCommand(cmd) {
-    var parts = cmd.trim().split(/\s+/);
-    var command = parts; // parts でコマンドを取得
-    if (command === '/coin') {
-      var amount = parseInt(parts[2], 10) || 0; // parts[2] で数値を指定
-      addCoins(amount);
-      debugLog('🪙 +' + amount + ' コイン追加 (所持: ' + getCoins() + ')');
-    } else if (command === '/reset') {
-      localStorage.removeItem(COIN_KEY);
-      localStorage.removeItem('ger_unlocked_cards');
-      localStorage.removeItem('jap_unlocked_cards');
-      localStorage.removeItem('sov_unlocked_cards');
-      updateCoinDisplay();
-      debugLog('🗑 全データをリセットしました');
-    } else if (command === '/all') {
-      var nation = document.body.dataset.nation;
-      var key = nation ? nation.toLowerCase() + '_unlocked_cards' : null;
-      if (key && typeof leaders !== 'undefined') {
-        var allIds = leaders.map(function(l) { return l.id; }).filter(Boolean);
-        localStorage.setItem(key, JSON.stringify(allIds));
-        debugLog('🔓 全カードを解放しました (' + allIds.length + '枚)');
-      } else {
-        debugLog('❌ カードデータが取得できません');
-      }
+  // デバッグコマンド実行（バグ修正・完全版）
+function executeDebugCommand(cmd) {
+  var parts = cmd.trim().split(/\s+/);
+  var command = parts; // 【修正1】配列の先頭要素(インデックス0)からコマンド名を取得 [1]
+  
+  if (command === '/coin') {
+    var amount = parseInt(parts[3], 10) || 0; // 【修正2】2番目の要素(インデックス1)から数値を取得 [1]
+    addCoins(amount);
+    debugLog('🪙 +' + amount + ' コイン追加 (所持: ' + getCoins() + ')');
+  } else if (command === '/reset') {
+    localStorage.removeItem(COIN_KEY);
+    localStorage.removeItem('ger_unlocked_cards');
+    localStorage.removeItem('jap_unlocked_cards');
+    localStorage.removeItem('sov_unlocked_cards');
+    updateCoinDisplay();
+    debugLog('🗑 全データをリセットしました');
+  } else if (command === '/all') {
+    var nation = document.body.dataset.nation;
+    var key = nation ? nation.toLowerCase() + '_unlocked_cards' : null;
+    if (key && typeof leaders !== 'undefined') {
+      var allIds = leaders.map(function(l) { return l.id; }).filter(Boolean);
+      localStorage.setItem(key, JSON.stringify(allIds));
+      debugLog('🔓 全カードを解放しました (' + allIds.length + '枚)');
     } else {
-      debugLog('❓ 不明: ' + cmd);
-      debugLog('cmds: /coin [num]  /reset  /all');
+      debugLog('❌ カードデータが取得できません');
     }
+  } else {
+    debugLog('❓ 不明: ' + cmd);
+    debugLog('cmds: /coin [num]  /reset  /all');
   }
+}
 
   function initDebugConsole() {
     var dc = document.getElementById('debug-console');
