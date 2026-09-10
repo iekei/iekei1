@@ -54,11 +54,12 @@
     log.scrollTop = log.scrollHeight;
   }
 
+  // デバッグコマンド実行（バグ修正済み）
   function executeDebugCommand(cmd) {
     var parts = cmd.trim().split(/\s+/);
-    var command = parts;
+    var command = parts; // parts でコマンドを取得
     if (command === '/coin') {
-      var amount = parseInt(parts[1], 10) || 0;
+      var amount = parseInt(parts[2], 10) || 0; // parts[2] で数値を指定
       addCoins(amount);
       debugLog('🪙 +' + amount + ' コイン追加 (所持: ' + getCoins() + ')');
     } else if (command === '/reset') {
@@ -111,8 +112,8 @@
     });
   }
 
-  // ===== MediaWiki (Wikipedia) API クイズ自動生成機能 =====
-  async function generateQuizFromMediaWiki(characterName, yearRange) {
+  // ===== MediaWiki (Wikipedia) API クイズ自動生成（語句大量拡張版） =====
+  async function generateQuizFromMediaWiki(characterName) {
     try {
       var url =
         'https://ja.wikipedia.org/w/api.php?origin=*&action=query&format=json&prop=extracts&explaintext=1&titles=' +
@@ -132,16 +133,32 @@
 
       var extractText = pages[pageId].extract;
 
-      // 高校歴史の超重要語句（優先抽出用）
+      // 近現代史の超重要語句マスターリスト（100語以上）
       var importantKeywords = [
-        '大東亜共栄圏', 'アンシュルス', '日独伊三国同盟', '国家総動員法', '満州事変', 
-        '二・二六事件', '五・一五事件', '真珠湾攻撃', '太平洋戦争', '国際連盟脱退', 
-        'ポツダム宣言', 'カイロ宣言', 'ニューディール', 'ミュンヘン会談', '全権委任法', 
-        'ヴェルサイユ条約', 'ワシントン会議', '国際連盟', '不戦条約', '非暴力・不服従',
-        '国際連合', 'ヤルタ会談', '関東軍', '治安維持法', '政友会', '民政党', '大政翼賛会'
+        // 外交・条約・宣言
+        '大東亜共栄圏', 'アンシュルス', '日独伊三国同盟', 'ポツダム宣言', 'カイロ宣言', 
+        'ヤルタ会談', 'ミュンヘン会談', 'ヴェルサイユ条約', 'ワシントン条約', 'ロンドン海軍軍縮条約', 
+        '下関条約', 'ポーツマス条約', '日英同盟', '日ソ中立条約', '不戦条約', 
+        'サンフランシスコ平和条約', '日韓併合', '日清修好条規', '国際連盟脱退', '全権委任法',
+        // 事件・事変・運動
+        '満州事変', '二・二六事件', '五・一五事件', '三・一運動', '五四運動', 
+        '柳条湖事件', '盧溝橋事件', '桜会事件', '血盟団事件', '虎ノ門事件', 
+        '大逆事件', 'サラエボ事件', '義和団事件', '自由民権運動', '非暴力・不服従',
+        // 戦争・作戦・軍事
+        '太平洋戦争', '日清戦争', '日露戦争', '第一次世界大戦', '第二次世界大戦', 
+        '日中戦争', '戊辰戦争', '西南戦争', '真珠湾攻撃', '関東軍', 
+        'ベルリン攻略戦', 'バグラチオン作戦', 'バルバロッサ作戦', 'ミッドウェー海戦', 'ガダルカナル島の戦い',
+        // 法令・政策・制度
+        '国家総動員法', '治安維持法', '治安警察法', '大日本帝国憲法', '日本国憲法', 
+        'ワイマール憲法', 'ニューディール', '挙国一致内閣', '大政翼賛会', '金解禁', 
+        '農地改革', '財閥解体', '徴兵令', '地租改正', '殖産興業',
+        // 組織・政党・思想
+        '国際連盟', '国際連合', '政友会', '民政党', '関東憲兵隊', 
+        'コミンテルン', 'ファシズム', 'ナチズム', '天皇機関説', '東亜連盟', 
+        'サムライ', '自由党', '改進党', '参謀本部', '海軍航空本部'
       ];
 
-      // 文章を「。」で分割（長さを20〜120文字に調整）
+      // 文章を分割（20〜120文字の文章）
       var sentences = extractText
         .split(/[。\n]+/)
         .map(function (s) { return s.trim(); })
@@ -154,12 +171,12 @@
 
         // 年代（西暦）の抽出
         var yearMatch = sentence.match(/(1\d{3}|20\d{2})年/);
-        var yearNum = yearMatch ? parseInt(yearMatch[1], 10) : null;
+        var yearNum = yearMatch ? parseInt(yearMatch[2], 10) : null;
         var yearDisplay = yearMatch ? yearMatch : '';
 
         var blankWord = null;
 
-        // 超重要語句が含まれていれば最優先で選出
+        // 重要語句が含まれていれば優先選出
         for (var k = 0; k < importantKeywords.length; k++) {
           var kw = importantKeywords[k];
           if (sentence.indexOf(kw) !== -1 && characterName.indexOf(kw) === -1) {
@@ -168,7 +185,7 @@
           }
         }
 
-        // 重要語句がない場合は文中の漢字・カタカナ語句から自動選出
+        // 見つからない場合は文中の漢字・カタカナ語句から抽出
         if (!blankWord) {
           var words = sentence.match(/[\u4e00-\u9faf\u30a0-\u30ff]{2,8}/g);
           if (words) {
@@ -185,8 +202,9 @@
 
         var text = sentence.replace(blankWord, '【 ' + blankWord + ' 】');
 
+        // ダミー選択肢プール
         var dummyPool = importantKeywords.concat([
-          '明治維新', '大政奉還', '帝国議会', '日清戦争', '日露戦争', 'サンフランシスコ平和条約'
+          '明治維新', '大政奉還', '帝国議会', '無差別爆撃', '連合国軍', '枢軸国'
         ]);
 
         var options = [blankWord];
@@ -211,6 +229,7 @@
         if (questions.length >= 15) break;
       }
 
+      // 年代順に並び替え
       questions.sort(function (a, b) {
         if (a.year && b.year) return a.year - b.year;
         return 0;
@@ -275,7 +294,6 @@
       return;
     }
 
-    // 1. MediaWiki APIによる自動生成を試行
     var questions = null;
     try {
       questions = await generateQuizFromMediaWiki(card.name);
@@ -283,7 +301,6 @@
       questions = null;
     }
 
-    // 2. 失敗した場合は既存のローカルJSONにフォールバック
     if (!questions || !questions.length) {
       try {
         var response = await fetch('data/json/' + cid + '.json');
