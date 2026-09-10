@@ -57,10 +57,10 @@
   // デバッグコマンド実行（バグ修正・完全版）
 function executeDebugCommand(cmd) {
   var parts = cmd.trim().split(/\s+/);
-  var command = parts; // 【修正1】配列の先頭要素(インデックス0)からコマンド名を取得 [1]
+  var command = parts[0]; // ✅ インデックス0を取得
   
   if (command === '/coin') {
-    var amount = parseInt(parts[3], 10) || 0; // 【修正2】2番目の要素(インデックス1)から数値を取得 [1]
+    var amount = parseInt(parts[1], 10) || 0; // ✅ インデックス1から取得
     addCoins(amount);
     debugLog('🪙 +' + amount + ' コイン追加 (所持: ' + getCoins() + ')');
   } else if (command === '/reset') {
