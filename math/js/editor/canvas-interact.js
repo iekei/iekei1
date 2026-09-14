@@ -66,6 +66,9 @@ export class CanvasInteract {
       const displayText = state.revealChars >= 0 ? (clip.text || '').slice(0, state.revealChars) : (clip.text || '');
       bw = Math.max(ctx.measureText(displayText).width, 20) * state.scaleX;
       bh = fontSize * 1.3 * state.scaleY;
+    } else if (clip.type === 'graph') {
+      bw = w * 0.84 * state.scaleX;
+      bh = h * 0.84 * state.scaleY;
     } else {
       const source = clip._img || clip._video;
       const sw = source?.videoWidth || source?.naturalWidth || source?.width || 16;

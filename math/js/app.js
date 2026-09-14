@@ -3,6 +3,7 @@
 import { Timeline } from './editor/timeline.js';
 import * as backend from './community/backend.js';
 import { CommunityPlayer } from './community/player.js';
+import { initTheme } from './editor/theme.js';
 
 class App {
   constructor() {
@@ -11,8 +12,11 @@ class App {
     this.player = null;
     this.dirty = false;
     this.mathTags = [];
+    this.physicsTags = [];
+    this.chemistryTags = [];
     this.uploads = [];
     this.draftKey = 'mathclip_draft';
+    this.activeMatTab = 'math';
 
     this._init();
   }
@@ -23,8 +27,12 @@ class App {
     document.getElementById('backend-mode').textContent =
       mode === 'local' ? 'ローカルモード (IndexedDB)' : `${mode}モード`;
 
-    // Load math tags
+    // Init theme
+    initTheme();
+
+    // Load tags
     await this._loadMathTags();
+    await this._loadScienceTags();
 
     // Init editor
     this.timeline = new Timeline(this);
@@ -38,6 +46,7 @@ class App {
     this._bindMaterialTabs();
     this._bindSearch();
     this._bindUpload();
+    this._bindGraph();
     this._bindExport();
     this._bindBeforeUnload();
     this._bindPanelCollapse();
@@ -45,8 +54,10 @@ class App {
     // Restore draft
     await this._restoreDraft();
 
-    // Render math grid
+    // Render grids
     this._renderMathGrid('');
+    this._renderPhysicsGrid('');
+    this._renderChemistryGrid('');
 
     // Render community
     this.community.refreshGrid();
@@ -85,7 +96,7 @@ class App {
     }
   }
 
-  // ===== Math Tags =====
+  // ===== Tags =====
   async _loadMathTags() {
     try {
       const res = await fetch('data/math_tags.json');
@@ -96,10 +107,26 @@ class App {
     }
   }
 
+  async _loadScienceTags() {
+    try {
+      const [pr, cr] = await Promise.all([
+        fetch('data/physics_tags.json'),
+        fetch('data/chemistry_tags.json'),
+      ]);
+      this.physicsTags = await pr.json();
+      this.chemistryTags = await cr.json();
+    } catch (e) {
+      console.error('Failed to load science tags', e);
+      this.physicsTags = [];
+      this.chemistryTags = [];
+    }
+  }
+
   _bindMaterialTabs() {
     document.querySelectorAll('.mat-tab').forEach(btn => {
       btn.addEventListener('click', () => {
         const tab = btn.dataset.matTab;
+        this.activeMatTab = tab;
         document.querySelectorAll('.mat-tab').forEach(b => {
           b.classList.remove('active');
           b.classList.add('border-transparent');
@@ -110,6 +137,9 @@ class App {
         btn.classList.add('border-accent');
         document.querySelectorAll('.mat-panel').forEach(p => p.classList.add('hidden'));
         document.getElementById(`mat-${tab}`).classList.remove('hidden');
+        // 検索結果をアクティブタブに合わせて再描画
+        const q = document.getElementById('mat-search').value;
+        this._renderActiveTab(q);
       });
     });
     this._renderGBGrid();
@@ -117,23 +147,31 @@ class App {
 
   _bindSearch() {
     const input = document.getElementById('mat-search');
-    input.addEventListener('input', () => this._renderMathGrid(input.value));
+    input.addEventListener('input', () => this._renderActiveTab(input.value));
   }
 
-  _renderMathGrid(query) {
-    const grid = document.getElementById('mat-math');
+  _renderActiveTab(query) {
+    switch (this.activeMatTab) {
+      case 'math': this._renderMathGrid(query); break;
+      case 'physics': this._renderPhysicsGrid(query); break;
+      case 'chemistry': this._renderChemistryGrid(query); break;
+    }
+  }
+
+  _renderTagGrid(gridId, tags, query) {
+    const grid = document.getElementById(gridId);
     grid.innerHTML = '';
     const q = (query || '').toLowerCase().trim();
     const filtered = q
-      ? this.mathTags.filter(t =>
+      ? tags.filter(t =>
           t.symbol.toLowerCase().includes(q) ||
           t.name.toLowerCase().includes(q) ||
           t.tags.some(tag => tag.toLowerCase().includes(q))
         )
-      : this.mathTags;
+      : tags;
 
     if (filtered.length === 0) {
-      grid.innerHTML = '<p class="col-span-4 text-center text-gray-500 text-sm py-4">該当する素材がありません</p>';
+      grid.innerHTML = '<p class="col-span-full text-center text-dim text-sm py-4">該当する素材がありません</p>';
       return;
     }
 
@@ -159,6 +197,10 @@ class App {
       grid.appendChild(tile);
     });
   }
+
+  _renderMathGrid(query) { this._renderTagGrid('mat-math', this.mathTags, query); }
+  _renderPhysicsGrid(query) { this._renderTagGrid('mat-physics', this.physicsTags, query); }
+  _renderChemistryGrid(query) { this._renderTagGrid('mat-chemistry', this.chemistryTags, query); }
 
   _renderGBGrid() {
     const grid = document.getElementById('mat-gb');
@@ -262,8 +304,56 @@ class App {
       v.loop = true;
       clip._video = v;
       v.addEventListener('loadeddata', () => this.timeline.render());
+    } else if (item.type === 'audio') {
+      const a = new Audio(item.url);
+      a.preload = 'metadata';
+      clip._audio = a;
+      clip.effects.volume = 1;
+      clip.effects.fadeIn = 0;
+      clip.effects.fadeOut = 0;
+      a.addEventListener('loadedmetadata', () => {
+        if (a.duration && isFinite(a.duration)) {
+          clip.duration = Math.min(a.duration, 30);
+          this.timeline.render();
+        }
+      });
     }
     this.timeline.addClip(clip);
+  }
+
+  // ===== Graph Generator =====
+  _bindGraph() {
+    const btn = document.getElementById('btn-gen-graph');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      const expr = document.getElementById('graph-expr').value.trim() || 'sin(x)';
+      const xmin = parseFloat(document.getElementById('graph-xmin').value) || -5;
+      const xmax = parseFloat(document.getElementById('graph-xmax').value) || 5;
+      const ymin = parseFloat(document.getElementById('graph-ymin').value) || -3;
+      const ymax = parseFloat(document.getElementById('graph-ymax').value) || 3;
+      const color = document.getElementById('graph-color').value || '#89b4fa';
+      const drawDur = parseFloat(document.getElementById('graph-drawdur').value) || 2;
+
+      const clip = {
+        type: 'graph',
+        name: 'グラフ: ' + expr,
+        start: this.timeline.currentTime,
+        duration: drawDur + 3,
+        x: 0.5, y: 0.5,
+        effects: { opacity: 1, scale: 1, animation: 'fade', animDuration: 0.3 },
+        graph: {
+          expression: expr,
+          xRange: [xmin, xmax],
+          yRange: [ymin, ymax],
+          curveColor: color,
+          curveWidth: 3,
+          drawDuration: drawDur,
+          showGrid: true,
+          annotations: [],
+        },
+      };
+      this.timeline.addClip(clip);
+    });
   }
 
   // ===== Export =====
