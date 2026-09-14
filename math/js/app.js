@@ -29,7 +29,7 @@ class App {
     // Init backend
     const mode = await backend.initBackend();
     document.getElementById('backend-mode').textContent =
-      mode === 'local' ? 'ローカルモード (IndexedDB)' : `${mode}モード`;
+      mode === 'local' ? 'ローカルモード (IndexedDB)' : '🌐 共有モード';
 
     // Init theme
     initTheme();
