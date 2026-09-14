@@ -145,6 +145,10 @@
               <p class="text-dim text-xs mt-2">mp4, webm, png, jpg, gif, mp3, wav, m4a</p>
               <input id="file-input" type="file" multiple accept="video/*,image/*,audio/*" class="hidden" />
             </div>
+            <div class="mt-3 flex gap-2">
+              <button id="btn-gdrive" class="flex-1 px-3 py-2 rounded-lg bg-accent-soft text-accent text-sm font-medium hover:opacity-80 whitespace-nowrap">☁ Googleドライブから読み込む</button>
+              <button id="btn-gdrive-settings" class="px-3 py-2 rounded-lg bg-surface hover:bg-surface-h text-sm shrink-0" title="Googleドライブ設定">⚙</button>
+            </div>
             <div id="upload-list" class="mt-3 space-y-2"></div>
           </div>
         </div>
@@ -220,6 +224,27 @@
       <div class="flex gap-3 justify-end">
         <button id="upload-cancel" class="px-4 py-2 rounded-lg bg-surface hover:bg-surface-h">キャンセル</button>
         <button id="upload-submit" class="px-4 py-2 rounded-lg bg-accent text-app font-bold">投稿する</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Google Drive Settings Modal ===== -->
+  <div id="gdrive-modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50">
+    <div class="bg-panel rounded-xl p-6 w-full max-w-md mx-4 shadow-2xl">
+      <h3 class="font-bold text-lg mb-1">☁ Googleドライブ設定</h3>
+      <p class="text-dim text-xs mb-4">Google Cloud Console で発行した OAuth 2.0 クライアント ID と APIキーを入力します（ブラウザのローカルストレージに保存されます）。</p>
+      <div class="prop-row mb-3">
+        <label>OAuth クライアント ID</label>
+        <input id="gd-client-id" type="text" placeholder="xxxxx.apps.googleusercontent.com" />
+      </div>
+      <div class="prop-row mb-2">
+        <label>APIキー</label>
+        <input id="gd-api-key" type="text" placeholder="AIza..." />
+      </div>
+      <p class="text-dim text-xs mt-2">※ 未設定の場合はローカルファイル選択からの読み込みをご利用ください。</p>
+      <div class="flex gap-3 justify-end mt-4">
+        <button id="gdrive-cancel" class="px-3 py-2 rounded-lg bg-surface hover:bg-surface-h">キャンセル</button>
+        <button id="gdrive-save" class="px-3 py-2 rounded-lg bg-accent text-app font-bold">保存</button>
       </div>
     </div>
   </div>
