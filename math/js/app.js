@@ -58,6 +58,7 @@ class App {
     this._bindSearch();
     this._bindUpload();
     this._bindGoogleDrive();
+    this._bindSettings();
     this._bindGraph();
     this._bindExport();
     this._bindBeforeUnload();
@@ -314,27 +315,44 @@ class App {
       }
     });
 
-    // 設定モーダル
-    const modal = document.getElementById('gdrive-modal');
-    const openModal = () => {
-      const cfg = getDriveConfig();
-      document.getElementById('gd-client-id').value = cfg.clientId || '';
-      document.getElementById('gd-api-key').value = cfg.apiKey || '';
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-    };
-    const closeModal = () => {
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
-    };
-    settingsBtn.addEventListener('click', openModal);
-    document.getElementById('gdrive-cancel').addEventListener('click', closeModal);
-    document.getElementById('gdrive-save').addEventListener('click', () => {
+    // 設定モーダル（共通設定モーダルを開く）
+    settingsBtn.addEventListener('click', () => this._openSettings());
+  }
+
+  // ===== Settings Modal =====
+  _openSettings() {
+    const modal = document.getElementById('settings-modal');
+    const cfg = getDriveConfig();
+    document.getElementById('set-api-key').value = cfg.apiKey || '';
+    document.getElementById('set-client-id').value = cfg.clientId || '';
+    document.getElementById('set-folder-id').value = cfg.folderId || '';
+    document.getElementById('set-backend-config').value = cfg.backendConfig || '';
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+  }
+
+  _closeSettings() {
+    const modal = document.getElementById('settings-modal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+
+  _bindSettings() {
+    document.getElementById('btn-settings').addEventListener('click', () => this._openSettings());
+    document.getElementById('settings-close').addEventListener('click', () => this._closeSettings());
+    document.getElementById('settings-cancel').addEventListener('click', () => this._closeSettings());
+    document.getElementById('settings-save').addEventListener('click', () => {
       saveDriveConfig({
-        clientId: document.getElementById('gd-client-id').value.trim(),
-        apiKey: document.getElementById('gd-api-key').value.trim(),
+        clientId: document.getElementById('set-client-id').value.trim(),
+        apiKey: document.getElementById('set-api-key').value.trim(),
+        folderId: document.getElementById('set-folder-id').value.trim(),
+        backendConfig: document.getElementById('set-backend-config').value.trim(),
       });
-      closeModal();
+      this._closeSettings();
+    });
+    // モーダル背景クリックで閉じる
+    document.getElementById('settings-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'settings-modal') this._closeSettings();
     });
   }
 

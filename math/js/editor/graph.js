@@ -152,11 +152,18 @@ export function drawGraph(ctx, clip, localTime, canvasW, canvasH) {
   const scale = canvasH / 360;
   const xRange = g.xRange || [-5, 5];
   const yRange = g.yRange || [-3, 3];
+
+  // グラフをクリップ位置を中心に84%サイズで描画（移動・リサイズ対応）
+  const graphW = canvasW * 0.84;
+  const graphH = canvasH * 0.84;
+  const cx = (clip.x ?? 0.5) * canvasW;
+  const cy = (clip.y ?? 0.5) * canvasH;
+
   const pad = 0.08;
-  const plotW = canvasW * (1 - 2 * pad);
-  const plotH = canvasH * (1 - 2 * pad);
-  const ox = canvasW * pad;
-  const oy = canvasH * pad;
+  const plotW = graphW * (1 - 2 * pad);
+  const plotH = graphH * (1 - 2 * pad);
+  const ox = cx - graphW / 2 + graphW * pad;
+  const oy = cy - graphH / 2 + graphH * pad;
 
   const toX = (x) => ox + ((x - xRange[0]) / (xRange[1] - xRange[0])) * plotW;
   const toY = (y) => oy + plotH - ((y - yRange[0]) / (yRange[1] - yRange[0])) * plotH;
@@ -179,9 +186,7 @@ export function drawGraph(ctx, clip, localTime, canvasW, canvasH) {
   if (anim === 'fade' && localTime < animDur) baseAlpha *= localTime / animDur;
   ctx.globalAlpha = Math.max(0, baseAlpha);
 
-  // 位置・拡大縮小
-  const cx = (clip.x ?? 0.5) * canvasW;
-  const cy = (clip.y ?? 0.5) * canvasH;
+  // 位置・拡大縮小（cx/cyは上部で定義済み）
   const sc = fx.scale ?? 1;
   ctx.translate(cx, cy);
   ctx.scale(sc, sc);

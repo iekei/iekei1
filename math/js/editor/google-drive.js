@@ -92,12 +92,25 @@ export async function pickFromGoogleDrive() {
   await loadScript('https://apis.google.com/js/api.js');
   await new Promise((resolve) => window.gapi.load('picker', resolve));
 
+  // 特定フォルダ制限 (Folder Scoping): 設定されたフォルダID配下のみ表示
+  const { folderId } = getDriveConfig();
+  const MIME_FILTER = 'video/mp4,video/webm,image/png,image/jpeg,image/gif,audio/mp3,audio/wav,audio/m4a';
+
+  const makeView = (viewId) => {
+    const view = new google.picker.DocsView(viewId);
+    if (folderId) {
+      view.setParent(folderId);
+    }
+    view.setMimeTypes(MIME_FILTER);
+    return view;
+  };
+
   const docs = await new Promise((resolve) => {
-    const picker = new google.picker.PickerBuilder()
+    const builder = new google.picker.PickerBuilder()
       .setDeveloperKey(apiKey)
       .setOAuthToken(token)
-      .addView(new google.picker.DocsView(google.picker.ViewId.DOCS_IMAGES_AND_VIDEOS))
-      .addView(new google.picker.DocsView(google.picker.ViewId.AUDIO))
+      .addView(makeView(google.picker.ViewId.DOCS_IMAGES_AND_VIDEOS))
+      .addView(makeView(google.picker.ViewId.AUDIO))
       .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
       .setCallback((data) => {
         const action = data[google.picker.Response.ACTION];
@@ -106,8 +119,14 @@ export async function pickFromGoogleDrive() {
         } else if (action === google.picker.Action.CANCEL) {
           resolve([]);
         }
-      })
-      .build();
+      });
+
+    // フォルダID指定時はタイトルにフォルダ名を表示
+    if (folderId) {
+      builder.setTitle('Google Drive (指定フォルダ)');
+    }
+
+    const picker = builder.build();
     picker.setVisible(true);
   });
 
