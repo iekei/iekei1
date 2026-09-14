@@ -255,14 +255,26 @@
           </div>
           <p class="text-dim text-xs">※ フォルダIDを指定すると、そのフォルダ配下のファイルのみPickerに表示されます。フォルダIDはGoogleドライブのURLから取得できます。</p>
         </div>
-        <!-- Backend Settings -->
+        <!-- GitHub Pages Community Backend -->
         <div class="space-y-2">
-          <h4 class="font-bold text-sm text-muted uppercase tracking-wide">Firebase / Supabase 接続情報</h4>
+          <h4 class="font-bold text-sm text-muted uppercase tracking-wide">GitHub Pages コミュニティ連携</h4>
           <div class="prop-row">
-            <label>APIキー / 設定JSON</label>
-            <textarea id="set-backend-config" rows="4" placeholder='{"apiKey":"...","authDomain":"...","projectId":"...","appId":"..."}' style="font-family:monospace;font-size:11px;"></textarea>
+            <label>GitHub Personal Access Token</label>
+            <input id="set-gh-token" type="password" placeholder="ghp_... (repo 権限が必要)" />
           </div>
-          <p class="text-dim text-xs">※ コミュニティ機能のバックエンド接続に使用します。未設定の場合はローカルモード (IndexedDB) で動作します。</p>
+          <div class="prop-row">
+            <label>GitHub ユーザー名 / 組織名</label>
+            <input id="set-gh-owner" type="text" placeholder="例: iekei" />
+          </div>
+          <div class="prop-row">
+            <label>リポジトリ名</label>
+            <input id="set-gh-repo" type="text" placeholder="例: my-app" />
+          </div>
+          <div class="prop-row">
+            <label>ブランチ (デフォルト: main)</label>
+            <input id="set-gh-branch" type="text" placeholder="main" />
+          </div>
+          <p class="text-dim text-xs">※ GitHub Pages環境でコミュニティ機能を使うための設定です。動画はリポジトリ内に保存され、どのデバイスからでも視聴できます。Tokenは<a href="https://github.com/settings/tokens" target="_blank" class="text-accent2 underline">GitHub Settings</a>から作成してください（repo権限必須）。</p>
         </div>
       </div>
       <div class="flex gap-3 justify-end mt-5">

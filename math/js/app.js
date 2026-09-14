@@ -8,6 +8,7 @@ import { KeyboardShortcuts, initShortcutsModal } from './editor/keyboard.js';
 import { UndoRedo } from './editor/undo-redo.js';
 import { Splitter } from './editor/splitter.js';
 import { pickFromGoogleDrive, isDriveConfigured, getDriveConfig, saveDriveConfig } from './editor/google-drive.js';
+import { getCommunityConfig, saveCommunityConfig } from './community/github-backend.js';
 
 class App {
   constructor() {
@@ -28,8 +29,8 @@ class App {
   async _init() {
     // Init backend
     const mode = await backend.initBackend();
-    document.getElementById('backend-mode').textContent =
-      mode === 'local' ? 'ローカルモード (IndexedDB)' : '🌐 共有モード';
+    const modeLabel = { local: 'ローカルモード (IndexedDB)', shared: '🌐 共有モード', github: '🐙 GitHubモード' };
+    document.getElementById('backend-mode').textContent = modeLabel[mode] || mode;
 
     // Init theme
     initTheme();
@@ -327,6 +328,11 @@ class App {
     document.getElementById('set-client-id').value = cfg.clientId || '';
     document.getElementById('set-folder-id').value = cfg.folderId || '';
     document.getElementById('set-backend-config').value = cfg.backendConfig || '';
+    const gh = getCommunityConfig();
+    document.getElementById('set-gh-token').value = gh.token || '';
+    document.getElementById('set-gh-owner').value = gh.owner || '';
+    document.getElementById('set-gh-repo').value = gh.repo || '';
+    document.getElementById('set-gh-branch').value = gh.branch || '';
     modal.classList.remove('hidden');
     modal.classList.add('flex');
   }
@@ -347,6 +353,12 @@ class App {
         apiKey: document.getElementById('set-api-key').value.trim(),
         folderId: document.getElementById('set-folder-id').value.trim(),
         backendConfig: document.getElementById('set-backend-config').value.trim(),
+      });
+      saveCommunityConfig({
+        token: document.getElementById('set-gh-token').value.trim(),
+        owner: document.getElementById('set-gh-owner').value.trim(),
+        repo: document.getElementById('set-gh-repo').value.trim(),
+        branch: document.getElementById('set-gh-branch').value.trim() || 'main',
       });
       this._closeSettings();
     });
