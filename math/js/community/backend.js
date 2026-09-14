@@ -1,7 +1,9 @@
 // js/community/backend.js — 動画共有バックエンド連携
-// サーバーAPI (/api/) に動画を保存し、どのデバイスからでも視聴できるようにする
+// サーバーAPI (/api/) または GitHub API に動画を保存し、どのデバイスからでも視聴できるようにする
 
-let backend = null; // 'shared' | 'local'
+import * as github from './github-backend.js';
+
+let backend = null; // 'shared' | 'github' | 'local'
 let dbInstance = null;
 
 // ===== IndexedDB (フォールバック用) =====
@@ -63,6 +65,7 @@ function idbGet(store, key) {
 
 // ===== バックエンド初期化 =====
 export async function initBackend() {
+  // 1. サーバーAPI (Base44プレビュー等の動的環境)
   try {
     const res = await fetch('/api/health', { cache: 'no-store' });
     if (res.ok) {
@@ -71,8 +74,15 @@ export async function initBackend() {
       return 'shared';
     }
   } catch (e) {
-    console.warn('[backend] サーバーAPIに接続できません、ローカルモードにフォールバック', e);
+    console.warn('[backend] サーバーAPIに接続できません', e);
   }
+  // 2. GitHub API (GitHub Pages等の静的環境)
+  if (github.isGitHubConfigured()) {
+    backend = 'github';
+    console.log('[backend] GitHubモード (GitHub API)');
+    return 'github';
+  }
+  // 3. ローカルフォールバック (IndexedDB)
   backend = 'local';
   await openDB();
   console.log('[backend] ローカルモード (IndexedDB)');
@@ -92,6 +102,9 @@ export async function uploadVideo(file, title, desc = '') {
     if (!res.ok) throw new Error('アップロードに失敗しました');
     return res.json();
   }
+  if (backend === 'github') {
+    return github.uploadVideo(file, title, desc);
+  }
   // ローカルフォールバック
   const id = crypto.randomUUID();
   const created_at = Date.now();
@@ -110,6 +123,9 @@ export async function getVideos() {
     if (!res.ok) throw new Error('一覧取得に失敗しました');
     return res.json();
   }
+  if (backend === 'github') {
+    return github.getVideos();
+  }
   const videos = await idbGetAll(STORE_VIDEOS);
   for (const v of videos) {
     if (v.blob_id && (!v.video_url || !v.video_url.startsWith('blob:'))) {
@@ -127,6 +143,9 @@ export async function getVideo(videoId) {
     if (!res.ok) throw new Error('動画取得に失敗しました');
     return res.json();
   }
+  if (backend === 'github') {
+    return github.getVideo(videoId);
+  }
   const video = await idbGet(STORE_VIDEOS, videoId);
   if (video && video.blob_id) {
     const blobRecord = await idbGet(STORE_BLOBS, video.blob_id);
@@ -143,6 +162,9 @@ export async function likeVideo(videoId) {
     const data = await res.json();
     return data.likes;
   }
+  if (backend === 'github') {
+    return github.likeVideo(videoId);
+  }
   const video = await idbGet(STORE_VIDEOS, videoId);
   if (!video) return 0;
   video.likes = (video.likes || 0) + 1;
@@ -157,6 +179,9 @@ export async function incrementViews(videoId) {
     if (!res.ok) throw new Error('視聴回数更新に失敗しました');
     const data = await res.json();
     return data.views;
+  }
+  if (backend === 'github') {
+    return github.incrementViews(videoId);
   }
   const video = await idbGet(STORE_VIDEOS, videoId);
   if (!video) return 0;
@@ -176,6 +201,9 @@ export async function postComment(videoId, time, text, color = '#FFFFFF') {
     if (!res.ok) throw new Error('コメント投稿に失敗しました');
     return res.json();
   }
+  if (backend === 'github') {
+    return github.postComment(videoId, time, text, color);
+  }
   const comment = { id: crypto.randomUUID(), video_id: videoId, time, text, color, created_at: Date.now() };
   await idbPut(STORE_COMMENTS, comment);
   return comment;
@@ -187,6 +215,9 @@ export async function getComments(videoId) {
     const res = await fetch(`/api/videos/${videoId}/comments`);
     if (!res.ok) throw new Error('コメント取得に失敗しました');
     return res.json();
+  }
+  if (backend === 'github') {
+    return github.getComments(videoId);
   }
   const all = await idbGetAll(STORE_COMMENTS, 'video_id');
   return all.filter(c => c.video_id === videoId).sort((a, b) => a.time - b.time);
