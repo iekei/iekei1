@@ -43,6 +43,7 @@
     </nav>
     <div class="ml-auto flex items-center gap-3 text-sm text-muted">
       <button id="btn-theme" class="px-2 py-1 rounded bg-surface hover:bg-surface-h text-sm shrink-0" title="テーマ切り替え">🌙</button>
+      <button id="btn-settings" class="px-2 py-1 rounded bg-surface hover:bg-surface-h text-sm shrink-0" title="設定">⚙ 設定</button>
       <span id="backend-mode" class="px-2 py-1 rounded bg-surface text-xs">ローカルモード</span>
       <button id="btn-export" class="hidden px-3 py-1.5 rounded-lg bg-accent text-app font-bold text-sm hover:opacity-80">⬇ 書き出し</button>
     </div>
@@ -228,23 +229,45 @@
     </div>
   </div>
 
-  <!-- ===== Google Drive Settings Modal ===== -->
-  <div id="gdrive-modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50">
-    <div class="bg-panel rounded-xl p-6 w-full max-w-md mx-4 shadow-2xl">
-      <h3 class="font-bold text-lg mb-1">☁ Googleドライブ設定</h3>
-      <p class="text-dim text-xs mb-4">Google Cloud Console で発行した OAuth 2.0 クライアント ID と APIキーを入力します（ブラウザのローカルストレージに保存されます）。</p>
-      <div class="prop-row mb-3">
-        <label>OAuth クライアント ID</label>
-        <input id="gd-client-id" type="text" placeholder="xxxxx.apps.googleusercontent.com" />
+  <!-- ===== Settings Modal ===== -->
+  <div id="settings-modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50">
+    <div class="bg-panel rounded-xl p-6 w-full max-w-lg mx-4 shadow-2xl max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="font-bold text-lg">⚙ 設定</h3>
+        <button id="settings-close" class="text-dim hover:text-accent text-xl">✕</button>
       </div>
-      <div class="prop-row mb-2">
-        <label>APIキー</label>
-        <input id="gd-api-key" type="text" placeholder="AIza..." />
+      <p class="text-dim text-xs mb-4">入力内容はブラウザのローカルストレージに保存され、ページ更新後も保持されます。</p>
+      <div class="space-y-5">
+        <!-- Google API Settings -->
+        <div class="space-y-2">
+          <h4 class="font-bold text-sm text-muted uppercase tracking-wide">Google API 設定</h4>
+          <div class="prop-row">
+            <label>Google API キー</label>
+            <input id="set-api-key" type="text" placeholder="AIza..." />
+          </div>
+          <div class="prop-row">
+            <label>Google OAuth クライアント ID</label>
+            <input id="set-client-id" type="text" placeholder="xxxxx.apps.googleusercontent.com" />
+          </div>
+          <div class="prop-row">
+            <label>Google Drive フォルダ ID</label>
+            <input id="set-folder-id" type="text" placeholder="例: 動画素材フォルダのID (空欄でドライブ全体)" />
+          </div>
+          <p class="text-dim text-xs">※ フォルダIDを指定すると、そのフォルダ配下のファイルのみPickerに表示されます。フォルダIDはGoogleドライブのURLから取得できます。</p>
+        </div>
+        <!-- Backend Settings -->
+        <div class="space-y-2">
+          <h4 class="font-bold text-sm text-muted uppercase tracking-wide">Firebase / Supabase 接続情報</h4>
+          <div class="prop-row">
+            <label>APIキー / 設定JSON</label>
+            <textarea id="set-backend-config" rows="4" placeholder='{"apiKey":"...","authDomain":"...","projectId":"...","appId":"..."}' style="font-family:monospace;font-size:11px;"></textarea>
+          </div>
+          <p class="text-dim text-xs">※ コミュニティ機能のバックエンド接続に使用します。未設定の場合はローカルモード (IndexedDB) で動作します。</p>
+        </div>
       </div>
-      <p class="text-dim text-xs mt-2">※ 未設定の場合はローカルファイル選択からの読み込みをご利用ください。</p>
-      <div class="flex gap-3 justify-end mt-4">
-        <button id="gdrive-cancel" class="px-3 py-2 rounded-lg bg-surface hover:bg-surface-h">キャンセル</button>
-        <button id="gdrive-save" class="px-3 py-2 rounded-lg bg-accent text-app font-bold">保存</button>
+      <div class="flex gap-3 justify-end mt-5">
+        <button id="settings-cancel" class="px-4 py-2 rounded-lg bg-surface hover:bg-surface-h">キャンセル</button>
+        <button id="settings-save" class="px-4 py-2 rounded-lg bg-accent text-app font-bold">保存</button>
       </div>
     </div>
   </div>
