@@ -327,7 +327,6 @@ class App {
     document.getElementById('set-api-key').value = cfg.apiKey || '';
     document.getElementById('set-client-id').value = cfg.clientId || '';
     document.getElementById('set-folder-id').value = cfg.folderId || '';
-    document.getElementById('set-backend-config').value = cfg.backendConfig || '';
     const gh = getCommunityConfig();
     document.getElementById('set-gh-token').value = gh.token || '';
     document.getElementById('set-gh-owner').value = gh.owner || '';
@@ -352,7 +351,6 @@ class App {
         clientId: document.getElementById('set-client-id').value.trim(),
         apiKey: document.getElementById('set-api-key').value.trim(),
         folderId: document.getElementById('set-folder-id').value.trim(),
-        backendConfig: document.getElementById('set-backend-config').value.trim(),
       });
       saveCommunityConfig({
         token: document.getElementById('set-gh-token').value.trim(),
