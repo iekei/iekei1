@@ -52,7 +52,10 @@ app.use(express.json());
 // multer: メモリに貯めずディスクへ直接書き出し
 const upload = multer({
   storage: multer.diskStorage({
-    destination: UPLOAD_DIR,
+    destination: (_req, _file, cb) => {
+      fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+      cb(null, UPLOAD_DIR);
+    },
     filename: (_req, file, cb) => {
       const id = randomUUID();
       const ext = extForMime(file.mimetype);

@@ -172,6 +172,7 @@ export class Timeline {
       this._loop();
     } else {
       this._updateAudio();
+      this._updateVideos();
     }
   }
 
@@ -208,6 +209,32 @@ export class Timeline {
     document.getElementById('time-display').textContent = `${fmt(this.currentTime)} / ${fmt(this.duration)}`;
   }
 
+  /** 再生中の動画クリップの再生/停止・タイムラインとの同期 */
+  _updateVideos() {
+    for (const clip of this.clips) {
+      if (clip.type !== 'video' || !clip._video) continue;
+      const v = clip._video;
+      const localTime = this.currentTime - clip.start;
+      const inRange = localTime >= 0 && localTime <= clip.duration;
+      // 動画本体の長さ（未ロードなら無限扱い）
+      const vd = isFinite(v.duration) ? v.duration : Infinity;
+
+      if (this.playing && inRange && localTime <= vd) {
+        // 大きなズレがある時だけシーク（毎フレーム設定するとデコードが追いつかない）
+        if (Math.abs(v.currentTime - localTime) > 0.3) {
+          try { v.currentTime = Math.max(0, localTime); } catch (e) {}
+        }
+        if (v.paused) v.play().catch(() => {});
+      } else {
+        if (!v.paused) v.pause();
+        // 停止中・スクラブ中は該当フレームを表示
+        if (inRange && localTime <= vd && Math.abs(v.currentTime - localTime) > 0.05) {
+          try { v.currentTime = localTime; } catch (e) {}
+        }
+      }
+    }
+  }
+
   /** 再生中のオーディオクリップの再生/停止・音量制御 */
   _updateAudio() {
     for (const clip of this.clips) {
@@ -235,6 +262,7 @@ export class Timeline {
   // ===== Rendering =====
 
   render() {
+    this._updateVideos();
     this._renderRuler();
     this._renderTracks();
     this._renderCanvas();
@@ -409,9 +437,9 @@ export class Timeline {
       } else if (clip.type === 'image' && clip._img) {
         this._drawMediaClip(ctx, clip, state, w, h, clip._img);
       } else if (clip.type === 'video' && clip._video) {
-        const v = clip._video;
-        if (this.playing) v.currentTime = localTime;
-        this._drawMediaClip(ctx, clip, state, w, h, v);
+        // 再生/同期は _updateVideos() で一元管理（毎フレーム currentTime を
+        // 設定するとシークが中断されフレームが描画されない）
+        this._drawMediaClip(ctx, clip, state, w, h, clip._video);
       } else if (clip.type === 'gb' && clip._video) {
         const v = clip._video;
         if (this.playing) v.currentTime = localTime;
