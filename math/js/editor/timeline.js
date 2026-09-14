@@ -3,6 +3,7 @@
 import { computeEffect, drawTextClip } from './effects.js';
 import { chromakeyFrame } from './chromakey.js';
 import { CanvasInteract } from './canvas-interact.js';
+import { drawGraph } from './graph.js';
 
 export class Timeline {
   constructor(app) {
@@ -114,6 +115,8 @@ export class Timeline {
     if (this.playing) {
       this.lastFrameTime = performance.now();
       this._loop();
+    } else {
+      this._updateAudio();
     }
   }
 
@@ -121,6 +124,7 @@ export class Timeline {
     this.playing = false;
     document.getElementById('btn-play').textContent = '▶ 再生';
     this.currentTime = 0;
+    this._updateAudio();
     this.render();
     this._updateTimeDisplay();
   }
@@ -134,6 +138,7 @@ export class Timeline {
     if (this.currentTime >= this.duration) {
       this.currentTime = 0;
     }
+    this._updateAudio();
     this.render();
     this._updateTimeDisplay();
     requestAnimationFrame(() => this._loop());
@@ -146,6 +151,30 @@ export class Timeline {
       return `${String(m).padStart(2, '0')}:${sec}`;
     };
     document.getElementById('time-display').textContent = `${fmt(this.currentTime)} / ${fmt(this.duration)}`;
+  }
+
+  /** 再生中のオーディオクリップの再生/停止・音量制御 */
+  _updateAudio() {
+    for (const clip of this.clips) {
+      if (clip.type !== 'audio' || !clip._audio) continue;
+      const audio = clip._audio;
+      const localTime = this.currentTime - clip.start;
+      const inRange = localTime >= 0 && localTime <= clip.duration;
+
+      if (this.playing && inRange) {
+        if (audio.paused) {
+          try { audio.currentTime = localTime; } catch (e) {}
+          audio.play().catch(() => {});
+        }
+        const fx = clip.effects || {};
+        let vol = fx.volume ?? 1;
+        if (fx.fadeIn > 0 && localTime < fx.fadeIn) vol *= localTime / fx.fadeIn;
+        if (fx.fadeOut > 0 && localTime > clip.duration - fx.fadeOut) vol *= Math.max(0, (clip.duration - localTime) / fx.fadeOut);
+        audio.volume = Math.max(0, Math.min(1, vol));
+      } else {
+        if (!audio.paused) audio.pause();
+      }
+    }
   }
 
   // ===== Rendering =====
@@ -232,7 +261,7 @@ export class Timeline {
     const width = clip.duration * this.pxPerSec;
     el.style.left = left + 'px';
     el.style.width = width + 'px';
-    const colorMap = { text: '#89b4fa', video: '#a6e3a1', image: '#f9e2af', audio: '#f5c2e7', gb: '#00b140' };
+    const colorMap = { text: '#89b4fa', video: '#a6e3a1', image: '#f9e2af', audio: '#f5c2e7', gb: '#00b140', graph: '#fab387' };
     el.style.background = colorMap[clip.type] || '#45475a';
     el.style.color = '#1e1e2e';
     el.textContent = clip.text || clip.name || clip.type;
@@ -332,6 +361,11 @@ export class Timeline {
         ctx.translate((clip.x ?? 0.5) * w + state.offsetX, (clip.y ?? 0.5) * h + state.offsetY);
         ctx.scale(state.scaleX, state.scaleY);
         ctx.drawImage(frame, -w / 2, -h / 2, w, h);
+        ctx.restore();
+      } else if (clip.type === 'graph') {
+        ctx.save();
+        ctx.globalAlpha = state.alpha;
+        drawGraph(ctx, clip, localTime, w, h);
         ctx.restore();
       }
     }
@@ -491,6 +525,72 @@ export class Timeline {
       </div>`;
     }
 
+    if (clip.type === 'audio') {
+      html += `
+      <div class="prop-row">
+        <label>音量</label>
+        <input type="range" id="prop-volume" min="0" max="1" step="0.05" value="${fx.volume ?? 1}" />
+      </div>`;
+    }
+
+    if (clip.type === 'graph') {
+      const g = clip.graph || (clip.graph = {});
+      const xr = g.xRange || [-5, 5];
+      const yr = g.yRange || [-3, 3];
+      html += `
+      <div class="prop-row">
+        <label>数式</label>
+        <input type="text" id="prop-graph-expr" value="${g.expression || ''}" />
+      </div>
+      <div class="flex gap-2">
+        <div class="prop-row flex-1">
+          <label>X最小</label>
+          <input type="number" id="prop-graph-xmin" value="${xr[0]}" step="0.5" />
+        </div>
+        <div class="prop-row flex-1">
+          <label>X最大</label>
+          <input type="number" id="prop-graph-xmax" value="${xr[1]}" step="0.5" />
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <div class="prop-row flex-1">
+          <label>Y最小</label>
+          <input type="number" id="prop-graph-ymin" value="${yr[0]}" step="0.5" />
+        </div>
+        <div class="prop-row flex-1">
+          <label>Y最大</label>
+          <input type="number" id="prop-graph-ymax" value="${yr[1]}" step="0.5" />
+        </div>
+      </div>
+      <div class="prop-row">
+        <label>曲線の色</label>
+        <input type="color" id="prop-graph-color" value="${g.curveColor || '#89b4fa'}" />
+      </div>
+      <div class="prop-row">
+        <label>描画アニメ時間(秒)</label>
+        <input type="number" id="prop-graph-drawdur" value="${g.drawDuration ?? 2}" min="0.5" max="10" step="0.5" />
+      </div>
+      <div class="prop-row">
+        <label>注釈追加</label>
+        <select id="prop-ann-type">
+          <option value="text">テキスト</option>
+          <option value="point">点</option>
+          <option value="line">補助線</option>
+          <option value="arrow">ベクトル矢印</option>
+        </select>
+        <input type="text" id="prop-ann-text" placeholder="テキスト (例: 極大値)" />
+        <div class="flex gap-1">
+          <input type="number" id="prop-ann-x1" placeholder="x1" step="0.5" />
+          <input type="number" id="prop-ann-y1" placeholder="y1" step="0.5" />
+          <input type="number" id="prop-ann-x2" placeholder="x2" step="0.5" />
+          <input type="number" id="prop-ann-y2" placeholder="y2" step="0.5" />
+        </div>
+        <input type="color" id="prop-ann-color" value="#f38ba8" />
+        <button id="prop-ann-add" class="px-2 py-1 rounded bg-accent-soft text-accent text-xs">＋ 注釈を追加</button>
+      </div>
+      <div id="prop-ann-list" class="space-y-1"></div>`;
+    }
+
     html += `
       <div class="prop-row">
         <label>開始(秒)</label>
@@ -541,8 +641,91 @@ export class Timeline {
     bind('prop-start', 'start');
     bind('prop-duration', 'duration');
 
+    // Audio
+    bind('prop-volume', 'volume', fx);
+
+    // Graph
+    if (clip.type === 'graph') {
+      const g = clip.graph || (clip.graph = {});
+      const gbind = (id, key, target = g, parse = parseFloat) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener('input', () => {
+          target[key] = el.type === 'color' ? el.value : parse(el.value);
+          this.app.markDirty();
+          this.render();
+        });
+      };
+      gbind('prop-graph-expr', 'expression', g, v => v);
+      gbind('prop-graph-color', 'curveColor', g, v => v);
+      gbind('prop-graph-drawdur', 'drawDuration', g);
+      const xminEl = document.getElementById('prop-graph-xmin');
+      const xmaxEl = document.getElementById('prop-graph-xmax');
+      const yminEl = document.getElementById('prop-graph-ymin');
+      const ymaxEl = document.getElementById('prop-graph-ymax');
+      if (xminEl) xminEl.addEventListener('input', () => { g.xRange = [parseFloat(xminEl.value) || -5, g.xRange[1]]; this.app.markDirty(); this.render(); });
+      if (xmaxEl) xmaxEl.addEventListener('input', () => { g.xRange = [g.xRange[0], parseFloat(xmaxEl.value) || 5]; this.app.markDirty(); this.render(); });
+      if (yminEl) yminEl.addEventListener('input', () => { g.yRange = [parseFloat(yminEl.value) || -3, g.yRange[1]]; this.app.markDirty(); this.render(); });
+      if (ymaxEl) ymaxEl.addEventListener('input', () => { g.yRange = [g.yRange[0], parseFloat(ymaxEl.value) || 3]; this.app.markDirty(); this.render(); });
+
+      // Annotation add
+      const annAdd = document.getElementById('prop-ann-add');
+      if (annAdd) annAdd.addEventListener('click', () => {
+        const type = document.getElementById('prop-ann-type').value;
+        const text = document.getElementById('prop-ann-text').value || '';
+        const x1 = parseFloat(document.getElementById('prop-ann-x1').value) || 0;
+        const y1 = parseFloat(document.getElementById('prop-ann-y1').value) || 0;
+        const x2 = parseFloat(document.getElementById('prop-ann-x2').value);
+        const y2 = parseFloat(document.getElementById('prop-ann-y2').value);
+        const color = document.getElementById('prop-ann-color').value || '#f38ba8';
+        if (!g.annotations) g.annotations = [];
+        if (type === 'text' || type === 'point') {
+          g.annotations.push({ type, x: x1, y: y1, text, color });
+        } else {
+          g.annotations.push({ type, x1, y1, x2: x2 ?? x1 + 1, y2: y2 ?? y1, color });
+        }
+        document.getElementById('prop-ann-text').value = '';
+        document.getElementById('prop-ann-x1').value = '';
+        document.getElementById('prop-ann-y1').value = '';
+        document.getElementById('prop-ann-x2').value = '';
+        document.getElementById('prop-ann-y2').value = '';
+        this.app.markDirty();
+        this.render();
+        this._renderAnnList(clip);
+      });
+      this._renderAnnList(clip);
+    }
+
     const del = document.getElementById('prop-delete');
     if (del) del.addEventListener('click', () => this.removeClip(clip.id));
+  }
+
+  /** グラフ注釈リストをプロパティパネルに描画 */
+  _renderAnnList(clip) {
+    const el = document.getElementById('prop-ann-list');
+    if (!el) return;
+    const g = clip.graph || {};
+    const anns = g.annotations || [];
+    el.innerHTML = '';
+    anns.forEach((ann, i) => {
+      const item = document.createElement('div');
+      item.className = 'ann-item';
+      const label = ann.type === 'text' ? `📝 ${ann.text || ''} (${ann.x},${ann.y})`
+        : ann.type === 'point' ? `● (${ann.x},${ann.y})`
+        : ann.type === 'line' ? `─ (${ann.x1},${ann.y1})→(${ann.x2},${ann.y2})`
+        : `→ (${ann.x1},${ann.y1})→(${ann.x2},${ann.y2})`;
+      item.textContent = label;
+      const del = document.createElement('button');
+      del.textContent = '✕';
+      del.addEventListener('click', () => {
+        g.annotations.splice(i, 1);
+        this.app.markDirty();
+        this.render();
+        this._renderAnnList(clip);
+      });
+      item.appendChild(del);
+      el.appendChild(item);
+    });
   }
 
   // ===== Export =====

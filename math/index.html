@@ -1,22 +1,30 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" class="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mathkinclip TV — 高校数学記号素材対応 動画編集＆コミュニティ</title>
+  <script>
+    // ページ描画前のフラッシュ防止
+    (function() {
+      var t = localStorage.getItem('mathclip_theme') || 'dark';
+      document.documentElement.classList.add(t);
+    })();
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=M+PLUS+1p:wght@400;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           colors: {
-            panel: '#1e1e2e',
-            panel2: '#181825',
-            accent: '#cba6f7',
-            accent2: '#89b4fa',
+            panel:  'var(--c-panel)',
+            panel2: 'var(--c-panel2)',
+            accent: 'var(--c-accent)',
+            accent2:'var(--c-accent2)',
           },
           fontFamily: { jp: ['"Noto Sans JP"', 'sans-serif'], display: ['"M PLUS 1p"', 'sans-serif'] },
         },
@@ -24,74 +32,115 @@
     };
   </script>
 </head>
-<body class="bg-[#11111b] text-gray-200 font-jp min-h-screen flex flex-col">
+<body class="bg-app text-app font-jp h-screen overflow-hidden flex flex-col">
 
   <!-- ===== HEADER / TABS ===== -->
-  <header class="flex items-center gap-4 px-5 py-3 bg-panel2 border-b border-[#313244] shadow-lg z-30">
+  <header class="flex items-center gap-4 px-5 py-3 bg-panel2 border-b border-app shadow-lg z-30 shrink-0">
     <h1 class="font-display font-extrabold text-lg text-accent whitespace-nowrap">📐 Mathkinclip TV</h1>
     <nav class="flex gap-1">
       <button id="tab-editor" class="tab-btn px-4 py-1.5 rounded-lg font-medium transition">🎬 動画編集</button>
       <button id="tab-community" class="tab-btn px-4 py-1.5 rounded-lg font-medium transition">📺 コミュニティ</button>
     </nav>
-    <div class="ml-auto flex items-center gap-3 text-sm text-gray-400">
-      <span id="backend-mode" class="px-2 py-1 rounded bg-[#313244] text-xs">ローカルモード</span>
-      <button id="btn-export" class="hidden px-3 py-1.5 rounded-lg bg-accent text-[#11111b] font-bold text-sm hover:opacity-80">⬇ 書き出し</button>
+    <div class="ml-auto flex items-center gap-3 text-sm text-muted">
+      <button id="btn-theme" class="px-2 py-1 rounded bg-surface hover:bg-surface-h text-sm shrink-0" title="テーマ切り替え">🌙</button>
+      <span id="backend-mode" class="px-2 py-1 rounded bg-surface text-xs">ローカルモード</span>
+      <button id="btn-export" class="hidden px-3 py-1.5 rounded-lg bg-accent text-app font-bold text-sm hover:opacity-80">⬇ 書き出し</button>
     </div>
   </header>
 
   <!-- ===== EDITOR VIEW ===== -->
-  <main id="view-editor" class="flex-1 flex flex-col overflow-hidden">
-    <div class="flex flex-1 overflow-hidden">
+  <main id="view-editor" class="flex-1 flex flex-col overflow-hidden min-h-0">
+    <div class="flex flex-1 overflow-hidden min-h-0">
       <!-- LEFT: Property Panel -->
-      <aside id="property-panel" class="w-64 bg-panel border-r border-[#313244] flex flex-col overflow-hidden shrink-0 transition-all duration-200">
-        <div class="flex items-center justify-between px-3 py-2 border-b border-[#313244] shrink-0">
-          <h3 class="font-bold text-sm text-gray-300 uppercase tracking-wide">プロパティ</h3>
-          <button id="collapse-property" class="text-gray-500 hover:text-accent text-sm shrink-0">◀</button>
+      <aside id="property-panel" class="w-64 bg-panel border-r border-app flex flex-col overflow-hidden shrink-0 transition-all duration-200">
+        <div class="flex items-center justify-between px-3 py-2 border-b border-app shrink-0">
+          <h3 class="font-bold text-sm text-muted uppercase tracking-wide">プロパティ</h3>
+          <button id="collapse-property" class="text-dim hover:text-accent text-sm shrink-0">◀</button>
         </div>
         <div id="property-content" class="flex-1 overflow-y-auto p-3 space-y-3 text-sm">
-          <p class="text-gray-500 text-xs">オブジェクトを選択してください</p>
+          <p class="text-dim text-xs">オブジェクトを選択してください</p>
         </div>
       </aside>
 
       <!-- CENTER: Preview Canvas -->
-      <section class="flex-1 flex flex-col items-center justify-center bg-[#0a0a0f] p-4 overflow-hidden">
-        <div class="relative w-full max-w-3xl aspect-video bg-black rounded-lg overflow-hidden shadow-2xl ring-1 ring-[#313244]">
+      <section class="flex-1 flex flex-col items-center justify-center bg-deep p-4 overflow-hidden min-h-0 min-w-0">
+        <div class="relative w-full max-w-3xl aspect-video bg-black rounded-lg overflow-hidden shadow-2xl ring-1 ring-app">
           <canvas id="preview-canvas" class="w-full h-full"></canvas>
           <div id="preview-overlay" class="absolute inset-0 pointer-events-none"></div>
         </div>
         <!-- Transport -->
-        <div class="flex items-center gap-3 mt-3 w-full max-w-3xl">
-          <button id="btn-play" class="px-4 py-2 rounded-lg bg-accent2 text-[#11111b] font-bold">▶ 再生</button>
-          <button id="btn-stop" class="px-3 py-2 rounded-lg bg-[#313244] hover:bg-[#45475a]">⏹</button>
-          <span id="time-display" class="text-sm font-mono text-gray-400">00:00.00 / 00:00.00</span>
+        <div class="flex items-center gap-3 mt-3 w-full max-w-3xl shrink-0">
+          <button id="btn-play" class="px-4 py-2 rounded-lg bg-accent2 text-app font-bold">▶ 再生</button>
+          <button id="btn-stop" class="px-3 py-2 rounded-lg bg-surface hover:bg-surface-h">⏹</button>
+          <span id="time-display" class="text-sm font-mono text-muted">00:00.00 / 00:00.00</span>
           <div class="ml-auto flex items-center gap-2 text-sm">
-            <span class="text-gray-500">ズーム</span>
+            <span class="text-dim">ズーム</span>
             <input id="zoom-slider" type="range" min="20" max="200" value="60" class="w-32 accent-accent" />
           </div>
         </div>
       </section>
 
       <!-- RIGHT: Material Tabs -->
-      <aside id="material-panel" class="w-72 bg-panel border-l border-[#313244] flex flex-col overflow-hidden shrink-0 transition-all duration-200">
-        <div class="flex items-center justify-between px-3 py-2 border-b border-[#313244] shrink-0">
-          <span class="font-bold text-sm text-gray-300 uppercase tracking-wide">素材</span>
-          <button id="collapse-material" class="text-gray-500 hover:text-accent text-sm shrink-0">▶</button>
+      <aside id="material-panel" class="w-80 bg-panel border-l border-app flex flex-col overflow-hidden shrink-0 transition-all duration-200">
+        <div class="flex items-center justify-between px-3 py-2 border-b border-app shrink-0">
+          <span class="font-bold text-sm text-muted uppercase tracking-wide">素材</span>
+          <button id="collapse-material" class="text-dim hover:text-accent text-sm shrink-0">▶</button>
         </div>
-        <div id="material-content" class="flex-1 flex flex-col overflow-hidden">
-          <div class="flex border-b border-[#313244] text-sm">
-            <button data-mat-tab="math" class="mat-tab flex-1 py-2 font-medium border-b-2 border-accent">数学記号</button>
-            <button data-mat-tab="gb" class="mat-tab flex-1 py-2 font-medium border-b-2 border-transparent">GB素材</button>
-            <button data-mat-tab="upload" class="mat-tab flex-1 py-2 font-medium border-b-2 border-transparent">アップロード</button>
+        <div id="material-content" class="flex-1 flex flex-col overflow-hidden min-h-0">
+          <div class="flex border-b border-app text-xs flex-wrap">
+            <button data-mat-tab="math" class="mat-tab flex-1 py-2 font-medium border-b-2 border-accent whitespace-nowrap">数学</button>
+            <button data-mat-tab="physics" class="mat-tab flex-1 py-2 font-medium border-b-2 border-transparent whitespace-nowrap">物理</button>
+            <button data-mat-tab="chemistry" class="mat-tab flex-1 py-2 font-medium border-b-2 border-transparent whitespace-nowrap">化学</button>
+            <button data-mat-tab="graph" class="mat-tab flex-1 py-2 font-medium border-b-2 border-transparent whitespace-nowrap">グラフ</button>
+            <button data-mat-tab="gb" class="mat-tab flex-1 py-2 font-medium border-b-2 border-transparent whitespace-nowrap">GB</button>
+            <button data-mat-tab="upload" class="mat-tab flex-1 py-2 font-medium border-b-2 border-transparent whitespace-nowrap">↑</button>
           </div>
-          <div class="p-3 border-b border-[#313244]">
-            <input id="mat-search" type="text" placeholder="🔍 タグ検索 (例: ルート)" class="w-full px-3 py-2 rounded-lg bg-panel2 text-sm border border-[#313244] focus:border-accent outline-none" />
+          <div class="p-3 border-b border-app">
+            <input id="mat-search" type="text" placeholder="🔍 タグ検索 (例: ルート, オーム)" class="w-full px-3 py-2 rounded-lg bg-panel2 text-sm border border-app focus:border-accent outline-none" />
           </div>
           <div id="mat-math" class="mat-panel flex-1 overflow-y-auto p-3 grid grid-cols-4 gap-2"></div>
+          <div id="mat-physics" class="mat-panel flex-1 overflow-y-auto p-3 grid grid-cols-4 gap-2 hidden"></div>
+          <div id="mat-chemistry" class="mat-panel flex-1 overflow-y-auto p-3 grid grid-cols-4 gap-2 hidden"></div>
+          <div id="mat-graph" class="mat-panel flex-1 overflow-y-auto p-3 space-y-3 hidden">
+            <div class="prop-row">
+              <label>数式 (例: y = sin(x))</label>
+              <input id="graph-expr" type="text" placeholder="y = sin(x)" value="y = sin(x)" />
+            </div>
+            <div class="flex gap-2">
+              <div class="prop-row flex-1">
+                <label>X最小</label>
+                <input id="graph-xmin" type="number" value="-5" step="0.5" />
+              </div>
+              <div class="prop-row flex-1">
+                <label>X最大</label>
+                <input id="graph-xmax" type="number" value="5" step="0.5" />
+              </div>
+            </div>
+            <div class="flex gap-2">
+              <div class="prop-row flex-1">
+                <label>Y最小</label>
+                <input id="graph-ymin" type="number" value="-3" step="0.5" />
+              </div>
+              <div class="prop-row flex-1">
+                <label>Y最大</label>
+                <input id="graph-ymax" type="number" value="3" step="0.5" />
+              </div>
+            </div>
+            <div class="prop-row">
+              <label>曲線の色</label>
+              <input id="graph-color" type="color" value="#89b4fa" />
+            </div>
+            <div class="prop-row">
+              <label>描画アニメ時間(秒)</label>
+              <input id="graph-drawdur" type="number" value="2" min="0.5" max="10" step="0.5" />
+            </div>
+            <button id="btn-gen-graph" class="w-full px-3 py-2 rounded-lg bg-accent text-app font-bold text-sm hover:opacity-80">📊 グラフを生成</button>
+          </div>
           <div id="mat-gb" class="mat-panel flex-1 overflow-y-auto p-3 grid grid-cols-3 gap-2 hidden"></div>
           <div id="mat-upload" class="mat-panel flex-1 overflow-y-auto p-3 hidden">
-            <div id="drop-zone" class="border-2 border-dashed border-[#45475a] rounded-lg p-6 text-center cursor-pointer hover:border-accent transition">
-              <p class="text-gray-400 text-sm">ドラッグ＆ドロップ<br/>またはクリックして選択</p>
-              <p class="text-gray-600 text-xs mt-2">mp4, webm, png, jpg, gif, mp3, wav</p>
+            <div id="drop-zone" class="border-2 border-dashed border-app rounded-lg p-6 text-center cursor-pointer hover:border-accent transition">
+              <p class="text-muted text-sm">ドラッグ＆ドロップ<br/>またはクリックして選択</p>
+              <p class="text-dim text-xs mt-2">mp4, webm, png, jpg, gif, mp3, wav, m4a</p>
               <input id="file-input" type="file" multiple accept="video/*,image/*,audio/*" class="hidden" />
             </div>
             <div id="upload-list" class="mt-3 space-y-2"></div>
@@ -101,16 +150,16 @@
     </div>
 
     <!-- TIMELINE -->
-    <section id="timeline-section" class="h-56 bg-panel2 border-t border-[#313244] flex flex-col overflow-hidden shrink-0">
-      <div class="flex items-center gap-2 px-3 py-1.5 border-b border-[#313244] text-sm">
-        <button id="btn-add-track" class="px-2 py-1 rounded bg-[#313244] hover:bg-[#45475a] text-xs">＋ トラック追加</button>
-        <button id="btn-auto-seq" class="px-2 py-1 rounded bg-accent/20 text-accent text-xs">✨ 自動段落アニメ</button>
-        <button id="btn-save-draft" class="px-2 py-1 rounded bg-[#313244] hover:bg-[#45475a] text-xs">💾 下書き保存</button>
-        <span class="text-gray-500 text-xs ml-auto">タイムライン</span>
-        <button id="collapse-timeline" class="text-gray-500 hover:text-accent text-sm shrink-0">▼</button>
+    <section id="timeline-section" class="h-48 bg-panel2 border-t border-app flex flex-col overflow-hidden shrink-0">
+      <div class="flex items-center gap-2 px-3 py-1.5 border-b border-app text-sm shrink-0">
+        <button id="btn-add-track" class="px-2 py-1 rounded bg-surface hover:bg-surface-h text-xs">＋ トラック追加</button>
+        <button id="btn-auto-seq" class="px-2 py-1 rounded bg-accent-soft text-accent text-xs">✨ 自動段落アニメ</button>
+        <button id="btn-save-draft" class="px-2 py-1 rounded bg-surface hover:bg-surface-h text-xs">💾 下書き保存</button>
+        <span class="text-dim text-xs ml-auto">タイムライン</span>
+        <button id="collapse-timeline" class="text-dim hover:text-accent text-sm shrink-0">▼</button>
       </div>
-      <div id="timeline-ruler" class="h-6 bg-[#181825] border-b border-[#313244] relative cursor-text select-none"></div>
-      <div id="timeline-tracks" class="flex-1 overflow-y-auto overflow-x-hidden"></div>
+      <div id="timeline-ruler" class="h-6 bg-panel2 border-b border-app relative cursor-text select-none shrink-0"></div>
+      <div id="timeline-tracks" class="flex-1 overflow-y-auto overflow-x-hidden min-h-0"></div>
     </section>
   </main>
 
@@ -120,7 +169,7 @@
     <div id="community-grid" class="max-w-6xl mx-auto">
       <div class="flex items-center justify-between mb-5">
         <h2 class="font-display font-bold text-xl">📺 投稿動画一覧</h2>
-        <button id="btn-upload-video" class="px-4 py-2 rounded-lg bg-accent text-[#11111b] font-bold text-sm">＋ 動画を投稿</button>
+        <button id="btn-upload-video" class="px-4 py-2 rounded-lg bg-accent text-app font-bold text-sm">＋ 動画を投稿</button>
       </div>
       <div id="video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
     </div>
@@ -134,9 +183,9 @@
       </div>
       <div class="mt-4">
         <h2 id="player-title" class="font-display font-bold text-xl"></h2>
-        <div class="flex items-center gap-4 mt-2 text-sm text-gray-400">
+        <div class="flex items-center gap-4 mt-2 text-sm text-muted">
           <span id="player-views">👁 0 回視聴</span>
-          <button id="btn-like" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#313244] hover:bg-[#45475a] transition">
+          <button id="btn-like" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface hover:bg-surface-h transition">
             <span class="text-base">👍</span><span id="like-count">0</span>
           </button>
         </div>
@@ -146,8 +195,8 @@
         <h3 class="font-bold text-sm mb-2">💬 弾幕コメントを投稿</h3>
         <div class="flex gap-2 items-center">
           <input id="comment-color" type="color" value="#ffffff" class="w-10 h-9 rounded cursor-pointer bg-transparent" />
-          <input id="comment-text" type="text" maxlength="100" placeholder="コメントを入力..." class="flex-1 px-3 py-2 rounded-lg bg-panel2 text-sm border border-[#313244] outline-none focus:border-accent" />
-          <button id="btn-post-comment" class="px-4 py-2 rounded-lg bg-accent2 text-[#11111b] font-bold text-sm">投稿</button>
+          <input id="comment-text" type="text" maxlength="100" placeholder="コメントを入力..." class="flex-1 px-3 py-2 rounded-lg bg-panel2 text-sm border border-app outline-none focus:border-accent" />
+          <button id="btn-post-comment" class="px-4 py-2 rounded-lg bg-accent2 text-app font-bold text-sm">投稿</button>
         </div>
       </div>
     </div>
@@ -157,12 +206,12 @@
   <div id="upload-modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50">
     <div class="bg-panel rounded-xl p-6 w-full max-w-md mx-4 shadow-2xl">
       <h3 class="font-bold text-lg mb-4">動画を投稿</h3>
-      <input id="upload-title" type="text" placeholder="タイトル" class="w-full px-3 py-2 mb-3 rounded-lg bg-panel2 border border-[#313244] outline-none focus:border-accent" />
-      <textarea id="upload-desc" placeholder="説明文" rows="3" class="w-full px-3 py-2 mb-3 rounded-lg bg-panel2 border border-[#313244] outline-none focus:border-accent"></textarea>
+      <input id="upload-title" type="text" placeholder="タイトル" class="w-full px-3 py-2 mb-3 rounded-lg bg-panel2 border border-app outline-none focus:border-accent" />
+      <textarea id="upload-desc" placeholder="説明文" rows="3" class="w-full px-3 py-2 mb-3 rounded-lg bg-panel2 border border-app outline-none focus:border-accent"></textarea>
       <input id="upload-file" type="file" accept="video/*" class="w-full mb-4 text-sm" />
       <div class="flex gap-3 justify-end">
-        <button id="upload-cancel" class="px-4 py-2 rounded-lg bg-[#313244] hover:bg-[#45475a]">キャンセル</button>
-        <button id="upload-submit" class="px-4 py-2 rounded-lg bg-accent text-[#11111b] font-bold">投稿する</button>
+        <button id="upload-cancel" class="px-4 py-2 rounded-lg bg-surface hover:bg-surface-h">キャンセル</button>
+        <button id="upload-submit" class="px-4 py-2 rounded-lg bg-accent text-app font-bold">投稿する</button>
       </div>
     </div>
   </div>
