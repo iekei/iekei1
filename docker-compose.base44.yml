@@ -6,4 +6,20 @@ services:
     volumes:
       - ./:/usr/share/nginx/html:ro
       - ./nginx.base44.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api
     restart: unless-stopped
+
+  api:
+    image: node:22-slim
+    working_dir: /app/server
+    volumes:
+      - ./server:/app/server
+      - api-data:/app/server/data
+    command: sh -c "npm install && npx nodemon --watch . --ignore data/ --ignore node_modules/ server.js"
+    expose:
+      - "3001"
+    restart: unless-stopped
+
+volumes:
+  api-data:
