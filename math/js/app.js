@@ -40,6 +40,7 @@ class App {
     this._bindUpload();
     this._bindExport();
     this._bindBeforeUnload();
+    this._bindPanelCollapse();
 
     // Restore draft
     await this._restoreDraft();
@@ -352,6 +353,30 @@ class App {
         e.returnValue = '動画編集を終了しますか？変更が保存されない可能性があります。';
         return e.returnValue;
       }
+    });
+  }
+
+  // ===== Panel Collapse =====
+  _bindPanelCollapse() {
+    const propPanel = document.getElementById('property-panel');
+    const propBtn = document.getElementById('collapse-property');
+    propBtn.addEventListener('click', () => {
+      propPanel.classList.toggle('collapsed');
+      propBtn.textContent = propPanel.classList.contains('collapsed') ? '▶' : '◀';
+    });
+
+    const matPanel = document.getElementById('material-panel');
+    const matBtn = document.getElementById('collapse-material');
+    matBtn.addEventListener('click', () => {
+      matPanel.classList.toggle('collapsed');
+      matBtn.textContent = matPanel.classList.contains('collapsed') ? '◀' : '▶';
+    });
+
+    const tlSection = document.getElementById('timeline-section');
+    const tlBtn = document.getElementById('collapse-timeline');
+    tlBtn.addEventListener('click', () => {
+      tlSection.classList.toggle('collapsed');
+      tlBtn.textContent = tlSection.classList.contains('collapsed') ? '▲' : '▼';
     });
   }
 }

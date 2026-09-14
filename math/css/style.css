@@ -1,4 +1,4 @@
-/* ===== MathClip Studio — custom styles ===== */
+/* ===== Mathkinclip TV — custom styles ===== */
 :root {
   --track-h: 44px;
   --ruler-h: 24px;
@@ -166,3 +166,40 @@ body { -webkit-font-smoothing: antialiased; }
 ::-webkit-scrollbar-track { background: #181825; }
 ::-webkit-scrollbar-thumb { background: #45475a; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #585b70; }
+
+/* ===== Collapsible panels ===== */
+#property-panel.collapsed { width: 36px !important; }
+#property-panel.collapsed #property-content { display: none; }
+#property-panel.collapsed .panel-header-text,
+#property-panel.collapsed h3 { display: none; }
+
+#material-panel.collapsed { width: 36px !important; }
+#material-panel.collapsed #material-content { display: none; }
+#material-panel.collapsed span.uppercase { display: none; }
+
+#timeline-section.collapsed { height: 36px !important; }
+#timeline-section.collapsed #timeline-ruler,
+#timeline-section.collapsed #timeline-tracks { display: none; }
+
+/* ===== Canvas overlay: clip selection box & resize handles ===== */
+#preview-overlay { z-index: 5; }
+.clip-select-box {
+  position: absolute;
+  border: 2px dashed #cba6f7;
+  cursor: move;
+  box-sizing: border-box;
+  background: rgba(203, 166, 247, 0.08);
+}
+.clip-resize-handle {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #cba6f7;
+  border: 2px solid #11111b;
+  border-radius: 50%;
+  z-index: 6;
+}
+.clip-resize-nw { top: -6px; left: -6px; cursor: nwse-resize; }
+.clip-resize-ne { top: -6px; right: -6px; cursor: nesw-resize; }
+.clip-resize-sw { bottom: -6px; left: -6px; cursor: nesw-resize; }
+.clip-resize-se { bottom: -6px; right: -6px; cursor: nwse-resize; }

@@ -2,6 +2,7 @@
 
 import { computeEffect, drawTextClip } from './effects.js';
 import { chromakeyFrame } from './chromakey.js';
+import { CanvasInteract } from './canvas-interact.js';
 
 export class Timeline {
   constructor(app) {
@@ -23,6 +24,7 @@ export class Timeline {
 
     this._setupCanvas();
     this._bindEvents();
+    this.canvasInteract = new CanvasInteract(this);
     this.addTrack('Video 1');
     this.addTrack('Text 1');
     this.render();
@@ -152,6 +154,7 @@ export class Timeline {
     this._renderRuler();
     this._renderTracks();
     this._renderCanvas();
+    this.canvasInteract.update();
   }
 
   _renderRuler() {
