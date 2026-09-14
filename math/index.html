@@ -290,9 +290,30 @@
           </div>
           <p class="text-dim text-xs">※ フォルダIDを指定すると、そのフォルダ配下のファイルのみPickerに表示されます。フォルダIDはGoogleドライブのURLから取得できます。</p>
         </div>
+        <!-- Firebase Community Backend (トークン不要・推奨) -->
+        <div class="space-y-2">
+          <h4 class="font-bold text-sm text-muted uppercase tracking-wide">Firebase コミュニティ連携 (推奨・トークン不要)</h4>
+          <div class="prop-row">
+            <label>Firebase API Key</label>
+            <input id="set-fb-api-key" type="text" placeholder="AIza..." />
+          </div>
+          <div class="prop-row">
+            <label>Firebase Database URL</label>
+            <input id="set-fb-db-url" type="text" placeholder="https://<project>-default-rtdb.firebaseio.com" />
+          </div>
+          <div class="prop-row">
+            <label>Firebase Storage Bucket</label>
+            <input id="set-fb-storage" type="text" placeholder="<project>.appspot.com" />
+          </div>
+          <div class="prop-row">
+            <label>Firebase Project ID</label>
+            <input id="set-fb-project-id" type="text" placeholder="<project>" />
+          </div>
+          <p class="text-dim text-xs">※ Firebaseを使うとGitHub Pagesでもトークン不要で誰でも動画を投稿・視聴できます。設定方法は<a href="https://console.firebase.google.com/" target="_blank" class="text-accent2 underline">Firebase Console</a>でプロジェクトを作成し、Realtime Database（テストモード）とStorage（テストモード）を有効にして、上記の値を入力してください。</p>
+        </div>
         <!-- GitHub Pages Community Backend -->
         <div class="space-y-2">
-          <h4 class="font-bold text-sm text-muted uppercase tracking-wide">GitHub Pages コミュニティ連携</h4>
+          <h4 class="font-bold text-sm text-muted uppercase tracking-wide">GitHub Pages コミュニティ連携 (非推奨・トークン必要)</h4>
           <div class="prop-row">
             <label>GitHub Personal Access Token</label>
             <input id="set-gh-token" type="password" placeholder="ghp_... (repo 権限が必要)" />

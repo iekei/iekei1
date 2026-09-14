@@ -9,6 +9,7 @@ import { UndoRedo } from './editor/undo-redo.js';
 import { Splitter } from './editor/splitter.js';
 import { pickFromGoogleDrive, isDriveConfigured, getDriveConfig, saveDriveConfig } from './editor/google-drive.js';
 import { getCommunityConfig, saveCommunityConfig } from './community/github-backend.js';
+import { getFirebaseConfig, saveFirebaseConfig } from './community/firebase-backend.js';
 import { PlaylistManager } from './community/playlist.js';
 
 class App {
@@ -30,7 +31,7 @@ class App {
   async _init() {
     // Init backend
     const mode = await backend.initBackend();
-    const modeLabel = { local: 'ローカルモード (IndexedDB)', shared: '🌐 共有モード', github: '🐙 GitHubモード' };
+    const modeLabel = { local: 'ローカルモード (IndexedDB)', shared: '🌐 共有モード', firebase: '🔥 Firebaseモード', github: '🐙 GitHubモード' };
     document.getElementById('backend-mode').textContent = modeLabel[mode] || mode;
 
     // Init theme
@@ -335,6 +336,11 @@ class App {
     document.getElementById('set-gh-owner').value = gh.owner || '';
     document.getElementById('set-gh-repo').value = gh.repo || '';
     document.getElementById('set-gh-branch').value = gh.branch || '';
+    const fb = getFirebaseConfig();
+    document.getElementById('set-fb-api-key').value = fb.apiKey || '';
+    document.getElementById('set-fb-db-url').value = fb.databaseURL || '';
+    document.getElementById('set-fb-storage').value = fb.storageBucket || '';
+    document.getElementById('set-fb-project-id').value = fb.projectId || '';
     modal.classList.remove('hidden');
     modal.classList.add('flex');
   }
@@ -360,6 +366,12 @@ class App {
         owner: document.getElementById('set-gh-owner').value.trim(),
         repo: document.getElementById('set-gh-repo').value.trim(),
         branch: document.getElementById('set-gh-branch').value.trim() || 'main',
+      });
+      saveFirebaseConfig({
+        apiKey: document.getElementById('set-fb-api-key').value.trim(),
+        databaseURL: document.getElementById('set-fb-db-url').value.trim(),
+        storageBucket: document.getElementById('set-fb-storage').value.trim(),
+        projectId: document.getElementById('set-fb-project-id').value.trim(),
       });
       this._closeSettings();
     });
