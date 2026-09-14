@@ -61,6 +61,7 @@
           <p class="text-dim text-xs">オブジェクトを選択してください</p>
         </div>
       </aside>
+      <div id="splitter-left" class="splitter-bar splitter-vertical"></div>
 
       <!-- CENTER: Preview Canvas -->
       <section class="flex-1 flex flex-col items-center justify-center bg-deep p-4 overflow-hidden min-h-0 min-w-0">
@@ -79,6 +80,7 @@
           </div>
         </div>
       </section>
+      <div id="splitter-right" class="splitter-bar splitter-vertical"></div>
 
       <!-- RIGHT: Material Tabs -->
       <aside id="material-panel" class="w-80 bg-panel border-l border-app flex flex-col overflow-hidden shrink-0 transition-all duration-200">
@@ -148,6 +150,7 @@
         </div>
       </aside>
     </div>
+    <div id="splitter-bottom" class="splitter-bar splitter-horizontal"></div>
 
     <!-- TIMELINE -->
     <section id="timeline-section" class="h-48 bg-panel2 border-t border-app flex flex-col overflow-hidden shrink-0">
@@ -155,6 +158,11 @@
         <button id="btn-add-track" class="px-2 py-1 rounded bg-surface hover:bg-surface-h text-xs">＋ トラック追加</button>
         <button id="btn-auto-seq" class="px-2 py-1 rounded bg-accent-soft text-accent text-xs">✨ 自動段落アニメ</button>
         <button id="btn-save-draft" class="px-2 py-1 rounded bg-surface hover:bg-surface-h text-xs">💾 下書き保存</button>
+        <button id="btn-add-text" class="quick-add-btn">＋ テキスト</button>
+        <button id="btn-add-shape" class="quick-add-btn">＋ 図形</button>
+        <button id="btn-add-graph" class="quick-add-btn">＋ グラフ</button>
+        <button id="btn-reset-layout" class="px-2 py-1 rounded bg-surface hover:bg-surface-h text-xs" title="レイアウトをリセット">📐 レイアウト</button>
+        <button id="btn-shortcuts" class="px-2 py-1 rounded bg-surface hover:bg-surface-h text-xs" title="キーボードショートカット">❓ ショートカット</button>
         <span class="text-dim text-xs ml-auto">タイムライン</span>
         <button id="collapse-timeline" class="text-dim hover:text-accent text-sm shrink-0">▼</button>
       </div>
@@ -213,6 +221,37 @@
         <button id="upload-cancel" class="px-4 py-2 rounded-lg bg-surface hover:bg-surface-h">キャンセル</button>
         <button id="upload-submit" class="px-4 py-2 rounded-lg bg-accent text-app font-bold">投稿する</button>
       </div>
+    </div>
+  </div>
+
+  <!-- ===== Shortcuts Help Modal ===== -->
+  <div id="shortcuts-modal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50">
+    <div class="bg-panel rounded-xl p-6 w-full max-w-2xl mx-4 shadow-2xl max-h-[80vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="font-bold text-lg">⌨️ キーボードショートカット一覧</h3>
+        <button id="shortcuts-close" class="text-dim hover:text-accent text-xl">✕</button>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div>
+          <h4 class="font-bold text-sm text-muted mb-2 uppercase tracking-wide">タイムライン・再生操作</h4>
+          <div class="space-y-0">
+            <div class="shortcut-item"><span>再生 / 一時停止</span><span class="shortcut-key">Space</span></div>
+            <div class="shortcut-item"><span>選択クリップを削除</span><span class="shortcut-key">Delete / Backspace</span></div>
+            <div class="shortcut-item"><span>再生ヘッドを0.1秒移動</span><span class="shortcut-key">← / →</span></div>
+            <div class="shortcut-item"><span>再生ヘッドを1秒移動</span><span class="shortcut-key">Shift + ← / →</span></div>
+          </div>
+        </div>
+        <div>
+          <h4 class="font-bold text-sm text-muted mb-2 uppercase tracking-wide">履歴・編集操作</h4>
+          <div class="space-y-0">
+            <div class="shortcut-item"><span>取り消し (Undo)</span><span class="shortcut-key">Ctrl+Z (Cmd+Z)</span></div>
+            <div class="shortcut-item"><span>やり直し (Redo)</span><span class="shortcut-key">Ctrl+Y / Ctrl+Shift+Z</span></div>
+            <div class="shortcut-item"><span>コピー</span><span class="shortcut-key">Ctrl+C (Cmd+C)</span></div>
+            <div class="shortcut-item"><span>ペースト</span><span class="shortcut-key">Ctrl+V (Cmd+V)</span></div>
+          </div>
+        </div>
+      </div>
+      <p class="text-dim text-xs mt-4">※テキスト入力中はショートカットが無効になります</p>
     </div>
   </div>
 

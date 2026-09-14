@@ -4,6 +4,9 @@ import { Timeline } from './editor/timeline.js';
 import * as backend from './community/backend.js';
 import { CommunityPlayer } from './community/player.js';
 import { initTheme } from './editor/theme.js';
+import { KeyboardShortcuts, initShortcutsModal } from './editor/keyboard.js';
+import { UndoRedo } from './editor/undo-redo.js';
+import { Splitter } from './editor/splitter.js';
 
 class App {
   constructor() {
@@ -36,6 +39,13 @@ class App {
 
     // Init editor
     this.timeline = new Timeline(this);
+    this.undoRedo = new UndoRedo(this.timeline);
+    this.keyboard = new KeyboardShortcuts(this);
+    this.splitter = new Splitter();
+    initShortcutsModal();
+
+    // Layout reset
+    document.getElementById('btn-reset-layout')?.addEventListener('click', () => this.splitter.reset());
 
     // Init community
     this.community = new Community(this);
