@@ -4,7 +4,7 @@ import { computeEffect, drawTextClip, drawShapeClip, easings, easingNames } from
 import { chromakeyFrame } from './chromakey.js';
 import { CanvasInteract } from './canvas-interact.js';
 import { drawGraph } from './graph.js';
-import { renderEffectsSection, bindEffectEvents } from './effects-panel.js';
+import { renderEffectsSection, bindEffectEvents, getAppliedEffects } from './effects-panel.js';
 
 export class Timeline {
   constructor(app) {
@@ -417,7 +417,7 @@ export class Timeline {
         if (this.playing) v.currentTime = localTime;
         const fx = clip.effects || {};
         const frame = chromakeyFrame(v, w, h, {
-          keyColor: fx.keyColor || '#00b140',
+          keyColor: fx.keyColor || '#00ff00',
           threshold: fx.chromaThreshold ?? 0.4,
           smooth: fx.chromaSmooth ?? 0.1,
           spill: fx.chromaSpill ?? 0.5,
@@ -439,18 +439,34 @@ export class Timeline {
     }
   }
 
+  /** クロマキーエフェクトが適用済みか */
+  _hasChromakey(clip) {
+    return getAppliedEffects(clip).includes('chromakey');
+  }
+
   _drawMediaClip(ctx, clip, state, w, h, source) {
     ctx.save();
     ctx.globalAlpha = state.alpha;
     ctx.translate((clip.x ?? 0.5) * w + state.offsetX, (clip.y ?? 0.5) * h + state.offsetY);
     if (state.rotation) ctx.rotate(state.rotation * Math.PI / 180);
     ctx.scale(state.scaleX, state.scaleY);
-    const sw = source.videoWidth || source.width;
-    const sh = source.videoHeight || source.height;
+    const sw = source.videoWidth || source.naturalWidth || source.width;
+    const sh = source.videoHeight || source.naturalHeight || source.height;
     if (sw && sh) {
+      // クロマキー適用時はフレーム単位でキー色を透過してから描画
+      let drawable = source;
+      if (this._hasChromakey(clip)) {
+        const fx = clip.effects || {};
+        drawable = chromakeyFrame(source, sw, sh, {
+          keyColor: fx.keyColor || '#00ff00',
+          threshold: fx.chromaThreshold ?? 0.4,
+          smooth: fx.chromaSmooth ?? 0.1,
+          spill: fx.chromaSpill ?? 0.5,
+        });
+      }
       const scale = Math.max(w / sw, h / sh);
       const dw = sw * scale, dh = sh * scale;
-      ctx.drawImage(source, -dw / 2, -dh / 2, dw, dh);
+      ctx.drawImage(drawable, -dw / 2, -dh / 2, dw, dh);
     }
     ctx.restore();
   }

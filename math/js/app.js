@@ -7,6 +7,7 @@ import { initTheme } from './editor/theme.js';
 import { KeyboardShortcuts, initShortcutsModal } from './editor/keyboard.js';
 import { UndoRedo } from './editor/undo-redo.js';
 import { Splitter } from './editor/splitter.js';
+import { pickFromGoogleDrive, isDriveConfigured, getDriveConfig, saveDriveConfig } from './editor/google-drive.js';
 
 class App {
   constructor() {
@@ -56,6 +57,7 @@ class App {
     this._bindMaterialTabs();
     this._bindSearch();
     this._bindUpload();
+    this._bindGoogleDrive();
     this._bindGraph();
     this._bindExport();
     this._bindBeforeUnload();
@@ -238,7 +240,7 @@ class App {
           x: 0.5, y: 0.5,
           effects: {
             fontSize: 40, color: '#00ff00', stroke: 2, strokeColor: '#000',
-            keyColor: '#00b140', chromaThreshold: 0.4, chromaSpill: 0.5,
+            keyColor: '#00ff00', chromaThreshold: 0.4, chromaSpill: 0.5,
             animation: 'fade', animDuration: 0.5,
           },
         });
@@ -285,6 +287,57 @@ class App {
     });
   }
 
+  // ===== Google Drive =====
+  _bindGoogleDrive() {
+    const btn = document.getElementById('btn-gdrive');
+    const settingsBtn = document.getElementById('btn-gdrive-settings');
+    const fileInput = document.getElementById('file-input');
+
+    btn.addEventListener('click', async () => {
+      // 未設定時はローカルファイル選択ダイアログへフォールバック
+      if (!isDriveConfigured()) {
+        alert('Googleドライブ連携には設定が必要です。\n⚙ボタンから OAuth クライアントID と APIキー を入力してください。\n（未設定の場合はローカルファイルから読み込めます）');
+        fileInput.click();
+        return;
+      }
+      const orig = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = '☁ 読み込み中...';
+      try {
+        const files = await pickFromGoogleDrive();
+        if (files.length > 0) this._handleFiles(files);
+      } catch (e) {
+        alert('Googleドライブからの読み込みに失敗しました: ' + e.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = orig;
+      }
+    });
+
+    // 設定モーダル
+    const modal = document.getElementById('gdrive-modal');
+    const openModal = () => {
+      const cfg = getDriveConfig();
+      document.getElementById('gd-client-id').value = cfg.clientId || '';
+      document.getElementById('gd-api-key').value = cfg.apiKey || '';
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    };
+    const closeModal = () => {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    };
+    settingsBtn.addEventListener('click', openModal);
+    document.getElementById('gdrive-cancel').addEventListener('click', closeModal);
+    document.getElementById('gdrive-save').addEventListener('click', () => {
+      saveDriveConfig({
+        clientId: document.getElementById('gd-client-id').value.trim(),
+        apiKey: document.getElementById('gd-api-key').value.trim(),
+      });
+      closeModal();
+    });
+  }
+
   _detectType(file) {
     if (file.type.startsWith('video/')) return 'video';
     if (file.type.startsWith('image/')) return 'image';
@@ -303,11 +356,13 @@ class App {
     };
     if (item.type === 'image') {
       const img = new Image();
+      img.crossOrigin = 'anonymous'; // CORS対策(Googleドライブ等の外部素材)
       img.src = item.url;
       clip._img = img;
       img.onload = () => this.timeline.render();
     } else if (item.type === 'video') {
       const v = document.createElement('video');
+      v.crossOrigin = 'anonymous'; // CORS対策(Googleドライブ等の外部素材)
       v.src = item.url;
       v.muted = true;
       v.playsInline = true;

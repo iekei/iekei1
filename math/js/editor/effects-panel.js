@@ -5,7 +5,7 @@ const EFFECT_DEFS = [
   { id: 'shake',     name: '📳 振動・揺れ',       types: ['text', 'image', 'video', 'gb', 'shape', 'graph'] },
   { id: 'pulse',     name: '💓 パルス',           types: ['text', 'image', 'video', 'gb', 'shape', 'graph'] },
   { id: 'rotation',  name: '🔄 回転',             types: ['text', 'image', 'video', 'gb', 'shape', 'graph'] },
-  { id: 'chromakey', name: '🟢 クロマキー',       types: ['gb', 'video'] },
+  { id: 'chromakey', name: '🟢 クロマキー',       types: ['gb', 'video', 'image'] },
   { id: 'glow',      name: '✨ 発光',             types: ['text', 'shape'] },
 ];
 
@@ -71,8 +71,15 @@ function _renderCard(clip, effectId) {
       break;
     case 'chromakey':
       inner = `
-        <div class="prop-row"><label>キー色</label><input type="color" id="fx-keyColor" value="${fx.keyColor || '#00b140'}" /></div>
+        <div class="prop-row">
+          <label>キー色</label>
+          <div class="flex gap-1 items-center">
+            <input type="color" id="fx-keyColor" value="${fx.keyColor || '#00ff00'}" />
+            <button id="fx-eyedropper" class="px-2 py-1 rounded bg-surface hover:bg-surface-h text-xs" title="プレビュー画面をクリックして色を抽出">🎨</button>
+          </div>
+        </div>
         <div class="prop-row"><label>しきい値</label><input type="range" id="fx-chromaThreshold" min="0" max="1" step="0.05" value="${fx.chromaThreshold ?? 0.4}" /></div>
+        <div class="prop-row"><label>エッジのぼかし</label><input type="range" id="fx-chromaSmooth" min="0" max="1" step="0.05" value="${fx.chromaSmooth ?? 0.1}" /></div>
         <div class="prop-row"><label>スピル抑制</label><input type="range" id="fx-chromaSpill" min="0" max="1" step="0.05" value="${fx.chromaSpill ?? 0.5}" /></div>`;
       break;
     case 'glow':
@@ -153,7 +160,46 @@ export function bindEffectEvents(timeline, clip) {
   bind('fx-rotation', 'rotation');
   bind('fx-keyColor', 'keyColor', v => v);
   bind('fx-chromaThreshold', 'chromaThreshold');
+  bind('fx-chromaSmooth', 'chromaSmooth');
   bind('fx-chromaSpill', 'chromaSpill');
+
+  // スポイトツール — プレビュー画面上をクリックして色を抽出
+  const eye = document.getElementById('fx-eyedropper');
+  if (eye) {
+    eye.addEventListener('click', () => {
+      const canvas = timeline.canvas;
+      eye.textContent = '🎯';
+      eye.title = 'プレビュー上の抽出したい色をクリック（キャンセルは外側をクリック）';
+      canvas.style.cursor = 'crosshair';
+      const cleanup = () => {
+        window.removeEventListener('mousedown', onPick, true);
+        canvas.style.cursor = '';
+        eye.textContent = '🎨';
+        eye.title = 'プレビュー画面をクリックして色を抽出';
+      };
+      const onPick = (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const inside = e.clientX >= rect.left && e.clientX <= rect.right &&
+                       e.clientY >= rect.top && e.clientY <= rect.bottom;
+        if (!inside) { cleanup(); return; } // プレビュー外クリックでキャンセル
+        e.preventDefault();
+        e.stopPropagation();
+        cleanup();
+        const x = Math.max(0, Math.min(canvas.width - 1, Math.floor((e.clientX - rect.left) / rect.width * canvas.width)));
+        const y = Math.max(0, Math.min(canvas.height - 1, Math.floor((e.clientY - rect.top) / rect.height * canvas.height)));
+        const d = timeline.ctx.getImageData(x, y, 1, 1).data;
+        if (d[3] < 10) {
+          alert('透明な領域です。素材が表示されている場所をクリックしてください。');
+          return;
+        }
+        fx.keyColor = '#' + [d[0], d[1], d[2]].map(v => v.toString(16).padStart(2, '0')).join('');
+        timeline.app.markDirty();
+        timeline.render();
+        timeline.renderProperties();
+      };
+      window.addEventListener('mousedown', onPick, true);
+    });
+  }
   bind('fx-glow', 'glow');
   bind('fx-glowColor', 'glowColor', v => v);
 }
@@ -164,7 +210,7 @@ function _setDefaults(fx, effectId) {
     case 'shake': fx.shake = 5; break;
     case 'pulse': fx.pulse = 0.3; break;
     case 'rotation': fx.rotation = 0; break;
-    case 'chromakey': fx.keyColor = '#00b140'; fx.chromaThreshold = 0.4; fx.chromaSpill = 0.5; break;
+    case 'chromakey': fx.keyColor = '#00ff00'; fx.chromaThreshold = 0.4; fx.chromaSmooth = 0.1; fx.chromaSpill = 0.5; break;
     case 'glow': fx.glow = 10; fx.glowColor = '#cba6f7'; break;
   }
 }
@@ -175,7 +221,7 @@ function _resetEffect(fx, effectId) {
     case 'shake': fx.shake = 0; break;
     case 'pulse': fx.pulse = 0; break;
     case 'rotation': fx.rotation = 0; break;
-    case 'chromakey': delete fx.keyColor; delete fx.chromaThreshold; delete fx.chromaSpill; break;
+    case 'chromakey': delete fx.keyColor; delete fx.chromaThreshold; delete fx.chromaSmooth; delete fx.chromaSpill; break;
     case 'glow': fx.glow = 0; delete fx.glowColor; break;
   }
 }
