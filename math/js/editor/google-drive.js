@@ -1,7 +1,7 @@
 // js/editor/google-drive.js — Googleドライブ連携 (OAuth 2.0 + Picker API)
 
 const CONFIG_KEY = 'mathclip_gdrive_config';
-const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.readonly';
+const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
 
 /** 設定（localStorage）を取得 */
 export function getDriveConfig() {
@@ -148,4 +148,78 @@ export async function pickFromGoogleDrive() {
   }));
 
   return files;
+}
+
+// ===== Google Drive への動画アップロード（コミュニティ投稿用）=====
+
+/**
+ * ファイルをGoogleドライブにアップロードする
+ * @param {File} file アップロードするファイル
+ * @returns {Promise<{id: string, name: string, mimeType: string}>}
+ */
+export async function uploadFileToDrive(file) {
+  const { clientId } = getDriveConfig();
+  if (!clientId) throw new Error('unconfigured');
+
+  const token = await getAccessToken(clientId);
+
+  const boundary = '-------' + Math.random().toString(36).slice(2);
+  const metadata = { name: file.name, mimeType: file.type };
+
+  const body = new Blob([
+    `--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n`,
+    JSON.stringify(metadata),
+    `\r\n--${boundary}\r\nContent-Type: ${file.type || 'application/octet-stream'}\r\n\r\n`,
+    file,
+    `\r\n--${boundary}--`,
+  ]);
+
+  const res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': `multipart/related; boundary=${boundary}`,
+    },
+    body,
+  });
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`アップロードに失敗しました (${res.status}): ${err}`);
+  }
+  const data = await res.json();
+  return { id: data.id, name: data.name, mimeType: data.mimeType };
+}
+
+/**
+ * ファイルを「リンクを知っている全員が閲覧可能」に設定する
+ * @param {string} fileId Google Drive ファイルID
+ */
+export async function shareFilePublic(fileId) {
+  const { clientId } = getDriveConfig();
+  const token = await getAccessToken(clientId);
+
+  const res = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}/permissions`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ role: 'reader', type: 'anyone' }),
+  });
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`共有設定に失敗しました (${res.status}): ${err}`);
+  }
+  return res.json();
+}
+
+/**
+ * Google Drive ファイルIDから再生可能なURLを生成する
+ * @param {string} fileId Google Drive ファイルID
+ * @returns {string} 動画再生用URL
+ */
+export function getDriveVideoUrl(fileId) {
+  return `https://drive.google.com/uc?export=download&id=${fileId}`;
 }
