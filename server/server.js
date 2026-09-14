@@ -13,6 +13,7 @@ const DATA_DIR = path.join(__dirname, 'data');
 const UPLOAD_DIR = path.join(DATA_DIR, 'uploads');
 const VIDEOS_JSON = path.join(DATA_DIR, 'videos.json');
 const COMMENTS_JSON = path.join(DATA_DIR, 'comments.json');
+const PLAYLISTS_JSON = path.join(DATA_DIR, 'playlists.json');
 
 // ディレクトリとファイルを準備
 fs.mkdirSync(UPLOAD_DIR, { recursive: true });
@@ -33,6 +34,8 @@ function getVideos() { return readJSON(VIDEOS_JSON, []); }
 function saveVideos(v) { writeJSON(VIDEOS_JSON, v); }
 function getComments() { return readJSON(COMMENTS_JSON, []); }
 function saveComments(c) { writeJSON(COMMENTS_JSON, c); }
+function getPlaylists() { return readJSON(PLAYLISTS_JSON, []); }
+function savePlaylists(p) { writeJSON(PLAYLISTS_JSON, p); }
 
 // 拡張子を MIME タイプから判定
 function extForMime(mime) {
@@ -183,6 +186,92 @@ app.get('/api/videos/:id/comments', (req, res) => {
     .filter(c => c.video_id === req.params.id)
     .sort((a, b) => a.time - b.time);
   res.json(comments);
+});
+
+// ===== Google Drive 動画メタデータ登録（ファイル本体はDriveに保存）=====
+app.post('/api/videos/drive', (req, res) => {
+  const { title, description, drive_file_id, video_url } = req.body;
+  if (!drive_file_id || !video_url) return res.status(400).json({ error: 'DriveファイルIDとURLが必要です' });
+  const id = randomUUID();
+  const video = {
+    id,
+    title: (title || '無題').trim(),
+    description: (description || '').trim(),
+    drive_file_id,
+    video_url,
+    source: 'gdrive',
+    likes: 0,
+    views: 0,
+    created_at: Date.now(),
+  };
+  const videos = getVideos();
+  videos.push(video);
+  saveVideos(videos);
+  res.status(201).json(video);
+});
+
+// ===== 再生リスト一覧 =====
+app.get('/api/playlists', (_req, res) => {
+  const playlists = getPlaylists().sort((a, b) => b.created_at - a.created_at);
+  res.json(playlists);
+});
+
+// ===== 再生リスト作成 =====
+app.post('/api/playlists', (req, res) => {
+  const { name, description } = req.body;
+  if (!name || !name.trim()) return res.status(400).json({ error: 'リスト名が必要です' });
+  const playlist = {
+    id: randomUUID(),
+    name: name.trim(),
+    description: (description || '').trim(),
+    video_ids: [],
+    created_at: Date.now(),
+  };
+  const playlists = getPlaylists();
+  playlists.push(playlist);
+  savePlaylists(playlists);
+  res.status(201).json(playlist);
+});
+
+// ===== 再生リスト1件取得 =====
+app.get('/api/playlists/:id', (req, res) => {
+  const playlist = getPlaylists().find(p => p.id === req.params.id);
+  if (!playlist) return res.status(404).json({ error: '見つかりません' });
+  res.json(playlist);
+});
+
+// ===== 再生リストに動画追加 =====
+app.post('/api/playlists/:id/videos', (req, res) => {
+  const { video_id } = req.body;
+  if (!video_id) return res.status(400).json({ error: '動画IDが必要です' });
+  const playlists = getPlaylists();
+  const playlist = playlists.find(p => p.id === req.params.id);
+  if (!playlist) return res.status(404).json({ error: '見つかりません' });
+  if (!playlist.video_ids.includes(video_id)) {
+    playlist.video_ids.push(video_id);
+    savePlaylists(playlists);
+  }
+  res.json(playlist);
+});
+
+// ===== 再生リストから動画削除 =====
+app.delete('/api/playlists/:id/videos/:videoId', (req, res) => {
+  const playlists = getPlaylists();
+  const playlist = playlists.find(p => p.id === req.params.id);
+  if (!playlist) return res.status(404).json({ error: '見つかりません' });
+  playlist.video_ids = playlist.video_ids.filter(vid => vid !== req.params.videoId);
+  savePlaylists(playlists);
+  res.json(playlist);
+});
+
+// ===== 再生リスト削除 =====
+app.delete('/api/playlists/:id', (req, res) => {
+  const playlists = getPlaylists();
+  const idx = playlists.findIndex(p => p.id === req.params.id);
+  if (idx === -1) return res.status(404).json({ error: '見つかりません' });
+  const [deleted] = playlists.splice(idx, 1);
+  savePlaylists(playlists);
+  res.json(deleted);
 });
 
 const PORT = 3001;

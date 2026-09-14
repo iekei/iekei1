@@ -2,6 +2,7 @@
 // サーバーAPI (/api/) または GitHub API に動画を保存し、どのデバイスからでも視聴できるようにする
 
 import * as github from './github-backend.js';
+import { uploadFileToDrive, shareFilePublic, getDriveVideoUrl, isDriveConfigured } from '../editor/google-drive.js';
 
 let backend = null; // 'shared' | 'github' | 'local'
 let dbInstance = null;
@@ -12,6 +13,7 @@ const DB_VERSION = 1;
 const STORE_VIDEOS = 'videos';
 const STORE_COMMENTS = 'comments';
 const STORE_BLOBS = 'blobs';
+const STORE_PLAYLISTS = 'playlists';
 
 function openDB() {
   return new Promise((resolve, reject) => {
@@ -27,6 +29,9 @@ function openDB() {
       }
       if (!db.objectStoreNames.contains(STORE_BLOBS)) {
         db.createObjectStore(STORE_BLOBS, { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains(STORE_PLAYLISTS)) {
+        db.createObjectStore(STORE_PLAYLISTS, { keyPath: 'id' });
       }
     };
     req.onsuccess = (e) => { dbInstance = e.target.result; resolve(dbInstance); };
@@ -93,6 +98,10 @@ export function getBackendMode() { return backend; }
 
 // ===== 動画アップロード =====
 export async function uploadVideo(file, title, desc = '') {
+  // Google Drive が設定済みの場合はDriveにアップロードしてメタデータのみ保存
+  if (isDriveConfigured()) {
+    return uploadDriveVideo(file, title, desc);
+  }
   if (backend === 'shared') {
     const form = new FormData();
     form.append('file', file);
@@ -112,6 +121,35 @@ export async function uploadVideo(file, title, desc = '') {
   await idbPut(STORE_BLOBS, { id: blobId, blob: file });
   const video_url = URL.createObjectURL(file);
   const video = { id, title, description: desc, video_url, blob_id: blobId, likes: 0, views: 0, created_at };
+  await idbPut(STORE_VIDEOS, video);
+  return video;
+}
+
+// ===== Google Drive への動画アップロード =====
+export async function uploadDriveVideo(file, title, desc = '') {
+  // 1. Google Drive にファイルをアップロード
+  const driveFile = await uploadFileToDrive(file);
+  // 2. 公開設定（リンクを知る全員が閲覧可能）
+  await shareFilePublic(driveFile.id);
+  // 3. 再生用URLを生成
+  const video_url = getDriveVideoUrl(driveFile.id);
+
+  // 4. メタデータをバックエンドに保存
+  if (backend === 'shared') {
+    const res = await fetch('/api/videos/drive', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, description: desc, drive_file_id: driveFile.id, video_url }),
+    });
+    if (!res.ok) throw new Error('メタデータの保存に失敗しました');
+    return res.json();
+  }
+  if (backend === 'github') {
+    return github.uploadDriveVideoMetadata(title, desc, driveFile.id, video_url);
+  }
+  // ローカルフォールバック
+  const id = crypto.randomUUID();
+  const video = { id, title, description: desc, drive_file_id: driveFile.id, video_url, source: 'gdrive', likes: 0, views: 0, created_at: Date.now() };
   await idbPut(STORE_VIDEOS, video);
   return video;
 }
@@ -221,4 +259,109 @@ export async function getComments(videoId) {
   }
   const all = await idbGetAll(STORE_COMMENTS, 'video_id');
   return all.filter(c => c.video_id === videoId).sort((a, b) => a.time - b.time);
+}
+
+// ===== 再生リスト一覧 =====
+export async function getPlaylists() {
+  if (backend === 'shared') {
+    const res = await fetch('/api/playlists');
+    if (!res.ok) throw new Error('再生リスト取得に失敗しました');
+    return res.json();
+  }
+  if (backend === 'github') {
+    return github.getPlaylists();
+  }
+  const playlists = await idbGetAll(STORE_PLAYLISTS);
+  return playlists.sort((a, b) => b.created_at - a.created_at);
+}
+
+// ===== 再生リスト作成 =====
+export async function createPlaylist(name, description = '') {
+  if (backend === 'shared') {
+    const res = await fetch('/api/playlists', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, description }),
+    });
+    if (!res.ok) throw new Error('再生リスト作成に失敗しました');
+    return res.json();
+  }
+  if (backend === 'github') {
+    return github.createPlaylist(name, description);
+  }
+  const playlist = { id: crypto.randomUUID(), name, description, video_ids: [], created_at: Date.now() };
+  await idbPut(STORE_PLAYLISTS, playlist);
+  return playlist;
+}
+
+// ===== 再生リスト1件取得 =====
+export async function getPlaylist(playlistId) {
+  if (backend === 'shared') {
+    const res = await fetch(`/api/playlists/${playlistId}`);
+    if (!res.ok) throw new Error('再生リスト取得に失敗しました');
+    return res.json();
+  }
+  if (backend === 'github') {
+    return github.getPlaylist(playlistId);
+  }
+  return idbGet(STORE_PLAYLISTS, playlistId);
+}
+
+// ===== 再生リストに動画追加 =====
+export async function addVideoToPlaylist(playlistId, videoId) {
+  if (backend === 'shared') {
+    const res = await fetch(`/api/playlists/${playlistId}/videos`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ video_id: videoId }),
+    });
+    if (!res.ok) throw new Error('動画追加に失敗しました');
+    return res.json();
+  }
+  if (backend === 'github') {
+    return github.addVideoToPlaylist(playlistId, videoId);
+  }
+  const playlist = await idbGet(STORE_PLAYLISTS, playlistId);
+  if (!playlist) throw new Error('再生リストが見つかりません');
+  if (!playlist.video_ids.includes(videoId)) {
+    playlist.video_ids.push(videoId);
+    await idbPut(STORE_PLAYLISTS, playlist);
+  }
+  return playlist;
+}
+
+// ===== 再生リストから動画削除 =====
+export async function removeVideoFromPlaylist(playlistId, videoId) {
+  if (backend === 'shared') {
+    const res = await fetch(`/api/playlists/${playlistId}/videos/${videoId}`, { method: 'DELETE' });
+    if (!res.ok) throw new Error('動画削除に失敗しました');
+    return res.json();
+  }
+  if (backend === 'github') {
+    return github.removeVideoFromPlaylist(playlistId, videoId);
+  }
+  const playlist = await idbGet(STORE_PLAYLISTS, playlistId);
+  if (!playlist) throw new Error('再生リストが見つかりません');
+  playlist.video_ids = playlist.video_ids.filter(vid => vid !== videoId);
+  await idbPut(STORE_PLAYLISTS, playlist);
+  return playlist;
+}
+
+// ===== 再生リスト削除 =====
+export async function deletePlaylist(playlistId) {
+  if (backend === 'shared') {
+    const res = await fetch(`/api/playlists/${playlistId}`, { method: 'DELETE' });
+    if (!res.ok) throw new Error('再生リスト削除に失敗しました');
+    return res.json();
+  }
+  if (backend === 'github') {
+    return github.deletePlaylist(playlistId);
+  }
+  const playlist = await idbGet(STORE_PLAYLISTS, playlistId);
+  if (playlist) {
+    const tx = dbInstance.transaction(STORE_PLAYLISTS, 'readwrite');
+    tx.objectStore(STORE_PLAYLISTS).delete(playlistId);
+    await new Promise(r => tx.oncomplete = r);
+  }
+  return playlist;
 }

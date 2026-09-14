@@ -70,6 +70,8 @@ body { -webkit-font-smoothing: antialiased; }
 /* Tabs */
 .tab-btn { color: var(--c-text-muted); }
 .tab-btn.active { background: var(--c-surface); color: var(--c-accent); }
+.subtab-btn { color: var(--c-text-muted); }
+.subtab-btn.active { background: var(--c-surface); color: var(--c-accent); }
 .mat-tab { color: var(--c-text-dim); }
 .mat-tab.active { color: var(--c-accent); }
 
@@ -405,3 +407,66 @@ body { -webkit-font-smoothing: antialiased; }
   line-height: 1;
 }
 .ann-item button:hover { color: #f38ba8; }
+
+/* ===== Playlist styles ===== */
+.playlist-card {
+  background: var(--c-panel);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform .15s, box-shadow .15s;
+  border: 1px solid var(--c-border);
+}
+.playlist-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,.4); }
+.playlist-thumb {
+  aspect-ratio: 16/9;
+  background: var(--c-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  position: relative;
+}
+.playlist-thumb .playlist-count {
+  position: absolute;
+  bottom: 6px;
+  right: 8px;
+  background: rgba(0,0,0,.7);
+  color: #fff;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+.playlist-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--c-panel2);
+  cursor: pointer;
+  transition: background .12s;
+}
+.playlist-item:hover { background: var(--c-surface); }
+.playlist-item.active { background: var(--c-accent-soft); border-left: 3px solid var(--c-accent); }
+.playlist-item-thumb {
+  width: 80px;
+  height: 45px;
+  border-radius: 6px;
+  background: var(--c-bg);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.playlist-item-info { flex: 1; min-width: 0; }
+.playlist-item-info h4 { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.playlist-item-info span { font-size: 11px; color: var(--c-text-dim); }
+.playlist-item-delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--c-text-dim);
+  padding: 4px;
+  flex-shrink: 0;
+}
+.playlist-item-delete:hover { color: #f38ba8; }

@@ -8,6 +8,7 @@ const DATA_PATH = 'math/data/community';
 const VIDEO_DIR = `${DATA_PATH}/videos`;
 const VIDEOS_FILE = `${DATA_PATH}/videos.json`;
 const COMMENTS_FILE = `${DATA_PATH}/comments.json`;
+const PLAYLISTS_FILE = `${DATA_PATH}/playlists.json`;
 
 // ===== 設定（localStorage）=====
 export function getCommunityConfig() {
@@ -210,4 +211,70 @@ export async function getComments(videoId) {
   return comments
     .filter(c => c.video_id === videoId)
     .sort((a, b) => a.time - b.time);
+}
+
+// ===== Google Drive 動画メタデータ保存（ファイル本体はDriveに保存）=====
+export async function uploadDriveVideoMetadata(title, desc, driveFileId, videoUrl) {
+  const id = crypto.randomUUID();
+  const video = {
+    id,
+    title: title.trim() || '無題',
+    description: desc.trim(),
+    drive_file_id: driveFileId,
+    video_url: videoUrl,
+    source: 'gdrive',
+    likes: 0,
+    views: 0,
+    created_at: Date.now(),
+  };
+  await ghUpdateJSON(VIDEOS_FILE, (videos) => [...videos, video], `Add Drive video: ${title}`);
+  return video;
+}
+
+// ===== 再生リスト =====
+
+export async function getPlaylists() {
+  return await ghGetJSON(PLAYLISTS_FILE, []);
+}
+
+export async function createPlaylist(name, description = '') {
+  const playlist = {
+    id: crypto.randomUUID(),
+    name: name.trim(),
+    description: description.trim(),
+    video_ids: [],
+    created_at: Date.now(),
+  };
+  await ghUpdateJSON(PLAYLISTS_FILE, (list) => [...list, playlist], `Create playlist: ${name}`);
+  return playlist;
+}
+
+export async function getPlaylist(playlistId) {
+  const playlists = await ghGetJSON(PLAYLISTS_FILE, []);
+  return playlists.find(p => p.id === playlistId) || null;
+}
+
+export async function addVideoToPlaylist(playlistId, videoId) {
+  const playlists = await ghUpdateJSON(PLAYLISTS_FILE, (list) => {
+    const p = list.find(x => x.id === playlistId);
+    if (p && !p.video_ids.includes(videoId)) p.video_ids.push(videoId);
+    return list;
+  }, `Add video to playlist: ${playlistId}`);
+  return playlists.find(p => p.id === playlistId);
+}
+
+export async function removeVideoFromPlaylist(playlistId, videoId) {
+  const playlists = await ghUpdateJSON(PLAYLISTS_FILE, (list) => {
+    const p = list.find(x => x.id === playlistId);
+    if (p) p.video_ids = p.video_ids.filter(vid => vid !== videoId);
+    return list;
+  }, `Remove video from playlist: ${playlistId}`);
+  return playlists.find(p => p.id === playlistId);
+}
+
+export async function deletePlaylist(playlistId) {
+  const playlists = await ghUpdateJSON(PLAYLISTS_FILE, (list) =>
+    list.filter(p => p.id !== playlistId),
+  `Delete playlist: ${playlistId}`);
+  return playlists;
 }

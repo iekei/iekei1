@@ -9,6 +9,7 @@ import { UndoRedo } from './editor/undo-redo.js';
 import { Splitter } from './editor/splitter.js';
 import { pickFromGoogleDrive, isDriveConfigured, getDriveConfig, saveDriveConfig } from './editor/google-drive.js';
 import { getCommunityConfig, saveCommunityConfig } from './community/github-backend.js';
+import { PlaylistManager } from './community/playlist.js';
 
 class App {
   constructor() {
@@ -52,6 +53,7 @@ class App {
     // Init community
     this.community = new Community(this);
     this.player = new CommunityPlayer(this);
+    this.playlistManager = new PlaylistManager(this);
 
     // Bind UI
     this._bindTabs();
@@ -107,6 +109,7 @@ class App {
       document.getElementById('tab-community').classList.add('active');
       exportBtn.classList.add('hidden');
       this.community.refreshGrid();
+      this.playlistManager.refreshPlaylists();
     }
   }
 
@@ -577,6 +580,13 @@ class Community {
     document.getElementById('btn-upload-video').addEventListener('click', () => {
       document.getElementById('upload-modal').classList.remove('hidden');
       document.getElementById('upload-modal').classList.add('flex');
+      // Google Drive が設定済みならヒントを表示
+      const hint = document.getElementById('upload-drive-hint');
+      if (isDriveConfigured()) {
+        hint.classList.remove('hidden');
+      } else {
+        hint.classList.add('hidden');
+      }
     });
     document.getElementById('upload-cancel').addEventListener('click', () => this._closeModal());
     document.getElementById('upload-submit').addEventListener('click', () => this._submitUpload());
