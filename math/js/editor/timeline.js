@@ -1,9 +1,10 @@
 // js/editor/timeline.js — タイムライン管理 & キャンバス描画ロジック
 
-import { computeEffect, drawTextClip } from './effects.js';
+import { computeEffect, drawTextClip, drawShapeClip, easings, easingNames } from './effects.js';
 import { chromakeyFrame } from './chromakey.js';
 import { CanvasInteract } from './canvas-interact.js';
 import { drawGraph } from './graph.js';
+import { renderEffectsSection, bindEffectEvents } from './effects-panel.js';
 
 export class Timeline {
   constructor(app) {
@@ -16,6 +17,7 @@ export class Timeline {
     this.pxPerSec = 60;
     this.selectedClip = null;
     this.lastFrameTime = 0;
+    this.clipboard = null;
 
     this.canvas = document.getElementById('preview-canvas');
     this.ctx = this.canvas.getContext('2d');
@@ -50,6 +52,9 @@ export class Timeline {
     });
     document.getElementById('btn-auto-seq').addEventListener('click', () => this._autoSequence());
     document.getElementById('btn-save-draft').addEventListener('click', () => this.app.saveDraft());
+    document.getElementById('btn-add-text')?.addEventListener('click', () => this.addTextClip());
+    document.getElementById('btn-add-shape')?.addEventListener('click', () => this.addShapeClip());
+    document.getElementById('btn-add-graph')?.addEventListener('click', () => this.addGraphClip());
 
     const zoom = document.getElementById('zoom-slider');
     zoom.addEventListener('input', () => {
@@ -79,7 +84,12 @@ export class Timeline {
     return id;
   }
 
+  _beforeChange() {
+    if (this.app.undoRedo) this.app.undoRedo.snapshot();
+  }
+
   addClip(clip) {
+    this._beforeChange();
     clip.id = clip.id || crypto.randomUUID();
     if (clip.track === undefined) clip.track = this.tracks.length - 1;
     this.clips.push(clip);
@@ -90,11 +100,56 @@ export class Timeline {
   }
 
   removeClip(id) {
+    this._beforeChange();
     this.clips = this.clips.filter(c => c.id !== id);
     if (this.selectedClip?.id === id) this.selectedClip = null;
     this.app.markDirty();
     this.render();
     this.renderProperties();
+  }
+
+  addTextClip() {
+    this.addClip({
+      type: 'text',
+      text: 'テキスト',
+      start: this.currentTime,
+      duration: 3,
+      x: 0.5, y: 0.5,
+      effects: { fontSize: 48, color: '#ffffff', stroke: 2, strokeColor: '#000', animation: 'fade', animDuration: 0.5, animEasing: 'easeOut' },
+    });
+  }
+
+  addShapeClip() {
+    this.addClip({
+      type: 'shape',
+      shape: 'rect',
+      name: '図形',
+      start: this.currentTime,
+      duration: 3,
+      x: 0.5, y: 0.5,
+      effects: { fontSize: 100, color: '#89b4fa', stroke: 0, strokeColor: '#000', animation: 'fade', animDuration: 0.5, animEasing: 'easeOut' },
+    });
+  }
+
+  addGraphClip() {
+    this.addClip({
+      type: 'graph',
+      name: 'グラフ: y = sin(x)',
+      start: this.currentTime,
+      duration: 5,
+      x: 0.5, y: 0.5,
+      effects: { opacity: 1, scale: 1, animation: 'fade', animDuration: 0.3, animEasing: 'easeOut' },
+      graph: {
+        expression: 'y = sin(x)',
+        xRange: [-5, 5],
+        yRange: [-3, 3],
+        curveColor: '#89b4fa',
+        curveWidth: 3,
+        drawDuration: 2,
+        showGrid: true,
+        annotations: [],
+      },
+    });
   }
 
   selectClip(id) {
@@ -261,7 +316,7 @@ export class Timeline {
     const width = clip.duration * this.pxPerSec;
     el.style.left = left + 'px';
     el.style.width = width + 'px';
-    const colorMap = { text: '#89b4fa', video: '#a6e3a1', image: '#f9e2af', audio: '#f5c2e7', gb: '#00b140', graph: '#fab387' };
+    const colorMap = { text: '#89b4fa', video: '#a6e3a1', image: '#f9e2af', audio: '#f5c2e7', gb: '#00b140', graph: '#fab387', shape: '#94e2d5' };
     el.style.background = colorMap[clip.type] || '#45475a';
     el.style.color = '#1e1e2e';
     el.textContent = clip.text || clip.name || clip.type;
@@ -274,16 +329,27 @@ export class Timeline {
     el.appendChild(lh);
     el.appendChild(rh);
 
-    // Click to select
+    // Click to select + drag to move (horizontal = time, vertical = track)
     el.addEventListener('mousedown', (e) => {
       if (e.target === lh || e.target === rh) return;
       e.stopPropagation();
       this.selectClip(clip.id);
-      // Drag to move
+      this._beforeChange();
       const startX = e.clientX;
+      const startY = e.clientY;
       const origStart = clip.start;
+      const origTrack = clip.track;
       const move = (ev) => {
+        // Horizontal: change start time
         clip.start = Math.max(0, origStart + (ev.clientX - startX) / this.pxPerSec);
+        // Vertical: change track
+        const tracksRect = this.tracksEl.getBoundingClientRect();
+        const y = ev.clientY - tracksRect.top + this.tracksEl.scrollTop;
+        const trackH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--track-h')) || 44;
+        const trackIdx = Math.floor(y / trackH);
+        if (trackIdx >= 0 && trackIdx < this.tracks.length) {
+          clip.track = trackIdx;
+        }
         this.app.markDirty();
         this.render();
       };
@@ -362,6 +428,8 @@ export class Timeline {
         ctx.scale(state.scaleX, state.scaleY);
         ctx.drawImage(frame, -w / 2, -h / 2, w, h);
         ctx.restore();
+      } else if (clip.type === 'shape') {
+        drawShapeClip(ctx, clip, state, w, h);
       } else if (clip.type === 'graph') {
         ctx.save();
         ctx.globalAlpha = state.alpha;
@@ -455,16 +523,16 @@ export class Timeline {
         <input type="range" id="prop-scale" min="0.1" max="3" step="0.05" value="${fx.scale ?? 1}" />
       </div>
       <div class="prop-row">
-        <label>回転(度)</label>
-        <input type="range" id="prop-rotation" min="-180" max="180" step="1" value="${fx.rotation || 0}" />
-      </div>
-      <div class="prop-row">
         <label>出現アニメ</label>
         <select id="prop-animation">${animOpts}</select>
       </div>
       <div class="prop-row">
         <label>アニメ時間(秒)</label>
         <input type="number" id="prop-animDuration" min="0.1" max="5" step="0.1" value="${fx.animDuration ?? 0.5}" />
+      </div>
+      <div class="prop-row">
+        <label>イージング</label>
+        <select id="prop-animEasing">${Object.entries(easingNames).map(([k, v]) => `<option value="${k}" ${fx.animEasing === k ? 'selected' : ''}>${v}</option>`).join('')}</select>
       </div>
       <div class="prop-row">
         <label>フェードイン(秒)</label>
@@ -492,36 +560,35 @@ export class Timeline {
       <div class="prop-row">
         <label>縁取り色</label>
         <input type="color" id="prop-strokeColor" value="${fx.strokeColor || '#000000'}" />
-      </div>
-      <div class="prop-row">
-        <label>ドロップシャドウ</label>
-        <input type="checkbox" id="prop-shadow" ${fx.shadow ? 'checked' : ''} />
       </div>`;
     }
 
-    html += `
-      <div class="prop-row">
-        <label>振動(揺れ)</label>
-        <input type="range" id="prop-shake" min="0" max="20" step="1" value="${fx.shake || 0}" />
-      </div>
-      <div class="prop-row">
-        <label>パルス(拡縮)</label>
-        <input type="range" id="prop-pulse" min="0" max="1" step="0.05" value="${fx.pulse || 0}" />
-      </div>`;
-
-    if (clip.type === 'gb') {
+    if (clip.type === 'shape') {
       html += `
       <div class="prop-row">
-        <label>クロマキー色</label>
-        <input type="color" id="prop-keyColor" value="${fx.keyColor || '#00b140'}" />
+        <label>図形の種類</label>
+        <select id="prop-shape">
+          <option value="rect" ${clip.shape === 'rect' ? 'selected' : ''}>矩形</option>
+          <option value="circle" ${clip.shape === 'circle' ? 'selected' : ''}>円</option>
+          <option value="triangle" ${clip.shape === 'triangle' ? 'selected' : ''}>三角</option>
+          <option value="star" ${clip.shape === 'star' ? 'selected' : ''}>星</option>
+        </select>
       </div>
       <div class="prop-row">
-        <label>キーしきい値</label>
-        <input type="range" id="prop-chromaThreshold" min="0" max="1" step="0.05" value="${fx.chromaThreshold ?? 0.4}" />
+        <label>色</label>
+        <input type="color" id="prop-color" value="${fx.color || '#89b4fa'}" />
       </div>
       <div class="prop-row">
-        <label>スピル抑制</label>
-        <input type="range" id="prop-chromaSpill" min="0" max="1" step="0.05" value="${fx.chromaSpill ?? 0.5}" />
+        <label>サイズ</label>
+        <input type="number" id="prop-fontSize" min="10" max="500" step="1" value="${fx.fontSize || 100}" />
+      </div>
+      <div class="prop-row">
+        <label>縁取り太さ</label>
+        <input type="range" id="prop-stroke" min="0" max="10" step="0.5" value="${fx.stroke || 0}" />
+      </div>
+      <div class="prop-row">
+        <label>縁取り色</label>
+        <input type="color" id="prop-strokeColor" value="${fx.strokeColor || '#000000'}" />
       </div>`;
     }
 
@@ -591,6 +658,8 @@ export class Timeline {
       <div id="prop-ann-list" class="space-y-1"></div>`;
     }
 
+    html += renderEffectsSection(clip);
+
     html += `
       <div class="prop-row">
         <label>開始(秒)</label>
@@ -623,23 +692,21 @@ export class Timeline {
     bind('prop-x', 'x'); bind('prop-y', 'y');
     bind('prop-opacity', 'opacity', fx);
     bind('prop-scale', 'scale', fx);
-    bind('prop-rotation', 'rotation', fx);
     bind('prop-animation', 'animation', fx, v => v);
     bind('prop-animDuration', 'animDuration', fx);
+    bind('prop-animEasing', 'animEasing', fx, v => v);
     bind('prop-fadeIn', 'fadeIn', fx);
     bind('prop-fadeOut', 'fadeOut', fx);
     bind('prop-color', 'color', fx, v => v);
     bind('prop-fontSize', 'fontSize', fx);
     bind('prop-stroke', 'stroke', fx);
     bind('prop-strokeColor', 'strokeColor', fx, v => v);
-    bind('prop-shadow', 'shadow', fx);
-    bind('prop-shake', 'shake', fx);
-    bind('prop-pulse', 'pulse', fx);
-    bind('prop-keyColor', 'keyColor', fx, v => v);
-    bind('prop-chromaThreshold', 'chromaThreshold', fx);
-    bind('prop-chromaSpill', 'chromaSpill', fx);
+    bind('prop-shape', 'shape', clip, v => v);
     bind('prop-start', 'start');
     bind('prop-duration', 'duration');
+
+    // Modular effect cards
+    bindEffectEvents(this, clip);
 
     // Audio
     bind('prop-volume', 'volume', fx);

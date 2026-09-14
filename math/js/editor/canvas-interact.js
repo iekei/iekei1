@@ -69,6 +69,10 @@ export class CanvasInteract {
     } else if (clip.type === 'graph') {
       bw = w * 0.84 * state.scaleX;
       bh = h * 0.84 * state.scaleY;
+    } else if (clip.type === 'shape') {
+      const sSize = (fx.fontSize || 100) * (h / 360);
+      bw = sSize * state.scaleX;
+      bh = sSize * state.scaleY;
     } else {
       const source = clip._img || clip._video;
       const sw = source?.videoWidth || source?.naturalWidth || source?.width || 16;
