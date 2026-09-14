@@ -2,9 +2,10 @@
 // サーバーAPI (/api/) または GitHub API に動画を保存し、どのデバイスからでも視聴できるようにする
 
 import * as github from './github-backend.js';
+import * as firebase from './firebase-backend.js';
 import { uploadFileToDrive, shareFilePublic, getDriveVideoUrl, isDriveConfigured } from '../editor/google-drive.js';
 
-let backend = null; // 'shared' | 'github' | 'local'
+let backend = null; // 'shared' | 'firebase' | 'github' | 'local'
 let dbInstance = null;
 
 // ===== IndexedDB (フォールバック用) =====
@@ -81,13 +82,24 @@ export async function initBackend() {
   } catch (e) {
     console.warn('[backend] サーバーAPIに接続できません', e);
   }
-  // 2. GitHub API (GitHub Pages等の静的環境)
+  // 2. Firebase (GitHub Pages等の静的環境・トークン不要)
+  if (firebase.isFirebaseConfigured()) {
+    try {
+      await firebase.initFirebase();
+      backend = 'firebase';
+      console.log('[backend] Firebaseモード (Storage + Realtime DB)');
+      return 'firebase';
+    } catch (e) {
+      console.warn('[backend] Firebase初期化に失敗', e);
+    }
+  }
+  // 3. GitHub API (GitHub Pages等の静的環境・トークン必要)
   if (github.isGitHubConfigured()) {
     backend = 'github';
     console.log('[backend] GitHubモード (GitHub API)');
     return 'github';
   }
-  // 3. ローカルフォールバック (IndexedDB)
+  // 4. ローカルフォールバック (IndexedDB)
   backend = 'local';
   await openDB();
   console.log('[backend] ローカルモード (IndexedDB)');
@@ -110,6 +122,9 @@ export async function uploadVideo(file, title, desc = '') {
     const res = await fetch('/api/videos', { method: 'POST', body: form });
     if (!res.ok) throw new Error('アップロードに失敗しました');
     return res.json();
+  }
+  if (backend === 'firebase') {
+    return firebase.uploadVideo(file, title, desc);
   }
   if (backend === 'github') {
     return github.uploadVideo(file, title, desc);
@@ -144,6 +159,9 @@ export async function uploadDriveVideo(file, title, desc = '') {
     if (!res.ok) throw new Error('メタデータの保存に失敗しました');
     return res.json();
   }
+  if (backend === 'firebase') {
+    return firebase.uploadDriveVideoMetadata(title, desc, driveFile.id, video_url);
+  }
   if (backend === 'github') {
     return github.uploadDriveVideoMetadata(title, desc, driveFile.id, video_url);
   }
@@ -160,6 +178,9 @@ export async function getVideos() {
     const res = await fetch('/api/videos');
     if (!res.ok) throw new Error('一覧取得に失敗しました');
     return res.json();
+  }
+  if (backend === 'firebase') {
+    return firebase.getVideos();
   }
   if (backend === 'github') {
     return github.getVideos();
@@ -181,6 +202,9 @@ export async function getVideo(videoId) {
     if (!res.ok) throw new Error('動画取得に失敗しました');
     return res.json();
   }
+  if (backend === 'firebase') {
+    return firebase.getVideo(videoId);
+  }
   if (backend === 'github') {
     return github.getVideo(videoId);
   }
@@ -200,6 +224,9 @@ export async function likeVideo(videoId) {
     const data = await res.json();
     return data.likes;
   }
+  if (backend === 'firebase') {
+    return firebase.likeVideo(videoId);
+  }
   if (backend === 'github') {
     return github.likeVideo(videoId);
   }
@@ -217,6 +244,9 @@ export async function incrementViews(videoId) {
     if (!res.ok) throw new Error('視聴回数更新に失敗しました');
     const data = await res.json();
     return data.views;
+  }
+  if (backend === 'firebase') {
+    return firebase.incrementViews(videoId);
   }
   if (backend === 'github') {
     return github.incrementViews(videoId);
@@ -239,6 +269,9 @@ export async function postComment(videoId, time, text, color = '#FFFFFF') {
     if (!res.ok) throw new Error('コメント投稿に失敗しました');
     return res.json();
   }
+  if (backend === 'firebase') {
+    return firebase.postComment(videoId, time, text, color);
+  }
   if (backend === 'github') {
     return github.postComment(videoId, time, text, color);
   }
@@ -254,6 +287,9 @@ export async function getComments(videoId) {
     if (!res.ok) throw new Error('コメント取得に失敗しました');
     return res.json();
   }
+  if (backend === 'firebase') {
+    return firebase.getComments(videoId);
+  }
   if (backend === 'github') {
     return github.getComments(videoId);
   }
@@ -267,6 +303,9 @@ export async function getPlaylists() {
     const res = await fetch('/api/playlists');
     if (!res.ok) throw new Error('再生リスト取得に失敗しました');
     return res.json();
+  }
+  if (backend === 'firebase') {
+    return firebase.getPlaylists();
   }
   if (backend === 'github') {
     return github.getPlaylists();
@@ -286,6 +325,9 @@ export async function createPlaylist(name, description = '') {
     if (!res.ok) throw new Error('再生リスト作成に失敗しました');
     return res.json();
   }
+  if (backend === 'firebase') {
+    return firebase.createPlaylist(name, description);
+  }
   if (backend === 'github') {
     return github.createPlaylist(name, description);
   }
@@ -300,6 +342,9 @@ export async function getPlaylist(playlistId) {
     const res = await fetch(`/api/playlists/${playlistId}`);
     if (!res.ok) throw new Error('再生リスト取得に失敗しました');
     return res.json();
+  }
+  if (backend === 'firebase') {
+    return firebase.getPlaylist(playlistId);
   }
   if (backend === 'github') {
     return github.getPlaylist(playlistId);
@@ -317,6 +362,9 @@ export async function addVideoToPlaylist(playlistId, videoId) {
     });
     if (!res.ok) throw new Error('動画追加に失敗しました');
     return res.json();
+  }
+  if (backend === 'firebase') {
+    return firebase.addVideoToPlaylist(playlistId, videoId);
   }
   if (backend === 'github') {
     return github.addVideoToPlaylist(playlistId, videoId);
@@ -337,6 +385,9 @@ export async function removeVideoFromPlaylist(playlistId, videoId) {
     if (!res.ok) throw new Error('動画削除に失敗しました');
     return res.json();
   }
+  if (backend === 'firebase') {
+    return firebase.removeVideoFromPlaylist(playlistId, videoId);
+  }
   if (backend === 'github') {
     return github.removeVideoFromPlaylist(playlistId, videoId);
   }
@@ -353,6 +404,9 @@ export async function deletePlaylist(playlistId) {
     const res = await fetch(`/api/playlists/${playlistId}`, { method: 'DELETE' });
     if (!res.ok) throw new Error('再生リスト削除に失敗しました');
     return res.json();
+  }
+  if (backend === 'firebase') {
+    return firebase.deletePlaylist(playlistId);
   }
   if (backend === 'github') {
     return github.deletePlaylist(playlistId);
