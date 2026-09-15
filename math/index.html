@@ -188,7 +188,10 @@
     <div id="community-grid" class="max-w-6xl mx-auto">
       <div class="flex items-center justify-between mb-5">
         <h2 class="font-display font-bold text-xl">📺 投稿動画一覧</h2>
-        <button id="btn-upload-video" class="px-4 py-2 rounded-lg bg-accent text-app font-bold text-sm">＋ 動画を投稿</button>
+        <div class="flex gap-2">
+          <button id="btn-upload-video" class="px-4 py-2 rounded-lg bg-accent text-app font-bold text-sm">＋ 動画を投稿</button>
+          <button id="btn-upload-github" class="px-4 py-2 rounded-lg bg-surface hover:bg-surface-h text-sm font-medium">🐙 GitHubに直接アップロード</button>
+        </div>
       </div>
       <div id="video-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
     </div>
@@ -254,6 +257,7 @@
     <div class="bg-panel rounded-xl p-6 w-full max-w-md mx-4 shadow-2xl">
       <h3 class="font-bold text-lg mb-4">動画を投稿</h3>
       <div id="upload-drive-hint" class="mb-3 text-xs text-accent2 hidden">☁ Googleドライブにアップロードされます（他のデバイスからも視聴可能）</div>
+      <div id="upload-github-hint" class="mb-3 text-xs text-accent2 hidden">🐙 GitHubリポジトリに直接アップロードされます（リポジトリ内に保存され、どのデバイスからも視聴可能）</div>
       <input id="upload-title" type="text" lang="ja" placeholder="タイトル" class="w-full px-3 py-2 mb-3 rounded-lg bg-panel2 border border-app outline-none focus:border-accent" />
       <textarea id="upload-desc" lang="ja" placeholder="説明文" rows="3" class="w-full px-3 py-2 mb-3 rounded-lg bg-panel2 border border-app outline-none focus:border-accent"></textarea>
       <input id="upload-file" type="file" accept="video/*" class="w-full mb-4 text-sm" />

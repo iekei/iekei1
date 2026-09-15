@@ -8,7 +8,7 @@ import { KeyboardShortcuts, initShortcutsModal } from './editor/keyboard.js';
 import { UndoRedo } from './editor/undo-redo.js';
 import { Splitter } from './editor/splitter.js';
 import { pickFromGoogleDrive, isDriveConfigured, getDriveConfig, saveDriveConfig } from './editor/google-drive.js';
-import { getCommunityConfig, saveCommunityConfig } from './community/github-backend.js';
+import { getCommunityConfig, saveCommunityConfig, isGitHubConfigured, uploadVideo as ghUploadVideo, getVideos as ghGetVideos } from './community/github-backend.js';
 import { getFirebaseConfig, saveFirebaseConfig } from './community/firebase-backend.js';
 import { PlaylistManager } from './community/playlist.js';
 
@@ -590,18 +590,37 @@ class Community {
 
   _bind() {
     document.getElementById('btn-upload-video').addEventListener('click', () => {
-      document.getElementById('upload-modal').classList.remove('hidden');
-      document.getElementById('upload-modal').classList.add('flex');
-      // Google Drive が設定済みならヒントを表示
-      const hint = document.getElementById('upload-drive-hint');
-      if (isDriveConfigured()) {
-        hint.classList.remove('hidden');
-      } else {
-        hint.classList.add('hidden');
+      this._githubMode = false;
+      this._openModal();
+    });
+    document.getElementById('btn-upload-github').addEventListener('click', () => {
+      if (!isGitHubConfigured()) {
+        alert('GitHub連携の設定が必要です。\n⚙ 設定から GitHub Token・ユーザー名・リポジトリ名 を入力してください。');
+        return;
       }
+      this._githubMode = true;
+      this._openModal();
     });
     document.getElementById('upload-cancel').addEventListener('click', () => this._closeModal());
     document.getElementById('upload-submit').addEventListener('click', () => this._submitUpload());
+  }
+
+  _openModal() {
+    document.getElementById('upload-modal').classList.remove('hidden');
+    document.getElementById('upload-modal').classList.add('flex');
+    const driveHint = document.getElementById('upload-drive-hint');
+    const ghHint = document.getElementById('upload-github-hint');
+    if (this._githubMode) {
+      ghHint?.classList.remove('hidden');
+      driveHint.classList.add('hidden');
+    } else {
+      ghHint?.classList.add('hidden');
+      if (isDriveConfigured()) {
+        driveHint.classList.remove('hidden');
+      } else {
+        driveHint.classList.add('hidden');
+      }
+    }
   }
 
   _closeModal() {
@@ -624,7 +643,11 @@ class Community {
     btn.disabled = true;
 
     try {
-      await backend.uploadVideo(file, title, desc);
+      if (this._githubMode) {
+        await ghUploadVideo(file, title, desc);
+      } else {
+        await backend.uploadVideo(file, title, desc);
+      }
       this._closeModal();
       this.refreshGrid();
     } catch (e) {
@@ -638,7 +661,22 @@ class Community {
   async refreshGrid() {
     const grid = document.getElementById('video-grid');
     grid.innerHTML = '<p class="text-gray-500 col-span-full text-center py-8">読み込み中...</p>';
-    const videos = await backend.getVideos();
+    let videos = [];
+    try {
+      videos = await backend.getVideos();
+    } catch (e) {
+      console.warn('[community] バックエンドからの動画取得に失敗', e);
+    }
+    // GitHubが設定済み かつ 現在のバックエンドがGitHub以外の場合、GitHubの動画もマージ
+    if (isGitHubConfigured() && backend.getBackendMode() !== 'github') {
+      try {
+        const ghVideos = await ghGetVideos();
+        videos = [...videos, ...ghVideos.map(v => ({ ...v, source: 'github' }))];
+      } catch (e) {
+        console.warn('[community] GitHub動画の取得に失敗', e);
+      }
+    }
+    videos.sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
     if (videos.length === 0) {
       grid.innerHTML = `
         <div class="col-span-full text-center py-12">
@@ -657,10 +695,11 @@ class Community {
           <video src="${v.video_url}" muted preload="metadata" class="w-full h-full object-cover"></video>
         </div>
         <div class="p-3">
-          <h3 class="font-bold text-sm truncate">${this._esc(v.title)}</h3>
+          <h3 class="font-bold text-sm truncate">${v.source === 'github' ? '🐙 ' : ''}${this._esc(v.title)}</h3>
           <div class="flex items-center gap-3 mt-1 text-xs text-gray-500">
             <span>👁 ${v.views || 0}</span>
             <span>👍 ${v.likes || 0}</span>
+            ${v.source === 'github' ? '<span class="text-accent2">GitHub</span>' : ''}
             <span class="ml-auto">${date}</span>
           </div>
         </div>`;
