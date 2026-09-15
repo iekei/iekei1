@@ -68,6 +68,8 @@ function executeDebugCommand(cmd) {
     localStorage.removeItem('ger_unlocked_cards');
     localStorage.removeItem('jap_unlocked_cards');
     localStorage.removeItem('sov_unlocked_cards');
+    localStorage.removeItem('world_unlocked_cards');
+    localStorage.removeItem('world_wiki_cache_v1');
     updateCoinDisplay();
     debugLog('🗑 全データをリセットしました');
   } else if (command === '/all') {
@@ -156,7 +158,13 @@ function executeDebugCommand(cmd) {
         // 組織・政党・思想
         '国際連盟', '国際連合', '政友会', '民政党', '関東憲兵隊', 
         'コミンテルン', 'ファシズム', 'ナチズム', '天皇機関説', '東亜連盟', 
-        'サムライ', '自由党', '改進党', '参謀本部', '海軍航空本部'
+        'サムライ', '自由党', '改進党', '参謀本部', '海軍航空本部',
+        // 世界史・全時代の重要語句（全世界指導者パック対応）
+        'ローマ帝国', 'ローマ共和政', 'アテナイ', 'ペルシア戦争', 'アケメネス朝', 'ヘレニズム',
+        'モンゴル帝国', '十字軍', 'オスマン帝国', 'ビザンツ帝国', '百年戦争', 'ルネサンス',
+        '宗教改革', '大航海時代', '啓蒙思想', 'フランス革命', 'アメリカ独立戦争', '南北戦争',
+        '産業革命', 'ロシア革命', '十月革命', '辛亥革命', '帝国主義', '冷戦', '朝鮮戦争',
+        'キューバ危機', 'ベトナム戦争', 'アパルトヘイト', '公民権運動', '独立運動', '市民革命'
       ];
 
       // 文章を分割（20〜120文字の文章）
@@ -268,6 +276,12 @@ function executeDebugCommand(cmd) {
 
     name.textContent = card.rank + ' ' + card.name;
     name.style.color = card.color || '#fff';
+
+    var eraEl = modal.querySelector('.card-detail-era');
+    if (eraEl) {
+      eraEl.textContent = (card.era && card.years) ? card.era + '｜' + card.years + (card.region ? '（' + card.region + '）' : '') : '';
+    }
+
     desc.textContent = card.desc || '';
 
     easyBtn.onclick = function() {
@@ -297,7 +311,7 @@ function executeDebugCommand(cmd) {
 
     var questions = null;
     try {
-      questions = await generateQuizFromMediaWiki(card.name);
+      questions = await generateQuizFromMediaWiki(card.wikiTitle || card.name);
     } catch (e) {
       questions = null;
     }
