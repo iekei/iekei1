@@ -392,6 +392,44 @@ function applyPolygonReduction(model, ratio) {
   });
 }
 
+// ---- FBXモデルの向き・サイズ正規化（+Z向き・目標の体長・接地）----
+const MODEL_FIXES = {
+  deer: { targetLength: 2.5 },                    // 鹿: 体長2.5m
+  boar: { yaw: Math.PI / 2, targetLength: 1.5 },   // イノシシ: X軸向き→+Zへ、体長1.5m
+};
+
+function normalizeLoadedModel(g, fix) {
+  // 影・背景用の平面メッシュを除去（平らで三角形がほぼないメッシュ）
+  g.updateMatrixWorld(true);
+  const toRemove = [];
+  g.traverse(m => {
+    if (!m.isMesh || !m.geometry || !m.geometry.attributes.position) return;
+    const tris = m.geometry.index ? m.geometry.index.count / 3
+      : m.geometry.attributes.position.count / 3;
+    if (tris > 4) return;
+    const box = new THREE.Box3().setFromObject(m);
+    const s = new THREE.Vector3(); box.getSize(s);
+    if (s.y < 0.01) toRemove.push(m);
+  });
+  toRemove.forEach(m => { if (m.parent) m.parent.remove(m); });
+
+  // 向き補正（Y軸回転で+Z向きに）
+  if (fix.yaw) g.rotation.y = fix.yaw;
+
+  // スケール正規化（体長を目標値に）
+  g.updateMatrixWorld(true);
+  let box = new THREE.Box3().setFromObject(g);
+  let size = new THREE.Vector3(); box.getSize(size);
+  g.scale.setScalar(fix.targetLength / (size.z || 1));
+
+  // 接地（足元を原点に、水平方向も中心に）
+  g.updateMatrixWorld(true);
+  box = new THREE.Box3().setFromObject(g);
+  g.position.y -= box.min.y;
+  g.position.x -= (box.min.x + box.max.x) / 2;
+  g.position.z -= (box.min.z + box.max.z) / 2;
+}
+
 // ---- モデルテクスチャ読み込み ----
 let animalTexture = null;
 function loadAnimalTexture() {
@@ -437,6 +475,9 @@ async function loadModels() {
     if (model) {
       // ポリゴン削減（約50%に削減）
       applyPolygonReduction(model, 0.5);
+      // 向き・サイズの正規化（+Z向き・接地・目標体長）
+      const fix = MODEL_FIXES[k];
+      if (fix) normalizeLoadedModel(model, fix);
       // テクスチャが未設定の場合は動物テクスチャを適用
       if (animalTexture) {
         model.traverse(m => {
@@ -623,28 +664,48 @@ function buildTerrain() {
 // ============================================================
 // ---- 日本の山の植生: 杉、松、竹、紅葉、芝生、シダ ----
 
+// 共有ジオメトリ・マテリアル（森のパフォーマンス向上: 生成は1回だけ）
+let vegAssets = null;
+function buildVegAssets() {
+  vegAssets = {
+    barkMat: new THREE.MeshLambertMaterial({ map: barkTex }),
+    cedarTrunk: new THREE.CylinderGeometry(0.18, 0.35, 7, 6),
+    cedarTiers: [0, 0.25, 0.5, 0.75].map(t =>
+      new THREE.ConeGeometry(2.2 - t * 1.6, 3.5 - t * 0.5, 7)),
+    cedarLeafMat: new THREE.MeshLambertMaterial({ color: 0x2d4a22, map: leafTex }),
+    pineTrunk: new THREE.CylinderGeometry(0.25, 0.5, 4, 6),
+    pineLeaf: new THREE.SphereGeometry(1, 8, 6),
+    pineLeafMat: new THREE.MeshLambertMaterial({ color: 0x3a5a28, map: leafTex }),
+    bambooStem: new THREE.CylinderGeometry(0.08, 0.1, 1, 5),
+    bambooLeaf: new THREE.SphereGeometry(0.7, 6, 5),
+    bambooMat: new THREE.MeshLambertMaterial({ color: 0x6a8a3a }),
+    bambooLeafMat: new THREE.MeshLambertMaterial({ color: 0x4a7a2a, map: leafTex }),
+    mapleTrunk: new THREE.CylinderGeometry(0.2, 0.38, 3.5, 6),
+    mapleLeaf: new THREE.SphereGeometry(1, 8, 6),
+    mapleMats: [0xc04020, 0xd05030, 0xe06030, 0xb08020, 0xc85820].map(c =>
+      new THREE.MeshLambertMaterial({ color: c })),
+    broadTrunk: new THREE.CylinderGeometry(0.28, 0.45, 5, 8),
+    broadLeaf1: new THREE.ConeGeometry(2.6, 6, 8),
+    broadLeaf2: new THREE.ConeGeometry(2.0, 4.5, 8),
+    broadLeafMats: [0x2a4a1a, 0x33551f, 0x2a521f, 0x3c5a24, 0x24461e].map(c =>
+      new THREE.MeshLambertMaterial({ color: c, map: leafTex })),
+  };
+}
+
 function buildCedar(x, z, h, scale) {
   // 杉（スギ）: 高く真っ直ぐ、細い円錐
-  const trunkH = 7 * scale;
-  const trunk = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.18 * scale, 0.35 * scale, trunkH, 6),
-    new THREE.MeshLambertMaterial({ map: barkTex })
-  );
-  trunk.position.set(x, h + trunkH / 2, z);
+  const trunk = new THREE.Mesh(vegAssets.cedarTrunk, vegAssets.barkMat);
+  trunk.scale.setScalar(scale);
+  trunk.position.set(x, h + 3.5 * scale, z);
+  trunk.rotation.y = Math.random() * Math.PI * 2;
   trunk.castShadow = true;
   scene.add(trunk);
 
-  const cedarLeafMat = new THREE.MeshLambertMaterial({ color: 0x2d4a22, map: leafTex });
-  // 細長い円錐を3-4段重ねる
+  // 細長い円錐を4段重ねる
   for (let j = 0; j < 4; j++) {
-    const t = j / 4;
-    const radius = (2.2 - t * 1.6) * scale;
-    const height = (3.5 - t * 0.5) * scale;
-    const cone = new THREE.Mesh(
-      new THREE.ConeGeometry(Math.max(0.3, radius), height, 7),
-      cedarLeafMat
-    );
-    cone.position.set(x, h + trunkH * (0.45 + t * 0.55), z);
+    const cone = new THREE.Mesh(vegAssets.cedarTiers[j], vegAssets.cedarLeafMat);
+    cone.scale.setScalar(scale);
+    cone.position.set(x, h + 7 * scale * (0.45 + (j / 4) * 0.55), z);
     cone.rotation.y = Math.random() * Math.PI;
     cone.castShadow = true;
     scene.add(cone);
@@ -654,31 +715,24 @@ function buildCedar(x, z, h, scale) {
 
 function buildPine(x, z, h, scale) {
   // 松（マツ）: 不規則な枝広がり、ごつごくした幹
-  const trunkH = 4 * scale;
-  const trunk = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.25 * scale, 0.5 * scale, trunkH, 6),
-    new THREE.MeshLambertMaterial({ map: barkTex })
-  );
-  trunk.position.set(x, h + trunkH / 2, z);
+  const trunk = new THREE.Mesh(vegAssets.pineTrunk, vegAssets.barkMat);
+  trunk.scale.setScalar(scale);
+  trunk.position.set(x, h + 2 * scale, z);
   trunk.rotation.z = (Math.random() - 0.5) * 0.15;
   trunk.castShadow = true;
   scene.add(trunk);
 
-  const pineLeafMat = new THREE.MeshLambertMaterial({ color: 0x3a5a28, map: leafTex });
   // 不規則な枝方向に球状の葉を配置
   const branches = 3 + Math.floor(Math.random() * 3);
   for (let j = 0; j < branches; j++) {
     const angle = (j / branches) * Math.PI * 2 + Math.random() * 0.5;
     const dist = (1.5 + Math.random() * 1.5) * scale;
-    const by = h + trunkH * (0.5 + Math.random() * 0.5);
+    const by = h + 4 * scale * (0.5 + Math.random() * 0.5);
     const bx = x + Math.cos(angle) * dist;
     const bz = z + Math.sin(angle) * dist;
     const r = (1.8 + Math.random() * 1.2) * scale;
-    const leaf = new THREE.Mesh(
-      new THREE.SphereGeometry(r, 8, 6),
-      pineLeafMat
-    );
-    leaf.scale.y = 0.7;
+    const leaf = new THREE.Mesh(vegAssets.pineLeaf, vegAssets.pineLeafMat);
+    leaf.scale.set(r, r * 0.7, r);
     leaf.position.set(bx, by, bz);
     leaf.castShadow = true;
     scene.add(leaf);
@@ -688,28 +742,21 @@ function buildPine(x, z, h, scale) {
 
 function buildBamboo(x, z, h, scale) {
   // 竹（タケ）: 細く高い、節がある
-  const bambooMat = new THREE.MeshLambertMaterial({ color: 0x6a8a3a });
-  const bambooLeafMat = new THREE.MeshLambertMaterial({ color: 0x4a7a2a, map: leafTex });
   const count = 3 + Math.floor(Math.random() * 4);
   for (let j = 0; j < count; j++) {
     const ox = x + (Math.random() - 0.5) * 2.5;
     const oz = z + (Math.random() - 0.5) * 2.5;
     const bh = (6 + Math.random() * 4) * scale;
-    const stem = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.08 * scale, 0.1 * scale, bh, 5),
-      bambooMat
-    );
+    const stem = new THREE.Mesh(vegAssets.bambooStem, vegAssets.bambooMat);
+    stem.scale.set(scale, bh, scale);
     stem.position.set(ox, h + bh / 2, oz);
     stem.rotation.z = (Math.random() - 0.5) * 0.08;
     stem.castShadow = true;
     scene.add(stem);
 
     // 竹の葉（上部に小さな塊）
-    const leaf = new THREE.Mesh(
-      new THREE.SphereGeometry(0.7 * scale, 6, 5),
-      bambooLeafMat
-    );
-    leaf.scale.set(1, 0.5, 1);
+    const leaf = new THREE.Mesh(vegAssets.bambooLeaf, vegAssets.bambooLeafMat);
+    leaf.scale.set(scale, 0.5 * scale, scale);
     leaf.position.set(ox, h + bh - 0.3 * scale, oz);
     leaf.castShadow = true;
     scene.add(leaf);
@@ -719,34 +766,24 @@ function buildBamboo(x, z, h, scale) {
 
 function buildMaple(x, z, h, scale) {
   // 紅葉（モミジ）: 広がる樹形、秋色の葉
-  const trunkH = 3.5 * scale;
-  const trunk = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.2 * scale, 0.38 * scale, trunkH, 6),
-    new THREE.MeshLambertMaterial({ map: barkTex })
-  );
-  trunk.position.set(x, h + trunkH / 2, z);
+  const trunk = new THREE.Mesh(vegAssets.mapleTrunk, vegAssets.barkMat);
+  trunk.scale.setScalar(scale);
+  trunk.position.set(x, h + 1.75 * scale, z);
   trunk.castShadow = true;
   scene.add(trunk);
 
-  // 紅葉カラー: 赤橙〜黄色のバリエーション
-  const mapleColors = [0xc04020, 0xd05030, 0xe06030, 0xb08020, 0xc85820];
-  const mapleMat = new THREE.MeshLambertMaterial({
-    color: mapleColors[Math.floor(Math.random() * mapleColors.length)]
-  });
+  const mapleMat = vegAssets.mapleMats[Math.floor(Math.random() * vegAssets.mapleMats.length)];
   // 広がる球状の葉
   const branches = 4 + Math.floor(Math.random() * 2);
   for (let j = 0; j < branches; j++) {
     const angle = (j / branches) * Math.PI * 2 + Math.random() * 0.3;
     const dist = (1.2 + Math.random() * 1.0) * scale;
-    const by = h + trunkH * (0.6 + Math.random() * 0.4);
+    const by = h + 3.5 * scale * (0.6 + Math.random() * 0.4);
     const bx = x + Math.cos(angle) * dist;
     const bz = z + Math.sin(angle) * dist;
     const r = (1.5 + Math.random() * 1.0) * scale;
-    const leaf = new THREE.Mesh(
-      new THREE.SphereGeometry(r, 8, 6),
-      mapleMat
-    );
-    leaf.scale.y = 0.8;
+    const leaf = new THREE.Mesh(vegAssets.mapleLeaf, mapleMat);
+    leaf.scale.set(r, r * 0.8, r);
     leaf.position.set(bx, by, bz);
     leaf.castShadow = true;
     scene.add(leaf);
@@ -755,43 +792,42 @@ function buildMaple(x, z, h, scale) {
 }
 
 function buildTrees() {
-  const treeCount = 200;
-  for (let i = 0; i < treeCount; i++) {
-    const x = (Math.random() - 0.5) * (MAP_SIZE - 16);
-    const z = (Math.random() - 0.5) * (MAP_SIZE - 16);
-    if (Math.abs(x) < 7 && Math.abs(z) < 7) continue;
-    if (trailDistance(x, z) < 4) continue;
+  buildVegAssets(); // 共有ジオメトリ・マテリアルを一度だけ生成
+
+  // 森のような密度: 400本を確実に配置（見つからない場所は再抽選）
+  const treeCount = 400;
+  let placed = 0, attempts = 0;
+  while (placed < treeCount && attempts < 1600) {
+    attempts++;
+    const x = (Math.random() - 0.5) * (MAP_SIZE - 12);
+    const z = (Math.random() - 0.5) * (MAP_SIZE - 12);
+    if (Math.abs(x) < 6 && Math.abs(z) < 6) continue;
+    if (trailDistance(x, z) < 3.5) continue;
     const h = terrainHeight(x, z);
-    if (h > 38) continue;
+    if (h > 40) continue;
 
     const scale = 0.7 + Math.random() * 0.6;
     const r = Math.random();
-    if (r < 0.35) buildCedar(x, z, h, scale);      // 杉 35%
-    else if (r < 0.60) buildPine(x, z, h, scale);   // 松 25%
-    else if (r < 0.75) buildBamboo(x, z, h, scale);  // 竹 15%
-    else if (r < 0.88) buildMaple(x, z, h, scale);   // 紅葉 13%
+    if (r < 0.40) buildCedar(x, z, h, scale);       // 杉 40%（杉林）
+    else if (r < 0.60) buildPine(x, z, h, scale);   // 松 20%
+    else if (r < 0.72) buildBamboo(x, z, h, scale);  // 竹 12%
+    else if (r < 0.85) buildMaple(x, z, h, scale);   // 紅葉 13%
     else {
       // 広葉樹（落葉高木）: 従来の円錐型
-      const trunkGeo = new THREE.CylinderGeometry(0.28, 0.45, 5, 8);
-      const leafGeo = new THREE.ConeGeometry(2.6, 6, 8);
-      const leafGeo2 = new THREE.ConeGeometry(2.0, 4.5, 8);
-      const trunkMat = new THREE.MeshLambertMaterial({ map: barkTex });
-      const leafMats = [0x2a4a1a, 0x33551f, 0x2a521f, 0x3c5a24, 0x24461e].map(c =>
-        new THREE.MeshLambertMaterial({ color: c, map: leafTex }));
-      const trunk = new THREE.Mesh(trunkGeo, trunkMat);
+      const trunk = new THREE.Mesh(vegAssets.broadTrunk, vegAssets.barkMat);
       trunk.position.set(x, h + 2.5 * scale, z);
       trunk.scale.setScalar(scale);
       trunk.rotation.y = Math.random() * Math.PI * 2;
       trunk.castShadow = true;
       scene.add(trunk);
-      const lm = leafMats[i % leafMats.length];
-      const l1 = new THREE.Mesh(leafGeo, lm);
+      const lm = vegAssets.broadLeafMats[placed % vegAssets.broadLeafMats.length];
+      const l1 = new THREE.Mesh(vegAssets.broadLeaf1, lm);
       l1.position.set(x, h + (5 + 2.2) * scale, z);
       l1.scale.setScalar(scale);
       l1.rotation.y = Math.random() * Math.PI;
       l1.castShadow = true;
       scene.add(l1);
-      const l2 = new THREE.Mesh(leafGeo2, lm);
+      const l2 = new THREE.Mesh(vegAssets.broadLeaf2, lm);
       l2.position.set(x, h + (5 + 4.6) * scale, z);
       l2.scale.setScalar(scale);
       l2.rotation.y = Math.random() * Math.PI;
@@ -799,6 +835,7 @@ function buildTrees() {
       scene.add(l2);
       trees.push({ x, z });
     }
+    placed++;
   }
 
   // 芝生・草（instanced）: 地面を覆う低い草
@@ -1192,7 +1229,9 @@ function createAnimalMesh(type) {
         m.castShadow = true;
       }
     });
-    g.scale.setScalar(def.scale);
+    // 正規化済みモデル（deer/boar）は向き・接地・スケール済み。
+    // 未正規化モデル（raccoon等）のみ def.scale を適用
+    if (!MODEL_FIXES[type]) g.scale.setScalar(def.scale);
     return g;
   }
   let g;
