@@ -268,6 +268,7 @@ canvas.game { display: block; position: fixed; top: 0; left: 0; z-index: 1; }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/PointerLockControls.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/MTLLoader.js"></script>
 <script>
 "use strict";
 
@@ -335,7 +336,16 @@ const loadedModels = { terrain: null, bear: null, deer: null, boar: null, raccoo
 
 function loadObj(url) {
   return new Promise(resolve => {
-    new THREE.OBJLoader().load(url, resolve, undefined, () => resolve(null));
+    const mtlUrl = url.replace(/\.obj$/, '.mtl');
+    new THREE.MTLLoader().load(mtlUrl, (materials) => {
+      materials.preload();
+      const loader = new THREE.OBJLoader();
+      loader.setMaterials(materials);
+      loader.load(url, resolve, undefined, () => resolve(null));
+    }, undefined, () => {
+      // MTLが見つからない場合はOBJのみ読み込み
+      new THREE.OBJLoader().load(url, resolve, undefined, () => resolve(null));
+    });
   });
 }
 async function loadModels() {
@@ -881,7 +891,13 @@ function createAnimalMesh(type) {
   if (proto) {
     const g = proto.clone();
     const bodyMat = mat(def.color);
-    g.traverse(m => { if (m.isMesh) { m.material = bodyMat; m.castShadow = true; } });
+    g.traverse(m => {
+      if (m.isMesh) {
+        // MTL素材が読み込まれていない場合はフォールバック色を使用
+        if (!m.material || !m.material.name) m.material = bodyMat;
+        m.castShadow = true;
+      }
+    });
     g.scale.setScalar(def.scale);
     return g;
   }

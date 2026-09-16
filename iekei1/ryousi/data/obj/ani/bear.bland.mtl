@@ -1,0 +1,7 @@
+# Bear materials
+newmtl bear_material
+Ka 0.05 0.04 0.02
+Kd 0.227 0.165 0.102
+Ks 0.0 0.0 0.0
+d 1.0
+illum 1
