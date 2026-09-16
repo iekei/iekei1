@@ -3,84 +3,91 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>猟師シミュレーター - 軽量3D狩猟ゲーム</title>
+<title>猟師シミュレーター - 3D狩猟ゲーム</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { width: 100%; height: 100%; overflow: hidden; background: #000; font-family: 'Segoe UI', sans-serif; user-select: none; }
-canvas { display: block; position: fixed; top: 0; left: 0; width: 100vw !important; height: 100vh !important; z-index: 1; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: #000; font-family: 'Segoe UI', 'Hiragino Sans', sans-serif; user-select: none; }
+canvas.game { display: block; position: fixed; top: 0; left: 0; z-index: 1; }
 
 /* ===== HUD ===== */
 #hud { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
 
 #crosshair {
   position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  width: 24px; height: 24px;
+  width: 24px; height: 24px; opacity: 0.9;
 }
 #crosshair::before, #crosshair::after {
-  content: ''; position: absolute; background: rgba(255,255,255,0.8);
+  content: ''; position: absolute; background: rgba(255,255,255,0.85);
+  box-shadow: 0 0 2px rgba(0,0,0,0.8);
 }
 #crosshair::before { top: 50%; left: 0; width: 100%; height: 2px; transform: translateY(-50%); }
 #crosshair::after { left: 50%; top: 0; width: 2px; height: 100%; transform: translateX(-50%); }
 #crosshair .dot {
   position: absolute; top: 50%; left: 50%; width: 4px; height: 4px;
-  background: rgba(255,80,80,0.9); border-radius: 50%; transform: translate(-50%,-50%);
+  background: rgba(255,80,80,0.95); border-radius: 50%; transform: translate(-50%,-50%);
+  box-shadow: 0 0 2px rgba(0,0,0,0.8);
 }
 
 #scopeOverlay {
   display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-  background: radial-gradient(circle at center, transparent 28%, rgba(0,0,0,0.97) 30%);
+  background: radial-gradient(circle at center, transparent 30%, rgba(0,0,0,0.97) 32%);
 }
 #scopeReticle {
   position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-  width: 200px; height: 200px;
+  width: 240px; height: 240px;
 }
 #scopeReticle::before, #scopeReticle::after {
-  content: ''; position: absolute; background: rgba(0,0,0,0.7);
+  content: ''; position: absolute; background: rgba(10,10,10,0.75);
 }
 #scopeReticle::before { top: 50%; left: 0; width: 100%; height: 1px; transform: translateY(-50%); }
 #scopeReticle::after { left: 50%; top: 0; width: 1px; height: 100%; transform: translateX(-50%); }
-#scopeReticle .milDot {
-  position: absolute; left: 50%; width: 6px; height: 6px;
-  border: 1px solid rgba(0,0,0,0.5); border-radius: 50%; transform: translateX(-50%);
+.milDot {
+  position: absolute; left: 50%; width: 5px; height: 5px;
+  background: rgba(10,10,10,0.6); border-radius: 50%; transform: translateX(-50%);
 }
 
 #stats {
   position: absolute; top: 12px; left: 12px; color: #fff; font-size: 14px;
-  text-shadow: 1px 1px 2px #000; line-height: 1.7;
+  text-shadow: 1px 1px 2px #000; line-height: 1.8;
 }
-#hpBar { display: inline-block; width: 100px; height: 14px; border: 1px solid #555; background: #222; vertical-align: middle; }
-#hpFill { height: 100%; background: #e44; transition: width 0.3s; }
+#hpBar { display: inline-block; width: 110px; height: 14px; border: 1px solid #666; background: #222; vertical-align: middle; border-radius: 3px; }
+#hpFill { height: 100%; background: linear-gradient(90deg,#c33,#e55); transition: width 0.3s; border-radius: 2px; }
 
 #timeDisplay {
   position: absolute; top: 12px; right: 12px; color: #fff; font-size: 14px;
-  text-shadow: 1px 1px 2px #000; text-align: right; line-height: 1.7;
+  text-shadow: 1px 1px 2px #000; text-align: right; line-height: 1.8;
 }
 #ammoDisplay {
-  position: absolute; bottom: 12px; right: 12px; color: #fff; font-size: 18px;
+  position: absolute; bottom: 12px; right: 14px; color: #fff; font-size: 20px;
+  text-shadow: 1px 1px 2px #000; text-align: right;
+}
+#weaponName { font-size: 12px; opacity: 0.85; }
+#moneyDisplay {
+  position: absolute; bottom: 12px; left: 14px; color: #ffd700; font-size: 17px;
   text-shadow: 1px 1px 2px #000;
 }
-#weaponName { font-size: 12px; opacity: 0.8; }
-#moneyDisplay {
-  position: absolute; bottom: 12px; left: 12px; color: #ffd700; font-size: 16px;
+#hintBar {
+  position: absolute; bottom: 46px; left: 14px; color: rgba(255,255,255,0.55); font-size: 11px;
   text-shadow: 1px 1px 2px #000;
 }
 
 #notifications {
-  position: absolute; top: 60px; left: 50%; transform: translateX(-50%);
-  color: #fff; font-size: 15px; text-shadow: 1px 1px 2px #000; text-align: center;
+  position: absolute; top: 64px; left: 50%; transform: translateX(-50%);
+  color: #fff; font-size: 15px; text-shadow: 1px 1px 2px #000; text-align: center; width: 80%;
 }
 .notif { padding: 4px 0; opacity: 1; transition: opacity 0.5s; }
 .notif.fade { opacity: 0; }
 
 #hitMarker {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) rotate(45deg);
   width: 30px; height: 30px; display: none;
 }
 #hitMarker::before, #hitMarker::after {
-  content: ''; position: absolute; background: #f44; width: 14px; height: 2px;
+  content: ''; position: absolute; background: #f44; width: 16px; height: 2px;
+  box-shadow: 0 0 2px #000;
 }
-#hitMarker::before { top: 0; left: 0; transform: rotate(45deg); transform-origin: 0 0; }
-#hitMarker::after { top: 0; right: 0; transform: rotate(-45deg); transform-origin: 100% 0; }
+#hitMarker::before { top: 0; left: 0; }
+#hitMarker::after { bottom: 0; right: 0; }
 
 #damageFlash {
   position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -90,57 +97,67 @@ canvas { display: block; position: fixed; top: 0; left: 0; width: 100vw !importa
 /* ===== Modals ===== */
 .modal {
   display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.85); z-index: 100; justify-content: center; align-items: center;
+  background: rgba(0,0,0,0.55); z-index: 100; justify-content: center; align-items: center;
   color: #fff;
 }
+.modal.blocking { background: rgba(0,0,0,0.85); }
 .modal.active { display: flex; }
 .modal-content {
-  background: #1a1a2e; border: 2px solid #4a4a6a; border-radius: 10px;
-  padding: 30px; max-width: 560px; width: 90%; max-height: 85vh; overflow-y: auto;
+  background: rgba(18,22,36,0.95); border: 1px solid rgba(120,150,220,0.35); border-radius: 12px;
+  padding: 26px; max-width: 600px; width: 92%; max-height: 88vh; overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
 }
-.modal-content h2 { text-align: center; margin-bottom: 20px; color: #8af; }
+.modal-content h2 { text-align: center; margin-bottom: 16px; color: #9cf; font-size: 20px; }
 .shop-item {
   display: flex; justify-content: space-between; align-items: center;
-  padding: 10px; margin: 6px 0; background: #2a2a4e; border-radius: 6px;
+  padding: 9px 12px; margin: 5px 0; background: rgba(50,58,92,0.6); border-radius: 7px;
+}
+.shop-item .hotkey {
+  display: inline-block; min-width: 22px; height: 22px; line-height: 22px; text-align: center;
+  background: #335; border: 1px solid #667; border-radius: 4px; font-size: 12px; margin-right: 8px;
+  color: #ffd700; font-weight: bold;
 }
 .shop-item .info { flex: 1; }
-.shop-item .name { font-weight: bold; font-size: 15px; }
-.shop-item .desc { font-size: 12px; color: #aaa; }
-.shop-item .price { color: #ffd700; margin: 0 12px; white-space: nowrap; }
+.shop-item .name { font-weight: bold; font-size: 14px; display: inline; }
+.shop-item .desc { font-size: 12px; color: #9aa; display: block; }
+.shop-item .price { color: #ffd700; margin: 0 12px; white-space: nowrap; font-size: 14px; }
 .shop-item button {
   padding: 6px 14px; border: none; border-radius: 4px; cursor: pointer;
-  background: #4a8; color: #fff; font-weight: bold;
+  background: #4a8; color: #fff; font-weight: bold; font-size: 13px;
 }
-.shop-item button:disabled { background: #555; cursor: default; }
-.shop-item button.owned { background: #666; }
+.shop-item button:disabled { background: #445; cursor: default; }
+.shop-item button.owned { background: #556; }
 
 .btn {
   display: block; width: 100%; padding: 12px; margin: 8px 0;
-  border: none; border-radius: 6px; cursor: pointer; font-size: 16px;
+  border: none; border-radius: 7px; cursor: pointer; font-size: 15px;
   font-weight: bold; color: #fff;
 }
 .btn-primary { background: #4a8; }
 .btn-secondary { background: #556; }
-.btn-danger { background: #a44; }
 
-#mapCanvas { border: 2px solid #4a4a6a; border-radius: 8px; display: block; margin: 0 auto; }
+#mapCanvas { border-radius: 10px; display: block; margin: 0 auto; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+.map-legend { display: flex; justify-content: center; gap: 14px; margin-top: 10px; font-size: 12px; color: #bcc; flex-wrap: wrap; }
+.map-legend span { display: inline-flex; align-items: center; gap: 4px; }
+.map-legend i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
 
 #startScreen {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background: #0a0a1a; z-index: 200; display: flex; flex-direction: column;
-  justify-content: center; align-items: center; color: #fff; text-align: center;
+  background: radial-gradient(ellipse at center, #16213e 0%, #0a0a1a 100%); z-index: 200;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  color: #fff; text-align: center;
 }
-#startScreen h1 { font-size: 36px; margin-bottom: 10px; color: #8af; }
-#startScreen p { margin: 6px 0; font-size: 14px; color: #ccc; max-width: 500px; line-height: 1.6; }
-#startScreen .controls { margin: 20px 0; font-size: 13px; color: #999; }
-#startBtn { padding: 14px 40px; font-size: 20px; margin-top: 20px; }
+#startScreen h1 { font-size: 38px; margin-bottom: 12px; color: #9cf; text-shadow: 0 0 20px rgba(100,160,255,0.4); }
+#startScreen p { margin: 6px 0; font-size: 14px; color: #bbc; max-width: 520px; line-height: 1.7; }
+#startScreen .controls { margin: 18px 0; font-size: 13px; color: #889; line-height: 1.9; }
+#startScreen .controls b { color: #ccd; }
 
 #gameOverScreen {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
   background: rgba(0,0,0,0.9); z-index: 200; display: none;
-  flex-direction: column; justify-content: center; align-items: center; color: #f44;
+  flex-direction: column; justify-content: center; align-items: center; color: #f55;
 }
-#gameOverScreen h1 { font-size: 42px; margin-bottom: 20px; }
+#gameOverScreen h1 { font-size: 42px; margin-bottom: 16px; text-shadow: 0 0 30px rgba(255,0,0,0.5); }
 #gameOverScreen.active { display: flex; }
 
 #fadeOverlay {
@@ -153,24 +170,30 @@ canvas { display: block; position: fixed; top: 0; left: 0; width: 100vw !importa
 
 <div id="startScreen">
   <h1>🏹 猟師シミュレーター</h1>
-  <p>10分で1日が過ぎる山林で、動物を狩猟しよう。<br>夜は動物が狂暴化します。注意してください。</p>
+  <p>10分で1日が過ぎる日本の山で、動物を狩猟しよう。<br>夜は動物が狂暴化します。注意してください。</p>
   <div class="controls">
-    <b>操作方法</b><br>
-    WASD: 移動 / マウス: 視点 / 左クリック: 射撃・トラップ設置<br>
-    右クリック: スコープ / R: リロード / E: 獲物回収<br>
-    B: ショップ / M: マップ / Esc: ポーズメニュー
+    <b>WASD</b>: 移動 / <b>マウス</b>: 視点 / <b>左クリック</b>: 射撃<br>
+    <b>右クリック</b>: スコープ / <b>R</b>: リロード / <b>E</b>: 獲物・トラップ回収 / <b>T</b>: トラップ設置<br>
+    <b>B</b>: ショップ（ゲーム続行） / <b>M</b>: マップ / <b>F</b>: ライト / <b>Esc</b>: ポーズメニュー
   </div>
-  <button class="btn btn-primary" id="startBtn" style="width:auto;min-width:200px;">ゲーム開始</button>
+  <button class="btn btn-primary" id="startBtn" style="width:auto;min-width:220px;font-size:19px;">ゲーム開始</button>
 </div>
 
 <div id="hud">
   <div id="crosshair"><div class="dot"></div></div>
-  <div id="scopeOverlay"><div id="scopeReticle"></div></div>
+  <div id="scopeOverlay">
+    <div id="scopeReticle">
+      <div class="milDot" style="top:20%"></div>
+      <div class="milDot" style="top:40%"></div>
+      <div class="milDot" style="top:60%"></div>
+      <div class="milDot" style="top:80%"></div>
+    </div>
+  </div>
   <div id="hitMarker"></div>
   <div id="damageFlash"></div>
   <div id="stats">
     HP: <span id="hpBar"><span id="hpFill" style="width:100%"></span></span> <span id="hpText">2/2</span><br>
-    所持トラップ: <span id="trapCount">0</span>
+    トラップ: <span id="trapCount">なし</span> / ライト: <span id="lightState">OFF</span>
   </div>
   <div id="timeDisplay">
     <div id="dayText">DAY 1</div>
@@ -178,6 +201,7 @@ canvas { display: block; position: fixed; top: 0; left: 0; width: 100vw !importa
     <div id="phaseText">🌅 朝</div>
   </div>
   <div id="moneyDisplay">💰 <span id="money">3000</span> 円</div>
+  <div id="hintBar">B:ショップ M:マップ T:罠設置 E:回収 F:ライト R:リロード</div>
   <div id="ammoDisplay">
     <div id="weaponName">猟銃: ショットガン</div>
     <span id="ammo">5</span> / <span id="magSize">5</span>
@@ -187,10 +211,10 @@ canvas { display: block; position: fixed; top: 0; left: 0; width: 100vw !importa
 
 <div id="fadeOverlay"></div>
 
-<!-- Shop Modal -->
+<!-- Shop Modal (non-blocking: game continues) -->
 <div class="modal" id="shopModal">
   <div class="modal-content">
-    <h2>🛒 ショップ</h2>
+    <h2>🛒 ショップ <span style="font-size:12px;color:#889;">（数字キーで購入・ゲームは続行中）</span></h2>
     <div id="shopItems"></div>
     <button class="btn btn-secondary" onclick="closeModal('shop')">閉じる (B)</button>
   </div>
@@ -199,26 +223,33 @@ canvas { display: block; position: fixed; top: 0; left: 0; width: 100vw !importa
 <!-- Map Modal -->
 <div class="modal" id="mapModal">
   <div class="modal-content" style="text-align:center;">
-    <h2>🗺️ 全体マップ</h2>
-    <canvas id="mapCanvas" width="400" height="400"></canvas>
-    <p style="margin-top:10px;color:#aaa;font-size:13px;">赤▲: プレイヤー・向き / 🟤: クマ / 🦌: 鹿 / 🐗: イノシシ / 🦝: アライグマ</p>
+    <h2>🗺️ 山林マップ</h2>
+    <canvas id="mapCanvas" width="440" height="440"></canvas>
+    <div class="map-legend">
+      <span><i style="background:#4a90e2"></i>プレイヤー</span>
+      <span><i style="background:#7a4a2a"></i>クマ</span>
+      <span><i style="background:#c89858"></i>鹿</span>
+      <span><i style="background:#3a3a3a"></i>イノシシ</span>
+      <span><i style="background:#8a8a8a"></i>アライグマ</span>
+      <span><i style="background:#e08030"></i>トラップ</span>
+    </div>
     <button class="btn btn-secondary" onclick="closeModal('map')">閉じる (M)</button>
   </div>
 </div>
 
 <!-- Pause Modal -->
-<div class="modal" id="pauseModal">
+<div class="modal blocking" id="pauseModal">
   <div class="modal-content">
     <h2>⏸️ ポーズメニュー</h2>
     <button class="btn btn-primary" id="goHomeBtn">🏠 帰宅する（次の日へ）</button>
-    <button class="btn btn-secondary" onclick="closeModal('pause')">閉じる (Esc)</button>
+    <button class="btn btn-secondary" onclick="closeModal('pause')">閉じる（クリックで再開）</button>
   </div>
 </div>
 
 <!-- Game Over -->
 <div id="gameOverScreen">
   <h1>💀 ゲームオーバー</h1>
-  <p style="color:#fff;font-size:18px;margin-bottom:20px;">動物に倒されました...</p>
+  <p style="color:#fff;font-size:17px;margin-bottom:20px;">動物に倒されました...</p>
   <button class="btn btn-primary" id="restartBtn" style="width:auto;min-width:200px;">最初から</button>
 </div>
 
@@ -227,13 +258,14 @@ canvas { display: block; position: fixed; top: 0; left: 0; width: 100vw !importa
 <script>
 "use strict";
 
-// ===== GLOBAL STATE =====
+// ============================================================
+// GLOBAL STATE
+// ============================================================
 let scene, camera, renderer, controls;
 let clock;
 let player = {
   hp: 2, maxHp: 2,
   money: 3000,
-  velocity: new THREE.Vector3(),
   weapon: 'shotgun',
   ammo: 5, magSize: 5,
   reloading: false,
@@ -243,6 +275,9 @@ let player = {
   hasScope: false,
   scoping: false,
   invulnTimer: 0,
+  flashlightOn: false,
+  bobPhase: 0,
+  moving: false,
 };
 let animals = [];
 let trees = [];
@@ -254,261 +289,578 @@ let day = 1;
 let timeOfDay = 0.25;
 const DAY_DURATION = 600;
 let isNight = false;
+let prevIsNight = false;
 
-let sunLight, moonLight, ambientLight, hemiLight;
-let sunMesh, moonMesh;
-let skyDome;
+let sunLight, moonLight, ambientLight, hemiLight, flashlight;
+let sunMesh, moonMesh, sunGlow, moonGlow, stars, skyUniforms;
+let gunGroup;
 
 let gameRunning = false;
 let pointerLocked = false;
-let modalOpen = null;
+let modalOpen = null; // 'shop' | 'map' | 'pause' | null
 
 const MAP_SIZE = 200;
+const HALF = MAP_SIZE / 2;
 const PLAYER_HEIGHT = 1.7;
 const PLAYER_SPEED = 8;
 
 const raycaster = new THREE.Raycaster();
 const keys = {};
-let mouseDown = false;
 
-// ===== INIT =====
-function init() {
-  scene = new THREE.Scene();
-  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.set(0, PLAYER_HEIGHT, 0);
-
-  renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: 'high-performance' });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.BasicShadowMap;
-  document.body.appendChild(renderer.domElement);
-
-  clock = new THREE.Clock();
-
-  scene.fog = new THREE.Fog(0x88aacc, 20, 120);
-
-  ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-  scene.add(ambientLight);
-
-  hemiLight = new THREE.HemisphereLight(0x88aaff, 0x445522, 0.4);
-  scene.add(hemiLight);
-
-  sunLight = new THREE.DirectionalLight(0xfff5e0, 1.0);
-  sunLight.position.set(50, 100, 50);
-  sunLight.castShadow = true;
-  sunLight.shadow.mapSize.width = 1024;
-  sunLight.shadow.mapSize.height = 1024;
-  sunLight.shadow.camera.near = 10;
-  sunLight.shadow.camera.far = 300;
-  sunLight.shadow.camera.left = -100;
-  sunLight.shadow.camera.right = 100;
-  sunLight.shadow.camera.top = 100;
-  sunLight.shadow.camera.bottom = -100;
-  scene.add(sunLight);
-
-  moonLight = new THREE.DirectionalLight(0x9999ff, 0.15);
-  moonLight.position.set(-50, 80, -50);
-  scene.add(moonLight);
-
-  const sunGeo = new THREE.SphereGeometry(8, 12, 8);
-  const sunMat = new THREE.MeshBasicMaterial({ color: 0xffee88, fog: false });
-  sunMesh = new THREE.Mesh(sunGeo, sunMat);
-  scene.add(sunMesh);
-
-  const moonGeo = new THREE.SphereGeometry(5, 10, 8);
-  const moonMat = new THREE.MeshBasicMaterial({ color: 0xddddff, fog: false });
-  moonMesh = new THREE.Mesh(moonGeo, moonMat);
-  scene.add(moonMesh);
-
-  const skyGeo = new THREE.SphereGeometry(500, 16, 8);
-  const skyMat = new THREE.MeshBasicMaterial({ color: 0x88aacc, side: THREE.BackSide, fog: false });
-  skyDome = new THREE.Mesh(skyGeo, skyMat);
-  scene.add(skyDome);
-
-  controls = new THREE.PointerLockControls(camera, document.body);
-  scene.add(controls.getObject());
-
-  buildTerrain();
-  buildTrees();
-  buildBoundaries();
-  spawnInitialAnimals();
-  setupEvents();
-  // Ensure canvas matches viewport after iframe fully expands
-  setTimeout(() => {
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-  }, 100);
-  animate();
+// ============================================================
+// PROCEDURAL TEXTURES
+// ============================================================
+function makeNoiseCanvas(size, base, variation, spots) {
+  const c = document.createElement('canvas');
+  c.width = c.height = size;
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = base;
+  ctx.fillRect(0, 0, size, size);
+  const img = ctx.getImageData(0, 0, size, size);
+  const d = img.data;
+  for (let i = 0; i < d.length; i += 4) {
+    const n = (Math.random() - 0.5) * variation;
+    d[i]   = Math.max(0, Math.min(255, d[i] + n));
+    d[i+1] = Math.max(0, Math.min(255, d[i+1] + n));
+    d[i+2] = Math.max(0, Math.min(255, d[i+2] + n));
+  }
+  ctx.putImageData(img, 0, 0);
+  for (let i = 0; i < spots; i++) {
+    const x = Math.random() * size, y = Math.random() * size;
+    const r = 2 + Math.random() * 6;
+    ctx.fillStyle = 'rgba(' + (Math.random()*60|0) + ',' + (Math.random()*80+60|0) + ',' + (Math.random()*50|0) + ',' + (0.15 + Math.random()*0.25) + ')';
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+  }
+  return c;
 }
 
-// ===== TERRAIN =====
+function makeTexture(canvas, repeatX, repeatY) {
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+  tex.repeat.set(repeatX, repeatY);
+  return tex;
+}
+
+let grassTex, dirtTex, barkTex, leafTex;
+
+function buildTextures() {
+  grassTex = makeTexture(makeNoiseCanvas(256, '#4a6b2e', 44, 160), 24, 24);
+  dirtTex  = makeTexture(makeNoiseCanvas(128, '#8a6a42', 40, 90), 4, 4);
+  barkTex  = makeTexture(makeNoiseCanvas(128, '#5a4128', 50, 40), 2, 2);
+  leafTex  = makeTexture(makeNoiseCanvas(128, '#2e4e1e', 55, 120), 1, 1);
+}
+
+function makeGlowTexture(inner, outer) {
+  const c = document.createElement('canvas');
+  c.width = c.height = 128;
+  const ctx = c.getContext('2d');
+  const g = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+  g.addColorStop(0, inner);
+  g.addColorStop(0.35, outer);
+  g.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, 128, 128);
+  return new THREE.CanvasTexture(c);
+}
+
+// ============================================================
+// TERRAIN (Japanese mountain valley)
+// ============================================================
+function terrainHeight(x, z) {
+  const nx = x / HALF, nz = z / HALF;
+  const r = Math.sqrt(nx * nx + nz * nz);
+  const mountain = Math.pow(Math.max(0, r - 0.42) / 0.58, 1.7) * 34;
+  let h = mountain;
+  h += Math.sin(x * 0.045) * Math.cos(z * 0.052) * 2.6;
+  h += Math.sin(x * 0.11 + 1.3) * Math.cos(z * 0.09 + 0.6) * 1.1;
+  h += Math.sin(x * 0.27 + 3.1) * Math.sin(z * 0.23 + 1.7) * 0.45;
+  h += Math.sin(x * 0.53) * Math.cos(z * 0.61) * 0.15;
+  return h;
+}
+const getGroundHeight = terrainHeight;
+
+function terrainSlope(x, z) {
+  const e = 0.6;
+  const dx = terrainHeight(x + e, z) - terrainHeight(x - e, z);
+  const dz = terrainHeight(x, z + e) - terrainHeight(x, z - e);
+  return Math.sqrt(dx * dx + dz * dz) / (2 * e);
+}
+
+// ===== Animal trails (獣道) =====
+const trails = [
+  [ [-62,-58], [-18,-72], [28,-62], [58,-28], [52,18], [18,52], [-28,58], [-58,22], [-62,-58] ],
+  [ [-78,-8], [-40,-2], [-2,6], [42,2], [78,-6] ],
+  [ [8,-78], [2,-40], [-6,2], [4,40], [10,76] ],
+  [ [-45,-45], [-15,-25], [15,-12], [45,-20], [70,-40] ],
+];
+
+function distToSegment(px, pz, ax, az, bx, bz) {
+  const abx = bx - ax, abz = bz - az;
+  const t = Math.max(0, Math.min(1, ((px - ax) * abx + (pz - az) * abz) / (abx * abx + abz * abz)));
+  const cx = ax + abx * t, cz = az + abz * t;
+  return Math.hypot(px - cx, pz - cz);
+}
+
+function trailDistance(x, z) {
+  let min = Infinity;
+  for (const path of trails) {
+    for (let i = 0; i < path.length - 1; i++) {
+      const d = distToSegment(x, z, path[i][0], path[i][1], path[i+1][0], path[i+1][1]);
+      if (d < min) min = d;
+    }
+  }
+  return min;
+}
+
 function buildTerrain() {
-  const geo = new THREE.PlaneGeometry(MAP_SIZE, MAP_SIZE, 32, 32);
+  const SEG = 150;
+  const geo = new THREE.PlaneGeometry(MAP_SIZE, MAP_SIZE, SEG, SEG);
   geo.rotateX(-Math.PI / 2);
   const pos = geo.attributes.position;
+  const colors = new Float32Array(pos.count * 3);
+  const cGrass = new THREE.Color(0x6a8a3a);
+  const cDirt  = new THREE.Color(0x9a7a4e);
+  const cRock  = new THREE.Color(0x8a8578);
+  const cDry   = new THREE.Color(0x8a8a4a);
+  const tmp = new THREE.Color();
+
   for (let i = 0; i < pos.count; i++) {
     const x = pos.getX(i), z = pos.getZ(i);
-    const y = Math.sin(x * 0.05) * 1.5 + Math.cos(z * 0.05) * 1.5 + Math.sin(x * 0.02 + z * 0.03) * 2;
-    pos.setY(i, y);
+    const h = terrainHeight(x, z);
+    pos.setY(i, h);
+
+    const slope = terrainSlope(x, z);
+    const td = trailDistance(x, z);
+
+    tmp.copy(cGrass);
+    if (h > 16) tmp.lerp(cDry, Math.min(1, (h - 16) / 18));
+    if (h > 30) tmp.lerp(cRock, Math.min(1, (h - 30) / 12));
+    if (slope > 0.55) tmp.lerp(cRock, Math.min(1, (slope - 0.55) * 1.4));
+    if (td < 3.2) tmp.lerp(cDirt, Math.max(0, 1 - td / 3.2) * 0.85);
+    const n = 0.92 + Math.random() * 0.16;
+    colors[i*3]   = tmp.r * n;
+    colors[i*3+1] = tmp.g * n;
+    colors[i*3+2] = tmp.b * n;
   }
+  geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
   geo.computeVertexNormals();
-  const mat = new THREE.MeshLambertMaterial({ color: 0x3a5f2a });
+
+  const mat = new THREE.MeshLambertMaterial({ map: grassTex, vertexColors: true });
   const ground = new THREE.Mesh(geo, mat);
   ground.receiveShadow = true;
   scene.add(ground);
 }
 
-function getGroundHeight(x, z) {
-  return Math.sin(x * 0.05) * 1.5 + Math.cos(z * 0.05) * 1.5 + Math.sin(x * 0.02 + z * 0.03) * 2;
-}
-
-// ===== TREES =====
-const treeTrunkGeo = new THREE.CylinderGeometry(0.3, 0.4, 4, 5);
-const treeLeafGeo = new THREE.ConeGeometry(2.5, 5, 6);
-const trunkMat = new THREE.MeshLambertMaterial({ color: 0x4a3520 });
+// ============================================================
+// VEGETATION & ROCKS
+// ============================================================
 function buildTrees() {
-  const leafColors = [0x2a4a1a, 0x3a5a2a, 0x2a5a2a, 0x354a20];
-  for (let i = 0; i < 80; i++) {
-    const x = (Math.random() - 0.5) * (MAP_SIZE - 20);
-    const z = (Math.random() - 0.5) * (MAP_SIZE - 20);
-    if (Math.abs(x) < 8 && Math.abs(z) < 8) continue;
+  const trunkGeo = new THREE.CylinderGeometry(0.28, 0.45, 5, 8);
+  const leafGeo = new THREE.ConeGeometry(2.6, 6, 8);
+  const leafGeo2 = new THREE.ConeGeometry(2.0, 4.5, 8);
+  const trunkMat = new THREE.MeshLambertMaterial({ map: barkTex });
+  const leafMats = [0x2a4a1a, 0x33551f, 0x2a521f, 0x3c5a24, 0x24461e].map(c =>
+    new THREE.MeshLambertMaterial({ color: c, map: leafTex }));
 
-    const trunk = new THREE.Mesh(treeTrunkGeo, trunkMat);
-    const gy = getGroundHeight(x, z);
-    trunk.position.set(x, gy + 2, z);
+  const count = 170;
+  for (let i = 0; i < count; i++) {
+    const x = (Math.random() - 0.5) * (MAP_SIZE - 16);
+    const z = (Math.random() - 0.5) * (MAP_SIZE - 16);
+    if (Math.abs(x) < 7 && Math.abs(z) < 7) continue;
+    if (trailDistance(x, z) < 4) continue;
+    const h = terrainHeight(x, z);
+    if (h > 38) continue;
+
+    const scale = 0.8 + Math.random() * 0.7;
+    const trunk = new THREE.Mesh(trunkGeo, trunkMat);
+    trunk.position.set(x, h + 2.5 * scale, z);
+    trunk.scale.setScalar(scale);
+    trunk.rotation.y = Math.random() * Math.PI * 2;
     trunk.castShadow = true;
     scene.add(trunk);
 
-    const leafMat = new THREE.MeshLambertMaterial({ color: leafColors[i % leafColors.length] });
-    const leaf1 = new THREE.Mesh(treeLeafGeo, leafMat);
-    leaf1.position.set(x, gy + 6, z);
-    leaf1.castShadow = true;
-    scene.add(leaf1);
+    const lm = leafMats[i % leafMats.length];
+    const l1 = new THREE.Mesh(leafGeo, lm);
+    l1.position.set(x, h + (5 + 2.2) * scale, z);
+    l1.scale.setScalar(scale);
+    l1.rotation.y = Math.random() * Math.PI;
+    l1.castShadow = true;
+    scene.add(l1);
 
-    const leaf2 = new THREE.Mesh(treeLeafGeo, leafMat);
-    leaf2.position.set(x, gy + 8, z);
-    leaf2.scale.set(0.7, 0.7, 0.7);
-    leaf2.castShadow = true;
-    scene.add(leaf2);
+    const l2 = new THREE.Mesh(leafGeo2, lm);
+    l2.position.set(x, h + (5 + 4.6) * scale, z);
+    l2.scale.setScalar(scale);
+    l2.rotation.y = Math.random() * Math.PI;
+    l2.castShadow = true;
+    scene.add(l2);
 
-    trees.push({ x, z, r: 1.5 });
+    trees.push({ x, z });
   }
+
+  // bushes (instanced)
+  const bushGeo = new THREE.SphereGeometry(0.8, 8, 6);
+  const bushMat = new THREE.MeshLambertMaterial({ color: 0x2e4a20 });
+  const bushes = new THREE.InstancedMesh(bushGeo, bushMat, 120);
+  const m = new THREE.Matrix4();
+  let bi = 0;
+  for (let i = 0; i < 120; i++) {
+    const x = (Math.random() - 0.5) * (MAP_SIZE - 10);
+    const z = (Math.random() - 0.5) * (MAP_SIZE - 10);
+    if (trailDistance(x, z) < 3) continue;
+    const h = terrainHeight(x, z);
+    if (h > 34) continue;
+    const s = 0.6 + Math.random() * 0.9;
+    m.makeScale(s, s * 0.7, s);
+    m.setPosition(x, h + 0.3 * s, z);
+    bushes.setMatrixAt(bi++, m);
+  }
+  bushes.count = bi;
+  bushes.castShadow = true;
+  scene.add(bushes);
+
+  // rocks (instanced)
+  const rockGeo = new THREE.DodecahedronGeometry(0.9, 0);
+  const rockMat = new THREE.MeshLambertMaterial({ color: 0x8a857c });
+  const rocks = new THREE.InstancedMesh(rockGeo, rockMat, 80);
+  let ri = 0;
+  for (let i = 0; i < 80; i++) {
+    const x = (Math.random() - 0.5) * (MAP_SIZE - 8);
+    const z = (Math.random() - 0.5) * (MAP_SIZE - 8);
+    const h = terrainHeight(x, z);
+    const s = 0.5 + Math.random() * 1.8;
+    m.makeScale(s, s * (0.6 + Math.random() * 0.5), s);
+    m.setPosition(x, h + 0.2 * s, z);
+    rocks.setMatrixAt(ri++, m);
+  }
+  rocks.count = ri;
+  rocks.castShadow = true;
+  scene.add(rocks);
 }
 
-// ===== BOUNDARIES =====
 function buildBoundaries() {
   const boundMat = new THREE.MeshBasicMaterial({ visible: false });
-  const half = MAP_SIZE / 2;
   const walls = [
-    { x: half, z: 0, w: 1, d: MAP_SIZE },
-    { x: -half, z: 0, w: 1, d: MAP_SIZE },
-    { x: 0, z: half, w: MAP_SIZE, d: 1 },
-    { x: 0, z: -half, w: MAP_SIZE, d: 1 },
+    { x: HALF - 1, z: 0, w: 1, d: MAP_SIZE },
+    { x: -HALF + 1, z: 0, w: 1, d: MAP_SIZE },
+    { x: 0, z: HALF - 1, w: MAP_SIZE, d: 1 },
+    { x: 0, z: -HALF + 1, w: MAP_SIZE, d: 1 },
   ];
   walls.forEach(w => {
-    const geo = new THREE.BoxGeometry(w.w, 10, w.d);
+    const geo = new THREE.BoxGeometry(w.w, 60, w.d);
     const mesh = new THREE.Mesh(geo, boundMat);
-    mesh.position.set(w.x, 5, w.z);
+    mesh.position.set(w.x, 30, w.z);
     scene.add(mesh);
   });
 }
 
-// ===== ANIMALS =====
+// ============================================================
+// SKY (gradient shader dome + sun/moon/stars)
+// ============================================================
+function buildSky() {
+  skyUniforms = {
+    topColor:    { value: new THREE.Color(0x4488cc) },
+    bottomColor: { value: new THREE.Color(0xaaccdd) },
+    offset:      { value: 20.0 },
+    exponent:    { value: 0.7 },
+  };
+  const skyMat = new THREE.ShaderMaterial({
+    uniforms: skyUniforms,
+    vertexShader: `
+      varying vec3 vWorldPosition;
+      void main() {
+        vec4 wp = modelMatrix * vec4(position, 1.0);
+        vWorldPosition = wp.xyz;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }`,
+    fragmentShader: `
+      uniform vec3 topColor;
+      uniform vec3 bottomColor;
+      uniform float offset;
+      uniform float exponent;
+      varying vec3 vWorldPosition;
+      void main() {
+        float h = normalize(vWorldPosition + vec3(0.0, offset, 0.0)).y;
+        gl_FragColor = vec4(mix(bottomColor, topColor, max(pow(max(h, 0.0), exponent), 0.0)), 1.0);
+      }`,
+    side: THREE.BackSide,
+    fog: false,
+    depthWrite: false,
+  });
+  const skyDome = new THREE.Mesh(new THREE.SphereGeometry(480, 24, 14), skyMat);
+  scene.add(skyDome);
+
+  sunMesh = new THREE.Mesh(new THREE.SphereGeometry(14, 16, 12),
+    new THREE.MeshBasicMaterial({ color: 0xffee99, fog: false }));
+  scene.add(sunMesh);
+  sunGlow = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: makeGlowTexture('rgba(255,235,170,1)', 'rgba(255,180,60,0.35)'),
+    transparent: true, fog: false, depthWrite: false }));
+  sunGlow.scale.set(120, 120, 1);
+  scene.add(sunGlow);
+
+  moonMesh = new THREE.Mesh(new THREE.SphereGeometry(9, 14, 12),
+    new THREE.MeshBasicMaterial({ color: 0xe8e8f0, fog: false }));
+  scene.add(moonMesh);
+  moonGlow = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: makeGlowTexture('rgba(220,225,255,0.9)', 'rgba(150,160,255,0.25)'),
+    transparent: true, fog: false, depthWrite: false }));
+  moonGlow.scale.set(70, 70, 1);
+  scene.add(moonGlow);
+
+  // Stars
+  const starGeo = new THREE.BufferGeometry();
+  const starPos = [];
+  for (let i = 0; i < 900; i++) {
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.random() * Math.PI * 0.48;
+    const r = 460;
+    starPos.push(
+      r * Math.sin(phi) * Math.cos(theta),
+      r * Math.cos(phi) + 10,
+      r * Math.sin(phi) * Math.sin(theta));
+  }
+  starGeo.setAttribute('position', new THREE.Float32BufferAttribute(starPos, 3));
+  stars = new THREE.Points(starGeo, new THREE.PointsMaterial({
+    color: 0xffffff, size: 1.6, transparent: true, opacity: 0, fog: false, sizeAttenuation: false }));
+  scene.add(stars);
+}
+
+// ============================================================
+// FIRST-PERSON GUN MODEL
+// ============================================================
+function buildGun() {
+  gunGroup = new THREE.Group();
+  const dark = new THREE.MeshLambertMaterial({ color: 0x2a241c });
+  const wood = new THREE.MeshLambertMaterial({ color: 0x5a3a1e });
+  const metal = new THREE.MeshLambertMaterial({ color: 0x444a50 });
+
+  const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.035, 1.1, 10), metal);
+  barrel.rotation.x = Math.PI / 2;
+  barrel.position.set(0, 0.02, -0.45);
+  gunGroup.add(barrel);
+
+  const stock = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.11, 0.55), wood);
+  stock.position.set(0, -0.05, 0.18);
+  gunGroup.add(stock);
+
+  const body = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.1, 0.5), dark);
+  body.position.set(0, 0, -0.12);
+  gunGroup.add(body);
+
+  const pump = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.06, 0.22), wood);
+  pump.position.set(0, -0.05, -0.38);
+  gunGroup.add(pump);
+
+  gunGroup.position.set(0.26, -0.22, -0.35);
+  camera.add(gunGroup);
+}
+
+// ============================================================
+// ANIMALS (higher-poly models)
+// ============================================================
 const animalDefs = {
-  bear: { name: 'クマ', baseReward: 5000, hp: 3, speed: 4, detectRange: 25, attackRange: 3, attackDmg: 1, flee: false, scale: 1.3, color: 0x3a2a1a },
-  deer: { name: '鹿', baseReward: 3000, hp: 2, speed: 7, detectRange: 30, attackRange: 0, attackDmg: 0, flee: true, scale: 1.0, color: 0x8a6a3a },
-  boar: { name: 'イノシシ', baseReward: 2500, hp: 2, speed: 5, detectRange: 20, attackRange: 3, attackDmg: 1, flee: false, scale: 0.9, color: 0x2a2a2a },
-  raccoon: { name: 'アライグマ', baseReward: 800, hp: 1, speed: 3, detectRange: 15, attackRange: 0, attackDmg: 0, flee: true, scale: 0.4, color: 0x6a6a6a },
+  bear:    { name: 'クマ',     baseReward: 5000, hp: 3, speed: 4.0, detectRange: 25, attackRange: 3.2, attackDmg: 1, flee: false, scale: 1.25, color: 0x3a2a1a },
+  deer:    { name: '鹿',      baseReward: 3000, hp: 2, speed: 7.0, detectRange: 32, attackRange: 0,   attackDmg: 0, flee: true,  scale: 1.0,  color: 0x8a6a3a },
+  boar:    { name: 'イノシシ', baseReward: 2500, hp: 2, speed: 5.2, detectRange: 20, attackRange: 2.8, attackDmg: 1, flee: false, scale: 0.85, color: 0x2e2a26 },
+  raccoon: { name: 'アライグマ', baseReward: 800, hp: 1, speed: 3.2, detectRange: 15, attackRange: 0,   attackDmg: 0, flee: true,  scale: 0.42, color: 0x6e6a66 },
 };
 
-function createAnimalMesh(type) {
-  const def = animalDefs[type];
-  const group = new THREE.Group();
-  const s = def.scale;
-  const bodyMat = new THREE.MeshLambertMaterial({ color: def.color });
+function mat(color) { return new THREE.MeshLambertMaterial({ color }); }
 
-  const body = new THREE.Mesh(new THREE.BoxGeometry(1.2 * s, 0.8 * s, 2 * s), bodyMat);
-  body.position.y = 0.8 * s;
-  body.castShadow = true;
-  group.add(body);
-
-  const head = new THREE.Mesh(new THREE.BoxGeometry(0.7 * s, 0.6 * s, 0.6 * s), bodyMat);
-  head.position.set(0, 1 * s, 1.3 * s);
-  head.castShadow = true;
-  group.add(head);
-
-  const legGeo = new THREE.CylinderGeometry(0.15 * s, 0.15 * s, 0.8 * s, 4);
-  const legPositions = [
-    [0.4 * s, 0.4 * s, 0.6 * s], [-0.4 * s, 0.4 * s, 0.6 * s],
-    [0.4 * s, 0.4 * s, -0.6 * s], [-0.4 * s, 0.4 * s, -0.6 * s],
-  ];
-  legPositions.forEach(p => {
-    const leg = new THREE.Mesh(legGeo, bodyMat);
-    leg.position.set(p[0], p[1], p[2]);
+function addLegs(group, s, bodyY, legLen, legR, positions, m) {
+  const legGeo = new THREE.CylinderGeometry(legR, legR * 1.15, legLen, 8);
+  positions.forEach(p => {
+    const leg = new THREE.Mesh(legGeo, m);
+    leg.position.set(p[0] * s, bodyY * s - legLen / 2 * s, p[1] * s);
     leg.castShadow = true;
     group.add(leg);
   });
+}
 
-  if (type === 'bear') {
-    const earGeo = new THREE.ConeGeometry(0.15 * s, 0.3 * s, 4);
-    const earMat = new THREE.MeshLambertMaterial({ color: 0x2a1a0a });
-    [[0.2*s,1.3*s,1.3*s],[-0.2*s,1.3*s,1.3*s]].forEach(p => {
-      const ear = new THREE.Mesh(earGeo, earMat);
-      ear.position.set(p[0], p[1], p[2]);
-      group.add(ear);
-    });
-  } else if (type === 'deer') {
-    const antlerGeo = new THREE.ConeGeometry(0.08 * s, 0.8 * s, 4);
-    const antlerMat = new THREE.MeshLambertMaterial({ color: 0x6a4a2a });
-    [[0.2*s,1.4*s,1.3*s],[-0.2*s,1.4*s,1.3*s]].forEach(p => {
-      const antler = new THREE.Mesh(antlerGeo, antlerMat);
-      antler.position.set(p[0], p[1], p[2]);
-      antler.rotation.z = p[0] > 0 ? 0.3 : -0.3;
-      group.add(antler);
-    });
-  } else if (type === 'boar') {
-    const tuskGeo = new THREE.ConeGeometry(0.06 * s, 0.3 * s, 4);
-    const tuskMat = new THREE.MeshLambertMaterial({ color: 0xdddddd });
-    [[0.15*s,0.7*s,1.6*s],[-0.15*s,0.7*s,1.6*s]].forEach(p => {
-      const tusk = new THREE.Mesh(tuskGeo, tuskMat);
-      tusk.position.set(p[0], p[1], p[2]);
-      tusk.rotation.x = Math.PI;
-      group.add(tusk);
-    });
-  } else if (type === 'raccoon') {
-    const maskMat = new THREE.MeshLambertMaterial({ color: 0x1a1a1a });
-    const mask = new THREE.Mesh(new THREE.BoxGeometry(0.6*s, 0.2*s, 0.1*s), maskMat);
-    mask.position.set(0, 1.05*s, 1.55*s);
-    group.add(mask);
-    const tail = new THREE.Mesh(new THREE.CylinderGeometry(0.1*s, 0.15*s, 0.8*s, 4), bodyMat);
-    tail.position.set(0, 0.9*s, -1.2*s);
-    tail.rotation.x = 0.5;
-    group.add(tail);
+function createBearMesh() {
+  const g = new THREE.Group();
+  const fur = mat(0x3a2a1a), furDark = mat(0x2a1c10), snoutM = mat(0x6a5540);
+  const body = new THREE.Mesh(new THREE.SphereGeometry(1.05, 16, 12), fur);
+  body.scale.set(1.05, 0.9, 1.5);
+  body.position.y = 1.15;
+  body.castShadow = true; g.add(body);
+  const hump = new THREE.Mesh(new THREE.SphereGeometry(0.55, 12, 10), fur);
+  hump.position.set(0, 1.75, 0.45); hump.castShadow = true; g.add(hump);
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.48, 14, 12), fur);
+  head.position.set(0, 1.7, 1.5); head.castShadow = true; g.add(head);
+  const snout = new THREE.Mesh(new THREE.SphereGeometry(0.22, 10, 8), snoutM);
+  snout.scale.set(1, 0.8, 1.3);
+  snout.position.set(0, 1.58, 1.95); g.add(snout);
+  const nose = new THREE.Mesh(new THREE.SphereGeometry(0.07, 8, 6), mat(0x1a1210));
+  nose.position.set(0, 1.6, 2.2); g.add(nose);
+  [[0.26, 1], [-0.26, 1]].forEach(p => {
+    const ear = new THREE.Mesh(new THREE.SphereGeometry(0.14, 10, 8), furDark);
+    ear.position.set(p[0], 2.05, 1.35); g.add(ear);
+  });
+  [[0.18], [-0.18]].forEach(p => {
+    const eye = new THREE.Mesh(new THREE.SphereGeometry(0.05, 6, 6), mat(0x0a0a0a));
+    eye.position.set(p[0], 1.78, 1.9); g.add(eye);
+  });
+  const tail = new THREE.Mesh(new THREE.SphereGeometry(0.16, 8, 6), fur);
+  tail.position.set(0, 1.15, -1.5); g.add(tail);
+  addLegs(g, 1, 1.3, 1.15, 0.24, [[0.55, 0.7], [-0.55, 0.7], [0.55, -0.75], [-0.55, -0.75]], fur);
+  g.scale.setScalar(1.25);
+  return g;
+}
+
+function createDeerMesh() {
+  const g = new THREE.Group();
+  const fur = mat(0x8a6a3a), furLight = mat(0xa8885a);
+  const antlerM = mat(0x6a4a2a);
+  const body = new THREE.Mesh(new THREE.SphereGeometry(0.68, 16, 12), fur);
+  body.scale.set(0.85, 1.0, 1.55);
+  body.position.y = 1.25; body.castShadow = true; g.add(body);
+  const rump = new THREE.Mesh(new THREE.SphereGeometry(0.42, 10, 8), furLight);
+  rump.position.set(0, 1.3, -0.95); g.add(rump);
+  const chest = new THREE.Mesh(new THREE.SphereGeometry(0.4, 10, 8), fur);
+  chest.position.set(0, 1.2, 0.85); g.add(chest);
+  const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.24, 0.85, 10), fur);
+  neck.position.set(0, 1.9, 1.05);
+  neck.rotation.x = -0.65; neck.castShadow = true; g.add(neck);
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.24, 12, 10), fur);
+  head.position.set(0, 2.3, 1.42); head.castShadow = true; g.add(head);
+  const snout = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.11, 0.3, 8), furLight);
+  snout.rotation.x = Math.PI / 2 - 0.5;
+  snout.position.set(0, 2.22, 1.68); g.add(snout);
+  [[0.2, 0.5], [-0.2, -0.5]].forEach(p => {
+    const ear = new THREE.Mesh(new THREE.ConeGeometry(0.08, 0.28, 6), fur);
+    ear.position.set(p[0], 2.55, 1.3);
+    ear.rotation.z = p[1]; g.add(ear);
+  });
+  [-1, 1].forEach(side => {
+    const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.05, 0.6, 7), antlerM);
+    beam.position.set(0.14 * side, 2.75, 1.35);
+    beam.rotation.z = -0.55 * side; beam.rotation.x = -0.3; g.add(beam);
+    const t1 = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.035, 0.35, 6), antlerM);
+    t1.position.set(0.32 * side, 2.95, 1.28);
+    t1.rotation.z = -1.0 * side; g.add(t1);
+    const t2 = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.03, 0.28, 6), antlerM);
+    t2.position.set(0.3 * side, 3.1, 1.1);
+    t2.rotation.z = -0.35 * side; g.add(t2);
+    const t3 = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.025, 0.22, 6), antlerM);
+    t3.position.set(0.18 * side, 3.2, 1.2);
+    t3.rotation.z = -1.2 * side; g.add(t3);
+  });
+  const tail = new THREE.Mesh(new THREE.SphereGeometry(0.1, 6, 5), furLight);
+  tail.position.set(0, 1.5, -1.05); g.add(tail);
+  addLegs(g, 1, 1.25, 1.2, 0.07, [[0.36, 0.75], [-0.36, 0.75], [0.32, -0.8], [-0.32, -0.8]], fur);
+  return g;
+}
+
+function createBoarMesh() {
+  const g = new THREE.Group();
+  const fur = mat(0x2e2a26), bristle = mat(0x1e1a16), tuskM = mat(0xe8e2d0);
+  const body = new THREE.Mesh(new THREE.SphereGeometry(0.8, 14, 10), fur);
+  body.scale.set(1.0, 0.95, 1.5);
+  body.position.y = 0.95; body.castShadow = true; g.add(body);
+  const ridge = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.12, 1.6, 6), bristle);
+  ridge.rotation.x = Math.PI / 2;
+  ridge.position.set(0, 1.68, 0); g.add(ridge);
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.45, 12, 10), fur);
+  head.scale.set(0.9, 0.9, 1.1);
+  head.position.set(0, 1.0, 1.25); head.castShadow = true; g.add(head);
+  const snout = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.2, 0.18, 10), bristle);
+  snout.rotation.x = Math.PI / 2;
+  snout.position.set(0, 0.9, 1.75); g.add(snout);
+  [-1, 1].forEach(side => {
+    const tusk = new THREE.Mesh(new THREE.ConeGeometry(0.05, 0.34, 7), tuskM);
+    tusk.position.set(0.16 * side, 1.05, 1.6);
+    tusk.rotation.x = -0.9; g.add(tusk);
+  });
+  [-1, 1].forEach(side => {
+    const ear = new THREE.Mesh(new THREE.ConeGeometry(0.1, 0.22, 6), bristle);
+    ear.position.set(0.24 * side, 1.35, 1.15);
+    ear.rotation.z = -0.5 * side; g.add(ear);
+  });
+  [[0.2], [-0.2]].forEach(p => {
+    const eye = new THREE.Mesh(new THREE.SphereGeometry(0.04, 6, 6), mat(0x0a0a0a));
+    eye.position.set(p[0], 1.15, 1.5); g.add(eye);
+  });
+  const tail = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.05, 0.3, 5), bristle);
+  tail.position.set(0, 1.1, -1.3); tail.rotation.x = 0.6; g.add(tail);
+  addLegs(g, 1, 0.95, 0.85, 0.13, [[0.42, 0.6], [-0.42, 0.6], [0.42, -0.65], [-0.42, -0.65]], fur);
+  g.scale.setScalar(0.9);
+  return g;
+}
+
+function createRaccoonMesh() {
+  const g = new THREE.Group();
+  const fur = mat(0x6e6a66), dark = mat(0x2a2622), lightM = mat(0x9a948e);
+  const body = new THREE.Mesh(new THREE.SphereGeometry(0.42, 14, 10), fur);
+  body.scale.set(0.9, 0.9, 1.4);
+  body.position.y = 0.5; body.castShadow = true; g.add(body);
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.26, 12, 10), fur);
+  head.position.set(0, 0.85, 0.55); head.castShadow = true; g.add(head);
+  const mask = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.12, 0.16), dark);
+  mask.position.set(0, 0.87, 0.74); g.add(mask);
+  const snout = new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 6), lightM);
+  snout.position.set(0, 0.78, 0.78); g.add(snout);
+  [-1, 1].forEach(side => {
+    const ear = new THREE.Mesh(new THREE.ConeGeometry(0.09, 0.16, 6), dark);
+    ear.position.set(0.15 * side, 1.08, 0.5); g.add(ear);
+  });
+  const tailColors = [fur, dark, fur, dark, lightM];
+  for (let i = 0; i < 5; i++) {
+    const seg = new THREE.Mesh(new THREE.SphereGeometry(0.1 - i * 0.008, 8, 6), tailColors[i]);
+    seg.position.set(0, 0.45 + i * 0.02, -0.55 - i * 0.14);
+    g.add(seg);
   }
+  [[0.1], [-0.1]].forEach(p => {
+    const eye = new THREE.Mesh(new THREE.SphereGeometry(0.03, 6, 5), mat(0x0a0a0a));
+    eye.position.set(p[0], 0.92, 0.72); g.add(eye);
+  });
+  addLegs(g, 1, 0.5, 0.5, 0.06, [[0.2, 0.3], [-0.2, 0.3], [0.2, -0.32], [-0.2, -0.32]], dark);
+  return g;
+}
 
-  return group;
+function createAnimalMesh(type) {
+  const def = animalDefs[type];
+  let g;
+  if (type === 'bear') g = createBearMesh();
+  else if (type === 'deer') g = createDeerMesh();
+  else if (type === 'boar') g = createBoarMesh();
+  else g = createRaccoonMesh();
+  g.scale.multiplyScalar(def.scale);
+  return g;
+}
+
+// ---- AI ----
+function nearestTrailPoint(x, z) {
+  let best = null, bestD = Infinity;
+  for (let t = 0; t < trails.length; t++) {
+    const path = trails[t];
+    for (let i = 0; i < path.length; i++) {
+      const d = Math.hypot(x - path[i][0], z - path[i][1]);
+      if (d < bestD) { bestD = d; best = { trail: t, idx: i }; }
+    }
+  }
+  return best;
 }
 
 function spawnAnimal(type, x, z) {
   const def = animalDefs[type];
   const mesh = createAnimalMesh(type);
-  const gy = getGroundHeight(x, z);
-  mesh.position.set(x, gy, z);
+  mesh.position.set(x, terrainHeight(x, z), z);
   scene.add(mesh);
 
+  const near = nearestTrailPoint(x, z);
   const animal = {
     type, mesh, def,
     hp: def.hp,
     state: 'wander',
-    target: new THREE.Vector3(),
-    wanderTimer: 0,
+    target: new THREE.Vector3(x, 0, z),
+    wanderTimer: Math.random() * 3,
     attackCooldown: 0,
     weight: 0.7 + Math.random() * 0.6,
-    deadTimer: 0,
+    onTrail: near ? near.trail : -1,
+    trailIdx: near ? near.idx : 0,
+    legPhase: Math.random() * Math.PI * 2,
   };
-  setWanderTarget(animal);
   animals.push(animal);
   return animal;
 }
@@ -516,26 +868,39 @@ function spawnAnimal(type, x, z) {
 function spawnInitialAnimals() {
   spawnAnimal('bear', 40, 40);
   spawnAnimal('bear', -50, -30);
+  spawnAnimal('bear', 65, -55);
   spawnAnimal('deer', 30, -50);
   spawnAnimal('deer', -40, 50);
   spawnAnimal('deer', 60, 10);
+  spawnAnimal('deer', -10, 65);
   spawnAnimal('boar', -60, 20);
   spawnAnimal('boar', 50, -40);
+  spawnAnimal('boar', 5, -15);
   spawnAnimal('raccoon', 20, 60);
   spawnAnimal('raccoon', -20, -60);
   spawnAnimal('raccoon', 70, 70);
+  spawnAnimal('raccoon', -70, -70);
 }
 
 function setWanderTarget(animal) {
-  const angle = Math.random() * Math.PI * 2;
-  const dist = 5 + Math.random() * 15;
-  animal.target.set(
-    animal.mesh.position.x + Math.cos(angle) * dist,
-    0,
-    animal.mesh.position.z + Math.sin(angle) * dist
-  );
-  animal.target.x = THREE.MathUtils.clamp(animal.target.x, -MAP_SIZE/2 + 5, MAP_SIZE/2 - 5);
-  animal.target.z = THREE.MathUtils.clamp(animal.target.z, -MAP_SIZE/2 + 5, MAP_SIZE/2 - 5);
+  // 獣道を好んで歩く: 70%でトレイル上の次のポイントへ
+  if (animal.onTrail >= 0 && Math.random() < 0.7) {
+    const path = trails[animal.onTrail];
+    const dir = Math.random() < 0.5 ? 1 : -1;
+    animal.trailIdx = (animal.trailIdx + dir + path.length) % path.length;
+    animal.target.set(path[animal.trailIdx][0], 0, path[animal.trailIdx][1]);
+    if (Math.random() < 0.5) {
+      animal.wanderTimer = -2 - Math.random() * 3; // rest
+    }
+  } else {
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 4 + Math.random() * 14;
+    let tx = animal.mesh.position.x + Math.cos(angle) * dist;
+    let tz = animal.mesh.position.z + Math.sin(angle) * dist;
+    tx = THREE.MathUtils.clamp(tx, -HALF + 5, HALF - 5);
+    tz = THREE.MathUtils.clamp(tz, -HALF + 5, HALF - 5);
+    animal.target.set(tx, 0, tz);
+  }
 }
 
 function updateAnimals(dt) {
@@ -545,12 +910,8 @@ function updateAnimals(dt) {
   for (let i = animals.length - 1; i >= 0; i--) {
     const a = animals[i];
     if (a.state === 'dead') {
-      a.deadTimer += dt;
-      a.mesh.position.y -= dt * 0.3;
-      if (a.deadTimer > 60) {
-        scene.remove(a.mesh);
-        animals.splice(i, 1);
-      }
+      // 死体はその場に留まる（沈まない）
+      a.mesh.position.y = terrainHeight(a.mesh.position.x, a.mesh.position.z) + 0.1;
       continue;
     }
 
@@ -560,15 +921,10 @@ function updateAnimals(dt) {
     const speed = a.def.speed * nightMult;
 
     if (a.def.flee) {
-      if (distToPlayer < detectR || a.state === 'flee') {
-        a.state = 'flee';
-      } else {
-        a.state = 'wander';
-      }
+      a.state = (distToPlayer < detectR) ? 'flee' : 'wander';
     } else {
-      if (distToPlayer < detectR) {
-        a.state = 'chase';
-      } else if (a.state === 'chase' && distToPlayer > detectR * 1.5) {
+      if (distToPlayer < detectR) a.state = 'chase';
+      else if (a.state === 'chase' && distToPlayer > detectR * 1.6) {
         a.state = 'wander';
         setWanderTarget(a);
       }
@@ -576,32 +932,35 @@ function updateAnimals(dt) {
 
     let moveTarget;
     if (a.state === 'flee') {
-      const dx = pos.x - playerPos.x;
-      const dz = pos.z - playerPos.z;
-      const len = Math.sqrt(dx*dx + dz*dz) || 1;
-      moveTarget = new THREE.Vector3(pos.x + dx/len * 10, 0, pos.z + dz/len * 10);
-      moveTarget.x = THREE.MathUtils.clamp(moveTarget.x, -MAP_SIZE/2+5, MAP_SIZE/2-5);
-      moveTarget.z = THREE.MathUtils.clamp(moveTarget.z, -MAP_SIZE/2+5, MAP_SIZE/2-5);
+      const dx = pos.x - playerPos.x, dz = pos.z - playerPos.z;
+      const len = Math.sqrt(dx * dx + dz * dz) || 1;
+      moveTarget = new THREE.Vector3(
+        THREE.MathUtils.clamp(pos.x + dx / len * 12, -HALF + 5, HALF - 5), 0,
+        THREE.MathUtils.clamp(pos.z + dz / len * 12, -HALF + 5, HALF - 5));
     } else if (a.state === 'chase') {
       moveTarget = new THREE.Vector3(playerPos.x, 0, playerPos.z);
     } else {
       a.wanderTimer += dt;
       if (a.wanderTimer > 4 || pos.distanceTo(a.target) < 2) {
         setWanderTarget(a);
-        a.wanderTimer = 0;
+        if (a.wanderTimer > 0) a.wanderTimer = 0;
       }
       moveTarget = a.target;
     }
 
-    const dx = moveTarget.x - pos.x;
-    const dz = moveTarget.z - pos.z;
-    const dlen = Math.sqrt(dx*dx + dz*dz);
-    if (dlen > 0.1) {
-      pos.x += (dx / dlen) * speed * dt;
-      pos.z += (dz / dlen) * speed * dt;
+    const dx = moveTarget.x - pos.x, dz = moveTarget.z - pos.z;
+    const dlen = Math.sqrt(dx * dx + dz * dz);
+    if (a.wanderTimer >= 0 && dlen > 0.1) {
+      const step = speed * dt;
+      const mv = Math.min(step, dlen);
+      pos.x += dx / dlen * mv;
+      pos.z += dz / dlen * mv;
       a.mesh.rotation.y = Math.atan2(dx, dz);
+      a.legPhase += dt * speed * 2;
+      a.mesh.position.y = terrainHeight(pos.x, pos.z) + Math.abs(Math.sin(a.legPhase)) * 0.06;
+    } else {
+      a.mesh.position.y = terrainHeight(pos.x, pos.z);
     }
-    pos.y = getGroundHeight(pos.x, pos.z);
 
     if (a.def.attackDmg > 0 && a.state === 'chase' && distToPlayer < a.def.attackRange) {
       a.attackCooldown -= dt;
@@ -613,16 +972,16 @@ function updateAnimals(dt) {
   }
 }
 
-// ===== PLAYER DAMAGE =====
+// ============================================================
+// DAMAGE / SHOOT / COLLECT / TRAPS
+// ============================================================
 function damagePlayer(dmg) {
   if (player.invulnTimer > 0) return;
   player.hp -= dmg;
   player.invulnTimer = 1.0;
   updateHUD();
   flashDamage();
-  if (player.hp <= 0) {
-    gameOver();
-  }
+  if (player.hp <= 0) gameOver();
 }
 
 function flashDamage() {
@@ -631,7 +990,6 @@ function flashDamage() {
   setTimeout(() => { flash.style.background = 'rgba(200,0,0,0)'; }, 200);
 }
 
-// ===== SHOOTING =====
 function shoot() {
   if (player.reloading) return;
   if (player.ammo <= 0) {
@@ -641,9 +999,13 @@ function shoot() {
   player.ammo--;
   updateHUD();
 
-  const recoilAmount = player.weapon === 'shotgun' ? 0.04 : 0.015;
+  const recoilAmount = player.weapon === 'shotgun' ? 0.045 : 0.018;
   const recoilMult = player.recoilLevel === 0 ? 1 : player.recoilLevel === 1 ? 0.6 : 0.3;
   camera.rotation.x += recoilAmount * recoilMult * (Math.random() * 0.5 + 0.5);
+  if (gunGroup) {
+    gunGroup.position.z += 0.08 * recoilMult;
+    gunGroup.rotation.x += 0.15 * recoilMult;
+  }
 
   if (player.weapon === 'shotgun') {
     const spread = player.scoping ? 0.02 : 0.06;
@@ -661,48 +1023,35 @@ function shoot() {
     camera.getWorldDirection(dir);
     fireRay(dir);
   }
-
   spawnMuzzleFlash();
 }
 
 function fireRay(dir) {
   raycaster.set(camera.position, dir);
-  raycaster.far = 200;
-
+  raycaster.far = 250;
   const animalMeshes = animals.filter(a => a.state !== 'dead').map(a => a.mesh);
   const hits = raycaster.intersectObjects(animalMeshes, true);
-
   if (hits.length > 0) {
-    let hitMesh = hits[0].object;
+    const hitMesh = hits[0].object;
     let hitAnimal = null;
     for (const a of animals) {
       if (a.state === 'dead') continue;
-      if (a.mesh === hitMesh || a.mesh.children.includes(hitMesh)) {
-        hitAnimal = a;
-        break;
-      }
+      if (a.mesh === hitMesh || a.mesh.children.includes(hitMesh)) { hitAnimal = a; break; }
     }
     if (hitAnimal) {
-      const dmg = player.weapon === 'shotgun' ? 1 : 2;
-      hitAnimal.hp -= dmg;
+      hitAnimal.hp -= player.weapon === 'shotgun' ? 1 : 2;
       showHitMarker();
       spawnBlood(hitAnimal.mesh.position);
-      if (hitAnimal.hp <= 0) {
-        killAnimal(hitAnimal);
-      } else {
-        if (hitAnimal.def.flee) {
-          hitAnimal.state = 'flee';
-        } else {
-          hitAnimal.state = 'chase';
-        }
-      }
+      if (hitAnimal.hp <= 0) killAnimal(hitAnimal);
+      else hitAnimal.state = hitAnimal.def.flee ? 'flee' : 'chase';
     }
   }
 }
 
 function killAnimal(animal) {
   animal.state = 'dead';
-  animal.mesh.rotation.x = Math.PI / 2;
+  animal.mesh.rotation.z = Math.PI / 2 * 0.92; // lie on side
+  animal.mesh.position.y = terrainHeight(animal.mesh.position.x, animal.mesh.position.z) + 0.1;
   const reward = Math.round(animal.def.baseReward * animal.weight);
   animal.rewardValue = reward;
   collectibles.push(animal);
@@ -712,11 +1061,9 @@ function killAnimal(animal) {
 function showHitMarker() {
   const hm = document.getElementById('hitMarker');
   hm.style.display = 'block';
-  hm.style.opacity = '1';
-  setTimeout(() => { hm.style.display = 'none'; }, 200);
+  setTimeout(() => { hm.style.display = 'none'; }, 180);
 }
 
-// ===== COLLECT =====
 function collectNearby() {
   const playerPos = controls.getObject().position;
   for (let i = collectibles.length - 1; i >= 0; i--) {
@@ -734,7 +1081,7 @@ function collectNearby() {
   }
   for (let i = trapPlacements.length - 1; i >= 0; i--) {
     const t = trapPlacements[i];
-    if (t.mesh.position.distanceTo(playerPos) < 4) {
+    if (t.mesh.position.distanceTo(playerPos) < 4 && !t.triggered) {
       scene.remove(t.mesh);
       trapPlacements.splice(i, 1);
       player.trapType = t.type;
@@ -745,7 +1092,6 @@ function collectNearby() {
   }
 }
 
-// ===== TRAPS =====
 function placeTrap() {
   if (player.trapType === 0) {
     notify('トラップを所持していません（Bでショップ）');
@@ -754,15 +1100,14 @@ function placeTrap() {
   const playerPos = controls.getObject().position;
   const dir = new THREE.Vector3();
   camera.getWorldDirection(dir);
-  const tx = playerPos.x + dir.x * 3;
-  const tz = playerPos.z + dir.z * 3;
-  const ty = getGroundHeight(tx, tz);
+  const tx = THREE.MathUtils.clamp(playerPos.x + dir.x * 3, -HALF + 3, HALF - 3);
+  const tz = THREE.MathUtils.clamp(playerPos.z + dir.z * 3, -HALF + 3, HALF - 3);
+  const ty = terrainHeight(tx, tz);
 
   const isLarge = player.trapType === 2;
-  const geo = new THREE.BoxGeometry(isLarge ? 1.5 : 1, 0.2, isLarge ? 1.5 : 1);
-  const mat = new THREE.MeshLambertMaterial({ color: 0x664422 });
-  const mesh = new THREE.Mesh(geo, mat);
-  mesh.position.set(tx, ty + 0.1, tz);
+  const geo = new THREE.CylinderGeometry(isLarge ? 0.8 : 0.5, isLarge ? 0.9 : 0.6, 0.15, 10);
+  const mesh = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({ color: 0x664422 }));
+  mesh.position.set(tx, ty + 0.08, tz);
   mesh.castShadow = true;
   scene.add(mesh);
 
@@ -772,7 +1117,7 @@ function placeTrap() {
   notify('トラップを設置した');
 }
 
-function updateTraps(dt) {
+function updateTraps() {
   for (let i = trapPlacements.length - 1; i >= 0; i--) {
     const t = trapPlacements[i];
     if (t.triggered) continue;
@@ -780,12 +1125,9 @@ function updateTraps(dt) {
       if (a.state === 'dead') continue;
       if (a.mesh.position.distanceTo(t.pos) < (t.type === 2 ? 2.5 : 1.5)) {
         t.triggered = true;
-        const dmg = t.type === 2 ? 3 : 1;
-        a.hp -= dmg;
+        a.hp -= t.type === 2 ? 3 : 1;
         spawnBlood(a.mesh.position);
-        if (a.hp <= 0) {
-          killAnimal(a);
-        }
+        if (a.hp <= 0) killAnimal(a);
         t.mesh.scale.y = 3;
         t.mesh.material.color.setHex(0x882222);
         notify('トラップに ' + a.def.name + ' がかかった！');
@@ -794,24 +1136,24 @@ function updateTraps(dt) {
           scene.remove(trapRef.mesh);
           const idx = trapPlacements.indexOf(trapRef);
           if (idx >= 0) trapPlacements.splice(idx, 1);
-        }, 3000);
+        }, 4000);
         break;
       }
     }
   }
 }
 
-// ===== PARTICLES =====
+// ============================================================
+// PARTICLES
+// ============================================================
+const bloodGeo = new THREE.SphereGeometry(0.09, 5, 4);
+const bloodMat = new THREE.MeshBasicMaterial({ color: 0x991111 });
 function spawnBlood(pos) {
-  for (let i = 0; i < 5; i++) {
-    const geo = new THREE.SphereGeometry(0.1, 4, 3);
-    const mat = new THREE.MeshBasicMaterial({ color: 0xaa0000 });
-    const p = new THREE.Mesh(geo, mat);
+  for (let i = 0; i < 6; i++) {
+    const p = new THREE.Mesh(bloodGeo, bloodMat);
     p.position.copy(pos);
     p.position.y += 1;
-    p.userData.vel = new THREE.Vector3(
-      (Math.random()-0.5)*3, Math.random()*3, (Math.random()-0.5)*3
-    );
+    p.userData.vel = new THREE.Vector3((Math.random()-0.5)*3, Math.random()*3, (Math.random()-0.5)*3);
     p.userData.life = 0.6;
     scene.add(p);
     particles.push(p);
@@ -819,13 +1161,12 @@ function spawnBlood(pos) {
 }
 
 function spawnMuzzleFlash() {
-  const geo = new THREE.SphereGeometry(0.3, 4, 4);
-  const mat = new THREE.MeshBasicMaterial({ color: 0xffaa00, transparent: true });
-  const p = new THREE.Mesh(geo, mat);
+  const p = new THREE.Mesh(new THREE.SphereGeometry(0.14, 6, 5),
+    new THREE.MeshBasicMaterial({ color: 0xffb840, transparent: true }));
   const dir = new THREE.Vector3();
   camera.getWorldDirection(dir);
-  p.position.copy(camera.position).add(dir.multiplyScalar(1));
-  p.userData.life = 0.08;
+  p.position.copy(camera.position).add(dir.multiplyScalar(1.2)).add(new THREE.Vector3(0.2, -0.15, 0));
+  p.userData.life = 0.07;
   p.userData.isFlash = true;
   scene.add(p);
   particles.push(p);
@@ -840,160 +1181,157 @@ function updateParticles(dt) {
       particles.splice(i, 1);
       continue;
     }
-    if (p.userData.isFlash) {
-      p.material.opacity = p.userData.life / 0.08;
-      continue;
-    }
+    if (p.userData.isFlash) { p.material.opacity = p.userData.life / 0.07; continue; }
     p.userData.vel.y -= 9.8 * dt;
     p.position.add(p.userData.vel.clone().multiplyScalar(dt));
   }
 }
 
-// ===== RELOAD =====
 function reload() {
   if (player.reloading || player.ammo === player.magSize) return;
   player.reloading = true;
   notify('リロード中...');
+  if (gunGroup) gunGroup.rotation.x = 0.5;
   setTimeout(() => {
     player.ammo = player.magSize;
     player.reloading = false;
+    if (gunGroup) gunGroup.rotation.x = 0;
     updateHUD();
     notify('リロード完了');
   }, 1500);
 }
 
-// ===== DAY/NIGHT CYCLE =====
+// ============================================================
+// DAY / NIGHT CYCLE (sky keyframe interpolation)
+// ============================================================
+const skyKeys = [
+  { t: 0.00, top: 0x04040e, hor: 0x08081a, amb: 0.09, sun: 0.0,  fog: 0.030, sunC: 0x000000, icon: '🌙', label: '深夜' },
+  { t: 0.18, top: 0x080820, hor: 0x120e30, amb: 0.11, sun: 0.0,  fog: 0.028, sunC: 0x000000, icon: '🌙', label: '深夜' },
+  { t: 0.22, top: 0x1a2a52, hor: 0xc86840, amb: 0.26, sun: 0.25, fog: 0.016, sunC: 0xff8855, icon: '🌅', label: '朝' },
+  { t: 0.27, top: 0x3a6a9e, hor: 0xffb070, amb: 0.42, sun: 0.65, fog: 0.010, sunC: 0xffaa66, icon: '🌅', label: '朝' },
+  { t: 0.35, top: 0x2a62c8, hor: 0xa8d0ee, amb: 0.62, sun: 1.05, fog: 0.006, sunC: 0xfff2dd, icon: '☀️', label: '昼' },
+  { t: 0.50, top: 0x1a56c0, hor: 0x9acdea, amb: 0.68, sun: 1.15, fog: 0.005, sunC: 0xfff5e0, icon: '☀️', label: '昼' },
+  { t: 0.65, top: 0x2a5cb0, hor: 0xa8c4e4, amb: 0.60, sun: 1.0,  fog: 0.006, sunC: 0xffeeda, icon: '☀️', label: '昼' },
+  { t: 0.73, top: 0x4a3a80, hor: 0xff7a40, amb: 0.42, sun: 0.6,  fog: 0.011, sunC: 0xff8844, icon: '🌇', label: '夕方' },
+  { t: 0.78, top: 0x201a48, hor: 0x8a3a50, amb: 0.24, sun: 0.15, fog: 0.016, sunC: 0xff6633, icon: '🌇', label: '夕方' },
+  { t: 0.85, top: 0x08081e, hor: 0x101028, amb: 0.11, sun: 0.0,  fog: 0.028, sunC: 0x000000, icon: '🌙', label: '夜' },
+  { t: 1.00, top: 0x04040e, hor: 0x08081a, amb: 0.09, sun: 0.0,  fog: 0.030, sunC: 0x000000, icon: '🌙', label: '深夜' },
+];
+
+const _cA = new THREE.Color(), _cB = new THREE.Color();
+function lerpHex(a, b, t) {
+  _cA.setHex(a); _cB.setHex(b);
+  _cA.lerp(_cB, t);
+  return _cA;
+}
+
 function updateDayNight(dt) {
   timeOfDay += dt / DAY_DURATION;
   if (timeOfDay >= 1) timeOfDay -= 1;
 
-  const sunAngle = (timeOfDay - 0.25) * Math.PI * 2;
-  const sunHeight = Math.sin(sunAngle);
-  const sunX = Math.cos(sunAngle) * 200;
-  const sunY = Math.sin(sunAngle) * 200;
-  const sunZ = 50;
-
-  sunLight.position.set(sunX, sunY, sunZ);
-  sunMesh.position.set(sunX * 0.8, sunY * 0.8, sunZ * 0.5 + 100);
-
-  const moonAngle = sunAngle + Math.PI;
-  const moonX = Math.cos(moonAngle) * 200;
-  const moonY = Math.sin(moonAngle) * 200;
-  moonLight.position.set(moonX, moonY, -50);
-  moonMesh.position.set(moonX * 0.8, moonY * 0.8, -50 * 0.5 - 100);
-
-  let skyColor, ambColor, ambIntensity, sunIntensity, fogColor, fogNear, fogFar, phaseLabel, phaseIcon;
-
-  if (timeOfDay >= 0.22 && timeOfDay < 0.30) {
-    const t = (timeOfDay - 0.22) / 0.08;
-    skyColor = lerpColor(0x1a1a3a, 0xff9966, t);
-    ambColor = lerpColor(0x332244, 0xffccaa, t);
-    ambIntensity = 0.3 + t * 0.3;
-    sunIntensity = 0.3 + t * 0.7;
-    fogColor = lerpColor(0x1a1a2a, 0xddaa88, t);
-    fogNear = 15; fogFar = 80;
-    phaseLabel = '朝'; phaseIcon = '🌅';
-    isNight = false;
-  } else if (timeOfDay >= 0.30 && timeOfDay < 0.70) {
-    if (timeOfDay < 0.5) {
-      const t = (timeOfDay - 0.30) / 0.20;
-      skyColor = lerpColor(0xff9966, 0x4488ff, t);
-      ambColor = lerpColor(0xffccaa, 0xccccdd, t);
-      ambIntensity = 0.6 + t * 0.2;
-      sunIntensity = 1.0;
-      fogColor = lerpColor(0xddaa88, 0x88aacc, t);
-    } else {
-      const t = (timeOfDay - 0.50) / 0.20;
-      skyColor = lerpColor(0x4488ff, 0xff7744, t);
-      ambColor = lerpColor(0xccccdd, 0xffaa88, t);
-      ambIntensity = 0.8 - t * 0.2;
-      sunIntensity = 1.0;
-      fogColor = lerpColor(0x88aacc, 0xcc6644, t);
+  let k0 = skyKeys[0], k1 = skyKeys[skyKeys.length - 1];
+  for (let i = 0; i < skyKeys.length - 1; i++) {
+    if (timeOfDay >= skyKeys[i].t && timeOfDay <= skyKeys[i + 1].t) {
+      k0 = skyKeys[i]; k1 = skyKeys[i + 1];
+      break;
     }
-    fogNear = 30; fogFar = 140;
-    phaseLabel = '昼'; phaseIcon = '☀️';
-    isNight = false;
-  } else if (timeOfDay >= 0.70 && timeOfDay < 0.80) {
-    const t = (timeOfDay - 0.70) / 0.10;
-    skyColor = lerpColor(0xff7744, 0x6633aa, t);
-    ambColor = lerpColor(0xffaa88, 0x443366, t);
-    ambIntensity = 0.6 - t * 0.4;
-    sunIntensity = 1.0 - t * 0.8;
-    fogColor = lerpColor(0xcc6644, 0x332244, t);
-    fogNear = 20 - t * 5; fogFar = 100 - t * 30;
-    phaseLabel = '夕方'; phaseIcon = '🌇';
-    isNight = false;
-  } else {
-    skyColor = 0x0a0a22;
-    ambColor = 0x222244;
-    ambIntensity = 0.15;
-    sunIntensity = 0;
-    fogColor = 0x0a0a1a;
-    fogNear = 8; fogFar = 45;
-    phaseLabel = '夜'; phaseIcon = '🌙';
-    isNight = true;
   }
+  const span = k1.t - k0.t || 1;
+  const t = (timeOfDay - k0.t) / span;
 
-  skyDome.material.color.setHex(skyColor);
-  scene.background = new THREE.Color(skyColor);
-  scene.fog.color.setHex(fogColor);
-  scene.fog.near = fogNear;
-  scene.fog.far = fogFar;
+  skyUniforms.topColor.value.copy(lerpHex(k0.top, k1.top, t));
+  skyUniforms.bottomColor.value.copy(lerpHex(k0.hor, k1.hor, t));
+  scene.fog.color.copy(skyUniforms.bottomColor.value);
+  scene.fog.density = k0.fog + (k1.fog - k0.fog) * t;
 
-  ambientLight.color.setHex(ambColor);
-  ambientLight.intensity = ambIntensity;
+  ambientLight.intensity = k0.amb + (k1.amb - k0.amb) * t;
+  ambientLight.color.copy(lerpHex(k0.hor, k1.hor, t)).lerp(new THREE.Color(0xffffff), 0.4);
 
-  sunLight.intensity = Math.max(0, sunIntensity);
-  sunLight.color.setHex(timeOfDay >= 0.22 && timeOfDay < 0.30 ? 0xff9966 : (timeOfDay >= 0.70 && timeOfDay < 0.80 ? 0xff7744 : 0xfff5e0));
+  const sunAngle = (timeOfDay - 0.25) * Math.PI * 2;
+  const sunDir = new THREE.Vector3(Math.cos(sunAngle), Math.sin(sunAngle), 0.42).normalize();
+  const sunPos = sunDir.clone().multiplyScalar(420);
+  sunLight.position.copy(sunPos);
+  sunMesh.position.copy(sunPos);
+  sunGlow.position.copy(sunPos);
+  const sunI = k0.sun + (k1.sun - k0.sun) * t;
+  sunLight.intensity = sunI;
+  sunLight.color.copy(lerpHex(k0.sunC, k1.sunC, t));
 
-  moonLight.intensity = isNight ? 0.25 : 0;
-  hemiLight.intensity = isNight ? 0.1 : 0.4;
+  const moonDir = new THREE.Vector3(-sunDir.x, -sunDir.y, -0.42).normalize();
+  const moonPos = moonDir.clone().multiplyScalar(400);
+  moonLight.position.copy(moonPos);
+  moonMesh.position.copy(moonPos);
+  moonGlow.position.copy(moonPos);
+
+  const sunH = Math.sin(sunAngle);
+  const nightF = THREE.MathUtils.clamp((0.06 - sunH) * 3.5, 0, 1);
+  moonLight.intensity = nightF * 0.3;
+  hemiLight.intensity = 0.45 * (1 - nightF * 0.8);
+  stars.material.opacity = nightF;
+  sunGlow.material.opacity = THREE.MathUtils.clamp(sunI, 0, 1);
+  moonGlow.material.opacity = nightF * 0.8;
+
+  isNight = nightF > 0.5;
+  if (isNight !== prevIsNight) {
+    prevIsNight = isNight;
+    if (isNight) notify('夜になった…動物が狂暴化している！');
+    else notify('朝が来た。動物は落ち着いている。');
+  }
 
   const totalMinutes = timeOfDay * 24 * 60;
   const hours = Math.floor(totalMinutes / 60);
   const minutes = Math.floor(totalMinutes % 60);
-  const timeStr = String(hours).padStart(2,'0') + ':' + String(minutes).padStart(2,'0');
-  document.getElementById('timeText').textContent = phaseLabel + ' ' + timeStr;
-  document.getElementById('phaseText').textContent = phaseIcon + ' ' + phaseLabel;
+  const icon = t < 0.5 ? k0.icon : k1.icon;
+  const label = t < 0.5 ? k0.label : k1.label;
+  document.getElementById('timeText').textContent = label + ' ' +
+    String(hours).padStart(2, '0') + ':' + String(minutes).padStart(2, '0');
+  document.getElementById('phaseText').textContent = icon + ' ' + label;
 }
 
-function lerpColor(c1, c2, t) {
-  t = Math.max(0, Math.min(1, t));
-  const r1 = (c1 >> 16) & 0xff, g1 = (c1 >> 8) & 0xff, b1 = c1 & 0xff;
-  const r2 = (c2 >> 16) & 0xff, g2 = (c2 >> 8) & 0xff, b2 = c2 & 0xff;
-  const r = Math.round(r1 + (r2 - r1) * t);
-  const g = Math.round(g1 + (g2 - g1) * t);
-  const b = Math.round(b1 + (b2 - b1) * t);
-  return (r << 16) | (g << 8) | b;
-}
-
-// ===== PLAYER MOVEMENT =====
+// ============================================================
+// PLAYER MOVEMENT
+// ============================================================
 function updatePlayer(dt) {
   if (player.invulnTimer > 0) player.invulnTimer -= dt;
-  if (!pointerLocked || modalOpen) return;
+  if (!pointerLocked) return; // pause = pointer unlocked
 
   const moveSpeed = player.scoping ? PLAYER_SPEED * 0.4 : PLAYER_SPEED;
   const dir = new THREE.Vector3();
-
   if (keys['KeyW']) dir.z -= 1;
   if (keys['KeyS']) dir.z += 1;
   if (keys['KeyA']) dir.x -= 1;
   if (keys['KeyD']) dir.x += 1;
 
-  dir.normalize();
-  dir.multiplyScalar(moveSpeed * dt);
+  player.moving = dir.lengthSq() > 0;
+  dir.normalize().multiplyScalar(moveSpeed * dt);
 
-  if (dir.length() > 0) {
+  if (player.moving) {
     controls.moveRight(dir.x);
     controls.moveForward(-dir.z);
+    player.bobPhase += dt * 10;
   }
 
   const pos = controls.getObject().position;
-  pos.x = THREE.MathUtils.clamp(pos.x, -MAP_SIZE/2 + 2, MAP_SIZE/2 - 2);
-  pos.z = THREE.MathUtils.clamp(pos.z, -MAP_SIZE/2 + 2, MAP_SIZE/2 - 2);
+  pos.x = THREE.MathUtils.clamp(pos.x, -HALF + 2, HALF - 2);
+  pos.z = THREE.MathUtils.clamp(pos.z, -HALF + 2, HALF - 2);
+  const gy = terrainHeight(pos.x, pos.z);
+  const bob = player.moving ? Math.abs(Math.sin(player.bobPhase)) * 0.05 : 0;
+  pos.y = gy + PLAYER_HEIGHT + bob;
 
-  const gy = getGroundHeight(pos.x, pos.z);
-  pos.y = gy + PLAYER_HEIGHT;
+  // gun sway
+  if (gunGroup) {
+    const sway = player.moving ? Math.sin(player.bobPhase) * 0.008 : Math.sin(performance.now() * 0.0012) * 0.002;
+    gunGroup.position.x = 0.26 + sway;
+    gunGroup.position.y = -0.22 + (player.moving ? Math.abs(Math.cos(player.bobPhase)) * 0.008 : 0);
+    gunGroup.position.z += (-0.35 - gunGroup.position.z) * Math.min(1, dt * 10);
+    gunGroup.rotation.x += (0 - gunGroup.rotation.x) * Math.min(1, dt * 8);
+  }
+}
+
+function toggleFlashlight() {
+  player.flashlightOn = !player.flashlightOn;
+  flashlight.visible = player.flashlightOn;
+  document.getElementById('lightState').textContent = player.flashlightOn ? 'ON' : 'OFF';
 }
 
 // ===== SCOPE =====
@@ -1009,23 +1347,19 @@ function toggleScope() {
     return;
   }
   player.scoping = !player.scoping;
-  if (player.scoping) {
-    camera.fov = player.scopeLevel === 1 ? 40 : 20;
-    camera.updateProjectionMatrix();
-    document.getElementById('scopeOverlay').style.display = 'block';
-    document.getElementById('crosshair').style.display = 'none';
-  } else {
-    camera.fov = 75;
-    camera.updateProjectionMatrix();
-    document.getElementById('scopeOverlay').style.display = 'none';
-    document.getElementById('crosshair').style.display = 'block';
-  }
+  camera.fov = player.scoping ? (player.scopeLevel === 1 ? 40 : 20) : 75;
+  camera.updateProjectionMatrix();
+  document.getElementById('scopeOverlay').style.display = player.scoping ? 'block' : 'none';
+  document.getElementById('crosshair').style.display = player.scoping ? 'none' : 'block';
+  if (gunGroup) gunGroup.visible = !player.scoping;
 }
 
-// ===== HUD =====
+// ============================================================
+// HUD
+// ============================================================
 function updateHUD() {
-  document.getElementById('hpFill').style.width = (player.hp / player.maxHp * 100) + '%';
-  document.getElementById('hpText').textContent = player.hp + '/' + player.maxHp;
+  document.getElementById('hpFill').style.width = (Math.max(0, player.hp) / player.maxHp * 100) + '%';
+  document.getElementById('hpText').textContent = Math.max(0, player.hp) + '/' + player.maxHp;
   document.getElementById('money').textContent = player.money;
   document.getElementById('ammo').textContent = player.ammo;
   document.getElementById('magSize').textContent = player.magSize;
@@ -1041,145 +1375,223 @@ function notify(msg) {
   div.textContent = msg;
   container.appendChild(div);
   setTimeout(() => { div.classList.add('fade'); }, 2000);
-  setTimeout(() => { div.remove(); }, 2500);
+  setTimeout(() => { div.remove(); }, 2600);
 }
 
-// ===== SHOP =====
+// ============================================================
+// SHOP (hotkey driven, non-blocking)
+// ============================================================
+const shopItems = [
+  { id: 'rifle', name: 'ライフル', desc: '拡散率低・高精度・高威力', price: 5000,
+    owned: () => player.weapon === 'rifle',
+    buy: () => { if (player.money >= 5000) { player.money -= 5000; player.weapon = 'rifle'; player.magSize = 5; player.ammo = 5; return true; } return false; } },
+  { id: 'shotgun', name: 'ショットガン', desc: '拡散率高・近距離向け', price: 0,
+    owned: () => player.weapon === 'shotgun',
+    buy: () => { player.weapon = 'shotgun'; player.magSize = 5; player.ammo = 5; return true; } },
+  { id: 'recoil1', name: '反動軽減ストック Lv1', desc: '反動を40%軽減', price: 2000,
+    owned: () => player.recoilLevel >= 1,
+    buy: () => { if (player.recoilLevel === 0 && player.money >= 2000) { player.money -= 2000; player.recoilLevel = 1; return true; } return false; } },
+  { id: 'recoil2', name: '反動軽減ストック Lv2', desc: '反動を70%軽減（Lv1必要）', price: 5000,
+    owned: () => player.recoilLevel >= 2,
+    buy: () => { if (player.recoilLevel === 1 && player.money >= 5000) { player.money -= 5000; player.recoilLevel = 2; return true; } return false; } },
+  { id: 'scope1', name: 'スコープ 2倍', desc: '右クリックで2倍ズーム', price: 3000,
+    owned: () => player.scopeLevel >= 1,
+    buy: () => { if (player.scopeLevel === 0 && player.money >= 3000) { player.money -= 3000; player.scopeLevel = 1; player.hasScope = true; return true; } return false; } },
+  { id: 'scope2', name: 'スコープ 4倍', desc: '右クリックで4倍ズーム（2倍必要）', price: 6000,
+    owned: () => player.scopeLevel >= 2,
+    buy: () => { if (player.scopeLevel === 1 && player.money >= 6000) { player.money -= 6000; player.scopeLevel = 2; return true; } return false; } },
+  { id: 'trapSmall', name: '小型トラップ', desc: '小動物向け・1回使用', price: 2000,
+    owned: () => false,
+    buy: () => { if (player.trapType === 0 && player.money >= 2000) { player.money -= 2000; player.trapType = 1; return true; } return false; } },
+  { id: 'trapLarge', name: '大型強化トラップ', desc: '大型獣向け・高威力', price: 8000,
+    owned: () => false,
+    buy: () => { if (player.trapType === 0 && player.money >= 8000) { player.money -= 8000; player.trapType = 2; return true; } return false; } },
+  { id: 'heal', name: '応急手当キット', desc: 'HPを1回復', price: 1500,
+    owned: () => false,
+    buy: () => { if (player.hp < player.maxHp && player.money >= 1500) { player.money -= 1500; player.hp = Math.min(player.maxHp, player.hp + 1); return true; } return false; } },
+];
+
 function buildShop() {
   const container = document.getElementById('shopItems');
   container.innerHTML = '';
-
-  const items = [
-    { id: 'rifle', name: 'ライフル', desc: '拡散率低・高精度・高威力', price: 5000,
-      owned: () => player.weapon === 'rifle',
-      buy: () => { if (player.money >= 5000) { player.money -= 5000; player.weapon = 'rifle'; player.magSize = 5; player.ammo = 5; return true; } return false; } },
-    { id: 'shotgun', name: 'ショットガン', desc: '拡散率高・近距離向け', price: 0,
-      owned: () => player.weapon === 'shotgun',
-      buy: () => { player.weapon = 'shotgun'; player.magSize = 5; player.ammo = 5; return true; } },
-    { id: 'recoil1', name: '反動軽減ストック Lv1', desc: '反動を40%軽減', price: 2000,
-      owned: () => player.recoilLevel >= 1,
-      buy: () => { if (player.recoilLevel === 0 && player.money >= 2000) { player.money -= 2000; player.recoilLevel = 1; return true; } return false; } },
-    { id: 'recoil2', name: '反動軽減ストック Lv2', desc: '反動を70%軽減（Lv1必要）', price: 5000,
-      owned: () => player.recoilLevel >= 2,
-      buy: () => { if (player.recoilLevel === 1 && player.money >= 5000) { player.money -= 5000; player.recoilLevel = 2; return true; } return false; } },
-    { id: 'scope1', name: 'スコープ 2倍', desc: '右クリックで2倍ズーム', price: 3000,
-      owned: () => player.scopeLevel >= 1,
-      buy: () => { if (player.scopeLevel === 0 && player.money >= 3000) { player.money -= 3000; player.scopeLevel = 1; player.hasScope = true; return true; } return false; } },
-    { id: 'scope2', name: 'スコープ 4倍', desc: '右クリックで4倍ズーム（2倍必要）', price: 6000,
-      owned: () => player.scopeLevel >= 2,
-      buy: () => { if (player.scopeLevel === 1 && player.money >= 6000) { player.money -= 6000; player.scopeLevel = 2; return true; } return false; } },
-    { id: 'trapSmall', name: '小型トラップ', desc: '小動物向け・1回使用', price: 2000,
-      owned: () => false,
-      buy: () => { if (player.trapType === 0 && player.money >= 2000) { player.money -= 2000; player.trapType = 1; return true; } return false; } },
-    { id: 'trapLarge', name: '大型強化トラップ', desc: '大型獣向け・高威力', price: 8000,
-      owned: () => false,
-      buy: () => { if (player.trapType === 0 && player.money >= 8000) { player.money -= 8000; player.trapType = 2; return true; } return false; } },
-    { id: 'heal', name: '応急手当キット', desc: 'HPを1回復', price: 1500,
-      owned: () => false,
-      buy: () => { if (player.hp < player.maxHp && player.money >= 1500) { player.money -= 1500; player.hp = Math.min(player.maxHp, player.hp + 1); return true; } return false; } },
-  ];
-
-  items.forEach(item => {
+  shopItems.forEach((item, idx) => {
+    const hotkey = idx === 9 ? '0' : String(idx + 1);
     const div = document.createElement('div');
     div.className = 'shop-item';
     const owned = item.owned();
     const canBuy = !owned && (item.price === 0 || player.money >= item.price);
-
-    div.innerHTML = '<div class="info"><div class="name">' + item.name + '</div><div class="desc">' + item.desc + '</div></div><div class="price">' + (item.price > 0 ? item.price + '円' : '無料') + '</div>';
+    div.innerHTML =
+      '<div class="info"><span class="hotkey">' + hotkey + '</span>' +
+      '<span class="name">' + item.name + '</span>' +
+      '<span class="desc">' + item.desc + '</span></div>' +
+      '<div class="price">' + (item.price > 0 ? item.price.toLocaleString() + '円' : '無料') + '</div>';
     const btn = document.createElement('button');
     btn.textContent = owned ? '所持済' : '購入';
     btn.disabled = !canBuy;
     if (owned) btn.classList.add('owned');
-    btn.onclick = () => {
-      if (item.buy()) {
-        notify(item.name + ' を購入しました');
-        updateHUD();
-        buildShop();
-      } else {
-        notify('購入できません');
-      }
-    };
+    btn.onclick = () => buyItem(idx);
     div.appendChild(btn);
     container.appendChild(div);
   });
 }
 
-// ===== MAP =====
-function drawMap() {
-  const canvas = document.getElementById('mapCanvas');
-  const ctx = canvas.getContext('2d');
-  const W = canvas.width, H = canvas.height;
-  const scale = W / MAP_SIZE;
+function buyItem(idx) {
+  const item = shopItems[idx];
+  if (!item) return;
+  if (item.owned()) return;
+  if (item.buy()) {
+    notify(item.name + ' を購入しました');
+    updateHUD();
+    buildShop();
+  } else {
+    notify('購入できません（条件不足または所持金不足）');
+  }
+}
 
-  ctx.fillStyle = '#1a3a1a';
-  ctx.fillRect(0, 0, W, H);
+// ============================================================
+// MAP (Google Maps style)
+// ============================================================
+let mapBaseLayer = null;
 
-  ctx.fillStyle = '#2a5a2a';
+function buildMapBaseLayer() {
+  const c = document.createElement('canvas');
+  c.width = c.height = 440;
+  const ctx = c.getContext('2d');
+  const px = 440 / MAP_SIZE;
+
+  for (let iy = 0; iy < 440; iy++) {
+    for (let ix = 0; ix < 440; ix++) {
+      const x = ix / px - HALF;
+      const z = iy / px - HALF;
+      const h = terrainHeight(x, z);
+      const slope = terrainSlope(x, z);
+      const td = trailDistance(x, z);
+
+      let r, g, b;
+      if (h < 6)       { r = 0.72; g = 0.80; b = 0.55; }
+      else if (h < 14) { const t2 = (h - 6) / 8;  r = 0.72 - t2 * 0.10; g = 0.80 - t2 * 0.14; b = 0.55 - t2 * 0.08; }
+      else if (h < 26) { const t2 = (h - 14) / 12; r = 0.62 - t2 * 0.06; g = 0.66 - t2 * 0.10; b = 0.47 - t2 * 0.05; }
+      else             { const t2 = Math.min(1, (h - 26) / 14); r = 0.56 + t2 * 0.30; g = 0.56 + t2 * 0.28; b = 0.42 + t2 * 0.26; }
+      const shade = 1 - Math.min(0.45, slope * 0.5);
+      r *= shade; g *= shade; b *= shade;
+      if (td < 3.0) {
+        const tw = Math.max(0, 1 - td / 3.0);
+        r = r * (1 - tw) + 0.83 * tw;
+        g = g * (1 - tw) + 0.70 * tw;
+        b = b * (1 - tw) + 0.48 * tw;
+      }
+      ctx.fillStyle = 'rgb(' + (r * 255 | 0) + ',' + (g * 255 | 0) + ',' + (b * 255 | 0) + ')';
+      ctx.fillRect(ix, iy, 1, 1);
+    }
+  }
+
+  ctx.fillStyle = 'rgba(40,80,32,0.85)';
   trees.forEach(t => {
-    const mx = (t.x + MAP_SIZE/2) * scale;
-    const my = (t.z + MAP_SIZE/2) * scale;
-    ctx.fillRect(mx - 1, my - 1, 3, 3);
-  });
-
-  const animalColors = { bear: '#5a3a1a', deer: '#aa7a3a', boar: '#3a3a3a', raccoon: '#7a7a7a' };
-  animals.forEach(a => {
-    if (a.state === 'dead') return;
-    const mx = (a.mesh.position.x + MAP_SIZE/2) * scale;
-    const my = (a.mesh.position.z + MAP_SIZE/2) * scale;
-    ctx.fillStyle = animalColors[a.type];
     ctx.beginPath();
-    ctx.arc(mx, my, 4, 0, Math.PI * 2);
+    ctx.arc((t.x + HALF) * px, (t.z + HALF) * px, 1.4, 0, Math.PI * 2);
     ctx.fill();
   });
 
-  ctx.fillStyle = '#664422';
+  mapBaseLayer = c;
+}
+
+function drawMap() {
+  const canvas = document.getElementById('mapCanvas');
+  const ctx = canvas.getContext('2d');
+  const px = 440 / MAP_SIZE;
+
+  if (mapBaseLayer) ctx.drawImage(mapBaseLayer, 0, 0);
+  else { ctx.fillStyle = '#333'; ctx.fillRect(0, 0, 440, 440); }
+
   trapPlacements.forEach(t => {
-    const mx = (t.pos.x + MAP_SIZE/2) * scale;
-    const my = (t.pos.z + MAP_SIZE/2) * scale;
-    ctx.fillRect(mx - 2, my - 2, 5, 5);
+    const mx = (t.pos.x + HALF) * px, my = (t.pos.z + HALF) * px;
+    ctx.fillStyle = '#e08030';
+    ctx.fillRect(mx - 3, my - 3, 6, 6);
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 1;
+    ctx.strokeRect(mx - 3, my - 3, 6, 6);
+  });
+
+  const animalColors = { bear: '#7a4a2a', deer: '#c89858', boar: '#3a3a3a', raccoon: '#8a8a8a' };
+  animals.forEach(a => {
+    const mx = (a.mesh.position.x + HALF) * px, my = (a.mesh.position.z + HALF) * px;
+    ctx.beginPath();
+    ctx.arc(mx, my, 5, 0, Math.PI * 2);
+    ctx.fillStyle = a.state === 'dead' ? 'rgba(120,120,120,0.5)' : animalColors[a.type];
+    ctx.fill();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5;
+    ctx.stroke();
+    if (a.state === 'dead') {
+      ctx.beginPath();
+      ctx.moveTo(mx - 3, my - 3); ctx.lineTo(mx + 3, my + 3);
+      ctx.moveTo(mx + 3, my - 3); ctx.lineTo(mx - 3, my + 3);
+      ctx.stroke();
+    }
   });
 
   const pos = controls.getObject().position;
-  const px = (pos.x + MAP_SIZE/2) * scale;
-  const py = (pos.z + MAP_SIZE/2) * scale;
+  const pxl = (pos.x + HALF) * px, pyl = (pos.z + HALF) * px;
   const dir = new THREE.Vector3();
   camera.getWorldDirection(dir);
   const angle = Math.atan2(dir.x, dir.z);
 
   ctx.save();
-  ctx.translate(px, py);
+  ctx.translate(pxl, pyl);
   ctx.rotate(-angle);
-  ctx.fillStyle = '#ff3333';
+  ctx.fillStyle = 'rgba(74,144,226,0.35)';
   ctx.beginPath();
-  ctx.moveTo(0, -8);
-  ctx.lineTo(-5, 5);
-  ctx.lineTo(5, 5);
+  ctx.moveTo(0, 0);
+  ctx.arc(0, 0, 34, -Math.PI / 2 - 0.5, -Math.PI / 2 + 0.5);
   ctx.closePath();
   ctx.fill();
   ctx.restore();
 
-  ctx.strokeStyle = '#4a4a6a';
-  ctx.strokeRect(0, 0, W, H);
+  ctx.beginPath();
+  ctx.arc(pxl, pyl, 7, 0, Math.PI * 2);
+  ctx.fillStyle = '#4a90e2'; ctx.fill();
+  ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.5; ctx.stroke();
+  ctx.save();
+  ctx.translate(pxl, pyl);
+  ctx.rotate(-angle);
+  ctx.fillStyle = '#fff';
+  ctx.beginPath();
+  ctx.moveTo(0, -12); ctx.lineTo(-4, -4); ctx.lineTo(4, -4);
+  ctx.closePath(); ctx.fill();
+  ctx.restore();
+
+  ctx.fillStyle = 'rgba(255,255,255,0.9)';
+  ctx.font = 'bold 13px sans-serif';
+  ctx.fillText('N', 424, 18);
+  ctx.beginPath();
+  ctx.moveTo(427, 30); ctx.lineTo(422, 40); ctx.lineTo(427, 37); ctx.lineTo(432, 40);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(1, 1, 438, 438);
 }
 
-// ===== MODALS =====
+// ============================================================
+// MODALS
+// ============================================================
 function openModal(name) {
   if (name === 'shop') {
     buildShop();
     document.getElementById('shopModal').classList.add('active');
   } else if (name === 'map') {
+    if (!mapBaseLayer) buildMapBaseLayer();
     drawMap();
     document.getElementById('mapModal').classList.add('active');
   } else if (name === 'pause') {
     document.getElementById('pauseModal').classList.add('active');
   }
   modalOpen = name;
-  if (pointerLocked) controls.unlock();
+  // ショップ・マップはポインタロックを解除しない（ゲーム続行）
+  if (name === 'pause' && pointerLocked) controls.unlock();
 }
 
 function closeModal(id) {
   document.getElementById(id + 'Modal').classList.remove('active');
-  modalOpen = null;
+  if (modalOpen === id) modalOpen = null;
+  if (gameRunning && id !== 'pause' && !pointerLocked) controls.lock();
 }
 
 function closeAllModals() {
@@ -1187,7 +1599,9 @@ function closeAllModals() {
   modalOpen = null;
 }
 
-// ===== GO HOME =====
+// ============================================================
+// GO HOME / GAME OVER / RESTART
+// ============================================================
 function goHome() {
   closeModal('pause');
   const fade = document.getElementById('fadeOverlay');
@@ -1197,7 +1611,7 @@ function goHome() {
     player.hp = player.maxHp;
     timeOfDay = 0.25;
     player.invulnTimer = 0;
-    controls.getObject().position.set(0, PLAYER_HEIGHT, 0);
+    controls.getObject().position.set(0, terrainHeight(0, 0) + PLAYER_HEIGHT, 0);
     animals.forEach(a => scene.remove(a.mesh));
     animals = [];
     collectibles = [];
@@ -1210,14 +1624,13 @@ function goHome() {
   }, 800);
 }
 
-// ===== GAME OVER =====
 function gameOver() {
   gameRunning = false;
   if (pointerLocked) controls.unlock();
   document.getElementById('gameOverScreen').classList.add('active');
 }
 
-function restartGame() {
+function resetWorldEntities() {
   animals.forEach(a => scene.remove(a.mesh));
   animals = [];
   collectibles = [];
@@ -1225,7 +1638,9 @@ function restartGame() {
   trapPlacements = [];
   particles.forEach(p => scene.remove(p));
   particles = [];
+}
 
+function resetPlayerState() {
   player.hp = player.maxHp;
   player.money = 3000;
   player.weapon = 'shotgun';
@@ -1237,12 +1652,24 @@ function restartGame() {
   player.hasScope = false;
   player.scoping = false;
   player.invulnTimer = 0;
+  player.flashlightOn = false;
+  flashlight.visible = false;
+  document.getElementById('lightState').textContent = 'OFF';
   day = 1;
   timeOfDay = 0.25;
+  prevIsNight = false;
   camera.fov = 75;
   camera.updateProjectionMatrix();
-  controls.getObject().position.set(0, PLAYER_HEIGHT, 0);
+  document.getElementById('scopeOverlay').style.display = 'none';
+  document.getElementById('crosshair').style.display = 'block';
+  if (gunGroup) gunGroup.visible = true;
+  controls.getObject().position.set(0, terrainHeight(0, 0) + PLAYER_HEIGHT, 0);
+}
 
+function restartGame() {
+  closeAllModals();
+  resetWorldEntities();
+  resetPlayerState();
   spawnInitialAnimals();
   updateHUD();
   document.getElementById('gameOverScreen').classList.remove('active');
@@ -1250,7 +1677,9 @@ function restartGame() {
   controls.lock();
 }
 
-// ===== EVENTS =====
+// ============================================================
+// EVENTS
+// ============================================================
 function setupEvents() {
   document.getElementById('startBtn').addEventListener('click', () => {
     document.getElementById('startScreen').style.display = 'none';
@@ -1262,57 +1691,55 @@ function setupEvents() {
   document.getElementById('restartBtn').addEventListener('click', restartGame);
   document.getElementById('goHomeBtn').addEventListener('click', goHome);
 
-  controls.addEventListener('lock', () => {
-    pointerLocked = true;
-  });
+  controls.addEventListener('lock', () => { pointerLocked = true; });
   controls.addEventListener('unlock', () => {
     pointerLocked = false;
-    if (gameRunning && !modalOpen) {
-      openModal('pause');
-    }
+    if (gameRunning && !modalOpen) openModal('pause');
+  });
+
+  renderer.domElement.addEventListener('click', () => {
+    if (gameRunning && !pointerLocked && !modalOpen) controls.lock();
   });
 
   document.addEventListener('keydown', (e) => {
     keys[e.code] = true;
     if (!gameRunning) return;
 
+    // shop hotkeys (works while shop overlay is open — game continues)
+    if (modalOpen === 'shop' && /^Digit[0-9]$/.test(e.code)) {
+      const n = e.code === 'Digit0' ? 9 : parseInt(e.code.slice(5)) - 1;
+      buyItem(n);
+      return;
+    }
+
     if (e.code === 'KeyR') reload();
     if (e.code === 'KeyE') collectNearby();
+    if (e.code === 'KeyT') placeTrap();
+    if (e.code === 'KeyF') toggleFlashlight();
     if (e.code === 'KeyB') {
       if (modalOpen === 'shop') closeModal('shop');
-      else openModal('shop');
+      else if (!modalOpen) openModal('shop');
     }
     if (e.code === 'KeyM') {
       if (modalOpen === 'map') closeModal('map');
-      else openModal('map');
+      else if (!modalOpen) openModal('map');
     }
     if (e.code === 'Escape') {
       if (modalOpen === 'pause') closeModal('pause');
-      else if (modalOpen) closeAllModals();
-      else openModal('pause');
+      else if (modalOpen) { closeAllModals(); }
     }
   });
 
-  document.addEventListener('keyup', (e) => {
-    keys[e.code] = false;
-  });
+  document.addEventListener('keyup', (e) => { keys[e.code] = false; });
 
   document.addEventListener('mousedown', (e) => {
     if (!gameRunning || !pointerLocked || modalOpen) return;
-    if (e.button === 0) {
-      mouseDown = true;
-      shoot();
-    }
-    if (e.button === 2) {
-      toggleScope();
-    }
+    if (e.button === 0) shoot();
+    if (e.button === 2) toggleScope();
   });
 
   document.addEventListener('mouseup', (e) => {
-    if (e.button === 0) mouseDown = false;
-    if (e.button === 2) {
-      if (player.scoping) toggleScope();
-    }
+    if (e.button === 2 && player.scoping) toggleScope();
   });
 
   document.addEventListener('contextmenu', (e) => e.preventDefault());
@@ -1324,7 +1751,80 @@ function setupEvents() {
   });
 }
 
-// ===== ANIMATE =====
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x88aacc, 0.008);
+
+  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1200);
+  camera.position.set(0, terrainHeight(0, 0) + PLAYER_HEIGHT, 0);
+
+  renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.domElement.classList.add('game');
+  document.body.appendChild(renderer.domElement);
+
+  clock = new THREE.Clock();
+
+  buildTextures();
+
+  ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+  scene.add(ambientLight);
+  hemiLight = new THREE.HemisphereLight(0x88aaff, 0x445522, 0.4);
+  scene.add(hemiLight);
+
+  sunLight = new THREE.DirectionalLight(0xfff5e0, 1.0);
+  sunLight.castShadow = true;
+  sunLight.shadow.mapSize.width = 2048;
+  sunLight.shadow.mapSize.height = 2048;
+  sunLight.shadow.camera.near = 20;
+  sunLight.shadow.camera.far = 500;
+  sunLight.shadow.camera.left = -130;
+  sunLight.shadow.camera.right = 130;
+  sunLight.shadow.camera.top = 130;
+  sunLight.shadow.camera.bottom = -130;
+  sunLight.shadow.bias = -0.0005;
+  scene.add(sunLight);
+
+  moonLight = new THREE.DirectionalLight(0x9999ff, 0.15);
+  scene.add(moonLight);
+
+  flashlight = new THREE.SpotLight(0xfff2cc, 1.6, 45, Math.PI / 6, 0.4, 1.2);
+  flashlight.visible = false;
+  scene.add(flashlight);
+  scene.add(flashlight.target);
+
+  buildSky();
+
+  controls = new THREE.PointerLockControls(camera, document.body);
+  scene.add(controls.getObject());
+
+  buildTerrain();
+  buildTrees();
+  buildBoundaries();
+  buildGun();
+  spawnInitialAnimals();
+  setupEvents();
+
+  setTimeout(() => {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+  }, 100);
+
+  animate();
+}
+
+// ============================================================
+// MAIN LOOP
+// ============================================================
+let mapRefreshTimer = 0;
 function animate() {
   requestAnimationFrame(animate);
   const dt = Math.min(clock.getDelta(), 0.05);
@@ -1332,15 +1832,26 @@ function animate() {
   if (gameRunning) {
     updatePlayer(dt);
     updateAnimals(dt);
-    updateTraps(dt);
+    updateTraps();
     updateParticles(dt);
     updateDayNight(dt);
+
+    if (flashlight.visible) {
+      const dir = new THREE.Vector3();
+      camera.getWorldDirection(dir);
+      flashlight.position.copy(camera.position);
+      flashlight.target.position.copy(camera.position).add(dir.multiplyScalar(30));
+    }
+
+    if (modalOpen === 'map') {
+      mapRefreshTimer += dt;
+      if (mapRefreshTimer > 0.35) { mapRefreshTimer = 0; drawMap(); }
+    }
   }
 
   renderer.render(scene, camera);
 }
 
-// ===== START =====
 init();
 </script>
 </body>
