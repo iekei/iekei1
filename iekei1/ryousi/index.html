@@ -94,6 +94,17 @@ canvas.game { display: block; position: fixed; top: 0; left: 0; z-index: 1; }
   background: rgba(200,0,0,0); pointer-events: none; transition: background 0.1s;
 }
 
+#collectInfo {
+  display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  background: rgba(10,14,26,0.93); border: 1px solid rgba(140,170,255,0.4); border-radius: 12px;
+  padding: 18px 30px; color: #fff; text-align: center; pointer-events: none;
+  box-shadow: 0 6px 30px rgba(0,0,0,0.5); min-width: 250px;
+}
+#collectInfo h3 { color: #ffd700; margin-bottom: 10px; font-size: 17px; }
+#collectInfo table { margin: 0 auto; font-size: 14px; border-collapse: collapse; }
+#collectInfo td { padding: 3px 12px; }
+#collectInfo tr.total td { color: #ffd700; font-weight: bold; border-top: 1px solid #445; padding-top: 6px; }
+
 /* ===== Modals ===== */
 .modal {
   display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -207,6 +218,7 @@ canvas.game { display: block; position: fixed; top: 0; left: 0; z-index: 1; }
     <span id="ammo">5</span> / <span id="magSize">5</span>
   </div>
   <div id="notifications"></div>
+  <div id="collectInfo"></div>
 </div>
 
 <div id="fadeOverlay"></div>
@@ -255,6 +267,7 @@ canvas.game { display: block; position: fixed; top: 0; left: 0; z-index: 1; }
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/PointerLockControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>
 <script>
 "use strict";
 
@@ -306,6 +319,30 @@ const PLAYER_SPEED = 8;
 
 const raycaster = new THREE.Raycaster();
 const keys = {};
+
+// ============================================================
+// EXTERNAL OBJ MODELS (data/obj/)
+// ============================================================
+const MODEL_BASE = 'data/obj/';
+const MODEL_FILES = {
+  terrain: 'map/caverna.obj',
+  bear: 'ani/bear.bland.obj',
+  deer: 'ani/3d-model.obj',
+  boar: 'ani/boar.obj',
+  raccoon: 'ani/raccoon.obj',
+};
+const loadedModels = { terrain: null, bear: null, deer: null, boar: null, raccoon: null };
+
+function loadObj(url) {
+  return new Promise(resolve => {
+    new THREE.OBJLoader().load(url, resolve, undefined, () => resolve(null));
+  });
+}
+async function loadModels() {
+  const keysArr = Object.keys(MODEL_FILES);
+  const loaded = await Promise.all(keysArr.map(k => loadObj(MODEL_BASE + MODEL_FILES[k])));
+  keysArr.forEach((k, i) => { loadedModels[k] = loaded[i]; });
+}
 
 // ============================================================
 // PROCEDURAL TEXTURES
@@ -412,26 +449,20 @@ function trailDistance(x, z) {
   return min;
 }
 
-function buildTerrain() {
-  const SEG = 150;
-  const geo = new THREE.PlaneGeometry(MAP_SIZE, MAP_SIZE, SEG, SEG);
-  geo.rotateX(-Math.PI / 2);
+const cGrass = new THREE.Color(0x6a8a3a);
+const cDirt  = new THREE.Color(0x9a7a4e);
+const cRock  = new THREE.Color(0x8a8578);
+const cDry   = new THREE.Color(0x8a8a4a);
+
+function applyTerrainColors(geo) {
   const pos = geo.attributes.position;
   const colors = new Float32Array(pos.count * 3);
-  const cGrass = new THREE.Color(0x6a8a3a);
-  const cDirt  = new THREE.Color(0x9a7a4e);
-  const cRock  = new THREE.Color(0x8a8578);
-  const cDry   = new THREE.Color(0x8a8a4a);
   const tmp = new THREE.Color();
-
   for (let i = 0; i < pos.count; i++) {
     const x = pos.getX(i), z = pos.getZ(i);
-    const h = terrainHeight(x, z);
-    pos.setY(i, h);
-
+    const h = pos.getY(i);
     const slope = terrainSlope(x, z);
     const td = trailDistance(x, z);
-
     tmp.copy(cGrass);
     if (h > 16) tmp.lerp(cDry, Math.min(1, (h - 16) / 18));
     if (h > 30) tmp.lerp(cRock, Math.min(1, (h - 30) / 12));
@@ -443,10 +474,35 @@ function buildTerrain() {
     colors[i*3+2] = tmp.b * n;
   }
   geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-  geo.computeVertexNormals();
+}
 
-  const mat = new THREE.MeshLambertMaterial({ map: grassTex, vertexColors: true });
-  const ground = new THREE.Mesh(geo, mat);
+function buildTerrain() {
+  const terrainMat = new THREE.MeshLambertMaterial({ map: grassTex, vertexColors: true });
+
+  // OBJ地形モデル（data/obj/map/caverna.obj）があれば使用
+  if (loadedModels.terrain) {
+    loadedModels.terrain.traverse(m => {
+      if (!m.isMesh) return;
+      applyTerrainColors(m.geometry);
+      m.geometry.computeVertexNormals();
+      m.material = terrainMat;
+      m.receiveShadow = true;
+    });
+    scene.add(loadedModels.terrain);
+    return;
+  }
+
+  // フォールバック: プロシージャル地形
+  const SEG = 150;
+  const geo = new THREE.PlaneGeometry(MAP_SIZE, MAP_SIZE, SEG, SEG);
+  geo.rotateX(-Math.PI / 2);
+  const pos = geo.attributes.position;
+  for (let i = 0; i < pos.count; i++) {
+    pos.setY(i, terrainHeight(pos.getX(i), pos.getZ(i)));
+  }
+  applyTerrainColors(geo);
+  geo.computeVertexNormals();
+  const ground = new THREE.Mesh(geo, terrainMat);
   ground.receiveShadow = true;
   scene.add(ground);
 }
@@ -659,10 +715,10 @@ function buildGun() {
 // ANIMALS (higher-poly models)
 // ============================================================
 const animalDefs = {
-  bear:    { name: 'クマ',     baseReward: 5000, hp: 3, speed: 4.0, detectRange: 25, attackRange: 3.2, attackDmg: 1, flee: false, scale: 1.25, color: 0x3a2a1a },
-  deer:    { name: '鹿',      baseReward: 3000, hp: 2, speed: 7.0, detectRange: 32, attackRange: 0,   attackDmg: 0, flee: true,  scale: 1.0,  color: 0x8a6a3a },
-  boar:    { name: 'イノシシ', baseReward: 2500, hp: 2, speed: 5.2, detectRange: 20, attackRange: 2.8, attackDmg: 1, flee: false, scale: 0.85, color: 0x2e2a26 },
-  raccoon: { name: 'アライグマ', baseReward: 800, hp: 1, speed: 3.2, detectRange: 15, attackRange: 0,   attackDmg: 0, flee: true,  scale: 0.42, color: 0x6e6a66 },
+  bear:    { name: 'クマ',     baseWeight: 250, baseReward: 5000, hp: 3, speed: 4.0, detectRange: 25, attackRange: 3.2, attackDmg: 1, flee: false, scale: 1.25, color: 0x3a2a1a },
+  deer:    { name: '鹿',      baseWeight: 65,  baseReward: 3000, hp: 2, speed: 7.0, detectRange: 32, attackRange: 0,   attackDmg: 0, flee: true,  scale: 1.0,  color: 0x8a6a3a },
+  boar:    { name: 'イノシシ', baseWeight: 90,  baseReward: 2500, hp: 2, speed: 5.2, detectRange: 20, attackRange: 2.8, attackDmg: 1, flee: false, scale: 0.85, color: 0x2e2a26 },
+  raccoon: { name: 'アライグマ', baseWeight: 6, baseReward: 800, hp: 1, speed: 3.2, detectRange: 15, attackRange: 0,   attackDmg: 0, flee: true,  scale: 0.42, color: 0x6e6a66 },
 };
 
 function mat(color) { return new THREE.MeshLambertMaterial({ color }); }
@@ -820,6 +876,15 @@ function createRaccoonMesh() {
 
 function createAnimalMesh(type) {
   const def = animalDefs[type];
+  // OBJモデル（data/obj/ani/）があれば使用、なければプロシージャル生成にフォールバック
+  const proto = loadedModels[type];
+  if (proto) {
+    const g = proto.clone();
+    const bodyMat = mat(def.color);
+    g.traverse(m => { if (m.isMesh) { m.material = bodyMat; m.castShadow = true; } });
+    g.scale.setScalar(def.scale);
+    return g;
+  }
   let g;
   if (type === 'bear') g = createBearMesh();
   else if (type === 'deer') g = createDeerMesh();
@@ -857,10 +922,14 @@ function spawnAnimal(type, x, z) {
     wanderTimer: Math.random() * 3,
     attackCooldown: 0,
     weight: 0.7 + Math.random() * 0.6,
+    weightKg: 0,
     onTrail: near ? near.trail : -1,
     trailIdx: near ? near.idx : 0,
     legPhase: Math.random() * Math.PI * 2,
   };
+  animal.weightKg = Math.round(def.baseWeight * animal.weight);
+  // 着弾判定用に全メッシュへ参照をタグ付け（OBJモデルのネストにも対応）
+  animal.mesh.traverse(o => { o.userData.animalRef = animal; });
   animals.push(animal);
   return animal;
 }
@@ -1032,13 +1101,8 @@ function fireRay(dir) {
   const animalMeshes = animals.filter(a => a.state !== 'dead').map(a => a.mesh);
   const hits = raycaster.intersectObjects(animalMeshes, true);
   if (hits.length > 0) {
-    const hitMesh = hits[0].object;
-    let hitAnimal = null;
-    for (const a of animals) {
-      if (a.state === 'dead') continue;
-      if (a.mesh === hitMesh || a.mesh.children.includes(hitMesh)) { hitAnimal = a; break; }
-    }
-    if (hitAnimal) {
+    const hitAnimal = hits[0].object.userData.animalRef || null;
+    if (hitAnimal && hitAnimal.state !== 'dead') {
       hitAnimal.hp -= player.weapon === 'shotgun' ? 1 : 2;
       showHitMarker();
       spawnBlood(hitAnimal.mesh.position);
@@ -1055,7 +1119,26 @@ function killAnimal(animal) {
   const reward = Math.round(animal.def.baseReward * animal.weight);
   animal.rewardValue = reward;
   collectibles.push(animal);
-  notify(animal.def.name + ' を倒した！ E で回収（' + reward + '円）');
+  notify(animal.def.name + ' を倒した！ 体重' + animal.weightKg + 'kg — E で回収（' + reward.toLocaleString() + '円）');
+}
+
+// ===== 回収時の獲物データ表示 =====
+let collectInfoTimer = null;
+function showCollectInfo(a) {
+  const el = document.getElementById('collectInfo');
+  const base = a.def.baseReward;
+  const bonus = a.rewardValue - base;
+  el.innerHTML =
+    '<h3>🎯 ' + a.def.name + 'を解体した</h3>' +
+    '<table>' +
+    '<tr><td>推定体重</td><td style="text-align:right">' + a.weightKg.toLocaleString() + ' kg</td></tr>' +
+    '<tr><td>基本報酬</td><td style="text-align:right">' + base.toLocaleString() + ' 円</td></tr>' +
+    '<tr><td>重量加算</td><td style="text-align:right">' + (bonus >= 0 ? '+' : '') + bonus.toLocaleString() + ' 円</td></tr>' +
+    '<tr class="total"><td>受け取り額</td><td style="text-align:right">' + a.rewardValue.toLocaleString() + ' 円</td></tr>' +
+    '</table>';
+  el.style.display = 'block';
+  clearTimeout(collectInfoTimer);
+  collectInfoTimer = setTimeout(() => { el.style.display = 'none'; }, 4000);
 }
 
 function showHitMarker() {
@@ -1070,7 +1153,8 @@ function collectNearby() {
     const a = collectibles[i];
     if (a.mesh.position.distanceTo(playerPos) < 5) {
       player.money += a.rewardValue;
-      notify(a.def.name + ' を回収：+' + a.rewardValue + '円');
+      showCollectInfo(a);
+      notify(a.def.name + '（' + a.weightKg + 'kg）を回収：+' + a.rewardValue.toLocaleString() + '円');
       scene.remove(a.mesh);
       const idx = animals.indexOf(a);
       if (idx >= 0) animals.splice(idx, 1);
@@ -1754,7 +1838,7 @@ function setupEvents() {
 // ============================================================
 // INIT
 // ============================================================
-function init() {
+async function init() {
   scene = new THREE.Scene();
   scene.fog = new THREE.FogExp2(0x88aacc, 0.008);
 
@@ -1773,6 +1857,14 @@ function init() {
   clock = new THREE.Clock();
 
   buildTextures();
+
+  // 外部OBJモデル（data/obj/）の読込 — 失敗時はプロシージャル生成へフォールバック
+  const startBtn = document.getElementById('startBtn');
+  startBtn.textContent = 'モデル読込中…';
+  startBtn.disabled = true;
+  await loadModels();
+  startBtn.textContent = 'ゲーム開始';
+  startBtn.disabled = false;
 
   ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
   scene.add(ambientLight);
