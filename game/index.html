@@ -1,0 +1,2638 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  <title>Hearts of Iron IV × 将軍カードゲーム</title>
+  <!-- Tailwind CSS (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- PeerJS for P2P multiplayer -->
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <style>
+    /* ================================================================
+       CSS SECTION INDEX
+       1. Global / Reset
+       2. TopBar Styles
+       3. Tab Navigation Styles
+       4. Focus Tree Styles
+       5. Research / Tech Tree Styles
+       6. Special Projects Styles
+       7. Nuclear Strike Styles
+       8. Map Renderer Styles
+       9. Resource / Trade Styles
+      10. Diplomacy / Faction Styles
+      11. Card System Styles
+      12. Division Designer Styles
+      13. Cheat Console Styles
+      14. Multiplayer Styles
+      15. Modal / Dialog Styles
+      16. Notification / Log Styles
+       ================================================================ */
+
+    /* --- 1. Global / Reset --- */
+    :root {
+      --bg-dark: #0a0c0f;
+      --bg-panel: #141a21;
+      --bg-panel-light: #1c2530;
+      --border-mil: #2a3a4a;
+      --text-primary: #c8d0d8;
+      --text-secondary: #8a9aaa;
+      --text-gold: #d4a843;
+      --accent-blue: #4a8fc4;
+      --accent-red: #c44a4a;
+      --accent-green: #4ac46a;
+      --accent-orange: #d4843a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 14px;
+      overflow: hidden;
+      height: 100vh;
+    }
+    .hidden { display: none !important; }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-panel); }
+    ::-webkit-scrollbar-thumb { background: var(--border-mil); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3a4a5a; }
+
+    /* --- 2. TopBar Styles --- */
+    #top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(180deg, #1a2230, #121820);
+      border-bottom: 2px solid var(--border-mil);
+      padding: 6px 16px;
+      height: 52px;
+      flex-shrink: 0;
+    }
+    .stats-group { display: flex; gap: 16px; align-items: center; }
+    .stat-item {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 13px; color: var(--text-secondary);
+    }
+    .stat-item .stat-val { color: var(--text-primary); font-weight: 600; }
+    .stat-bar {
+      width: 60px; height: 6px; background: #333; border-radius: 3px; overflow: hidden;
+    }
+    .stat-bar-fill { height: 100%; transition: width 0.3s; }
+    .time-control-group { display: flex; align-items: center; gap: 12px; }
+    #calendar-display { font-size: 15px; font-weight: 600; color: var(--text-gold); min-width: 130px; }
+    .speed-buttons { display: flex; gap: 2px; }
+    .speed-btn {
+      background: var(--bg-panel-light); border: 1px solid var(--border-mil);
+      color: var(--text-secondary); padding: 4px 10px; cursor: pointer;
+      font-size: 12px; border-radius: 3px; transition: all 0.15s;
+    }
+    .speed-btn:hover { background: #2a3a4a; color: var(--text-primary); }
+    .speed-btn.active { background: var(--accent-blue); color: #fff; border-color: var(--accent-blue); }
+    .topbar-nav { display: flex; gap: 4px; }
+
+    /* --- 3. Tab Navigation Styles --- */
+    #tab-nav {
+      display: flex; background: var(--bg-panel); border-bottom: 1px solid var(--border-mil);
+      padding: 0 8px; flex-shrink: 0; overflow-x: auto;
+    }
+    .tab-btn {
+      background: transparent; border: none; border-bottom: 2px solid transparent;
+      color: var(--text-secondary); padding: 8px 16px; cursor: pointer;
+      font-size: 13px; white-space: nowrap; transition: all 0.15s;
+    }
+    .tab-btn:hover { color: var(--text-primary); background: var(--bg-panel-light); }
+    .tab-btn.active { color: var(--text-gold); border-bottom-color: var(--text-gold); }
+
+    /* --- 4. Focus Tree Styles --- */
+    #tab-focus { flex: 1; overflow: hidden; position: relative; }
+    #focus-tree-container {
+      width: 100%; height: 100%; overflow: auto; position: relative;
+      background: radial-gradient(ellipse at center, #111820 0%, #0a0c0f 100%);
+    }
+    #focus-tree-viewport { position: relative; min-width: 2400px; min-height: 1200px; }
+    #focus-svg-lines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+    .focus-node {
+      position: absolute; width: 120px; padding: 6px; border-radius: 6px;
+      background: var(--bg-panel-light); border: 2px solid var(--border-mil);
+      cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .focus-node:hover { border-color: var(--accent-blue); transform: scale(1.05); z-index: 10; }
+    .focus-node.available { border-color: var(--accent-green); }
+    .focus-node.active { border-color: var(--text-gold); box-shadow: 0 0 12px rgba(212,168,67,0.5); }
+    .focus-node.completed { background: #1a2a1a; border-color: var(--accent-green); opacity: 0.7; }
+    .focus-node.locked { opacity: 0.4; cursor: not-allowed; }
+    .focus-node img { width: 48px; height: 48px; object-fit: contain; margin: 0 auto; display: block; }
+    .focus-node .fn-title { font-size: 10px; line-height: 1.2; margin-top: 4px; color: var(--text-primary); }
+    .focus-node .fn-cost { font-size: 9px; color: var(--text-gold); margin-top: 2px; }
+    .focus-progress-bar {
+      width: 100%; height: 3px; background: #333; border-radius: 2px; margin-top: 4px; overflow: hidden;
+    }
+    .focus-progress-fill { height: 100%; background: var(--text-gold); transition: width 0.3s; }
+    #focus-tooltip {
+      position: fixed; z-index: 1000; background: var(--bg-panel); border: 1px solid var(--border-mil);
+      border-radius: 6px; padding: 10px; max-width: 280px; font-size: 12px;
+      pointer-events: none; box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    #focus-tooltip .tt-title { font-weight: 600; color: var(--text-gold); margin-bottom: 4px; }
+    #focus-tooltip .tt-effect { color: var(--text-secondary); white-space: pre-line; margin-top: 4px; }
+
+    /* --- 5. Research / Tech Tree Styles --- */
+    #tab-research { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+    .research-tabs { display: flex; gap: 2px; padding: 6px 8px; background: var(--bg-panel); flex-shrink: 0; }
+    .research-tab {
+      background: var(--bg-panel-light); border: 1px solid var(--border-mil); color: var(--text-secondary);
+      padding: 4px 12px; cursor: pointer; font-size: 12px; border-radius: 3px;
+    }
+    .research-tab.active { background: var(--accent-blue); color: #fff; }
+    #research-tree-container { flex: 1; overflow: auto; position: relative; background: #0d1117; }
+    #research-tree-viewport { position: relative; min-width: 800px; min-height: 1600px; }
+    .tech-node {
+      position: absolute; width: 110px; padding: 5px; border-radius: 5px;
+      background: var(--bg-panel-light); border: 2px solid var(--border-mil);
+      cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .tech-node:hover { border-color: var(--accent-blue); z-index: 5; }
+    .tech-node.researched { background: #1a2a1a; border-color: var(--accent-green); }
+    .tech-node.researching { border-color: var(--text-gold); box-shadow: 0 0 8px rgba(212,168,67,0.4); }
+    .tech-node .tn-title { font-size: 10px; line-height: 1.2; }
+    .tech-node .tn-year { font-size: 9px; color: var(--text-secondary); }
+    .tech-node .tn-svg { margin: 2px auto; }
+    .research-slots { display: flex; gap: 6px; padding: 4px 8px; background: var(--bg-panel); flex-shrink: 0; }
+    .research-slot {
+      background: var(--bg-panel-light); border: 1px solid var(--border-mil); border-radius: 4px;
+      padding: 4px 10px; font-size: 11px; color: var(--text-secondary);
+    }
+    .research-slot.active { color: var(--text-gold); border-color: var(--text-gold); }
+    .research-slot.locked { opacity: 0.4; }
+
+    /* --- 6. Special Projects Styles --- */
+    #tab-special { flex: 1; overflow: auto; padding: 16px; }
+    .sp-section { margin-bottom: 20px; }
+    .sp-section h3 { color: var(--text-gold); margin-bottom: 8px; font-size: 15px; border-bottom: 1px solid var(--border-mil); padding-bottom: 4px; }
+    .sp-facility-card {
+      display: inline-block; width: 280px; background: var(--bg-panel-light); border: 1px solid var(--border-mil);
+      border-radius: 8px; padding: 12px; margin: 6px; vertical-align: top;
+    }
+    .sp-facility-card .sp-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .sp-facility-card img { width: 48px; height: 48px; border-radius: 4px; object-fit: cover; }
+    .sp-facility-card .sp-name { font-weight: 600; font-size: 13px; }
+    .sp-facility-card .sp-cat { font-size: 11px; color: var(--text-secondary); }
+    .sp-phase { display: flex; gap: 4px; margin: 8px 0; }
+    .sp-phase-step {
+      flex: 1; text-align: center; padding: 4px; border-radius: 4px; font-size: 10px;
+      background: #2a3a3a; color: var(--text-secondary); border: 1px solid var(--border-mil);
+    }
+    .sp-phase-step.active { background: var(--accent-orange); color: #fff; }
+    .sp-phase-step.done { background: var(--accent-green); color: #fff; }
+    .sp-progress { width: 100%; height: 8px; background: #333; border-radius: 4px; overflow: hidden; margin: 6px 0; }
+    .sp-progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent-orange), var(--text-gold)); transition: width 0.3s; }
+    .sp-btn {
+      background: var(--accent-blue); color: #fff; border: none; padding: 6px 14px;
+      border-radius: 4px; cursor: pointer; font-size: 12px; margin-top: 4px;
+    }
+    .sp-btn:hover { background: #5a9fd4; }
+    .sp-btn:disabled { background: #333; color: #666; cursor: not-allowed; }
+    .sp-unlock-badge {
+      display: inline-block; background: var(--accent-green); color: #fff; padding: 2px 8px;
+      border-radius: 10px; font-size: 10px; margin-left: 4px;
+    }
+
+    /* --- 7. Nuclear Strike Styles --- */
+    #tab-nuclear { flex: 1; overflow: auto; padding: 16px; }
+    .nuclear-panel { background: var(--bg-panel-light); border: 1px solid var(--border-mil); border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    .nuclear-panel h3 { color: var(--accent-red); margin-bottom: 10px; }
+    .nuclear-stat { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid var(--border-mil); }
+    .nuclear-stat .ns-label { color: var(--text-secondary); }
+    .nuclear-stat .ns-value { font-weight: 600; }
+    .nuclear-btn {
+      background: var(--accent-red); color: #fff; border: none; padding: 10px 24px;
+      border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; margin-top: 12px;
+    }
+    .nuclear-btn:hover { background: #e05a5a; }
+    .nuclear-btn:disabled { background: #333; color: #666; cursor: not-allowed; }
+    .nuke-animation {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;
+      pointer-events: none; display: flex; align-items: center; justify-content: center;
+    }
+    .nuke-flash { position: absolute; width: 100%; height: 100%; background: #fff; opacity: 0; animation: nukeFlash 0.3s ease-out; }
+    @keyframes nukeFlash { 0%{opacity:0} 20%{opacity:1} 100%{opacity:0} }
+    .nuke-cloud {
+      width: 200px; height: 300px; position: relative;
+      animation: nukeRise 2s ease-out forwards;
+    }
+    @keyframes nukeRise { 0%{transform:scaleY(0)} 50%{transform:scaleY(1)} 100%{transform:scaleY(1.2);opacity:0.6} }
+    .nuke-cloud::before, .nuke-cloud::after {
+      content: ''; position: absolute; border-radius: 50%;
+    }
+    .nuke-cloud::before {
+      width: 160px; height: 160px; background: radial-gradient(circle, #ddd 0%, #888 40%, #333 100%);
+      top: 0; left: 20px;
+    }
+    .nuke-cloud::after {
+      width: 120px; height: 120px; background: radial-gradient(circle, #ccc 0%, #666 50%, #222 100%);
+      top: 80px; left: 40px;
+    }
+    .nuke-stem {
+      position: absolute; bottom: 0; left: 80px; width: 40px; height: 120px;
+      background: linear-gradient(180deg, #888, #333); border-radius: 50% 50% 0 0;
+    }
+    .screen-shake { animation: shake 0.5s ease-in-out; }
+    @keyframes shake { 0%,100%{transform:translate(0,0)} 25%{transform:translate(-5px,3px)} 50%{transform:translate(5px,-3px)} 75%{transform:translate(-3px,5px)} }
+
+    /* --- 8. Map Renderer Styles --- */
+    #tab-map { flex: 1; overflow: hidden; position: relative; }
+    #map-canvas { width: 100%; height: 100%; display: block; background: #0d1419; cursor: grab; }
+    #map-canvas:active { cursor: grabbing; }
+    .map-overlay { position: absolute; top: 8px; left: 8px; background: rgba(20,26,33,0.9); border: 1px solid var(--border-mil); border-radius: 6px; padding: 8px; font-size: 12px; }
+    .map-legend { position: absolute; bottom: 8px; right: 8px; background: rgba(20,26,33,0.9); border: 1px solid var(--border-mil); border-radius: 6px; padding: 8px; font-size: 11px; }
+    .map-legend-item { display: flex; align-items: center; gap: 6px; margin: 2px 0; }
+    .map-legend-color { width: 14px; height: 14px; border-radius: 2px; }
+
+    /* --- 9. Resource / Trade Styles --- */
+    #tab-trade { flex: 1; overflow: auto; padding: 16px; }
+    .resource-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-bottom: 16px; }
+    .resource-card {
+      background: var(--bg-panel-light); border: 1px solid var(--border-mil); border-radius: 8px;
+      padding: 10px; display: flex; align-items: center; gap: 10px;
+    }
+    .resource-card img { width: 36px; height: 36px; object-fit: contain; }
+    .resource-card .rc-info { flex: 1; }
+    .resource-card .rc-name { font-size: 12px; font-weight: 600; }
+    .resource-card .rc-amount { font-size: 11px; color: var(--text-secondary); }
+    .trade-row {
+      display: flex; align-items: center; justify-content: space-between; padding: 8px 12px;
+      background: var(--bg-panel-light); border: 1px solid var(--border-mil); border-radius: 6px; margin-bottom: 6px;
+    }
+    .trade-btn {
+      background: var(--accent-blue); color: #fff; border: none; padding: 4px 12px;
+      border-radius: 4px; cursor: pointer; font-size: 12px;
+    }
+    .trade-btn:hover { background: #5a9fd4; }
+    .trade-btn:disabled { background: #333; color: #666; cursor: not-allowed; }
+
+    /* --- 10. Diplomacy / Faction Styles --- */
+    #tab-diplomacy { flex: 1; overflow: auto; padding: 16px; }
+    .diplo-country-card {
+      display: inline-block; width: 240px; background: var(--bg-panel-light); border: 1px solid var(--border-mil);
+      border-radius: 8px; padding: 10px; margin: 6px; vertical-align: top;
+    }
+    .diplo-country-card .dc-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .diplo-country-card .dc-flag { font-size: 24px; }
+    .diplo-country-card .dc-name { font-weight: 600; font-size: 13px; }
+    .diplo-country-card .dc-relation { font-size: 11px; color: var(--text-secondary); }
+    .diplo-btn { background: var(--accent-blue); color: #fff; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; margin: 2px; }
+    .diplo-btn:hover { background: #5a9fd4; }
+    .faction-panel { background: var(--bg-panel-light); border: 1px solid var(--text-gold); border-radius: 8px; padding: 12px; margin-bottom: 12px; }
+    .faction-panel h3 { color: var(--text-gold); margin-bottom: 8px; }
+    .faction-member { display: inline-block; background: var(--bg-panel); border: 1px solid var(--border-mil); padding: 4px 10px; border-radius: 12px; font-size: 12px; margin: 2px; }
+    .lend-lease-row { display: flex; align-items: center; gap: 8px; padding: 6px; background: var(--bg-panel); border-radius: 4px; margin: 4px 0; }
+
+    /* --- 11. Card System Styles --- */
+    #tab-cards { flex: 1; overflow: auto; padding: 16px; }
+    .card-deck-area { margin-bottom: 16px; }
+    .card-deck-area h3 { color: var(--text-gold); margin-bottom: 8px; }
+    .card-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+    .game-card {
+      width: 140px; background: var(--bg-panel-light); border: 2px solid var(--border-mil);
+      border-radius: 8px; padding: 6px; cursor: pointer; transition: all 0.2s; position: relative;
+    }
+    .game-card:hover { transform: translateY(-4px); border-color: var(--accent-blue); box-shadow: 0 6px 16px rgba(0,0,0,0.4); }
+    .game-card.selected { border-color: var(--text-gold); box-shadow: 0 0 12px rgba(212,168,67,0.4); }
+    .game-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 4px; }
+    .game-card .gc-name { font-size: 11px; font-weight: 600; margin-top: 4px; line-height: 1.2; }
+    .game-card .gc-rank { font-size: 10px; font-weight: 700; }
+    .gc-rank-SSR { color: #ff4d4d; }
+    .gc-rank-SR { color: var(--accent-orange); }
+    .gc-rank-R { color: var(--accent-blue); }
+    .card-ability-panel {
+      background: var(--bg-panel-light); border: 1px solid var(--border-mil); border-radius: 8px;
+      padding: 12px; margin-top: 12px;
+    }
+    .card-ability-panel h4 { color: var(--text-gold); margin-bottom: 6px; }
+    .ability-btn {
+      background: var(--accent-orange); color: #fff; border: none; padding: 6px 14px;
+      border-radius: 4px; cursor: pointer; font-size: 12px; margin: 4px 2px;
+    }
+    .ability-btn:hover { background: #e89a4a; }
+    .ability-btn:disabled { background: #333; color: #666; cursor: not-allowed; }
+    .instant-card-btn {
+      background: var(--accent-green); color: #fff; border: none; padding: 6px 14px;
+      border-radius: 4px; cursor: pointer; font-size: 12px; margin: 4px 2px;
+    }
+    .instant-card-btn:hover { background: #5de87a; }
+
+    /* --- 12. Division Designer Styles --- */
+    #tab-division { flex: 1; overflow: auto; padding: 16px; }
+    .division-grid-container { display: flex; gap: 20px; }
+    .division-grid {
+      display: grid; grid-template-columns: repeat(5, 60px); grid-template-rows: repeat(5, 60px);
+      gap: 4px;
+    }
+    .division-cell {
+      width: 60px; height: 60px; background: var(--bg-panel); border: 2px dashed var(--border-mil);
+      border-radius: 4px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 20px; transition: all 0.15s;
+    }
+    .division-cell:hover { border-color: var(--accent-blue); background: var(--bg-panel-light); }
+    .division-cell.filled { border-style: solid; border-color: var(--accent-green); background: #1a2a1a; }
+    .division-battalion-list { background: var(--bg-panel-light); border: 1px solid var(--border-mil); border-radius: 8px; padding: 10px; width: 200px; }
+    .battalion-option {
+      padding: 6px; border-radius: 4px; cursor: pointer; font-size: 12px; margin: 2px 0;
+      border: 1px solid var(--border-mil); background: var(--bg-panel);
+    }
+    .battalion-option:hover { border-color: var(--accent-blue); }
+    .battalion-option.locked { opacity: 0.4; cursor: not-allowed; }
+    .division-stats { background: var(--bg-panel-light); border: 1px solid var(--border-mil); border-radius: 8px; padding: 10px; flex: 1; }
+    .division-stat-row { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid var(--border-mil); font-size: 12px; }
+
+    /* --- 13. Cheat Console Styles --- */
+    #cheat-console {
+      position: fixed; bottom: 0; right: 0; width: 420px; height: 240px;
+      background: rgba(10,12,15,0.97); border: 2px solid var(--accent-red); border-radius: 8px 0 0 0;
+      display: flex; flex-direction: column; z-index: 9000; transition: transform 0.3s;
+    }
+    #cheat-console.collapsed { transform: translateY(210px); }
+    #cheat-console-header {
+      background: var(--accent-red); color: #fff; padding: 4px 10px; font-size: 12px;
+      font-weight: 600; display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+    }
+    #cheat-console-output {
+      flex: 1; overflow-y: auto; padding: 6px 10px; font-family: 'Courier New', monospace;
+      font-size: 11px; color: var(--accent-green);
+    }
+    #cheat-console-input {
+      border: none; background: var(--bg-panel); color: var(--text-primary); padding: 6px 10px;
+      font-family: 'Courier New', monospace; font-size: 12px; outline: none; border-top: 1px solid var(--border-mil);
+    }
+    .cheat-output-line { margin: 1px 0; }
+    .cheat-error { color: var(--accent-red); }
+
+    /* --- 14. Multiplayer Styles --- */
+    #tab-multiplayer { flex: 1; overflow: auto; padding: 16px; }
+    .mp-panel { background: var(--bg-panel-light); border: 1px solid var(--border-mil); border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+    .mp-panel h3 { color: var(--accent-blue); margin-bottom: 8px; }
+    .mp-input { background: var(--bg-panel); border: 1px solid var(--border-mil); color: var(--text-primary); padding: 6px 10px; border-radius: 4px; font-size: 13px; width: 200px; }
+    .mp-btn { background: var(--accent-blue); color: #fff; border: none; padding: 6px 16px; border-radius: 4px; cursor: pointer; font-size: 13px; margin: 4px; }
+    .mp-btn:hover { background: #5a9fd4; }
+    .mp-status { font-size: 12px; color: var(--text-secondary); margin-top: 8px; }
+    .mp-player-list { margin-top: 8px; }
+    .mp-player-item { background: var(--bg-panel); border: 1px solid var(--border-mil); padding: 4px 10px; border-radius: 12px; font-size: 12px; display: inline-block; margin: 2px; }
+
+    /* --- 15. Modal / Dialog Styles --- */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 8000;
+    }
+    .modal-window {
+      background: var(--bg-panel); border: 2px solid var(--border-mil); border-radius: 10px;
+      max-width: 90vw; max-height: 85vh; overflow: hidden; display: flex; flex-direction: column;
+    }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; border-bottom: 1px solid var(--border-mil); }
+    .modal-header h3 { color: var(--text-gold); font-size: 15px; }
+    .modal-close-btn { background: none; border: none; color: var(--text-secondary); font-size: 22px; cursor: pointer; }
+    .modal-close-btn:hover { color: var(--text-primary); }
+    .modal-body { padding: 16px; overflow-y: auto; }
+
+    /* --- 16. Notification / Log Styles --- */
+    #log-banner {
+      background: var(--bg-panel); border-bottom: 1px solid var(--border-mil);
+      padding: 4px 16px; font-size: 12px; color: var(--text-secondary); flex-shrink: 0;
+      display: flex; align-items: center; gap: 8px;
+    }
+    #log-banner .log-icon { color: var(--text-gold); }
+    #notification-container {
+      position: fixed; top: 60px; right: 16px; z-index: 7000; display: flex; flex-direction: column; gap: 6px;
+    }
+    .notification {
+      background: var(--bg-panel); border-left: 4px solid var(--accent-blue); border-radius: 4px;
+      padding: 8px 14px; font-size: 12px; max-width: 340px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      animation: slideIn 0.3s ease-out;
+    }
+    .notification.alert { border-left-color: var(--accent-red); }
+    .notification.success { border-left-color: var(--accent-green); }
+    @keyframes slideIn { from{transform:translateX(100%);opacity:0} to{transform:translateX(0);opacity:1} }
+
+    /* --- Layout Wrapper --- */
+    #game-root { display: flex; flex-direction: column; height: 100vh; }
+    .tab-content { flex: 1; overflow: hidden; display: none; }
+    .tab-content.active { display: flex; flex-direction: column; }
+  </style>
+</head>
+<body>
+<div id="game-root">
+  <!-- ==================== TOP BAR ==================== -->
+  <header id="top-bar">
+    <div class="stats-group" id="stats-group">
+      <!-- Filled dynamically by CoreEngine -->
+    </div>
+    <div class="time-control-group">
+      <div id="calendar-display">1936年1月1日</div>
+      <div class="speed-buttons" id="speed-buttons">
+        <button class="speed-btn active" data-speed="0">⏸</button>
+        <button class="speed-btn" data-speed="1">▶1</button>
+        <button class="speed-btn" data-speed="2">▶2</button>
+        <button class="speed-btn" data-speed="3">▶3</button>
+        <button class="speed-btn" data-speed="4">▶4</button>
+        <button class="speed-btn" data-speed="5">▶5</button>
+      </div>
+    </div>
+    <div class="topbar-nav">
+      <button class="speed-btn" id="mp-indicator" onclick="GameUI.switchTab('multiplayer')">👥 単独</button>
+      <button class="speed-btn" id="cheat-toggle" onclick="CheatConsole.toggle()">~</button>
+    </div>
+  </header>
+
+  <!-- ==================== LOG BANNER ==================== -->
+  <div id="log-banner">
+    <span class="log-icon">📋</span>
+    <span id="log-text">1936年1月1日 — 世界情勢の監視を開始...</span>
+  </div>
+
+  <!-- ==================== TAB NAVIGATION ==================== -->
+  <nav id="tab-nav">
+    <button class="tab-btn active" data-tab="focus" onclick="GameUI.switchTab('focus')">🌲 国家方針</button>
+    <button class="tab-btn" data-tab="research" onclick="GameUI.switchTab('research')">🔬 研究</button>
+    <button class="tab-btn" data-tab="special" onclick="GameUI.switchTab('special')">⚛️ 特別研究</button>
+    <button class="tab-btn" data-tab="nuclear" onclick="GameUI.switchTab('nuclear')">☢️ 核攻撃</button>
+    <button class="tab-btn" data-tab="map" onclick="GameUI.switchTab('map')">🗺️ マップ</button>
+    <button class="tab-btn" data-tab="trade" onclick="GameUI.switchTab('trade')">📦 貿易</button>
+    <button class="tab-btn" data-tab="diplomacy" onclick="GameUI.switchTab('diplomacy')">🤝 外交</button>
+    <button class="tab-btn" data-tab="cards" onclick="GameUI.switchTab('cards')">🃏 将軍カード</button>
+    <button class="tab-btn" data-tab="division" onclick="GameUI.switchTab('division')">⚔️ 師団編成</button>
+    <button class="tab-btn" data-tab="multiplayer" onclick="GameUI.switchTab('multiplayer')">🌐 マルチ</button>
+  </nav>
+
+  <!-- ==================== TAB CONTENTS ==================== -->
+
+  <!-- Focus Tree Tab -->
+  <div class="tab-content active" id="tab-focus">
+    <div id="focus-tree-container">
+      <div id="focus-tree-viewport">
+        <svg id="focus-svg-lines"></svg>
+        <div id="focus-nodes"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Research Tab -->
+  <div class="tab-content" id="tab-research">
+    <div class="research-slots" id="research-slots"></div>
+    <div class="research-tabs" id="research-tabs"></div>
+    <div id="research-tree-container">
+      <div id="research-tree-viewport">
+        <svg id="research-svg-lines"></svg>
+        <div id="research-nodes"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Special Projects Tab -->
+  <div class="tab-content" id="tab-special">
+    <div id="special-projects-content"></div>
+  </div>
+
+  <!-- Nuclear Tab -->
+  <div class="tab-content" id="tab-nuclear">
+    <div id="nuclear-content"></div>
+  </div>
+
+  <!-- Map Tab -->
+  <div class="tab-content" id="tab-map">
+    <canvas id="map-canvas"></canvas>
+    <div class="map-overlay" id="map-info-overlay"></div>
+    <div class="map-legend" id="map-legend"></div>
+  </div>
+
+  <!-- Trade Tab -->
+  <div class="tab-content" id="tab-trade">
+    <div id="trade-content"></div>
+  </div>
+
+  <!-- Diplomacy Tab -->
+  <div class="tab-content" id="tab-diplomacy">
+    <div id="diplomacy-content"></div>
+  </div>
+
+  <!-- Cards Tab -->
+  <div class="tab-content" id="tab-cards">
+    <div id="cards-content"></div>
+  </div>
+
+  <!-- Division Designer Tab -->
+  <div class="tab-content" id="tab-division">
+    <div id="division-content"></div>
+  </div>
+
+  <!-- Multiplayer Tab -->
+  <div class="tab-content" id="tab-multiplayer">
+    <div id="multiplayer-content"></div>
+  </div>
+</div>
+
+<!-- ==================== DIALOG TEMPLATES ==================== -->
+
+<!-- Focus Tooltip -->
+<div id="focus-tooltip" class="hidden">
+  <div class="tt-title"></div>
+  <div class="tt-time"></div>
+  <div class="tt-effect"></div>
+</div>
+
+<!-- Generic Modal -->
+<div class="modal-overlay hidden" id="generic-modal-overlay">
+  <div class="modal-window">
+    <div class="modal-header">
+      <h3 id="generic-modal-title">タイトル</h3>
+      <button class="modal-close-btn" onclick="GameUI.closeModal()">&times;</button>
+    </div>
+    <div class="modal-body" id="generic-modal-body"></div>
+  </div>
+</div>
+
+<!-- Notification Container -->
+<div id="notification-container"></div>
+
+<!-- Cheat Console -->
+<div id="cheat-console" class="collapsed hidden">
+  <div id="cheat-console-header" onclick="CheatConsole.toggle()">
+    <span>デバッグコンソール (cheat)</span>
+    <span>▾</span>
+  </div>
+  <div id="cheat-console-output"></div>
+  <input type="text" id="cheat-console-input" placeholder="コマンドを入力... (nuke 10, pp 500, focus.autocomplete...)" onkeydown="CheatConsole.handleInput(event)">
+</div>
+
+<script>
+/* ================================================================
+   JavaScript Module Architecture
+   Classes: DataFetcher, CoreEngine, FocusTreeManager,
+   SpecialProjectManager, NuclearManager, MapRenderer,
+   ResourceManager, DiplomacyManager, DivisionDesigner,
+   CheatConsole, MultiplayerManager, CardSystem, ResearchManager,
+   GameUI
+   ================================================================ */
+
+// ==========================================================
+// Module 1: DataFetcher — 動的データフェッチ (hoi4-history + local)
+// ==========================================================
+class DataFetcher {
+  static HOI4_REPO_RAW = 'https://raw.githubusercontent.com/cbrzeczysz/hoi4-history/main';
+  static cache = new Map();
+
+  // Local card data paths (relative to game/index.html)
+  static CARD_PATHS = {
+    GER: { script: 'card/GER/script.js', imgBase: 'card/GER/' },
+    JAP: { script: 'card/JAP/script.js', imgBase: 'card/JAP/' },
+    SOV: { script: 'card/SOV/script.js', imgBase: 'card/SOV/' },
+    WORLD: { script: 'card/WORLD/script.js', imgBase: 'card/WORLD/' }
+  };
+
+  // Focus tree data paths
+  static FOCUS_PATHS = {
+    GER: ['ger/data/nf_batch1.json', 'ger/data/nf_batch2.json', 'ger/data/nf_batch3.json',
+          'ger/data/nf_batch4.json', 'ger/data/nf_batch5.json', 'ger/data/nf_batch6.json'],
+    SOV: ['sov/data/nf_batch1.json', 'sov/data/nf_batch2.json', 'sov/data/nf_batch3.json',
+          'sov/data/nf_batch4.json', 'sov/data/nf_batch5.json', 'sov/data/nf_batch6.json']
+  };
+
+  // Tech data paths
+  static TECH_PATHS = { GER: 'ger/tec/data/', SOV: 'sov/tec/data/' };
+  static TECH_CATEGORIES = ['infantry', 'armor', 'artillery', 'naval', 'air', 'engineering', 'industry'];
+
+  // Special projects data
+  static SPECIAL_PROJECTS_PATH = 'ger/tec/special/data/science.json';
+  static SPECIAL_PROJECTS_IMG = 'ger/tec/special/data/image/';
+
+  // Resource item images
+  static RESOURCE_IMAGES = {
+    oil: 'card/GER/data/image/item/oil.png',
+    coal: 'card/GER/data/image/item/coal.png',
+    steel: 'card/GER/data/image/item/steel.png',
+    tungsten: 'card/GER/data/image/item/tungsten.png',
+    chromium: 'card/GER/data/image/item/chromium.png',
+    aluminum: 'card/GER/data/image/item/aluminum.png',
+    rubber: 'card/GER/data/image/item/rubber.png'
+  };
+
+  static async fetchJSON(path) {
+    if (DataFetcher.cache.has(path)) return DataFetcher.cache.get(path);
+    try {
+      const res = await fetch(path);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      DataFetcher.cache.set(path, data);
+      return data;
+    } catch (e) {
+      console.warn('DataFetcher: Failed to fetch ' + path + ':', e.message);
+      return null;
+    }
+  }
+
+  static async fetchFocusTree(country) {
+    const paths = DataFetcher.FOCUS_PATHS[country];
+    if (!paths) return [];
+    const results = await Promise.all(paths.map(p => DataFetcher.fetchJSON(p)));
+    return results.filter(r => r).flat();
+  }
+
+  static async fetchTechTree(country, category) {
+    const path = DataFetcher.TECH_PATHS[country] + 'tech_' + category + '.json';
+    return await DataFetcher.fetchJSON(path) || [];
+  }
+
+  static async fetchAllTech(country) {
+    const results = {};
+    for (const cat of DataFetcher.TECH_CATEGORIES) {
+      results[cat] = await DataFetcher.fetchTechTree(country, cat);
+    }
+    return results;
+  }
+
+  static async fetchSpecialProjects() {
+    return await DataFetcher.fetchJSON(DataFetcher.SPECIAL_PROJECTS_PATH);
+  }
+
+  static async fetchCardData(country) {
+    const paths = DataFetcher.CARD_PATHS[country];
+    if (!paths) return [];
+    try {
+      const res = await fetch(paths.script);
+      if (!res.ok) return [];
+      const text = await res.text();
+      const leaders = DataFetcher.parseLeadersArray(text);
+      return leaders.map(c => ({
+        ...c,
+        imgUrl: c.imgUrl ? paths.imgBase + c.imgUrl : null,
+        cutinUrl: c.cutinUrl ? paths.imgBase + c.cutinUrl : null,
+        medalUrl: c.medalUrl ? paths.imgBase + c.medalUrl : null,
+        country
+      }));
+    } catch (e) {
+      console.warn('DataFetcher: Failed to fetch card data for ' + country + ':', e.message);
+      return [];
+    }
+  }
+
+  static parseLeadersArray(text) {
+    try {
+      const fn = new Function(text + '\n; return typeof leaders !== "undefined" ? leaders : [];');
+      return fn();
+    } catch (e) {
+      console.warn('DataFetcher: Failed to parse leaders:', e.message);
+      return [];
+    }
+  }
+
+  static async fetchAllCards() {
+    const countries = ['GER', 'JAP', 'SOV', 'WORLD'];
+    const results = await Promise.all(countries.map(c => DataFetcher.fetchCardData(c)));
+    const all = {};
+    countries.forEach((c, i) => { all[c] = results[i]; });
+    return all;
+  }
+
+  // Generate HoI4 official image URL from hoi4-history repo (lazy loading)
+  static getHoi4Image(path) {
+    return DataFetcher.HOI4_REPO_RAW + '/' + path;
+  }
+
+  static getFocusIconUrl(focusId) {
+    const iconFile = focusId.replace(/^(GER|SOV|JAP|USA|ENG|FRA|ITA)_/, '');
+    return DataFetcher.HOI4_REPO_RAW + '/gfx/interface/goals/icons/' + iconFile + '.png';
+  }
+
+  static getCountryFlag(country) {
+    const flags = {
+      GER: '🇩🇪', SOV: '🇷🇺', JAP: '🇯🇵', USA: '🇺🇸', ENG: '🇬🇧', FRA: '🇫🇷', ITA: '🇮🇹', POL: '🇵🇱'
+    };
+    return flags[country] || '🏳️';
+  }
+}
+
+// ==========================================================
+// Module 2: CoreEngine — ゲームループ・時間同期・Tick管理
+// ==========================================================
+class CoreEngine {
+  static gameState = {
+    date: new Date(1936, 0, 1),
+    speed: 0,
+    paused: true,
+    country: 'GER',
+    politicalPower: 100,
+    stability: 70,
+    warSupport: 50,
+    manpower: 1000000,
+    resources: {
+      oil: 50, coal: 80, steel: 100, tungsten: 20, chromium: 10, aluminum: 40, rubber: 5
+    },
+    civilianFactories: 20,
+    militaryFactories: 15,
+    dockyards: 5,
+    divisions: 10,
+    planes: 50,
+    ships: 20,
+    nuclearReactorLevel: 0,
+    nuclearStockpile: 0,
+    nuclearTechLevel: 0,
+    airSupremacy: 0,
+    strategicBombers: 0,
+    fuel: 0,
+    maxFuel: 1000,
+    convoys: 100,
+    researchSlots: 3,
+    cardModifiers: {
+      politicalPowerGain: 0,
+      stabilityBonus: 0,
+      specialProjectSpeed: 0,
+      facilityCostReduction: 0,
+      armorSpeed: 0,
+      armorBreakthrough: 0,
+      infantryDefense: 0,
+      landingPrepTime: 0
+    },
+    activeAbilities: {}
+  };
+
+  static timer = null;
+  static tickCallbacks = [];
+  static speedIntervals = { 1: 2000, 2: 1200, 3: 700, 4: 350, 5: 120 };
+
+  static init() {
+    CoreEngine.gameState.fuel = CoreEngine.gameState.maxFuel * 0.5;
+    CoreEngine.updateSpeedUI();
+    CoreEngine.renderStats();
+    document.querySelectorAll('.speed-btn[data-speed]').forEach(btn => {
+      btn.addEventListener('click', () => CoreEngine.setSpeed(parseInt(btn.dataset.speed)));
+    });
+  }
+
+  static setSpeed(speed) {
+    CoreEngine.gameState.speed = speed;
+    CoreEngine.gameState.paused = (speed === 0);
+    CoreEngine.updateSpeedUI();
+    if (CoreEngine.timer) { clearInterval(CoreEngine.timer); CoreEngine.timer = null; }
+    if (speed > 0) {
+      CoreEngine.timer = setInterval(() => CoreEngine.tick(), CoreEngine.speedIntervals[speed]);
+    }
+    MultiplayerManager.broadcast({ type: 'speed', speed: speed });
+  }
+
+  static updateSpeedUI() {
+    document.querySelectorAll('.speed-btn[data-speed]').forEach(btn => {
+      btn.classList.toggle('active', parseInt(btn.dataset.speed) === CoreEngine.gameState.speed);
+    });
+  }
+
+  static tick() {
+    const d = CoreEngine.gameState.date;
+    d.setDate(d.getDate() + 1);
+
+    const ppGain = 1 + CoreEngine.gameState.cardModifiers.politicalPowerGain;
+    CoreEngine.gameState.politicalPower = Math.min(999, CoreEngine.gameState.politicalPower + ppGain);
+    CoreEngine.gameState.fuel = Math.min(CoreEngine.gameState.maxFuel,
+      CoreEngine.gameState.fuel + CoreEngine.gameState.resources.oil * 0.1);
+
+    CoreEngine.tickCallbacks.forEach(cb => {
+      try { cb(CoreEngine.gameState.date); } catch (e) { console.error('Tick callback error:', e); }
+    });
+
+    CoreEngine.renderStats();
+    CoreEngine.updateCalendar();
+    MultiplayerManager.broadcast({
+      type: 'tick',
+      date: CoreEngine.gameState.date.toISOString(),
+      state: CoreEngine.getSyncState()
+    });
+  }
+
+  static registerTickCallback(cb) { CoreEngine.tickCallbacks.push(cb); }
+
+  static renderStats() {
+    const s = CoreEngine.gameState;
+    const html =
+      '<div class="stat-item">🏛️ <span class="stat-val">' + Math.floor(s.politicalPower) + '</span></div>' +
+      '<div class="stat-item">📊 <span class="stat-val">' + s.stability + '%</span>' +
+        '<div class="stat-bar"><div class="stat-bar-fill" style="width:' + s.stability + '%;background:var(--accent-green)"></div></div></div>' +
+      '<div class="stat-item">⚔️ <span class="stat-val">' + s.warSupport + '%</span>' +
+        '<div class="stat-bar"><div class="stat-bar-fill" style="width:' + s.warSupport + '%;background:var(--accent-orange)"></div></div></div>' +
+      '<div class="stat-item">👥 <span class="stat-val">' + (s.manpower/1000).toFixed(0) + 'K</span></div>' +
+      '<div class="stat-item">🏭 <span class="stat-val">' + s.civilianFactories + 'C / ' + s.militaryFactories + 'M</span></div>' +
+      '<div class="stat-item">⛽ <span class="stat-val">' + Math.floor(s.fuel) + '/' + s.maxFuel + '</span></div>' +
+      '<div class="stat-item">🚢 <span class="stat-val">' + s.convoys + '</span></div>';
+    document.getElementById('stats-group').innerHTML = html;
+  }
+
+  static updateCalendar() {
+    const d = CoreEngine.gameState.date;
+    document.getElementById('calendar-display').textContent =
+      d.getFullYear() + '年' + (d.getMonth()+1) + '月' + d.getDate() + '日';
+  }
+
+  static log(message) {
+    const d = CoreEngine.gameState.date;
+    document.getElementById('log-text').textContent =
+      d.getFullYear() + '/' + (d.getMonth()+1) + '/' + d.getDate() + ' — ' + message;
+  }
+
+  static getSyncState() {
+    const s = CoreEngine.gameState;
+    return {
+      pp: s.politicalPower, stab: s.stability, ws: s.warSupport, mp: s.manpower,
+      res: s.resources, cf: s.civilianFactories, mf: s.militaryFactories,
+      nuke: s.nuclearStockpile, fuel: s.fuel
+    };
+  }
+
+  static applySyncState(state) {
+    if (!state) return;
+    const s = CoreEngine.gameState;
+    if (state.pp !== undefined) s.politicalPower = state.pp;
+    if (state.stab !== undefined) s.stability = state.stab;
+    if (state.ws !== undefined) s.warSupport = state.ws;
+    if (state.mp !== undefined) s.manpower = state.mp;
+    if (state.res) s.resources = state.res;
+    if (state.cf !== undefined) s.civilianFactories = state.cf;
+    if (state.mf !== undefined) s.militaryFactories = state.mf;
+    if (state.nuke !== undefined) s.nuclearStockpile = state.nuke;
+    if (state.fuel !== undefined) s.fuel = state.fuel;
+    CoreEngine.renderStats();
+  }
+}
+
+// ==========================================================
+// Module 3: FocusTreeManager — 国家方針ツリーUI・依存関係
+// ==========================================================
+class FocusTreeManager {
+  static focuses = [];
+  static focusMap = {};
+  static completedFocuses = new Set();
+  static activeFocus = null;
+  static focusProgress = 0;
+  static focusDaysTotal = 0;
+  static autocomplete = false;
+  static noChecks = false;
+
+  static async init(country) {
+    FocusTreeManager.focuses = await DataFetcher.fetchFocusTree(country);
+    FocusTreeManager.focusMap = {};
+    FocusTreeManager.focuses.forEach(f => { FocusTreeManager.focusMap[f.id] = f; });
+    FocusTreeManager.render();
+    CoreEngine.registerTickCallback(() => FocusTreeManager.onTick());
+  }
+
+  static render() {
+    const container = document.getElementById('focus-nodes');
+    const svg = document.getElementById('focus-svg-lines');
+    container.innerHTML = '';
+    svg.innerHTML = '';
+
+    if (FocusTreeManager.focuses.length === 0) {
+      container.innerHTML = '<p style="color:var(--text-secondary);padding:20px;">国家方針データがありません。</p>';
+      return;
+    }
+
+    // Draw connection lines
+    let svgContent = '';
+    FocusTreeManager.focuses.forEach(f => {
+      if (f.prerequisites) {
+        f.prerequisites.forEach(prereqId => {
+          const pre = FocusTreeManager.focusMap[prereqId];
+          if (pre) {
+            const x1 = pre.x + 60, y1 = pre.y + 35;
+            const x2 = f.x + 60, y2 = f.y + 35;
+            const isDone = FocusTreeManager.completedFocuses.has(prereqId);
+            const color = isDone ? '#4ac46a' : '#3a4a5a';
+            svgContent += '<path d="M' + x1 + ',' + y1 + ' C' + x1 + ',' + ((y1+y2)/2) + ' ' + x2 + ',' + ((y1+y2)/2) + ' ' + x2 + ',' + y2 + '" stroke="' + color + '" stroke-width="2" fill="none" opacity="0.5"/>';
+          }
+        });
+      }
+    });
+    svg.innerHTML = svgContent;
+    svg.setAttribute('width', '2400');
+    svg.setAttribute('height', '1200');
+
+    // Draw focus nodes
+    FocusTreeManager.focuses.forEach(f => {
+      const isCompleted = FocusTreeManager.completedFocuses.has(f.id);
+      const isActive = FocusTreeManager.activeFocus === f.id;
+      const isAvailable = FocusTreeManager.isFocusAvailable(f);
+
+      let cls = 'focus-node';
+      if (isCompleted) cls += ' completed';
+      else if (isActive) cls += ' active';
+      else if (isAvailable) cls += ' available';
+      else cls += ' locked';
+
+      const progressHtml = isActive
+        ? '<div class="focus-progress-bar"><div class="focus-progress-fill" style="width:' + (FocusTreeManager.focusProgress/FocusTreeManager.focusDaysTotal*100) + '%"></div></div>'
+        : '';
+
+      const iconUrl = DataFetcher.getFocusIconUrl(f.id);
+      const iconHtml = '<img src="' + iconUrl + '" onerror="this.style.display=\'none\'" alt="">';
+      const titleShort = f.title.length > 12 ? f.title.substring(0, 11) + '…' : f.title;
+
+      const node = document.createElement('div');
+      node.className = cls;
+      node.style.left = f.x + 'px';
+      node.style.top = f.y + 'px';
+      node.innerHTML = iconHtml +
+        '<div class="fn-title">' + titleShort + '</div>' +
+        '<div class="fn-cost">📅' + (f.cost || 70) + '日</div>' +
+        progressHtml;
+      node.addEventListener('click', () => FocusTreeManager.selectFocus(f.id));
+      node.addEventListener('mouseenter', (e) => FocusTreeManager.showTooltip(f, e));
+      node.addEventListener('mouseleave', () => FocusTreeManager.hideTooltip());
+      container.appendChild(node);
+    });
+  }
+
+  static isFocusAvailable(f) {
+    if (FocusTreeManager.completedFocuses.has(f.id)) return false;
+    if (FocusTreeManager.noChecks || FocusTreeManager.autocomplete) return true;
+    if (!f.prerequisites || f.prerequisites.length === 0) return true;
+    return f.prerequisites.every(prereqId => FocusTreeManager.completedFocuses.has(prereqId));
+  }
+
+  static selectFocus(id) {
+    const f = FocusTreeManager.focusMap[id];
+    if (!f) return;
+    if (FocusTreeManager.completedFocuses.has(id)) {
+      GameUI.notify('この方針は既に完了しています。');
+      return;
+    }
+    if (FocusTreeManager.activeFocus === id) {
+      FocusTreeManager.activeFocus = null;
+      FocusTreeManager.focusProgress = 0;
+      CoreEngine.log('国家方針「' + f.title + '」を中断しました。');
+      FocusTreeManager.render();
+      return;
+    }
+    if (!FocusTreeManager.isFocusAvailable(f)) {
+      GameUI.notify('前提条件を満たしていません。', 'alert');
+      return;
+    }
+    if (FocusTreeManager.autocomplete) {
+      FocusTreeManager.completeFocus(id);
+      return;
+    }
+    FocusTreeManager.activeFocus = id;
+    FocusTreeManager.focusDaysTotal = f.cost || 70;
+    FocusTreeManager.focusProgress = 0;
+    CoreEngine.log('国家方針「' + f.title + '」を開始しました。');
+    FocusTreeManager.render();
+    MultiplayerManager.broadcast({ type: 'focus_select', focusId: id });
+  }
+
+  static onTick() {
+    if (!FocusTreeManager.activeFocus) return;
+    const f = FocusTreeManager.focusMap[FocusTreeManager.activeFocus];
+    if (!f) return;
+    FocusTreeManager.focusProgress++;
+    if (FocusTreeManager.focusProgress >= FocusTreeManager.focusDaysTotal) {
+      FocusTreeManager.completeFocus(FocusTreeManager.activeFocus);
+    } else {
+      FocusTreeManager.render();
+    }
+  }
+
+  static completeFocus(id) {
+    const f = FocusTreeManager.focusMap[id];
+    if (!f) return;
+    FocusTreeManager.completedFocuses.add(id);
+    FocusTreeManager.activeFocus = null;
+    FocusTreeManager.focusProgress = 0;
+    FocusTreeManager.applyFocusEffect(f);
+    CoreEngine.log('国家方針「' + f.title + '」が完了しました！');
+    GameUI.notify('方針完了: ' + f.title, 'success');
+    FocusTreeManager.render();
+    MultiplayerManager.broadcast({ type: 'focus_complete', focusId: id });
+  }
+
+  static applyFocusEffect(f) {
+    if (!f.effect) return;
+    const s = CoreEngine.gameState;
+    const ppMatch = f.effect.match(/政治力[:：]\s*\+?(\d+)/);
+    if (ppMatch) s.politicalPower += parseInt(ppMatch[1]);
+    const stabMatch = f.effect.match(/安定度[:：]\s*\+?(\d+)/);
+    if (stabMatch) s.stability = Math.min(100, s.stability + parseInt(stabMatch[1]));
+    const wsMatch = f.effect.match(/戦争協力度[:：]\s*\+?(\d+)/);
+    if (wsMatch) s.warSupport = Math.min(100, s.warSupport + parseInt(wsMatch[1]));
+    if (f.effect.includes('研究スロット')) s.researchSlots = Math.min(5, s.researchSlots + 1);
+    CoreEngine.renderStats();
+  }
+
+  static showTooltip(f, e) {
+    const tt = document.getElementById('focus-tooltip');
+    tt.querySelector('.tt-title').textContent = f.title;
+    tt.querySelector('.tt-time').textContent = '必要日数: ' + (f.cost || 70) + '日';
+    tt.querySelector('.tt-effect').textContent = f.effect || '効果なし';
+    tt.classList.remove('hidden');
+    tt.style.left = (e.clientX + 14) + 'px';
+    tt.style.top = (e.clientY + 14) + 'px';
+  }
+
+  static hideTooltip() {
+    document.getElementById('focus-tooltip').classList.add('hidden');
+  }
+}
+
+// ==========================================================
+// Module 4: SpecialProjectManager — 特別研究計画
+// ==========================================================
+class SpecialProjectManager {
+  static scienceData = null;
+  static projects = {};
+  static PHASES = ['feasibility', 'prototype', 'fieldtest', 'breakthrough'];
+
+  static async init() {
+    SpecialProjectManager.scienceData = await DataFetcher.fetchSpecialProjects();
+    SpecialProjectManager.render();
+    CoreEngine.registerTickCallback(() => SpecialProjectManager.onTick());
+  }
+
+  static render() {
+    const container = document.getElementById('special-projects-content');
+    if (!SpecialProjectManager.scienceData || !SpecialProjectManager.scienceData.scientists) {
+      container.innerHTML = '<p style="color:var(--text-secondary);">特別研究データを読み込めませんでした。</p>';
+      return;
+    }
+
+    let html =
+      '<div class="sp-section"><h3>⚛️ 特別研究計画 (Special Projects)</h3>' +
+      '<p style="color:var(--text-secondary);font-size:12px;margin-bottom:12px;">' +
+      '科学者を雇用し、特別研究施設を建設して超兵器を開発します。' +
+      '各プロジェクトは「基礎研究 → プロトタイプ製作 → 実地テスト → ブレイクスルー」の4段階を経て完成します。</p></div>' +
+      '<div class="sp-section"><h3>🔬 科学者リスト & 研究施設</h3><div>';
+
+    SpecialProjectManager.scienceData.scientists.forEach(sci => {
+      const proj = SpecialProjectManager.projects[sci.id];
+      const isHired = !!proj;
+      const phaseIdx = isHired ? SpecialProjectManager.PHASES.indexOf(proj.phase) : -1;
+      const costReduction = CoreEngine.gameState.cardModifiers.facilityCostReduction || 0;
+      const facilityCost = Math.ceil(50 * (1 - costReduction));
+      const imgFile = sci.icon ? sci.icon.split('/').pop() : '';
+      const projImgFile = sci.project_icon ? sci.project_icon.split('/').pop() : '';
+
+      html += '<div class="sp-facility-card"><div class="sp-header">' +
+        '<img src="' + DataFetcher.SPECIAL_PROJECTS_IMG + imgFile + '" onerror="this.src=\'' + DataFetcher.SPECIAL_PROJECTS_IMG + projImgFile + '\'" alt="' + sci.name + '">' +
+        '<div><div class="sp-name">' + sci.name + '</div><div class="sp-cat">' + sci.category_name + '</div></div></div>' +
+        '<div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;">' + sci.overview + '</div>' +
+        '<div style="font-size:11px;color:var(--text-gold);margin-bottom:6px;">兵器: ' + sci.weapons + '</div>';
+
+      if (isHired) {
+        html += '<div class="sp-phase">' +
+          '<div class="sp-phase-step ' + (phaseIdx >= 0 ? 'done' : '') + ' ' + (phaseIdx === 0 ? 'active' : '') + '">基礎研究</div>' +
+          '<div class="sp-phase-step ' + (phaseIdx >= 1 ? 'done' : '') + ' ' + (phaseIdx === 1 ? 'active' : '') + '">プロトタイプ</div>' +
+          '<div class="sp-phase-step ' + (phaseIdx >= 2 ? 'done' : '') + ' ' + (phaseIdx === 2 ? 'active' : '') + '">実地テスト</div>' +
+          '<div class="sp-phase-step ' + (phaseIdx >= 3 ? 'done' : '') + ' ' + (phaseIdx === 3 ? 'active' : '') + '">ブレイクスルー</div>' +
+          '</div>' +
+          '<div class="sp-progress"><div class="sp-progress-fill" style="width:' + proj.progress + '%"></div></div>' +
+          '<div style="font-size:11px;">工廠割当: ' + (proj.factories || 0) + ' | 進捗: ' + Math.floor(proj.progress) + '%</div>' +
+          '<button class="sp-btn" onclick="SpecialProjectManager.allocateFactory(\'' + sci.id + '\')">+1 工廠割当</button>' +
+          '<button class="sp-btn" onclick="SpecialProjectManager.advancePhase(\'' + sci.id + '\')" ' + (proj.progress < 100 ? 'disabled' : '') + '>' +
+            (proj.phase === 'breakthrough' ? '✅ 完了' : '次フェーズへ') + '</button>' +
+          (proj.completed ? '<span class="sp-unlock-badge">超兵器解除！</span>' : '');
+      } else {
+        html += '<button class="sp-btn" onclick="SpecialProjectManager.hireScientist(\'' + sci.id + '\')">雇用 (工廠' + facilityCost + '・PP50)</button>';
+      }
+      html += '</div>';
+    });
+
+    html += '</div></div>';
+
+    // Unlocked super weapons
+    html += '<div class="sp-section"><h3>🚀 解除された超兵器</h3><div>';
+    const unlocked = Object.entries(SpecialProjectManager.projects).filter(function(e) { return e[1].completed; });
+    if (unlocked.length === 0) {
+      html += '<p style="color:var(--text-secondary);font-size:12px;">まだ超兵器はありません。</p>';
+    } else {
+      unlocked.forEach(function(entry) {
+        const id = entry[0], p = entry[1];
+        const sci = SpecialProjectManager.scienceData.scientists.find(s => s.id === id);
+        if (sci) {
+          html += '<div style="background:var(--bg-panel-light);border:1px solid var(--accent-green);border-radius:6px;padding:10px;margin:6px;">' +
+            '<strong style="color:var(--accent-green);">' + sci.weapons + '</strong>' +
+            '<div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">' + sci.name + 'により開発完了</div></div>';
+        }
+      });
+    }
+    html += '</div></div>';
+
+    container.innerHTML = html;
+  }
+
+  static hireScientist(sciId) {
+    const s = CoreEngine.gameState;
+    const costReduction = s.cardModifiers.facilityCostReduction || 0;
+    const facilityCost = Math.ceil(50 * (1 - costReduction));
+    if (s.politicalPower < 50) { GameUI.notify('政治力が不足しています。', 'alert'); return; }
+    if (s.civilianFactories < facilityCost) { GameUI.notify('民需工廠が不足しています。', 'alert'); return; }
+    s.politicalPower -= 50;
+    s.civilianFactories -= facilityCost;
+    SpecialProjectManager.projects[sciId] = { phase: 'feasibility', progress: 0, factories: 0, completed: false };
+    CoreEngine.log('科学者を雇用し、特別研究施設を建設しました。');
+    GameUI.notify('特別研究施設を建設しました！', 'success');
+    CoreEngine.renderStats();
+    SpecialProjectManager.render();
+    MultiplayerManager.broadcast({ type: 'sp_hire', sciId: sciId });
+  }
+
+  static allocateFactory(sciId) {
+    const proj = SpecialProjectManager.projects[sciId];
+    if (!proj) return;
+    if (CoreEngine.gameState.civilianFactories < 1) { GameUI.notify('民需工廠が不足しています。', 'alert'); return; }
+    CoreEngine.gameState.civilianFactories--;
+    proj.factories = (proj.factories || 0) + 1;
+    CoreEngine.renderStats();
+    SpecialProjectManager.render();
+  }
+
+  static onTick() {
+    const speedBonus = 1 + (CoreEngine.gameState.cardModifiers.specialProjectSpeed || 0);
+    Object.entries(SpecialProjectManager.projects).forEach(function(entry) {
+      const proj = entry[1];
+      if (proj.completed) return;
+      const factories = proj.factories || 0;
+      if (factories > 0) {
+        proj.progress += factories * 0.5 * speedBonus;
+        if (proj.progress >= 100) proj.progress = 100;
+      }
+    });
+    if (GameUI.currentTab === 'special') SpecialProjectManager.render();
+  }
+
+  static advancePhase(sciId) {
+    const proj = SpecialProjectManager.projects[sciId];
+    if (!proj || proj.progress < 100) return;
+    const currentIdx = SpecialProjectManager.PHASES.indexOf(proj.phase);
+
+    if (proj.phase === 'prototype') {
+      const s = CoreEngine.gameState;
+      if (s.resources.steel < 10 || s.resources.chromium < 5) {
+        GameUI.notify('プロトタイプ製作には鋼鉄10・クロム5が必要です。', 'alert');
+        return;
+      }
+      s.resources.steel -= 10;
+      s.resources.chromium -= 5;
+    }
+
+    if (proj.phase === 'fieldtest') {
+      const success = Math.random() > 0.3;
+      if (!success) {
+        GameUI.notify('実地テスト失敗！プロトタイプを再製作します。', 'alert');
+        proj.phase = 'prototype';
+        proj.progress = 0;
+        SpecialProjectManager.render();
+        return;
+      }
+    }
+
+    if (currentIdx < SpecialProjectManager.PHASES.length - 1) {
+      proj.phase = SpecialProjectManager.PHASES[currentIdx + 1];
+      proj.progress = 0;
+      if (proj.phase === 'breakthrough') {
+        proj.completed = true;
+        CoreEngine.log('ブレイクスルー！超兵器が完成しました！');
+        GameUI.notify('超兵器獲得！', 'success');
+        DivisionDesigner.unlockSpecialBattalion(sciId);
+      }
+    }
+    SpecialProjectManager.render();
+    MultiplayerManager.broadcast({ type: 'sp_phase', sciId: sciId, phase: proj.phase });
+  }
+}
+
+// ==========================================================
+// Module 5: NuclearManager — 核攻撃システム
+// ==========================================================
+class NuclearManager {
+  static selectedTarget = null;
+
+  static async init() {
+    NuclearManager.render();
+    CoreEngine.registerTickCallback(() => NuclearManager.onTick());
+  }
+
+  static onTick() {
+    const s = CoreEngine.gameState;
+    if (s.nuclearReactorLevel > 0 && s.nuclearTechLevel > 0) {
+      s.nuclearStockpile += s.nuclearReactorLevel * 0.01;
+    }
+    if (GameUI.currentTab === 'nuclear') NuclearManager.render();
+  }
+
+  static render() {
+    const s = CoreEngine.gameState;
+    const canStrike = NuclearManager.canStrike();
+    const container = document.getElementById('nuclear-content');
+
+    container.innerHTML =
+      '<div class="nuclear-panel"><h3>☢️ 核兵器ステータス</h3>' +
+      '<div class="nuclear-stat"><span class="ns-label">核爆弾備蓄数</span><span class="ns-value">' + Math.floor(s.nuclearStockpile) + '</span></div>' +
+      '<div class="nuclear-stat"><span class="ns-label">原子炉レベル</span><span class="ns-value">' + s.nuclearReactorLevel + '</span></div>' +
+      '<div class="nuclear-stat"><span class="ns-label">核技術レベル</span><span class="ns-value">' + s.nuclearTechLevel + '</span></div>' +
+      '<div class="nuclear-stat"><span class="ns-label">制空権</span><span class="ns-value">' + s.airSupremacy + '% / 75%必要</span></div>' +
+      '<div class="nuclear-stat"><span class="ns-label">戦略爆撃機</span><span class="ns-value">' + s.strategicBombers + '機</span></div></div>' +
+
+      '<div class="nuclear-panel"><h3>🏭 核施設建設</h3>' +
+      '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">原子炉を建設して核爆弾を生産します。核技術研究が必要です。</p>' +
+      '<button class="sp-btn" onclick="NuclearManager.buildReactor()" ' + (s.civilianFactories < 5 ? 'disabled' : '') + '>原子炉建設 (民需工廠5消費) — 現在Lv.' + s.nuclearReactorLevel + '</button>' +
+      '<button class="sp-btn" onclick="NuclearManager.researchNuclear()" ' + (s.politicalPower < 30 ? 'disabled' : '') + ' style="margin-left:8px;">核技術研究 (PP30消費) — 現在Lv.' + s.nuclearTechLevel + '</button></div>' +
+
+      '<div class="nuclear-panel" style="border-color:' + (canStrike ? 'var(--accent-red)' : 'var(--border-mil)') + ';"><h3>💥 核攻撃</h3>' +
+      '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">' +
+      '核攻撃には以下の条件が必要です：<br>' +
+      '✓ 制空権75%以上 — 現在: ' + s.airSupremacy + '% ' + (s.airSupremacy >= 75 ? '✅' : '❌') + '<br>' +
+      '✓ 戦略爆撃機配備 — ' + (s.strategicBombers > 0 ? '✅' : '❌') + ' (' + s.strategicBombers + '機)<br>' +
+      '✓ 核爆弾備蓄1以上 — ' + (s.nuclearStockpile >= 1 ? '✅' : '❌') + ' (' + Math.floor(s.nuclearStockpile) + '個)</p>' +
+      '<button class="nuclear-btn" onclick="NuclearManager.launchStrike()" ' + (!canStrike ? 'disabled' : '') + '>☢️ 核攻撃を実行</button></div>' +
+
+      '<div class="nuclear-panel"><h3>🎯 ターゲット選択</h3>' +
+      '<p style="font-size:12px;color:var(--text-secondary);">敵国の主要都市・工業地帯を攻撃対象として選択できます。</p>' +
+      '<div id="nuke-targets" style="margin-top:8px;">' + NuclearManager.renderTargets() + '</div></div>';
+  }
+
+  static renderTargets() {
+    const targets = [
+      { id: 'london', name: 'ロンドン', country: 'ENG', damage: '高' },
+      { id: 'paris', name: 'パリ', country: 'FRA', damage: '高' },
+      { id: 'moscow', name: 'モスクワ', country: 'SOV', damage: '极高' },
+      { id: 'washington', name: 'ワシントン', country: 'USA', damage: '极高' },
+      { id: 'tokyo', name: '東京', country: 'JAP', damage: '高' },
+      { id: 'berlin', name: 'ベルリン', country: 'GER', damage: '极高' }
+    ];
+    return targets.map(t =>
+      '<div style="display:inline-block;background:var(--bg-panel-light);border:1px solid var(--border-mil);border-radius:6px;padding:8px 12px;margin:4px;cursor:pointer;font-size:12px;" onclick="NuclearManager.selectTarget(\'' + t.id + '\',\'' + t.name + '\')">' +
+      DataFetcher.getCountryFlag(t.country) + ' ' + t.name + ' (被害予測: ' + t.damage + ')</div>'
+    ).join('');
+  }
+
+  static selectTarget(id, name) {
+    NuclearManager.selectedTarget = { id: id, name: name };
+    GameUI.notify('ターゲット選択: ' + name);
+  }
+
+  static canStrike() {
+    const s = CoreEngine.gameState;
+    return s.airSupremacy >= 75 && s.strategicBombers > 0 && s.nuclearStockpile >= 1;
+  }
+
+  static buildReactor() {
+    const s = CoreEngine.gameState;
+    if (s.civilianFactories < 5) { GameUI.notify('民需工廠が不足しています。', 'alert'); return; }
+    s.civilianFactories -= 5;
+    s.nuclearReactorLevel++;
+    CoreEngine.log('原子炉を建設しました (Lv.' + s.nuclearReactorLevel + ')');
+    GameUI.notify('原子炉建設完了！', 'success');
+    CoreEngine.renderStats();
+    NuclearManager.render();
+  }
+
+  static researchNuclear() {
+    const s = CoreEngine.gameState;
+    if (s.politicalPower < 30) { GameUI.notify('政治力が不足しています。', 'alert'); return; }
+    s.politicalPower -= 30;
+    s.nuclearTechLevel++;
+    if (s.nuclearTechLevel === 1) s.strategicBombers += 10;
+    CoreEngine.log('核技術を研究しました (Lv.' + s.nuclearTechLevel + ')');
+    GameUI.notify('核技術研究完了！', 'success');
+    CoreEngine.renderStats();
+    NuclearManager.render();
+  }
+
+  static launchStrike() {
+    if (!NuclearManager.canStrike()) { GameUI.notify('核攻撃の条件を満たしていません。', 'alert'); return; }
+    if (!NuclearManager.selectedTarget) { GameUI.notify('ターゲットを選択してください。', 'alert'); return; }
+    const s = CoreEngine.gameState;
+    s.nuclearStockpile -= 1;
+
+    NuclearManager.playNukeAnimation();
+
+    const targetName = NuclearManager.selectedTarget.name;
+    s.stability = Math.max(0, s.stability - 5);
+    s.warSupport = Math.min(100, s.warSupport + 20);
+    s.airSupremacy = Math.max(0, s.airSupremacy - 20);
+
+    CoreEngine.log('💥 核攻撃実行！' + targetName + 'に原子爆弾を投下！');
+    GameUI.notify('核攻撃: ' + targetName + 'に投下完了！', 'alert');
+
+    MultiplayerManager.broadcast({
+      type: 'nuclear_strike',
+      target: targetName,
+      attacker: CoreEngine.gameState.country
+    });
+
+    CoreEngine.renderStats();
+    setTimeout(() => NuclearManager.render(), 2500);
+  }
+
+  static playNukeAnimation() {
+    const overlay = document.createElement('div');
+    overlay.className = 'nuke-animation';
+    overlay.innerHTML = '<div class="nuke-flash"></div><div class="nuke-cloud"><div class="nuke-stem"></div></div>';
+    document.body.appendChild(overlay);
+    document.body.classList.add('screen-shake');
+
+    const telop = document.createElement('div');
+    telop.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10000;color:#ff3333;font-size:48px;font-weight:900;text-shadow:0 0 20px #f00;animation:nukeFlash 0.5s ease-out;';
+    telop.textContent = '⚠️ 核攻撃警報 ⚠️';
+    document.body.appendChild(telop);
+
+    setTimeout(() => {
+      overlay.remove();
+      telop.remove();
+      document.body.classList.remove('screen-shake');
+    }, 2500);
+  }
+
+  static onNuclearStrike(data) {
+    NuclearManager.playNukeAnimation();
+    CoreEngine.log('⚠️ ' + data.attacker + 'が' + data.target + 'に核攻撃を実行しました！');
+    GameUI.notify('核攻撃警報: ' + data.target + 'が核攻撃を受けました！', 'alert');
+  }
+}
+
+// ==========================================================
+// Module 6: MapRenderer — Canvas マップ描画
+// ==========================================================
+class MapRenderer {
+  static canvas = null;
+  static ctx = null;
+  static offsetX = 0;
+  static offsetY = 0;
+  static scale = 1;
+  static isDragging = false;
+  static lastX = 0;
+  static lastY = 0;
+  static provinces = [];
+  static nukeEffects = [];
+
+  static WORLD_PROVINCES = [
+    { id: 'ger', name: 'ドイツ', x: 500, y: 200, w: 80, h: 60, color: '#3a4a3a', country: 'GER' },
+    { id: 'sov', name: 'ソ連', x: 600, y: 120, w: 200, h: 150, color: '#8b0000', country: 'SOV' },
+    { id: 'fra', name: 'フランス', x: 420, y: 220, w: 70, h: 50, color: '#3a5a8a', country: 'FRA' },
+    { id: 'eng', name: 'イギリス', x: 350, y: 180, w: 60, h: 50, color: '#4a4a8a', country: 'ENG' },
+    { id: 'ita', name: 'イタリア', x: 470, y: 270, w: 50, h: 60, color: '#4a8a4a', country: 'ITA' },
+    { id: 'jap', name: '日本', x: 850, y: 250, w: 50, h: 80, color: '#aa3a3a', country: 'JAP' },
+    { id: 'usa', name: 'アメリカ', x: 100, y: 180, w: 150, h: 120, color: '#4a6a8a', country: 'USA' },
+    { id: 'pol', name: 'ポーランド', x: 560, y: 190, w: 40, h: 40, color: '#8a8a3a', country: 'POL' }
+  ];
+
+  static init() {
+    MapRenderer.canvas = document.getElementById('map-canvas');
+    MapRenderer.ctx = MapRenderer.canvas.getContext('2d');
+    MapRenderer.resize();
+    window.addEventListener('resize', () => MapRenderer.resize());
+    MapRenderer.setupInteraction();
+    MapRenderer.provinces = [...MapRenderer.WORLD_PROVINCES];
+    MapRenderer.render();
+    MapRenderer.renderLegend();
+    CoreEngine.registerTickCallback(() => MapRenderer.onTick());
+  }
+
+  static resize() {
+    if (!MapRenderer.canvas) return;
+    MapRenderer.canvas.width = MapRenderer.canvas.offsetWidth;
+    MapRenderer.canvas.height = MapRenderer.canvas.offsetHeight;
+    MapRenderer.render();
+  }
+
+  static setupInteraction() {
+    const c = MapRenderer.canvas;
+    c.addEventListener('mousedown', (e) => {
+      MapRenderer.isDragging = true;
+      MapRenderer.lastX = e.offsetX;
+      MapRenderer.lastY = e.offsetY;
+    });
+    c.addEventListener('mousemove', (e) => {
+      if (!MapRenderer.isDragging) return;
+      MapRenderer.offsetX += e.offsetX - MapRenderer.lastX;
+      MapRenderer.offsetY += e.offsetY - MapRenderer.lastY;
+      MapRenderer.lastX = e.offsetX;
+      MapRenderer.lastY = e.offsetY;
+      MapRenderer.render();
+    });
+    c.addEventListener('mouseup', () => { MapRenderer.isDragging = false; });
+    c.addEventListener('mouseleave', () => { MapRenderer.isDragging = false; });
+    c.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const delta = e.deltaY > 0 ? 0.9 : 1.1;
+      MapRenderer.scale = Math.max(0.3, Math.min(3, MapRenderer.scale * delta));
+      MapRenderer.render();
+    });
+    c.addEventListener('click', (e) => {
+      if (MapRenderer.isDragging) return;
+      const x = (e.offsetX - MapRenderer.offsetX) / MapRenderer.scale;
+      const y = (e.offsetY - MapRenderer.offsetY) / MapRenderer.scale;
+      for (const p of MapRenderer.provinces) {
+        if (x >= p.x && x <= p.x + p.w && y >= p.y && y <= p.y + p.h) {
+          MapRenderer.selectProvince(p);
+          return;
+        }
+      }
+    });
+  }
+
+  static selectProvince(p) {
+    document.getElementById('map-info-overlay').innerHTML =
+      '<strong>' + DataFetcher.getCountryFlag(p.country) + ' ' + p.name + '</strong><br>' +
+      '<span style="color:var(--text-secondary);font-size:11px;">国: ' + p.country + '</span>';
+    GameUI.notify('選択: ' + p.name);
+  }
+
+  static render() {
+    if (!MapRenderer.ctx) return;
+    const ctx = MapRenderer.ctx;
+    const w = MapRenderer.canvas.width;
+    const h = MapRenderer.canvas.height;
+    ctx.fillStyle = '#0d1419';
+    ctx.fillRect(0, 0, w, h);
+
+    ctx.save();
+    ctx.translate(MapRenderer.offsetX, MapRenderer.offsetY);
+    ctx.scale(MapRenderer.scale, MapRenderer.scale);
+
+    MapRenderer.provinces.forEach(p => {
+      const isSelected = CoreEngine.gameState.country === p.country;
+      ctx.fillStyle = p.color;
+      ctx.fillRect(p.x, p.y, p.w, p.h);
+      ctx.strokeStyle = isSelected ? '#d4a843' : '#2a3a4a';
+      ctx.lineWidth = isSelected ? 3 : 1;
+      ctx.strokeRect(p.x, p.y, p.w, p.h);
+
+      ctx.fillStyle = '#fff';
+      ctx.font = '10px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(p.name, p.x + p.w/2, p.y + p.h/2);
+
+      if (isSelected) {
+        ctx.strokeStyle = 'rgba(74,196,106,0.3)';
+        ctx.setLineDash([5, 5]);
+        ctx.beginPath();
+        ctx.moveTo(p.x + p.w/2, p.y + p.h);
+        ctx.lineTo(p.x + p.w/2, p.y + p.h + 30);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+    });
+
+    // Naval supremacy zones
+    ctx.strokeStyle = 'rgba(74,143,196,0.3)';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([10, 5]);
+    ctx.beginPath();
+    ctx.moveTo(350, 230);
+    ctx.lineTo(500, 230);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Nuke effects
+    MapRenderer.nukeEffects.forEach(n => {
+      const progress = n.life / n.maxLife;
+      const radius = progress * 60;
+      ctx.strokeStyle = 'rgba(255, ' + Math.floor(100 * (1-progress)) + ', 0, ' + (1-progress) + ')';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, radius, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.fillStyle = 'rgba(200, 200, 200, ' + ((1-progress) * 0.5) + ')';
+      ctx.beginPath();
+      ctx.arc(n.x, n.y - radius * 0.5, radius * 0.4, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    ctx.restore();
+  }
+
+  static renderLegend() {
+    document.getElementById('map-legend').innerHTML =
+      '<div class="map-legend-item"><div class="map-legend-color" style="background:#3a4a3a"></div>自国</div>' +
+      '<div class="map-legend-item"><div class="map-legend-color" style="background:#8b0000"></div>敵国</div>' +
+      '<div class="map-legend-item"><div class="map-legend-color" style="background:#3a5a8a"></div>同盟国</div>' +
+      '<div class="map-legend-item"><div class="map-legend-color" style="background:rgba(74,196,106,0.5)"></div>補給線</div>' +
+      '<div class="map-legend-item"><div class="map-legend-color" style="background:rgba(74,143,196,0.3)"></div>制海権</div>' +
+      '<div style="margin-top:4px;font-size:10px;color:var(--text-secondary);">スクロール: ズーム | ドラッグ: 移動</div>';
+  }
+
+  static onTick() {
+    MapRenderer.nukeEffects = MapRenderer.nukeEffects.filter(n => {
+      n.life++;
+      return n.life < n.maxLife;
+    });
+    if (GameUI.currentTab === 'map') MapRenderer.render();
+  }
+
+  static addNukeEffect(x, y) {
+    MapRenderer.nukeEffects.push({ x: x, y: y, life: 0, maxLife: 60 });
+  }
+}
+
+// ==========================================================
+// Module 7: ResourceManager — 資源管理・貿易
+// ==========================================================
+class ResourceManager {
+  static TRADE_RESOURCES = [
+    { id: 'oil', name: '石油', icon: 'oil' },
+    { id: 'steel', name: '鋼鉄', icon: 'steel' },
+    { id: 'tungsten', name: 'タングステン', icon: 'tungsten' },
+    { id: 'chromium', name: 'クロム', icon: 'chromium' },
+    { id: 'aluminum', name: 'アルミニウム', icon: 'aluminum' },
+    { id: 'rubber', name: 'ゴム', icon: 'rubber' },
+    { id: 'coal', name: '石炭', icon: 'coal' }
+  ];
+
+  static init() {
+    ResourceManager.render();
+    CoreEngine.registerTickCallback(() => ResourceManager.onTick());
+  }
+
+  static onTick() {
+    if (GameUI.currentTab === 'trade') ResourceManager.render();
+  }
+
+  static render() {
+    const s = CoreEngine.gameState;
+    const container = document.getElementById('trade-content');
+
+    let html = '<div class="sp-section"><h3>📦 資源一覧</h3><div class="resource-grid">';
+    ResourceManager.TRADE_RESOURCES.forEach(r => {
+      const amount = Math.floor(s.resources[r.id] || 0);
+      const imgPath = DataFetcher.RESOURCE_IMAGES[r.icon];
+      html += '<div class="resource-card"><img src="' + imgPath + '" onerror="this.style.display=\'none\'" alt="' + r.name + '">' +
+        '<div class="rc-info"><div class="rc-name">' + r.name + '</div><div class="rc-amount">保有量: ' + amount + '</div></div></div>';
+    });
+    html += '</div></div>';
+
+    html += '<div class="sp-section"><h3>🤝 貿易 (資源輸入)</h3>' +
+      '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">民需工廠1つを消費して資源を輸入します。輸送船も消費します。</p>';
+    ResourceManager.TRADE_RESOURCES.forEach(r => {
+      const amount = Math.floor(s.resources[r.id] || 0);
+      html += '<div class="trade-row"><span>' + r.name + ' (保有: ' + amount + ')</span>' +
+        '<button class="trade-btn" onclick="ResourceManager.importResource(\'' + r.id + '\',\'' + r.name + '\')" ' +
+        (s.civilianFactories < 1 || s.convoys < 5 ? 'disabled' : '') + '>輸入 (工廠1・輸送船5)</button></div>';
+    });
+    html += '</div>';
+
+    html += '<div class="sp-section"><h3>📤 輸出</h3>' +
+      '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">余剰資源を輸出して民需工廠を獲得できます。</p>';
+    ResourceManager.TRADE_RESOURCES.forEach(r => {
+      const amount = Math.floor(s.resources[r.id] || 0);
+      if (amount > 20) {
+        html += '<div class="trade-row"><span>' + r.name + ' (保有: ' + amount + ')</span>' +
+          '<button class="trade-btn" onclick="ResourceManager.exportResource(\'' + r.id + '\',\'' + r.name + '\')">輸出 (資源10→工廠0.5)</button></div>';
+      }
+    });
+    html += '</div>';
+
+    container.innerHTML = html;
+  }
+
+  static importResource(resId, resName) {
+    const s = CoreEngine.gameState;
+    if (s.civilianFactories < 1) { GameUI.notify('民需工廠が不足しています。', 'alert'); return; }
+    if (s.convoys < 5) { GameUI.notify('輸送船が不足しています。', 'alert'); return; }
+    s.civilianFactories -= 1;
+    s.convoys -= 5;
+    s.resources[resId] = (s.resources[resId] || 0) + 8;
+    CoreEngine.log(resName + 'を輸入しました (+8)');
+    GameUI.notify(resName + 'を輸入しました', 'success');
+    CoreEngine.renderStats();
+    ResourceManager.render();
+    MultiplayerManager.broadcast({ type: 'trade', action: 'import', res: resId });
+  }
+
+  static exportResource(resId, resName) {
+    const s = CoreEngine.gameState;
+    if ((s.resources[resId] || 0) < 10) { GameUI.notify('資源が不足しています。', 'alert'); return; }
+    s.resources[resId] -= 10;
+    s.civilianFactories += 0.5;
+    CoreEngine.log(resName + 'を輸出しました (+0.5工廠)');
+    GameUI.notify(resName + 'を輸出しました', 'success');
+    CoreEngine.renderStats();
+    ResourceManager.render();
+  }
+}
+
+// ==========================================================
+// Module 8: DiplomacyManager — 陣営・レンドリース・外交
+// ==========================================================
+class DiplomacyManager {
+  static countries = [
+    { id: 'GER', name: 'ドイツ', relation: 0, faction: null },
+    { id: 'SOV', name: 'ソ連', relation: -50, faction: null },
+    { id: 'JAP', name: '日本', relation: 20, faction: null },
+    { id: 'USA', name: 'アメリカ', relation: -30, faction: null },
+    { id: 'ENG', name: 'イギリス', relation: -40, faction: null },
+    { id: 'FRA', name: 'フランス', relation: -20, faction: null },
+    { id: 'ITA', name: 'イタリア', relation: 30, faction: null },
+    { id: 'POL', name: 'ポーランド', relation: -60, faction: null }
+  ];
+
+  static factions = [];
+  static lendLeaseContracts = [];
+
+  static init() { DiplomacyManager.render(); }
+
+  static render() {
+    const container = document.getElementById('diplomacy-content');
+    const myCountry = CoreEngine.gameState.country;
+
+    let html = '<div class="faction-panel"><h3>🏰 陣営 (Faction)</h3>';
+    if (DiplomacyManager.factions.length === 0) {
+      html += '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">陣営がありません。新しい陣営を設立できます。</p>' +
+        '<button class="diplo-btn" onclick="DiplomacyManager.createFaction()" style="background:var(--text-gold);color:#000;">陣営を設立 (PP25)</button>';
+    } else {
+      DiplomacyManager.factions.forEach(f => {
+        html += '<div style="margin-bottom:8px;"><strong style="color:var(--text-gold);">' + f.name + '</strong> (盟主: ' + DataFetcher.getCountryFlag(f.leader) + ' ' + f.leader + ')<br><div>';
+        f.members.forEach(m => { html += '<span class="faction-member">' + DataFetcher.getCountryFlag(m) + ' ' + m + '</span>'; });
+        html += '</div></div>';
+      });
+    }
+    html += '</div>';
+
+    html += '<div class="faction-panel"><h3>📦 レンドリース (Lend-Lease)</h3>' +
+      '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">同盟国に余剰装備を送付できます。</p>';
+    if (DiplomacyManager.lendLeaseContracts.length > 0) {
+      DiplomacyManager.lendLeaseContracts.forEach(ll => {
+        html += '<div class="lend-lease-row"><span>' + DataFetcher.getCountryFlag(ll.from) + ' → ' + DataFetcher.getCountryFlag(ll.to) + '</span><span>' + ll.equipment + ' x' + ll.amount + '</span></div>';
+      });
+    } else {
+      html += '<p style="font-size:12px;color:var(--text-secondary);">レンドリース契約なし</p>';
+    }
+    html += '</div>';
+
+    html += '<div class="sp-section"><h3>🌍 外交関係</h3>';
+    DiplomacyManager.countries.forEach(c => {
+      if (c.id === myCountry) return;
+      const relColor = c.relation > 0 ? 'var(--accent-green)' : c.relation < -30 ? 'var(--accent-red)' : 'var(--text-secondary)';
+      html += '<div class="diplo-country-card"><div class="dc-header"><span class="dc-flag">' + DataFetcher.getCountryFlag(c.id) + '</span>' +
+        '<div><div class="dc-name">' + c.name + '</div><div class="dc-relation" style="color:' + relColor + ';">関係: ' + (c.relation > 0 ? '+' : '') + c.relation + '</div></div></div>' +
+        '<button class="diplo-btn" onclick="DiplomacyManager.improveRelation(\'' + c.id + '\')">関係改善 (PP10)</button>' +
+        '<button class="diplo-btn" onclick="DiplomacyManager.inviteToFaction(\'' + c.id + '\')" ' + (c.relation < 30 ? 'disabled' : '') + '>陣営に招待</button>' +
+        '<button class="diplo-btn" onclick="DiplomacyManager.lendLease(\'' + c.id + '\')" ' + (c.relation < 0 ? 'disabled' : '') + '>レンドリース</button></div>';
+    });
+    html += '</div>';
+
+    container.innerHTML = html;
+  }
+
+  static createFaction() {
+    const s = CoreEngine.gameState;
+    if (s.politicalPower < 25) { GameUI.notify('政治力が不足しています。', 'alert'); return; }
+    const name = prompt('陣営名を入力してください:', '枢軸国');
+    if (!name) return;
+    s.politicalPower -= 25;
+    const faction = { name: name, leader: s.country, members: [s.country] };
+    DiplomacyManager.factions.push(faction);
+    CoreEngine.log('陣営「' + name + '」を設立しました。');
+    GameUI.notify('陣営「' + name + '」を設立しました！', 'success');
+    CoreEngine.renderStats();
+    DiplomacyManager.render();
+    MultiplayerManager.broadcast({ type: 'faction_create', faction: faction });
+  }
+
+  static improveRelation(countryId) {
+    const s = CoreEngine.gameState;
+    if (s.politicalPower < 10) { GameUI.notify('政治力が不足しています。', 'alert'); return; }
+    s.politicalPower -= 10;
+    const c = DiplomacyManager.countries.find(c => c.id === countryId);
+    if (c) c.relation = Math.min(100, c.relation + 15);
+    CoreEngine.log(c.name + 'との関係を改善しました。');
+    GameUI.notify(c.name + 'との関係を改善しました', 'success');
+    CoreEngine.renderStats();
+    DiplomacyManager.render();
+  }
+
+  static inviteToFaction(countryId) {
+    const c = DiplomacyManager.countries.find(c => c.id === countryId);
+    if (!c || c.relation < 30) { GameUI.notify('関係が不十分です。', 'alert'); return; }
+    if (DiplomacyManager.factions.length === 0) { GameUI.notify('先に陣営を設立してください。', 'alert'); return; }
+    const faction = DiplomacyManager.factions[0];
+    if (!faction.members.includes(countryId)) {
+      faction.members.push(countryId);
+      c.faction = faction.name;
+      CoreEngine.log(c.name + 'が陣営「' + faction.name + '」に加盟しました。');
+      GameUI.notify(c.name + 'が陣営に加盟しました！', 'success');
+      MultiplayerManager.broadcast({ type: 'faction_join', countryId: countryId, factionName: faction.name });
+    }
+    DiplomacyManager.render();
+  }
+
+  static lendLease(countryId) {
+    const c = DiplomacyManager.countries.find(c => c.id === countryId);
+    if (!c || c.relation < 0) { GameUI.notify('関係が不十分です。', 'alert'); return; }
+    const equipment = prompt('送付する装備 (例: 歩兵装備, 戦車, 航空機):', '歩兵装備');
+    if (!equipment) return;
+    const amount = parseInt(prompt('数量:', '100'));
+    if (!amount || amount <= 0) return;
+    DiplomacyManager.lendLeaseContracts.push({ from: CoreEngine.gameState.country, to: countryId, equipment: equipment, amount: amount });
+    CoreEngine.log(c.name + 'へレンドリース: ' + equipment + ' x' + amount);
+    GameUI.notify(c.name + 'へレンドリース送付', 'success');
+    DiplomacyManager.render();
+    MultiplayerManager.broadcast({ type: 'lend_lease', to: countryId, equipment: equipment, amount: amount });
+  }
+}
+
+// ==========================================================
+// Module 9: DivisionDesigner — 5×5グリッド編成エディター
+// ==========================================================
+class DivisionDesigner {
+  static grid = Array(5).fill(null).map(() => Array(5).fill(null));
+  static selectedBattalion = null;
+  static availableBattalions = [
+    { id: 'infantry', name: '歩兵', icon: '🪖', attack: 10, defense: 20, org: 60 },
+    { id: 'artillery', name: '砲兵', icon: '💥', attack: 25, defense: 5, org: 10 },
+    { id: 'armor', name: '戦車', icon: '🚜', attack: 30, defense: 15, org: 40 },
+    { id: 'anti_tank', name: '対戦車', icon: '🎯', attack: 15, defense: 8, org: 15 },
+    { id: 'anti_air', name: '対空', icon: '🛡️', attack: 8, defense: 10, org: 15 },
+    { id: 'engineer', name: '工兵', icon: '🔧', attack: 5, defense: 25, org: 30 },
+    { id: 'recon', name: '偵察', icon: '🔭', attack: 8, defense: 12, org: 25 }
+  ];
+  static specialBattalions = [];
+
+  static init() { DivisionDesigner.render(); }
+
+  static unlockSpecialBattalion(sciId) {
+    const specialBatts = {
+      boris_stechkin: { id: 'jet_fighter', name: 'ジェット戦闘機', icon: '✈️', attack: 40, defense: 20, org: 30 },
+      sergey_korolyov: { id: 'v2_rocket', name: 'V2ロケット', icon: '🚀', attack: 50, defense: 0, org: 5 },
+      igor_kurchatov: { id: 'nuke_battalion', name: '核部隊', icon: '☢️', attack: 99, defense: 10, org: 10 },
+      vladimir_kotelnikov: { id: 'land_battleship', name: '陸上戦艦', icon: '🛳️', attack: 45, defense: 40, org: 50 }
+    };
+    const batt = specialBatts[sciId];
+    if (batt && !DivisionDesigner.specialBattalions.find(b => b.id === batt.id)) {
+      DivisionDesigner.specialBattalions.push(batt);
+      GameUI.notify('特別大隊解除: ' + batt.name + '！', 'success');
+    }
+  }
+
+  static render() {
+    const container = document.getElementById('division-content');
+    const allBatts = [...DivisionDesigner.availableBattalions, ...DivisionDesigner.specialBattalions];
+
+    let html = '<div class="sp-section"><h3>⚔️ 師団編成エディター (5×5)</h3>' +
+      '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">左の大隊を選択し、グリッドをクリックして配置します。</p>' +
+      '<div class="division-grid-container"><div><div class="division-grid" id="division-grid">';
+
+    for (let y = 0; y < 5; y++) {
+      for (let x = 0; x < 5; x++) {
+        const cell = DivisionDesigner.grid[y][x];
+        const cls = cell ? 'division-cell filled' : 'division-cell';
+        const icon = cell ? cell.icon : '';
+        html += '<div class="' + cls + '" onclick="DivisionDesigner.toggleCell(' + x + ',' + y + ')">' + icon + '</div>';
+      }
+    }
+    html += '</div><button class="sp-btn" onclick="DivisionDesigner.clearGrid()" style="margin-top:8px;">グリッドをクリア</button></div>';
+
+    html += '<div class="division-battalion-list"><h4 style="color:var(--text-gold);margin-bottom:6px;">大隊選択</h4>';
+    allBatts.forEach(b => {
+      const isSpecial = DivisionDesigner.specialBattalions.find(sb => sb.id === b.id);
+      html += '<div class="battalion-option" onclick="DivisionDesigner.selectBattalion(\'' + b.id + '\')">' +
+        b.icon + ' ' + b.name + (isSpecial ? ' <span style="color:var(--accent-green);">★</span>' : '') + '</div>';
+    });
+    html += '</div>';
+
+    const stats = DivisionDesigner.calculateStats();
+    html += '<div class="division-stats"><h4 style="color:var(--text-gold);margin-bottom:6px;">師団ステータス</h4>' +
+      '<div class="division-stat-row"><span>攻撃力</span><span style="color:var(--accent-red);">' + stats.attack + '</span></div>' +
+      '<div class="division-stat-row"><span>防御力</span><span style="color:var(--accent-green);">' + stats.defense + '</span></div>' +
+      '<div class="division-stat-row"><span>組織力</span><span style="color:var(--accent-blue);">' + stats.org + '</span></div>' +
+      '<div class="division-stat-row"><span>大隊数</span><span>' + stats.count + '</span></div>' +
+      '<div class="division-stat-row"><span>機甲速度ボーナス</span><span>' + (CoreEngine.gameState.cardModifiers.armorSpeed > 0 ? '+' : '') + (CoreEngine.gameState.cardModifiers.armorSpeed * 100) + '%</span></div>' +
+      '<div class="division-stat-row"><span>歩兵防御ボーナス</span><span>' + (CoreEngine.gameState.cardModifiers.infantryDefense > 0 ? '+' : '') + (CoreEngine.gameState.cardModifiers.infantryDefense * 100) + '%</span></div>' +
+      '</div></div></div>';
+
+    container.innerHTML = html;
+  }
+
+  static selectBattalion(battId) {
+    const allBatts = [...DivisionDesigner.availableBattalions, ...DivisionDesigner.specialBattalions];
+    DivisionDesigner.selectedBattalion = allBatts.find(b => b.id === battId) || null;
+    GameUI.notify(DivisionDesigner.selectedBattalion ? '選択: ' + DivisionDesigner.selectedBattalion.name : '選択解除');
+  }
+
+  static toggleCell(x, y) {
+    if (DivisionDesigner.grid[y][x]) {
+      DivisionDesigner.grid[y][x] = null;
+    } else if (DivisionDesigner.selectedBattalion) {
+      DivisionDesigner.grid[y][x] = { ...DivisionDesigner.selectedBattalion };
+    }
+    DivisionDesigner.render();
+  }
+
+  static clearGrid() {
+    DivisionDesigner.grid = Array(5).fill(null).map(() => Array(5).fill(null));
+    DivisionDesigner.render();
+  }
+
+  static calculateStats() {
+    let attack = 0, defense = 0, org = 0, count = 0;
+    DivisionDesigner.grid.forEach(row => {
+      row.forEach(cell => {
+        if (cell) {
+          let cellAttack = cell.attack;
+          let cellDefense = cell.defense;
+          if (cell.id === 'armor') cellAttack *= (1 + (CoreEngine.gameState.cardModifiers.armorBreakthrough || 0));
+          if (cell.id === 'infantry') cellDefense *= (1 + (CoreEngine.gameState.cardModifiers.infantryDefense || 0));
+          attack += cellAttack;
+          defense += cellDefense;
+          org += cell.org;
+          count++;
+        }
+      });
+    });
+    if (count > 0) org = Math.floor(org / count);
+    return { attack: Math.floor(attack), defense: Math.floor(defense), org: org, count: count };
+  }
+}
+
+// ==========================================================
+// Module 10: CheatConsole — コンソールチート機能
+// ==========================================================
+class CheatConsole {
+  static history = [];
+  static historyIdx = -1;
+
+  static init() {
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '`' || (e.key === '@' && e.shiftKey) || (e.key === '^' && e.shiftKey) || e.key === '~') {
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+          e.preventDefault();
+          CheatConsole.toggle();
+        }
+      }
+    });
+  }
+
+  static toggle() {
+    const el = document.getElementById('cheat-console');
+    if (el.classList.contains('hidden')) {
+      el.classList.remove('hidden');
+      el.classList.remove('collapsed');
+      document.getElementById('cheat-console-input').focus();
+    } else {
+      el.classList.toggle('collapsed');
+    }
+  }
+
+  static handleInput(e) {
+    if (e.key === 'Enter') {
+      const cmd = e.target.value.trim();
+      if (cmd) {
+        CheatConsole.execute(cmd);
+        CheatConsole.history.push(cmd);
+        CheatConsole.historyIdx = CheatConsole.history.length;
+      }
+      e.target.value = '';
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (CheatConsole.historyIdx > 0) {
+        CheatConsole.historyIdx--;
+        e.target.value = CheatConsole.history[CheatConsole.historyIdx] || '';
+      }
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (CheatConsole.historyIdx < CheatConsole.history.length - 1) {
+        CheatConsole.historyIdx++;
+        e.target.value = CheatConsole.history[CheatConsole.historyIdx] || '';
+      } else {
+        CheatConsole.historyIdx = CheatConsole.history.length;
+        e.target.value = '';
+      }
+    }
+  }
+
+  static output(msg, isError) {
+    const out = document.getElementById('cheat-console-output');
+    const line = document.createElement('div');
+    line.className = 'cheat-output-line' + (isError ? ' cheat-error' : '');
+    line.textContent = '> ' + msg;
+    out.appendChild(line);
+    out.scrollTop = out.scrollHeight;
+  }
+
+  static execute(cmd) {
+    const parts = cmd.toLowerCase().split(/\s+/);
+    const command = parts[0];
+    const s = CoreEngine.gameState;
+
+    switch (command) {
+      case 'nuke':
+        var nukeCount = parseInt(parts[1]) || 1;
+        s.nuclearStockpile += nukeCount;
+        CheatConsole.output('核爆弾 +' + nukeCount + ' (現在: ' + Math.floor(s.nuclearStockpile) + ')');
+        CoreEngine.renderStats();
+        break;
+      case 'pp':
+        var ppVal = parseInt(parts[1]) || 100;
+        s.politicalPower += ppVal;
+        CheatConsole.output('政治力 +' + ppVal + ' (現在: ' + Math.floor(s.politicalPower) + ')');
+        CoreEngine.renderStats();
+        break;
+      case 'manpower':
+        var mpVal = parseInt(parts[1]) || 1000000;
+        s.manpower += mpVal;
+        CheatConsole.output('人的資源 +' + mpVal + ' (現在: ' + s.manpower + ')');
+        CoreEngine.renderStats();
+        break;
+      case 'ic':
+        s.civilianFactories += 10;
+        s.militaryFactories += 10;
+        CheatConsole.output('工廠 +10C/+10M (現在: ' + s.civilianFactories + 'C/' + s.militaryFactories + 'M)');
+        CoreEngine.renderStats();
+        break;
+      case 'it':
+        CheatConsole.output('全技術研究を即座に完了します（チート）');
+        if (ResearchManager.techData) {
+          Object.values(ResearchManager.techData).forEach(cat => {
+            cat.forEach(t => ResearchManager.researchedTech.add(t.id));
+          });
+          ResearchManager.render();
+        }
+        break;
+      case 'focus.autocomplete':
+        FocusTreeManager.autocomplete = !FocusTreeManager.autocomplete;
+        CheatConsole.output('focus.autocomplete = ' + (FocusTreeManager.autocomplete ? 'ON' : 'OFF'));
+        FocusTreeManager.render();
+        break;
+      case 'focus.nochecks':
+        FocusTreeManager.noChecks = !FocusTreeManager.noChecks;
+        CheatConsole.output('focus.nochecks = ' + (FocusTreeManager.noChecks ? 'ON' : 'OFF'));
+        FocusTreeManager.render();
+        break;
+      case 'allowdiplo':
+        CheatConsole.output('allowdiplo = ON (外交制限解除)');
+        DiplomacyManager.countries.forEach(c => c.relation = Math.max(c.relation, 50));
+        DiplomacyManager.render();
+        break;
+      case 'annex':
+        var annexCountry = parts[1] ? parts[1].toUpperCase() : '';
+        if (annexCountry && DiplomacyManager.countries.find(c => c.id === annexCountry)) {
+          CheatConsole.output(annexCountry + 'を併合しました（チート）');
+          MapRenderer.provinces = MapRenderer.provinces.filter(p => p.country !== annexCountry);
+          MapRenderer.render();
+          GameUI.notify(annexCountry + 'を併合しました', 'alert');
+        } else {
+          CheatConsole.output('国名コードが無効: ' + annexCountry, true);
+        }
+        break;
+      case 'tag':
+        var tagCountry = parts[1] ? parts[1].toUpperCase() : '';
+        if (tagCountry && DataFetcher.getCountryFlag(tagCountry) !== '🏳️') {
+          s.country = tagCountry;
+          CheatConsole.output('プレイヤー国を' + tagCountry + 'に変更しました');
+          CoreEngine.renderStats();
+          FocusTreeManager.init(tagCountry);
+        } else {
+          CheatConsole.output('無効な国コード: ' + tagCountry, true);
+        }
+        break;
+      case 'stability':
+        s.stability = Math.min(100, Math.max(0, parseInt(parts[1]) || 100));
+        CheatConsole.output('安定度を' + s.stability + 'に設定');
+        CoreEngine.renderStats();
+        break;
+      case 'warsupport':
+        s.warSupport = Math.min(100, Math.max(0, parseInt(parts[1]) || 100));
+        CheatConsole.output('戦争協力度を' + s.warSupport + 'に設定');
+        CoreEngine.renderStats();
+        break;
+      case 'research':
+        s.researchSlots = 5;
+        CheatConsole.output('研究スロットを5に設定');
+        break;
+      case 'help':
+        CheatConsole.output('利用可能コマンド: nuke [数値], pp [数値], manpower [数値], ic, it, focus.autocomplete, focus.nochecks, allowdiplo, annex [国コード], tag [国コード], stability [数値], warsupport [数値], research');
+        break;
+      default:
+        CheatConsole.output('不明なコマンド: ' + command + ' (helpで一覧表示)', true);
+    }
+  }
+}
+
+// ==========================================================
+// Module 11: MultiplayerManager — PeerJS P2Pマルチプレイ
+// ==========================================================
+class MultiplayerManager {
+  static peer = null;
+  static connections = {};
+  static roomId = null;
+  static isHost = false;
+  static playerId = null;
+  static connected = false;
+
+  static init() {
+    MultiplayerManager.playerId = 'p' + Math.random().toString(36).substring(2, 8);
+    MultiplayerManager.render();
+  }
+
+  static render() {
+    const container = document.getElementById('multiplayer-content');
+    container.innerHTML =
+      '<div class="mp-panel"><h3>🌐 P2Pマルチプレイ (PeerJS)</h3>' +
+      '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">ルームIDを共有してクロスデバイスでプレイできます。サーバーレス直接通信（PeerJS）を使用します。</p>' +
+      '<div style="margin-bottom:8px;"><label style="font-size:12px;color:var(--text-secondary);">ルームID: </label>' +
+      '<input type="text" class="mp-input" id="mp-room-id" placeholder="ルームIDを入力"></div>' +
+      '<button class="mp-btn" onclick="MultiplayerManager.hostRoom()">ルーム作成 (ホスト)</button>' +
+      '<button class="mp-btn" onclick="MultiplayerManager.joinRoom()">ルームに参加</button>' +
+      '<button class="mp-btn" onclick="MultiplayerManager.disconnect()" style="background:var(--accent-red);">切断</button>' +
+      '<div class="mp-status" id="mp-status">未接続</div>' +
+      '<div class="mp-player-list" id="mp-player-list"></div></div>' +
+      '<div class="mp-panel"><h3>📡 同期情報</h3>' +
+      '<p style="font-size:12px;color:var(--text-secondary);">ゲーム時間・速度・国家方針進行・特別研究進捗・カード発動・核攻撃が全プレイヤー間で同期されます。</p>' +
+      '<div style="margin-top:8px;font-size:12px;"><div>プレイヤーID: <strong>' + MultiplayerManager.playerId + '</strong></div>' +
+      '<div>接続状態: <strong id="mp-conn-state">未接続</strong></div></div></div>';
+  }
+
+  static hostRoom() {
+    const roomIdInput = document.getElementById('mp-room-id');
+    const roomId = roomIdInput.value.trim() || ('hoi4-' + Math.random().toString(36).substring(2, 8));
+    MultiplayerManager.roomId = roomId;
+    MultiplayerManager.isHost = true;
+    MultiplayerManager.setStatus('ルーム作成中...', false);
+    MultiplayerManager.peer = new Peer('hoi4game-' + roomId, { debug: 1 });
+
+    MultiplayerManager.peer.on('open', (id) => {
+      MultiplayerManager.connected = true;
+      MultiplayerManager.setStatus('ホスト開始 (ID: ' + id + ')', true);
+      document.getElementById('mp-indicator').textContent = '👥 ホスト';
+      GameUI.notify('ルーム作成完了！ID: ' + roomId);
+      MultiplayerManager.updatePlayerList();
+    });
+
+    MultiplayerManager.peer.on('connection', (conn) => {
+      const peerId = conn.peer;
+      MultiplayerManager.connections[peerId] = conn;
+      conn.on('open', () => {
+        MultiplayerManager.setStatus('プレイヤー接続: ' + peerId, true);
+        MultiplayerManager.updatePlayerList();
+        conn.send({ type: 'sync', state: CoreEngine.getSyncState(), date: CoreEngine.gameState.date.toISOString() });
+      });
+      conn.on('data', (data) => MultiplayerManager.onData(data, peerId));
+      conn.on('close', () => {
+        delete MultiplayerManager.connections[peerId];
+        MultiplayerManager.setStatus('プレイヤー切断: ' + peerId, false);
+        MultiplayerManager.updatePlayerList();
+      });
+    });
+
+    MultiplayerManager.peer.on('error', (err) => {
+      MultiplayerManager.setStatus('エラー: ' + err.type, false);
+    });
+  }
+
+  static joinRoom() {
+    const roomIdInput = document.getElementById('mp-room-id');
+    const roomId = roomIdInput.value.trim();
+    if (!roomId) { GameUI.notify('ルームIDを入力してください。', 'alert'); return; }
+    MultiplayerManager.roomId = roomId;
+    MultiplayerManager.isHost = false;
+    MultiplayerManager.setStatus('接続中...', false);
+    MultiplayerManager.peer = new Peer({ debug: 1 });
+
+    MultiplayerManager.peer.on('open', (myId) => {
+      const conn = MultiplayerManager.peer.connect('hoi4game-' + roomId, { reliable: true });
+      MultiplayerManager.connections[conn.peer] = conn;
+      conn.on('open', () => {
+        MultiplayerManager.connected = true;
+        MultiplayerManager.setStatus('接続完了 (ルーム: ' + roomId + ')', true);
+        document.getElementById('mp-indicator').textContent = '👥 接続中';
+        GameUI.notify('ルームに参加しました: ' + roomId);
+        MultiplayerManager.updatePlayerList();
+      });
+      conn.on('data', (data) => MultiplayerManager.onData(data, conn.peer));
+      conn.on('close', () => {
+        delete MultiplayerManager.connections[conn.peer];
+        MultiplayerManager.setStatus('ホストから切断されました', false);
+        document.getElementById('mp-indicator').textContent = '👥 単独';
+      });
+    });
+
+    MultiplayerManager.peer.on('error', (err) => {
+      MultiplayerManager.setStatus('エラー: ' + err.type, false);
+    });
+  }
+
+  static disconnect() {
+    Object.values(MultiplayerManager.connections).forEach(conn => conn.close());
+    MultiplayerManager.connections = {};
+    if (MultiplayerManager.peer) { MultiplayerManager.peer.destroy(); MultiplayerManager.peer = null; }
+    MultiplayerManager.connected = false;
+    MultiplayerManager.setStatus('切断しました', false);
+    document.getElementById('mp-indicator').textContent = '👥 単独';
+    MultiplayerManager.updatePlayerList();
+  }
+
+  static setStatus(msg, isConnected) {
+    const el = document.getElementById('mp-status');
+    if (el) el.textContent = msg;
+    const stateEl = document.getElementById('mp-conn-state');
+    if (stateEl) stateEl.textContent = isConnected ? '接続中' : '未接続';
+  }
+
+  static updatePlayerList() {
+    const el = document.getElementById('mp-player-list');
+    if (!el) return;
+    let html = '<div class="mp-player-item">' + MultiplayerManager.playerId + ' (自分' + (MultiplayerManager.isHost ? '・ホスト' : '') + ')</div>';
+    Object.keys(MultiplayerManager.connections).forEach(peerId => {
+      html += '<div class="mp-player-item">' + peerId + '</div>';
+    });
+    el.innerHTML = html;
+  }
+
+  static broadcast(data) {
+    if (!MultiplayerManager.connected) return;
+    Object.values(MultiplayerManager.connections).forEach(conn => {
+      try { conn.send(data); } catch (e) {}
+    });
+  }
+
+  static onData(data, fromPeer) {
+    if (!data || !data.type) return;
+    switch (data.type) {
+      case 'sync':
+        if (data.state) CoreEngine.applySyncState(data.state);
+        if (data.date) CoreEngine.gameState.date = new Date(data.date);
+        CoreEngine.updateCalendar();
+        CoreEngine.renderStats();
+        break;
+      case 'tick':
+        if (data.state) CoreEngine.applySyncState(data.state);
+        if (data.date) CoreEngine.gameState.date = new Date(data.date);
+        CoreEngine.updateCalendar();
+        break;
+      case 'speed':
+        CoreEngine.setSpeed(data.speed);
+        break;
+      case 'focus_select':
+        FocusTreeManager.activeFocus = data.focusId;
+        FocusTreeManager.render();
+        break;
+      case 'focus_complete':
+        FocusTreeManager.completeFocus(data.focusId);
+        break;
+      case 'sp_hire':
+        if (!SpecialProjectManager.projects[data.sciId]) {
+          SpecialProjectManager.projects[data.sciId] = { phase: 'feasibility', progress: 0, factories: 0, completed: false };
+          SpecialProjectManager.render();
+        }
+        break;
+      case 'sp_phase':
+        if (SpecialProjectManager.projects[data.sciId]) {
+          SpecialProjectManager.projects[data.sciId].phase = data.phase;
+          SpecialProjectManager.render();
+        }
+        break;
+      case 'nuclear_strike':
+        NuclearManager.onNuclearStrike(data);
+        break;
+      case 'card_activate':
+        CoreEngine.log('他プレイヤーがカード「' + data.abilityName + '」を発動しました');
+        GameUI.notify('他プレイヤー: ' + data.abilityName + '発動', 'alert');
+        break;
+      case 'faction_create':
+        if (!DiplomacyManager.factions.find(f => f.name === data.faction.name)) {
+          DiplomacyManager.factions.push(data.faction);
+          DiplomacyManager.render();
+        }
+        break;
+      case 'faction_join':
+        var f = DiplomacyManager.factions.find(f => f.name === data.factionName);
+        if (f && !f.members.includes(data.countryId)) f.members.push(data.countryId);
+        DiplomacyManager.render();
+        break;
+      case 'lend_lease':
+        DiplomacyManager.lendLeaseContracts.push({ from: 'remote', to: data.to, equipment: data.equipment, amount: data.amount });
+        DiplomacyManager.render();
+        break;
+      case 'trade':
+        CoreEngine.log('他プレイヤーが貿易を実行しました');
+        break;
+    }
+  }
+}
+
+// ==========================================================
+// Module 12: CardSystem — 将軍カード・固有能力・インスタント資源カード
+// ==========================================================
+class CardSystem {
+  static allCards = {};
+  static deck = [];
+  static selectedCard = null;
+  static localStorageKey = 'hoi4_card_game_deck';
+
+  static ABILITIES = {
+    'hitler': { type: 'passive', name: '国家の象徴', desc: '政治力獲得量+0.5、安定度+10%', modifiers: { politicalPowerGain: 0.5, stabilityBonus: 10 } },
+    'stalin': { type: 'passive', name: '鉄の意志', desc: '安定度+15%、戦争協力度+10%', modifiers: { stabilityBonus: 15 } },
+    'hermann': { type: 'passive', name: '特別研究の推進者', desc: '特別研究進行速度+30%、施設建設コスト-20%', modifiers: { specialProjectSpeed: 0.3, facilityCostReduction: 0.2 } },
+    'rommel': { type: 'active', name: '電撃作戦', desc: '機甲速度+15%、突破+20%（アクティブ）', modifiers: { armorSpeed: 0.15, armorBreakthrough: 0.20 }, activeName: '電撃作戦' },
+    'guderian': { type: 'active', name: '電撃戦', desc: '機甲速度+20%、突破+15%（アクティブ）', modifiers: { armorSpeed: 0.20, armorBreakthrough: 0.15 }, activeName: '電撃戦' },
+    'mstein': { type: 'active', name: '奇襲作戦', desc: '計画ボーナス+25%（アクティブ）', modifiers: {}, activeName: '奇襲作戦' },
+    'rundstedt': { type: 'passive', name: '老練の指揮', desc: '全師団防御+10%', modifiers: {} },
+    'tukhachevsky': { type: 'active', name: '一歩も引くな', desc: '歩兵防御+25%（アクティブ）', modifiers: { infantryDefense: 0.25 }, activeName: '一歩も引くな' },
+    'yamamoto': { type: 'active', name: 'Z作戦', desc: '海軍攻撃力+20%（アクティブ）', modifiers: {}, activeName: 'Z作戦' },
+    'yamashita': { type: 'active', name: 'マレー電撃戦', desc: '機甲速度+15%（アクティブ）', modifiers: { armorSpeed: 0.15 }, activeName: 'マレー電撃戦' },
+    'oil': { type: 'instant', name: '石油備蓄解放', desc: '燃料全回復＋石油+50', resource: 'oil', amount: 50, refuel: true },
+    'rubber': { type: 'instant', name: '合成ゴム緊急生産', desc: 'ゴム+24', resource: 'rubber', amount: 24 },
+    'steel': { type: 'instant', name: '戦時金属増産指示', desc: '鉄+30、タングステン+30', resource: 'steel', amount: 30, extraResource: 'tungsten', extraAmount: 30 },
+    'tungsten': { type: 'instant', name: 'タングステン備蓄', desc: 'タングステン+30', resource: 'tungsten', amount: 30 },
+    'chromium': { type: 'instant', name: 'クロム備蓄', desc: 'クロム+30', resource: 'chromium', amount: 30 },
+    'aluminum': { type: 'instant', name: 'アルミニウム備蓄', desc: 'アルミニウム+30', resource: 'aluminum', amount: 30 },
+    'coal': { type: 'instant', name: '石炭備蓄', desc: '石炭+30', resource: 'coal', amount: 30 }
+  };
+
+  static DEFAULT_GENERAL_ABILITY = { type: 'passive', name: '指揮能力', desc: '全師団攻撃力+5%', modifiers: {} };
+
+  static async init() {
+    CardSystem.allCards = await DataFetcher.fetchAllCards();
+    CardSystem.loadDeck();
+    CardSystem.render();
+  }
+
+  static loadDeck() {
+    try {
+      const saved = localStorage.getItem(CardSystem.localStorageKey);
+      if (saved) CardSystem.deck = JSON.parse(saved);
+    } catch (e) { CardSystem.deck = []; }
+  }
+
+  static saveDeck() {
+    localStorage.setItem(CardSystem.localStorageKey, JSON.stringify(CardSystem.deck));
+  }
+
+  static getAbility(card) {
+    if (!card) return null;
+    return CardSystem.ABILITIES[card.id] || CardSystem.DEFAULT_GENERAL_ABILITY;
+  }
+
+  static render() {
+    const container = document.getElementById('cards-content');
+    let html = '<div class="card-deck-area"><h3>🃏 将軍・指導者カードデッキ</h3>' +
+      '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">カードをクリックしてデッキに編成します。編成したカードの固有能力がゲームに適用されます。</p>';
+
+    html += '<div style="background:var(--bg-panel);border:1px solid var(--text-gold);border-radius:8px;padding:10px;margin-bottom:12px;">' +
+      '<strong style="color:var(--text-gold);">デッキ (' + CardSystem.deck.length + '枚)</strong>';
+    if (CardSystem.deck.length > 0) {
+      html += '<div class="card-grid" style="margin-top:8px;">';
+      CardSystem.deck.forEach(card => {
+        const ability = CardSystem.getAbility(card);
+        html += CardSystem.renderCardHTML(card, true, ability);
+      });
+      html += '</div>';
+    } else {
+      html += '<p style="font-size:12px;color:var(--text-secondary);margin-top:4px;">デッキが空です。下のカードから選択してください。</p>';
+    }
+    html += '</div>';
+
+    Object.entries(CardSystem.allCards).forEach(entry => {
+      const country = entry[0], cards = entry[1];
+      if (cards.length === 0) return;
+      html += '<div style="margin-bottom:16px;"><h4 style="color:var(--text-secondary);margin-bottom:6px;">' + DataFetcher.getCountryFlag(country) + ' ' + country + ' パック</h4><div class="card-grid">';
+      cards.forEach(card => {
+        const inDeck = CardSystem.deck.find(c => c.id === card.id && c.country === card.country);
+        const ability = CardSystem.getAbility(card);
+        html += CardSystem.renderCardHTML(card, !!inDeck, ability);
+      });
+      html += '</div></div>';
+    });
+    html += '</div>';
+
+    if (CardSystem.selectedCard) {
+      const card = CardSystem.selectedCard;
+      const ability = CardSystem.getAbility(card);
+      html += '<div class="card-ability-panel"><h4>' + card.name + ' — ' + ability.name + '</h4>' +
+        '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">' + ability.desc + '</p>';
+      if (ability.type === 'active' && ability.activeName) {
+        const onCooldown = CoreEngine.gameState.activeAbilities[card.id];
+        html += '<button class="ability-btn" onclick="CardSystem.activateAbility(\'' + card.id + '\')" ' + (onCooldown ? 'disabled' : '') + '>' +
+          (onCooldown ? 'クールダウン中' : 'アクティブ発動: ' + ability.activeName) + '</button>';
+      } else if (ability.type === 'instant') {
+        html += '<button class="instant-card-btn" onclick="CardSystem.activateAbility(\'' + card.id + '\')">使用: ' + ability.name + '</button>';
+      } else {
+        html += '<p style="font-size:12px;color:var(--accent-green);">パッシブ能力（自動適用中）</p>';
+      }
+      html += '</div>';
+    }
+
+    container.innerHTML = html;
+  }
+
+  static renderCardHTML(card, inDeck, ability) {
+    const rankClass = 'gc-rank-' + (card.rank || 'R');
+    const imgHtml = card.imgUrl
+      ? '<img src="' + card.imgUrl + '" onerror="this.style.display=\'none\'" alt="' + card.name + '">'
+      : '<div style="width:100%;height:120px;background:var(--bg-panel);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:40px;">' + DataFetcher.getCountryFlag(card.country) + '</div>';
+    const abilityBadge = ability && ability.type === 'active' ? '⚡' : ability && ability.type === 'instant' ? '📦' : '🛡️';
+    return '<div class="game-card ' + (inDeck ? 'selected' : '') + '" onclick="CardSystem.selectCard(\'' + card.id + '\',\'' + card.country + '\')">' +
+      imgHtml + '<div class="gc-name">' + card.name + '</div>' +
+      '<div class="gc-rank ' + rankClass + '">' + abilityBadge + ' ' + (card.rank || 'R') + '</div></div>';
+  }
+
+  static selectCard(cardId, country) {
+    const cards = CardSystem.allCards[country] || [];
+    const card = cards.find(c => c.id === cardId);
+    if (!card) return;
+    const deckIdx = CardSystem.deck.findIndex(c => c.id === cardId && c.country === country);
+    if (deckIdx >= 0) {
+      CardSystem.deck.splice(deckIdx, 1);
+      CardSystem.removeModifiers(cardId);
+    } else {
+      if (CardSystem.deck.length >= 5) { GameUI.notify('デッキは最大5枚までです。', 'alert'); return; }
+      CardSystem.deck.push({ ...card });
+      CardSystem.applyModifiers(cardId);
+    }
+    CardSystem.saveDeck();
+    CardSystem.selectedCard = card;
+    CardSystem.render();
+    MultiplayerManager.broadcast({ type: 'card_select', cardId: cardId, country: country });
+  }
+
+  static applyModifiers(cardId) {
+    const ability = CardSystem.ABILITIES[cardId] || CardSystem.DEFAULT_GENERAL_ABILITY;
+    if (!ability.modifiers) return;
+    const mods = CoreEngine.gameState.cardModifiers;
+    Object.entries(ability.modifiers).forEach(entry => {
+      mods[entry[0]] = (mods[entry[0]] || 0) + entry[1];
+    });
+    if (ability.modifiers.stabilityBonus) {
+      CoreEngine.gameState.stability = Math.min(100, CoreEngine.gameState.stability + ability.modifiers.stabilityBonus);
+    }
+    CoreEngine.renderStats();
+  }
+
+  static removeModifiers(cardId) {
+    const ability = CardSystem.ABILITIES[cardId] || CardSystem.DEFAULT_GENERAL_ABILITY;
+    if (!ability.modifiers) return;
+    const mods = CoreEngine.gameState.cardModifiers;
+    Object.entries(ability.modifiers).forEach(entry => {
+      mods[entry[0]] = (mods[entry[0]] || 0) - entry[1];
+    });
+    if (ability.modifiers.stabilityBonus) {
+      CoreEngine.gameState.stability = Math.max(0, CoreEngine.gameState.stability - ability.modifiers.stabilityBonus);
+    }
+    CoreEngine.renderStats();
+  }
+
+  static activateAbility(cardId) {
+    const ability = CardSystem.ABILITIES[cardId];
+    if (!ability) return;
+    if (ability.type === 'instant') {
+      const s = CoreEngine.gameState;
+      if (ability.resource) s.resources[ability.resource] = (s.resources[ability.resource] || 0) + (ability.amount || 0);
+      if (ability.extraResource) s.resources[ability.extraResource] = (s.resources[ability.extraResource] || 0) + (ability.extraAmount || 0);
+      if (ability.refuel) s.fuel = s.maxFuel;
+      CoreEngine.log('カード使用: ' + ability.name);
+      GameUI.notify(ability.name + '発動！', 'success');
+      CoreEngine.renderStats();
+      if (GameUI.currentTab === 'trade') ResourceManager.render();
+    } else if (ability.type === 'active') {
+      const mods = CoreEngine.gameState.cardModifiers;
+      Object.entries(ability.modifiers || {}).forEach(entry => {
+        mods[entry[0]] = (mods[entry[0]] || 0) + entry[1];
+      });
+      CoreEngine.gameState.activeAbilities[cardId] = true;
+      CoreEngine.log('アクティブ能力発動: ' + (ability.activeName || ability.name));
+      GameUI.notify((ability.activeName || ability.name) + '発動！', 'success');
+      CoreEngine.renderStats();
+      if (GameUI.currentTab === 'division') DivisionDesigner.render();
+      setTimeout(() => {
+        Object.entries(ability.modifiers || {}).forEach(entry => {
+          mods[entry[0]] = (mods[entry[0]] || 0) - entry[1];
+        });
+        delete CoreEngine.gameState.activeAbilities[cardId];
+        CoreEngine.renderStats();
+        if (GameUI.currentTab === 'cards') CardSystem.render();
+        if (GameUI.currentTab === 'division') DivisionDesigner.render();
+      }, 30000);
+      MultiplayerManager.broadcast({ type: 'card_activate', cardId: cardId, abilityName: ability.name });
+    }
+  }
+}
+
+// ==========================================================
+// Module 13: ResearchManager — 技術ツリー管理
+// ==========================================================
+class ResearchManager {
+  static techData = {};
+  static researchedTech = new Set();
+  static researching = {};
+  static currentCategory = 'infantry';
+
+  static async init(country) {
+    ResearchManager.techData = await DataFetcher.fetchAllTech(country);
+    ResearchManager.renderTabs();
+    ResearchManager.renderSlots();
+    ResearchManager.render();
+    CoreEngine.registerTickCallback(() => ResearchManager.onTick());
+  }
+
+  static renderTabs() {
+    const cats = [
+      { id: 'infantry', name: '🪖 歩兵' }, { id: 'armor', name: '🚜 装甲' },
+      { id: 'artillery', name: '💥 砲兵' }, { id: 'naval', name: '⚓ 海軍' },
+      { id: 'air', name: '✈️ 航空' }, { id: 'engineering', name: '🛠️ 工学' },
+      { id: 'industry', name: '🏭 産業' }
+    ];
+    document.getElementById('research-tabs').innerHTML = cats.map(c =>
+      '<button class="research-tab ' + (c.id === ResearchManager.currentCategory ? 'active' : '') + '" onclick="ResearchManager.setCategory(\'' + c.id + '\')">' + c.name + '</button>'
+    ).join('');
+  }
+
+  static renderSlots() {
+    const s = CoreEngine.gameState;
+    let html = '';
+    for (let i = 1; i <= 5; i++) {
+      const locked = i > s.researchSlots;
+      const research = ResearchManager.researching[i];
+      let label = 'スロット' + i + ': ';
+      if (locked) label += '🔒';
+      else if (research) {
+        const tech = ResearchManager.findTech(research.techId);
+        label += tech ? tech.title + ' (' + Math.floor(research.progress/research.total*100) + '%)' : '研究中';
+      } else label += '空き';
+      html += '<div class="research-slot ' + (locked ? 'locked' : '') + ' ' + (research ? 'active' : '') + '">' + label + '</div>';
+    }
+    document.getElementById('research-slots').innerHTML = html;
+  }
+
+  static setCategory(cat) {
+    ResearchManager.currentCategory = cat;
+    ResearchManager.renderTabs();
+    ResearchManager.render();
+  }
+
+  static findTech(techId) {
+    for (const cat of Object.values(ResearchManager.techData)) {
+      const t = cat.find(t => t.id === techId);
+      if (t) return t;
+    }
+    return null;
+  }
+
+  static render() {
+    const container = document.getElementById('research-nodes');
+    const svg = document.getElementById('research-svg-lines');
+    const techs = ResearchManager.techData[ResearchManager.currentCategory] || [];
+    container.innerHTML = '';
+    svg.innerHTML = '';
+
+    if (techs.length === 0) {
+      container.innerHTML = '<p style="color:var(--text-secondary);padding:20px;">技術データがありません。</p>';
+      return;
+    }
+
+    let svgContent = '';
+    techs.forEach(t => {
+      if (t.prerequisites) {
+        t.prerequisites.forEach(preId => {
+          const pre = techs.find(t2 => t2.id === preId);
+          if (pre) {
+            const x1 = pre.x + 55, y1 = pre.y + 30;
+            const x2 = t.x + 55, y2 = t.y + 30;
+            const isDone = ResearchManager.researchedTech.has(preId);
+            svgContent += '<path d="M' + x1 + ',' + y1 + ' C' + x1 + ',' + ((y1+y2)/2) + ' ' + x2 + ',' + ((y1+y2)/2) + ' ' + x2 + ',' + y2 + '" stroke="' + (isDone ? '#4ac46a' : '#3a4a5a') + '" stroke-width="2" fill="none" opacity="0.4"/>';
+          }
+        });
+      }
+    });
+    svg.innerHTML = svgContent;
+    svg.setAttribute('width', '800');
+    svg.setAttribute('height', '1600');
+
+    techs.forEach(t => {
+      const isResearched = ResearchManager.researchedTech.has(t.id);
+      const isResearching = Object.values(ResearchManager.researching).some(r => r.techId === t.id);
+      let cls = 'tech-node';
+      if (isResearched) cls += ' researched';
+      else if (isResearching) cls += ' researching';
+      const node = document.createElement('div');
+      node.className = cls;
+      node.style.left = t.x + 'px';
+      node.style.top = t.y + 'px';
+      node.innerHTML = '<div class="tn-svg">' + (t.svg || '') + '</div><div class="tn-title">' + t.title + '</div><div class="tn-year">' + (t.year || '') + '</div>';
+      node.addEventListener('click', () => ResearchManager.selectTech(t));
+      container.appendChild(node);
+    });
+  }
+
+  static selectTech(tech) {
+    if (ResearchManager.researchedTech.has(tech.id)) { GameUI.notify('既に研究済みです。'); return; }
+    if (tech.prerequisites && !tech.prerequisites.every(p => ResearchManager.researchedTech.has(p))) {
+      GameUI.notify('前提技術が不足しています。', 'alert'); return;
+    }
+    const s = CoreEngine.gameState;
+    for (let i = 1; i <= s.researchSlots; i++) {
+      if (!ResearchManager.researching[i]) {
+        ResearchManager.researching[i] = { techId: tech.id, progress: 0, total: tech.research_time || 100 };
+        CoreEngine.log('研究開始: ' + tech.title);
+        GameUI.notify('研究開始: ' + tech.title, 'success');
+        ResearchManager.renderSlots();
+        ResearchManager.render();
+        return;
+      }
+    }
+    GameUI.notify('研究スロットが満杯です。', 'alert');
+  }
+
+  static onTick() {
+    let changed = false;
+    Object.entries(ResearchManager.researching).forEach(entry => {
+      const slot = entry[0], research = entry[1];
+      research.progress++;
+      if (research.progress >= research.total) {
+        ResearchManager.researchedTech.add(research.techId);
+        delete ResearchManager.researching[slot];
+        const tech = ResearchManager.findTech(research.techId);
+        if (tech) {
+          CoreEngine.log('研究完了: ' + tech.title);
+          GameUI.notify('研究完了: ' + tech.title, 'success');
+          if (tech.id && tech.id.includes('nuclear')) {
+            CoreEngine.gameState.nuclearTechLevel = Math.max(1, CoreEngine.gameState.nuclearTechLevel);
+          }
+        }
+        changed = true;
+      }
+    });
+    if (changed || GameUI.currentTab === 'research') {
+      ResearchManager.renderSlots();
+      ResearchManager.render();
+    }
+  }
+}
+
+// ==========================================================
+// Module 14: GameUI — UI管理・タブ切り替え・モーダル・通知
+// ==========================================================
+class GameUI {
+  static currentTab = 'focus';
+
+  static switchTab(tabName) {
+    GameUI.currentTab = tabName;
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.tab === tabName);
+    });
+    document.querySelectorAll('.tab-content').forEach(content => {
+      content.classList.toggle('active', content.id === 'tab-' + tabName);
+    });
+    if (tabName === 'map') setTimeout(() => MapRenderer.resize(), 100);
+    if (tabName === 'special') SpecialProjectManager.render();
+    if (tabName === 'nuclear') NuclearManager.render();
+    if (tabName === 'trade') ResourceManager.render();
+    if (tabName === 'diplomacy') DiplomacyManager.render();
+    if (tabName === 'cards') CardSystem.render();
+    if (tabName === 'division') DivisionDesigner.render();
+    if (tabName === 'multiplayer') MultiplayerManager.render();
+    if (tabName === 'research') { ResearchManager.renderTabs(); ResearchManager.renderSlots(); ResearchManager.render(); }
+  }
+
+  static notify(message, type) {
+    const container = document.getElementById('notification-container');
+    const notif = document.createElement('div');
+    notif.className = 'notification ' + (type === 'alert' ? 'alert' : type === 'success' ? 'success' : '');
+    notif.textContent = message;
+    container.appendChild(notif);
+    setTimeout(() => {
+      notif.style.opacity = '0';
+      notif.style.transition = 'opacity 0.3s';
+      setTimeout(() => notif.remove(), 300);
+    }, 4000);
+  }
+
+  static openModal(title, bodyHtml) {
+    document.getElementById('generic-modal-title').textContent = title;
+    document.getElementById('generic-modal-body').innerHTML = bodyHtml;
+    document.getElementById('generic-modal-overlay').classList.remove('hidden');
+  }
+
+  static closeModal() {
+    document.getElementById('generic-modal-overlay').classList.add('hidden');
+  }
+}
+
+// ==========================================================
+// INITIALIZATION — ゲーム起動
+// ==========================================================
+async function initGame() {
+  CoreEngine.init();
+  CoreEngine.updateCalendar();
+  await FocusTreeManager.init(CoreEngine.gameState.country);
+  await ResearchManager.init(CoreEngine.gameState.country);
+  await SpecialProjectManager.init();
+  await NuclearManager.init();
+  MapRenderer.init();
+  ResourceManager.init();
+  DiplomacyManager.init();
+  await CardSystem.init();
+  CheatConsole.init();
+  MultiplayerManager.init();
+  CardSystem.deck.forEach(card => CardSystem.applyModifiers(card.id));
+  CoreEngine.log('ゲームを開始しました。速度ボタンで時間を進めてください。');
+  GameUI.notify('Hearts of Iron IV × 将軍カードゲーム 開始！', 'success');
+}
+
+window.addEventListener('DOMContentLoaded', initGame);
+</script>
+</body>
+</html>
