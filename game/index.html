@@ -92,21 +92,22 @@
     .speed-btn.active { background: var(--accent-blue); color: #fff; border-color: var(--accent-blue); }
     .topbar-nav { display: flex; gap: 4px; }
 
-    /* --- 3. Tab Navigation Styles --- */
-    #tab-nav {
-      display: flex; background: var(--bg-panel); border-bottom: 1px solid var(--border-mil);
-      padding: 0 8px; flex-shrink: 0; overflow-x: auto;
+    /* --- 3. Window Navigation Rail Styles (map is the operating screen) --- */
+    #window-nav {
+      display: flex; align-items: center; background: var(--bg-panel);
+      border-bottom: 1px solid var(--border-mil);
+      padding: 4px 8px; flex-shrink: 0; overflow-x: auto; gap: 3px;
     }
-    .tab-btn {
-      background: transparent; border: none; border-bottom: 2px solid transparent;
-      color: var(--text-secondary); padding: 8px 16px; cursor: pointer;
-      font-size: 13px; white-space: nowrap; transition: all 0.15s;
+    .win-btn {
+      background: linear-gradient(180deg, #232e3c, #18202a); border: 1px solid var(--border-mil);
+      color: var(--text-secondary); padding: 5px 12px; cursor: pointer;
+      font-size: 12px; white-space: nowrap; transition: all 0.15s; border-radius: 4px;
     }
-    .tab-btn:hover { color: var(--text-primary); background: var(--bg-panel-light); }
-    .tab-btn.active { color: var(--text-gold); border-bottom-color: var(--text-gold); }
+    .win-btn:hover { color: var(--text-primary); border-color: var(--accent-blue); }
+    .win-btn.open { color: var(--text-gold); border-color: var(--text-gold); box-shadow: 0 0 6px rgba(212,168,67,0.3); }
 
     /* --- 4. Focus Tree Styles --- */
-    #tab-focus { flex: 1; overflow: hidden; position: relative; }
+    .pane-fill { flex: 1; overflow: hidden; position: relative; }
     #focus-tree-container {
       width: 100%; height: 100%; overflow: auto; position: relative;
       background: radial-gradient(ellipse at center, #111820 0%, #0a0c0f 100%);
@@ -139,7 +140,7 @@
     #focus-tooltip .tt-effect { color: var(--text-secondary); white-space: pre-line; margin-top: 4px; }
 
     /* --- 5. Research / Tech Tree Styles --- */
-    #tab-research { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+    .tpl-research { display: flex; flex-direction: column; height: 100%; }
     .research-tabs { display: flex; gap: 2px; padding: 6px 8px; background: var(--bg-panel); flex-shrink: 0; }
     .research-tab {
       background: var(--bg-panel-light); border: 1px solid var(--border-mil); color: var(--text-secondary);
@@ -168,7 +169,7 @@
     .research-slot.locked { opacity: 0.4; }
 
     /* --- 6. Special Projects Styles --- */
-    #tab-special { flex: 1; overflow: auto; padding: 16px; }
+    
     .sp-section { margin-bottom: 20px; }
     .sp-section h3 { color: var(--text-gold); margin-bottom: 8px; font-size: 15px; border-bottom: 1px solid var(--border-mil); padding-bottom: 4px; }
     .sp-facility-card {
@@ -200,7 +201,7 @@
     }
 
     /* --- 7. Nuclear Strike Styles --- */
-    #tab-nuclear { flex: 1; overflow: auto; padding: 16px; }
+    
     .nuclear-panel { background: var(--bg-panel-light); border: 1px solid var(--border-mil); border-radius: 8px; padding: 16px; margin-bottom: 16px; }
     .nuclear-panel h3 { color: var(--accent-red); margin-bottom: 10px; }
     .nuclear-stat { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid var(--border-mil); }
@@ -241,17 +242,45 @@
     .screen-shake { animation: shake 0.5s ease-in-out; }
     @keyframes shake { 0%,100%{transform:translate(0,0)} 25%{transform:translate(-5px,3px)} 50%{transform:translate(5px,-3px)} 75%{transform:translate(-3px,5px)} }
 
-    /* --- 8. Map Renderer Styles --- */
-    #tab-map { flex: 1; overflow: hidden; position: relative; }
-    #map-canvas { width: 100%; height: 100%; display: block; background: #0d1419; cursor: grab; }
+    /* --- 8. Operating Screen & Map Renderer Styles --- */
+    #operating-screen { flex: 1; overflow: hidden; position: relative; background: #0d1419; }
+    #map-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; background: #0d1419; cursor: grab; }
     #map-canvas:active { cursor: grabbing; }
-    .map-overlay { position: absolute; top: 8px; left: 8px; background: rgba(20,26,33,0.9); border: 1px solid var(--border-mil); border-radius: 6px; padding: 8px; font-size: 12px; }
-    .map-legend { position: absolute; bottom: 8px; right: 8px; background: rgba(20,26,33,0.9); border: 1px solid var(--border-mil); border-radius: 6px; padding: 8px; font-size: 11px; }
+    #map-loading {
+      position: absolute; inset: 0; display: flex; flex-direction: column; gap: 10px;
+      align-items: center; justify-content: center; background: #0d1419; z-index: 500;
+      color: var(--text-secondary); font-size: 14px;
+    }
+    #map-loading .spinner {
+      width: 42px; height: 42px; border: 4px solid var(--border-mil);
+      border-top-color: var(--text-gold); border-radius: 50%; animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #map-mode-toolbar {
+      position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 4px; background: rgba(20,26,33,0.92); border: 1px solid var(--border-mil);
+      border-radius: 6px; padding: 4px; z-index: 20;
+    }
+    .map-mode-btn {
+      background: transparent; border: 1px solid transparent; color: var(--text-secondary);
+      padding: 3px 10px; font-size: 11px; cursor: pointer; border-radius: 3px; white-space: nowrap;
+    }
+    .map-mode-btn:hover { color: var(--text-primary); background: var(--bg-panel-light); }
+    .map-mode-btn.active { color: #fff; background: var(--accent-blue); }
+    #map-help {
+      position: absolute; bottom: 8px; right: 8px; background: rgba(20,26,33,0.88);
+      border: 1px solid var(--border-mil); border-radius: 6px; padding: 6px 10px;
+      font-size: 11px; color: var(--text-secondary); z-index: 20; line-height: 1.6;
+    }
+    .pane-scroll { flex: 1; overflow: auto; padding: 16px; }
+    #map-canvas:active { cursor: grabbing; }
+    .map-overlay { position: absolute; top: 8px; left: 8px; background: rgba(20,26,33,0.9); border: 1px solid var(--border-mil); border-radius: 6px; padding: 8px; font-size: 12px; max-height: 40%; overflow: auto; }
+    .map-legend { position: absolute; top: 8px; right: 8px; background: rgba(20,26,33,0.9); border: 1px solid var(--border-mil); border-radius: 6px; padding: 8px; font-size: 11px; max-height: 60%; overflow: auto; }
     .map-legend-item { display: flex; align-items: center; gap: 6px; margin: 2px 0; }
     .map-legend-color { width: 14px; height: 14px; border-radius: 2px; }
 
     /* --- 9. Resource / Trade Styles --- */
-    #tab-trade { flex: 1; overflow: auto; padding: 16px; }
+    
     .resource-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-bottom: 16px; }
     .resource-card {
       background: var(--bg-panel-light); border: 1px solid var(--border-mil); border-radius: 8px;
@@ -273,7 +302,7 @@
     .trade-btn:disabled { background: #333; color: #666; cursor: not-allowed; }
 
     /* --- 10. Diplomacy / Faction Styles --- */
-    #tab-diplomacy { flex: 1; overflow: auto; padding: 16px; }
+    
     .diplo-country-card {
       display: inline-block; width: 240px; background: var(--bg-panel-light); border: 1px solid var(--border-mil);
       border-radius: 8px; padding: 10px; margin: 6px; vertical-align: top;
@@ -290,7 +319,7 @@
     .lend-lease-row { display: flex; align-items: center; gap: 8px; padding: 6px; background: var(--bg-panel); border-radius: 4px; margin: 4px 0; }
 
     /* --- 11. Card System Styles --- */
-    #tab-cards { flex: 1; overflow: auto; padding: 16px; }
+    
     .card-deck-area { margin-bottom: 16px; }
     .card-deck-area h3 { color: var(--text-gold); margin-bottom: 8px; }
     .card-grid { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -324,7 +353,7 @@
     .instant-card-btn:hover { background: #5de87a; }
 
     /* --- 12. Division Designer Styles --- */
-    #tab-division { flex: 1; overflow: auto; padding: 16px; }
+    
     .division-grid-container { display: flex; gap: 20px; }
     .division-grid {
       display: grid; grid-template-columns: repeat(5, 60px); grid-template-rows: repeat(5, 60px);
@@ -370,7 +399,7 @@
     .cheat-error { color: var(--accent-red); }
 
     /* --- 14. Multiplayer Styles --- */
-    #tab-multiplayer { flex: 1; overflow: auto; padding: 16px; }
+    
     .mp-panel { background: var(--bg-panel-light); border: 1px solid var(--border-mil); border-radius: 8px; padding: 16px; margin-bottom: 12px; }
     .mp-panel h3 { color: var(--accent-blue); margin-bottom: 8px; }
     .mp-input { background: var(--bg-panel); border: 1px solid var(--border-mil); color: var(--text-primary); padding: 6px 10px; border-radius: 4px; font-size: 13px; width: 200px; }
@@ -414,10 +443,106 @@
     .notification.success { border-left-color: var(--accent-green); }
     @keyframes slideIn { from{transform:translateX(100%);opacity:0} to{transform:translateX(0);opacity:1} }
 
+    /* --- 17. Window UI Styles (OS風 独立ウィンドウ) --- */
+    .os-window {
+      position: absolute; display: flex; flex-direction: column;
+      background: rgba(20,26,33,0.97); border: 1px solid var(--border-mil);
+      border-radius: 6px; box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+      min-width: 260px; min-height: 120px; overflow: hidden;
+    }
+    .os-window.focused { border-color: var(--text-gold); }
+    .os-window.maximized { left: 4px !important; top: 4px !important; width: calc(100% - 8px) !important; height: calc(100% - 8px) !important; }
+    .os-titlebar {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      background: linear-gradient(180deg, #232e3c, #18202a);
+      border-bottom: 1px solid var(--border-mil); padding: 4px 6px 4px 10px;
+      cursor: move; user-select: none; flex-shrink: 0;
+    }
+    .os-window.focused .os-titlebar { background: linear-gradient(180deg, #3a4a5a, #232e3c); }
+    .os-titlebar .os-title { font-size: 12px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .os-ctrl-group { display: flex; gap: 3px; }
+    .os-ctrl {
+      width: 20px; height: 18px; border: 1px solid var(--border-mil); border-radius: 3px;
+      background: var(--bg-panel-light); color: var(--text-secondary);
+      font-size: 11px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .os-ctrl:hover { color: var(--text-primary); background: #2a3a4a; }
+    .os-ctrl.close:hover { background: var(--accent-red); color: #fff; }
+    .os-body { flex: 1; overflow: hidden; display: flex; flex-direction: column; position: relative; }
+    .os-window.minimized .os-body { display: none; }
+    .os-window.minimized { height: auto !important; min-height: 0; }
+    .os-resize-handle {
+      position: absolute; right: 0; bottom: 0; width: 14px; height: 14px; cursor: nwse-resize; z-index: 5;
+      background: linear-gradient(135deg, transparent 50%, var(--border-mil) 50%);
+    }
+    .window-template { display: flex; flex-direction: column; width: 100%; height: 100%; }
+    .window-template.pane-scroll { padding: 0; }
+    .window-template.pane-scroll > * { flex: 1; overflow: auto; padding: 16px; }
+    #window-templates { display: none; }
+    #window-layer { position: absolute; inset: 0; pointer-events: none; }
+    #window-layer .os-window { pointer-events: auto; }
+
+    /* --- 18. Battle Line & Army Panel Styles (前線・作戦指揮) --- */
+    #army-panel {
+      position: absolute; left: 8px; bottom: 8px; width: 250px; z-index: 20;
+      background: rgba(20,26,33,0.94); border: 1px solid var(--border-mil); border-radius: 6px;
+      padding: 8px; font-size: 12px;
+    }
+    #army-panel h4 { color: var(--text-gold); font-size: 12px; margin-bottom: 4px; }
+    .army-row {
+      background: var(--bg-panel-light); border: 1px solid var(--border-mil); border-radius: 4px;
+      padding: 6px 8px; margin: 4px 0;
+    }
+    .army-row.selected { border-color: var(--accent-green); }
+    .army-name { font-weight: 600; font-size: 12px; }
+    .army-info { color: var(--text-secondary); font-size: 11px; margin: 2px 0; }
+    .army-orgbar { width: 100%; height: 5px; background: #333; border-radius: 3px; overflow: hidden; margin: 3px 0; }
+    .army-orgbar-fill { height: 100%; background: var(--accent-orange); transition: width 0.3s; }
+    .army-btn {
+      background: var(--accent-green); color: #fff; border: none; padding: 4px 10px;
+      border-radius: 4px; cursor: pointer; font-size: 11px; margin: 2px 2px 0 0;
+    }
+    .army-btn:hover { background: #5de87a; }
+    .army-btn:disabled { background: #333; color: #666; cursor: not-allowed; }
+    .army-btn.abort { background: var(--accent-red); }
+    .army-btn.abort:hover { background: #e05a5a; }
+    .map-overlay { max-width: 260px; }
+
+    /* --- 19. Construction Styles (建設) --- */
+    .con-state-card {
+      background: var(--bg-panel-light); border: 1px solid var(--border-mil); border-radius: 8px;
+      padding: 12px; margin-bottom: 12px;
+    }
+    .con-state-card h4 { color: var(--text-gold); margin-bottom: 4px; }
+    .con-state-info { font-size: 11px; color: var(--text-secondary); margin-bottom: 8px; }
+    .con-building-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      background: var(--bg-panel); border: 1px solid var(--border-mil); border-radius: 5px;
+      padding: 6px 10px; margin: 4px 0; font-size: 12px;
+    }
+    .con-building-row .cb-name { flex: 1; }
+    .con-building-row .cb-level { color: var(--text-gold); font-size: 11px; }
+    .con-build-btn {
+      background: var(--accent-blue); color: #fff; border: none; padding: 3px 10px;
+      border-radius: 4px; cursor: pointer; font-size: 11px; white-space: nowrap;
+    }
+    .con-build-btn:hover { background: #5a9fd4; }
+    .con-build-btn:disabled { background: #333; color: #666; cursor: not-allowed; }
+    .con-queue-item {
+      background: var(--bg-panel); border: 1px solid var(--border-mil); border-radius: 5px;
+      padding: 6px 10px; margin: 4px 0; font-size: 12px;
+    }
+    .con-queue-item .cq-top { display: flex; justify-content: space-between; align-items: center; }
+    .con-queue-item .cq-progress { width: 100%; height: 6px; background: #333; border-radius: 3px; overflow: hidden; margin-top: 4px; }
+    .con-queue-item .cq-progress-fill { height: 100%; background: var(--accent-green); transition: width 0.3s; }
+    .con-factory-select {
+      background: var(--bg-panel); border: 1px solid var(--border-mil); color: var(--text-primary);
+      border-radius: 4px; font-size: 11px; padding: 1px 4px;
+    }
+
     /* --- Layout Wrapper --- */
     #game-root { display: flex; flex-direction: column; height: 100vh; }
-    .tab-content { flex: 1; overflow: hidden; display: none; }
-    .tab-content.active { display: flex; flex-direction: column; }
+    #operating-screen { flex: 1; overflow: hidden; position: relative; }
   </style>
 </head>
 <body>
@@ -450,84 +575,107 @@
     <span id="log-text">1936年1月1日 — 世界情勢の監視を開始...</span>
   </div>
 
-  <!-- ==================== TAB NAVIGATION ==================== -->
-  <nav id="tab-nav">
-    <button class="tab-btn active" data-tab="focus" onclick="GameUI.switchTab('focus')">🌲 国家方針</button>
-    <button class="tab-btn" data-tab="research" onclick="GameUI.switchTab('research')">🔬 研究</button>
-    <button class="tab-btn" data-tab="special" onclick="GameUI.switchTab('special')">⚛️ 特別研究</button>
-    <button class="tab-btn" data-tab="nuclear" onclick="GameUI.switchTab('nuclear')">☢️ 核攻撃</button>
-    <button class="tab-btn" data-tab="map" onclick="GameUI.switchTab('map')">🗺️ マップ</button>
-    <button class="tab-btn" data-tab="trade" onclick="GameUI.switchTab('trade')">📦 貿易</button>
-    <button class="tab-btn" data-tab="diplomacy" onclick="GameUI.switchTab('diplomacy')">🤝 外交</button>
-    <button class="tab-btn" data-tab="cards" onclick="GameUI.switchTab('cards')">🃏 将軍カード</button>
-    <button class="tab-btn" data-tab="division" onclick="GameUI.switchTab('division')">⚔️ 師団編成</button>
-    <button class="tab-btn" data-tab="multiplayer" onclick="GameUI.switchTab('multiplayer')">🌐 マルチ</button>
+  <!-- ==================== WINDOW NAVIGATION RAIL ==================== -->
+  <nav id="window-nav">
+    <span style="font-size:11px;color:var(--text-secondary);margin-right:4px;">🪟 ウィンドウ:</span>
+    <button class="win-btn" data-tab="focus" onclick="GameUI.switchTab('focus')">🌲 国家方針</button>
+    <button class="win-btn" data-tab="research" onclick="GameUI.switchTab('research')">🔬 研究</button>
+    <button class="win-btn" data-tab="special" onclick="GameUI.switchTab('special')">⚛️ 特別研究</button>
+    <button class="win-btn" data-tab="nuclear" onclick="GameUI.switchTab('nuclear')">☢️ 核攻撃</button>
+    <button class="win-btn" data-tab="construction" onclick="GameUI.switchTab('construction')">🏗️ 建設</button>
+    <button class="win-btn" data-tab="trade" onclick="GameUI.switchTab('trade')">📦 貿易</button>
+    <button class="win-btn" data-tab="diplomacy" onclick="GameUI.switchTab('diplomacy')">🤝 外交</button>
+    <button class="win-btn" data-tab="cards" onclick="GameUI.switchTab('cards')">🃏 将軍カード</button>
+    <button class="win-btn" data-tab="division" onclick="GameUI.switchTab('division')">⚔️ 師団編成</button>
+    <button class="win-btn" data-tab="multiplayer" onclick="GameUI.switchTab('multiplayer')">🌐 マルチ</button>
+    <button class="win-btn" onclick="WindowManager.closeAll()">🗺️ マップ画面</button>
   </nav>
 
-  <!-- ==================== TAB CONTENTS ==================== -->
-
-  <!-- Focus Tree Tab -->
-  <div class="tab-content active" id="tab-focus">
-    <div id="focus-tree-container">
-      <div id="focus-tree-viewport">
-        <svg id="focus-svg-lines"></svg>
-        <div id="focus-nodes"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Research Tab -->
-  <div class="tab-content" id="tab-research">
-    <div class="research-slots" id="research-slots"></div>
-    <div class="research-tabs" id="research-tabs"></div>
-    <div id="research-tree-container">
-      <div id="research-tree-viewport">
-        <svg id="research-svg-lines"></svg>
-        <div id="research-nodes"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Special Projects Tab -->
-  <div class="tab-content" id="tab-special">
-    <div id="special-projects-content"></div>
-  </div>
-
-  <!-- Nuclear Tab -->
-  <div class="tab-content" id="tab-nuclear">
-    <div id="nuclear-content"></div>
-  </div>
-
-  <!-- Map Tab -->
-  <div class="tab-content" id="tab-map">
+  <!-- ==================== OPERATING SCREEN (fullscreen map) ==================== -->
+  <div id="operating-screen">
     <canvas id="map-canvas"></canvas>
+
+    <div id="map-loading">
+      <div class="spinner"></div>
+      <div id="map-loading-text">地図データ (hoi4-history) 読み込み中...</div>
+    </div>
+
+    <div id="map-mode-toolbar">
+      <button class="map-mode-btn active" data-mode="political">政治</button>
+      <button class="map-mode-btn" data-mode="terrain">地形</button>
+      <button class="map-mode-btn" data-mode="construction">建設</button>
+      <button class="map-mode-btn" data-mode="supply">補給</button>
+      <button class="map-mode-btn" data-mode="air">制空</button>
+      <button class="map-mode-btn" data-mode="naval">制海</button>
+    </div>
+
     <div class="map-overlay" id="map-info-overlay"></div>
     <div class="map-legend" id="map-legend"></div>
+    <div id="map-help">
+      左ドラッグ: マップ移動 / ホイール: ズーム / 左クリック: 州選択<br>
+      右ドラッグ: <b style="color:#7de87a">前線設定</b> / Shift+右ドラッグ: <b style="color:#ff6a6a">攻撃矢印</b>
+    </div>
+
+    <!-- Army / Battle Plan Panel -->
+    <div id="army-panel"></div>
+
+    <!-- Window layer (OS windows render here) -->
+    <div id="window-layer"></div>
   </div>
 
-  <!-- Trade Tab -->
-  <div class="tab-content" id="tab-trade">
-    <div id="trade-content"></div>
-  </div>
+  <!-- ==================== WINDOW TEMPLATES (moved into windows on open) ==================== -->
+  <div id="window-templates">
+    <div class="window-template pane-fill" id="tpl-focus" data-title="🌲 国家方針" data-w="900" data-h="640">
+      <div id="focus-tree-container">
+        <div id="focus-tree-viewport">
+          <svg id="focus-svg-lines"></svg>
+          <div id="focus-nodes"></div>
+        </div>
+      </div>
+    </div>
 
-  <!-- Diplomacy Tab -->
-  <div class="tab-content" id="tab-diplomacy">
-    <div id="diplomacy-content"></div>
-  </div>
+    <div class="window-template tpl-research" id="tpl-research" data-title="🔬 研究" data-w="880" data-h="620">
+      <div class="research-slots" id="research-slots"></div>
+      <div class="research-tabs" id="research-tabs"></div>
+      <div id="research-tree-container">
+        <div id="research-tree-viewport">
+          <svg id="research-svg-lines"></svg>
+          <div id="research-nodes"></div>
+        </div>
+      </div>
+    </div>
 
-  <!-- Cards Tab -->
-  <div class="tab-content" id="tab-cards">
-    <div id="cards-content"></div>
-  </div>
+    <div class="window-template pane-scroll" id="tpl-special" data-title="⚛️ 特別研究計画" data-w="900" data-h="600">
+      <div id="special-projects-content"></div>
+    </div>
 
-  <!-- Division Designer Tab -->
-  <div class="tab-content" id="tab-division">
-    <div id="division-content"></div>
-  </div>
+    <div class="window-template pane-scroll" id="tpl-nuclear" data-title="☢️ 核攻撃" data-w="760" data-h="620">
+      <div id="nuclear-content"></div>
+    </div>
 
-  <!-- Multiplayer Tab -->
-  <div class="tab-content" id="tab-multiplayer">
-    <div id="multiplayer-content"></div>
+    <div class="window-template pane-scroll" id="tpl-construction" data-title="🏗️ 建設" data-w="620" data-h="640">
+      <div id="construction-content"></div>
+    </div>
+
+    <div class="window-template pane-scroll" id="tpl-trade" data-title="📦 貿易・資源" data-w="800" data-h="600">
+      <div id="trade-content"></div>
+    </div>
+
+    <div class="window-template pane-scroll" id="tpl-diplomacy" data-title="🤝 外交" data-w="860" data-h="600">
+      <div id="diplomacy-content"></div>
+    </div>
+
+    <div class="window-template pane-scroll" id="tpl-cards" data-title="🃏 将軍カード" data-w="860" data-h="620">
+      <div id="cards-content"></div>
+    </div>
+
+    <div class="window-template pane-scroll" id="tpl-division" data-title="⚔️ 師団編成" data-w="900" data-h="560">
+      <div id="division-content"></div>
+    </div>
+
+    <div class="window-template pane-scroll" id="tpl-multiplayer" data-title="🌐 マルチプレイ" data-w="640" data-h="560">
+      <div id="multiplayer-content"></div>
+    </div>
   </div>
 </div>
 
@@ -568,10 +716,15 @@
 /* ================================================================
    JavaScript Module Architecture
    Classes: DataFetcher, CoreEngine, FocusTreeManager,
-   SpecialProjectManager, NuclearManager, MapRenderer,
-   ResourceManager, DiplomacyManager, DivisionDesigner,
-   CheatConsole, MultiplayerManager, CardSystem, ResearchManager,
-   GameUI
+   SpecialProjectManager, NuclearManager, WindowManager (OS風ウィンドウ),
+   MapRenderer (HoI4詳細マップ), BattlePlanManager (前線・作戦指揮),
+   ConstructionManager (建設), ResourceManager, DiplomacyManager,
+   DivisionDesigner, CheatConsole, MultiplayerManager, CardSystem,
+   ResearchManager, GameUI
+   データソース: cbrzeczysz/hoi4-history
+     - map/provinces.bmp (公式プロビンスビットマップ)
+     - map/definition.csv → game/mapdata/provinces.json
+     - history/states/*.txt → game/mapdata/states.json
    ================================================================ */
 
 // ==========================================================
@@ -604,6 +757,37 @@ class DataFetcher {
   // Special projects data
   static SPECIAL_PROJECTS_PATH = 'ger/tec/special/data/science.json';
   static SPECIAL_PROJECTS_IMG = 'ger/tec/special/data/image/';
+
+  // Map data (generated from cbrzeczysz/hoi4-history: map/definition.csv + history/states/*.txt)
+  static MAP_BMP_URL = DataFetcher.HOI4_REPO_RAW + '/map/provinces.bmp';
+  static MAPDATA_PROVINCES = 'mapdata/provinces.json';
+  static MAPDATA_STATES = 'mapdata/states.json';
+
+  // Country map colors (HoI4風パレティ)
+  static COUNTRY_COLORS = {
+    GER: [90, 90, 90], SOV: [178, 34, 34], JAP: [170, 60, 60], USA: [80, 110, 170],
+    ENG: [110, 120, 165], FRA: [70, 120, 170], ITA: [100, 150, 100], POL: [180, 170, 90],
+    CZE: [150, 130, 170], HUN: [130, 110, 150], ROM: [160, 120, 100], YUG: [120, 130, 130],
+    SWE: [70, 100, 140], NOR: [90, 130, 150], DEN: [160, 60, 90], HOL: [170, 130, 60],
+    BEL: [160, 140, 100], SWI: [160, 90, 90], AST: [60, 150, 120], CAN: [140, 150, 100],
+    FIN: [140, 160, 170], TUR: [150, 80, 60], CHI: [150, 100, 60], MEN: [160, 140, 60],
+    SPR: [150, 90, 100], POR: [110, 110, 140], GRE: [90, 140, 160], BUL: [140, 140, 160],
+    EST: [120, 130, 160], LAT: [130, 120, 140], LIT: [140, 110, 110], IRE: [80, 150, 80],
+    BRA: [100, 150, 70], ARG: [120, 140, 180], MEX: [140, 120, 80], ETH: [80, 130, 100],
+    IRQ: [150, 120, 90], IRN: [130, 140, 110], MON: [160, 120, 100], AFG: [130, 140, 120],
+    SAU: [150, 130, 130], MAN: [150, 100, 100], SIA: [140, 150, 90], LIB: [120, 130, 120],
+    EGY: [170, 150, 110], ALG: [90, 120, 110], MOR: [120, 100, 130], GXC: [140, 100, 130],
+    CHL: [110, 140, 130], PER: [140, 100, 130], VEN: [130, 120, 140], COL: [130, 110, 130]
+  };
+
+  static countryColor(tag) {
+    const c = DataFetcher.COUNTRY_COLORS[tag];
+    if (c) return c;
+    // deterministic fallback color from tag hash
+    let h = 0;
+    for (let i = 0; i < (tag || '???').length; i++) h = (h * 31 + tag.charCodeAt(i)) >>> 0;
+    return [80 + (h % 100), 80 + ((h >> 5) % 100), 80 + ((h >> 10) % 100)];
+  }
 
   // Resource item images
   static RESOURCE_IMAGES = {
@@ -1255,13 +1439,14 @@ class NuclearManager {
   }
 
   static renderTargets() {
+    // stateId は game/mapdata/states.json (cbrzeczysz/hoi4-history) 由来
     const targets = [
-      { id: 'london', name: 'ロンドン', country: 'ENG', damage: '高' },
-      { id: 'paris', name: 'パリ', country: 'FRA', damage: '高' },
-      { id: 'moscow', name: 'モスクワ', country: 'SOV', damage: '极高' },
-      { id: 'washington', name: 'ワシントン', country: 'USA', damage: '极高' },
-      { id: 'tokyo', name: '東京', country: 'JAP', damage: '高' },
-      { id: 'berlin', name: 'ベルリン', country: 'GER', damage: '极高' }
+      { id: '126', name: 'ロンドン', country: 'ENG', damage: '高' },
+      { id: '16', name: 'パリ', country: 'FRA', damage: '高' },
+      { id: '219', name: 'モスクワ', country: 'SOV', damage: '极高' },
+      { id: '386', name: 'ワシントン', country: 'USA', damage: '极高' },
+      { id: '282', name: '東京', country: 'JAP', damage: '高' },
+      { id: '64', name: 'ベルリン', country: 'GER', damage: '极高' }
     ];
     return targets.map(t =>
       '<div style="display:inline-block;background:var(--bg-panel-light);border:1px solid var(--border-mil);border-radius:6px;padding:8px 12px;margin:4px;cursor:pointer;font-size:12px;" onclick="NuclearManager.selectTarget(\'' + t.id + '\',\'' + t.name + '\')">' +
@@ -1315,6 +1500,17 @@ class NuclearManager {
     s.warSupport = Math.min(100, s.warSupport + 20);
     s.airSupremacy = Math.max(0, s.airSupremacy - 20);
 
+    // マップ上の州に核爆発エフェクト + 施設破壊 (組織力壊滅)
+    MapRenderer.addNukeEffectAtState(NuclearManager.selectedTarget.id);
+    const hitState = MapRenderer.states[NuclearManager.selectedTarget.id];
+    if (hitState) {
+      if (hitState.b) {
+        Object.keys(hitState.b).forEach(k => { hitState.b[k] = Math.floor(hitState.b[k] * 0.3); });
+      }
+      hitState.supply = 0;
+      MapRenderer.invalidateModes();
+    }
+
     CoreEngine.log('💥 核攻撃実行！' + targetName + 'に原子爆弾を投下！');
     GameUI.notify('核攻撃: ' + targetName + 'に投下完了！', 'alert');
 
@@ -1355,165 +1551,688 @@ class NuclearManager {
 }
 
 // ==========================================================
-// Module 6: MapRenderer — Canvas マップ描画
+// Module 6: WindowManager — OS風ウィンドウ管理（ドラッグ・リサイズ・zIndex）
+// ==========================================================
+class WindowManager {
+  static windows = new Map(); // tab -> win object
+  static zTop = 100;
+  static cascade = 0;
+
+  static open(tab) {
+    let win = WindowManager.windows.get(tab);
+    if (win) {
+      win.el.classList.remove('minimized');
+      WindowManager.focus(win);
+      return win.el;
+    }
+    const tpl = document.getElementById('tpl-' + tab);
+    if (!tpl) return null;
+
+    const el = document.createElement('div');
+    el.className = 'os-window';
+    const w = Math.min(parseInt(tpl.dataset.w) || 700, document.getElementById('window-layer').offsetWidth - 20);
+    const h = Math.min(parseInt(tpl.dataset.h) || 500, document.getElementById('window-layer').offsetHeight - 20);
+    const off = (WindowManager.cascade++ % 8) * 28;
+    el.style.width = w + 'px';
+    el.style.height = h + 'px';
+    el.style.left = Math.min(90 + off, document.getElementById('window-layer').offsetWidth - w - 8) + 'px';
+    el.style.top = Math.min(30 + off, document.getElementById('window-layer').offsetHeight - h - 8) + 'px';
+
+    el.innerHTML =
+      '<div class="os-titlebar"><span class="os-title">' + (tpl.dataset.title || tab) + '</span>' +
+      '<span class="os-ctrl-group">' +
+      '<button class="os-ctrl min" title="最小化">−</button>' +
+      '<button class="os-ctrl max" title="最大化">▢</button>' +
+      '<button class="os-ctrl close" title="閉じる">✕</button></span></div>' +
+      '<div class="os-body"></div>' +
+      '<div class="os-resize-handle"></div>';
+
+    const body = el.querySelector('.os-body');
+    body.appendChild(tpl); // move template content into the window
+
+    document.getElementById('window-layer').appendChild(el);
+
+    win = { tab: tab, el: el, minimized: false, maximized: false, prevRect: null };
+    WindowManager.windows.set(tab, win);
+
+    el.addEventListener('mousedown', () => WindowManager.focus(win));
+    el.querySelector('.os-ctrl.min').addEventListener('click', () => WindowManager.minimize(tab));
+    el.querySelector('.os-ctrl.max').addEventListener('click', () => WindowManager.toggleMaximize(tab));
+    el.querySelector('.os-ctrl.close').addEventListener('click', () => WindowManager.close(tab));
+    WindowManager.setupDrag(win);
+    WindowManager.setupResize(win);
+    WindowManager.focus(win);
+    WindowManager.updateRail();
+    GameUI.onWindowOpened(tab);
+    return el;
+  }
+
+  static close(tab) {
+    const win = WindowManager.windows.get(tab);
+    if (!win) return;
+    const tpl = document.getElementById('tpl-' + tab);
+    if (tpl) document.getElementById('window-templates').appendChild(tpl);
+    win.el.remove();
+    WindowManager.windows.delete(tab);
+    WindowManager.updateRail();
+    GameUI.onWindowClosed(tab);
+  }
+
+  static closeAll() {
+    [...WindowManager.windows.keys()].forEach(tab => WindowManager.close(tab));
+  }
+
+  static minimize(tab) {
+    const win = WindowManager.windows.get(tab);
+    if (!win) return;
+    win.minimized = !win.minimized;
+    win.el.classList.toggle('minimized', win.minimized);
+  }
+
+  static toggleMaximize(tab) {
+    const win = WindowManager.windows.get(tab);
+    if (!win) return;
+    win.maximized = !win.maximized;
+    win.el.classList.toggle('maximized', win.maximized);
+  }
+
+  static focus(win) {
+    win.el.style.zIndex = ++WindowManager.zTop;
+    WindowManager.windows.forEach(w => w.el.classList.toggle('focused', w === win));
+  }
+
+  static topWindow() {
+    let top = null, z = -1;
+    WindowManager.windows.forEach(w => {
+      if (w.minimized) return;
+      const wz = parseInt(w.el.style.zIndex) || 0;
+      if (wz > z) { z = wz; top = w; }
+    });
+    return top;
+  }
+
+  static isOpen(tab) { return WindowManager.windows.has(tab); }
+
+  static updateRail() {
+    document.querySelectorAll('.win-btn[data-tab]').forEach(btn => {
+      btn.classList.toggle('open', WindowManager.windows.has(btn.dataset.tab));
+    });
+  }
+
+  static setupDrag(win) {
+    const titlebar = win.el.querySelector('.os-titlebar');
+    let dragging = false, sx = 0, sy = 0, ox = 0, oy = 0;
+    titlebar.addEventListener('mousedown', (e) => {
+      if (e.target.closest('.os-ctrl')) return;
+      if (win.maximized) return;
+      dragging = true; sx = e.clientX; sy = e.clientY;
+      ox = parseInt(win.el.style.left); oy = parseInt(win.el.style.top);
+      e.preventDefault();
+    });
+    document.addEventListener('mousemove', (e) => {
+      if (!dragging) return;
+      win.el.style.left = Math.max(0, ox + e.clientX - sx) + 'px';
+      win.el.style.top = Math.max(0, oy + e.clientY - sy) + 'px';
+    });
+    document.addEventListener('mouseup', () => { dragging = false; });
+  }
+
+  static setupResize(win) {
+    const handle = win.el.querySelector('.os-resize-handle');
+    let resizing = false, sx = 0, sy = 0, ow = 0, oh = 0;
+    handle.addEventListener('mousedown', (e) => {
+      if (win.maximized) return;
+      resizing = true; sx = e.clientX; sy = e.clientY;
+      ow = win.el.offsetWidth; oh = win.el.offsetHeight;
+      e.preventDefault(); e.stopPropagation();
+    });
+    document.addEventListener('mousemove', (e) => {
+      if (!resizing) return;
+      win.el.style.width = Math.max(260, ow + e.clientX - sx) + 'px';
+      win.el.style.height = Math.max(120, oh + e.clientY - sy) + 'px';
+    });
+    document.addEventListener('mouseup', () => { resizing = false; });
+  }
+}
+
+// ==========================================================
+// Module 7: MapRenderer — HoI4風詳細マップ描画 (provinces.bmp + 州データ)
+// データソース: cbrzeczysz/hoi4-history (map/definition.csv, history/states/*.txt)
 // ==========================================================
 class MapRenderer {
   static canvas = null;
   static ctx = null;
-  static offsetX = 0;
-  static offsetY = 0;
-  static scale = 1;
-  static isDragging = false;
-  static lastX = 0;
-  static lastY = 0;
-  static provinces = [];
+  static ready = false;
+  static cam = { x: 0, y: 0, scale: 0.4 };
+  static srcCanvas = null;      // full-res provinces bitmap canvas
+  static provinces = null;      // {terr:[], types:[], p:{id:[r,g,b,typeIdx,coastal,terrIdx]}}
+  static states = null;        // {stateId:{name,owner,provinces,vp,b,supply}}
+  static provToState = new Map();
+  static colorToProv = new Map();  // u32 color -> province id
+  static idMap = null;            // Uint16Array: pixel -> province id (0 = none)
+  static mapW = 0; static mapH = 0;
+  static stateCenter = new Map();  // stateId -> [x, y]
+  static provCentroid = new Map(); // provId -> [x, y]
+  static mode = 'political';
+  static modeCache = {};          // mode -> canvas
+  static selectedStateId = null;
+  static selectedProvId = null;
   static nukeEffects = [];
+  static MIN_SCALE = 0.15; static MAX_SCALE = 16;
 
-  static WORLD_PROVINCES = [
-    { id: 'ger', name: 'ドイツ', x: 500, y: 200, w: 80, h: 60, color: '#3a4a3a', country: 'GER' },
-    { id: 'sov', name: 'ソ連', x: 600, y: 120, w: 200, h: 150, color: '#8b0000', country: 'SOV' },
-    { id: 'fra', name: 'フランス', x: 420, y: 220, w: 70, h: 50, color: '#3a5a8a', country: 'FRA' },
-    { id: 'eng', name: 'イギリス', x: 350, y: 180, w: 60, h: 50, color: '#4a4a8a', country: 'ENG' },
-    { id: 'ita', name: 'イタリア', x: 470, y: 270, w: 50, h: 60, color: '#4a8a4a', country: 'ITA' },
-    { id: 'jap', name: '日本', x: 850, y: 250, w: 50, h: 80, color: '#aa3a3a', country: 'JAP' },
-    { id: 'usa', name: 'アメリカ', x: 100, y: 180, w: 150, h: 120, color: '#4a6a8a', country: 'USA' },
-    { id: 'pol', name: 'ポーランド', x: 560, y: 190, w: 40, h: 40, color: '#8a8a3a', country: 'POL' }
-  ];
+  // HoI4風 地形パレット
+  static TERRAIN_COLORS = {
+    plains: [150, 160, 100], forest: [95, 120, 75], hills: [140, 122, 88],
+    mountains: [122, 100, 84], desert: [196, 172, 110], marsh: [100, 118, 92],
+    jungle: [80, 110, 60], urban: [130, 120, 115], tundra: [150, 150, 140],
+    taiga: [100, 110, 100], steppe: [168, 158, 104], savanna: [160, 150, 90],
+    ice: [220, 230, 235], lakes: [60, 110, 150], ocean: [40, 80, 110], unknown: [120, 120, 120]
+  };
 
-  static init() {
+  static async init() {
     MapRenderer.canvas = document.getElementById('map-canvas');
     MapRenderer.ctx = MapRenderer.canvas.getContext('2d');
     MapRenderer.resize();
     window.addEventListener('resize', () => MapRenderer.resize());
+    MapRenderer.setupModeToolbar();
     MapRenderer.setupInteraction();
-    MapRenderer.provinces = [...MapRenderer.WORLD_PROVINCES];
-    MapRenderer.render();
-    MapRenderer.renderLegend();
     CoreEngine.registerTickCallback(() => MapRenderer.onTick());
+
+    try {
+      await MapRenderer.loadMapData();
+      MapRenderer.buildPixelIndex();
+      MapRenderer.computeCentroids();
+      MapRenderer.centerOn(CoreEngine.gameState.country);
+      MapRenderer.ready = true;
+      document.getElementById('map-loading').classList.add('hidden');
+      MapRenderer.renderLegend();
+      MapRenderer.startRenderLoop();
+      ConstructionManager.onMapReady();
+      BattlePlanManager.onMapReady();
+    } catch (e) {
+      console.error('MapRenderer init failed:', e);
+      document.getElementById('map-loading-text').textContent =
+        '地図データの読み込みに失敗しました: ' + e.message + ' — 他のウィンドウは利用可能です。';
+      document.querySelector('#map-loading .spinner').style.display = 'none';
+    }
+  }
+
+  static async loadMapData() {
+    const [provData, stateData] = await Promise.all([
+      DataFetcher.fetchJSON(DataFetcher.MAPDATA_PROVINCES),
+      DataFetcher.fetchJSON(DataFetcher.MAPDATA_STATES)
+    ]);
+    if (!provData || !stateData) throw new Error('マップ定義JSONが見つかりません');
+    MapRenderer.provinces = provData;
+    MapRenderer.states = stateData;
+
+    // province -> state lookup & color -> province lookup
+    Object.entries(stateData).forEach(([sid, st]) => {
+      st.provinces.forEach(pid => MapRenderer.provToState.set(pid, sid));
+    });
+    Object.entries(provData.p).forEach(([pid, p]) => {
+      MapRenderer.colorToProv.set((255 << 24) | (p[2] << 16) | (p[1] << 8) | p[0], parseInt(pid));
+    });
+
+    // Load the official provinces bitmap from cbrzeczysz/hoi4-history
+    const img = await new Promise((resolve, reject) => {
+      const im = new Image();
+      im.crossOrigin = 'anonymous';
+      im.onload = () => resolve(im);
+      im.onerror = () => reject(new Error('provinces.bmp の取得に失敗'));
+      im.src = DataFetcher.MAP_BMP_URL;
+    });
+    MapRenderer.mapW = img.width; MapRenderer.mapH = img.height;
+    const c = document.createElement('canvas');
+    c.width = img.width; c.height = img.height;
+    c.getContext('2d').drawImage(img, 0, 0);
+    MapRenderer.srcCanvas = c;
+  }
+
+  static buildPixelIndex() {
+    const img = MapRenderer.srcCanvas.getContext('2d').getImageData(0, 0, MapRenderer.mapW, MapRenderer.mapH);
+    const src = new Uint32Array(img.data.buffer);
+    const idMap = new Uint16Array(MapRenderer.mapW * MapRenderer.mapH);
+    for (let i = 0; i < src.length; i++) {
+      const pid = MapRenderer.colorToProv.get(src[i]);
+      if (pid) idMap[i] = pid;
+    }
+    MapRenderer.idMap = idMap;
+  }
+
+  static computeCentroids() {
+    // downsample 1/4 で走査し、プロビンス重心を算出
+    const q = 4;
+    const w = Math.floor(MapRenderer.mapW / q), h = Math.floor(MapRenderer.mapH / q);
+    const c = document.createElement('canvas');
+    c.width = w; c.height = h;
+    c.getContext('2d').drawImage(MapRenderer.srcCanvas, 0, 0, w, h);
+    const data = c.getContext('2d').getImageData(0, 0, w, h).data;
+    const sumX = new Map(), sumY = new Map(), cnt = new Map();
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        const i = (y * w + x) * 4;
+        const u32 = (255 << 24) | (data[i + 2] << 16) | (data[i + 1] << 8) | data[i];
+        const pid = MapRenderer.colorToProv.get(u32);
+        if (!pid) continue;
+        sumX.set(pid, (sumX.get(pid) || 0) + x);
+        sumY.set(pid, (sumY.get(pid) || 0) + y);
+        cnt.set(pid, (cnt.get(pid) || 0) + 1);
+      }
+    }
+    cnt.forEach((n, pid) => {
+      MapRenderer.provCentroid.set(pid, [sumX.get(pid) / n * q, sumY.get(pid) / n * q]);
+    });
+    // 州の中心 = 最大VPプロビンスの重心 or 平均
+    Object.entries(MapRenderer.states).forEach(([sid, st]) => {
+      let best = null, bestVp = -1;
+      Object.keys(st.vp || {}).forEach(pid => {
+        const v = st.vp[pid];
+        if (v > bestVp && MapRenderer.provCentroid.has(parseInt(pid))) { bestVp = v; best = parseInt(pid); }
+      });
+      if (!best) {
+        let sx = 0, sy = 0, n = 0;
+        st.provinces.forEach(pid => {
+          const cen = MapRenderer.provCentroid.get(pid);
+          if (cen) { sx += cen[0]; sy += cen[1]; n++; }
+        });
+        if (n > 0) best = null, MapRenderer.stateCenter.set(sid, [sx / n, sy / n]);
+      }
+      if (best) MapRenderer.stateCenter.set(sid, MapRenderer.provCentroid.get(best));
+    });
+  }
+
+  static ownerOf(pid) {
+    const sid = MapRenderer.provToState.get(pid);
+    if (!sid) return null;
+    return (MapRenderer.states[sid] || {}).owner || null;
+  }
+
+  static stateOf(pid) { return MapRenderer.provToState.get(pid) || null; }
+
+  static provinceAt(wx, wy) {
+    if (!MapRenderer.idMap) return null;
+    const x = Math.floor(wx), y = Math.floor(wy);
+    if (x < 0 || y < 0 || x >= MapRenderer.mapW || y >= MapRenderer.mapH) return null;
+    return MapRenderer.idMap[y * MapRenderer.mapW + x] || null;
+  }
+
+  static centerOn(tag) {
+    // 指定国の州の中心座標にカメラを合わせる
+    const centers = [];
+    Object.entries(MapRenderer.states).forEach(([sid, st]) => {
+      if (st.owner === tag) {
+        const c = MapRenderer.stateCenter.get(sid);
+        if (c) centers.push(c);
+      }
+    });
+    if (centers.length === 0) return;
+    let cx = 0, cy = 0;
+    centers.forEach(c => { cx += c[0]; cy += c[1]; });
+    cx /= centers.length; cy /= centers.length;
+    const cw = MapRenderer.canvas.width, ch = MapRenderer.canvas.height;
+    const scale = Math.max(1.5, Math.min(4, cw / 900));
+    MapRenderer.cam.scale = scale;
+    MapRenderer.cam.x = cw / 2 - cx * scale;
+    MapRenderer.cam.y = ch / 2 - cy * scale;
+  }
+
+  static setupModeToolbar() {
+    document.querySelectorAll('.map-mode-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        MapRenderer.setMode(btn.dataset.mode);
+      });
+    });
+  }
+
+  static setMode(mode) {
+    MapRenderer.mode = mode;
+    document.querySelectorAll('.map-mode-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.mode === mode);
+    });
+    MapRenderer.renderLegend();
+  }
+
+  static invalidateModes() {
+    MapRenderer.modeCache = {};
+  }
+
+  // ---- マップモードごとのキャンバスを生成 (州の所有色・地形・境界線描画) ----
+  static getModeCanvas(mode) {
+    if (MapRenderer.modeCache[mode]) return MapRenderer.modeCache[mode];
+    const W = MapRenderer.mapW, H = MapRenderer.mapH;
+    const srcImg = MapRenderer.srcCanvas.getContext('2d').getImageData(0, 0, W, H);
+    const src = new Uint32Array(srcImg.data.buffer);
+    const out = new Uint32Array(src.length);
+    const idMap = MapRenderer.idMap;
+    const player = CoreEngine.gameState.country;
+    const states = MapRenderer.states;
+    const provToState = MapRenderer.provToState;
+
+    // プロビンスごとの塗り色 (u32) を事前計算
+    const provColor = new Uint32Array(14000);
+    const p = MapRenderer.provinces.p;
+    const terrNames = MapRenderer.provinces.terr;
+    const typeNames = MapRenderer.provinces.types;
+    Object.entries(p).forEach(([pid, pd]) => {
+      const id = parseInt(pid);
+      const type = typeNames[pd[3]];
+      let rgb;
+      if (mode === 'terrain') {
+        const tc = MapRenderer.TERRAIN_COLORS[terrNames[pd[5]]] || MapRenderer.TERRAIN_COLORS.unknown;
+        rgb = (type === 'sea') ? [38, 70, 100] : (type === 'lake') ? [50, 90, 130] : tc;
+      } else if (mode === 'political' || mode === 'construction' || mode === 'air' || mode === 'naval') {
+        if (type === 'sea') rgb = [30, 58, 82];
+        else if (type === 'lake') rgb = [42, 76, 110];
+        else {
+          const owner = MapRenderer.ownerOf(id);
+          if (owner) rgb = DataFetcher.countryColor(owner);
+          else rgb = [110, 110, 100];
+          // 地形による濃淡 (HoI4風の質感)
+          const shade = 0.82 + ((pd[5] * 7) % 5) * 0.09;
+          rgb = [Math.min(255, rgb[0] * shade) | 0, Math.min(255, rgb[1] * shade) | 0, Math.min(255, rgb[2] * shade) | 0];
+          if (mode !== 'political' && owner !== player) {
+            rgb = [rgb[0] * 0.55 | 0, rgb[1] * 0.55 | 0, rgb[2] * 0.55 | 0];
+            if (mode === 'air' && owner) rgb = [rgb[0], rgb[1] * 0.5 | 0, rgb[2] * 0.5 | 0];
+          }
+        }
+      } else if (mode === 'supply') {
+        if (type === 'sea') rgb = [24, 46, 66];
+        else if (type === 'lake') rgb = [42, 76, 110];
+        else {
+          const sid = provToState.get(id);
+          const st = sid ? states[sid] : null;
+          const sup = st ? (st.supply || 0) : 0;
+          const owner = st ? st.owner : null;
+          if (owner !== player) rgb = [70, 70, 70];
+          else {
+            const t = Math.min(1, sup / 12);
+            rgb = [160 - t * 140 | 0, 60 + t * 120 | 0, 60];
+          }
+        }
+      } else rgb = [100, 100, 100];
+
+      provColor[id] = (255 << 24) | (rgb[2] << 16) | (rgb[1] << 8) | rgb[0];
+    });
+
+    // 州ごとの所有者 (州境・国境判定用)
+    const stateOwner = new Map(Object.entries(states).map(([sid, st]) => [sid, st.owner]));
+
+    for (let y = 0; y < H; y++) {
+      const row = y * W;
+      for (let x = 0; x < W; x++) {
+        const i = row + x;
+        const id = idMap[i];
+        if (!id) { out[i] = (255 << 24) | (82 << 16) | (58 << 8) | 30; continue; }
+        let c = provColor[id];
+
+        // 境界線: 右・下の隣接ピクセルと比較 (プロビンス/州/国境)
+        const rId = x + 1 < W ? idMap[i + 1] : 0;
+        const dId = y + 1 < H ? idMap[i + W] : 0;
+        if (rId !== id || dId !== id) {
+          const nb = rId !== id ? rId : dId;
+          if (nb) {
+            const sA = provToState.get(id), sB = provToState.get(nb);
+            const oA = sA ? stateOwner.get(sA) : null, oB = sB ? stateOwner.get(sB) : null;
+            const isSea = typeNames[p[id][3]] === 'sea' || typeNames[p[nb][3]] === 'sea';
+            let dark;
+            if (oA !== oB && sA !== sB) dark = isSea ? 0.35 : 0.55;      // 国境 (太く暗く)
+            else if (sA !== sB) dark = 0.3;                               // 州境
+            else dark = 0.13;                                             // プロビンス境
+            const r = c & 255, g = (c >> 8) & 255, b = (c >> 16) & 255;
+            const f = 1 - dark;
+            c = (255 << 24) | (((b * f) | 0) << 16) | (((g * f) | 0) << 8) | ((r * f) | 0);
+          }
+        }
+        out[i] = c;
+      }
+    }
+
+    const modeCanvas = document.createElement('canvas');
+    modeCanvas.width = W; modeCanvas.height = H;
+    const mctx = modeCanvas.getContext('2d');
+    const outImg = mctx.createImageData(W, H);
+    new Uint32Array(outImg.data.buffer).set(out);
+    mctx.putImageData(outImg, 0, 0);
+    MapRenderer.modeCache[mode] = modeCanvas;
+    return modeCanvas;
   }
 
   static resize() {
     if (!MapRenderer.canvas) return;
     MapRenderer.canvas.width = MapRenderer.canvas.offsetWidth;
     MapRenderer.canvas.height = MapRenderer.canvas.offsetHeight;
-    MapRenderer.render();
   }
 
   static setupInteraction() {
     const c = MapRenderer.canvas;
+    let panning = false, moved = 0, sx = 0, sy = 0, lx = 0, ly = 0;
+
     c.addEventListener('mousedown', (e) => {
-      MapRenderer.isDragging = true;
-      MapRenderer.lastX = e.offsetX;
-      MapRenderer.lastY = e.offsetY;
-    });
-    c.addEventListener('mousemove', (e) => {
-      if (!MapRenderer.isDragging) return;
-      MapRenderer.offsetX += e.offsetX - MapRenderer.lastX;
-      MapRenderer.offsetY += e.offsetY - MapRenderer.lastY;
-      MapRenderer.lastX = e.offsetX;
-      MapRenderer.lastY = e.offsetY;
-      MapRenderer.render();
-    });
-    c.addEventListener('mouseup', () => { MapRenderer.isDragging = false; });
-    c.addEventListener('mouseleave', () => { MapRenderer.isDragging = false; });
-    c.addEventListener('wheel', (e) => {
-      e.preventDefault();
-      const delta = e.deltaY > 0 ? 0.9 : 1.1;
-      MapRenderer.scale = Math.max(0.3, Math.min(3, MapRenderer.scale * delta));
-      MapRenderer.render();
-    });
-    c.addEventListener('click', (e) => {
-      if (MapRenderer.isDragging) return;
-      const x = (e.offsetX - MapRenderer.offsetX) / MapRenderer.scale;
-      const y = (e.offsetY - MapRenderer.offsetY) / MapRenderer.scale;
-      for (const p of MapRenderer.provinces) {
-        if (x >= p.x && x <= p.x + p.w && y >= p.y && y <= p.y + p.h) {
-          MapRenderer.selectProvince(p);
-          return;
-        }
+      if (e.button === 0) {
+        panning = true; moved = 0;
+        sx = lx = e.clientX; sy = ly = e.clientY;
+      } else if (e.button === 2) {
+        const wp = MapRenderer.screenToWorld(e.offsetX, e.offsetY);
+        if (e.shiftKey) BattlePlanManager.startArrowDrag(wp);
+        else BattlePlanManager.startFrontDrag(wp);
       }
     });
+    c.addEventListener('mousemove', (e) => {
+      if (panning) {
+        const dx = e.clientX - lx, dy = e.clientY - ly;
+        moved += Math.abs(dx) + Math.abs(dy);
+        MapRenderer.cam.x += dx; MapRenderer.cam.y += dy;
+        lx = e.clientX; ly = e.clientY;
+      } else if (BattlePlanManager.dragMode) {
+        BattlePlanManager.onDragMove(MapRenderer.screenToWorld(e.offsetX, e.offsetY));
+      }
+    });
+    c.addEventListener('mouseup', (e) => {
+      if (e.button === 0 && panning) {
+        panning = false;
+        if (moved < 6) {
+          const wp = MapRenderer.screenToWorld(e.offsetX, e.offsetY);
+          const pid = MapRenderer.provinceAt(wp[0], wp[1]);
+          if (pid) MapRenderer.selectProvince(pid);
+        }
+      } else if (e.button === 2 && BattlePlanManager.dragMode) {
+        BattlePlanManager.endDrag();
+      }
+    });
+    c.addEventListener('mouseleave', () => {
+      panning = false;
+      if (BattlePlanManager.dragMode) BattlePlanManager.endDrag();
+    });
+    c.addEventListener('contextmenu', (e) => e.preventDefault());
+    c.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const cam = MapRenderer.cam;
+      const factor = e.deltaY > 0 ? 0.85 : 1.18;
+      const wx = (e.offsetX - cam.x) / cam.scale, wy = (e.offsetY - cam.y) / cam.scale;
+      cam.scale = Math.max(MapRenderer.MIN_SCALE, Math.min(MapRenderer.MAX_SCALE, cam.scale * factor));
+      cam.x = e.offsetX - wx * cam.scale;
+      cam.y = e.offsetY - wy * cam.scale;
+    }, { passive: false });
   }
 
-  static selectProvince(p) {
-    document.getElementById('map-info-overlay').innerHTML =
-      '<strong>' + DataFetcher.getCountryFlag(p.country) + ' ' + p.name + '</strong><br>' +
-      '<span style="color:var(--text-secondary);font-size:11px;">国: ' + p.country + '</span>';
-    GameUI.notify('選択: ' + p.name);
+  static screenToWorld(sx, sy) {
+    const cam = MapRenderer.cam;
+    return [(sx - cam.x) / cam.scale, (sy - cam.y) / cam.scale];
+  }
+
+  static worldToScreen(wx, wy) {
+    const cam = MapRenderer.cam;
+    return [wx * cam.scale + cam.x, wy * cam.scale + cam.y];
+  }
+
+  static selectProvince(pid) {
+    MapRenderer.selectedProvId = pid;
+    const sid = MapRenderer.stateOf(pid);
+    MapRenderer.selectedStateId = sid;
+    const st = sid ? MapRenderer.states[sid] : null;
+    const pd = MapRenderer.provinces.p[pid];
+    const terr = pd ? MapRenderer.provinces.terr[pd[5]] : '不明';
+    const coastal = pd && pd[4] ? '沿岸' : '内陸';
+    const overlay = document.getElementById('map-info-overlay');
+    if (st) {
+      const owner = st.owner || '無所属';
+      const b = st.b || {};
+      overlay.innerHTML =
+        '<strong>' + DataFetcher.getCountryFlag(owner) + ' ' + st.name + '</strong><br>' +
+        '<span style="color:var(--text-secondary);font-size:11px;">所有国: ' + owner + ' | 州ID: ' + sid + '</span><br>' +
+        '<span style="color:var(--text-secondary);font-size:11px;">地形: ' + terr + ' (' + coastal + ') | 補給: ' + (st.supply || 0) + '</span><br>' +
+        '<span style="color:var(--text-gold);font-size:11px;">🏭民需' + (b.industrial_complex || 0) +
+        ' ⚙️軍需' + (b.arms_factory || 0) + ' ⚓工廠' + (b.dockyard || 0) +
+        ' ✈️飛行場' + (b.air_base || 0) + ' 🛤️' + (b.infrastructure || 0) + '</span>';
+      ConstructionManager.selectState(sid);
+    } else {
+      overlay.innerHTML = '<strong>海域</strong><br><span style="color:var(--text-secondary);font-size:11px;">プロビンスID: ' + pid + '</span>';
+    }
+  }
+
+  static annexCountry(tag) {
+    const player = CoreEngine.gameState.country;
+    let count = 0;
+    Object.values(MapRenderer.states).forEach(st => {
+      if (st.owner === tag) { st.owner = player; count++; }
+    });
+    MapRenderer.invalidateModes();
+    return count;
+  }
+
+  static captureState(sid, newOwner) {
+    const st = MapRenderer.states[sid];
+    if (!st) return false;
+    st.owner = newOwner;
+    MapRenderer.invalidateModes();
+    return true;
+  }
+
+  static addNukeEffectAtState(sid) {
+    const c = MapRenderer.stateCenter.get(String(sid));
+    if (c) MapRenderer.nukeEffects.push({ x: c[0], y: c[1], life: 0, maxLife: 120 });
+  }
+
+  static startRenderLoop() {
+    const loop = () => {
+      if (MapRenderer.ready) MapRenderer.render();
+      requestAnimationFrame(loop);
+    };
+    requestAnimationFrame(loop);
   }
 
   static render() {
-    if (!MapRenderer.ctx) return;
+    if (!MapRenderer.ctx || !MapRenderer.ready) return;
     const ctx = MapRenderer.ctx;
-    const w = MapRenderer.canvas.width;
-    const h = MapRenderer.canvas.height;
+    const cam = MapRenderer.cam;
     ctx.fillStyle = '#0d1419';
-    ctx.fillRect(0, 0, w, h);
+    ctx.fillRect(0, 0, MapRenderer.canvas.width, MapRenderer.canvas.height);
 
-    ctx.save();
-    ctx.translate(MapRenderer.offsetX, MapRenderer.offsetY);
-    ctx.scale(MapRenderer.scale, MapRenderer.scale);
+    let modeCanvas = MapRenderer.modeCache[MapRenderer.mode];
+    if (!modeCanvas) modeCanvas = MapRenderer.getModeCanvas(MapRenderer.mode);
 
-    MapRenderer.provinces.forEach(p => {
-      const isSelected = CoreEngine.gameState.country === p.country;
-      ctx.fillStyle = p.color;
-      ctx.fillRect(p.x, p.y, p.w, p.h);
-      ctx.strokeStyle = isSelected ? '#d4a843' : '#2a3a4a';
-      ctx.lineWidth = isSelected ? 3 : 1;
-      ctx.strokeRect(p.x, p.y, p.w, p.h);
+    ctx.imageSmoothingEnabled = cam.scale < 1.5;
+    ctx.drawImage(modeCanvas, cam.x, cam.y, MapRenderer.mapW * cam.scale, MapRenderer.mapH * cam.scale);
 
-      ctx.fillStyle = '#fff';
-      ctx.font = '10px sans-serif';
+    // 州名ラベル (ズームイン時)
+    if (cam.scale >= 2.2 && (MapRenderer.mode === 'political' || MapRenderer.mode === 'construction')) {
+      ctx.font = Math.max(9, Math.min(13, 11 / cam.scale * 2)) + 'px sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(p.name, p.x + p.w/2, p.y + p.h/2);
+      ctx.fillStyle = 'rgba(0,0,0,0.75)';
+      MapRenderer.stateCenter.forEach((c, sid) => {
+        const st = MapRenderer.states[sid];
+        if (!st) return;
+        const s = MapRenderer.worldToScreen(c[0], c[1]);
+        ctx.fillText(st.name, s[0] + 1, s[1] + 1);
+        ctx.fillStyle = 'rgba(255,255,255,0.85)';
+        ctx.fillText(st.name, s[0], s[1]);
+        ctx.fillStyle = 'rgba(0,0,0,0.75)';
+      });
+    }
 
-      if (isSelected) {
-        ctx.strokeStyle = 'rgba(74,196,106,0.3)';
-        ctx.setLineDash([5, 5]);
+    // 建設マップモード: 自国州の建物アイコン表示
+    if (MapRenderer.mode === 'construction') {
+      const player = CoreEngine.gameState.country;
+      MapRenderer.stateCenter.forEach((c, sid) => {
+        const st = MapRenderer.states[sid];
+        if (!st || st.owner !== player) return;
+        const b = st.b || {};
+        const icons = [];
+        if (b.industrial_complex) icons.push('🏭' + b.industrial_complex);
+        if (b.arms_factory) icons.push('⚙️' + b.arms_factory);
+        if (b.dockyard) icons.push('⚓' + b.dockyard);
+        if (b.air_base) icons.push('✈️' + b.air_base);
+        if (!icons.length) return;
+        const s = MapRenderer.worldToScreen(c[0], c[1]);
+        if (s[0] < -60 || s[1] < -30 || s[0] > MapRenderer.canvas.width + 60 || s[1] > MapRenderer.canvas.height + 30) return;
+        ctx.font = Math.max(10, Math.min(16, 12 / cam.scale)) + 'px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = 'rgba(0,0,0,0.6)';
+        const txt = icons.join(' ');
+        const tw = ctx.measureText(txt).width;
+        ctx.fillRect(s[0] - tw / 2 - 3, s[1] - 6, tw + 6, 16);
+        ctx.fillStyle = '#fff';
+        ctx.fillText(txt, s[0], s[1] + 6);
+      });
+      // 建設中の州を緑で強調表示
+      ConstructionManager.queue.forEach(item => {
+        const c = MapRenderer.stateCenter.get(String(item.stateId));
+        if (!c) return;
+        const s = MapRenderer.worldToScreen(c[0], c[1]);
+        ctx.strokeStyle = 'rgba(74,196,106,0.9)';
+        ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.moveTo(p.x + p.w/2, p.y + p.h);
-        ctx.lineTo(p.x + p.w/2, p.y + p.h + 30);
+        ctx.arc(s[0], s[1], 14, 0, Math.PI * 2);
         ctx.stroke();
-        ctx.setLineDash([]);
-      }
-    });
+      });
+    }
 
-    // Naval supremacy zones
-    ctx.strokeStyle = 'rgba(74,143,196,0.3)';
-    ctx.lineWidth = 2;
-    ctx.setLineDash([10, 5]);
-    ctx.beginPath();
-    ctx.moveTo(350, 230);
-    ctx.lineTo(500, 230);
-    ctx.stroke();
-    ctx.setLineDash([]);
+    // 選択州の強調
+    if (MapRenderer.selectedStateId && MapRenderer.stateCenter.has(MapRenderer.selectedStateId)) {
+      const c = MapRenderer.stateCenter.get(MapRenderer.selectedStateId);
+      const s = MapRenderer.worldToScreen(c[0], c[1]);
+      const pulse = 10 + Math.sin(Date.now() / 300) * 4;
+      ctx.strokeStyle = '#d4a843';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(s[0], s[1], pulse, 0, Math.PI * 2);
+      ctx.stroke();
+    }
 
-    // Nuke effects
+    // 前線・攻撃矢印・師団マーカー描画
+    BattlePlanManager.drawOverlay(ctx, MapRenderer.cam, MapRenderer.worldToScreen);
+
+    // 核攻撃エフェクト
     MapRenderer.nukeEffects.forEach(n => {
-      const progress = n.life / n.maxLife;
-      const radius = progress * 60;
-      ctx.strokeStyle = 'rgba(255, ' + Math.floor(100 * (1-progress)) + ', 0, ' + (1-progress) + ')';
+      const prog = n.life / n.maxLife;
+      const s = MapRenderer.worldToScreen(n.x, n.y);
+      const radius = prog * 70;
+      ctx.strokeStyle = 'rgba(255,' + (Math.floor(120 * (1 - prog))) + ',0,' + (1 - prog) + ')';
       ctx.lineWidth = 3;
       ctx.beginPath();
-      ctx.arc(n.x, n.y, radius, 0, Math.PI * 2);
+      ctx.arc(s[0], s[1], radius, 0, Math.PI * 2);
       ctx.stroke();
-      ctx.fillStyle = 'rgba(200, 200, 200, ' + ((1-progress) * 0.5) + ')';
+      ctx.fillStyle = 'rgba(220,220,220,' + ((1 - prog) * 0.45) + ')';
       ctx.beginPath();
-      ctx.arc(n.x, n.y - radius * 0.5, radius * 0.4, 0, Math.PI * 2);
+      ctx.arc(s[0], s[1] - radius * 0.4, radius * 0.35, 0, Math.PI * 2);
       ctx.fill();
     });
-
-    ctx.restore();
   }
 
   static renderLegend() {
+    const legends = {
+      political: [['#5a5a5a','自国 (ドイツ)'],['#b22222','ソ連'],['#506eaa','連合国'],['#64964a','イタリア'],['#443a52','海']],
+      terrain: [['#96a064','平原'],['#5f784b','森林'],['#8c7a58','丘陵'],['#7a6454','山岳'],['#647660','湿地'],['#c4ac6e','砂漠']],
+      construction: [['#96a064','自国 (建設可能)'],['#404040','他国'],['#4ac46a','建設中の州']],
+      supply: [['#a03c3c','補給不足'],['#7c9040','普通'],['#3cc464','補給良好']],
+      air: [['#404040','制空権なし'],['#506eaa','自国空域']],
+      naval: [['#1e3a52','海域'],['#404040','他国沿岸']]
+    };
+    const items = legends[MapRenderer.mode] || [];
     document.getElementById('map-legend').innerHTML =
-      '<div class="map-legend-item"><div class="map-legend-color" style="background:#3a4a3a"></div>自国</div>' +
-      '<div class="map-legend-item"><div class="map-legend-color" style="background:#8b0000"></div>敵国</div>' +
-      '<div class="map-legend-item"><div class="map-legend-color" style="background:#3a5a8a"></div>同盟国</div>' +
-      '<div class="map-legend-item"><div class="map-legend-color" style="background:rgba(74,196,106,0.5)"></div>補給線</div>' +
-      '<div class="map-legend-item"><div class="map-legend-color" style="background:rgba(74,143,196,0.3)"></div>制海権</div>' +
-      '<div style="margin-top:4px;font-size:10px;color:var(--text-secondary);">スクロール: ズーム | ドラッグ: 移動</div>';
+      items.map(l => '<div class="map-legend-item"><div class="map-legend-color" style="background:' + l[1] + '"></div>' + l[0] + '</div>').join('') +
+      '<div style="margin-top:4px;font-size:10px;color:var(--text-secondary);">cbrzeczysz/hoi4-history 公式マップデータ</div>';
   }
 
   static onTick() {
@@ -1521,11 +2240,483 @@ class MapRenderer {
       n.life++;
       return n.life < n.maxLife;
     });
-    if (GameUI.currentTab === 'map') MapRenderer.render();
+    BattlePlanManager.onTick();
+  }
+}
+
+// ==========================================================
+// Module 8: BattlePlanManager — 前線・攻撃作戦指揮 (Frontline & Offensive)
+// ==========================================================
+class BattlePlanManager {
+  static armies = [];
+  static selectedArmyId = null;
+  static dragMode = null;      // 'front' | 'arrow'
+  static dragPoints = [];
+
+  static init() {
+    BattlePlanManager.renderPanel();
   }
 
-  static addNukeEffect(x, y) {
-    MapRenderer.nukeEffects.push({ x: x, y: y, life: 0, maxLife: 60 });
+  static onMapReady() {
+    // 自国の州から2個軍集団を編成 (師団は CoreEngine.gameState.divisions から配分)
+    BattlePlanManager.armies = [];
+    const player = CoreEngine.gameState.country;
+    const homeStates = Object.entries(MapRenderer.states)
+      .filter(([sid, st]) => st.owner === player)
+      .sort((a, b) => Math.max(0, ...Object.values(b[1].vp || {})) - Math.max(0, ...Object.values(a[1].vp || {})));
+    const centers = homeStates.map(([sid]) => MapRenderer.stateCenter.get(sid)).filter(Boolean);
+    const divs = CoreEngine.gameState.divisions;
+    const perArmy = Math.max(1, Math.floor(divs / 2));
+    for (let a = 0; a < 2; a++) {
+      const base = centers[a % Math.max(1, centers.length)] || [MapRenderer.mapW / 2, MapRenderer.mapH / 2];
+      BattlePlanManager.armies.push({
+        id: a + 1, name: '第' + (a + 1) + '軍集団', base: base,
+        divisions: Array.from({ length: perArmy }, (_, i) => ({
+          id: a * perArmy + i + 1, org: 60, maxOrg: 60,
+          x: base[0] + (i - perArmy / 2) * 8, y: base[1] + (i % 3) * 8
+        })),
+        frontline: null, arrow: null, executing: false, progress: 0, targetState: null
+      });
+    }
+    BattlePlanManager.selectedArmyId = 1;
+    BattlePlanManager.renderPanel();
+  }
+
+  static selectArmy(id) {
+    BattlePlanManager.selectedArmyId = id;
+    BattlePlanManager.renderPanel();
+  }
+
+  static selectedArmy() {
+    return BattlePlanManager.armies.find(a => a.id === BattlePlanManager.selectedArmyId) || null;
+  }
+
+  // ---- 前線描画 (右ドラッグ) ----
+  static startFrontDrag(worldPt) {
+    const army = BattlePlanManager.selectedArmy();
+    if (!army) { GameUI.notify('軍集団パネルから軍集団を選択してください。', 'alert'); return; }
+    BattlePlanManager.dragMode = 'front';
+    BattlePlanManager.dragPoints = [worldPt];
+  }
+
+  // ---- 攻撃矢印 (Shift+右ドラッグ) ----
+  static startArrowDrag(worldPt) {
+    const army = BattlePlanManager.selectedArmy();
+    if (!army) { GameUI.notify('軍集団パネルから軍集団を選択してください。', 'alert'); return; }
+    BattlePlanManager.dragMode = 'arrow';
+    BattlePlanManager.dragPoints = [worldPt];
+  }
+
+  static onDragMove(worldPt) {
+    const last = BattlePlanManager.dragPoints[BattlePlanManager.dragPoints.length - 1];
+    const d = Math.hypot(worldPt[0] - last[0], worldPt[1] - last[1]);
+    if (d > 6) BattlePlanManager.dragPoints.push(worldPt);
+  }
+
+  static endDrag() {
+    const army = BattlePlanManager.selectedArmy();
+    if (!army || BattlePlanManager.dragPoints.length < 2) {
+      BattlePlanManager.dragMode = null;
+      return;
+    }
+    if (BattlePlanManager.dragMode === 'front') {
+      // ドラッグ経路の陸地プロビンスのみ前線として採用
+      const pts = BattlePlanManager.dragPoints.filter(pt => {
+        const pid = MapRenderer.provinceAt(pt[0], pt[1]);
+        return pid && MapRenderer.provinces.p[pid] && MapRenderer.provinces.types[MapRenderer.provinces.p[pid][3]] === 'land';
+      });
+      if (pts.length < 2) {
+        GameUI.notify('前線は陸地プロビンス上で描画してください。', 'alert');
+      } else {
+        army.frontline = pts;
+        CoreEngine.log(army.name + 'の前線を設定しました。');
+        GameUI.notify('前線設定完了 — Shift+右ドラッグで攻撃矢印を描けます');
+        MultiplayerManager.broadcast({ type: 'battle_front', army: army.id, points: pts });
+      }
+    } else if (BattlePlanManager.dragMode === 'arrow') {
+      const from = army.frontline
+        ? army.frontline[Math.floor(army.frontline.length / 2)]
+        : BattlePlanManager.dragPoints[0];
+      const to = BattlePlanManager.dragPoints[BattlePlanManager.dragPoints.length - 1];
+      const toPid = MapRenderer.provinceAt(to[0], to[1]);
+      const sid = toPid ? MapRenderer.stateOf(toPid) : null;
+      const target = sid ? MapRenderer.states[sid] : null;
+      if (!target) { GameUI.notify('攻撃目標は陸上の州に指定してください。', 'alert'); }
+      else if (target.owner === CoreEngine.gameState.country) {
+        GameUI.notify('自国の州は攻撃目標にできません。', 'alert');
+      } else {
+        army.arrow = { from: from, to: to };
+        army.targetState = sid;
+        army.progress = 0;
+        CoreEngine.log(army.name + 'の攻撃作戦を描きました: → ' + target.name);
+        GameUI.notify('攻撃矢印設定: ' + target.name, 'success');
+        MultiplayerManager.broadcast({ type: 'battle_arrow', army: army.id, from: from, to: to, state: sid });
+      }
+    }
+    BattlePlanManager.dragMode = null;
+    BattlePlanManager.dragPoints = [];
+    BattlePlanManager.renderPanel();
+  }
+
+  static clearFront(armyId) {
+    const army = BattlePlanManager.armies.find(a => a.id === armyId);
+    if (!army) return;
+    army.frontline = null;
+    army.arrow = null;
+    army.targetState = null;
+    army.executing = false;
+    BattlePlanManager.renderPanel();
+  }
+
+  static execute(armyId) {
+    const army = BattlePlanManager.armies.find(a => a.id === armyId);
+    if (!army) return;
+    if (!army.arrow || !army.targetState) {
+      GameUI.notify('攻撃矢印を先に描いてください (Shift+右ドラッグ)。', 'alert');
+      return;
+    }
+    if (army.divisions.every(d => d.org <= 5)) {
+      GameUI.notify('師団の組織力が回復するまで待ってください。', 'alert');
+      return;
+    }
+    army.executing = true;
+    army.progress = 0;
+    const target = MapRenderer.states[army.targetState];
+    CoreEngine.log(army.name + 'が作戦を開始: ' + (target ? target.name : '') + 'へ進撃！');
+    GameUI.notify('⚔️ 作戦開始！', 'success');
+    MultiplayerManager.broadcast({ type: 'battle_execute', army: army.id });
+    BattlePlanManager.renderPanel();
+  }
+
+  static abort(armyId) {
+    const army = BattlePlanManager.armies.find(a => a.id === armyId);
+    if (!army) return;
+    army.executing = false;
+    army.progress = 0;
+    CoreEngine.log(army.name + 'の作戦を中止しました。');
+    BattlePlanManager.renderPanel();
+  }
+
+  static onTick() {
+    if (!MapRenderer.ready) return;
+    BattlePlanManager.armies.forEach(army => {
+      if (army.executing) {
+        // 師団が矢印に沿って前進 (アニメ用に師団座標を矢印経路へ補間)
+        const t = Math.min(1, army.progress / 100);
+        army.divisions.forEach((d, i) => {
+          if (d.org > 0) {
+            d.x = army.arrow.from[0] + (army.arrow.to[0] - army.arrow.from[0]) * t + (i % 2 ? 6 : -6);
+            d.y = army.arrow.from[1] + (army.arrow.to[1] - army.arrow.from[1]) * t + (i % 2 ? 6 : -6);
+            d.org = Math.max(0, d.org - 0.4);
+          }
+        });
+        const speed = army.divisions.filter(d => d.org > 0).length;
+        army.progress += Math.max(0.5, speed * 0.3);
+        if (army.progress >= 100) {
+          army.executing = false;
+          army.progress = 0;
+          const sid = army.targetState;
+          const st = sid ? MapRenderer.states[sid] : null;
+          if (st && MapRenderer.captureState(sid, CoreEngine.gameState.country)) {
+            CoreEngine.gameState.manpower = Math.max(0, CoreEngine.gameState.manpower - 5000 * army.divisions.length);
+            CoreEngine.gameState.warSupport = Math.min(100, CoreEngine.gameState.warSupport + 3);
+            CoreEngine.log('🏆 ' + army.name + 'が' + st.name + 'を占領しました！');
+            GameUI.notify('州占領: ' + st.name, 'success');
+            MultiplayerManager.broadcast({ type: 'state_capture', state: sid, owner: CoreEngine.gameState.country });
+            ConstructionManager.selectState(sid);
+          }
+        }
+      } else {
+        // 待機中は組織力が回復
+        army.divisions.forEach(d => {
+          d.org = Math.min(d.maxOrg, d.org + 0.2);
+          // 拠点へ徐々に帰還
+          d.x += (army.base[0] + (d.id % 5) * 8 - d.x) * 0.02;
+          d.y += (army.base[1] + (d.id % 3) * 8 - d.y) * 0.02;
+        });
+      }
+    });
+    BattlePlanManager.renderPanelThrottled();
+  }
+
+  static renderPanelThrottled() {
+    if (!BattlePlanManager._lastRender || Date.now() - BattlePlanManager._lastRender > 2000) {
+      BattlePlanManager.renderPanel();
+    }
+  }
+
+  static renderPanel() {
+    BattlePlanManager._lastRender = Date.now();
+    const el = document.getElementById('army-panel');
+    if (!el) return;
+    if (!MapRenderer.ready) {
+      el.innerHTML = '<h4>⚔️ 軍集団</h4><div class="army-info">地図読込後に編成されます</div>';
+      return;
+    }
+    let html = '<h4>⚔️ 軍集団パネル (作戦指揮)</h4>';
+    BattlePlanManager.armies.forEach(army => {
+      const org = army.divisions.reduce((s, d) => s + d.org, 0);
+      const maxOrg = army.divisions.reduce((s, d) => s + d.maxOrg, 0);
+      html += '<div class="army-row ' + (army.id === BattlePlanManager.selectedArmyId ? 'selected' : '') + '" onclick="BattlePlanManager.selectArmy(' + army.id + ')">' +
+        '<div class="army-name">' + army.name + (army.id === BattlePlanManager.selectedArmyId ? ' ✅' : '') + '</div>' +
+        '<div class="army-info">師団 ' + army.divisions.length + '個 | ' +
+        (army.frontline ? '前線✅' : '前線—') + ' | ' +
+        (army.arrow ? '矢印✅' : '矢印—') + '</div>' +
+        '<div class="army-orgbar"><div class="army-orgbar-fill" style="width:' + (org / maxOrg * 100) + '%"></div></div>' +
+        (army.executing
+          ? '<div class="army-info" style="color:var(--accent-red)">作戦実行中... ' + Math.floor(army.progress) + '%</div>' +
+            '<button class="army-btn abort" onclick="BattlePlanManager.abort(' + army.id + ')">⛔ 中止</button>'
+          : '<button class="army-btn" onclick="BattlePlanManager.execute(' + army.id + ')" ' + (army.arrow ? '' : 'disabled') + '>▶ 作戦開始</button>') +
+        '<button class="army-btn" style="background:var(--bg-panel-light)" onclick="BattleManager_clearFront(' + army.id + ')">✕ 前線</button>' +
+        '</div>';
+    });
+    html += '<div style="font-size:10px;color:var(--text-secondary);margin-top:4px;">マップ上で右ドラッグ=前線 / Shift+右ドラッグ=攻撃矢印</div>';
+    el.innerHTML = html;
+  }
+
+  // ---- Canvasオーバーレイ描画: 前線・矢印・師団 ----
+  static drawOverlay(ctx, cam, worldToScreen) {
+    if (!MapRenderer.ready) return;
+    const drawPolyline = (pts, color, width, dash) => {
+      if (!pts || pts.length < 2) return;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = width;
+      if (dash) ctx.setLineDash(dash);
+      ctx.beginPath();
+      pts.forEach((pt, i) => {
+        const s = worldToScreen(pt[0], pt[1]);
+        if (i === 0) ctx.moveTo(s[0], s[1]); else ctx.lineTo(s[0], s[1]);
+      });
+      ctx.stroke();
+      ctx.setLineDash([]);
+    };
+
+    BattlePlanManager.armies.forEach(army => {
+      // 前線 (緑の光線)
+      if (army.frontline) {
+        ctx.save();
+        ctx.shadowColor = '#4ac46a';
+        ctx.shadowBlur = 8;
+        drawPolyline(army.frontline, 'rgba(125,232,122,0.95)', Math.max(2, 3));
+        ctx.restore();
+      }
+      // 攻撃矢印 (赤)
+      if (army.arrow) {
+        const from = worldToScreen(army.arrow.from[0], army.arrow.from[1]);
+        const to = worldToScreen(army.arrow.to[0], army.arrow.to[1]);
+        ctx.strokeStyle = 'rgba(255,90,90,0.95)';
+        ctx.fillStyle = 'rgba(255,90,90,0.95)';
+        ctx.lineWidth = Math.max(2, 3);
+        ctx.beginPath();
+        ctx.moveTo(from[0], from[1]);
+        ctx.lineTo(to[0], to[1]);
+        ctx.stroke();
+        // 矢尻
+        const ang = Math.atan2(to[1] - from[1], to[0] - from[0]);
+        const size = 10;
+        ctx.beginPath();
+        ctx.moveTo(to[0], to[1]);
+        ctx.lineTo(to[0] - size * Math.cos(ang - 0.5), to[1] - size * Math.sin(ang - 0.5));
+        ctx.lineTo(to[0] - size * Math.cos(ang + 0.5), to[1] - size * Math.sin(ang + 0.5));
+        ctx.closePath();
+        ctx.fill();
+        if (army.executing) {
+          // 進行度
+          ctx.strokeStyle = '#d4a843';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(to[0], to[1], 8, -Math.PI / 2, -Math.PI / 2 + army.progress / 100 * Math.PI * 2);
+          ctx.stroke();
+        }
+      }
+      // 師団マーカー (NATO風矩形 + 組織力バー)
+      army.divisions.forEach(d => {
+        const s = worldToScreen(d.x, d.y);
+        if (s[0] < -20 || s[1] < -20 || s[0] > ctx.canvas.width + 20 || s[1] > ctx.canvas.height + 20) return;
+        const selected = army.id === BattlePlanManager.selectedArmyId;
+        ctx.fillStyle = selected ? 'rgba(212,168,67,0.95)' : 'rgba(90,110,140,0.9)';
+        ctx.fillRect(s[0] - 5, s[1] - 3, 10, 6);
+        ctx.strokeStyle = '#0a0c0f';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(s[0] - 5, s[1] - 3, 10, 6);
+        if (selected) {
+          ctx.fillStyle = '#333';
+          ctx.fillRect(s[0] - 5, s[1] - 6, 10, 2);
+          ctx.fillStyle = '#d4843a';
+          ctx.fillRect(s[0] - 5, s[1] - 6, 10 * (d.org / d.maxOrg), 2);
+        }
+      });
+    });
+
+    // ドラッグ中のプレビュー
+    if (BattlePlanManager.dragMode && BattlePlanManager.dragPoints.length > 1) {
+      const color = BattlePlanManager.dragMode === 'front' ? 'rgba(125,232,122,0.8)' : 'rgba(255,90,90,0.8)';
+      drawPolyline(BattlePlanManager.dragPoints, color, 2, [8, 4]);
+    }
+  }
+}
+
+// グローバルヘルパー (パネルのHTML onclickから参照)
+function BattleManager_clearFront(armyId) { BattlePlanManager.clearFront(armyId); }
+
+// ==========================================================
+// Module 9: ConstructionManager — 建設 (民需/軍需工場・飛行場・要塞等)
+// ==========================================================
+class ConstructionManager {
+  static BUILDINGS = [
+    { id: 'industrial_complex', name: '民需工場', icon: '🏭', cost: 300, gameKey: 'civilianFactories' },
+    { id: 'arms_factory', name: '軍需工場', icon: '⚙️', cost: 360, gameKey: 'militaryFactories' },
+    { id: 'dockyard', name: '海軍工廠', icon: '⚓', cost: 330, gameKey: 'dockyards' },
+    { id: 'air_base', name: '飛行場', icon: '✈️', cost: 240 },
+    { id: 'infrastructure', name: 'インフラ', icon: '🛤️', cost: 200, max: 5 },
+    { id: 'land_fort', name: '陸軍要塞', icon: '🛡️', cost: 250, max: 5 },
+    { id: 'coastal_bunker', name: '沿岸要塞', icon: '🌊', cost: 250, max: 5 },
+    { id: 'supply_hub', name: '補給ハブ', icon: '📦', cost: 400, max: 3 },
+    { id: 'nuclear_reactor', name: '原子炉', icon: '☢️', cost: 600, max: 1 }
+  ];
+  static queue = [];  // {stateId, building, progress, factories}
+  static selectedStateId = null;
+
+  static init() {
+    CoreEngine.registerTickCallback(() => ConstructionManager.onTick());
+  }
+
+  static onMapReady() { ConstructionManager.render(); }
+
+  static selectState(sid) {
+    ConstructionManager.selectedStateId = sid;
+    if (WindowManager.isOpen('construction')) ConstructionManager.render();
+  }
+
+  static maxLevel(b) {
+    return b.max || (b.id === 'industrial_complex' ? 25 : 20);
+  }
+
+  static render() {
+    const container = document.getElementById('construction-content');
+    if (!container) return;
+    const s = CoreEngine.gameState;
+    const player = s.country;
+    const sid = ConstructionManager.selectedStateId;
+    const st = sid ? MapRenderer.states[sid] : null;
+
+    let html = '<div class="sp-section"><h3>🏗️ 建設 (Construction)</h3>' +
+      '<p style="color:var(--text-secondary);font-size:12px;">マップ上の州をクリックして選択 → 施設を建設キューに追加します。' +
+      'キュー各項目に民需工場（最大15個/スロット）を割り当てると建設が速くなります。</p></div>';
+
+    if (!st) {
+      html += '<div class="con-state-card"><h4>州未選択</h4><div class="con-state-info">マップ上で自国の州をクリックしてください。</div></div>';
+    } else {
+      const isOwn = st.owner === player;
+      html += '<div class="con-state-card"><h4>' + DataFetcher.getCountryFlag(st.owner || '???') + ' ' + st.name + '</h4>' +
+        '<div class="con-state-info">所有国: ' + (st.owner || '無所属') + ' | 分類: ' + (st.category || '-') +
+        ' | 人的資源: ' + (st.manpower || 0).toLocaleString() + ' | 補給: ' + (st.supply || 0) + '</div>';
+      if (!isOwn) {
+        html += '<div class="con-state-info" style="color:var(--accent-red);">⚠️ 自国の州ではありません — 建設できません。</div>';
+      } else {
+        ConstructionManager.BUILDINGS.forEach(b => {
+          const level = (st.b && st.b[b.id]) || 0;
+          const maxL = ConstructionManager.maxLevel(b);
+          html += '<div class="con-building-row">' +
+            '<span class="cb-name">' + b.icon + ' ' + b.name + '</span>' +
+            '<span class="cb-level">Lv.' + level + '/' + maxL + '</span>' +
+            '<button class="con-build-btn" onclick="ConstructionManager.enqueue(\'' + b.id + '\')" ' +
+            (level >= maxL ? 'disabled' : '') + '>建設 (' + b.cost + '日)</button></div>';
+        });
+      }
+      html += '</div>';
+    }
+
+    // 建設キュー
+    html += '<div class="sp-section"><h3>📋 建設キュー</h3>';
+    if (ConstructionManager.queue.length === 0) {
+      html += '<p style="color:var(--text-secondary);font-size:12px;">キューは空です。</p>';
+    } else {
+      const totalAllocated = ConstructionManager.queue.reduce((t, q) => t + q.factories, 0);
+      html += '<div class="con-state-info">割り当て済み民需工場: ' + totalAllocated + ' / ' + Math.floor(s.civilianFactories) + '</div>';
+      ConstructionManager.queue.forEach((q, idx) => {
+        const b = ConstructionManager.BUILDINGS.find(x => x.id === q.building);
+        const stq = MapRenderer.states[q.stateId];
+        html += '<div class="con-queue-item"><div class="cq-top">' +
+          '<span>' + (b ? b.icon : '') + ' ' + (b ? b.name : q.building) + ' — ' + (stq ? stq.name : '州' + q.stateId) + '</span>' +
+          '<span style="display:flex;align-items:center;gap:4px;">' +
+          '<select class="con-factory-select" onchange="ConstructionManager.setFactories(' + idx + ', this.value)">';
+          for (let f = 1; f <= 15; f++) {
+            html += '<option value="' + f + '" ' + (q.factories === f ? 'selected' : '') + '>' + f + '工廠</option>';
+          }
+          html += '</select>' +
+          '<button class="con-build-btn" style="background:var(--accent-red)" onclick="ConstructionManager.cancel(' + idx + ')">✕</button></span></div>' +
+          '<div class="cq-progress"><div class="cq-progress-fill" style="width:' + (q.progress / q.cost * 100) + '%"></div></div>' +
+          '<div style="font-size:10px;color:var(--text-secondary);">' + Math.floor(q.progress) + ' / ' + q.cost + ' 日 (' + Math.ceil((q.cost - q.progress) / q.factories) + '日で完成)</div></div>';
+      });
+    }
+    html += '</div>';
+
+    container.innerHTML = html;
+  }
+
+  static enqueue(buildingId) {
+    const s = CoreEngine.gameState;
+    const sid = ConstructionManager.selectedStateId;
+    const st = sid ? MapRenderer.states[sid] : null;
+    if (!st) { GameUI.notify('州を選択してください。', 'alert'); return; }
+    if (st.owner !== s.country) { GameUI.notify('自国の州のみ建設可能です。', 'alert'); return; }
+    const b = ConstructionManager.BUILDINGS.find(x => x.id === buildingId);
+    if (!b) return;
+    if (!st.b) st.b = {};
+    const level = st.b[b.id] || 0;
+    if (level >= ConstructionManager.maxLevel(b)) { GameUI.notify('最大レベルに達しています。', 'alert'); return; }
+    if (ConstructionManager.queue.length >= 10) { GameUI.notify('建設キューが満杯です。', 'alert'); return; }
+    ConstructionManager.queue.push({ stateId: sid, building: buildingId, progress: 0, factories: 1 });
+    CoreEngine.log(st.name + 'に' + b.name + 'の建設を開始しました。');
+    GameUI.notify('建設キュー追加: ' + b.name);
+    ConstructionManager.render();
+    MultiplayerManager.broadcast({ type: 'construction_add', state: sid, building: buildingId });
+  }
+
+  static setFactories(idx, val) {
+    const q = ConstructionManager.queue[idx];
+    if (!q) return;
+    const others = ConstructionManager.queue.reduce((t, item, i) => i === idx ? t : t + item.factories, 0);
+    const avail = Math.max(1, Math.floor(CoreEngine.gameState.civilianFactories) - others);
+    q.factories = Math.max(1, Math.min(15, parseInt(val) || 1, avail));
+    ConstructionManager.render();
+  }
+
+  static cancel(idx) {
+    ConstructionManager.queue.splice(idx, 1);
+    ConstructionManager.render();
+  }
+
+  static onTick() {
+    if (!MapRenderer.ready) return;
+    let changed = false;
+    ConstructionManager.queue.forEach(q => {
+      q.progress += q.factories;
+      if (q.progress >= q.cost) {
+        const st = MapRenderer.states[q.stateId];
+        const b = ConstructionManager.BUILDINGS.find(x => x.id === q.building);
+        if (st) {
+          if (!st.b) st.b = {};
+          st.b[q.building] = (st.b[q.building] || 0) + 1;
+          // 政治ステータスへの反映
+          const s = CoreEngine.gameState;
+          if (b && b.gameKey) s[b.gameKey]++;
+          if (q.building === 'nuclear_reactor') s.nuclearReactorLevel++;
+          if (q.building === 'supply_hub') st.supply = (st.supply || 0) + 4;
+          if (q.building === 'infrastructure') st.supply = (st.supply || 0) + 1;
+          CoreEngine.log(st.name + 'の' + (b ? b.name : q.building) + 'が完成しました！');
+          GameUI.notify('🏗️ 建設完了: ' + st.name + ' ' + (b ? b.name : ''), 'success');
+          CoreEngine.renderStats();
+          MapRenderer.invalidateModes();
+          MultiplayerManager.broadcast({ type: 'construction_done', state: q.stateId, building: q.building });
+        }
+        q.done = true;
+        changed = true;
+      }
+    });
+    ConstructionManager.queue = ConstructionManager.queue.filter(q => !q.done);
+    if (changed && WindowManager.isOpen('construction')) ConstructionManager.render();
   }
 }
 
@@ -1970,21 +3161,22 @@ class CheatConsole {
       case 'annex':
         var annexCountry = parts[1] ? parts[1].toUpperCase() : '';
         if (annexCountry && DiplomacyManager.countries.find(c => c.id === annexCountry)) {
-          CheatConsole.output(annexCountry + 'を併合しました（チート）');
-          MapRenderer.provinces = MapRenderer.provinces.filter(p => p.country !== annexCountry);
-          MapRenderer.render();
-          GameUI.notify(annexCountry + 'を併合しました', 'alert');
+          var statesTaken = MapRenderer.annexCountry(annexCountry);
+          CheatConsole.output(annexCountry + 'を併合しました（チート）: ' + statesTaken + '州を獲得');
+          GameUI.notify(annexCountry + 'を併合しました (' + statesTaken + '州)', 'alert');
         } else {
           CheatConsole.output('国名コードが無効: ' + annexCountry, true);
         }
         break;
       case 'tag':
         var tagCountry = parts[1] ? parts[1].toUpperCase() : '';
-        if (tagCountry && DataFetcher.getCountryFlag(tagCountry) !== '🏳️') {
+        var knownOwners = new Set(Object.values(MapRenderer.states || {}).map(function(st){ return st.owner; }));
+        if (tagCountry && (DataFetcher.getCountryFlag(tagCountry) !== '🏳️' || knownOwners.has(tagCountry))) {
           s.country = tagCountry;
           CheatConsole.output('プレイヤー国を' + tagCountry + 'に変更しました');
           CoreEngine.renderStats();
-          FocusTreeManager.init(tagCountry);
+          if (DataFetcher.FOCUS_PATHS[tagCountry]) FocusTreeManager.init(tagCountry);
+          if (MapRenderer.ready) { MapRenderer.centerOn(tagCountry); MapRenderer.invalidateModes(); }
         } else {
           CheatConsole.output('無効な国コード: ' + tagCountry, true);
         }
@@ -2209,6 +3401,33 @@ class MultiplayerManager {
         break;
       case 'trade':
         CoreEngine.log('他プレイヤーが貿易を実行しました');
+        break;
+      case 'battle_front':
+        var ba = BattlePlanManager.armies.find(a => a.id === data.army);
+        if (ba) { ba.frontline = data.points; BattlePlanManager.renderPanel(); }
+        break;
+      case 'battle_arrow':
+        var ba2 = BattlePlanManager.armies.find(a => a.id === data.army);
+        if (ba2) { ba2.arrow = { from: data.from, to: data.to }; ba2.targetState = data.state; ba2.progress = 0; BattlePlanManager.renderPanel(); }
+        break;
+      case 'battle_execute':
+        CoreEngine.log('他プレイヤーが攻撃作戦を開始しました');
+        break;
+      case 'state_capture':
+        if (MapRenderer.captureState(data.state, data.owner)) {
+          CoreEngine.log('他プレイヤーが州 ' + (MapRenderer.states[data.state] ? MapRenderer.states[data.state].name : data.state) + 'を占領しました');
+        }
+        break;
+      case 'construction_add':
+        CoreEngine.log('他プレイヤーが建設を開始しました');
+        break;
+      case 'construction_done':
+        var cdst = MapRenderer.states[data.state];
+        if (cdst) {
+          if (!cdst.b) cdst.b = {};
+          cdst.b[data.building] = (cdst.b[data.building] || 0) + 1;
+          MapRenderer.invalidateModes();
+        }
         break;
     }
   }
@@ -2563,29 +3782,35 @@ class ResearchManager {
 }
 
 // ==========================================================
-// Module 14: GameUI — UI管理・タブ切り替え・モーダル・通知
+// Module 17: GameUI — UI管理・ウィンドウ切替・モーダル・通知
 // ==========================================================
 class GameUI {
-  static currentTab = 'focus';
+  // 現在のタブ = 最前面のウィンドウ (ウィンドウUI化に伴う互換getter)
+  static get currentTab() {
+    const top = WindowManager.topWindow();
+    return top ? top.tab : null;
+  }
 
   static switchTab(tabName) {
-    GameUI.currentTab = tabName;
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.tab === tabName);
-    });
-    document.querySelectorAll('.tab-content').forEach(content => {
-      content.classList.toggle('active', content.id === 'tab-' + tabName);
-    });
-    if (tabName === 'map') setTimeout(() => MapRenderer.resize(), 100);
+    if (tabName === 'map') { WindowManager.closeAll(); return; }
+    WindowManager.open(tabName);
+  }
+
+  // ウィンドウが開かれた時に対応するパネルを再描画
+  static onWindowOpened(tabName) {
     if (tabName === 'special') SpecialProjectManager.render();
     if (tabName === 'nuclear') NuclearManager.render();
+    if (tabName === 'construction') ConstructionManager.render();
     if (tabName === 'trade') ResourceManager.render();
     if (tabName === 'diplomacy') DiplomacyManager.render();
     if (tabName === 'cards') CardSystem.render();
     if (tabName === 'division') DivisionDesigner.render();
     if (tabName === 'multiplayer') MultiplayerManager.render();
     if (tabName === 'research') { ResearchManager.renderTabs(); ResearchManager.renderSlots(); ResearchManager.render(); }
+    if (tabName === 'focus') FocusTreeManager.render();
   }
+
+  static onWindowClosed(tabName) { /* focus管理はWindowManagerが行う */ }
 
   static notify(message, type) {
     const container = document.getElementById('notification-container');
@@ -2617,17 +3842,21 @@ class GameUI {
 async function initGame() {
   CoreEngine.init();
   CoreEngine.updateCalendar();
+  MapRenderer.init();            // 全画面操作マップ (hoi4-history公式データ) — 非同期で読み込み
+  BattlePlanManager.init();      // 軍集団パネル・作戦指揮
+  ConstructionManager.init();   // 建設キュー
   await FocusTreeManager.init(CoreEngine.gameState.country);
   await ResearchManager.init(CoreEngine.gameState.country);
   await SpecialProjectManager.init();
   await NuclearManager.init();
-  MapRenderer.init();
   ResourceManager.init();
   DiplomacyManager.init();
   await CardSystem.init();
   CheatConsole.init();
   MultiplayerManager.init();
   CardSystem.deck.forEach(card => CardSystem.applyModifiers(card.id));
+  // 国家方針ウィンドウを初期表示 (マップ操作画面の上に重ねて表示)
+  WindowManager.open('focus');
   CoreEngine.log('ゲームを開始しました。速度ボタンで時間を進めてください。');
   GameUI.notify('Hearts of Iron IV × 将軍カードゲーム 開始！', 'success');
 }
