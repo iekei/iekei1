@@ -4,21 +4,21 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>里山ハンター — 八分間の山仕事</title>
 <style>
-:root{color-scheme:dark;--ink:#edf5e8;--muted:#b8cbb8;--accent:#e9bb66;--panel:#10271eeb}*{box-sizing:border-box}body{margin:0;overflow:hidden;background:#172b25;font:15px/1.65 system-ui,sans-serif;color:var(--ink)}canvas#world{display:block;width:100vw;height:100vh}button{font:inherit;color:var(--ink);background:#294937;border:1px solid #6b8569;border-radius:9px;padding:10px 18px;cursor:pointer;transition:background .15s,transform .15s}button:hover{background:#426044;transform:translateY(-1px)}button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}button:disabled{opacity:.45;cursor:not-allowed;transform:none}.primary{background:#c69b4f;color:#14291d;font-weight:800;border-color:#f1ce86}.primary:hover{background:#e4b967}h1,h2,h3,p{margin:0 0 12px}h1{font-size:clamp(30px,5vw,58px);line-height:1.2;letter-spacing:.06em}h2{font-size:26px}.eyebrow{letter-spacing:.24em;font-size:11px;color:var(--accent);font-weight:800}.small{font-size:12px;color:var(--muted)}.overlay{position:fixed;inset:0;background:#08180bbd;display:flex;align-items:center;justify-content:center;padding:22px;backdrop-filter:blur(7px);z-index:10}.overlay[hidden]{display:none}.card{background:linear-gradient(145deg,#1b392cef,#10251ff5);border:1px solid #829b674f;border-radius:20px;padding:30px;max-width:800px;width:100%;max-height:94vh;overflow:auto;box-shadow:0 30px 100px #0008}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0}.tile{padding:16px;border:1px solid #94b18d36;border-radius:12px;background:#ffffff04}.tile h3{font-size:16px;color:var(--accent)}kbd{background:#ffffff12;border:1px solid #ffffff30;border-radius:4px;padding:1px 5px;font:12px monospace}.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}.hud{position:fixed;pointer-events:none;z-index:2}.panel{background:var(--panel);border:1px solid #afc99f40;border-radius:12px;padding:13px 17px;box-shadow:0 5px 20px #0002}#top{top:18px;left:18px;display:flex;gap:10px;align-items:center}#mission{left:18px;top:99px;width:310px}#missionTitle{font-size:17px;font-weight:750}#missionDesc{color:var(--muted);font-size:13px}#progress{height:5px;background:#80947735;margin-top:12px;border-radius:5px;overflow:hidden}#progress i{display:block;height:100%;background:var(--accent);transition:width .3s}#bottom{bottom:18px;left:18px;right:230px}#cross{position:fixed;top:50%;left:50%;width:18px;height:18px;transform:translate(-50%,-50%);border:1px solid #fff9;border-radius:50%;pointer-events:none;box-shadow:0 0 5px #0008}#cross:after{content:'';position:absolute;left:7px;top:7px;width:2px;height:2px;background:white}#target{position:fixed;top:calc(50% + 24px);width:100%;text-align:center;pointer-events:none;text-shadow:0 2px 5px #000;font-size:13px}#notice{position:fixed;top:25px;left:50%;transform:translateX(-50%);max-width:480px;padding:12px 22px;background:#edc679;color:#21301c;border-radius:10px;text-align:center;font-weight:700;opacity:0;transition:opacity .2s;pointer-events:none;z-index:4}#radarWrap{right:18px;bottom:18px;padding:8px;text-align:center}#radar{width:172px;height:172px;display:block}#clock{font-size:25px;font-variant-numeric:tabular-nums}#vignette{position:fixed;inset:0;box-shadow:inset 0 0 100px #102e2545;pointer-events:none}#shopItems{display:grid;gap:12px;margin:20px 0}.shopItem{display:flex;justify-content:space-between;align-items:center;gap:15px;border-bottom:1px solid #ffffff18;padding:10px 0}.shopItem p{margin:0}.gold{color:var(--accent)}#helpButton{position:fixed;right:18px;top:18px;z-index:3}#flash{position:fixed;inset:0;background:#ffeab9;opacity:0;pointer-events:none}.warning{color:#ffbe8c}@media(max-width:700px){.grid{grid-template-columns:1fr}.card{padding:22px}#mission{width:230px;top:85px}#radarWrap{transform:scale(.75);transform-origin:bottom right}#bottom{right:155px;font-size:11px}#top{font-size:12px}#clock{font-size:20px}#helpButton{padding:7px}#notice{top:45%;width:85%}}
+:root{color-scheme:dark;--ink:#edf5e8;--muted:#b8cbb8;--accent:#e9bb66;--panel:#10271eeb}*{box-sizing:border-box}body{margin:0;overflow:hidden;background:#172b25;font:15px/1.65 system-ui,sans-serif;color:var(--ink)}canvas#world{display:block;width:100vw;height:100vh}button{font:inherit;color:var(--ink);background:#294937;border:1px solid #6b8569;border-radius:9px;padding:10px 18px;cursor:pointer;transition:background .15s,transform .15s}button:hover{background:#426044;transform:translateY(-1px)}button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}button:disabled{opacity:.45;cursor:not-allowed;transform:none}.primary{background:#c69b4f;color:#14291d;font-weight:800;border-color:#f1ce86}.primary:hover{background:#e4b967}h1,h2,h3,p{margin:0 0 12px}h1{font-size:clamp(30px,5vw,58px);line-height:1.2;letter-spacing:.06em}h2{font-size:26px}.eyebrow{letter-spacing:.24em;font-size:11px;color:var(--accent);font-weight:800}.small{font-size:12px;color:var(--muted)}.overlay{position:fixed;inset:0;background:#08180bbd;display:flex;align-items:center;justify-content:center;padding:22px;backdrop-filter:blur(7px);z-index:10}.overlay[hidden]{display:none}.card{background:linear-gradient(145deg,#1b392cef,#10251ff5);border:1px solid #829b674f;border-radius:20px;padding:30px;max-width:800px;width:100%;max-height:94vh;overflow:auto;box-shadow:0 30px 100px #0008}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0}.tile{padding:16px;border:1px solid #94b18d36;border-radius:12px;background:#ffffff04}.tile h3{font-size:16px;color:var(--accent)}kbd{background:#ffffff12;border:1px solid #ffffff30;border-radius:4px;padding:1px 5px;font:12px monospace}.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}.hud{position:fixed;pointer-events:none;z-index:2}.panel{background:var(--panel);border:1px solid #afc99f40;border-radius:12px;padding:13px 17px;box-shadow:0 5px 20px #0002}#top{top:18px;left:18px;display:flex;gap:10px;align-items:center}#mission{left:18px;top:99px;width:310px}#missionTitle{font-size:17px;font-weight:750}#missionDesc{color:var(--muted);font-size:13px}#progress{height:5px;background:#80947735;margin-top:12px;border-radius:5px;overflow:hidden}#progress i{display:block;height:100%;background:var(--accent);transition:width .3s}#bottom{bottom:18px;left:18px;right:230px}#cross{position:fixed;top:50%;left:50%;width:18px;height:18px;transform:translate(-50%,-50%);border:1px solid #fff9;border-radius:50%;pointer-events:none;box-shadow:0 0 5px #0008}#cross.hit{border-color:#ffeb3b;box-shadow:0 0 8px #ffeb3b}#cross:after{content:'';position:absolute;left:7px;top:7px;width:2px;height:2px;background:white}#target{position:fixed;top:calc(50% + 24px);width:100%;text-align:center;pointer-events:none;text-shadow:0 2px 5px #000;font-size:13px}#notice{position:fixed;top:25px;left:50%;transform:translateX(-50%);max-width:480px;padding:12px 22px;background:#edc679;color:#21301c;border-radius:10px;text-align:center;font-weight:700;opacity:0;transition:opacity .2s;pointer-events:none;z-index:4}#radarWrap{right:18px;bottom:18px;padding:8px;text-align:center}#radar{width:172px;height:172px;display:block}#clock{font-size:25px;font-variant-numeric:tabular-nums}#vignette{position:fixed;inset:0;box-shadow:inset 0 0 100px #102e2545;pointer-events:none}#shopItems{display:grid;gap:12px;margin:20px 0}.shopItem{display:flex;justify-content:space-between;align-items:center;gap:15px;border-bottom:1px solid #ffffff18;padding:10px 0}.shopItem p{margin:0}.gold{color:var(--accent)}#helpButton{position:fixed;right:18px;top:18px;z-index:3}#flash{position:fixed;inset:0;background:#ffeab9;opacity:0;pointer-events:none}.warning{color:#ffbe8c}#scopeMask{position:fixed;inset:0;border:100px solid rgba(0,0,0,0.85);border-radius:50%;pointer-events:none;z-index:1}#healthBar{height:6px;background:#8dcc9b;border-radius:3px;transition:width .2s,background .2s}@media(max-width:700px){.grid{grid-template-columns:1fr}.card{padding:22px}#mission{width:230px;top:85px}#radarWrap{transform:scale(.75);transform-origin:bottom right}#bottom{right:155px;font-size:11px}#top{font-size:12px}#clock{font-size:20px}#helpButton{padding:7px}#notice{top:45%;width:85%}}
 </style>
 </head>
 <body>
-<canvas id="world" aria-label="日本の里山を探索する3Dゲーム"></canvas><div id="vignette"></div><div id="flash"></div>
-<div id="top" class="hud"><div class="panel"><div class="eyebrow">SAToyama / 里山管理隊</div><span id="area">住宅街</span> · <span id="clock">08:00</span></div><div class="panel"><b class="gold" id="money">¥0</b><br><span class="small" id="bag">獲物 0頭 / ¥0</span></div></div>
-<div id="mission" class="hud panel"><div class="eyebrow" id="missionStep">MISSION 01 / 06</div><div id="missionTitle"></div><div id="missionDesc"></div><div id="progress"><i id="bar"></i></div><div class="small" id="missionCount"></div></div>
+<canvas id="world" aria-label="日本の里山を探索する3Dゲーム"></canvas><div id="vignette"></div><div id="flash"></div><div id="scopeMask" hidden></div>
+<div id="top" class="hud"><div class="panel"><div class="eyebrow">SATOYAMA / 里山管理隊</div><span id="area">管理小屋</span> · <span id="clock">08:00</span></div><div class="panel"><b class="gold" id="money">¥0</b><br><span class="small" id="healthText">体力 100 / 100</span><div id="healthBar" style="width:100%"></div></div></div>
+<div id="mission" class="hud panel"><div class="eyebrow" id="missionStep">MISSION 01 / 06</div><div id="missionTitle"></div><div id="missionDesc"></div><div id="progress"><i id="missionBar"></i></div><div class="small" id="missionCount"></div></div>
 <div id="cross"></div><div id="target"></div><div id="notice" role="status" aria-live="polite"></div>
-<div id="bottom" class="hud panel"><b id="weapon"></b><div id="hint" class="small"></div></div>
+<div id="bottom" class="hud panel"><b id="weaponName"></b> · <span id="ammo"></span><div id="gear" class="small"></div></div>
 <div id="radarWrap" class="hud panel"><canvas id="radar" width="200" height="200" aria-label="地図。黄色がプレイヤー、白が管理小屋、赤が動物、青が罠"></canvas><div class="small">北 ↑ 山林 ／ 南 ↓ 住宅街</div></div>
-<button id="helpButton">遊び方 / 一時停止</button>
-<div id="intro" class="overlay"><section class="card"><div class="eyebrow">A SHORT WOODLAND ADVENTURE</div><h1>里山ハンター</h1><p class="gold">八分間の山仕事</p><p>山あいの集落で、今日の鳥獣管理を任されました。山林を探索し、獲物を換金して装備を強化。住宅街の動物にも対応して、全6件の依頼を完了しましょう。</p><div class="grid"><div class="tile"><h3>01 · 歩く・見渡す</h3><p><kbd>W A S D</kbd> 移動 ／ <kbd>Shift</kbd> 走る<br>マウスで視点移動、または矢印キー。<br><kbd>Esc</kbd> 一時停止。</p></div><div class="tile"><h3>02 · 狩る・罠を置く</h3><p>中央の照準で狙い、クリックまたは <kbd>Space</kbd> で発射。<kbd>R</kbd> で装填。<br><kbd>T</kbd> で罠を設置。近くの動物を誘引します。</p></div><div class="tile"><h3>03 · 換金・買い物</h3><p>白い地図マーカーの管理小屋で <kbd>E</kbd>。獲物をまとめて換金し、銃や罠を購入。<br><kbd>H</kbd> で小屋へ帰還（残り時間 −15秒）。</p></div><div class="tile"><h3>04 · 依頼をこなす</h3><p>左上に現在の依頼、右下に地図。依頼の対象は追加出現します。時間切れでも成果を確認できます。</p></div></div><p class="small">PCのキーボード・マウス向け。外部通信・インストール不要。架空のゲームで、実際の狩猟手順を再現するものではありません。動物は光の粒になり、流血表現はありません。</p><button id="start" class="primary">山仕事をはじめる</button><p id="error" class="warning" role="alert"></p></section></div>
-<div id="pause" class="overlay" hidden><section class="card"><div class="eyebrow">TAKE A BREATH</div><h2>ひと休み</h2><p>WASD：移動 ／ Shift：走る ／ マウス・矢印：視点<br>クリック・Space：発射 ／ R：装填 ／ T：罠<br>E：小屋の店 ／ H：小屋へ帰還（15秒消費）</p><p>照準が金色なら射程内の動物に命中します。獲物は自動で回収されます。小屋で換金すると資金になります。罠は置いた周囲の動物を引き寄せ、一頭捕まえると消費されます。</p><p class="small">この画面と買い物中は時間が止まります。視点のマウス操作が使えない場合は矢印キーで遊べます。</p><button id="resume" class="primary">ゲームに戻る</button></section></div>
-<div id="shop" class="overlay" hidden><section class="card"><div class="eyebrow">MOUNTAIN FIELD STATION</div><h2>管理小屋 · 換金と装備</h2><p id="shopBalance" class="gold"></p><button id="sell" class="primary">獲物を換金する</button><div id="shopItems"><div class="shopItem"><div><b>銃のアップグレード</b><p class="small" id="upgradeText"></p></div><button id="upgrade">購入</button></div><div class="shopItem"><div><b>誘引罠 × 1</b><p class="small">¥80 · 設置後は自動捕獲。最大8個所持。</p></div><button id="buyTrap">購入 ¥80</button></div></div><p class="small">弾薬は支給品です。Rキーで何度でも装填できます。換金額：シカ ¥100 ／ イノシシ ¥140 ／ クマ ¥240。</p><button id="leave">山へ戻る</button></section></div>
-<div id="end" class="overlay" hidden><section class="card"><div class="eyebrow">TODAY'S FIELD REPORT</div><h1 id="endTitle"></h1><p id="endText"></p><div class="grid" id="stats"></div><p class="small">おつかれさまでした。集落と山の暮らしを守る、一日の小さな冒険。</p><button id="restart" class="primary">もう一度プレイ</button></section></div>
+<button id="helpButton">遊び方 / 一時停止</button><button id="sound" style="position:fixed;right:150px;top:18px;z-index:3">音：ON</button>
+<div id="intro" class="overlay"><section class="card"><div class="eyebrow">A SHORT WOODLAND ADVENTURE</div><h1>里山ハンター</h1><p class="gold">八分間の山仕事</p><p>山あいの集落で、今日の鳥獣管理を任されました。山林を探索し、獲物を換金して装備を強化。住宅街の動物にも対応して、全6件の依頼を完了しましょう。</p><div class="grid"><div class="tile"><h3>01 · 歩く・見渡す</h3><p><kbd>W A S D</kbd> 移動 ／ <kbd>Shift</kbd> 走る<br>マウスで視点移動、または矢印キー。<br><kbd>Esc</kbd> 一時停止。</p></div><div class="tile"><h3>02 · 狩る・罠を置く</h3><p>中央の照準で狙い、クリックまたは <kbd>Space</kbd> で発射。<kbd>R</kbd> で装填。<br><kbd>T</kbd> で罠を設置。<kbd>Q</kbd> / 右クリックでズーム。</p></div><div class="tile"><h3>03 · 換金・買い物</h3><p>小屋の近くで <kbd>E</kbd> を押し、装備の購入・換金を行います。<kbd>E</kbd> キーで獲物の回収も可能。<kbd>H</kbd> で小屋へ帰還。</p></div><div class="tile"><h3>04 · 依頼をこなす</h3><p>左上に現在の依頼、右下に地図。依頼の対象は追加出現します。体力低下時は <kbd>F</kbd> で救急キットを使用。</p></div></div><p class="small">PCのキーボード・マウス向け。外部通信・インストール不要。架空のゲームで、実際の狩猟手順を再現するものではありません。流血表現はありません。</p><button id="start" class="primary">山仕事をはじめる</button><p id="error" class="warning" role="alert"></p></section></div>
+<div id="pause" class="overlay" hidden><section class="card"><div class="eyebrow">TAKE A BREATH</div><h2>ひと休み</h2><p>WASD：移動 ／ Shift：走る ／ マウス・矢印：視点<br>クリック・Space：発射 ／ R：装填 ／ T：罠<br>E：回収・店 ／ F：救急キット ／ Q：ズーム ／ H：帰還</p><p>照準が黄色になれば射程内です。倒した獲物は E キーで回収してください。小屋の近くで E キーを押すと装備購入や管理を行えます。</p><p class="small">この画面と買い物中は時間が止まります。</p><button id="resume" class="primary">ゲームに戻る</button></section></div>
+<div id="shop" class="overlay" hidden><section class="card"><div class="eyebrow">MOUNTAIN FIELD STATION</div><h2>管理小屋 · 装備とサプライ</h2><p id="shopBalance" class="gold"></p><div id="shopItems"></div><p id="shopFeedback" class="gold" style="min-height:1.5em;margin:10px 0"></p><p class="small">弾薬は支給品です。Rキーでいつでも装填できます。凶暴な動物からのダメージには注意してください。</p><button id="leave">山へ戻る</button></section></div>
+<div id="end" class="overlay" hidden><section class="card"><div class="eyebrow">TODAY'S FIELD REPORT</div><h1 id="endTitle"></h1><p id="endText"></p><div class="grid" id="stats"></div><p class="small">おつかれさでした。集落と山の暮らしを守る、一日の小さな冒険。</p><button id="restart" class="primary">もう一度プレイ</button></section></div>
 <script>
 'use strict';
 (() => {
@@ -44,38 +44,459 @@ const groundData=[];for(let z=-230;z<170;z+=10)for(let x=-210;x<210;x+=10){const
 let bound=null;function draw(m,x,y,z,sx,sy,sz,color,rot=0){if(bound!==m){gl.bindBuffer(gl.ARRAY_BUFFER,m.b);gl.vertexAttribPointer(ap,3,gl.FLOAT,false,24,0);gl.vertexAttribPointer(an,3,gl.FLOAT,false,24,12);bound=m;}gl.uniform3f(U.Pos,x,y,z);gl.uniform3f(U.Scale,sx,sy,sz);gl.uniform1f(U.Rot,rot);gl.uniform3fv(U.Color,color);gl.drawArrays(gl.TRIANGLES,0,m.count);}
 const C={grass:[.25,.39,.22],trunk:[.30,.22,.15],pine:[.12,.30,.22],lightpine:[.24,.40,.23],road:[.40,.43,.40],wood:[.49,.32,.19],roof:[.22,.27,.30],cream:[.79,.75,.61],gold:[.95,.72,.29],white:[.92,.94,.79]};
 let seed=516;function rand(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;}
-const trees=[],rocks=[],houses=[],decor=[];
+function random(){return rand();}
+const trees=[],rocks=[],houses=[];
 for(let i=0;i<100;i++){let x=(rand()-.5)*225,z=-rand()*185-5;if(Math.abs(x)<8)continue;trees.push({x,z,h:5+rand()*7,r:1.4+rand()*1.5});}
 for(let i=0;i<28;i++)rocks.push({x:(rand()-.5)*230,z:-rand()*180,s:1+rand()*3});
 for(const x of [-48,-27,29,52])for(const z of [31,60,88])houses.push({x,z,w:11,d:12,h:6+rand()*2});
 const hut={x:0,z:78};
-const keys=new Set(),animals=[],traps=[],particles=[];let player,game,noticeTime=0,audio=null,accumulator=0,last=0,shotFlash=0;
-const types={deer:{name:'シカ',hp:2,value:100,color:[.57,.35,.18],size:.9},boar:{name:'イノシシ',hp:2,value:140,color:[.31,.25,.22],size:1},bear:{name:'クマ',hp:3,value:240,color:[.18,.16,.14],size:1.3}};
-const missions=[
-{title:'山仕事の第一歩',desc:'山林の動物を狩り、Hで帰還。管理小屋で獲物を換金しよう。',goal:100,reward:100,kind:'sale',unit:'円を換金'},
-{title:'山林のシカ調査',desc:'山林でシカを3頭捕獲。銃の強化で一撃で捕獲できる。',goal:3,reward:160,kind:'deer',zone:'forest',unit:'頭',spawn:5},
-{title:'罠猟を覚えよう',desc:'Tで罠を置き、イノシシを2頭捕獲。罠の近くへ誘導しよう。罠を2個支給！',goal:2,reward:200,kind:'boar',method:'trap',unit:'頭',spawn:4},
-{title:'住宅街への侵入',desc:'南側の住宅街でイノシシ3頭を駆除。赤い地図マーカーを探そう。',goal:3,reward:220,kind:'boar',zone:'village',unit:'頭',spawn:5},
-{title:'奥山の見回り',desc:'山林のクマを2頭捕獲。強化した銃か罠が有効。',goal:2,reward:260,kind:'bear',zone:'forest',unit:'頭',spawn:4},
-{title:'集落の安全確認',desc:'住宅街の動物をあと4頭捕獲し、今日の仕事を終えよう。',goal:4,reward:400,kind:'any',zone:'village',unit:'頭',spawn:6}
+const keys=new Set(),animals=[],traps=[],particles=[],bodies=[];let player,game,noticeTime=0,audio=null,soundEnabled=true,damageFlash=0,hudTime=0;
+const types={deer:{name:'シカ',hp:2,value:100,damage:0,speed:2.2,color:[.57,.35,.18],size:.9},boar:{name:'イノシシ',hp:2,value:140,damage:18,speed:3.0,color:[.31,.25,.22],size:1},bear:{name:'クマ',hp:4,value:240,damage:32,speed:3.6,color:[.18,.16,.14],size:1.3}};
+const guns=[
+  {name:'軽快ライフル',damage:1,mag:5,reload:1.6,range:55,price:0,desc:'標準的な散策用。連射しやすく扱いやすい。'},
+  {name:'猟用ライフル',damage:2,mag:4,reload:2.0,range:75,price:650,desc:'威力と射程に優れた精密ライフル。大物狙いに。'},
+  {name:'重大型ライフル',damage:4,mag:3,reload:2.6,range:90,price:1400,desc:'圧倒的な破壊力。大型クマを一撃で仕留める。'}
 ];
-function beep(freq=440,dur=.08){if(!audio)return;try{const o=audio.createOscillator(),g=audio.createGain();o.type='triangle';o.frequency.setValueAtTime(freq,audio.currentTime);g.gain.setValueAtTime(.035,audio.currentTime);g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+dur);o.connect(g);g.connect(audio.destination);o.start();o.stop(audio.currentTime+dur);}catch(e){}}
+const supplies=[
+  {id:'scope',name:'光学スコープ',price:900,desc:'Q / 右クリックで2.3倍ズーム。遠くの動物を狙いやすく。'},
+  {id:'mag',name:'拡張弾倉',price:700,desc:'全ての銃の装弾数 +3。購入後はRで装填。'},
+  {id:'reload',name:'装填キット',price:1100,desc:'全ての銃の装填時間を40%短縮。'},
+  {id:'trap',name:'誘引罠 × 1',price:120,desc:'Tで設置 / 誘引22m / 1頭捕獲で消費。所持上限12。'},
+  {id:'med',name:'救急キット × 1',price:180,desc:'Fで体力45回復。所持上限8。'}
+];
+const missions=[
+  {title:'山仕事の第一歩',desc:'山林で動物を1頭撃破し、金色の光まで近づいて E キーで回収。',goal:1,reward:100,kind:'any'},
+  {title:'山林のシカ調査',desc:'山林のシカを3頭回収。銃を変更・強化するとより効率的に。',goal:3,reward:180,kind:'deer',zone:'forest',spawn:5},
+  {title:'罠猟を覚えよう',desc:'Tで罠を置き、イノシシを2頭捕獲。罠の近くへ誘引しよう。罠を2個支給！',goal:2,reward:220,kind:'boar',method:'trap',unit:'頭',spawn:4},
+  {title:'住宅街への侵入',desc:'南側の住宅街でイノシシ3頭を回収。集落を被害から守ろう。',goal:3,reward:250,kind:'boar',zone:'village',spawn:5},
+  {title:'奥山のクマ対策',desc:'山林の危険なクマを2頭回収。攻撃に注意し、高威力銃や罠を活用。',goal:2,reward:320,kind:'bear',zone:'forest',spawn:4},
+  {title:'集落の完全安全化',desc:'住宅街の動物をあと4頭回収し、本日の見回り業務を終えよう。',goal:4,reward:450,kind:'any',zone:'village',spawn:6}
+];
+
+function money(v){return '¥'+v.toLocaleString();}
+function clamp(v,min,max){return Math.max(min,Math.min(max,v));}
+function distance(a,b){return Math.hypot(a.x-b.x,a.z-b.z);}
+function zone(z){return z>15?'village':'forest';}
+function capacity(){return guns[game.gun].mag+(game.attach.mag?3:0);}
+
+function beep(freq=440,dur=.08){if(!soundEnabled||!audio)return;try{const o=audio.createOscillator(),g=audio.createGain();o.type='triangle';o.frequency.setValueAtTime(freq,audio.currentTime);g.gain.setValueAtTime(.035,audio.currentTime);g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+dur);o.connect(g);g.connect(audio.destination);o.start();o.stop(audio.currentTime+dur);}catch(e){}}
 function notify(text){$('notice').textContent=text;noticeTime=4;$('notice').style.opacity=1;}
-function zone(z){return z>15?'village':'forest';}function dist(a,b){return Math.hypot(a.x-b.x,a.z-b.z);}
-function blocked(x,z,r=.5){if(x<-108+r||x>108-r||z<-155+r||z>107-r)return true;for(const h of houses)if(Math.abs(x-h.x)<h.w/2+r&&Math.abs(z-h.z)<h.d/2+r)return true;if(Math.abs(x-hut.x)<5+r&&Math.abs(z-hut.z)<4+r)return true;return false;}
-function spawn(type,where){let x,z,tries=0;do{x=(rand()-.5)*(where==='village'?100:170);z=where==='village'?23+rand()*73:-15-rand()*124;}while(blocked(x,z,2)&&++tries<80);if(blocked(x,z,2)){x=12;z=where==='village'?40:-50;}const t=types[type];animals.push({type,x,z,hp:t.hp,angle:rand()*Math.PI*2,turn:rand()*4,scared:0,zone:where,phase:rand()*6});}
-function setupMission(){const m=missions[game.mission];if(!m)return;game.progress=0;if(m.method==='trap'){game.trapStock=Math.min(8,game.trapStock+2);notify('誘引罠を2個支給しました。Tで設置できます。');}if(m.spawn){while(animals.length>23)animals.shift();for(let i=0;i<m.spawn;i++)spawn(m.kind==='any'?(i%2?'boar':'deer'):m.kind,m.zone||zone(player.z));}}
-function reset(){seed=9241;animals.length=traps.length=particles.length=0;keys.clear();player={x:0,z:64,yaw:0,pitch:0};game={mode:'play',time:480,money:80,earned:0,bag:0,bagValue:0,total:0,trapCaught:0,trapStock:2,level:0,ammo:5,reload:0,cooldown:0,mission:0,progress:0,steps:0};for(let i=0;i<18;i++)spawn(i%5===0?'bear':i%2?'deer':'boar','forest');for(let i=0;i<3;i++)spawn('boar','village');setupMission();for(const id of ['intro','end','pause','shop'])$(id).hidden=true;notify('北の山林へ出発！ 動物を捕獲して、小屋で換金しましょう。');updateHUD();}
-function lock(){if(!canvas.requestPointerLock)return;try{const p=canvas.requestPointerLock();if(p&&p.catch)p.catch(()=>notify('矢印キーでも視点を操作できます。'));}catch(e){notify('矢印キーで視点を操作できます。');}}
+
+function blocked(x,z,r=.5){
+  if(x<-108+r||x>108-r||z<-155+r||z>107-r)return true;
+  for(const h of houses)if(Math.abs(x-h.x)<h.w/2+r&&Math.abs(z-h.z)<h.d/2+r)return true;
+  if(Math.abs(x-hut.x)<5+r&&Math.abs(z-hut.z)<4+r)return true;
+  return false;
+}
+
+function clearRay(x0,y0,z0,dx,dy,dz,maxDist){
+  for(let q=1;q<maxDist;q+=1.2){
+    const x=x0+dx*q,y=y0+dy*q,z=z0+dz*q;
+    if(y<height(x,z)+.15)return false;
+    for(const h of houses)if(Math.abs(x-h.x)<h.w/2&&Math.abs(z-h.z)<h.d/2&&y<h.h+2)return false;
+    if(Math.abs(x-hut.x)<5&&Math.abs(z-hut.z)<4&&y<7)return false;
+  }
+  return true;
+}
+
+function equip(index){
+  if(!game.owned[index]||game.gun===index)return;
+  game.gun=index;game.scope=false;game.ammo=0;game.reload=guns[index].reload*(game.attach.reload?.6:1);game.cooldown=.25;
+  notify(guns[index].name+'に変更。装填中…');updateHUD();
+}
+
+function openShop(){game.mode='shop';game.scope=false;release();$('shop').hidden=false;$('shopFeedback').textContent='';renderShop();updateHUD();$('leave').focus();}
+
+function renderShop(){
+  $('shopBalance').textContent='所持金 '+money(game.money)+' · 罠 '+game.trapStock+' · 救急 '+game.meds;
+  const items=$('shopItems');items.replaceChildren();
+  function heading(text){const h=document.createElement('div');h.className='sectionTitle';h.textContent=text;items.append(h);}
+  function item(name,desc,label,disabled,handler){
+    const row=document.createElement('div');row.className='shopItem';const info=document.createElement('div');
+    const title=document.createElement('b');title.textContent=name;const p=document.createElement('p');p.className='small';p.textContent=desc;
+    const button=document.createElement('button');button.textContent=label;button.disabled=disabled;button.onclick=handler;
+    info.append(title,p);row.append(info,button);items.append(row);
+  }
+  heading('01 / 銃');
+  guns.forEach((g,i)=>{
+    const owned=game.owned[i],active=game.gun===i;
+    item(g.name,g.desc,active?'装備中':owned?'装備する':money(g.price),active||(!owned&&game.money<g.price),()=>{
+      if(game.mode!=='shop')return;
+      if(!game.owned[i]){if(game.money<g.price)return;game.money-=g.price;game.owned[i]=true;}
+      equip(i);$('shopFeedback').textContent=g.name+'を装備。山へ戻ると装填が進みます。';renderShop();updateHUD();
+    });
+  });
+  heading('02 / アタッチメント・消耗品');
+  for(const s of supplies){
+    const attached=Object.hasOwn?Object.hasOwn(game.attach,s.id):Object.prototype.hasOwnProperty.call(game.attach,s.id);
+    const owned=attached&&game.attach[s.id];
+    const full=(s.id==='trap'&&game.trapStock>=12)||(s.id==='med'&&game.meds>=8);
+    item(s.name,s.desc,owned?'購入済み':full?'所持上限':money(s.price),owned||full||game.money<s.price,()=>{
+      if(game.mode!=='shop'||game.money<s.price||(attached&&game.attach[s.id]))return;
+      if((s.id==='trap'&&game.trapStock>=12)||(s.id==='med'&&game.meds>=8))return;
+      game.money-=s.price;
+      if(s.id==='trap')game.trapStock++;else if(s.id==='med')game.meds++;else game.attach[s.id]=true;
+      $('shopFeedback').textContent=s.name+'を購入しました。';beep(650,.08);renderShop();updateHUD();
+    });
+  }
+}
+
+function spawn(type,where){
+  let x,z,tries=0;
+  do{x=(rand()-.5)*(where==='village'?100:170);z=where==='village'?23+rand()*73:-15-rand()*124;}while(blocked(x,z,2)&&++tries<80);
+  if(blocked(x,z,2)){x=12;z=where==='village'?40:-50;}
+  const t=types[type];
+  animals.push({type,x,z,hp:t.hp,angle:rand()*Math.PI*2,turn:rand()*4,scared:0,attack:0,home:where,phase:rand()*6});
+}
+
+function setupMission(){
+  const m=missions[game.mission];if(!m)return;
+  game.progress=0;
+  if(m.method==='trap'){game.trapStock=Math.min(12,game.trapStock+2);notify('誘引罠を2個支給しました。Tで設置できます。');}
+  if(m.spawn){
+    while(animals.length>20)animals.shift();
+    for(let i=0;i<m.spawn;i++)spawn(m.kind==='any'?(i%2?'boar':'deer'):m.kind,m.zone||zone(player.z));
+  }
+}
+
+function reset(){
+  seed=9241;animals.length=traps.length=particles.length=bodies.length=0;keys.clear();
+  player={x:0,z:68,yaw:0,pitch:0};
+  game={mode:'play',time:480,money:120,hp:100,gun:0,owned:[true,false,false],attach:{},trapStock:2,meds:1,ammo:5,reload:0,cooldown:0,invincible:0,scope:false,mission:0,progress:0,total:0,weight:0,trapCaught:0,steps:0};
+  for(let i=0;i<16;i++)spawn(i%5===0?'bear':i%2?'deer':'boar','forest');
+  for(let i=0;i<4;i++)spawn('boar','village');
+  setupMission();
+  for(const id of ['intro','end','pause','shop'])$(id).hidden=true;
+  notify('管理小屋から北の山林へ出発！ 動物を倒し、近づいてEで回収します。');
+  updateHUD();
+}
+
+function lock(){
+  if(!canvas.requestPointerLock)return;
+  try{const p=canvas.requestPointerLock();if(p&&p.catch)p.catch(()=>{});}catch(e){}
+}
 function release(){keys.clear();if(document.pointerLockElement===canvas&&document.exitPointerLock)document.exitPointerLock();}
 function pause(){if(game&&game.mode==='play'){game.mode='pause';$('pause').hidden=false;release();}}
 function resume(){if(!game||game.mode==='end')return;game.mode='play';$('pause').hidden=true;$('shop').hidden=true;keys.clear();lock();}
 function start(){if(!audio){try{audio=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}if(audio)audio.resume().catch(()=>{});reset();lock();}
+
+function finish(reason){
+  game.mode='end';release();$('end').hidden=false;
+  const won=reason==='mission';
+  $('endTitle').textContent=won?'本日の業務、完全達成！':reason==='injured'?'重傷につき緊急撤退':'本日の見回り終了';
+  $('endText').textContent=won?'すべての依頼を完了。集落に平和が戻りました。':reason==='injured'?'野生動物の反撃を受けました。治療を受け、装備を整えて再挑戦しましょう。':'日が暮れました。得られた資金でライフルや資材を強化し、次回の仕事に備えましょう。';
+  const spent=480-game.time;
+  $('stats').innerHTML=`<div class="tile"><h3>依頼達成</h3>${game.mission} / 6 件</div><div class="tile"><h3>回収数 / 総重量</h3>${game.total} 頭 / ${game.weight.toFixed(1)} kg</div><div class="tile"><h3>獲得資金</h3>${money(game.money)}</div><div class="tile"><h3>活動時間</h3>${Math.floor(spent/60)}分 ${Math.floor(spent%60)}秒</div>`;
+  beep(won?720:200,.4);updateHUD();
+}
+
+function missionEvent(type,where,method,value=1){
+  if(game.mode==='end')return;
+  const m=missions[game.mission];if(!m)return;
+  if((m.kind==='any'||m.kind===type)&&(!m.zone||m.zone===where)&&(!m.method||m.method===method)){
+    game.progress+=value;
+    if(game.progress>=m.goal){
+      game.money+=m.reward;game.mission++;
+      beep(880,.2);
+      if(game.mission===missions.length){finish('mission');return;}
+      setupMission();
+      notify(`依頼達成！ 報酬 ${money(m.reward)} ／ 次：${missions[game.mission].title}`);
+    }
+  }
+  updateHUD();
+}
+
+function capture(a,method){
+  const index=animals.indexOf(a);if(index<0)return;
+  animals.splice(index,1);
+  const t=types[a.type],w=+(t.size*(120+rand()*80)).toFixed(1),val=Math.round(t.value*(w/150));
+  bodies.push({type:a.type,x:a.x,z:a.z,weight:w,value:val,zone:zone(a.z)});
+  if(method==='trap'){
+    game.trapCaught++;
+    for(let i=0;i<14;i++)particles.push({x:a.x,y:height(a.x,a.z)+1,z:a.z,vx:(rand()-.5)*4,vy:2+rand()*3,vz:(rand()-.5)*4,life:1});
+    notify(`${t.name}を罠で捕獲！ 金色の光から[E]で回収`);
+  }else notify(`${t.name}を倒しました！ 金色の光から[E]で回収`);
+  beep(650,.12);
+  if(animals.length<16)spawn(a.type,a.home);
+}
+
+function canCollect(b){return distance(player,b)<4.2;}
+
+function collect(){
+  const index=bodies.findIndex(canCollect);if(index<0)return false;
+  const b=bodies.splice(index,1)[0],t=types[b.type];
+  game.total++;game.weight+=b.weight;game.money+=b.value;
+  for(let i=0;i<12;i++)particles.push({x:b.x,y:height(b.x,b.z)+1,z:b.z,vx:(rand()-.5)*3,vy:2+rand()*2,vz:(rand()-.5)*3,life:.8});
+  notify(`${t.name} (${b.weight}kg) を回収 · ${money(b.value)} 獲得`);
+  beep(800,.12);
+  missionEvent(b.type,b.zone,'collect');
+  return true;
+}
+
+function aim(){
+  let best=null,min=1e9;
+  const cp=Math.cos(player.pitch),dx=Math.sin(player.yaw)*cp,dy=Math.sin(player.pitch),dz=-Math.cos(player.yaw)*cp;
+  const eye=height(player.x,player.z)+1.75,g=guns[game.gun];
+  for(const a of animals){
+    const t=types[a.type],vx=a.x-player.x,vy=height(a.x,a.z)+t.size-eye,vz=a.z-player.z;
+    const along=vx*dx+vy*dy+vz*dz;
+    if(along<1||along>g.range)continue;
+    const perpendicular=Math.sqrt(Math.max(0,vx*vx+vy*vy+vz*vz-along*along));
+    if(perpendicular>t.size*.95+.18)continue;
+    if(clearRay(player.x,eye,player.z,dx,dy,dz,along)&&along<min){min=along;best=a;}
+  }
+  return best;
+}
+
+function reload(){
+  if(game.reload||game.ammo===capacity())return;
+  game.reload=guns[game.gun].reload*(game.attach.reload?.6:1);
+  notify('装填中…');beep(190,.1);
+}
+
+function toggleScope(){if(!game.attach.scope){notify('スコープ未所持。管理小屋で購入できます。');return;}game.scope=!game.scope;updateHUD();}
+
+function shoot(){
+  if(game.mode!=='play'||game.cooldown>0||game.reload>0)return;
+  if(game.ammo<=0){reload();return;}
+  const g=guns[game.gun];
+  game.ammo--;game.cooldown=game.gun===2?.85:.5;damageFlash=.15;beep(90,.10);
+  const a=aim();
+  if(a){
+    a.hp-=g.damage;a.scared=7;
+    for(let i=0;i<8;i++)particles.push({x:a.x,y:height(a.x,a.z)+1,z:a.z,vx:(rand()-.5)*3,vy:1+rand()*2,vz:(rand()-.5)*3,life:.5});
+    if(a.hp<=0)capture(a,'gun');else notify(`${types[a.type].name}に命中！ 残りHP ${a.hp}`);
+  }
+  for(const b of animals)if(distance(b,player)<32)b.scared=5;
+  updateHUD();
+}
+
+function placeTrap(){
+  if(!game.trapStock){notify('罠がありません。管理小屋で購入できます。');return;}
+  const p={x:player.x+Math.sin(player.yaw)*2.5,z:player.z-Math.cos(player.yaw)*2.5};
+  if(blocked(p.x,p.z,1)){notify('ここには罠を設置できません。');return;}
+  game.trapStock--;traps.push({x:p.x,z:p.z,age:0});
+  notify('誘引罠を設置しました（効果範囲22m）。');beep(520,.09);updateHUD();
+}
+
+function heal(){
+  if(!game.meds){notify('救急キットがありません。管理小屋で購入できます。');return;}
+  if(game.hp>=100){notify('体力は満タンです。');return;}
+  game.meds--;game.hp=Math.min(100,game.hp+45);
+  notify('救急キットを使用。体力が回復しました。');beep(750,.15);updateHUD();
+}
+
+function returnHome(){
+  if(distance(player,hut)<18){openShop();return;}
+  game.time=Math.max(0,game.time-15);player.x=hut.x;player.z=hut.z+6;player.yaw=0;player.pitch=0;
+  notify('管理小屋へ即時帰還しました（残り時間 −15秒）。');beep(400,.12);openShop();
+}
+
+function interact(){if(collect())return;if(distance(player,hut)<18){openShop();return;}notify('金色の獲物マーカーから4m以内、または小屋の近くでE。');}
+
+function updateHUD(){
+  if(!game)return;
+  const secs=Math.ceil(game.time),m=missions[game.mission];
+  $('clock').textContent=String(Math.floor(secs/60)).padStart(2,'0')+':'+String(secs\%60).padStart(2,'0');$('area').textContent=distance(player,hut)<18?'管理小屋':zone(player.z)==='forest'?'北の山林':'南の集落';
+  $('money').textContent=money(game.money);$('healthText').textContent='体力 '+Math.ceil(game.hp)+' / 100';$('healthBar').style.width=game.hp+'\%';$('healthBar').style.background=game.hp<35?'#e88a75':'#8dcc9b';
+  $('ammo').textContent=game.reload>0?'装填 '+game.reload.toFixed(1)+'s':game.ammo+' / '+capacity();$('weaponName').textContent=guns[game.gun].name;
+  const gear=[];if(game.attach.scope)gear.push('スコープ');if(game.attach.mag)gear.push('拡張弾倉');if(game.attach.reload)gear.push('装填短縮');
+  $('gear').textContent='罠 '+game.trapStock+' [T] · 救急 '+game.meds+' [F] · 回収 '+game.total+'頭 / '+game.weight.toFixed(1)+'kg'+(gear.length?' · '+gear.join(' / '):'');
+  $('missionStep').textContent='MISSION '+String(Math.min(6,game.mission+1)).padStart(2,'0')+' / 06';
+  $('missionTitle').textContent=m?m.title:'すべての依頼を達成';$('missionDesc').textContent=m?m.desc:'おつかれさまでした！';
+  $('missionBar').style.width=m?(Math.min(1,game.progress/m.goal)*100)+'\%':'100\%';$('missionCount').textContent=m?game.progress+' / '+m.goal+' 頭 · 報酬 '+money(m.reward):'6 / 6 件 完了';
+  $('scopeMask').hidden=!game.scope||game.mode!=='play';
+}
+
 $('start').onclick=start;$('restart').onclick=start;$('resume').onclick=resume;$('leave').onclick=resume;$('helpButton').onclick=pause;
-function finish(won){game.mode='end';release();$('end').hidden=false;$('endTitle').textContent=won?'本日の仕事、完了！':'本日の見回り終了';$('endText').textContent=won?'すべての依頼を達成。集落に穏やかな時間が戻りました。':'日が暮れてきました。今回の成果を持ち帰り、次の山仕事に備えましょう。';const spent=480-game.time;$('stats').innerHTML=`<div class="tile"><h3>依頼達成</h3>${game.mission} / 6 件</div><div class="tile"><h3>捕獲した動物</h3>${game.total} 頭（罠 ${game.trapCaught} 頭）</div><div class="tile"><h3>獲得した資金</h3>¥${game.earned.toLocaleString()}<br><span class="small">未換金の獲物 ¥${game.bagValue}</span></div><div class="tile"><h3>活動時間</h3>${Math.floor(spent/60)}分 ${Math.floor(spent%60)}秒</div>`;beep(won?720:240,.4);updateHUD();}
-function missionEvent(type,where,method,value=1){if(game.mode==='end')return;const m=missions[game.mission];if(!m)return;if((m.kind==='any'||m.kind===type)&&(!m.zone||m.zone===where)&&(!m.method||m.method===method)){game.progress+=value;if(game.progress>=m.goal){game.money+=m.reward;game.earned+=m.reward;game.mission++;beep(880,.2);if(game.mission===missions.length){finish(true);return;}setupMission();notify(`依頼達成！ 報酬 ¥${m.reward} ／ 次：${missions[game.mission].title}`);}}updateHUD();}
-function capture(a,method){const index=animals.indexOf(a);if(index<0)return;animals.splice(index,1);const t=types[a.type];game.total++;game.bag++;game.bagValue+=t.value;if(method==='trap')game.trapCaught++;for(let i=0;i<14;i++)particles.push({x:a.x,y:height(a.x,a.z)+1,z:a.z,vx:(rand()-.5)*4,vy:2+rand()*3,vz:(rand()-.5)*4,life:1});notify(`${t.name}を${method==='trap'?'罠で':''}捕獲 · 換金額 ¥${t.value}`);beep(650,.12);missionEvent(a.type,zone(a.z),method);if(animals.length<16)spawn(a.type,a.zone);}
-function aim(){let best=null,min=1e9;const cp=Math.cos(player.pitch),dx=Math.sin(player.yaw)*cp,dy=Math.sin(player.pitch),dz=-Math.cos(player.yaw)*cp;const eye=height(player.x,player.z)+1.75;for(const a of animals){const t=types[a.type],vx=a.x-player.x,vy=height(a.x,a.z)+t.size-eye,vz=a.z-player.z;const along=vx*dx+vy*dy+vz*dz;if(along<1||along>48+game.level*16)continue;const perpendicular=Math.sqrt(Math.max(0,vx*vx+vy*vy+vz*vz-along*along));if(perpendicular>t.size*.9+.15)continue;let occluded=false;for(let q=2;q<along-1;q+=1.5){const x=player.x+dx*q,z=player.z+dz*q,y=eye+dy*q;if(y<height(x,z)+.15){occluded=true;break;}for(const h of houses){if(Math.abs(x-h.x)<h.w/2&&Math.abs(z-h.z)<h.d/2&&y<h.h+2){occluded=true;break;}}if(Math.abs(x-hut.x)<5&&Math.abs(z-hut.z)<4&&y<7)occluded=true;if(occluded)break;}if(!occluded&&along<min){min=along;best=a;}}return best;}
-function reload(){if(game.reload||game.ammo===5)return;game.reload=1.3;notify('装填中…');beep(190,.1);}
-function shoot(){if(game.mode!=='play'||game.cooldown>0||game.reload>0)return;if(game.ammo<=0){reload();return;}game.ammo--;game.cooldown=.65-game.level*.12;shotFlash=.11;beep(90,.10);const a=aim();if(a){a.hp-=1+game.level;a.scared=6;if(a.hp<=0)capture(a,'gun');else notify(`${types[a.type].name}に命中 · あと${a.hp}ダメージ`);}for(const b of animals)if(dist(b,player)<30)b.scared=4;updateHUD();}
-function placeTrap(){if(!game.trapStock){notify('罠がありません。管理小屋で購入できます。');return;}const p={x:player.x+Math.sin(player.yaw)*2.5,z:player.z-Math.cos(player.yaw
+$('sound').onclick=()=>{soundEnabled=!soundEnabled;$('sound').textContent='音：'+(soundEnabled?'ON':'OFF');};
+
+const handled=new Set(['KeyW','KeyA','KeyS','KeyD','ShiftLeft','ShiftRight','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Space','KeyR','KeyT','KeyF','KeyQ','KeyH','KeyE','KeyP','Digit1','Digit2','Digit3','Escape']);
+document.addEventListener('keydown',event=>{
+  if(!game)return;
+  if(game.mode==='play'&&handled.has(event.code))event.preventDefault();
+  if(event.code==='Escape'||event.code==='KeyP'){
+    if(event.repeat)return;
+    if(game.mode==='play')pause();else if(game.mode==='pause'||game.mode==='shop')resume();
+    return;
+  }
+  if(game.mode!=='play')return;
+  keys.add(event.code);if(event.repeat)return;
+  switch(event.code){
+    case 'KeyR':reload();break;case 'KeyT':placeTrap();break;case 'KeyF':heal();break;
+    case 'KeyQ':toggleScope();break;case 'KeyH':returnHome();break;case 'KeyE':interact();break;
+    case 'Digit1':equip(0);break;case 'Digit2':equip(1);break;case 'Digit3':equip(2);break;
+  }
+});
+document.addEventListener('keyup',event=>keys.delete(event.code));
+
+canvas.addEventListener('mousedown',event=>{
+  if(!game||game.mode!=='play')return;
+  event.preventDefault();
+  if(event.button===2)toggleScope();else if(event.button===0){shoot();if(document.pointerLockElement!==canvas)lock();}
+});
+canvas.addEventListener('contextmenu',event=>event.preventDefault());
+document.addEventListener('mousemove',event=>{
+  if(!game||game.mode!=='play'||document.pointerLockElement!==canvas)return;
+  const sensitivity=game.scope?.0011:.0022;
+  player.yaw+=event.movementX*sensitivity;player.pitch=clamp(player.pitch-event.movementY*sensitivity,-1.15,1.15);
+});
+document.addEventListener('pointerlockchange',()=>{if(document.pointerLockElement!==canvas)pause();});
+window.addEventListener('blur',()=>{keys.clear();pause();});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){keys.clear();pause();}});
+canvas.addEventListener('webglcontextlost',event=>{
+  event.preventDefault();pause();$('intro').hidden=false;
+  $('error').textContent='3D描画が中断されました。ページを再読み込みしてください。';
+});
+
+function moveAnimal(a,dx,dz){
+  let moved=false;
+  const valid=(x,z)=>!blocked(x,z,.8)&&distance({x,z},hut)>12&&(a.home==='village'?z>17:z<14);
+  if(valid(a.x+dx,a.z)){a.x+=dx;moved=true;}
+  if(valid(a.x,a.z+dz)){a.z+=dz;moved=true;}
+  return moved;
+}
+
+function update(dt){
+  game.time=Math.max(0,game.time-dt);if(!game.time){finish('time');return;}
+  game.cooldown=Math.max(0,game.cooldown-dt);game.invincible=Math.max(0,game.invincible-dt);
+  if(game.reload>0){game.reload=Math.max(0,game.reload-dt);if(!game.reload){game.ammo=capacity();beep(300,.06);}}
+  const turn=(game.scope?.8:1.5)*dt;
+  if(keys.has('ArrowLeft'))player.yaw-=turn;if(keys.has('ArrowRight'))player.yaw+=turn;
+  if(keys.has('ArrowUp'))player.pitch=clamp(player.pitch+turn,-1.15,1.15);if(keys.has('ArrowDown'))player.pitch=clamp(player.pitch-turn,-1.15,1.15);
+  let forward=Number(keys.has('KeyW'))-Number(keys.has('KeyS')),side=Number(keys.has('KeyD'))-Number(keys.has('KeyA'));
+  const length=Math.hypot(forward,side);
+  if(length){
+    const speed=(keys.has('ShiftLeft')||keys.has('ShiftRight')?11:6)*(game.scope?.65:1);
+    forward/=length;side/=length;
+    const dx=(Math.sin(player.yaw)*forward+Math.cos(player.yaw)*side)*speed*dt,dz=(-Math.cos(player.yaw)*forward+Math.sin(player.yaw)*side)*speed*dt;
+    if(!blocked(player.x+dx,player.z))player.x+=dx;if(!blocked(player.x,player.z+dz))player.z+=dz;
+    game.steps+=dt*speed;
+  }
+  if(keys.has('Space'))shoot();
+  for(const trap of traps)trap.age+=dt;
+  for(const a of [...animals]){
+    if(!animals.includes(a))continue;
+    const t=types[a.type];a.scared=Math.max(0,a.scared-dt);a.attack=Math.max(0,a.attack-dt);a.turn-=dt;
+    const pd=distance(a,player);
+    let lure=null,lureDistance=22;
+    for(const trap of traps){const d=distance(a,trap);if(trap.age>=2&&d<lureDistance){lure=trap;lureDistance=d;}}
+    if(lure&&lureDistance<1.7){traps.splice(traps.indexOf(lure),1);capture(a,'trap');continue;}
+    let speed=1.2;
+    if(lure){a.angle=Math.atan2(lure.x-a.x,-(lure.z-a.z));speed=2.8;}
+    else if(t.damage&&pd<(a.type==='bear'?17:12)&&distance(player,hut)>12){a.angle=Math.atan2(player.x-a.x,-(player.z-a.z));speed=t.speed*1.5;}
+    else if(pd<10||a.scared>0){a.angle=Math.atan2(a.x-player.x,-(a.z-player.z));speed=t.speed;}
+    else if(a.turn<=0){a.angle+=(random()-.5)*2;a.turn=2+random()*4;}
+    const dx=Math.sin(a.angle)*speed*dt,dz=-Math.cos(a.angle)*speed*dt;
+    if(!moveAnimal(a,dx,dz)){
+      if(!moveAnimal(a,-dz,dx))moveAnimal(a,dz,-dx);
+      a.angle+=1.4;a.turn=.8;
+    }
+    a.phase+=dt*speed*2;
+    if(t.damage&&distance(a,player)<2.5&&a.attack<=0&&game.invincible<=0&&distance(player,hut)>12){
+      const dx=player.x-a.x,dz=player.z-a.z,len=Math.hypot(dx,dz)||1;
+      if(clearRay(a.x,height(a.x,a.z)+1,a.z,dx/len,0,dz/len,len)){
+        game.hp=Math.max(0,game.hp-t.damage);game.invincible=1.25;a.attack=1.7;damageFlash=.8;beep(65,.2);
+        notify(t.name+'の攻撃！ −'+t.damage+' / Fで回復・Hで帰還');
+        if(!game.hp){finish('injured');return;}
+      }
+    }
+  }
+  for(let i=particles.length-1;i>=0;i--){const p=particles[i];p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.z+=p.vz*dt;p.vy-=5*dt;if(p.life<=0)particles.splice(i,1);}
+  hudTime-=dt;
+  if(hudTime<=0){
+    hudTime=.1;updateHUD();
+    const a=aim(),near=bodies.find(canCollect);$('cross').classList.toggle('hit',!!a);$('target').textContent=near?'[E] '+types[near.type].name+' '+near.weight.toFixed(1)+'kg · '+money(near.value)+' を回収':distance(player,hut)<18?'[E] 管理小屋で装備を購入（安全地帯）':a?types[a.type].name+' · '+Math.round(distance(a,player))+'m · HP '+Math.ceil(a.hp):game.hp<35?'体力低下！ [F] 救急キット / [H] 帰還':'';
+  }
+}
+
+function renderRadar(){
+  const rc=$('radar'),ctx=rc.getContext('2d');
+  ctx.fillStyle='#12251c';ctx.fillRect(0,0,200,200);
+  ctx.strokeStyle='#355443';ctx.lineWidth=1;
+  ctx.beginPath();ctx.arc(100,100,45,0,Math.PI*2);ctx.arc(100,100,85,0,Math.PI*2);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(100,0);ctx.lineTo(100,200);ctx.moveTo(0,100);ctx.lineTo(200,100);ctx.stroke();
+  const scale=.85;
+  function map(x,z){return [100+(x-player.x)*scale,100+(z-player.z)*scale];}
+  ctx.fillStyle='#ffffff';const [hx,hz]=map(hut.x,hut.z);ctx.fillRect(hx-3,hz-3,6,6);
+  for(const t of traps){const [tx,tz]=map(t.x,t.z);if(tx>4&&tx<196&&tz>4&&tz<196){ctx.fillStyle='#72d2ff';ctx.beginPath();ctx.arc(tx,tz,3,0,Math.PI*2);ctx.fill();}}
+  for(const b of bodies){const [bx,bz]=map(b.x,b.z);if(bx>4&&bx<196&&bz>4&&bz<196){ctx.fillStyle='#ffd700';ctx.beginPath();ctx.arc(bx,bz,3.5,0,Math.PI*2);ctx.fill();}}
+  for(const a of animals){const [ax,az]=map(a.x,a.z);if(ax>4&&ax<196&&az>4&&az<196){ctx.fillStyle=a.type==='bear'?'#ff7b7b':zone(a.z)==='village'?'#ff4d4d':'#ff9f68';ctx.beginPath();ctx.arc(ax,az,a.type==='bear'?4:3,0,Math.PI*2);ctx.fill();}}
+  ctx.fillStyle='#ffee7c';ctx.beginPath();ctx.arc(100,100,4,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='#ffee7c';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(100,100);
+  const dirX=Math.sin(player.yaw)*12,dirZ=-Math.cos(player.yaw)*12;
+  ctx.lineTo(100+dirX,100+dirZ);ctx.stroke();
+}
+
+function render(){
+  gl.viewport(0,0,canvas.width,canvas.height);
+  gl.clearColor(.58,.72,.68,1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+  const aspect=canvas.width/canvas.height;
+  gl.uniform1f(U.Aspect,aspect);
+  const eyeY=height(player.x,player.z)+1.75;
+  gl.uniform3f(U.Cam,player.x,eyeY,player.z);
+  gl.uniform2f(U.View,player.yaw,player.pitch);
+
+  draw(ground,0,0,0,1,1,1,C.grass);
+  for(const r of rocks)draw(cube,r.x,height(r.x,r.z)+r.s*.35,r.z,r.s*1.2,r.s*.7,r.s,C.road);
+  for(const t of trees){
+    const y=height(t.x,t.z);
+    draw(cube,t.x,y+t.h*.3,t.z,.6,t.h*.6,.6,C.trunk);
+    draw(cube,t.x,y+t.h*.7,t.z,t.r*2.1,t.h*.45,t.r*2.1,C.pine);
+    draw(cube,t.x,y+t.h*.9,t.z,t.r*1.5,t.h*.35,t.r*1.5,C.lightpine);
+  }
+  for(const h of houses){
+    draw(cube,h.x,h.h/2,h.z,h.w,h.h,h.d,C.cream);
+    draw(cube,h.x,h.h+1.2,h.z,h.w+1.2,1.8,h.d+1.2,C.roof);
+  }
+  draw(cube,hut.x,2.5,hut.z,8,5,6,C.wood);
+  draw(cube,hut.x,5.6,hut.z,9.2,1.4,7.2,C.roof);
+
+  for(const tr of traps){
+    const y=height(tr.x,tr.z);
+    draw(cube,tr.x,y+.25,tr.z,1.4,.2,1.4,[.35,.55,.75]);
+  }
+  for(const b of bodies){
+    const y=height(b.x,b.z)+.3,pulse=.8+.2*Math.sin(Date.now()*.008);
+    draw(cube,b.x,y,b.z,.7*pulse,1.8*pulse,.7*pulse,C.gold);
+  }
+  for(const a of animals){
+    const t=types[a.type],y=height(a.x,a.z)+t.size*.5,bob=Math.sin(a.phase)*.08;
+    draw(cube,a.x,y+bob,a.z,t.size*.8,t.size*.8,t.size*1.3,t.color,a.angle);
+    draw(cube,a.x+Math.sin(a.angle)*t.size*.5,y+.3+bob,a.z-Math.cos(a.angle)*t.size*.5,t.size*.5,t.size*.5,t.size*.6,t.color,a.angle);
+  }
+  for(const p of particles)draw(cube,p.x,p.y,p.z,.18,.18,.18,C.gold);
+
+  if(noticeTime>0){noticeTime-=0.016;if(noticeTime<=0)$('notice').style.opacity=0;}
+  if(damageFlash>0){
+    damageFlash=Math.max(0,damageFlash-0.016*2.5);
+    $('flash').style.opacity=damageFlash;
+    $('flash').style.background='#ff3333';
+  }else if(shotFlash>0){
+    shotFlash=Math.max(0,shotFlash-0.016*3);
+    $('flash').style.opacity=shotFlash;
+    $('flash').style.background='#ffeab9';
+  }else $('flash').style.opacity=0;
+
+  renderRadar();
+}
+
+function resize(){
+  const w=window.innerWidth,h=window.innerHeight;
+  if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}
+}
+
+function loop(timestamp){
+  if(!last)last=timestamp;
+  const dt=Math.min(.05,(timestamp-last)/1000);
+  last=timestamp;
+  resize();
+  if(game&&game.mode==='play')update(dt);
+  render();
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
