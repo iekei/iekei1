@@ -160,6 +160,7 @@
     .tech-node .tn-title { font-size: 10px; line-height: 1.2; }
     .tech-node .tn-year { font-size: 9px; color: var(--text-secondary); }
     .tech-node .tn-svg { margin: 2px auto; }
+    .tech-node .tn-progress { font-size: 9px; color: var(--text-gold); margin-top: 2px; }
     .research-slots { display: flex; gap: 6px; padding: 4px 8px; background: var(--bg-panel); flex-shrink: 0; }
     .research-slot {
       background: var(--bg-panel-light); border: 1px solid var(--border-mil); border-radius: 4px;
@@ -4475,7 +4476,7 @@ class MultiplayerManager {
       '<div class="mp-status" id="mp-status">未接続</div>' +
       '<div class="mp-player-list" id="mp-player-list"></div></div>' +
       '<div class="mp-panel"><h3>📡 同期情報</h3>' +
-      '<p style="font-size:12px;color:var(--text-secondary);">ゲーム時間・速度・国家方針進行・特別研究進捗・カード発動・核攻撃が全プレイヤー間で同期されます。</p>' +
+      '<p style="font-size:12px;color:var(--text-secondary);">ゲーム時間・速度・国家方針進行・研究進捗・特別研究進捗・カード発動・核攻撃が全プレイヤー間で同期されます。</p>' +
       '<div style="margin-top:8px;font-size:12px;"><div>プレイヤーID: <strong>' + MultiplayerManager.playerId + '</strong></div>' +
       '<div>接続状態: <strong id="mp-conn-state">未接続</strong></div></div></div>';
   }
@@ -4651,6 +4652,30 @@ class MultiplayerManager {
       case 'focus_complete':
         FocusTreeManager.completeFocus(data.focusId);
         break;
+      case 'research_start': {
+        const rsTech = ResearchManager.findTech(data.techId);
+        if (rsTech && !ResearchManager.researchedTech.has(data.techId) &&
+            !Object.values(ResearchManager.researching).some(r => r.techId === data.techId)) {
+          ResearchManager.researching[data.slot] = { techId: data.techId, progress: 0, total: rsTech.research_time || 100 };
+          ResearchManager.renderSlots();
+          if (GameUI.currentTab === 'research') ResearchManager.render();
+          CoreEngine.log('他プレイヤーが研究開始: ' + rsTech.title);
+        }
+        break;
+      }
+      case 'research_complete': {
+        const rcTech = ResearchManager.findTech(data.techId);
+        if (rcTech && !ResearchManager.researchedTech.has(data.techId)) {
+          ResearchManager.researchedTech.add(data.techId);
+          Object.entries(ResearchManager.researching).forEach(([slot, r]) => {
+            if (r.techId === data.techId) delete ResearchManager.researching[slot];
+          });
+          ResearchManager.renderSlots();
+          if (GameUI.currentTab === 'research') ResearchManager.render();
+          CoreEngine.log('研究完了: ' + rcTech.title);
+        }
+        break;
+      }
       case 'sp_hire':
         if (!SpecialProjectManager.projects[data.sciId]) {
           SpecialProjectManager.projects[data.sciId] = { phase: 'feasibility', progress: 0, factories: 0, completed: false };
@@ -5086,6 +5111,10 @@ class ResearchManager {
 
   static async init(country) {
     ResearchManager.techData = await DataFetcher.fetchAllTech(country);
+    // 新規ゲーム開始・国変更時に進行状態をその国用にリセット
+    ResearchManager.researchedTech = new Set();
+    ResearchManager.researching = {};
+    ResearchManager.currentCategory = 'infantry';
     ResearchManager.renderTabs();
     ResearchManager.renderSlots();
     ResearchManager.render();
@@ -5177,7 +5206,9 @@ class ResearchManager {
       node.className = cls;
       node.style.left = t.x + 'px';
       node.style.top = t.y + 'px';
-      node.innerHTML = '<div class="tn-svg">' + (t.svg || '') + '</div><div class="tn-title">' + t.title + '</div><div class="tn-year">' + (t.year || '') + '</div>';
+      const rEntry = isResearching ? Object.values(ResearchManager.researching).find(r => r.techId === t.id) : null;
+      const progHtml = (rEntry && !isResearched) ? '<div class="tn-progress">' + Math.floor(rEntry.progress / rEntry.total * 100) + '%</div>' : '';
+      node.innerHTML = '<div class="tn-svg">' + (t.svg || '') + '</div><div class="tn-title">' + t.title + '</div><div class="tn-year">' + (t.year || '') + '</div>' + progHtml;
       node.addEventListener('click', () => ResearchManager.selectTech(t));
       container.appendChild(node);
     });
@@ -5194,6 +5225,7 @@ class ResearchManager {
         ResearchManager.researching[i] = { techId: tech.id, progress: 0, total: tech.research_time || 100 };
         CoreEngine.log('研究開始: ' + tech.title);
         GameUI.notify('研究開始: ' + tech.title, 'success');
+        MultiplayerManager.broadcast({ type: 'research_start', slot: i, techId: tech.id });
         ResearchManager.renderSlots();
         ResearchManager.render();
         return;
@@ -5210,6 +5242,7 @@ class ResearchManager {
       if (research.progress >= research.total) {
         ResearchManager.researchedTech.add(research.techId);
         delete ResearchManager.researching[slot];
+        MultiplayerManager.broadcast({ type: 'research_complete', techId: research.techId });
         const tech = ResearchManager.findTech(research.techId);
         if (tech) {
           CoreEngine.log('研究完了: ' + tech.title);
@@ -5221,9 +5254,10 @@ class ResearchManager {
         changed = true;
       }
     });
-    if (changed || GameUI.currentTab === 'research') {
+    const researchWin = WindowManager.windows.get('research');
+    if (changed || Object.keys(ResearchManager.researching).length > 0 || GameUI.currentTab === 'research') {
       ResearchManager.renderSlots();
-      ResearchManager.render();
+      if (researchWin && !researchWin.minimized) ResearchManager.render();
     }
   }
 }
@@ -5530,6 +5564,10 @@ class SaveLoadManager {
         progress: FocusTreeManager.focusProgress,
         total: FocusTreeManager.focusDaysTotal
       },
+      research: {
+        researched: [...ResearchManager.researchedTech],
+        researching: JSON.parse(JSON.stringify(ResearchManager.researching))
+      },
       deck: CardSystem.deck,
       hired: CardSystem.hiredCards,
       dlc: (typeof DLC !== 'undefined' ? DLC.collect() : null)   // DLC拡張状態 (XP/設計/諜報/MIO/講和/特性)
@@ -5572,6 +5610,12 @@ class SaveLoadManager {
       FocusTreeManager.activeFocus = data.focus.activeFocus || null;
       FocusTreeManager.focusProgress = data.focus.progress || 0;
       FocusTreeManager.focusDaysTotal = data.focus.total || 0;
+    }
+    if (data.research && ResearchManager.techData && Object.keys(ResearchManager.techData).length > 0) {
+      ResearchManager.researchedTech = new Set(data.research.researched || []);
+      ResearchManager.researching = data.research.researching || {};
+      ResearchManager.renderSlots();
+      if (GameUI.currentTab === 'research') ResearchManager.render();
     }
     CardSystem.deck = data.deck || [];
     CardSystem.hiredCards = data.hired || [];
