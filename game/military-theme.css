@@ -1,0 +1,379 @@
+/* HoI4-inspired visual theme. Load after the existing layout styles.
+   DOM, node coordinates, SVG geometry and game state remain owned by the app. */
+:root {
+  color-scheme: dark;
+  --bg-dark: #11130f;
+  --bg-panel: #20251c;
+  --bg-panel-light: #30362a;
+  --border-mil: #61634f;
+  --text-primary: #dedbcd;
+  --text-secondary: #b1b2a1;
+  --text-gold: #c4ad72;
+  --accent-blue: #7c9291;
+  --accent-red: #c07868;
+  --accent-green: #96b17e;
+  --accent-orange: #bd9260;
+  --mil-brass-dark: #76623c;
+  --mil-steel-light: #858775;
+  --mil-radius: 3px;
+  --mil-font-ui: 'Trebuchet MS', 'Yu Gothic', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+  --mil-font-print: Georgia, 'Times New Roman', 'Yu Mincho', 'Hiragino Mincho ProN', 'Noto Serif CJK JP', serif;
+  --mil-grain: repeating-linear-gradient(0deg, #ffffff03 0 1px, #00000008 1px 3px);
+  --mil-plate: var(--mil-grain), linear-gradient(180deg, #3c4234, #2a3026 48%, #23281f);
+  --mil-raised: inset 0 1px 0 #d6d8bd26, inset 1px 0 0 #d6d8bd12,
+    inset 0 -2px 0 #00000070, 0 2px 3px #00000080;
+  --mil-recessed: inset 0 2px 5px #000000b3, inset 0 -1px 0 #d6d8bd1a;
+  --mil-frame: inset 0 0 0 1px #11130fc9, inset 0 0 0 3px #b9bba51a,
+    0 10px 28px #000000a6, 0 2px 4px #000000b3;
+  --paper-base: #d5c5a1;
+  --paper-edge: #8d7751;
+  --paper-ink: #30291f;
+  --paper-ink-muted: #514636;
+  --paper-texture: radial-gradient(ellipse at 8% 12%, #8b642f24, transparent 42%),
+    radial-gradient(ellipse at 95% 90%, #7553272b, transparent 48%),
+    radial-gradient(circle, #62492314 0.6px, transparent 0.9px),
+    radial-gradient(circle, #fff7d928 0.7px, transparent 1px),
+    repeating-linear-gradient(0deg, #604a2c05 0 1px, transparent 1px 3px),
+    linear-gradient(100deg, #d0be97, #e1d4b6 48%, #d1c09c);
+}
+
+body {
+  background: var(--mil-grain), var(--bg-dark);
+  color: var(--text-primary);
+  font-family: var(--mil-font-ui);
+}
+
+::selection { background: var(--mil-brass-dark); color: #eee5cb; }
+::-webkit-scrollbar-track { background: var(--bg-dark); box-shadow: var(--mil-recessed); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #454b3c, #70725c, #454b3c);
+  border: 1px solid var(--bg-dark);
+  border-radius: var(--mil-radius);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--mil-brass-dark); }
+
+/* Steel housings and inset instruments. */
+#top-bar, #window-nav, .os-titlebar, .modal-header,
+#game-root .research-tabs, #game-root .research-slots {
+  background: var(--mil-plate);
+  border-color: var(--border-mil);
+  box-shadow: var(--mil-raised);
+}
+
+#top-bar { border-bottom-color: var(--mil-brass-dark); }
+#window-nav > span { white-space: nowrap; flex-shrink: 0; }
+#log-banner {
+  background: var(--bg-dark);
+  border-color: #454b3c;
+  color: var(--text-secondary);
+  box-shadow: var(--mil-recessed);
+}
+#calendar-display {
+  background: var(--bg-dark);
+  border: 1px solid var(--mil-brass-dark);
+  border-radius: var(--mil-radius);
+  padding: 3px 8px;
+  box-shadow: var(--mil-recessed);
+  font-family: var(--mil-font-print);
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 1px 1px #000;
+}
+.stat-item .stat-val { color: var(--text-primary); font-variant-numeric: tabular-nums; }
+
+/* Keep all existing control dimensions and state classes. */
+#game-root button, #game-root .mp-btn, #start-game-btn,
+.modal-window button, #cheat-console button {
+  background: var(--mil-plate);
+  border: 1px solid var(--border-mil);
+  border-radius: var(--mil-radius);
+  color: var(--text-primary);
+  box-shadow: var(--mil-raised);
+  font-family: var(--mil-font-ui);
+  font-weight: 700;
+  text-shadow: 0 1px 1px #000;
+  transition: background-color .15s, border-color .15s, box-shadow .15s, color .15s;
+}
+
+#game-root button:hover:not(:disabled), #game-root .mp-btn:hover,
+#start-game-btn:hover:not(:disabled), .modal-window button:hover:not(:disabled) {
+  background: var(--mil-grain), linear-gradient(180deg, #4c503b, #343827);
+  border-color: var(--text-gold);
+  color: #eee5cb;
+}
+
+#game-root button:active:not(:disabled), #start-game-btn:active:not(:disabled),
+.modal-window button:active:not(:disabled) { box-shadow: var(--mil-recessed); }
+
+#game-root button:is(.active, .open), #game-root .dlc-btn.gold,
+#start-game-btn:not(:disabled) {
+  background: var(--mil-grain), linear-gradient(180deg, #6e6040, #453d2b);
+  border-color: var(--text-gold);
+  color: #eee1bc;
+  box-shadow: var(--mil-recessed), 0 1px 0 #ffffff12;
+}
+
+#game-root button:is(.abort, .nuclear-btn), #game-root .os-ctrl.close:hover {
+  background: var(--mil-grain), linear-gradient(180deg, #774e42, #442c25);
+  border-color: var(--accent-red);
+  color: #f0d3c6;
+}
+
+#game-root button:disabled, #start-game-btn:disabled, .modal-window button:disabled {
+  background: #282c24;
+  border-color: #4a4f40;
+  color: #8a8d7d;
+  box-shadow: var(--mil-recessed);
+  text-shadow: none;
+  cursor: not-allowed;
+}
+
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--text-gold);
+  outline-offset: 2px;
+}
+#game-root :is(input:not([type='radio']):not([type='checkbox']), select, textarea),
+#cheat-console-input {
+  background: var(--bg-dark);
+  border-color: var(--border-mil);
+  border-radius: var(--mil-radius);
+  color: var(--text-primary);
+  box-shadow: var(--mil-recessed);
+  font-family: var(--mil-font-ui);
+}
+#game-root :is(input[type='radio'], input[type='checkbox']) { accent-color: var(--text-gold); }
+#cheat-console-input { font-family: 'Courier New', monospace; }
+
+.os-window, .modal-window, .start-inner {
+  background: var(--mil-grain), var(--bg-panel);
+  border: 2px solid var(--border-mil);
+  border-radius: var(--mil-radius);
+  box-shadow: var(--mil-frame);
+}
+.os-window.focused { border-color: var(--mil-brass-dark); }
+.os-window.focused .os-titlebar {
+  background: var(--mil-grain), linear-gradient(180deg, #59543b, #343426);
+  border-bottom-color: var(--mil-brass-dark);
+}
+.os-titlebar .os-title, .modal-header h3 {
+  color: var(--text-gold);
+  font-family: var(--mil-font-print);
+  font-weight: 700;
+  text-shadow: 0 1px 2px #000;
+}
+
+#game-root :is(.sp-facility-card, .nuclear-panel, .resource-card, .trade-row,
+  .diplo-country-card, .faction-panel, .game-card, .card-ability-panel,
+  .division-battalion-list, .division-stats, .mp-panel, .army-row,
+  .con-state-card, .con-building-row, .con-queue-item, .portrait-card,
+  .politics-spirit, .dlc-card, .battalion-option, .research-slot) {
+  background: var(--mil-plate);
+  border-radius: var(--mil-radius);
+  box-shadow: var(--mil-raised);
+}
+
+#game-root :is(.game-card.selected, .army-row.selected, .research-slot.active) {
+  border-color: var(--text-gold);
+  box-shadow: var(--mil-raised), 0 0 0 1px var(--mil-brass-dark);
+}
+#game-root :is(.game-card:hover, .portrait-card:hover, .battalion-option:hover) {
+  border-color: var(--text-gold);
+}
+#game-root :is(.faction-member, .mp-player-item, .sp-unlock-badge, .dlc-badge) {
+  border-radius: var(--mil-radius);
+  color: var(--text-primary);
+  background: #3c4931;
+  box-shadow: inset 0 1px 0 #ffffff1a;
+}
+
+#game-root :is(.stat-bar, .focus-progress-bar, .sp-progress, .army-orgbar,
+  .cq-progress, .dlc-xpbar) {
+  background: #12160f;
+  border-radius: 2px;
+  box-shadow: var(--mil-recessed);
+}
+#game-root :is(.focus-progress-fill, .sp-progress-fill, .cq-progress-fill, .dlc-xpbar-fill) {
+  background: linear-gradient(180deg, #c4ad72, #85703f);
+  box-shadow: inset 0 1px 0 #e8dcb252;
+}
+#game-root .sp-phase-step { background: #282e23; color: var(--text-secondary); }
+#game-root .sp-phase-step.active { background: #615232; color: #eee1bc; }
+#game-root .sp-phase-step.done { background: #3c4931; color: #d1dfbe; }
+
+#army-panel, #map-mode-toolbar, #map-help, .map-overlay, .map-legend,
+#focus-tooltip, #stat-tooltip, #battle-tooltip, .notification {
+  background: var(--mil-grain), #20251cf5;
+  border-color: var(--border-mil);
+  border-radius: var(--mil-radius);
+  box-shadow: var(--mil-frame);
+}
+#focus-tooltip, #stat-tooltip, #battle-tooltip { border-color: var(--mil-brass-dark); }
+#map-canvas, #map-loading { background-color: var(--bg-dark); }
+#cheat-console { border-radius: var(--mil-radius) 0 0 0; }
+
+/* Machined tree plates. Never change sizes or absolute node coordinates. */
+#focus-tree-container, #research-tree-container, #game-root .dlc-tree-canvas {
+  background-color: var(--bg-dark);
+  background-image: linear-gradient(#b4b89e07 1px, transparent 1px),
+    linear-gradient(90deg, #b4b89e07 1px, transparent 1px),
+    radial-gradient(ellipse at 45% 25%, #333c2a, #141810 78%);
+  background-size: 40px 40px, 40px 40px, 100% 100%;
+  box-shadow: var(--mil-recessed);
+  border-radius: 0;
+}
+#game-root :is(.focus-node, .tech-node, .dlc-node) {
+  background: var(--mil-plate);
+  border-color: var(--border-mil);
+  border-radius: var(--mil-radius);
+  box-shadow: var(--mil-raised), 0 4px 6px #00000080;
+  text-shadow: 0 1px 1px #000;
+}
+#game-root :is(.focus-node, .tech-node, .dlc-node):hover {
+  border-color: var(--text-gold);
+  transform: none;
+}
+#game-root :is(.focus-node.available, .dlc-node.selectable) {
+  border-color: var(--accent-green);
+  box-shadow: var(--mil-raised), 0 0 0 1px #12160f;
+}
+#game-root :is(.focus-node.active, .tech-node.researching) {
+  background: var(--mil-grain), linear-gradient(180deg, #524a31, #302c1e);
+  border-color: var(--text-gold);
+  box-shadow: var(--mil-raised), 0 0 0 1px var(--mil-brass-dark), 0 0 10px #c4ad7226;
+}
+#game-root :is(.focus-node.completed, .tech-node.researched, .dlc-node.unlocked) {
+  background: var(--mil-grain), linear-gradient(180deg, #3b4930, #232e20);
+  border-color: var(--accent-green);
+  box-shadow: var(--mil-recessed), 0 2px 3px #00000080;
+  opacity: 1;
+}
+#game-root :is(.focus-node.locked, .dlc-node.locked) { opacity: .58; }
+#game-root :is(.fn-title, .tn-title, .dn-title) { color: var(--text-primary); font-weight: 700; }
+
+/* CSS overrides SVG presentation attributes; keep completed connections green. */
+#focus-svg-lines path, #research-svg-lines path, #game-root .dlc-svg-lines path {
+  stroke: var(--mil-steel-light);
+  stroke-width: 3;
+  stroke-dasharray: none;
+  stroke-linejoin: miter;
+  stroke-linecap: square;
+  opacity: .95;
+  filter: drop-shadow(0 1px 1px #000) drop-shadow(0 -1px 0 #d6d8bd33);
+}
+#focus-svg-lines path[stroke='#4ac46a'], #research-svg-lines path[stroke='#4ac46a'],
+#game-root .dlc-svg-lines path[stroke='#4ac46a'] { stroke: var(--accent-green); }
+
+/* Scenario selection: a framed military briefing. */
+#start-screen {
+  background: var(--mil-grain), radial-gradient(ellipse at 50% 35%, #39402b, #10130f 80%);
+}
+.start-inner { position: relative; border-color: var(--mil-brass-dark); }
+.start-inner h1 {
+  color: var(--text-gold);
+  font-family: var(--mil-font-print);
+  font-size: clamp(20px, 3vw, 28px);
+  font-weight: 700;
+  text-shadow: 0 2px 2px #000;
+}
+.start-nation-card {
+  background: var(--mil-plate);
+  border-color: var(--border-mil);
+  border-radius: var(--mil-radius);
+  box-shadow: var(--mil-raised);
+}
+.start-nation-card:hover { border-color: var(--text-gold); }
+.start-nation-card.active {
+  background: var(--mil-grain), linear-gradient(180deg, #494730, #303222);
+  border-color: var(--text-gold);
+  box-shadow: var(--mil-recessed), 0 0 0 1px var(--mil-brass-dark);
+}
+.start-nation-card .sn-name { font-family: var(--mil-font-print); }
+.start-nation-card .sn-desc { color: var(--text-secondary); line-height: 1.65; }
+
+/* Wartime newspaper. !important is limited to paint/type/size properties
+   supplied inline by NewsManager. Its display and event handlers stay intact. */
+#news-popup-overlay { background: #080a07bd !important; }
+#news-popup {
+  color-scheme: light;
+  width: min(640px, 92vw) !important;
+  max-height: 90vh;
+  max-height: 90dvh;
+  overflow-y: auto !important;
+  background-color: var(--paper-base) !important;
+  background-image: var(--paper-texture) !important;
+  background-size: auto, auto, 5px 7px, 7px 5px, auto, auto !important;
+  border: 1px solid var(--paper-edge) !important;
+  border-radius: 2px !important;
+  box-shadow: inset 0 0 30px #6b4e292e, inset 0 0 0 4px #e9ddbd66,
+    0 16px 60px #000000b3, 3px 3px 0 #ad9974, 5px 5px 0 #382e20 !important;
+  color: var(--paper-ink) !important;
+  font-family: var(--mil-font-print) !important;
+}
+#news-popup > div:first-child {
+  background: transparent !important;
+  border-bottom: 3px double var(--paper-ink-muted) !important;
+  padding: 14px 20px 10px !important;
+}
+#news-popup > div:first-child > span:first-child {
+  color: var(--paper-ink) !important;
+  font-family: var(--mil-font-print);
+  font-size: 13px !important;
+  letter-spacing: .16em !important;
+  text-shadow: .3px .3px 0 #30291f55;
+}
+#news-date { color: var(--paper-ink-muted) !important; font-variant-numeric: tabular-nums; }
+#news-body { padding: 20px 26px !important; }
+#news-body > div:first-child { filter: grayscale(1) sepia(.7); opacity: .8; }
+#news-body h3 {
+  color: var(--paper-ink) !important;
+  font-family: var(--mil-font-print);
+  font-size: clamp(22px, 3.2vw, 32px) !important;
+  font-weight: 900;
+  line-height: 1.45;
+  text-wrap: balance;
+  text-shadow: .4px .4px 0 #30291f55, -.3px 0 .5px #30291f33;
+  border-bottom: 3px double var(--paper-ink-muted) !important;
+  padding-bottom: 14px !important;
+  margin-bottom: 16px !important;
+}
+#news-body p {
+  color: var(--paper-ink) !important;
+  font-family: var(--mil-font-print);
+  font-size: 15px !important;
+  line-height: 1.95 !important;
+  text-align: justify;
+  overflow-wrap: anywhere;
+}
+#news-buttons { padding: 0 26px 24px !important; gap: 10px !important; }
+#news-buttons button {
+  flex: 1 1 150px;
+  background: #a68a5010 !important;
+  color: var(--paper-ink) !important;
+  border: 2px solid var(--paper-ink-muted) !important;
+  border-radius: 2px !important;
+  padding: 10px 14px !important;
+  margin: 0;
+  box-shadow: inset 0 0 0 2px #dccba6, inset 0 0 0 3px #51463655;
+  font-family: var(--mil-font-print);
+  font-size: 13px !important;
+  font-weight: 700;
+  line-height: 1.6;
+  text-shadow: .3px 0 0 #30291f44;
+  overflow-wrap: anywhere;
+  transition: background-color .15s, box-shadow .15s;
+}
+#news-buttons button:hover { background: #83633826 !important; box-shadow: inset 0 0 0 1px var(--paper-ink-muted); }
+#news-buttons button:active { background: #83633840 !important; box-shadow: inset 0 2px 4px #513d2333; }
+#news-buttons button:focus-visible { outline: 2px solid var(--paper-ink); outline-offset: 3px; }
+#news-popup ::selection { background: #b1996d; color: var(--paper-ink); }
+
+@media (max-width: 600px) {
+  .start-inner { padding: 20px 16px; }
+  .start-nation-grid { gap: 8px; }
+  #news-popup > div:first-child { padding-inline: 16px !important; gap: 8px; flex-wrap: wrap; }
+  #news-body { padding: 16px !important; }
+  #news-buttons { padding: 0 16px 18px !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #game-root button, .focus-node, .tech-node, .start-nation-card,
+  #game-root .dlc-node, #news-buttons button { transition: none; }
+}

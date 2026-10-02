@@ -125,7 +125,7 @@ class AIManager {
   }
 
   static isPlayer(tag) {
-    return tag === CoreEngine.gameState.country;
+    return tag === CoreEngine.gameState.country || Object.values(CoreEngine.gameState.strategy?.peers||{}).includes(tag);
   }
 
   // ---- 毎ゲーム日のAI処理 ----
@@ -172,6 +172,7 @@ class AIManager {
     if (a === b) return;
     const player = CoreEngine.gameState.country;
     const s = CoreEngine.gameState;
+    if (s.strategy) s.strategy.tensionByCountry[a] = (s.strategy.tensionByCountry[a] || 0) + 15;
     // プレイヤーが関与する戦争: プレイヤーの atWar に登録 (戦闘は既存システムで解決)
     if (b === player && !s.atWar.includes(a)) {
       s.atWar.push(a);
@@ -211,18 +212,13 @@ class AIManager {
   static advanceWar(w) {
     const defStates = Object.keys(MapRenderer.states).filter(sid => MapRenderer.states[sid].owner === w.b);
     if (defStates.length === 0) { AIManager.endWar(w.a, w.b); return; }
-    // 防衛国のうち攻撃国に隣接する州 (最前線) を優先して占領 — 飛び地は発生しない
-    const frontier = defStates.filter(sid => {
-      const nbrs = MapRenderer.stateAdjacency.get(String(sid)) || [];
-      return nbrs.some(n => MapRenderer.states[n] && MapRenderer.states[n].owner === w.a);
-    });
-    const pool = frontier.length ? frontier : defStates;
-    pool.sort((x, y) => Number(x) - Number(y));   // 決定的 (マルチプレイで全員同じ結果になる)
-    const sid = pool[0];
-    const st = MapRenderer.states[sid];
-    MapRenderer.captureState(sid, w.a);
-    if (st && st.name) CoreEngine.log('⚔️ ' + st.name + 'が' + w.a + '軍に占領されました (' + w.b + '残存' + (defStates.length - 1) + '州)');
-    if (defStates.length - 1 === 0) {
+    const frontier=Object.keys(MapRenderer.provinces.p).map(Number).filter(p=>OffensivePlanner.isLand(p)&&MapRenderer.ownerOf(p)===w.b&&[...(MapRenderer.provNeighbors.get(p)||[])].some(n=>MapRenderer.ownerOf(n)===w.a));
+    if(!frontier.length)return;
+    frontier.sort((a,b)=>a-b);
+    const pid=frontier[0],sid=MapRenderer.stateOf(pid),st=MapRenderer.states[sid];
+    OffensivePlanner.capture(pid,w.a);
+    if(st)CoreEngine.log('⚔️ '+st.name+'のプロビンス '+pid+'を'+w.a+'軍が占領しました。');
+    if (!Object.keys(MapRenderer.provinces.p).some(p=>OffensivePlanner.isLand(p)&&MapRenderer.ownerOf(Number(p))===w.b)) {
       AIManager.endWar(w.a, w.b);
       if (typeof NewsManager !== 'undefined') {
         NewsManager.fireCustom({ icon: '🏳️', title: w.b + '、' + w.a + 'に降伏', body: w.a + '軍が' + w.b + '全土を占領しました。同国は降伏し、勢力範囲は再編されています。',
@@ -248,6 +244,7 @@ class AIManager {
         // 一部の方針は国際緊張度に影響
         if (/戦|侵|進軍|作戦/.test(f.name)) {
           CoreEngine.gameState.worldTension = Math.min(100, CoreEngine.gameState.worldTension + 3);
+          if (CoreEngine.gameState.strategy) CoreEngine.gameState.strategy.tensionByCountry[tag] = (CoreEngine.gameState.strategy.tensionByCountry[tag] || 0) + 3;
           CoreEngine.renderWorldTension();
         }
         CoreEngine.log('🤖 ' + DataFetcher.getCountryFlag(tag) + ' ' + tag + 'の方針「' + f.name + '」が完了しました');
@@ -282,8 +279,8 @@ class AIManager {
     const player = s.country;
     const intel = s.intel;
     // プレイヤーが諜報機関を持っていれば発見されやすい
-    const agencyLevel = intel && intel.agency ? intel.agency.level || 0 : 0;
-    if (Math.random() < 0.5 - agencyLevel * 0.05) {
+    const agencyLevel = intel && intel.agency ? intel.level || 0 : 0;
+    if (Math.random() < Math.max(0.05, 0.5 - agencyLevel * 0.05 - IntelOperations.counterPower() * 0.1)) {
       const attackers = ['GER', 'SOV', 'JAP', 'ENG'].filter(t => t !== player);
       const spy = attackers[Math.floor(Math.random() * attackers.length)];
       const what = Math.random() < 0.5 ? '設計図の盗難' : '工場の破壊工作';

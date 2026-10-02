@@ -22,7 +22,11 @@ class BattleManager {
   };
 
   // ---- 戦闘開始: 陸軍の攻撃作戦 ----
-  static startOffensive(army, targetPid, targetStateId) {
+  static startOffensive(army, targetPid, targetStateId, options = {}) {
+    if (!army.divisions.length || BattleManager.battles.some(b => b.attackerArmyId === army.id)) return null;
+    const owner = MapRenderer.ownerOf(targetPid);
+    if (!CoreEngine.gameState.atWar.includes(owner)) return null;
+    if (!options.invasion && !options.airdrop && !(MapRenderer.provNeighbors.get(army.positionPid) || new Set()).has(targetPid)) return null;
     const st = MapRenderer.states[targetStateId];
     const pos = MapRenderer.provCentroid.get(targetPid) ||
       MapRenderer.stateCenter.get(String(targetStateId)) || army.base.slice();
@@ -33,7 +37,8 @@ class BattleManager {
       stateId: targetStateId,
       x: pos[0], y: pos[1],
       attacker: CoreEngine.gameState.country,
-      defender: (st && st.owner) || '???',
+      defender: owner,
+      invasion: !!options.invasion, airdrop: !!options.airdrop,
       attackerArmyId: army.id,
       // プレイヤー視点の優勢度 (-1 〜 +1)
       advantage: BattleManager.calcOffensiveAdvantage(army, st),
@@ -41,7 +46,8 @@ class BattleManager {
       totalDays: 0
     };
     // 優勢ほど短く終わる: 3〜13日
-    b.totalDays = Math.max(3, Math.round(3 + (1 - Math.abs(b.advantage)) * 10));
+    b.totalDays = OffensivePlanner.duration(army, targetPid, Math.max(3, Math.round(3 + (1 - Math.abs(b.advantage)) * 10)));
+    if (options.invasion && army.divisions.some(d => d.comp?.marine)) b.totalDays = Math.max(2, Math.round(b.totalDays * 0.65));
     BattleManager.battles.push(b);
     CoreEngine.log('⚔️ 戦闘開始: ' + (st ? st.name : '州' + targetStateId) + ' — ' + b.attacker + ' vs ' + b.defender + ' (約' + b.totalDays + '日)');
     GameUI.notify('⚔️ 戦闘開始: ' + (st ? st.name : '') + ' (約' + b.totalDays + '日)', 'alert');
@@ -53,12 +59,14 @@ class BattleManager {
   static startDefense(enemyTag, stateId) {
     const st = MapRenderer.states[stateId];
     if (!st) return null;
-    const pos = MapRenderer.stateCenter.get(String(stateId));
+    const pid = st.provinces.find(p => MapRenderer.ownerOf(p) === CoreEngine.gameState.country && [...(MapRenderer.provNeighbors.get(p) || [])].some(n => MapRenderer.ownerOf(n) === enemyTag));
+    if (!pid || BattleManager.battles.some(b => b.provId === pid)) return null;
+    const pos = MapRenderer.provCentroid.get(pid);
     if (!pos) return null;
     const b = {
       id: BattleManager.nextId++,
       kind: 'defense',
-      provId: null,
+      provId: pid,
       stateId: stateId,
       x: pos[0], y: pos[1],
       attacker: enemyTag,
@@ -80,7 +88,7 @@ class BattleManager {
     // 攻撃側: 平均組織力 / 防御側: 基礎戦力 + 要塞 + 補給ボーナス
     const org = army.divisions.reduce((s, d) => s + d.org, 0) / Math.max(1, army.divisions.length);
     const defense = 50 + (st && st.b ? (st.b.fort || 0) * 8 : 0) + (st && st.supply ? st.supply : 0) * 1.5;
-    let adv = (org - defense) / 100;
+    let adv = (org + Math.min(25, army.divisions.length * 1.2) - defense) / 100;
     // 将軍カードの攻勢ボーナス (軍集団に割り当てられた将軍の階級で決まる)
     if (army.general && army.general.rank) adv += (BattleManager.GENERAL_BONUS[army.general.rank] || 0);
     // 海軍/空軍の行動支援: 周辺で任務実行中の部隊が戦闘を支援する
@@ -125,7 +133,7 @@ class BattleManager {
   static serialize(b) {
     return { id: b.id, kind: b.kind, stateId: b.stateId, provId: b.provId, x: b.x, y: b.y,
       attacker: b.attacker, defender: b.defender, advantage: b.advantage,
-      progress: b.progress, totalDays: b.totalDays, attackerArmyId: b.attackerArmyId };
+      progress: b.progress, totalDays: b.totalDays, attackerArmyId: b.attackerArmyId, invasion: b.invasion, airdrop: b.airdrop, preparation:b.preparation };
   }
 
   static deserialize(data) {
@@ -138,6 +146,7 @@ class BattleManager {
   static onTick() {
     const resolved = [];
     BattleManager.battles.forEach(b => {
+      if(b.preparation>0){b.preparation--;return;}
       b.progress += 1 / b.totalDays;
       // 戦況の揺らぎ (ダイスロール)
       b.advantage = Math.max(-1, Math.min(1, b.advantage + (Math.random() - 0.5) * 0.06));
@@ -150,142 +159,24 @@ class BattleManager {
   // ---- 包囲判定: 自国州が陸路で他の自国州に到達できない場合、
   //      その州の師団は消滅し、州は包囲した敵国に占領される ----
   static checkEncirclement() {
-    if (!MapRenderer.ready || !MapRenderer.states) return;
-    MapRenderer.buildStateAdjacency();
-    const player = CoreEngine.gameState.country;
-    const gs = CoreEngine.gameState;
-    const ownStates = Object.keys(MapRenderer.states).filter(sid => MapRenderer.states[sid].owner === player);
-    if (ownStates.length < 2) return;
-
-    // 最大連結成分を見つける (自国領のみ経由したBFS)
-    const visited = new Set();
-    let largest = new Set();
-    ownStates.forEach(sid => {
-      if (visited.has(sid)) return;
-      const comp = new Set([sid]);
-      const q = [sid];
-      visited.add(sid);
-      while (q.length) {
-        const cur = q.shift();
-        (MapRenderer.stateAdjacency.get(String(cur)) || []).forEach(n => {
-          if (comp.has(n)) return;
-          const st = MapRenderer.states[n];
-          if (st && st.owner === player) { comp.add(n); visited.add(n); q.push(n); }
-        });
+    if (!MapRenderer.ready) return;
+    // Disconnected colonies and landing bridgeheads are not instant defeats.
+    // Only troops actually in an enemy-controlled pocket lose organization.
+    BattlePlanManager.armies.forEach(army => {
+      if (army.positionPid && MapRenderer.ownerOf(army.positionPid) !== CoreEngine.gameState.country) {
+        army.divisions.forEach(d => { d.org = Math.max(0, d.org - 2); });
+        army.executing = false;
+        army.status = '補給路切断';
       }
-      if (comp.size > largest.size) largest = comp;
-    });
-    // 最大連結成分に含まれない自国州 = 包囲されている
-    const encircled = ownStates.filter(sid => !largest.has(String(sid)));
-    encircled.forEach(sid => {
-      const st = MapRenderer.states[sid];
-      if (!st) return;
-      // 包囲している敵国を特定 (隣接する開戦済みの敵国)
-      const nbrs = MapRenderer.stateAdjacency.get(String(sid)) || [];
-      const enemy = [...nbrs].map(n => MapRenderer.states[n]).find(s => s && gs.atWar.includes(s.owner));
-      const captor = enemy ? enemy.owner : (gs.atWar[0] || '???');
-      // この州に駐留している軍集団の師団を全滅
-      BattlePlanManager.armies.forEach(army => {
-        const c = MapRenderer.stateCenter.get(String(sid));
-        if (!c || !army.base) return;
-        const d = Math.hypot(army.base[0] - c[0], army.base[1] - c[1]);
-        if (d < 80) {
-          const lost = army.divisions.length;
-          army.divisions = [];
-          CoreEngine.log('💀 ' + army.name + 'の師団 ' + lost + '個が' + st.name + 'で包囲殲滅されました！');
-          GameUI.notify('💀 包囲殲滅: ' + army.name + 'の' + lost + '師団が' + st.name + 'で全滅', 'alert');
-        }
-      });
-      MapRenderer.captureState(sid, captor);
-      CoreEngine.log('🏴 ' + st.name + 'が包囲され陥落しました (' + captor + 'が占領)');
-      GameUI.notify('🏴 ' + st.name + 'が包囲されて陥落！', 'alert');
     });
   }
 
   // ---- 戦闘結果の確定 → 占領 / 逆占領 ----
   static resolve(b) {
-    const s = CoreEngine.gameState;
     BattleManager.battles = BattleManager.battles.filter(x => x.id !== b.id);
-    const st = MapRenderer.states[b.stateId];
-    const name = st ? st.name : '州' + b.stateId;
-    const army = b.attackerArmyId ? BattlePlanManager.armies.find(a => a.id === b.attackerArmyId) : null;
-
-    // 師団に損害
-    if (army) {
-      army.divisions.forEach(d => { d.org = Math.max(0, d.org - 12); });
-      army.executing = false;
-      army.progress = 0;
-    }
-
-    if (b.advantage >= 0.1) {
-      // 優勢で終了 → 戦闘地のプロビンスを占領
-      if (b.kind === 'offensive') {
-        if (MapRenderer.captureState(b.stateId, b.attacker)) {
-          s.manpower = Math.max(0, (s.manpower || 0) - 5000 * (army ? army.divisions.length : 1));
-          s.warSupport = Math.min(100, s.warSupport + 3);
-          CoreEngine.log('🏆 ' + name + 'を占領しました！ (' + b.attacker + ' 勝利)');
-          GameUI.notify('🏆 ' + name + ' を占領！', 'success');
-          if (typeof ConstructionManager !== 'undefined') ConstructionManager.selectState(b.stateId);
-        }
-        // ---- 攻撃チェーン: 勝つと戦線が広がり、次の州へ段階的に進撃する ----
-        if (army && Array.isArray(army.chain) && army.chain.length > 0) {
-          army.chain = army.chain.filter(sid => sid !== b.stateId);
-          // 組織力が尽きたら進撃停止 (待機して回復)
-          if (army.chain.length === 0 || army.divisions.every(d => d.org <= 10)) {
-            if (army.chain.length === 0) {
-              army.executing = false;
-              army.chain = null;
-              CoreEngine.log('🎯 ' + army.name + 'の攻撃作戦を完了: 目標地点に到達しました！');
-              GameUI.notify('🎯 ' + army.name + ': 作戦目標達成！', 'success');
-            } else {
-              army.executing = false;
-              CoreEngine.log('⏸️ ' + army.name + ': 組織力回復のため進撃を一時停止 (再度作戦開始で再進撃)');
-              GameUI.notify('⏸️ 組織力が低下 — 一時停止中 (再開で次の州へ)', 'alert');
-            }
-          } else {
-            const nextSid = army.chain[0];
-            const nextSt = MapRenderer.states[nextSid];
-            if (nextSt && CoreEngine.gameState.atWar.includes(nextSt.owner)) {
-              army.progress = 0;
-              BattleManager.startOffensive(army, (nextSt.provinces && nextSt.provinces[0]) || b.provId, nextSid);
-              CoreEngine.log('➡️ 戦線が広がりました: ' + army.name + 'が ' + (nextSt.name || '州' + nextSid) + 'へ進撃中 (' + army.chain.length + '州残り)');
-              return;   // チェーン進撃中は後続処理をスキップ
-            }
-          }
-        } else if (army) {
-          army.executing = false;
-        }
-      } else {
-        CoreEngine.log('🛡️ ' + name + 'の防衛に成功！敵軍を撃退しました。');
-        GameUI.notify('🛡️ ' + name + ' 防衛成功！', 'success');
-        s.warSupport = Math.min(100, s.warSupport + 2);
-      }
-    } else if (b.advantage <= -0.1) {
-      // 劣勢で終了 → 逆に占領される
-      if (b.kind === 'offensive') {
-        // 攻撃が失敗: チェーンを放棄して待機に戻る (戦線は広がらない)
-        if (army) { army.chain = null; army.executing = false; }
-        const loseSid = army ? BattleManager.nearestOwnState(army.base) : null;
-        if (loseSid && MapRenderer.captureState(loseSid, b.defender)) {
-          const lost = MapRenderer.states[loseSid];
-          CoreEngine.log('💥 攻勢失敗 — ' + (lost ? lost.name : '') + 'を' + b.defender + 'に占領されました！');
-          GameUI.notify('💥 劣勢: ' + (lost ? lost.name : '') + 'を占領されました！', 'alert');
-        } else {
-          CoreEngine.log('💥 攻勢失敗 — ' + name + 'で敗退しました。');
-          GameUI.notify('💥 攻勢失敗: ' + name, 'alert');
-        }
-      } else {
-        // 防衛戦敗北 → その州を占領される
-        if (MapRenderer.captureState(b.stateId, b.attacker)) {
-          CoreEngine.log('💥 ' + name + 'が' + b.attacker + 'に占領されました！');
-          GameUI.notify('💥 ' + name + 'が占領されました！', 'alert');
-        }
-      }
-    } else {
-      // 均等 → 一時休戦 (領土変動なし)
-      CoreEngine.log('⚖️ ' + name + 'の戦闘は膠着状態で終了しました。');
-      GameUI.notify('⚖️ ' + name + ': 膠着状態 — 領土変動なし', 'alert');
-    }
+    if (b.kind === 'offensive') OffensivePlanner.result(b);
+    else if (b.advantage <= -0.1) OffensivePlanner.capture(b.provId, b.attacker);
+    else CoreEngine.log('🛡️ 防衛戦終了: プロビンス ' + b.provId + 'を維持しました。');
     MultiplayerManager.broadcast({ type: 'battle_end', battleId: b.id, state: b.stateId, advantage: b.advantage, kind: b.kind });
     BattlePlanManager.renderPanel();
     CoreEngine.renderStats();
@@ -320,9 +211,7 @@ class BattleManager {
       // 前線 = 自国防衛州のうち敵領に陸路で接する州のみ (飛び地は攻めない)
       const frontier = Object.keys(MapRenderer.states).filter(sid => {
         const st = MapRenderer.states[sid];
-        if (!st || st.owner !== player) return false;
-        return [...(MapRenderer.stateAdjacency.get(String(sid)) || [])]
-          .some(n => MapRenderer.states[n] && MapRenderer.states[n].owner === enemy);
+        return st && st.provinces.some(p=>MapRenderer.ownerOf(p)===player && [...(MapRenderer.provNeighbors.get(p)||[])].some(n=>MapRenderer.ownerOf(n)===enemy));
       });
       if (!frontier.length) return;
       const sid = frontier[Math.floor(Math.random() * frontier.length)];
