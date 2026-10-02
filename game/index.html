@@ -588,6 +588,8 @@
     <button class="win-btn" data-tab="cards" onclick="GameUI.switchTab('cards')">🃏 将軍カード</button>
     <button class="win-btn" data-tab="division" onclick="GameUI.switchTab('division')">⚔️ 師団編成</button>
     <button class="win-btn" data-tab="multiplayer" onclick="GameUI.switchTab('multiplayer')">🌐 マルチ</button>
+    <button class="win-btn" data-tab="nation" onclick="GameUI.switchTab('nation')">🏛️ 固有システム</button>
+    <button class="win-btn" data-tab="winsave" onclick="GameUI.switchTab('winsave')">💾 セーブ/ロード</button>
     <button class="win-btn" onclick="WindowManager.closeAll()">🗺️ マップ画面</button>
   </nav>
 
@@ -675,6 +677,12 @@
 
     <div class="window-template pane-scroll" id="tpl-multiplayer" data-title="🌐 マルチプレイ" data-w="640" data-h="560">
       <div id="multiplayer-content"></div>
+    </div>
+    <div class="window-template pane-scroll" id="tpl-nation" data-title="🏛️ 国家固有システム" data-w="700" data-h="560">
+      <div id="nation-content"></div>
+    </div>
+    <div class="window-template pane-scroll" id="tpl-winsave" data-title="💾 セーブ / ロード" data-w="580" data-h="540">
+      <div id="winsave-content"></div>
     </div>
   </div>
 </div>
@@ -936,7 +944,8 @@ class CoreEngine {
       infantryDefense: 0,
       landingPrepTime: 0
     },
-    activeAbilities: {}
+    activeAbilities: {},
+    nationSystems: {}
   };
 
   static timer = null;
@@ -1025,7 +1034,7 @@ class CoreEngine {
     return {
       pp: s.politicalPower, stab: s.stability, ws: s.warSupport, mp: s.manpower,
       res: s.resources, cf: s.civilianFactories, mf: s.militaryFactories,
-      nuke: s.nuclearStockpile, fuel: s.fuel
+      nuke: s.nuclearStockpile, fuel: s.fuel, nation: s.nationSystems
     };
   }
 
@@ -1041,6 +1050,7 @@ class CoreEngine {
     if (state.mf !== undefined) s.militaryFactories = state.mf;
     if (state.nuke !== undefined) s.nuclearStockpile = state.nuke;
     if (state.fuel !== undefined) s.fuel = state.fuel;
+    if (state.nation) s.nationSystems = state.nation;
     CoreEngine.renderStats();
   }
 }
@@ -3225,8 +3235,10 @@ class MultiplayerManager {
     container.innerHTML =
       '<div class="mp-panel"><h3>🌐 P2Pマルチプレイ (PeerJS)</h3>' +
       '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">ルームIDを共有してクロスデバイスでプレイできます。サーバーレス直接通信（PeerJS）を使用します。</p>' +
-      '<div style="margin-bottom:8px;"><label style="font-size:12px;color:var(--text-secondary);">ルームID: </label>' +
-      '<input type="text" class="mp-input" id="mp-room-id" placeholder="ルームIDを入力"></div>' +
+      '<div style="margin-bottom:8px;"><label style="font-size:12px;color:var(--text-secondary);">ルームコード: </label>' +
+      '<input type="text" class="mp-input" id="mp-room-id" placeholder="ルームコードを入力"></div>' +
+      '<div style="margin-bottom:8px;"><label style="font-size:12px;color:var(--text-secondary);">パスワード: </label>' +
+      '<input type="password" class="mp-input" id="mp-room-pass" placeholder="ルームパスワード (任意)"></div>' +
       '<button class="mp-btn" onclick="MultiplayerManager.hostRoom()">ルーム作成 (ホスト)</button>' +
       '<button class="mp-btn" onclick="MultiplayerManager.joinRoom()">ルームに参加</button>' +
       '<button class="mp-btn" onclick="MultiplayerManager.disconnect()" style="background:var(--accent-red);">切断</button>' +
@@ -3241,7 +3253,9 @@ class MultiplayerManager {
   static hostRoom() {
     const roomIdInput = document.getElementById('mp-room-id');
     const roomId = roomIdInput.value.trim() || ('hoi4-' + Math.random().toString(36).substring(2, 8));
+    const passInput = document.getElementById('mp-room-pass');
     MultiplayerManager.roomId = roomId;
+    MultiplayerManager.roomHash = MultiplayerManager.hashPassword(passInput ? passInput.value : '');
     MultiplayerManager.isHost = true;
     MultiplayerManager.setStatus('ルーム作成中...', false);
     MultiplayerManager.peer = new Peer('hoi4game-' + roomId, { debug: 1 });
@@ -3258,9 +3272,9 @@ class MultiplayerManager {
       const peerId = conn.peer;
       MultiplayerManager.connections[peerId] = conn;
       conn.on('open', () => {
-        MultiplayerManager.setStatus('プレイヤー接続: ' + peerId, true);
-        MultiplayerManager.updatePlayerList();
-        conn.send({ type: 'sync', state: CoreEngine.getSyncState(), date: CoreEngine.gameState.date.toISOString() });
+        conn.authOk = false;
+        MultiplayerManager.setStatus('プレイヤー接続: パスワード認証中...', false);
+        conn.send({ type: 'auth_req' });
       });
       conn.on('data', (data) => MultiplayerManager.onData(data, peerId));
       conn.on('close', () => {
@@ -3278,7 +3292,9 @@ class MultiplayerManager {
   static joinRoom() {
     const roomIdInput = document.getElementById('mp-room-id');
     const roomId = roomIdInput.value.trim();
-    if (!roomId) { GameUI.notify('ルームIDを入力してください。', 'alert'); return; }
+    if (!roomId) { GameUI.notify('ルームコードを入力してください。', 'alert'); return; }
+    const passInput = document.getElementById('mp-room-pass');
+    MultiplayerManager.joinPassword = passInput ? passInput.value : '';
     MultiplayerManager.roomId = roomId;
     MultiplayerManager.isHost = false;
     MultiplayerManager.setStatus('接続中...', false);
@@ -3341,9 +3357,49 @@ class MultiplayerManager {
     });
   }
 
+  static hashPassword(pw) {
+    let h = 5381;
+    const s = String(pw || '');
+    for (let i = 0; i < s.length; i++) h = (((h << 5) + h) + s.charCodeAt(i)) >>> 0;
+    return 'h' + h.toString(36);
+  }
+
+  static verifyPassword(pw) {
+    return MultiplayerManager.hashPassword(pw) === MultiplayerManager.roomHash;
+  }
+
   static onData(data, fromPeer) {
     if (!data || !data.type) return;
+    const conn0 = MultiplayerManager.connections[fromPeer];
+    // ホスト側: パスワード認証が済んでいない接続からは認証メッセージ以外を破棄
+    if (conn0 && conn0.authOk === false && data.type !== 'auth_resp') return;
     switch (data.type) {
+      case 'auth_req': {
+        const c = MultiplayerManager.connections[fromPeer];
+        if (c) c.send({ type: 'auth_resp', password: MultiplayerManager.joinPassword || '' });
+        MultiplayerManager.setStatus('パスワード認証中...', false);
+        break;
+      }
+      case 'auth_resp': {
+        const conn = MultiplayerManager.connections[fromPeer];
+        if (MultiplayerManager.verifyPassword(data.password)) {
+          if (conn) conn.authOk = true;
+          MultiplayerManager.setStatus('プレイヤー接続: ' + fromPeer, true);
+          MultiplayerManager.updatePlayerList();
+          if (conn) conn.send({ type: 'sync', state: CoreEngine.getSyncState(), date: CoreEngine.gameState.date.toISOString() });
+          GameUI.notify('プレイヤーが参加しました: ' + fromPeer, 'success');
+        } else {
+          MultiplayerManager.setStatus('パスワード不一致のため接続を拒否: ' + fromPeer, false);
+          GameUI.notify('接続拒否: ルームパスワードが違います', 'alert');
+          if (conn) { try { conn.send({ type: 'auth_fail' }); } catch (e) {} setTimeout(() => { try { conn.close(); } catch (e) {} }, 400); }
+        }
+        break;
+      }
+      case 'auth_fail':
+        MultiplayerManager.setStatus('パスワードが違います', false);
+        GameUI.notify('ルームパスワードが違います', 'alert');
+        MultiplayerManager.disconnect();
+        break;
       case 'sync':
         if (data.state) CoreEngine.applySyncState(data.state);
         if (data.date) CoreEngine.gameState.date = new Date(data.date);
@@ -3384,6 +3440,19 @@ class MultiplayerManager {
         CoreEngine.log('他プレイヤーがカード「' + data.abilityName + '」を発動しました');
         GameUI.notify('他プレイヤー: ' + data.abilityName + '発動', 'alert');
         break;
+      case 'card_hire': {
+        if (!CardSystem.hiredCards.some(c => c.id === data.cardId)) {
+          const cards = CardSystem.allCards[data.country] || [];
+          const card = cards.find(c => c.id === data.cardId);
+          if (card) {
+            CardSystem.hiredCards.push({ id: card.id, country: card.country, name: card.name, rank: card.rank });
+            CardSystem.saveHired();
+            CardSystem.render();
+            GameUI.notify('他プレイヤーが ' + card.name + ' を雇用しました', 'alert');
+          }
+        }
+        break;
+      }
       case 'faction_create':
         if (!DiplomacyManager.factions.find(f => f.name === data.faction.name)) {
           DiplomacyManager.factions.push(data.faction);
@@ -3441,6 +3510,10 @@ class CardSystem {
   static deck = [];
   static selectedCard = null;
   static localStorageKey = 'hoi4_card_game_deck';
+  static hiredCards = [];
+  static hiredKey = 'hoi4_card_hired';
+  // 雇用コスト (政治力): レアリティ別
+  static HIRE_COST = { SSR: 150, SR: 90, R: 40, default: 40 };
 
   static ABILITIES = {
     'hitler': { type: 'passive', name: '国家の象徴', desc: '政治力獲得量+0.5、安定度+10%', modifiers: { politicalPowerGain: 0.5, stabilityBonus: 10 } },
@@ -3467,6 +3540,7 @@ class CardSystem {
   static async init() {
     CardSystem.allCards = await DataFetcher.fetchAllCards();
     CardSystem.loadDeck();
+    CardSystem.loadHired();
     CardSystem.render();
   }
 
@@ -3481,6 +3555,80 @@ class CardSystem {
     localStorage.setItem(CardSystem.localStorageKey, JSON.stringify(CardSystem.deck));
   }
 
+  // --- カード雇用 (ガチャで引いたキャラを政治力消費で自陣営に配備) ---
+  static loadHired() {
+    try {
+      const saved = localStorage.getItem(CardSystem.hiredKey);
+      if (saved) CardSystem.hiredCards = JSON.parse(saved);
+    } catch (e) { CardSystem.hiredCards = []; }
+  }
+
+  static saveHired() {
+    localStorage.setItem(CardSystem.hiredKey, JSON.stringify(CardSystem.hiredCards));
+  }
+
+  static isHired(cardId) {
+    return CardSystem.hiredCards.some(c => c.id === cardId);
+  }
+
+  static isUnlocked(cardId, country) {
+    try {
+      const key = (country || '').toLowerCase() + '_unlocked_cards';
+      const list = JSON.parse(localStorage.getItem(key) || '[]');
+      return list.includes(cardId);
+    } catch (e) { return false; }
+  }
+
+  static hireCard(cardId, country) {
+    const cards = CardSystem.allCards[country] || [];
+    const card = cards.find(c => c.id === cardId);
+    if (!card) return;
+    if (CardSystem.isHired(cardId)) { GameUI.notify('すでに雇用しています。', 'alert'); return; }
+    if (!CardSystem.isUnlocked(cardId, country)) {
+      GameUI.notify('🔒 ガチャで引き当てたカードのみ雇用できます。', 'alert');
+      return;
+    }
+    const cost = CardSystem.HIRE_COST[card.rank] || CardSystem.HIRE_COST.default;
+    if (CoreEngine.gameState.politicalPower < cost) {
+      GameUI.notify('政治力が足りません (必要: ' + cost + ')。', 'alert');
+      return;
+    }
+    CoreEngine.gameState.politicalPower -= cost;
+    CardSystem.hiredCards.push({ id: card.id, country: card.country, name: card.name, rank: card.rank });
+    CardSystem.saveHired();
+    CardSystem.applyModifiers(cardId);
+    CoreEngine.renderStats();
+    CardSystem.selectedCard = card;
+    CardSystem.render();
+    GameUI.notify('🎖️ ' + card.name + ' を雇用・配備しました (政治力 -' + cost + ')', 'success');
+    CoreEngine.log(card.name + ' を政治力 ' + cost + ' で雇用しました。');
+    MultiplayerManager.broadcast({ type: 'card_hire', cardId: cardId, country: country });
+  }
+
+  static fireCard(cardId) {
+    const idx = CardSystem.hiredCards.findIndex(c => c.id === cardId);
+    if (idx < 0) return;
+    const removed = CardSystem.hiredCards.splice(idx, 1)[0];
+    CardSystem.saveHired();
+    CardSystem.removeModifiers(cardId);
+    CoreEngine.renderStats();
+    CardSystem.render();
+    GameUI.notify(removed.name + ' を解雇しました。', 'alert');
+  }
+
+  // SOV 大粛清などから呼ばれる: 雇用キャラを1人ランダムに失う
+  static purgeRandomCharacter() {
+    if (CardSystem.hiredCards.length === 0) return null;
+    const victim = CardSystem.hiredCards[Math.floor(Math.random() * CardSystem.hiredCards.length)];
+    CardSystem.hiredCards = CardSystem.hiredCards.filter(c => c.id !== victim.id);
+    CardSystem.saveHired();
+    CardSystem.removeModifiers(victim.id);
+    if (CardSystem.selectedCard && CardSystem.selectedCard.id === victim.id) CardSystem.selectedCard = null;
+    CardSystem.render();
+    CoreEngine.renderStats();
+    return victim.name;
+  }
+
   static getAbility(card) {
     if (!card) return null;
     return CardSystem.ABILITIES[card.id] || CardSystem.DEFAULT_GENERAL_ABILITY;
@@ -3489,7 +3637,8 @@ class CardSystem {
   static render() {
     const container = document.getElementById('cards-content');
     let html = '<div class="card-deck-area"><h3>🃏 将軍・指導者カードデッキ</h3>' +
-      '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">カードをクリックしてデッキに編成します。編成したカードの固有能力がゲームに適用されます。</p>';
+      '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">カードをクリックしてデッキに編成します。編成したカードの固有能力がゲームに適用されます。' +
+      ' ガチャで引き当てたカードは政治力を消費して「雇用・配備」できます。<a href="card/index.html" target="_blank" style="color:var(--text-gold);margin-left:8px;">🎴 ガチャを開く (10連で11連目SSR確定)</a></p>';
 
     html += '<div style="background:var(--bg-panel);border:1px solid var(--text-gold);border-radius:8px;padding:10px;margin-bottom:12px;">' +
       '<strong style="color:var(--text-gold);">デッキ (' + CardSystem.deck.length + '枚)</strong>';
@@ -3504,6 +3653,18 @@ class CardSystem {
       html += '<p style="font-size:12px;color:var(--text-secondary);margin-top:4px;">デッキが空です。下のカードから選択してください。</p>';
     }
     html += '</div>';
+
+    // 雇用・配備済みロスター (ガチャで引いたキャラを政治力消費で配備)
+    if (CardSystem.hiredCards.length > 0) {
+      html += '<div style="background:var(--bg-panel);border:1px solid var(--accent-green);border-radius:8px;padding:10px;margin-bottom:12px;">' +
+        '<strong style="color:var(--accent-green);">🎖️ 雇用・配備済み (' + CardSystem.hiredCards.length + '人)</strong>' +
+        '<div style="margin-top:6px;">' +
+        CardSystem.hiredCards.map(hc =>
+          '<span class="mp-player-item" style="border-color:var(--accent-green);">' + DataFetcher.getCountryFlag(hc.country) + ' ' + hc.name +
+          ' <span style="color:var(--accent-orange);">(' + hc.rank + ')</span> ' +
+          '<button class="diplo-btn" style="background:var(--accent-red);" onclick="CardSystem.fireCard(\'' + hc.id + '\')">解雇</button></span>'
+        ).join('') + '</div></div>';
+    }
 
     Object.entries(CardSystem.allCards).forEach(entry => {
       const country = entry[0], cards = entry[1];
@@ -3531,6 +3692,17 @@ class CardSystem {
         html += '<button class="instant-card-btn" onclick="CardSystem.activateAbility(\'' + card.id + '\')">使用: ' + ability.name + '</button>';
       } else {
         html += '<p style="font-size:12px;color:var(--accent-green);">パッシブ能力（自動適用中）</p>';
+      }
+      // 雇用 (ガチャ排出カードを政治力消費で配備)
+      if (CardSystem.allCards[card.country] && CardSystem.allCards[card.country].some(c => c.id === card.id)) {
+        if (CardSystem.isHired(card.id)) {
+          html += '<p style="font-size:12px;color:var(--accent-green);">✔ 雇用済み — 自陣営に配備中</p>';
+        } else if (CardSystem.isUnlocked(card.id, card.country)) {
+          const cost = CardSystem.HIRE_COST[card.rank] || CardSystem.HIRE_COST.default;
+          html += '<button class="instant-card-btn" onclick="CardSystem.hireCard(\'' + card.id + '\',\'' + card.country + '\')">🎖️ 雇用・配備 (政治力 ' + cost + ')</button>';
+        } else {
+          html += '<p style="font-size:12px;color:var(--text-secondary);">🔒 ' + DataFetcher.getCountryFlag(card.country) + ' ガチャでこのカードを引き当てると雇用できます</p>';
+        }
       }
       html += '</div>';
     }
@@ -3782,6 +3954,441 @@ class ResearchManager {
 }
 
 // ==========================================================
+// Module 15b: UniqueNationSystems — 7大国の国家固有システム (DLC連携)
+//   GER: MEFO手形 / SOV: スターリンのパラノイア / JAP: 陸海軍の対立
+//   USA: 連邦議会 / ENG: 帝国会議 / FRA: 政治的二極化 / ITA: 権力の均衡
+// ==========================================================
+class UniqueNationSystems {
+  static init() {
+    UniqueNationSystems.ensureDefaults();
+    CoreEngine.registerTickCallback(() => UniqueNationSystems.tick());
+  }
+
+  static ensureDefaults() {
+    const s = CoreEngine.gameState;
+    if (!s.nationSystems || Object.keys(s.nationSystems).length === 0) {
+      s.nationSystems = UniqueNationSystems.defaultsFor(s.country);
+    }
+  }
+
+  static defaultsFor(country) {
+    const base = {
+      GER: { mefoIssued: false, mefoMonthsLeft: 0 },
+      SOV: { paranoia: 25 },
+      JAP: { armyInfluence: 50 },
+      USA: { congressDem: 290, congressRep: 145 },
+      ENG: { dominionSupport: 60 },
+      FRA: { polarization: 50 },
+      ITA: { duceBalance: 65 }
+    };
+    return JSON.parse(JSON.stringify(base[country] || { generic: true }));
+  }
+
+  static tick() {
+    const s = CoreEngine.gameState;
+    const st = s.nationSystems;
+    if (!st) { UniqueNationSystems.ensureDefaults(); return; }
+    if (s.country === 'SOV') st.paranoia = Math.min(100, (st.paranoia || 0) + 0.05);
+    if (s.country === 'GER' && st.mefoIssued) {
+      st.mefoMonthsLeft--;
+      if (st.mefoMonthsLeft <= 0) {
+        st.mefoIssued = false;
+        s.cardModifiers.facilityCostReduction = Math.max(0, (s.cardModifiers.facilityCostReduction || 0) - 0.2);
+        GameUI.notify('MEFO手形の返済期限が到来 — 建設ブーストが失効しました', 'alert');
+      }
+    }
+    if (s.country === 'ENG') st.dominionSupport = Math.min(100, (st.dominionSupport || 0) + 0.02);
+    if (WindowManager.windows.get('nation')) UniqueNationSystems.render();
+  }
+
+  static gauge(value, color) {
+    return '<div style="width:100%;height:14px;background:#222;border:1px solid var(--border-mil);border-radius:7px;overflow:hidden;margin:6px 0;">' +
+      '<div style="width:' + Math.max(0, Math.min(100, value)) + '%;height:100%;background:' + color + ';"></div></div>';
+  }
+
+  static spendPP(cost) {
+    if (CoreEngine.gameState.politicalPower < cost) {
+      GameUI.notify('政治力が足りません (必要: ' + cost + ')。', 'alert');
+      return false;
+    }
+    CoreEngine.gameState.politicalPower -= cost;
+    CoreEngine.renderStats();
+    return true;
+  }
+
+  static broadcastState() {
+    MultiplayerManager.broadcast({ type: 'sync', state: CoreEngine.getSyncState(), date: CoreEngine.gameState.date.toISOString() });
+  }
+
+  static render() {
+    UniqueNationSystems.ensureDefaults();
+    const container = document.getElementById('nation-content');
+    if (!container) return;
+    const s = CoreEngine.gameState;
+    const st = s.nationSystems;
+    const names = { GER: 'ドイツ', SOV: 'ソビエト連邦', JAP: '大日本帝国', USA: 'アメリカ合衆国', ENG: 'イギリス', FRA: 'フランス', ITA: 'イタリア' };
+    const renderers = {
+      GER: UniqueNationSystems.renderGER, SOV: UniqueNationSystems.renderSOV,
+      JAP: UniqueNationSystems.renderJAP, USA: UniqueNationSystems.renderUSA,
+      ENG: UniqueNationSystems.renderENG, FRA: UniqueNationSystems.renderFRA,
+      ITA: UniqueNationSystems.renderITA
+    };
+    const fn = renderers[s.country];
+    container.innerHTML =
+      '<div class="sp-section"><h3>🏛️ ' + DataFetcher.getCountryFlag(s.country) + ' ' + (names[s.country] || s.country) + ' 固有システム</h3></div>' +
+      (fn ? fn(st) : '<p style="color:var(--text-secondary);">この国には固有システムがありません。</p>');
+  }
+
+  /* --- ドイツ: MEFO手形 --- */
+  static renderGER(st) {
+    let html = '<div class="mp-panel"><h3>📜 MEFO手形 (メフォ紙幣)</h3>' +
+      '<p style="font-size:12px;color:var(--text-secondary);">再軍備資金を隠蔽した決済手形。発行すると24ヶ月間、特別研究施設の建設コストが20%減少します (期限が来ると自動失効)。</p>';
+    if (st.mefoIssued) {
+      html += '<p style="color:var(--accent-green);font-size:13px;">✔ 発行中 — 残り約' + Math.ceil(st.mefoMonthsLeft / 30) + 'ヶ月 / 建設コスト -20%</p>';
+    } else {
+      html += '<button class="mp-btn" onclick="UniqueNationSystems.issueMefo()">MEFO手形を発行 (政治力 50)</button>';
+    }
+    return html + '</div>';
+  }
+
+  static issueMefo() {
+    const st = CoreEngine.gameState.nationSystems;
+    if (st.mefoIssued) return;
+    if (UniqueNationSystems.spendPP(50)) {
+      st.mefoIssued = true;
+      st.mefoMonthsLeft = 24 * 30;
+      CoreEngine.gameState.cardModifiers.facilityCostReduction = (CoreEngine.gameState.cardModifiers.facilityCostReduction || 0) + 0.2;
+      GameUI.notify('MEFO手形を発行 — 建設コスト -20% (24ヶ月間)', 'success');
+      CoreEngine.log('MEFO手形を発行。隠れた再軍備資金が調達された。');
+      UniqueNationSystems.render();
+      UniqueNationSystems.broadcastState();
+    }
+  }
+
+  /* --- ソ連: スターリンのパラノイア --- */
+  static renderSOV(st) {
+    const p = Math.round(st.paranoia || 0);
+    const color = p >= 70 ? 'linear-gradient(90deg,#d4843a,#c44a4a)' : '#8a5a2a';
+    return '<div class="mp-panel"><h3>👁️ スターリンのパラノイア</h3>' +
+      '<p style="font-size:12px;color:var(--text-secondary);">パラノイアは日ごとに蓄積します。70以上で「大粛清」が実行可能 — 政治力+100・安定度+10を得るが、雇用したカードキャラクターが1人粛清される危険があります。</p>' +
+      '<div style="font-size:12px;">パラノイア: <strong style="color:' + (p >= 70 ? '#ff4d4d' : '#d4a843') + ';">' + p + ' / 100</strong></div>' +
+      UniqueNationSystems.gauge(p, color) +
+      '<button class="mp-btn" style="background:var(--accent-red);" onclick="UniqueNationSystems.runPurge()" ' + (p >= 70 ? '' : 'disabled') + '>⚡ 大粛清を実行 (パラノイア70+)</button></div>';
+  }
+
+  static runPurge() {
+    const st = CoreEngine.gameState.nationSystems;
+    if ((st.paranoia || 0) < 70) return;
+    st.paranoia = 15;
+    CoreEngine.gameState.politicalPower = Math.min(999, CoreEngine.gameState.politicalPower + 100);
+    CoreEngine.gameState.stability = Math.min(100, CoreEngine.gameState.stability + 10);
+    const purged = CardSystem.purgeRandomCharacter();
+    if (purged) {
+      GameUI.notify('🔪 ' + purged + ' が粛清されました…', 'alert');
+      CoreEngine.log('大粛清: ' + purged + ' が粛清された。');
+    } else {
+      GameUI.notify('大粛清が完了しました。', 'success');
+      CoreEngine.log('大粛清が完了した。');
+    }
+    CoreEngine.renderStats();
+    UniqueNationSystems.render();
+    UniqueNationSystems.broadcastState();
+  }
+
+  /* --- 大日本帝国: 陸海軍の対立 --- */
+  static renderJAP(st) {
+    const army = Math.round(st.armyInfluence === undefined ? 50 : st.armyInfluence);
+    const navy = 100 - army;
+    let html = '<div class="mp-panel"><h3>⚔️ 陸海軍の対立</h3>' +
+      '<p style="font-size:12px;color:var(--text-secondary);">予算と資源を巡る陸海軍の対立。優勢な軍に応じた恩恵を受けます (陸軍優勢: 戦争協力度+ / 海軍優勢: 船団+燃料+)。シフトには政治力25が必要です。</p>' +
+      '<div style="display:flex;gap:8px;font-size:12px;"><div style="flex:1;">🪖 陸軍 <strong style="color:#c44a4a;">' + army + '%</strong></div><div style="flex:1;text-align:right;">⚓ 海軍 <strong style="color:#4a8fc4;">' + navy + '%</strong></div></div>' +
+      '<div style="display:flex;height:14px;border:1px solid var(--border-mil);border-radius:7px;overflow:hidden;margin:6px 0;">' +
+      '<div style="width:' + army + '%;background:#a03c3c;"></div><div style="width:' + navy + '%;background:#3c6ea0;"></div></div>' +
+      '<button class="mp-btn" style="background:var(--accent-red);" onclick="UniqueNationSystems.shiftJAP(-10)">🪖 陸軍を優遇 (PP 25)</button>' +
+      '<button class="mp-btn" onclick="UniqueNationSystems.shiftJAP(10)">⚓ 海軍を優遇 (PP 25)</button>' +
+      '<p style="font-size:11px;color:var(--text-secondary);margin-top:6px;">現在: ' +
+      (army > 60 ? '🪖 陸軍優勢 (戦争協力度ボーナス維持)' : navy > 60 ? '⚓ 海軍優勢 (船団・燃料ボーナス維持)' : '⚖️ 均衡状態 (ボーナスなし)') + '</p></div>';
+    return html;
+  }
+
+  static shiftJAP(delta) {
+    const st = CoreEngine.gameState.nationSystems;
+    if (!UniqueNationSystems.spendPP(25)) return;
+    st.armyInfluence = Math.max(0, Math.min(100, (st.armyInfluence === undefined ? 50 : st.armyInfluence) + delta));
+    const s = CoreEngine.gameState;
+    if (delta < 0) {
+      s.warSupport = Math.min(100, s.warSupport + 2);
+      CoreEngine.log('陸軍を優遇: 戦争協力度+2');
+    } else {
+      s.convoys += 10;
+      s.fuel = Math.min(s.maxFuel, s.fuel + 100);
+      CoreEngine.log('海軍を優遇: 船団+10 / 燃料+100');
+    }
+    UniqueNationSystems.render();
+    UniqueNationSystems.broadcastState();
+  }
+
+  /* --- アメリカ: 連邦議会 --- */
+  static renderUSA(st) {
+    const total = (st.congressDem || 0) + (st.congressRep || 0);
+    const demPct = Math.round((st.congressDem || 0) / total * 100);
+    return '<div class="mp-panel"><h3>🏛️ 連邦議会 (民主の兵器廠)</h3>' +
+      '<p style="font-size:12px;color:var(--text-secondary);">上下院の議席構成。与党が過半数 (55%+) を維持している間、法案通過により政治力獲得量が増加します。</p>' +
+      '<div style="display:flex;gap:8px;font-size:12px;"><div>民主党 <strong style="color:#4a8fc4;">' + (st.congressDem || 0) + '議席</strong></div>' +
+      '<div>共和党 <strong style="color:#c44a4a;">' + (st.congressRep || 0) + '議席</strong> — 民主党 ' + demPct + '%</div></div>' +
+      '<div style="display:flex;height:14px;border:1px solid var(--border-mil);border-radius:7px;overflow:hidden;margin:6px 0;">' +
+      '<div style="width:' + demPct + '%;background:#3c6ea0;"></div><div style="width:' + (100 - demPct) + '%;background:#a03c3c;"></div></div>' +
+      '<button class="mp-btn" onclick="UniqueNationSystems.passUSABill()">📜 法案を通過させる (PP 40)</button>' +
+      '<p style="font-size:11px;color:var(--text-secondary);margin-top:6px;">過半数維持: ' + (demPct >= 55 ? '✔ 政治力獲得 +0.25/日' : '✖ 議会が分裂中 — ロビー活動が必要') + '</p></div>';
+  }
+
+  static passUSABill() {
+    const st = CoreEngine.gameState.nationSystems;
+    const total = (st.congressDem || 0) + (st.congressRep || 0);
+    const demPct = (st.congressDem || 0) / total * 100;
+    if (demPct < 55) {
+      GameUI.notify('議会が分裂している — ロビー活動 (選挙支援) が必要です。', 'alert');
+      return;
+    }
+    if (UniqueNationSystems.spendPP(40)) {
+      CoreEngine.gameState.cardModifiers.politicalPowerGain = (CoreEngine.gameState.cardModifiers.politicalPowerGain || 0) + 0.25;
+      GameUI.notify('📜 法案通過 — 政治力獲得量 +0.25/日', 'success');
+      CoreEngine.log('連邦議会で法案が通過した。政治力獲得が増加。');
+      UniqueNationSystems.render();
+      UniqueNationSystems.broadcastState();
+    }
+  }
+
+  /* --- イギリス: 帝国会議 --- */
+  static renderENG(st) {
+    const sup = Math.round(st.dominionSupport === undefined ? 60 : st.dominionSupport);
+    return '<div class="mp-panel"><h3>🌍 帝国会議 (大英帝国)</h3>' +
+      '<p style="font-size:12px;color:var(--text-secondary);">自治領・植民地との連携。招集するたびに自治領支持が10消費されます (日ごとに少しずつ回復)。船団と人的資源を獲得。</p>' +
+      '<div style="font-size:12px;">自治領支持: <strong style="color:#d4a843;">' + sup + ' / 100</strong></div>' +
+      UniqueNationSystems.gauge(sup, '#8a7a3a') +
+      '<button class="mp-btn" onclick="UniqueNationSystems.convokeImperial()" ' + (sup >= 10 ? '' : 'disabled') + '>🤝 帝国会議を招集 (PP 40 / 支持10)</button></div>';
+  }
+
+  static convokeImperial() {
+    const st = CoreEngine.gameState.nationSystems;
+    if ((st.dominionSupport === undefined ? 60 : st.dominionSupport) < 10) return;
+    if (UniqueNationSystems.spendPP(40)) {
+      st.dominionSupport = Math.max(0, st.dominionSupport - 10);
+      CoreEngine.gameState.convoys += 25;
+      CoreEngine.gameState.manpower += 50000;
+      GameUI.notify('🤝 帝国会議 — 船団+25 / 人的資源+50K', 'success');
+      CoreEngine.log('帝国会議を招集。自治領からの支援を受けた。');
+      CoreEngine.renderStats();
+      UniqueNationSystems.render();
+      UniqueNationSystems.broadcastState();
+    }
+  }
+
+  /* --- フランス: 政治的二極化 --- */
+  static renderFRA(st) {
+    const pol = Math.round(st.polarization === undefined ? 50 : st.polarization);
+    const centered = Math.abs(pol - 50) <= 10;
+    return '<div class="mp-panel"><h3>⚡ 政治的二極化 (フランス)</h3>' +
+      '<p style="font-size:12px;color:var(--text-secondary);">人民戦線と右派の対立。どちらかに極端に偏ると安定度が低下し、中道 (45-55) に保つと政治力獲得ボーナスを得ます。</p>' +
+      '<div style="display:flex;gap:8px;font-size:12px;"><div>⬅️ 左派</div><div style="flex:1;text-align:center;">中道 (45-55で安定)</div><div>右派 ➡️</div></div>' +
+      UniqueNationSystems.gauge(pol, 'linear-gradient(90deg,#a03c5a,#4a5a6a,#3a6a4a)') +
+      '<button class="mp-btn" onclick="UniqueNationSystems.shiftFRA(-10)">🚩 人民戦線と組む (PP 30)</button>' +
+      '<button class="mp-btn" onclick="UniqueNationSystems.shiftFRA(10)">🛡️ 右派と組む (PP 30)</button>' +
+      '<p style="font-size:11px;color:var(--text-secondary);margin-top:6px;">現在: ' + (centered ? '✔ 政治的混乱が収束 — 政治力獲得 +0.25/日' : '⚠️ 政治が二極化中 (安定度ボーナスなし)') + '</p></div>';
+  }
+
+  static shiftFRA(delta) {
+    const st = CoreEngine.gameState.nationSystems;
+    if (!UniqueNationSystems.spendPP(30)) return;
+    st.polarization = Math.max(0, Math.min(100, (st.polarization === undefined ? 50 : st.polarization) + delta));
+    const s = CoreEngine.gameState;
+    s.stability = Math.min(100, Math.max(0, s.stability + (Math.abs(st.polarization - 50) <= 10 ? 5 : -2)));
+    UniqueNationSystems.render();
+    CoreEngine.renderStats();
+    UniqueNationSystems.broadcastState();
+  }
+
+  /* --- イタリア: 権力の均衡 --- */
+  static renderITA(st) {
+    const duce = Math.round(st.duceBalance === undefined ? 65 : st.duceBalance);
+    const king = 100 - duce;
+    return '<div class="mp-panel"><h3>⚖️ 権力の均衡 (ムッソリーニ vs 国王)</h3>' +
+      '<p style="font-size:12px;color:var(--text-secondary);">ムッソリーニ優位なら戦争協力度を、国王 (王党派) 優位なら安定度を得られます。どちらに傾けるかが外交・軍事の方針を決めます。</p>' +
+      '<div style="display:flex;gap:8px;font-size:12px;"><div>🦅 ムッソリーニ <strong style="color:#5a7a4a;">' + duce + '%</strong></div>' +
+      '<div style="flex:1;text-align:right;">👑 国王 <strong style="color:#8a8aaa;">' + king + '%</strong></div></div>' +
+      '<div style="display:flex;height:14px;border:1px solid var(--border-mil);border-radius:7px;overflow:hidden;margin:6px 0;">' +
+      '<div style="width:' + duce + '%;background:#4a6a3a;"></div><div style="width:' + king + '%;background:#6a6a8a;"></div></div>' +
+      '<button class="mp-btn" style="background:var(--accent-orange);" onclick="UniqueNationSystems.shiftITA(-10)">🦅 ムッソリーニを強化 (PP 30)</button>' +
+      '<button class="mp-btn" onclick="UniqueNationSystems.shiftITA(10)">👑 国王に譲歩 (PP 30)</button></div>';
+  }
+
+  static shiftITA(delta) {
+    const st = CoreEngine.gameState.nationSystems;
+    if (!UniqueNationSystems.spendPP(30)) return;
+    st.duceBalance = Math.max(0, Math.min(100, (st.duceBalance === undefined ? 65 : st.duceBalance) + delta));
+    const s = CoreEngine.gameState;
+    if (delta < 0) s.warSupport = Math.min(100, s.warSupport + 3);
+    else s.stability = Math.min(100, s.stability + 3);
+    UniqueNationSystems.render();
+    CoreEngine.renderStats();
+    UniqueNationSystems.broadcastState();
+  }
+}
+
+// ==========================================================
+// Module 16: SaveLoadManager — セーブ/ロード (スロット + JSON入出力)
+//   保存内容: 世界情勢 (資源・工場・政治力等) / 国家方針進捗 /
+//   デッキ・雇用カード / 国家固有システム
+// ==========================================================
+class SaveLoadManager {
+  static PREFIX = 'hoi4_save_slot_';
+
+  static collect() {
+    const gs = CoreEngine.gameState;
+    return {
+      version: 3,
+      savedAt: new Date().toISOString(),
+      core: { ...gs, date: gs.date.toISOString() },
+      focus: {
+        completed: [...FocusTreeManager.completedFocuses],
+        activeFocus: FocusTreeManager.activeFocus,
+        progress: FocusTreeManager.focusProgress,
+        total: FocusTreeManager.focusDaysTotal
+      },
+      deck: CardSystem.deck,
+      hired: CardSystem.hiredCards
+    };
+  }
+
+  static save(slot) {
+    try {
+      const data = SaveLoadManager.collect();
+      data.savedAt = new Date().toISOString();
+      localStorage.setItem(SaveLoadManager.PREFIX + slot, JSON.stringify(data));
+      GameUI.notify('💾 スロット' + slot + 'にセーブしました', 'success');
+      CoreEngine.log('スロット' + slot + 'にセーブしました。');
+    } catch (e) {
+      GameUI.notify('セーブに失敗: ' + e.message, 'alert');
+    }
+    SaveLoadManager.render();
+  }
+
+  static load(slot) {
+    let data;
+    try {
+      data = JSON.parse(localStorage.getItem(SaveLoadManager.PREFIX + slot) || 'null');
+    } catch (e) { data = null; }
+    if (!data) { GameUI.notify('スロット' + slot + 'は空です。', 'alert'); return; }
+    SaveLoadManager.apply(data);
+  }
+
+  static apply(data) {
+    if (!data || !data.core) { GameUI.notify('セーブデータが不正です。', 'alert'); return; }
+    const gs = CoreEngine.gameState;
+    CoreEngine.setSpeed(0);
+    Object.entries(data.core).forEach(([k, v]) => {
+      if (k === 'date') gs.date = new Date(v);
+      else if (k === 'cardModifiers') gs.cardModifiers = { ...gs.cardModifiers, ...v };
+      else if (k in gs) gs[k] = v;
+    });
+    if (data.focus) {
+      FocusTreeManager.completedFocuses = new Set(data.focus.completed || []);
+      FocusTreeManager.activeFocus = data.focus.activeFocus || null;
+      FocusTreeManager.focusProgress = data.focus.progress || 0;
+      FocusTreeManager.focusDaysTotal = data.focus.total || 0;
+    }
+    CardSystem.deck = data.deck || [];
+    CardSystem.hiredCards = data.hired || [];
+    CardSystem.saveDeck();
+    CardSystem.saveHired();
+    UniqueNationSystems.ensureDefaults();
+    CoreEngine.renderStats();
+    CoreEngine.updateCalendar();
+    FocusTreeManager.render();
+    CardSystem.render();
+    UniqueNationSystems.render();
+    MultiplayerManager.broadcast({ type: 'sync', state: CoreEngine.getSyncState(), date: gs.date.toISOString() });
+    GameUI.notify('💾 セーブデータをロードしました', 'success');
+    CoreEngine.log('セーブデータを読み込みました。');
+  }
+
+  static deleteSlot(slot) {
+    localStorage.removeItem(SaveLoadManager.PREFIX + slot);
+    SaveLoadManager.render();
+    GameUI.notify('スロット' + slot + 'を削除しました。');
+  }
+
+  static exportSave() {
+    const data = SaveLoadManager.collect();
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    const d = CoreEngine.gameState.date;
+    a.download = 'hoi4_save_' + d.getFullYear() + (d.getMonth() + 1 + '').padStart(2, '0') + (d.getDate() + '').padStart(2, '0') + '.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    GameUI.notify('セーブデータをJSONで書き出しました', 'success');
+  }
+
+  static importSave(input) {
+    const file = input.files && input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        SaveLoadManager.apply(JSON.parse(reader.result));
+        SaveLoadManager.render();
+      } catch (e) {
+        GameUI.notify('読み込み失敗: 不正なJSONです。', 'alert');
+      }
+    };
+    reader.readAsText(file);
+    input.value = '';
+  }
+
+  static slotMeta(slot) {
+    try {
+      const data = JSON.parse(localStorage.getItem(SaveLoadManager.PREFIX + slot) || 'null');
+      if (!data || !data.core) return null;
+      const d = new Date(data.core.date);
+      return {
+        date: d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate(),
+        country: data.core.country,
+        savedAt: new Date(data.savedAt).toLocaleString('ja-JP'),
+        deck: (data.deck || []).length,
+        hired: (data.hired || []).length
+      };
+    } catch (e) { return null; }
+  }
+
+  static render() {
+    const container = document.getElementById('winsave-content');
+    if (!container) return;
+    let html = '<div class="sp-section"><h3>💾 セーブ / ロード</h3>' +
+      '<p style="font-size:12px;color:var(--text-secondary);">世界情勢・国家方針進捗・軍隊・資源・所持カードを保存します。スロット3つ + JSONファイル入出力に対応。</p></div>';
+    for (let slot = 1; slot <= 3; slot++) {
+      const meta = SaveLoadManager.slotMeta(slot);
+      html += '<div class="con-queue-item"><div class="cq-top"><strong>スロット ' + slot + '</strong>' +
+        '<span>' +
+        '<button class="mp-btn" onclick="SaveLoadManager.save(' + slot + ')">セーブ</button> ' +
+        '<button class="mp-btn" onclick="SaveLoadManager.load(' + slot + ')" ' + (meta ? '' : 'disabled') + '>ロード</button> ' +
+        '<button class="diplo-btn" style="background:var(--accent-red);" onclick="SaveLoadManager.deleteSlot(' + slot + ')" ' + (meta ? '' : 'disabled') + '>削除</button>' +
+        '</span></div>' +
+        (meta
+          ? '<div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">📅 ' + meta.date + ' | ' + DataFetcher.getCountryFlag(meta.country) + ' ' + meta.country +
+            ' | 🃏 デッキ' + meta.deck + '枚 / 🎖️ 雇用' + meta.hired + '人 | 保存: ' + meta.savedAt + '</div>'
+          : '<div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">空きスロット</div>') +
+        '</div>';
+    }
+    html += '<div class="sp-section" style="margin-top:16px;"><h3>📤 ファイル入出力</h3>' +
+      '<button class="mp-btn" onclick="SaveLoadManager.exportSave()">📤 JSONで書き出す</button> ' +
+      '<label class="mp-btn" style="display:inline-block;">📥 JSONを読み込む<input type="file" accept=".json" style="display:none;" onchange="SaveLoadManager.importSave(this)"></label>' +
+      '<p style="font-size:11px;color:var(--text-secondary);margin-top:6px;">書き出したセーブファイルを他のプレイヤーと共有して、同じ世界から再開できます。</p></div>';
+    container.innerHTML = html;
+  }
+}
+
+// ==========================================================
 // Module 17: GameUI — UI管理・ウィンドウ切替・モーダル・通知
 // ==========================================================
 class GameUI {
@@ -3808,6 +4415,8 @@ class GameUI {
     if (tabName === 'multiplayer') MultiplayerManager.render();
     if (tabName === 'research') { ResearchManager.renderTabs(); ResearchManager.renderSlots(); ResearchManager.render(); }
     if (tabName === 'focus') FocusTreeManager.render();
+    if (tabName === 'nation') UniqueNationSystems.render();
+    if (tabName === 'winsave') SaveLoadManager.render();
   }
 
   static onWindowClosed(tabName) { /* focus管理はWindowManagerが行う */ }
@@ -3854,6 +4463,7 @@ async function initGame() {
   await CardSystem.init();
   CheatConsole.init();
   MultiplayerManager.init();
+  UniqueNationSystems.init();
   CardSystem.deck.forEach(card => CardSystem.applyModifiers(card.id));
   // 国家方針ウィンドウを初期表示 (マップ操作画面の上に重ねて表示)
   WindowManager.open('focus');
