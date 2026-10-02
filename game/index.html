@@ -4343,6 +4343,9 @@ class DiplomacyManager {
   }
 
   static render() {
+    // ゲーム一時停止中 (speed=0) は onTick が呼ばれないため、
+    // 描画時に必ず国家リストを再構築する (地図読込前はスキップされる)
+    DiplomacyManager.rebuildCountries();
     const container = document.getElementById('diplomacy-content');
     const s = CoreEngine.gameState;
     const myCountry = s.country;
