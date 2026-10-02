@@ -406,12 +406,9 @@ class EquipmentDesigner {
   static equipDesign(id) {
     const dsg = EquipmentDesigner.designs.find(x => x.id === id);
     if (!dsg) return;
-    const gs = CoreEngine.gameState;
-    if (gs.equipment < 100) { GameUI.notify('装備が不足しています (100必要)。', 'alert'); return; }
-    gs.equipment -= 100;
-    CoreEngine.log('🛠️ ' + dsg.name + ' を100装備生産 (装備残: ' + gs.equipment + ')');
-    GameUI.notify('生産開始: ' + dsg.name, 'success');
-    EquipmentDesigner.render();
+    WindowManager.open('production');
+    ProductionManager.render();
+    GameUI.notify('装備生産画面で工場を割り当ててください。');
   }
 
   static render() {
@@ -457,7 +454,7 @@ class EquipmentDesigner {
       EquipmentDesigner.designs.forEach(dsg => {
         html += '<div class="dlc-card"><h4>' + (EquipmentDesigner.DATA[dsg.cat] ? EquipmentDesigner.DATA[dsg.cat].label : dsg.cat) + ' — ' + dsg.name + '</h4>' +
           '<div>' + (dsg.stats || []).join('<br>') + '</div>' +
-          '<button class="dlc-btn" style="margin-top:6px;" onclick="EquipmentDesigner.equipDesign(\'' + dsg.id + '\')">🏭 100装備生産</button></div>';
+          '<button class="dlc-btn" style="margin-top:6px;" onclick="EquipmentDesigner.equipDesign(\'' + dsg.id + '\')">🏭 生産ラインを割り当て</button></div>';
       });
     }
     html += '</div>';
@@ -817,97 +814,18 @@ window.BlueprintRenderer = BlueprintRenderer;
 // 3. IntelligenceManager — 諜報機関とスパイ活動 (La Résistance)
 // ==========================================================
 class IntelligenceManager {
-  static createAgency() {
-    const gs = CoreEngine.gameState;
-    if (gs.politicalPower < 50) { GameUI.notify('政治力が不足しています (50必要)。', 'alert'); return; }
-    gs.politicalPower -= 50;
-    gs.intel.agency = gs.country + '諜報総局';
-    gs.intel.level = 1;
-    CoreEngine.log('🕵️ 諜報機関を設立: ' + gs.intel.agency);
-    GameUI.notify('諜報機関を設立しました', 'success');
-    IntelligenceManager.render();
-  }
-
-  static upgrade() {
-    const gs = CoreEngine.gameState;
-    const cost = 100 * gs.intel.level;
-    if (gs.politicalPower < cost) { GameUI.notify('政治力が不足しています (' + cost + '必要)。', 'alert'); return; }
-    gs.politicalPower -= cost;
-    gs.intel.level = Math.min(5, gs.intel.level + 1);
-    CoreEngine.log('🕵️ 諜報機関を拡張 (Lv.' + gs.intel.level + ')');
-    IntelligenceManager.render();
-  }
-
-  static hireSpy() {
-    const gs = CoreEngine.gameState;
-    if (gs.intel.spies >= gs.intel.level * 2) { GameUI.notify('諜報機関のレベルを上げる必要があります。', 'alert'); return; }
-    if (gs.politicalPower < 75) { GameUI.notify('政治力が不足しています (75必要)。', 'alert'); return; }
-    gs.politicalPower -= 75;
-    gs.intel.spies++;
-    CoreEngine.log('🕵️ スパイを雇用 (諜報員: ' + gs.intel.spies + '名)');
-    IntelligenceManager.render();
-  }
-
-  static startOp(opId) {
-    const gs = CoreEngine.gameState;
-    if (gs.intel.op) { GameUI.notify('既にオペレーション実行中です。', 'alert'); return; }
-    if (gs.intel.spies < 1) { GameUI.notify('スパイを雇用してください。', 'alert'); return; }
-    const op = DLC_INTEL_OPS.find(o => o.id === opId);
-    gs.intel.op = { id: opId, progress: 0, dur: Math.max(10, op.dur - gs.intel.level * 4) };
-    CoreEngine.log('🕵️ オペレーション開始: ' + op.name);
-    IntelligenceManager.render();
-  }
-
-  static cancelOp() { CoreEngine.gameState.intel.op = null; IntelligenceManager.render(); }
-
-  static onTick() {
-    const gs = CoreEngine.gameState;
-    const op = gs.intel.op;
-    if (!op) return;
-    op.progress += 1;
-    if (op.progress >= op.dur) {
-      gs.intel.op = null;
-      if (op.id === 'infil') { gs.politicalPower += 30; gs.worldTension = Math.min(100, gs.worldTension + 1); }
-      if (op.id === 'crypto') { gs.xp.army += 20; gs.warSupport = Math.min(100, gs.warSupport + 3); }
-      if (op.id === 'politics') { gs.stability = Math.min(100, gs.stability + 3); gs.worldTension = Math.min(100, gs.worldTension + 2); }
-      if (op.id === 'subvert') { gs.worldTension = Math.min(100, gs.worldTension + 2); gs.warSupport = Math.min(100, gs.warSupport + 2); }
-      CoreEngine.log('🕵️ オペレーション完了: ' + (DLC_INTEL_OPS.find(o => o.id === op.id) || {}).name);
-      GameUI.notify('諜報オペレーション完了！', 'success');
-    }
-  }
-
-  static render() {
-    const el = document.getElementById('intel-content');
-    if (!el) return;
-    const gs = CoreEngine.gameState;
-    let html = '';
-    if (!gs.intel.agency) {
-      html += '<div class="dlc-section"><h3>諜報機関の設立</h3><p style="font-size:12px;">政治力50を消費して諜報機関を設立すると、スパイの雇用とオペレーションが可能になります。</p>' +
-        '<button class="dlc-btn gold" onclick="IntelligenceManager.createAgency()">🕵️ 諜報機関を設立 (50 PP)</button></div>';
-    } else {
-      html += '<div class="dlc-section"><h3>' + gs.intel.agency + ' (Lv.' + gs.intel.level + '/5)</h3>' +
-        '<div class="dlc-row">スパイ: ' + gs.intel.spies + ' / 最大 ' + (gs.intel.level * 2) + '名</div>' +
-        '<button class="dlc-btn" onclick="IntelligenceManager.upgrade()">拡張 (' + (100 * gs.intel.level) + ' PP)</button> ' +
-        '<button class="dlc-btn" onclick="IntelligenceManager.hireSpy()">スパイ雇用 (75 PP)</button></div>';
-      html += '<div class="dlc-section"><h3>オペレーション</h3>';
-      const op = gs.intel.op;
-      if (op) {
-        const def = DLC_INTEL_OPS.find(o => o.id === op.id);
-        html += '<div class="dlc-card"><h4>' + def.icon + ' ' + def.name + ' — 実行中</h4>' +
-          '<div class="dlc-xpbar"><div class="dlc-xpbar-fill" style="width:' + (op.progress / op.dur * 100) + '%"></div></div>' +
-          '<div>' + op.progress + ' / ' + op.dur + '日</div>' +
-          '<button class="dlc-btn" style="margin-top:6px;" onclick="IntelligenceManager.cancelOp()">中止</button></div>';
-      } else {
-        DLC_INTEL_OPS.forEach(o => {
-          html += '<div class="dlc-card"><h4>' + o.icon + ' ' + o.name + '</h4><div>' + o.desc + '</div>' +
-            '<div style="color:var(--text-gold);margin-top:4px;">効果: ' + o.eff + '</div>' +
-            '<button class="dlc-btn" style="margin-top:6px;" onclick="IntelligenceManager.startOp(\'' + o.id + '\')">開始</button></div>';
-        });
-      }
-      html += '</div>';
-    }
-    el.innerHTML = html;
-  }
+  static ensure() { IntelOperations.ensure(); }
+  static createAgency() { return IntelOperations.createAgency(); }
+  static upgrade() { return IntelOperations.upgrade(); }
+  static hireSpy() { return IntelOperations.hireSpy(); }
+  static startOp(id) { return IntelOperations.startOp(id); }
+  static cancelOp() { IntelOperations.cancelOp(); }
+  static onTick() { IntelOperations.tick(); }
+  static render() { IntelOperations.render(); }
+  static selectTarget(tag) { IntelOperations.selectTarget(tag); }
+  static assign(slot,kind,tag) { return IntelOperations.assign(slot,kind,tag); }
+  static visibleDivisions() { return IntelOperations.visibleDivisions(); }
+  static hasReveal() { return IntelOperations.hasReveal(); }
 }
 
 // ==========================================================
@@ -937,28 +855,14 @@ class MIOManager {
   }
 
   static buy(tag) {
-    const gs = CoreEngine.gameState;
-    const offers = { USA: 40, GER: 35, SOV: 30, ENG: 35, ITA: 25 };
-    const cost = offers[tag] || 30;
-    if (gs.politicalPower < cost) { GameUI.notify('政治力が不足しています (' + cost + '必要)。', 'alert'); return; }
-    gs.politicalPower -= cost;
-    gs.equipment = (gs.equipment || 0) + 500;
-    CoreEngine.log('📦 国際市場: ' + tag + ' から装備500を輸入 (-' + cost + ' PP)');
-    GameUI.notify('装備500を輸入しました', 'success');
+    WindowManager.open('mio');
     MIOManager.render();
   }
 
-  static sell() {
-    const gs = CoreEngine.gameState;
-    if ((gs.equipment || 0) < 500) { GameUI.notify('装備が不足しています (500必要)。', 'alert'); return; }
-    gs.equipment -= 500;
-    gs.politicalPower += 25;
-    CoreEngine.log('📦 国際市場: 装備500を輸出 (+25 PP)');
-    GameUI.notify('装備500を輸出しました', 'success');
-    MIOManager.render();
-  }
+  static sell() { MarketManager.list(); }
 
   static render() {
+    if(GameTools.editing('mio-content'))return;
     const el = document.getElementById('mio-content');
     if (!el) return;
     const gs = CoreEngine.gameState;
@@ -972,14 +876,7 @@ class MIOManager {
     });
     html += '</div>';
 
-    html += '<div class="dlc-section"><h3>国際市場 (装備在庫: ' + Math.floor(gs.equipment || 0) + ')</h3>';
-    html += '<div class="dlc-row"><b>輸入</b><span style="color:var(--text-secondary);font-size:11px;">民需工場を対価に装備を購入</span></div>';
-    ['USA', 'GER', 'SOV', 'ENG', 'ITA'].forEach(tag => {
-      const flag = DataFetcher.getCountryFlag ? DataFetcher.getCountryFlag(tag) : tag;
-      html += '<div class="dlc-row">' + flag + ' ' + tag + ' — 装備500 <button class="dlc-btn" onclick="MIOManager.buy(\'' + tag + '\')">輸入 (35~40 PP)</button></div>';
-    });
-    html += '<div class="dlc-row"><b>輸出</b><span style="color:var(--text-secondary);font-size:11px;">装備500を売却し+25 PP</span> <button class="dlc-btn" onclick="MIOManager.sell()">輸出</button></div>';
-    html += '</div>';
+    html += MarketManager.markup();
     el.innerHTML = html;
   }
 }

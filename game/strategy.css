@@ -1,0 +1,35 @@
+/* Operational controls share the military palette. */
+#army-panel.army-dock { left: 8px; right: 8px; bottom: 8px; width: auto; max-height: 210px; overflow: auto; z-index: 25; }
+.army-tools { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
+.army-tools > span { color: var(--text-secondary); font-size: 10px; margin-left: auto; }
+.army-strip { display: flex; gap: 8px; overflow-x: auto; padding: 3px; }
+.army-tile { display: flex; min-width: 265px; background: var(--mil-plate); border: 1px solid var(--border-mil); border-radius: 3px; box-shadow: var(--mil-raised); padding: 6px; gap: 8px; }
+.army-tile.selected { border-color: var(--text-gold); }
+#game-root button.army-portrait { width: 72px; flex-shrink: 0; padding: 0; overflow: hidden; text-align: center; }
+.army-portrait img { width: 70px; height: 72px; object-fit: cover; object-position: top; display: block; filter: sepia(.25) saturate(.6); }
+.army-portrait strong { display: block; padding: 3px; background: #14180f; color: var(--text-gold); font-size: 12px; }
+.portrait-placeholder { display: grid; place-items: center; height: 72px; font-size: 32px; }
+.army-tile-info { font-size: 11px; }
+#map-help { bottom: 225px; max-width: 430px; }
+#game-root input[type='number'] { width: 80px; padding: 4px; }
+.production-row { display: grid; grid-template-columns: 1fr 90px 160px 150px; align-items: center; gap: 8px; padding: 10px; border-bottom: 1px solid var(--border-mil); }
+.production-row small { grid-column: 1 / -1; color: var(--text-secondary); }
+.production-table, .market-form { margin-top: 12px; }
+.market-form { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.rule-note { color: var(--text-secondary); font-size: 11px; margin-top: 5px; }
+.division-picker { max-height: 380px; overflow: auto; padding: 10px; }
+.division-picker label { display: inline-flex; gap: 6px; width: 160px; padding: 6px; }
+.division-picker h4 { color: var(--text-gold); border-bottom: 1px solid var(--border-mil); padding: 8px; }
+.foreign-portrait { display: flex; align-items: center; gap: 18px; padding-bottom: 12px; }
+.foreign-portrait img { width: 140px; height: 170px; object-fit: cover; object-position: top; filter: sepia(.35); border: 2px solid var(--mil-brass-dark); }
+#crypto-mission { max-width: 580px; color: var(--text-primary); font-family: 'Courier New', monospace; }
+.cipher-code { color: var(--text-gold); font-size: 24px; letter-spacing: .18em; }
+.cipher-dials { display: flex; justify-content: center; gap: 12px; margin: 20px 0; }
+.cipher-dial { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.cipher-dial output { display: grid; place-items: center; width: 62px; height: 62px; border-radius: 50%; border: 3px double var(--text-gold); background: radial-gradient(circle at 35% 30%, #656750, #1a1e15 70%); box-shadow: inset 0 0 0 6px #10140e, 0 3px 6px #000; color: var(--text-gold); font-size: 28px; }
+#cipher-word { background: #12160f; color: var(--text-primary); padding: 10px; border: 1px solid var(--border-mil); letter-spacing: .2em; font: 22px 'Courier New', monospace; width: 180px; }
+#cipher-result { min-height: 24px; color: var(--accent-red); }
+@media (max-width: 700px) { .production-row { grid-template-columns: 1fr 1fr; } .army-tools > span { display: none; } #army-panel.army-dock { max-height: 210px; } #map-help { display: none; } .trade-row { flex-wrap: wrap; gap: 8px; } }
+/* Status banners must not intercept map and navigation clicks. */
+#notification-container { pointer-events: none; }
+.cipher-dial button { min-width: 32px; min-height: 28px; }

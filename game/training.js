@@ -48,7 +48,12 @@ class TrainingManager {
       (comp.armor || 0) * 9 + (comp.artillery || 0) * 5 +
       (comp.jet_fighter || 0) * 7 + (comp.v2_rocket || 0) * 7 +
       (comp.nuke_battalion || 0) * 10 + (comp.land_battleship || 0) * 8));
-    return { comp, count, equipNeed, trainDays, manpowerNeed: count * 10000 };
+    const equipmentNeeds = {};
+    Object.entries(comp).forEach(([id,n]) => {
+      const type = id === 'armor' ? 'tank' : ['artillery','anti_tank','anti_air'].includes(id) ? 'artillery' : id === 'jet_fighter' ? 'fighter' : 'infantry';
+      equipmentNeeds[type] = (equipmentNeeds[type] || 0) + (TrainingManager.BATTALION_COST[id] || 100) * n;
+    });
+    return { comp, count, equipNeed, equipmentNeeds, trainDays, manpowerNeed: count * 10000 };
   }
 
   // ---- 徴兵命令を作成 (兵員・兵器が集まり次第訓練開始) ----
@@ -56,12 +61,13 @@ class TrainingManager {
     const s = CoreEngine.gameState;
     const req = TrainingManager.requirements();
     if (!req) { GameUI.notify('先に師団編成エディターで大隊を配置してください。', 'alert'); return; }
+    if (['ranger','mountaineer','paratrooper','marine'].some(k => req.comp[k]) && ArmyRoster.specialCount() >= 5) { GameUI.notify('特殊部隊は全軍で5師団までです（訓練中を含みます）。', 'alert'); return; }
     if (TrainingManager.queue.length >= 10) { GameUI.notify('徴兵キューが満杯です。', 'alert'); return; }
     const order = {
       id: TrainingManager.nextId++,
       name: '新編師団 #' + TrainingManager.nextId,
       comp: req.comp, count: req.count,
-      manpowerNeed: req.manpowerNeed, equipmentNeed: req.equipNeed,
+      manpowerNeed: req.manpowerNeed, equipmentNeed: req.equipNeed, equipmentNeeds: req.equipmentNeeds,
       trainDays: req.trainDays,
       phase: 'gathering',   // gathering (資源待ち) → training (訓練中)
       progress: 0,
@@ -90,9 +96,9 @@ class TrainingManager {
     TrainingManager.queue.forEach(o => {
       if (o.phase === 'gathering') {
         // 兵員 (人的資源) と兵器が揃い次第訓練開始 — ここで両方を消費する
-        if (s.manpower >= o.manpowerNeed && (s.equipment || 0) >= o.equipmentNeed) {
+        if (s.manpower >= o.manpowerNeed && ProductionManager.canConsume(o.equipmentNeeds || { infantry: o.equipmentNeed })) {
           s.manpower -= o.manpowerNeed;
-          s.equipment -= o.equipmentNeed;
+          ProductionManager.consume(o.equipmentNeeds || { infantry: o.equipmentNeed });
           o.phase = 'training';
           o.progress = 0;
           CoreEngine.log('🎓 ' + o.name + ' — 兵員・兵器が揃い訓練開始 (約' + o.trainDays + '日)');
@@ -104,19 +110,15 @@ class TrainingManager {
         if (o.progress >= o.trainDays) {
           o.done = true;
           s.divisions = (s.divisions || 0) + 1;
-          // 新師団を指定の軍集団に配属 (未指定なら最も少ない軍集団)
-          const armies = BattlePlanManager.armies || [];
-          if (armies.length) {
-            let a;
-            if (o.targetArmyId != null) {
-              a = armies.find(x => x.id === o.targetArmyId);
-            }
-            if (!a) a = armies.reduce((m, x) => x.divisions.length < m.divisions.length ? x : m, armies[0]);
-            a.divisions.push({
-              id: s.divisions, org: 30, maxOrg: 60,
-              x: a.base[0], y: a.base[1]
-            });
-          }
+          const a = (BattlePlanManager.armies || []).find(x => x.id === o.targetArmyId);
+          const division = {
+            id: s.strategy.nextDivisionId++, name: o.name, comp: o.comp,
+            org: 30, maxOrg: 60, type: Object.keys(o.comp)[0],
+            x: a?.base[0] || 0, y: a?.base[1] || 0, pid: a?.positionPid
+          };
+          if (a && !a.executing) a.divisions.push(division);
+          else s.strategy.reserves.push(division);
+          BattlePlanManager.renderPanel();
           CoreEngine.log('🎖️ ' + o.name + 'の訓練完了 — 師団数 ' + s.divisions);
           GameUI.notify('🎖️ ' + o.name + 'の訓練完了！ 師団が編入されました', 'success');
           changed = true;
@@ -131,30 +133,7 @@ class TrainingManager {
 
   // ---- 兵器の生産: 軍需工場が資源を消費して装備を生産 (資源不足では生産不可) ----
   static tickProduction() {
-    const s = CoreEngine.gameState;
-    const eco = typeof PoliticsManager !== 'undefined' ? PoliticsManager.currentLaw('economy') : null;
-    const out = (eco ? eco.factoryOutput : 0);
-    // 軍需工場1つあたり: 鋼鉄0.2 / タングステン0.08 / クロム0.04 を消費
-    const steelNeed = s.militaryFactories * 0.2;
-    const tungstenNeed = s.militaryFactories * 0.08;
-    const chromiumNeed = s.militaryFactories * 0.04;
-    const short = [];
-    if ((s.resources.steel || 0) < steelNeed) short.push('鋼鉄');
-    if ((s.resources.tungsten || 0) < tungstenNeed) short.push('タングステン');
-    if ((s.resources.chromium || 0) < chromiumNeed) short.push('クロム');
-    if (short.length) {
-      // 資源が足りない → 兵器は生産できない
-      if (!TrainingManager._shortNotified || Date.now() - TrainingManager._shortNotified > 60000) {
-        TrainingManager._shortNotified = Date.now();
-        GameUI.notify('⚠️ 資源不足 (' + short.join('・') + ') — 兵器の生産が停止中', 'alert');
-        CoreEngine.log('⚠️ 資源不足のため兵器の生産が停止しています (' + short.join('・') + ')');
-      }
-      return;
-    }
-    s.resources.steel -= steelNeed;
-    s.resources.tungsten -= tungstenNeed;
-    s.resources.chromium -= chromiumNeed;
-    s.equipment = (s.equipment || 0) + s.militaryFactories * 0.4 * (1 + out);
+    ProductionManager.tick();
   }
 
   // ---- 徴兵キューUI (師団編成ウィンドウ内) ----
