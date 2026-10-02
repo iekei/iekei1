@@ -744,8 +744,9 @@
     <div class="map-overlay" id="map-info-overlay"></div>
     <div class="map-legend" id="map-legend"></div>
     <div id="map-help">
-      左ドラッグ: マップ移動 / ホイール: ズーム / 左クリック: 州選択<br>
-      右ドラッグ: <b style="color:#7de87a">前線設定</b> / Shift+右ドラッグ: <b style="color:#ff6a6a">攻撃矢印</b>
+      左ドラッグ: マップ移動 / ホイール: ズーム / 左クリック (他国領土): <b style="color:#7de87a">前線を国境に自動スナップ</b><br>
+      右ドラッグ: 前線 / Shift+右ドラッグ: <b style="color:#ff6a6a">攻撃矢印</b> / 🌊 強襲上陸は作戦指揮パネルから<br>
+      タッチ: 1本指ドラッグ=移動 / 2本指=ピンチズーム / タップ=クリック
     </div>
 
     <!-- Army / Battle Plan Panel -->
@@ -881,7 +882,7 @@ class DataFetcher {
   static HOI4_REPO_RAW = 'https://raw.githubusercontent.com/cbrzeczysz/hoi4-history/main';
   static cache = new Map();
   // データバージョン: データファイル更新時に上げる (fetchURLのキャッシュバスティング用)
-  static DATA_VERSION = '2';
+  static DATA_VERSION = '3';
 
   // Local card data paths (relative to game/index.html)
   static CARD_PATHS = {
@@ -2495,16 +2496,7 @@ class MapRenderer {
     c.addEventListener('mouseup', (e) => {
       if (e.button === 0 && panning) {
         panning = false;
-        if (moved < 6) {
-          const wp = MapRenderer.screenToWorld(e.offsetX, e.offsetY);
-          const pid = MapRenderer.provinceAt(wp[0], wp[1]);
-          if (!pid) return;
-          // 海軍/空軍モード: クリックだけで任務海域・空域を指定
-          if (BattlePlanManager.activeForce !== 'army') {
-            BattlePlanManager.handleZoneClick(pid, wp);
-          }
-          MapRenderer.selectProvince(pid);
-        }
+        if (moved < 6) MapRenderer.handlePrimaryClick(e.offsetX, e.offsetY);
       } else if (e.button === 2) {
         const wasDragMode = BattlePlanManager.dragMode;
         if (wasDragMode) BattlePlanManager.endDrag();
@@ -2533,6 +2525,77 @@ class MapRenderer {
       cam.x = e.offsetX - wx * cam.scale;
       cam.y = e.offsetY - wy * cam.scale;
     }, { passive: false });
+
+    // ---- タッチパネル操作: 1本指ドラッグ=マップ移動 / 2本指=ピンチズーム&移動 / タップ=左クリック ----
+    let touchPan = false, touchPinch = false, touchMoved = 0;
+    let touchLastX = 0, touchLastY = 0, pinchBaseScale = 0, pinchBaseDist = 1, pinchWorldPt = null;
+    c.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        touchPan = true; touchPinch = false; touchMoved = 0;
+        touchLastX = e.touches[0].clientX;
+        touchLastY = e.touches[0].clientY;
+      } else if (e.touches.length === 2) {
+        touchPan = false; touchPinch = true;
+        const t1 = e.touches[0], t2 = e.touches[1];
+        pinchBaseDist = Math.max(1, Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY));
+        pinchBaseScale = MapRenderer.cam.scale;
+        const rect = c.getBoundingClientRect();
+        pinchWorldPt = MapRenderer.screenToWorld((t1.clientX + t2.clientX) / 2 - rect.left, (t1.clientY + t2.clientY) / 2 - rect.top);
+      }
+    }, { passive: true });
+    c.addEventListener('touchmove', (e) => {
+      e.preventDefault();   // ページ全体のスクロール・ズームを防ぐ
+      if (touchPinch && e.touches.length === 2) {
+        const t1 = e.touches[0], t2 = e.touches[1];
+        const d = Math.max(1, Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY));
+        const rect = c.getBoundingClientRect();
+        const midX = (t1.clientX + t2.clientX) / 2 - rect.left, midY = (t1.clientY + t2.clientY) / 2 - rect.top;
+        const cam = MapRenderer.cam;
+        cam.scale = Math.max(MapRenderer.MIN_SCALE, Math.min(MapRenderer.MAX_SCALE, pinchBaseScale * (d / pinchBaseDist)));
+        cam.x = midX - pinchWorldPt[0] * cam.scale;
+        cam.y = midY - pinchWorldPt[1] * cam.scale;
+      } else if (touchPan && e.touches.length === 1) {
+        const t = e.touches[0];
+        const dx = t.clientX - touchLastX, dy = t.clientY - touchLastY;
+        touchMoved += Math.abs(dx) + Math.abs(dy);
+        MapRenderer.cam.x += dx; MapRenderer.cam.y += dy;
+        touchLastX = t.clientX; touchLastY = t.clientY;
+      }
+    }, { passive: false });
+    c.addEventListener('touchend', (e) => {
+      const wasTap = touchPan && !touchPinch && touchMoved < 10;
+      touchPan = false;
+      if (e.touches.length === 0) touchPinch = false;
+      if (wasTap && e.changedTouches.length > 0) {
+        const rect = c.getBoundingClientRect();
+        MapRenderer.handlePrimaryClick(e.changedTouches[0].clientX - rect.left, e.changedTouches[0].clientY - rect.top);
+      }
+    });
+  }
+
+  // ---- 左クリック/タップ共通の処理: 州選択・前線自動スナップ・強襲上陸 ----
+  static handlePrimaryClick(offsetX, offsetY) {
+    const wp = MapRenderer.screenToWorld(offsetX, offsetY);
+    const pid = MapRenderer.provinceAt(wp[0], wp[1]);
+    if (!pid) return;
+    // 海軍/空軍モード: クリックだけで任務海域・空域を指定
+    if (BattlePlanManager.activeForce !== 'army') {
+      BattlePlanManager.handleZoneClick(pid, wp);
+      MapRenderer.selectProvince(pid);
+      return;
+    }
+    // 強襲上陸モード: 沿岸の敵州を左クリックで上陸
+    if (BattlePlanManager.invasionMode) {
+      BattlePlanManager.tryInvasion(pid, wp);
+      return;
+    }
+    const owner = MapRenderer.ownerOf(pid);
+    const player = CoreEngine.gameState.country;
+    if (owner && owner !== player && BattlePlanManager.selectedArmy()) {
+      // 他国領土を左クリック → その国との国境に前線を自動スナップ
+      BattlePlanManager.autoFrontline(owner);
+    }
+    MapRenderer.selectProvince(pid);
   }
 
   static screenToWorld(sx, sy) {
@@ -2736,6 +2799,7 @@ class BattlePlanManager {
   static dragPoints = [];
   // ---- 海軍/空軍オーダー (DLC拡張): 陸軍と同じマップ操作で哨戒・攻撃エリアを設定 ----
   static activeForce = 'army';   // 'army' | 'navy' | 'air'
+  static invasionMode = false;   // 強襲上陸モード (沿岸の敵州を左クリックで上陸)
   static navy = [];
   static air = [];
   static selectedUnitId = null;
@@ -3003,6 +3067,95 @@ class BattlePlanManager {
     const last = BattlePlanManager.dragPoints[BattlePlanManager.dragPoints.length - 1];
     const d = Math.hypot(worldPt[0] - last[0], worldPt[1] - last[1]);
     if (d > 6) BattlePlanManager.dragPoints.push(worldPt);
+  }
+
+  // ---- 強襲上陸 (Naval Invasion): 海を越えた沿岸州への直接攻撃 ----
+  static toggleInvasion() {
+    BattlePlanManager.invasionMode = !BattlePlanManager.invasionMode;
+    if (BattlePlanManager.invasionMode) {
+      GameUI.notify('🌊 強襲上陸モード ON — 沿岸の敵州を左クリックして上陸を開始', 'success');
+    } else {
+      GameUI.notify('🌊 強襲上陸モード OFF');
+    }
+    BattlePlanManager.renderPanel();
+  }
+
+  static tryInvasion(pid, wp) {
+    BattlePlanManager.invasionMode = false;
+    BattlePlanManager.renderPanel();
+    const army = BattlePlanManager.selectedArmy();
+    if (!army) { GameUI.notify('軍集団パネルから軍集団を選択してください。', 'alert'); return; }
+    if (army.executing) { GameUI.notify('この軍集団は作戦実行中です。', 'alert'); return; }
+    const sid = MapRenderer.stateOf(pid);
+    const st = sid ? MapRenderer.states[sid] : null;
+    if (!st) { GameUI.notify('上陸目標は陸上の州に指定してください。', 'alert'); return; }
+    const player = CoreEngine.gameState.country;
+    if (st.owner === player) { GameUI.notify('自国の州には上陸できません。', 'alert'); return; }
+    if (!CoreEngine.gameState.atWar.includes(st.owner)) {
+      GameUI.notify('⚔️ ' + st.owner + 'とは開戦していません。先に宣戦布告してください。', 'alert'); return;
+    }
+    // 沿岸州か (海岸に面したプロビンスを持つ州)
+    const coastalPid = (st.provinces || []).find(p => {
+      const pd = MapRenderer.provinces.p[p];
+      return pd && pd[4];
+    });
+    if (!coastalPid) { GameUI.notify('🌊 強襲上陸は沿岸の州にのみ実行できます。', 'alert'); return; }
+    // 制海権の確認 (25%以上必要)
+    const sup = CoreEngine.gameState.navalSupremacy || 0;
+    if (sup < 25) { GameUI.notify('⚓ 制海権が不足しています (25%以上必要・現在' + Math.floor(sup) + '%)。海軍の哨戒で制海権を確保してください。', 'alert'); return; }
+    // 上陸開始 (陸路接続は不要 — これが強襲上陸)
+    const c = MapRenderer.stateCenter.get(String(sid)) || wp;
+    army.executing = true; army.progress = 0; army.chain = null;
+    const b = BattleManager.startOffensive(army, coastalPid, sid);
+    if (b) b.invasion = true;
+    CoreEngine.log('🌊 ' + army.name + 'が強襲上陸を開始: ' + (st.name || '州' + sid) + ' (' + army.divisions.length + '師団)');
+    MultiplayerManager.broadcast({ type: 'battle_execute', army: army.id });
+  }
+
+  // ---- 左クリックで国境へ自動スナップした前線を設定 ----
+  static autoFrontline(enemyTag) {
+    const army = BattlePlanManager.selectedArmy();
+    if (!army) { GameUI.notify('軍集団パネルから軍集団を選択してください。', 'alert'); return; }
+    if (army.executing) { GameUI.notify('この軍集団は作戦実行中です。', 'alert'); return; }
+    const player = CoreEngine.gameState.country;
+    const typeNames = MapRenderer.provinces.types;
+    // 自国 & 相手国の陸の国境プロビンスを収集
+    const pts = [];
+    MapRenderer.provNeighbors.forEach((set, pid) => {
+      const pd = MapRenderer.provinces.p[pid];
+      if (!pd || typeNames[pd[3]] !== 'land') return;
+      if (MapRenderer.ownerOf(pid) !== player) return;
+      for (const n of set) {
+        const npd = MapRenderer.provinces.p[n];
+        if (!npd || typeNames[npd[3]] !== 'land') continue;
+        if (MapRenderer.ownerOf(n) === enemyTag) {
+          const c = MapRenderer.provCentroid.get(pid);
+          if (c) pts.push(c.slice());
+          break;
+        }
+      }
+    });
+    if (pts.length === 0) {
+      GameUI.notify('⚠️ ' + enemyTag + 'とは陸の国境で接していません。', 'alert');
+      return;
+    }
+    // 軍集団の拠点に最も近い点から最近傍順に並べて国境線に沿わせる
+    const base = army.base;
+    const ordered = [];
+    let cur = pts.reduce((best, p) => Math.hypot(p[0] - base[0], p[1] - base[1]) < Math.hypot(best[0] - base[0], best[1] - base[1]) ? p : best);
+    ordered.push(cur);
+    let remaining = pts.filter(p => p !== cur);
+    while (remaining.length) {
+      cur = remaining.reduce((best, p) => Math.hypot(p[0] - cur[0], p[1] - cur[1]) < Math.hypot(best[0] - cur[0], best[1] - cur[1]) ? p : best);
+      ordered.push(cur);
+      remaining = remaining.filter(p => p !== cur);
+    }
+    army.frontline = ordered;
+    army.arrow = null; army.targetState = null; army.chain = null;
+    CoreEngine.log(army.name + 'の前線を' + enemyTag + 'との国境に自動設定しました (' + ordered.length + '地点)。');
+    GameUI.notify('✅ ' + enemyTag + 'との国境に前線を自動スナップ (' + ordered.length + '地点) — Shift+右ドラッグで攻撃矢印を描けます', 'success');
+    MultiplayerManager.broadcast({ type: 'battle_front', army: army.id, points: ordered });
+    BattlePlanManager.renderPanel();
   }
 
   static endDrag() {
@@ -3393,7 +3546,10 @@ class BattlePlanManager {
         '<button class="army-btn" style="background:var(--accent-blue)" onclick="event.stopPropagation();BattlePlanManager.assignGeneral(' + army.id + ')">🎖️ 将軍</button>' +
         '</div>';
     });
-    html += '<div style="font-size:10px;color:var(--text-secondary);margin-top:4px;">マップ上で右ドラッグ=前線 / Shift+右ドラッグ=攻撃矢印</div>';
+    html += '<div style="display:flex;gap:4px;margin-top:6px;">' +
+      '<button class="army-btn" style="background:' + (BattlePlanManager.invasionMode ? 'var(--text-gold);color:#000;' : 'var(--accent-blue)') + '" onclick="BattlePlanManager.toggleInvasion()">🌊 強襲上陸' + (BattlePlanManager.invasionMode ? ' (ON)' : '') + '</button>' +
+      '</div>' +
+      '<div style="font-size:10px;color:var(--text-secondary);margin-top:4px;">マップ上で左クリック (他国領土) = 国境に前線を自動スナップ / 右ドラッグ=前線 / Shift+右ドラッグ=攻撃矢印 / 強襲上陸モード中は左クリックで沿岸州に上陸</div>';
     el.innerHTML = html;
   }
 
@@ -3978,24 +4134,79 @@ class PoliticsManager {
 // Module 8: DiplomacyManager — 陣営・レンドリース・外交
 // ==========================================================
 class DiplomacyManager {
-  static countries = [
-    { id: 'GER', name: 'ドイツ', relation: 0, faction: null },
-    { id: 'SOV', name: 'ソ連', relation: -50, faction: null },
-    { id: 'JAP', name: '日本', relation: 20, faction: null },
-    { id: 'USA', name: 'アメリカ', relation: -30, faction: null },
-    { id: 'ENG', name: 'イギリス', relation: -40, faction: null },
-    { id: 'FRA', name: 'フランス', relation: -20, faction: null },
-    { id: 'ITA', name: 'イタリア', relation: 30, faction: null },
-    { id: 'POL', name: 'ポーランド', relation: -60, faction: null }
-  ];
+  // 国タグ → 日本語名 (地図上の全84か国 + 予備)
+  static COUNTRY_NAMES = {
+    GER: 'ドイツ', SOV: 'ソ連', JAP: '日本', USA: 'アメリカ', ENG: 'イギリス', FRA: 'フランス',
+    ITA: 'イタリア', POL: 'ポーランド', CHI: '中華民国', CHS: '中華ソビエト', PRC: '中華ソビエト',
+    MEN: '蒙疆政府', MAN: '満州国', GXC: '広西軍閥', YUN: '雲南軍閥', SIK: '新疆軍閥', SHX: '山西軍閥',
+    XSM: '馬家軍', TIB: 'チベット', MON: 'モンゴル', NEP: 'ネパール', BHU: 'ブータン',
+    BRA: 'ブラジル', ARG: 'アルゼンチン', MEX: 'メキシコ', CHL: 'チリ', PER: 'ペルー',
+    BOL: 'ボリビア', PAR: 'パラグアイ', URG: 'ウルグアイ', ECU: 'エクアドル', COL: 'コロンビア',
+    VEN: 'ベネズエラ', PAN: 'パナマ', COS: 'コスタリカ', HON: 'ホンジュラス', ELS: 'エルサルバドル',
+    NIC: 'ニカラグア', GUA: 'グアテマラ', CUB: 'キューバ', HAI: 'ハイチ', DOM: 'ドミニカ共和国',
+    CAN: 'カナダ', AST: 'オーストラリア', NZL: 'ニュージーランド', SAF: '南アフリカ', RAJ: 'イギリス領インド',
+    MAL: 'マラヤ', INS: '蘭領東インド', PHI: 'フィリピン', TAN: 'タンガニーカ',
+    SWE: 'スウェーデン', NOR: 'ノルウェー', DEN: 'デンマーク', FIN: 'フィンランド', ICE: 'アイスランド',
+    HOL: 'オランダ', BEL: 'ベルギー', LUX: 'ルクセンブルク', SWI: 'スイス', POR: 'ポルトガル',
+    SPR: 'スペイン', GRE: 'ギリシャ', ALB: 'アルバニア', YUG: 'ユーゴスラビア', ROM: 'ルーマニア',
+    BUL: 'ブルガリア', HUN: 'ハンガリー', CZE: 'チェコスロバキア', AUS: 'オーストリア',
+    TUR: 'トルコ', IRE: 'アイルランド', EST: 'エストニア', LAT: 'ラトビア', LIT: 'リトアニア',
+    PRU: 'プロイセン', ETH: 'エチオピア', AFA: 'アフリカ連邦', EGY: 'エジプト', IRQ: 'イラク',
+    IRN: 'イラン', SAU: 'サウジアラビア', YEM: 'イエメン', OMA: 'オマーン', AFG: 'アフガニスタン',
+    SIA: 'シャム', LIB: 'リベリア', SPR2: 'スペイン国民軍', FRA2: 'ヴィシー・フランス'
+  };
 
+  // 開戦前からの初期関係値 (主要国のみ)
+  static INITIAL_RELATIONS = {
+    SOV: -50, JAP: 20, USA: -30, ENG: -40, FRA: -20, ITA: 30, POL: -60
+  };
+
+  static countries = [];       // 地図上の全か国 (マップ読込後に自動構築)
   static factions = [];
   static lendLeaseContracts = [];
   static selectedTag = null;   // 地図右クリック等で選択中の国
+  static search = '';          // 外交画面での国名検索
+  static _ownerSig = '';
 
   static init() {
     CoreEngine.registerTickCallback(() => DiplomacyManager.onTick());
+    DiplomacyManager.rebuildCountries();
     DiplomacyManager.render();
+  }
+
+  // ---- 地図上の全か国から外交リストを構築 (国家数に制限なし) ----
+  static rebuildCountries() {
+    if (!MapRenderer.ready || !MapRenderer.states) return false;
+    const tags = new Set(Object.values(MapRenderer.states).map(st => st.owner).filter(Boolean));
+    Object.keys(DiplomacyManager.INITIAL_RELATIONS).forEach(t => tags.add(t));
+    if (tags.has(CoreEngine.gameState.country)) tags.add(CoreEngine.gameState.country);
+    const sig = [...tags].sort().join(',');
+    if (sig === DiplomacyManager._ownerSig) return false;
+    DiplomacyManager._ownerSig = sig;
+    const prevById = Object.fromEntries(DiplomacyManager.countries.map(c => [c.id, c]));
+    DiplomacyManager.countries = [...tags].filter(t => t !== CoreEngine.gameState.country)
+      .sort((a, b) => DiplomacyManager.nameOf(a).localeCompare(DiplomacyManager.nameOf(b), 'ja'))
+      .map(t => prevById[t] || {
+        id: t,
+        name: DiplomacyManager.nameOf(t),
+        relation: DiplomacyManager.INITIAL_RELATIONS[t] != null ? DiplomacyManager.INITIAL_RELATIONS[t] : 0,
+        faction: null
+      });
+    if (DiplomacyManager.selectedTag && !DiplomacyManager.countries.some(c => c.id === DiplomacyManager.selectedTag)) {
+      DiplomacyManager.selectedTag = null;
+    }
+    return true;
+  }
+
+  static nameOf(tag) {
+    return DiplomacyManager.COUNTRY_NAMES[tag] || tag;
+  }
+
+  static setSearch(v) {
+    DiplomacyManager.search = v;
+    DiplomacyManager.renderCountryList();
+    const input = document.getElementById('diplo-search-input');
+    if (input) { input.focus(); input.setSelectionRange(input.value.length, input.value.length); }
   }
 
   // 他国の領土を右クリックした際に外交画面を開く
@@ -4010,6 +4221,10 @@ class DiplomacyManager {
     // 宣戦布告済みの相手との戦争中: 戦争協力度の自然上昇
     if (s.atWar.length > 0 && s.warSupport < 100) {
       s.warSupport = Math.min(100, s.warSupport + 0.01);
+    }
+    // 地図読込後に全か国リストを構築 (地図上の国家全員と外交できる)
+    if (MapRenderer.ready && DiplomacyManager.rebuildCountries()) {
+      DiplomacyManager.render();
     }
   }
 
@@ -4075,8 +4290,32 @@ class DiplomacyManager {
     }
     html += '</div>';
 
-    html += '<div class="sp-section"><h3>🌍 外交関係 <span style="font-size:11px;color:var(--text-secondary);">— 戦争には必ず「戦争目標の正当化」が必要です</span></h3>';
-    DiplomacyManager.countries.forEach(c => {
+    html += '<div class="sp-section"><h3>🌍 外交関係 <span style="font-size:11px;color:var(--text-secondary);">— 戦争には必ず「戦争目標の正当化」が必要です</span></h3>' +
+      '<div style="margin-bottom:10px;"><input type="text" id="diplo-search-input" placeholder="🔍 国名を検索して宣戦布告する国を探す (例: トルコ)" ' +
+      'style="width:100%;padding:8px 10px;background:var(--bg-panel-light);border:1px solid var(--border-mil);border-radius:6px;color:var(--text-primary);font-size:13px;box-sizing:border-box;" ' +
+      'oninput="DiplomacyManager.setSearch(this.value)" value="' + DiplomacyManager.search.replace(/"/g, '&quot;') + '">' +
+      '<div style="font-size:10px;color:var(--text-secondary);margin-top:4px;">地図上の全 ' + DiplomacyManager.countries.length + 'か国と外交可能</div></div>' +
+      '<div id="diplo-country-list"></div></div>';
+
+    container.innerHTML = html;
+    DiplomacyManager.renderCountryList();
+  }
+
+  // ---- 国リスト部分のみ再描画 (検索時にフォーカスを保つ) ----
+  static renderCountryList() {
+    const listEl = document.getElementById('diplo-country-list');
+    if (!listEl) return;
+    const s = CoreEngine.gameState;
+    const myCountry = s.country;
+    const q = (DiplomacyManager.search || '').trim().toLowerCase();
+    const countries = DiplomacyManager.countries
+      .filter(c => !q || c.name.toLowerCase().includes(q) || c.id.toLowerCase().includes(q));
+    if (countries.length === 0) {
+      listEl.innerHTML = '<p style="font-size:12px;color:var(--text-secondary);">「' + DiplomacyManager.search + '」に一致する国がありません。</p>';
+      return;
+    }
+    let html = '';
+    countries.forEach(c => {
       if (c.id === myCountry) return;
       const relColor = c.relation > 0 ? 'var(--accent-green)' : c.relation < -30 ? 'var(--accent-red)' : 'var(--text-secondary)';
       const selected = DiplomacyManager.selectedTag === c.id;
@@ -4100,9 +4339,7 @@ class DiplomacyManager {
       }
       html += '</div>';
     });
-    html += '</div>';
-
-    container.innerHTML = html;
+    listEl.innerHTML = html;
   }
 
   static createFaction() {
@@ -5192,9 +5429,14 @@ class ResearchManager {
         });
       }
     });
+    // ノード数に応じて木のサイズを動的に拡張 (多数の兵器データに対応)
+    const maxX = Math.max(800, ...techs.map(t => (t.x || 100) + 160));
+    const maxY = Math.max(1600, ...techs.map(t => (t.y || 50) + 120));
     svg.innerHTML = svgContent;
-    svg.setAttribute('width', '800');
-    svg.setAttribute('height', '1600');
+    svg.setAttribute('width', String(maxX));
+    svg.setAttribute('height', String(maxY));
+    const viewport = document.getElementById('research-tree-viewport');
+    if (viewport) { viewport.style.minWidth = maxX + 'px'; viewport.style.minHeight = maxY + 'px'; }
 
     techs.forEach(t => {
       const isResearched = ResearchManager.researchedTech.has(t.id);

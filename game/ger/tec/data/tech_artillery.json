@@ -1,28 +1,10 @@
 [
   {
-    "id": "lefh18",
-    "title": "le.FH18 105mm榴弾砲",
-    "year": 1936,
-    "x": 100,
-    "y": 50,
-    "research_time": 100,
-    "reliability": "配備（制式採用）",
-    "desc": "10.5cm軽榴弾砲。ドイツ陸軍の標準野戦榴弾砲として全戦線で使用された。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
-    "effects": [
-      "攻撃: 55/100",
-      "射程: 60/100",
-      "機動力: 58/100",
-      "信頼度: 78/100"
-    ],
-    "prerequisites": []
-  },
-  {
     "id": "flak36",
     "title": "8.8cm FlaK36",
     "year": 1936,
     "x": 100,
-    "y": 200,
+    "y": 50,
     "research_time": 120,
     "reliability": "配備（制式採用）",
     "desc": "世界的に有名な「88」。対空砲として開発されたが、対戦車砲としても連合軍戦車を圧倒した。",
@@ -34,8 +16,26 @@
       "射程: 78/100",
       "機動力: 40/100"
     ],
+    "prerequisites": []
+  },
+  {
+    "id": "lefh18",
+    "title": "le.FH18 105mm榴弾砲",
+    "year": 1936,
+    "x": 100,
+    "y": 200,
+    "research_time": 100,
+    "reliability": "配備（制式採用）",
+    "desc": "10.5cm軽榴弾砲。ドイツ陸軍の標準野戦榴弾砲として全戦線で使用された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "effects": [
+      "攻撃: 55/100",
+      "射程: 60/100",
+      "機動力: 58/100",
+      "信頼度: 78/100"
+    ],
     "prerequisites": [
-      "lefh18"
+      "flak36"
     ]
   },
   {
@@ -59,11 +59,135 @@
     ]
   },
   {
+    "id": "sig33",
+    "title": "15cm歩兵砲 sIG 33",
+    "year": 1936,
+    "x": 100,
+    "y": 500,
+    "research_time": 95,
+    "reliability": "配備（制式採用）",
+    "desc": "歩兵連隊直援用の重歩兵砲。弾体58kgの威力は健在だが重量が過大で、機甲化とともに自走化が進んだ。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "effects": [
+      "対人攻撃: 38/100",
+      "対物攻撃: 39/100",
+      "生存力: 15/100",
+      "機動力: 48/100",
+      "信頼度: 72/100"
+    ],
+    "prerequisites": [
+      "sfh18"
+    ]
+  },
+  {
+    "id": "pak38",
+    "title": "7.5cm PaK 40",
+    "year": 1939,
+    "x": 100,
+    "y": 650,
+    "research_time": 101,
+    "reliability": "配備（制式採用）",
+    "desc": "対戦車砲の主力。独ソ戦でT-34に対峙するために大口径化した本格的な対戦車砲で大量生産された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "effects": [
+      "対人攻撃: 40/100",
+      "対物攻撃: 43/100",
+      "生存力: 15/100",
+      "機動力: 48/100",
+      "信頼度: 74/100"
+    ],
+    "prerequisites": [
+      "sig33"
+    ]
+  },
+  {
+    "id": "k5",
+    "title": "K5列車砲「レオポルト」",
+    "year": 1940,
+    "x": 100,
+    "y": 800,
+    "research_time": 103,
+    "reliability": "配備（制式採用）",
+    "desc": "280mm列車砲。アンツィオ戦線で「アンツィオ・アニー」と恐れられた超長距離巨砲。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "effects": [
+      "対人攻撃: 41/100",
+      "対物攻撃: 45/100",
+      "生存力: 15/100",
+      "機動力: 48/100",
+      "信頼度: 75/100"
+    ],
+    "prerequisites": [
+      "pak38"
+    ]
+  },
+  {
+    "id": "flak37",
+    "title": "8.8cm Flak 37",
+    "year": 1937,
+    "x": 400,
+    "y": 50,
+    "research_time": 97,
+    "reliability": "配備（制式採用）",
+    "desc": "Flak 36の火器統制改良型。予告測遠機と弾道計算装置を統合した改良型。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "effects": [
+      "対人攻撃: 14/100",
+      "対物攻撃: 51/100",
+      "生存力: 14/100",
+      "機動力: 44/100",
+      "信頼度: 67/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "mrs18",
+    "title": "21cm榴弾砲 Mrs 18",
+    "year": 1938,
+    "x": 400,
+    "y": 200,
+    "research_time": 99,
+    "reliability": "配備（制式採用）",
+    "desc": "21cm重榴弾砲。師団砲兵の重火力の柱として、要塞・拠点攻撃に威力を発揮した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "effects": [
+      "対人攻撃: 14/100",
+      "対物攻撃: 53/100",
+      "生存力: 14/100",
+      "機動力: 44/100",
+      "信頼度: 67/100"
+    ],
+    "prerequisites": [
+      "flak37"
+    ]
+  },
+  {
+    "id": "karl",
+    "title": "カール・ゲレート60cm自走臼砲",
+    "year": 1940,
+    "x": 400,
+    "y": 350,
+    "research_time": 103,
+    "reliability": "配備（制式採用）",
+    "desc": "60cm/54cm臼砲を自走車台に載せた超重砲。セヴァストポリ包囲戦で要塞粉砕に用いられた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "effects": [
+      "対人攻撃: 14/100",
+      "対物攻撃: 56/100",
+      "生存力: 14/100",
+      "機動力: 44/100",
+      "信頼度: 69/100"
+    ],
+    "prerequisites": [
+      "mrs18"
+    ]
+  },
+  {
     "id": "nebelwerfer",
     "title": "ネーベルヴェルファー",
     "year": 1941,
     "x": 400,
-    "y": 200,
+    "y": 500,
     "research_time": 140,
     "reliability": "配備（火箭）",
     "desc": "多連装ロケット砲。面制圧射撃に用いられ、ソ連のカチューシャに対抗した。",
@@ -75,7 +199,7 @@
       "信頼度: 55/100"
     ],
     "prerequisites": [
-      "sfh18"
+      "karl"
     ]
   },
   {
@@ -83,7 +207,7 @@
     "title": "8.8cm PaK43",
     "year": 1943,
     "x": 400,
-    "y": 350,
+    "y": 650,
     "research_time": 150,
     "reliability": "配備（対戦車）",
     "desc": "対戦車専用の88mm砲。史上最強級の牽引対戦車砲で、あらゆる連合軍戦車を貫徹した。",
@@ -95,7 +219,47 @@
       "機動力: 22/100"
     ],
     "prerequisites": [
-      "flak36"
+      "nebelwerfer"
+    ]
+  },
+  {
+    "id": "wurfgerat",
+    "title": "ヴルフ・ゲレート 28cm発射枠",
+    "year": 1941,
+    "x": 700,
+    "y": 50,
+    "research_time": 105,
+    "reliability": "配備（制式採用）",
+    "desc": "簡易発射枠の28cm/32cmロケット。面制圧火力として東部戦線で多用された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "effects": [
+      "対人攻撃: 41/100",
+      "対物攻撃: 46/100",
+      "生存力: 15/100",
+      "機動力: 48/100",
+      "信頼度: 76/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "lefh18_40",
+    "title": "10.5cm leFH 18/40",
+    "year": 1942,
+    "x": 700,
+    "y": 200,
+    "research_time": 107,
+    "reliability": "配備（制式採用）",
+    "desc": "leFH 18の砲身延長・マズルブレーキ追加型。射程と威力を改善した師団砲兵の標準野砲。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "effects": [
+      "対人攻撃: 42/100",
+      "対物攻撃: 48/100",
+      "生存力: 15/100",
+      "機動力: 48/100",
+      "信頼度: 77/100"
+    ],
+    "prerequisites": [
+      "wurfgerat"
     ]
   }
 ]

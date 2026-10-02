@@ -351,7 +351,7 @@ class BattleManager {
       const name = st ? st.name : '州' + b.stateId;
       const color = BattleManager.colorOf(b);
       tip.innerHTML =
-        '<div class="bt-title" style="color:' + color + '">⚔️ 戦闘: ' + name + '</div>' +
+        '<div class="bt-title" style="color:' + color + '">' + (b.invasion ? '🌊 強襲上陸: ' : '⚔️ 戦闘: ') + name + '</div>' +
         '<div class="bt-line">' + DataFetcher.getCountryFlag(b.attacker) + ' ' + b.attacker + ' vs ' +
         DataFetcher.getCountryFlag(b.defender) + ' ' + b.defender + '</div>' +
         '<div class="bt-line">戦況: <span style="color:' + color + ';font-weight:bold;">' +

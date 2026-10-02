@@ -14,5 +14,57 @@
       "建設速度: +10%"
     ],
     "prerequisites": []
+  },
+  {
+    "id": "maginot_line",
+    "title": "マジノ線建設",
+    "year": 1936,
+    "x": 100,
+    "y": 200,
+    "research_time": 125,
+    "reliability": "配備（制式採用）",
+    "desc": "独仏国境に沿った巨大要塞線。莫大な予算を吸収した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
+    "effects": [
+      "生産効率上限: +9.6%",
+      "生産効率保持率: +9.6%"
+    ],
+    "prerequisites": [
+      "fra_industry_1"
+    ]
+  },
+  {
+    "id": "nationalized_factories",
+    "title": "軍需工場国有化",
+    "year": 1936,
+    "x": 100,
+    "y": 350,
+    "research_time": 125,
+    "reliability": "配備（制式採用）",
+    "desc": "人民戦線政権下での軍需工場国有化・生産統制。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
+    "effects": [
+      "生産効率上限: +9.6%",
+      "生産効率保持率: +9.6%"
+    ],
+    "prerequisites": [
+      "maginot_line"
+    ]
+  },
+  {
+    "id": "renault_expansion",
+    "title": "ルノー戦車増産",
+    "year": 1938,
+    "x": 400,
+    "y": 50,
+    "research_time": 129,
+    "reliability": "配備（制式採用）",
+    "desc": "ルノー・ソミュアの戦車生産能力拡張計画。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
+    "effects": [
+      "生産効率上限: +10.1%",
+      "生産効率保持率: +10.1%"
+    ],
+    "prerequisites": []
   }
 ]

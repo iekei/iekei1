@@ -16,11 +16,29 @@
     "prerequisites": []
   },
   {
+    "id": "shadow_factories",
+    "title": "影の工場計画",
+    "year": 1936,
+    "x": 100,
+    "y": 200,
+    "research_time": 125,
+    "reliability": "配備（制式採用）",
+    "desc": "航空機・発動機生産を民間工場に分散させる戦前計画。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
+    "effects": [
+      "生産効率上限: +9.6%",
+      "生産効率保持率: +9.6%"
+    ],
+    "prerequisites": [
+      "eng_industry_1"
+    ]
+  },
+  {
     "id": "eng_industry_2",
     "title": "分散生産",
     "year": 1938,
     "x": 100,
-    "y": 200,
+    "y": 350,
     "research_time": 110,
     "reliability": "配備",
     "desc": "工場を分散配置し、爆撃に対する耐性を高める。",
@@ -30,7 +48,59 @@
       "生産効率: +8%"
     ],
     "prerequisites": [
-      "eng_industry_1"
+      "shadow_factories"
+    ]
+  },
+  {
+    "id": "beaverbrook_ministry",
+    "title": "航空機生産省 (ビーバーブルック)",
+    "year": 1940,
+    "x": 100,
+    "y": 500,
+    "research_time": 133,
+    "reliability": "配備（制式採用）",
+    "desc": "航空機生産を統括する戦時省。生産量を急増させた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
+    "effects": [
+      "生産効率上限: +10.7%",
+      "生産効率保持率: +10.7%"
+    ],
+    "prerequisites": [
+      "eng_industry_2"
+    ]
+  },
+  {
+    "id": "war_cabinet_production",
+    "title": "戦時内閣生産統制",
+    "year": 1940,
+    "x": 400,
+    "y": 50,
+    "research_time": 133,
+    "reliability": "配備（制式採用）",
+    "desc": "全軍需生産を統括する戦時内閣体制。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
+    "effects": [
+      "生産効率上限: +10.7%",
+      "生産効率保持率: +10.7%"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "merseyside_expansion",
+    "title": "マージーサイド造船拡張",
+    "year": 1941,
+    "x": 400,
+    "y": 200,
+    "research_time": 135,
+    "reliability": "配備（制式採用）",
+    "desc": "大西洋船団を支える造船能力拡張計画。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
+    "effects": [
+      "生産効率上限: +10.9%",
+      "生産効率保持率: +10.9%"
+    ],
+    "prerequisites": [
+      "war_cabinet_production"
     ]
   }
 ]

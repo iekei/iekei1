@@ -1,10 +1,71 @@
 [
   {
+    "id": "l3_35",
+    "title": "L3/35軽戦車",
+    "year": 1936,
+    "x": 100,
+    "y": 50,
+    "research_time": 115,
+    "reliability": "配備（制式採用）",
+    "desc": "機銃装備の小型軽戦車。エチオピア・スペイン・北アフリカで大量使用された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "effects": [
+      "対人攻撃: 25/100",
+      "対物攻撃: 33/100",
+      "生存力: 28/100",
+      "機動力: 56/100",
+      "信頼度: 70/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "m11_39",
+    "title": "M11/39中戦車",
+    "year": 1939,
+    "x": 100,
+    "y": 200,
+    "research_time": 121,
+    "reliability": "配備（制式採用）",
+    "desc": "車体正面に37mm砲を置く中戦車。設計上の欠陥で早期に旧式化した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "effects": [
+      "対人攻撃: 27/100",
+      "対物攻撃: 37/100",
+      "生存力: 30/100",
+      "機動力: 56/100",
+      "信頼度: 72/100"
+    ],
+    "prerequisites": [
+      "l3_35"
+    ]
+  },
+  {
+    "id": "l6_40",
+    "title": "L6/40軽戦車",
+    "year": 1940,
+    "x": 100,
+    "y": 350,
+    "research_time": 123,
+    "reliability": "配備（制式採用）",
+    "desc": "20mm砲を備えた軽戦車。東部戦線・バルカンで偵察に用いられた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "effects": [
+      "対人攻撃: 27/100",
+      "対物攻撃: 38/100",
+      "生存力: 31/100",
+      "機動力: 56/100",
+      "信頼度: 73/100"
+    ],
+    "prerequisites": [
+      "m11_39"
+    ]
+  },
+  {
     "id": "m13_40",
     "title": "M13/40中戦車",
     "year": 1940,
     "x": 100,
-    "y": 50,
+    "y": 500,
     "research_time": 110,
     "reliability": "配備",
     "desc": "イタリア主力中戦車。47mm砲搭載。装甲が薄い。",
@@ -16,14 +77,37 @@
       "機動力: 55/100",
       "信頼度: 60/100"
     ],
-    "prerequisites": []
+    "prerequisites": [
+      "l6_40"
+    ]
+  },
+  {
+    "id": "m15_42",
+    "title": "M15/42中戦車",
+    "year": 1942,
+    "x": 100,
+    "y": 650,
+    "research_time": 127,
+    "reliability": "配備（制式採用）",
+    "desc": "47/40砲を搭載した改良中戦車。独軍も接収して運用した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "effects": [
+      "対人攻撃: 28/100",
+      "対物攻撃: 40/100",
+      "生存力: 33/100",
+      "機動力: 56/100",
+      "信頼度: 75/100"
+    ],
+    "prerequisites": [
+      "m13_40"
+    ]
   },
   {
     "id": "p26_40",
     "title": "P26/40重戦車",
     "year": 1942,
     "x": 100,
-    "y": 200,
+    "y": 800,
     "research_time": 130,
     "reliability": "少数配備",
     "desc": "75mm砲搭載の重戦車。イタリア最強の戦車だが生産数は少ない。",
@@ -36,7 +120,87 @@
       "信頼度: 55/100"
     ],
     "prerequisites": [
-      "m13_40"
+      "m15_42"
     ]
+  },
+  {
+    "id": "semovente_75_18",
+    "title": "セモヴェンテ 75/18",
+    "year": 1941,
+    "x": 400,
+    "y": 50,
+    "research_time": 125,
+    "reliability": "配備（制式採用）",
+    "desc": "M13車台に75mm砲を搭載した自走砲。独の突撃砲に相当する存在。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "effects": [
+      "対人攻撃: 12/100",
+      "対物攻撃: 60/100",
+      "生存力: 35/100",
+      "機動力: 46/100",
+      "信頼度: 69/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "semovente_90_53",
+    "title": "セモヴェンテ 90/53",
+    "year": 1942,
+    "x": 400,
+    "y": 200,
+    "research_time": 127,
+    "reliability": "配備（制式採用）",
+    "desc": "90mm高射砲を自走化した重駆逐戦車。少数生産だった。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "effects": [
+      "対人攻撃: 12/100",
+      "対物攻撃: 61/100",
+      "生存力: 36/100",
+      "機動力: 46/100",
+      "信頼度: 70/100"
+    ],
+    "prerequisites": [
+      "semovente_75_18"
+    ]
+  },
+  {
+    "id": "semovente_105_25",
+    "title": "セモヴェンテ 105/25",
+    "year": 1943,
+    "x": 400,
+    "y": 350,
+    "research_time": 129,
+    "reliability": "配備（制式採用）",
+    "desc": "105mm砲を搭載した突撃砲。戦争末期に投入された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "effects": [
+      "対人攻撃: 12/100",
+      "対物攻撃: 63/100",
+      "生存力: 36/100",
+      "機動力: 46/100",
+      "信頼度: 70/100"
+    ],
+    "prerequisites": [
+      "semovente_90_53"
+    ]
+  },
+  {
+    "id": "p43",
+    "title": "P.43中戦車",
+    "year": 1943,
+    "x": 700,
+    "y": 50,
+    "research_time": 129,
+    "reliability": "低（試作止まり）",
+    "desc": "75mm砲を備えた最終型中戦車計画。生産に至らなかった。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "effects": [
+      "対人攻撃: 29/100",
+      "対物攻撃: 42/100",
+      "生存力: 34/100",
+      "機動力: 56/100",
+      "信頼度: 76/100"
+    ],
+    "prerequisites": []
   }
 ]

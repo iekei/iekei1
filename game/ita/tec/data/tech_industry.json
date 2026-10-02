@@ -14,5 +14,57 @@
       "建設速度: +8%"
     ],
     "prerequisites": []
+  },
+  {
+    "id": "fiat_military",
+    "title": "FIAT軍需転換",
+    "year": 1937,
+    "x": 100,
+    "y": 200,
+    "research_time": 127,
+    "reliability": "配備（制式採用）",
+    "desc": "自動車産業の軍需転換。戦車・航空機生産を統合した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
+    "effects": [
+      "生産効率上限: +9.9%",
+      "生産効率保持率: +9.9%"
+    ],
+    "prerequisites": [
+      "ita_industry_1"
+    ]
+  },
+  {
+    "id": "libya_supply",
+    "title": "リビア補給網",
+    "year": 1938,
+    "x": 100,
+    "y": 350,
+    "research_time": 129,
+    "reliability": "配備（制式採用）",
+    "desc": "北アフリカ戦線への海上補給網整備。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
+    "effects": [
+      "生産効率上限: +10.1%",
+      "生産効率保持率: +10.1%"
+    ],
+    "prerequisites": [
+      "fiat_military"
+    ]
+  },
+  {
+    "id": "genoa_shipyard",
+    "title": "ジェノヴァ造船拡張",
+    "year": 1938,
+    "x": 400,
+    "y": 50,
+    "research_time": 129,
+    "reliability": "配備（制式採用）",
+    "desc": "アンサルド等の造船能力拡張計画。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
+    "effects": [
+      "生産効率上限: +10.1%",
+      "生産効率保持率: +10.1%"
+    ],
+    "prerequisites": []
   }
 ]

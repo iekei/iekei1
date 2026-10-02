@@ -18,6 +18,86 @@
     "prerequisites": []
   },
   {
+    "id": "bf110",
+    "title": "Bf 110双発重戦闘機",
+    "year": 1936,
+    "x": 100,
+    "y": 200,
+    "research_time": 115,
+    "reliability": "配備（制式採用）",
+    "desc": "長航程の双発重戦闘機。護衛戦闘機としては不適だったが夜間戦闘機・駆逐機として活躍した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='12' cy='14' r='2'/></svg>",
+    "effects": [
+      "攻撃力: 42/100",
+      "生存力: 30/100",
+      "機動力: 69/100",
+      "信頼度: 68/100"
+    ],
+    "prerequisites": [
+      "bf109"
+    ]
+  },
+  {
+    "id": "fw190",
+    "title": "Fw190",
+    "year": 1941,
+    "x": 100,
+    "y": 350,
+    "research_time": 130,
+    "reliability": "配備（主力）",
+    "desc": "クルト・タンク設計の「ブッチャー鳥」。Bf109を超える高出力と重武装を持つ多用途戦闘機。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "effects": [
+      "空戦: 78/100",
+      "速力: 78/100",
+      "航続: 40/100",
+      "装甲: 20/100"
+    ],
+    "prerequisites": [
+      "bf110"
+    ]
+  },
+  {
+    "id": "me163",
+    "title": "Me 163コメート",
+    "year": 1944,
+    "x": 100,
+    "y": 500,
+    "research_time": 131,
+    "reliability": "低（試作止まり）",
+    "desc": "ロケット発動機の要撃戦闘機。圧倒的上昇力で爆撃機編隊を切り裂いたが、航続時間は僅か数分。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='12' cy='14' r='2'/></svg>",
+    "effects": [
+      "攻撃力: 56/100",
+      "生存力: 37/100",
+      "機動力: 79/100",
+      "信頼度: 77/100"
+    ],
+    "prerequisites": [
+      "fw190"
+    ]
+  },
+  {
+    "id": "me262",
+    "title": "Me262シュヴァルベ",
+    "year": 1944,
+    "x": 100,
+    "y": 650,
+    "research_time": 200,
+    "reliability": "少数配備（ジェット）",
+    "desc": "世界初の実用ジェット戦闘機。連合軍のどのプロペラ機よりも速かったが、配備は遅れた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v9'/><path d='M2 11h20'/><path d='M6 11l-3 9'/><path d='M18 11l3 9'/><path d='M10 13v6'/></svg>",
+    "effects": [
+      "空戦: 90/100",
+      "速力: 95/100",
+      "航続: 25/100",
+      "装甲: 15/100"
+    ],
+    "prerequisites": [
+      "me163"
+    ]
+  },
+  {
     "id": "ju87",
     "title": "Ju87 スツーカ",
     "year": 1936,
@@ -33,8 +113,106 @@
       "航続: 55/100",
       "装甲: 12/100"
     ],
+    "prerequisites": []
+  },
+  {
+    "id": "do17",
+    "title": "Do 17双発爆撃機",
+    "year": 1937,
+    "x": 400,
+    "y": 200,
+    "research_time": 117,
+    "reliability": "配備（制式採用）",
+    "desc": "「飛行鉛筆」と呼ばれた細長い胴体の双発爆撃機。初期の電撃戦で活躍した中型爆撃機。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 48/100",
+      "生存力: 33/100",
+      "機動力: 38/100",
+      "信頼度: 69/100"
+    ],
     "prerequisites": [
-      "bf109"
+      "ju87"
+    ]
+  },
+  {
+    "id": "ju88",
+    "title": "Ju 88多用途爆撃機",
+    "year": 1939,
+    "x": 400,
+    "y": 350,
+    "research_time": 121,
+    "reliability": "配備（制式採用）",
+    "desc": "爆撃・夜戦・対艦攻撃までこなした万能機。独空軍の量産双発機として最大数を誇った。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 52/100",
+      "生存力: 36/100",
+      "機動力: 38/100",
+      "信頼度: 72/100"
+    ],
+    "prerequisites": [
+      "do17"
+    ]
+  },
+  {
+    "id": "ju188",
+    "title": "Ju 188爆撃機",
+    "year": 1943,
+    "x": 400,
+    "y": 500,
+    "research_time": 129,
+    "reliability": "配備（制式採用）",
+    "desc": "Ju 88のエンジン換装・翼形改良型。爆撃照準と防御火器を改善した改良中型爆撃機。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 59/100",
+      "生存力: 40/100",
+      "機動力: 38/100",
+      "信頼度: 76/100"
+    ],
+    "prerequisites": [
+      "ju88"
+    ]
+  },
+  {
+    "id": "ar234",
+    "title": "Ar234ブリッツ",
+    "year": 1944,
+    "x": 400,
+    "y": 650,
+    "research_time": 190,
+    "reliability": "少数配備（ジェット）",
+    "desc": "世界初のジェット爆撃機。高速偵察・爆撃に用いられた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v9'/><path d='M2 11h20'/><path d='M6 11l-3 9'/><path d='M18 11l3 9'/><path d='M10 13v6'/></svg>",
+    "effects": [
+      "爆撃: 55/100",
+      "速力: 88/100",
+      "航続: 50/100",
+      "装甲: 10/100"
+    ],
+    "prerequisites": [
+      "ju188"
+    ]
+  },
+  {
+    "id": "do335",
+    "title": "Do 335プファイル",
+    "year": 1944,
+    "x": 400,
+    "y": 800,
+    "research_time": 131,
+    "reliability": "低（試作止まり）",
+    "desc": "前後に発動機を置く異例の双発戦闘機。速度性能は優秀だったが実戦に間に合わなかった。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 60/100",
+      "生存力: 41/100",
+      "機動力: 38/100",
+      "信頼度: 77/100"
+    ],
+    "prerequisites": [
+      "ar234"
     ]
   },
   {
@@ -56,63 +234,63 @@
     "prerequisites": []
   },
   {
-    "id": "fw190",
-    "title": "Fw190",
-    "year": 1941,
-    "x": 100,
+    "id": "fw200",
+    "title": "Fw 200コンドル",
+    "year": 1939,
+    "x": 700,
     "y": 200,
-    "research_time": 130,
-    "reliability": "配備（主力）",
-    "desc": "クルト・タンク設計の「ブッチャー鳥」。Bf109を超える高出力と重武装を持つ多用途戦闘機。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "research_time": 121,
+    "reliability": "配備（制式採用）",
+    "desc": "旅客機を改造した長距離哨戒爆撃機。大西洋で連合軍船団に脅威を与えた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
     "effects": [
-      "空戦: 78/100",
-      "速力: 78/100",
-      "航続: 40/100",
-      "装甲: 20/100"
+      "攻撃力: 52/100",
+      "生存力: 36/100",
+      "機動力: 38/100",
+      "信頼度: 72/100"
     ],
     "prerequisites": [
-      "bf109"
+      "he111"
     ]
   },
   {
-    "id": "me262",
-    "title": "Me262シュヴァルベ",
-    "year": 1944,
-    "x": 100,
+    "id": "he177",
+    "title": "He 177グライフ",
+    "year": 1942,
+    "x": 700,
     "y": 350,
-    "research_time": 200,
-    "reliability": "少数配備（ジェット）",
-    "desc": "世界初の実用ジェット戦闘機。連合軍のどのプロペラ機よりも速かったが、配備は遅れた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v9'/><path d='M2 11h20'/><path d='M6 11l-3 9'/><path d='M18 11l3 9'/><path d='M10 13v6'/></svg>",
+    "research_time": 127,
+    "reliability": "配備（制式採用）",
+    "desc": "4発を2基の連結発動機にまとめた独唯一の重爆撃機。発動機火災に終始悩まされた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
     "effects": [
-      "空戦: 90/100",
-      "速力: 95/100",
-      "航続: 25/100",
-      "装甲: 15/100"
+      "攻撃力: 57/100",
+      "生存力: 39/100",
+      "機動力: 38/100",
+      "信頼度: 75/100"
     ],
     "prerequisites": [
-      "fw190"
+      "fw200"
     ]
   },
   {
-    "id": "ar234",
-    "title": "Ar234ブリッツ",
-    "year": 1944,
-    "x": 400,
-    "y": 350,
-    "research_time": 190,
-    "reliability": "少数配備（ジェット）",
-    "desc": "世界初のジェット爆撃機。高速偵察・爆撃に用いられた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v9'/><path d='M2 11h20'/><path d='M6 11l-3 9'/><path d='M18 11l3 9'/><path d='M10 13v6'/></svg>",
+    "id": "he162",
+    "title": "He 162フィアーター・サラマンダー",
+    "year": 1945,
+    "x": 700,
+    "y": 500,
+    "research_time": 133,
+    "reliability": "低（試作止まり）",
+    "desc": "国民戦闘機として急遽設計されたジェット要撃機。素人の操縦には過酷だった。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
     "effects": [
-      "爆撃: 55/100",
-      "速力: 88/100",
-      "航続: 50/100",
-      "装甲: 10/100"
+      "攻撃力: 62/100",
+      "生存力: 42/100",
+      "機動力: 38/100",
+      "信頼度: 78/100"
     ],
     "prerequisites": [
-      "me262"
+      "he177"
     ]
   }
 ]

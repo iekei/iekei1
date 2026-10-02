@@ -1,10 +1,68 @@
 [
   {
+    "id": "cr32",
+    "title": "フィアット CR.32",
+    "year": 1936,
+    "x": 100,
+    "y": 50,
+    "research_time": 115,
+    "reliability": "配備（制式採用）",
+    "desc": "複葉戦闘機。スペイン内戦で高い評価を得たが、戦闘機進化で旧式化した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='12' cy='14' r='2'/></svg>",
+    "effects": [
+      "攻撃力: 42/100",
+      "生存力: 30/100",
+      "機動力: 69/100",
+      "信頼度: 68/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "cr42",
+    "title": "フィアット CR.42ファルコ",
+    "year": 1939,
+    "x": 100,
+    "y": 200,
+    "research_time": 121,
+    "reliability": "配備（制式採用）",
+    "desc": "世界最後の実用複葉戦闘機。北アフリカ・地中海で用いられた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='12' cy='14' r='2'/></svg>",
+    "effects": [
+      "攻撃力: 48/100",
+      "生存力: 32/100",
+      "機動力: 73/100",
+      "信頼度: 72/100"
+    ],
+    "prerequisites": [
+      "cr32"
+    ]
+  },
+  {
+    "id": "mc200",
+    "title": "マッキ C.200サエッタ",
+    "year": 1939,
+    "x": 100,
+    "y": 350,
+    "research_time": 121,
+    "reliability": "配備（制式採用）",
+    "desc": "全金属製単葉戦闘機。運動性・堅牢性に優れた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='12' cy='14' r='2'/></svg>",
+    "effects": [
+      "攻撃力: 48/100",
+      "生存力: 32/100",
+      "機動力: 73/100",
+      "信頼度: 72/100"
+    ],
+    "prerequisites": [
+      "cr42"
+    ]
+  },
+  {
     "id": "mc202",
     "title": "MC.202チェントロ",
     "year": 1941,
     "x": 100,
-    "y": 50,
+    "y": 500,
     "research_time": 130,
     "reliability": "配備",
     "desc": "優秀な戦闘機。DB601エンジンを搭載。",
@@ -15,6 +73,144 @@
       "速力: 72/100",
       "装甲: 20/100"
     ],
+    "prerequisites": [
+      "mc200"
+    ]
+  },
+  {
+    "id": "g55",
+    "title": "フィアット G.55ケントウリオ",
+    "year": 1943,
+    "x": 100,
+    "y": 650,
+    "research_time": 129,
+    "reliability": "配備（制式採用）",
+    "desc": "ドイツ技術を取り入れた高性能戦闘機。独軍に高評価された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='12' cy='14' r='2'/></svg>",
+    "effects": [
+      "攻撃力: 55/100",
+      "生存力: 36/100",
+      "機動力: 78/100",
+      "信頼度: 76/100"
+    ],
+    "prerequisites": [
+      "mc202"
+    ]
+  },
+  {
+    "id": "mc205",
+    "title": "マッキ C.205ヴェルトロ",
+    "year": 1943,
+    "x": 100,
+    "y": 800,
+    "research_time": 129,
+    "reliability": "配備（制式採用）",
+    "desc": "DB601発動機搭載の高性能戦闘機。イタリア最良級の戦闘機。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='12' cy='14' r='2'/></svg>",
+    "effects": [
+      "攻撃力: 55/100",
+      "生存力: 36/100",
+      "機動力: 78/100",
+      "信頼度: 76/100"
+    ],
+    "prerequisites": [
+      "g55"
+    ]
+  },
+  {
+    "id": "sm79",
+    "title": "サヴォイア・マルケッティ SM.79",
+    "year": 1936,
+    "x": 400,
+    "y": 50,
+    "research_time": 115,
+    "reliability": "配備（制式採用）",
+    "desc": "三発中型爆撃機。「三発の醜い鴉」と呼ばれた地中海の主力爆撃機。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 46/100",
+      "生存力: 32/100",
+      "機動力: 38/100",
+      "信頼度: 68/100"
+    ],
     "prerequisites": []
+  },
+  {
+    "id": "z1007",
+    "title": "カント Z.1007爆撃機",
+    "year": 1939,
+    "x": 400,
+    "y": 200,
+    "research_time": 121,
+    "reliability": "配備（制式採用）",
+    "desc": "三発中型爆撃機。地中海・東部戦線で用いられた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 52/100",
+      "生存力: 36/100",
+      "機動力: 38/100",
+      "信頼度: 72/100"
+    ],
+    "prerequisites": [
+      "sm79"
+    ]
+  },
+  {
+    "id": "sm82",
+    "title": "SM.82クランゴル",
+    "year": 1940,
+    "x": 400,
+    "y": 350,
+    "research_time": 123,
+    "reliability": "配備（制式採用）",
+    "desc": "輸送・爆撃兼用の三発大型機。長距離輸送に重用された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 53/100",
+      "生存力: 37/100",
+      "機動力: 38/100",
+      "信頼度: 73/100"
+    ],
+    "prerequisites": [
+      "z1007"
+    ]
+  },
+  {
+    "id": "re2000",
+    "title": "レジアーナ Re.2000",
+    "year": 1939,
+    "x": 700,
+    "y": 50,
+    "research_time": 121,
+    "reliability": "配備（制式採用）",
+    "desc": "戦闘機。ハンガリー・スウェーデンにも輸出された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 52/100",
+      "生存力: 36/100",
+      "機動力: 38/100",
+      "信頼度: 72/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "re2001",
+    "title": "レジアーナ Re.2001",
+    "year": 1941,
+    "x": 700,
+    "y": 200,
+    "research_time": 125,
+    "reliability": "配備（制式採用）",
+    "desc": "改良型戦闘機。艦上戦闘機型も計画された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 55/100",
+      "生存力: 38/100",
+      "機動力: 38/100",
+      "信頼度: 74/100"
+    ],
+    "prerequisites": [
+      "re2000"
+    ]
   }
 ]

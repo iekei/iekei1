@@ -16,5 +16,127 @@
       "対空: 30/100"
     ],
     "prerequisites": []
+  },
+  {
+    "id": "jean_bart",
+    "title": "ジャン・バール",
+    "year": 1940,
+    "x": 100,
+    "y": 200,
+    "research_time": 143,
+    "reliability": "配備（制式採用）",
+    "desc": "リシュリュー級2番艦。カサブランカで米艦隊と戦った。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 16l2-6h16l2 6H2z'/><path d='M12 10V4'/><path d='M12 4l4 4-4 2'/></svg>",
+    "effects": [
+      "対人攻撃: 26/100",
+      "対物攻撃: 59/100",
+      "生存力: 50/100",
+      "機動力: 52/100",
+      "信頼度: 70/100"
+    ],
+    "prerequisites": [
+      "dunkerque"
+    ]
+  },
+  {
+    "id": "richelieu",
+    "title": "リシュリュー級戦艦",
+    "year": 1940,
+    "x": 100,
+    "y": 350,
+    "research_time": 143,
+    "reliability": "配備（制式採用）",
+    "desc": "4連装380mm砲2基の高速戦艦。自由フランス海軍の旗艦。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 16l2-6h16l2 6H2z'/><path d='M12 10V4'/><path d='M12 4l4 4-4 2'/></svg>",
+    "effects": [
+      "対人攻撃: 26/100",
+      "対物攻撃: 59/100",
+      "生存力: 50/100",
+      "機動力: 52/100",
+      "信頼度: 70/100"
+    ],
+    "prerequisites": [
+      "jean_bart"
+    ]
+  },
+  {
+    "id": "la_galissonniere",
+    "title": "ラ・ガリソニエール級軽巡洋艦",
+    "year": 1934,
+    "x": 400,
+    "y": 50,
+    "research_time": 131,
+    "reliability": "配備（制式採用）",
+    "desc": "9門の152mm砲を備えた均衡のとれた軽巡洋艦。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 16l2-6h16l2 6H2z'/><path d='M12 10V4'/><path d='M12 4l4 4-4 2'/></svg>",
+    "effects": [
+      "対人攻撃: 22/100",
+      "対物攻撃: 34/100",
+      "生存力: 26/100",
+      "機動力: 80/100",
+      "信頼度: 69/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "le_fantasque",
+    "title": "ル・ファンタスク級大型駆逐艦",
+    "year": 1934,
+    "x": 400,
+    "y": 200,
+    "research_time": 131,
+    "reliability": "配備（制式採用）",
+    "desc": "45ノット級の超高速駆逐艦。世界最速級の駆逐艦。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 16l2-6h16l2 6H2z'/><path d='M12 10V4'/><path d='M12 4l4 4-4 2'/></svg>",
+    "effects": [
+      "対人攻撃: 22/100",
+      "対物攻撃: 34/100",
+      "生存力: 26/100",
+      "機動力: 80/100",
+      "信頼度: 69/100"
+    ],
+    "prerequisites": [
+      "la_galissonniere"
+    ]
+  },
+  {
+    "id": "surcouf",
+    "title": "シュルクーフ潜水重巡",
+    "year": 1934,
+    "x": 700,
+    "y": 50,
+    "research_time": 131,
+    "reliability": "配備（制式採用）",
+    "desc": "203mm砲を備えた史上最大級の潜水艦。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><ellipse cx='12' cy='14' rx='9' ry='4'/><path d='M12 10V6h5'/><path d='M4 14h16'/></svg>",
+    "effects": [
+      "対人攻撃: 10/100",
+      "対物攻撃: 39/100",
+      "生存力: 23/100",
+      "機動力: 60/100",
+      "信頼度: 61/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "bearn",
+    "title": "ベアルン空母",
+    "year": 1936,
+    "x": 700,
+    "y": 200,
+    "research_time": 135,
+    "reliability": "配備（制式採用）",
+    "desc": "フランス唯一の正規空母。低速で戦闘には不向きだったが輸送に用いられた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><ellipse cx='12' cy='14' rx='9' ry='4'/><path d='M12 10V6h5'/><path d='M4 14h16'/></svg>",
+    "effects": [
+      "対人攻撃: 10/100",
+      "対物攻撃: 42/100",
+      "生存力: 24/100",
+      "機動力: 60/100",
+      "信頼度: 63/100"
+    ],
+    "prerequisites": [
+      "surcouf"
+    ]
   }
 ]

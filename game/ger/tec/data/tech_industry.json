@@ -16,11 +16,29 @@
     "prerequisites": []
   },
   {
+    "id": "ig_farben",
+    "title": "IGファルベン総合化学",
+    "year": 1936,
+    "x": 100,
+    "y": 200,
+    "research_time": 125,
+    "reliability": "配備（制式採用）",
+    "desc": "合成ゴム・合成燃料を統括する世界最大の化学コンツェルン。独戦争経済の化学的基盤。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
+    "effects": [
+      "生産効率上限: +9.6%",
+      "生産効率保持率: +9.6%"
+    ],
+    "prerequisites": [
+      "autobahn"
+    ]
+  },
+  {
     "id": "synthetic_fuel",
     "title": "合成燃料工場",
     "year": 1936,
     "x": 100,
-    "y": 200,
+    "y": 350,
     "research_time": 140,
     "reliability": "運用中",
     "desc": "石炭液化による合成燃料。ルーマニア石油への依存を減らす国家的事業。",
@@ -30,25 +48,43 @@
       "石油依存: -15%"
     ],
     "prerequisites": [
-      "autobahn"
+      "ig_farben"
     ]
   },
   {
-    "id": "synthetic_rubber",
-    "title": "合成ゴム (ブナ)",
+    "id": "hermann_goring_works",
+    "title": "ヘルマン・ゲーリング国家工廠",
     "year": 1937,
-    "x": 400,
-    "y": 200,
-    "research_time": 120,
-    "reliability": "運用中",
-    "desc": "天然ゴム代替の合成ゴム生産。タイヤ・ホースなど軍需資材を自給した。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M8 3h6v18H8z'/><path d='M14 8h3v8'/><path d='M10 7v3'/></svg>",
+    "x": 100,
+    "y": 500,
+    "research_time": 127,
+    "reliability": "配備（制式採用）",
+    "desc": "鉄鋼・兵器を一括管理する国営重工業複合体。占領地工場の吸収統合で急拡大した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
     "effects": [
-      "ゴム自給: +30%",
-      "車両信頼度: +5%"
+      "生産効率上限: +9.9%",
+      "生産効率保持率: +9.9%"
     ],
     "prerequisites": [
       "synthetic_fuel"
+    ]
+  },
+  {
+    "id": "organisation_todt",
+    "title": "トート組織 (OT)",
+    "year": 1938,
+    "x": 100,
+    "y": 650,
+    "research_time": 129,
+    "reliability": "配備（制式採用）",
+    "desc": "大規模土木・軍事建設を統括する国家建設組織。大西洋の壁・アウトバーンを支えた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
+    "effects": [
+      "生産効率上限: +10.1%",
+      "生産効率保持率: +10.1%"
+    ],
+    "prerequisites": [
+      "hermann_goring_works"
     ]
   },
   {
@@ -56,7 +92,7 @@
     "title": "ラインメタル拡張",
     "year": 1938,
     "x": 100,
-    "y": 350,
+    "y": 800,
     "research_time": 130,
     "reliability": "運用中",
     "desc": "火砲・装甲車両の生産ライン拡張。開戦時の軍需生産を支えた。",
@@ -66,15 +102,31 @@
       "装備生産効率: +8%"
     ],
     "prerequisites": [
-      "synthetic_fuel"
+      "organisation_todt"
     ]
+  },
+  {
+    "id": "synthetic_rubber",
+    "title": "合成ゴム (ブナ)",
+    "year": 1937,
+    "x": 400,
+    "y": 50,
+    "research_time": 120,
+    "reliability": "運用中",
+    "desc": "天然ゴム代替の合成ゴム生産。タイヤ・ホースなど軍需資材を自給した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M8 3h6v18H8z'/><path d='M14 8h3v8'/><path d='M10 7v3'/></svg>",
+    "effects": [
+      "ゴム自給: +30%",
+      "車両信頼度: +5%"
+    ],
+    "prerequisites": []
   },
   {
     "id": "four_year_plan_ind",
     "title": "四ヵ年計画の産業動員",
     "year": 1938,
     "x": 400,
-    "y": 350,
+    "y": 200,
     "research_time": 150,
     "reliability": "運用中",
     "desc": "ゲーリング主宰の四ヵ年計画。戦争経済への全面移行を推進した。",
@@ -85,8 +137,43 @@
       "建設速度: +8%"
     ],
     "prerequisites": [
-      "rheinmetall",
       "synthetic_rubber"
+    ]
+  },
+  {
+    "id": "krupp_expansion",
+    "title": "クルップ重工業拡張",
+    "year": 1938,
+    "x": 400,
+    "y": 350,
+    "research_time": 129,
+    "reliability": "配備（制式採用）",
+    "desc": "重砲・装甲車両の生産能力を一段と拡大させる重工業集積計画。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
+    "effects": [
+      "生産効率上限: +10.1%",
+      "生産効率保持率: +10.1%"
+    ],
+    "prerequisites": [
+      "four_year_plan_ind"
+    ]
+  },
+  {
+    "id": "forced_labor",
+    "title": "強制労働動員",
+    "year": 1941,
+    "x": 400,
+    "y": 500,
+    "research_time": 135,
+    "reliability": "配備（制式採用）",
+    "desc": "占領地域から動員した労働力で軍需生産を維持する経済制度。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
+    "effects": [
+      "生産効率上限: +10.9%",
+      "生産効率保持率: +10.9%"
+    ],
+    "prerequisites": [
+      "krupp_expansion"
     ]
   }
 ]

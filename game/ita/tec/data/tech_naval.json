@@ -16,5 +16,127 @@
       "対空: 35/100"
     ],
     "prerequisites": []
+  },
+  {
+    "id": "vittorio_veneto",
+    "title": "ヴィットリオ・ヴェネト級戦艦",
+    "year": 1940,
+    "x": 100,
+    "y": 200,
+    "research_time": 143,
+    "reliability": "配備（制式採用）",
+    "desc": "381mm砲9門の新型高速戦艦。タラント・マタパンで活躍した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 16l2-6h16l2 6H2z'/><path d='M12 10V4'/><path d='M12 4l4 4-4 2'/></svg>",
+    "effects": [
+      "対人攻撃: 26/100",
+      "対物攻撃: 59/100",
+      "生存力: 50/100",
+      "機動力: 52/100",
+      "信頼度: 70/100"
+    ],
+    "prerequisites": [
+      "littorio"
+    ]
+  },
+  {
+    "id": "roma",
+    "title": "ローマ",
+    "year": 1942,
+    "x": 100,
+    "y": 350,
+    "research_time": 147,
+    "reliability": "配備（制式採用）",
+    "desc": "ヴィットリオ・ヴェネト級3番艦。イタリア降伏後に独誘導爆弾により失われた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 16l2-6h16l2 6H2z'/><path d='M12 10V4'/><path d='M12 4l4 4-4 2'/></svg>",
+    "effects": [
+      "対人攻撃: 26/100",
+      "対物攻撃: 63/100",
+      "生存力: 53/100",
+      "機動力: 52/100",
+      "信頼度: 72/100"
+    ],
+    "prerequisites": [
+      "vittorio_veneto"
+    ]
+  },
+  {
+    "id": "bolzano",
+    "title": "ボルツァーノ重巡洋艦",
+    "year": 1933,
+    "x": 400,
+    "y": 50,
+    "research_time": 129,
+    "reliability": "配備（制式採用）",
+    "desc": "トレント級の改良重巡。地中海で通商破壊・護衛に従事した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 16l2-6h16l2 6H2z'/><path d='M12 10V4'/><path d='M12 4l4 4-4 2'/></svg>",
+    "effects": [
+      "対人攻撃: 22/100",
+      "対物攻撃: 33/100",
+      "生存力: 26/100",
+      "機動力: 80/100",
+      "信頼度: 68/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "duca_degli_abruzzi",
+    "title": "アブルッツィ公爵級軽巡洋艦",
+    "year": 1937,
+    "x": 400,
+    "y": 200,
+    "research_time": 137,
+    "reliability": "配備（制式採用）",
+    "desc": "コンドッティエーリ級の改良型軽巡洋艦。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 16l2-6h16l2 6H2z'/><path d='M12 10V4'/><path d='M12 4l4 4-4 2'/></svg>",
+    "effects": [
+      "対人攻撃: 22/100",
+      "対物攻撃: 37/100",
+      "生存力: 28/100",
+      "機動力: 80/100",
+      "信頼度: 72/100"
+    ],
+    "prerequisites": [
+      "bolzano"
+    ]
+  },
+  {
+    "id": "mas_boat",
+    "title": "MAS高速魚雷艇",
+    "year": 1936,
+    "x": 700,
+    "y": 50,
+    "research_time": 135,
+    "reliability": "配備（制式採用）",
+    "desc": "軽快な魚雷艇。地中海で艦隊・輸送船を攻撃した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><ellipse cx='12' cy='14' rx='9' ry='4'/><path d='M12 10V6h5'/><path d='M4 14h16'/></svg>",
+    "effects": [
+      "対人攻撃: 10/100",
+      "対物攻撃: 42/100",
+      "生存力: 24/100",
+      "機動力: 60/100",
+      "信頼度: 63/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "marconi_class",
+    "title": "マルコーニ級潜水艦",
+    "year": 1940,
+    "x": 700,
+    "y": 200,
+    "research_time": 143,
+    "reliability": "配備（制式採用）",
+    "desc": "地中海・大西洋で活動した遠洋潜水艦。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><ellipse cx='12' cy='14' rx='9' ry='4'/><path d='M12 10V6h5'/><path d='M4 14h16'/></svg>",
+    "effects": [
+      "対人攻撃: 10/100",
+      "対物攻撃: 47/100",
+      "生存力: 27/100",
+      "機動力: 60/100",
+      "信頼度: 66/100"
+    ],
+    "prerequisites": [
+      "mas_boat"
+    ]
   }
 ]

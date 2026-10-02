@@ -1,10 +1,50 @@
 [
   {
+    "id": "cannone_149_40",
+    "title": "149/40加農砲",
+    "year": 1935,
+    "x": 100,
+    "y": 50,
+    "research_time": 93,
+    "reliability": "配備（制式採用）",
+    "desc": "長射程の149mm重加農砲。機動砲兵の重火力。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "effects": [
+      "対人攻撃: 37/100",
+      "対物攻撃: 37/100",
+      "生存力: 15/100",
+      "機動力: 48/100",
+      "信頼度: 71/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "obice_100_17",
+    "title": "100/17榴弾砲",
+    "year": 1935,
+    "x": 100,
+    "y": 200,
+    "research_time": 93,
+    "reliability": "配備（制式採用）",
+    "desc": "師団砲兵の標準100mm榴弾砲。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "effects": [
+      "対人攻撃: 37/100",
+      "対物攻撃: 37/100",
+      "生存力: 15/100",
+      "機動力: 48/100",
+      "信頼度: 71/100"
+    ],
+    "prerequisites": [
+      "cannone_149_40"
+    ]
+  },
+  {
     "id": "ita_100mm",
     "title": "100mm榴弾砲",
     "year": 1936,
     "x": 100,
-    "y": 50,
+    "y": 350,
     "research_time": 90,
     "reliability": "配備",
     "desc": "イタリア標準榴弾砲。",
@@ -15,6 +55,88 @@
       "機動力: 60/100",
       "信頼度: 70/100"
     ],
+    "prerequisites": [
+      "obice_100_17"
+    ]
+  },
+  {
+    "id": "cannone_47_32",
+    "title": "47/32対戦車砲",
+    "year": 1935,
+    "x": 400,
+    "y": 50,
+    "research_time": 93,
+    "reliability": "配備（制式採用）",
+    "desc": "標準の47mm対戦車・歩兵砲。開戦時に大量配備された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "effects": [
+      "対人攻撃: 14/100",
+      "対物攻撃: 48/100",
+      "生存力: 14/100",
+      "機動力: 44/100",
+      "信頼度: 65/100"
+    ],
     "prerequisites": []
+  },
+  {
+    "id": "cannone_90_53",
+    "title": "90/53高射砲",
+    "year": 1939,
+    "x": 400,
+    "y": 200,
+    "research_time": 101,
+    "reliability": "配備（制式採用）",
+    "desc": "88mm級の高性能90mm高射・対戦車両用砲。独Flak 88に匹敵した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "effects": [
+      "対人攻撃: 14/100",
+      "対物攻撃: 54/100",
+      "生存力: 14/100",
+      "機動力: 44/100",
+      "信頼度: 68/100"
+    ],
+    "prerequisites": [
+      "cannone_47_32"
+    ]
+  },
+  {
+    "id": "ansaldo_210",
+    "title": "210/22重榴弾砲",
+    "year": 1935,
+    "x": 700,
+    "y": 50,
+    "research_time": 93,
+    "reliability": "配備（制式採用）",
+    "desc": "要塞攻撃用の210mm重榴弾砲。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "effects": [
+      "対人攻撃: 37/100",
+      "対物攻撃: 37/100",
+      "生存力: 15/100",
+      "機動力: 48/100",
+      "信頼度: 71/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "mortai_81_14",
+    "title": "81/14迫撃砲",
+    "year": 1935,
+    "x": 700,
+    "y": 200,
+    "research_time": 93,
+    "reliability": "配備（制式採用）",
+    "desc": "大隊・連隊用の81mm迫撃砲。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "effects": [
+      "対人攻撃: 37/100",
+      "対物攻撃: 37/100",
+      "生存力: 15/100",
+      "機動力: 48/100",
+      "信頼度: 71/100"
+    ],
+    "prerequisites": [
+      "ansaldo_210"
+    ]
   }
 ]

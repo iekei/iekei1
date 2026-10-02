@@ -19,11 +19,32 @@
     "prerequisites": []
   },
   {
+    "id": "mg13",
+    "title": "MG13機関銃",
+    "year": 1936,
+    "x": 100,
+    "y": 200,
+    "research_time": 95,
+    "reliability": "配備（制式採用）",
+    "desc": "世界初の汎用機関銃MG34の前身。ラインメタル製の気冷式機関銃で、小銃分隊に配備された初期の統制火器。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "effects": [
+      "対人攻撃: 39/100",
+      "対物攻撃: 12/100",
+      "生存力: 8/100",
+      "機動力: 62/100",
+      "信頼度: 77/100"
+    ],
+    "prerequisites": [
+      "kar98k"
+    ]
+  },
+  {
     "id": "mg34",
     "title": "MG34機関銃",
     "year": 1936,
     "x": 100,
-    "y": 200,
+    "y": 350,
     "research_time": 110,
     "reliability": "配備（制式採用）",
     "desc": "世界初の汎用機関銃。軽機としても重機としても運用でき、歩兵分隊の火力中核となった。",
@@ -36,71 +57,49 @@
       "信頼度: 65/100"
     ],
     "prerequisites": [
-      "kar98k"
+      "mg13"
     ]
   },
   {
-    "id": "mp40",
-    "title": "MP40短機関銃",
-    "year": 1938,
-    "x": 400,
-    "y": 50,
-    "research_time": 90,
-    "reliability": "配備（大量装備）",
-    "desc": "簡略化された9mm短機関銃。突撃部隊・降下猟兵に大量配備され、市街戦で威力を発揮した。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M3 11h14'/><circle cx='11' cy='15' r='3'/><path d='M5 11v4'/></svg>",
+    "id": "gewehr_41",
+    "title": "Gew 41半自動小銃",
+    "year": 1941,
+    "x": 100,
+    "y": 500,
+    "research_time": 105,
+    "reliability": "配備（制式採用）",
+    "desc": "ガス作動式の半自動小銃。ガスポートを銃口近くに置く構造が災いし、汚れに弱くGew 43へ改設計された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
     "effects": [
-      "対人攻撃: 35/100",
-      "対物攻撃: 3/100",
+      "対人攻撃: 43/100",
+      "対物攻撃: 13/100",
       "生存力: 8/100",
-      "機動力: 78/100",
-      "信頼度: 70/100"
-    ],
-    "prerequisites": [
-      "kar98k"
-    ]
-  },
-  {
-    "id": "stg44",
-    "title": "シュトゥルムゲヴェーア44",
-    "year": 1943,
-    "x": 400,
-    "y": 200,
-    "research_time": 150,
-    "reliability": "配備（後期）",
-    "desc": "世界初の量産アサルトライフル。7.92mm短弾を使用し、歩兵火力の概念を一変させた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M3 11h14'/><circle cx='11' cy='15' r='3'/><path d='M5 11v4'/></svg>",
-    "effects": [
-      "対人攻撃: 60/100",
-      "対物攻撃: 14/100",
-      "生存力: 12/100",
       "機動力: 62/100",
-      "信頼度: 55/100"
+      "信頼度: 83/100"
     ],
     "prerequisites": [
-      "mp40",
       "mg34"
     ]
   },
   {
-    "id": "panzerfaust",
-    "title": "パンツァーファウスト",
-    "year": 1943,
-    "x": 700,
-    "y": 50,
-    "research_time": 100,
-    "reliability": "配備（大量装備）",
-    "desc": "使い捨て式の対戦車擲弾発射器。歩兵が単独で戦車と交戦できるようになり、対戦車防御を一変させた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M4 18h16'/><path d='M6 18l6-10h4l4 10'/><circle cx='9' cy='18' r='1'/></svg>",
+    "id": "fg42",
+    "title": "FG42降下猟兵小銃",
+    "year": 1942,
+    "x": 100,
+    "y": 650,
+    "research_time": 107,
+    "reliability": "配備（制式採用）",
+    "desc": "クレタ島の教訓から開発された降下猟兵向け選択射撃小銃。世界中のバトルライフルの先駆的存在。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
     "effects": [
-      "対戦車攻撃: 65/100",
-      "対人攻撃: 5/100",
-      "射程: 25/100",
-      "機動力: 80/100",
-      "信頼度: 75/100"
+      "対人攻撃: 44/100",
+      "対物攻撃: 13/100",
+      "生存力: 8/100",
+      "機動力: 62/100",
+      "信頼度: 84/100"
     ],
     "prerequisites": [
-      "kar98k"
+      "gewehr_41"
     ]
   },
   {
@@ -108,7 +107,7 @@
     "title": "MG42機関銃",
     "year": 1942,
     "x": 100,
-    "y": 350,
+    "y": 800,
     "research_time": 120,
     "reliability": "配備（制式採用）",
     "desc": "MG34を改良した汎用機関銃。毎分1,200発の発射速度から「鋸の音」と恐れられた。",
@@ -121,7 +120,192 @@
       "信頼度: 68/100"
     ],
     "prerequisites": [
-      "mg34"
+      "fg42"
+    ]
+  },
+  {
+    "id": "mp38",
+    "title": "MP38短機関銃",
+    "year": 1938,
+    "x": 400,
+    "y": 50,
+    "research_time": 99,
+    "reliability": "配備（制式採用）",
+    "desc": "MP36を簡略化した折畳式鋼板フレームの短機関銃。溶接を廃して量産性を高めた初期型。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 11h14'/><circle cx='11' cy='15' r='3'/><path d='M5 11v4'/></svg>",
+    "effects": [
+      "対人攻撃: 36/100",
+      "対物攻撃: 5/100",
+      "生存力: 8/100",
+      "機動力: 78/100",
+      "信頼度: 63/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "mp40",
+    "title": "MP40短機関銃",
+    "year": 1938,
+    "x": 400,
+    "y": 200,
+    "research_time": 90,
+    "reliability": "配備（大量装備）",
+    "desc": "簡略化された9mm短機関銃。突撃部隊・降下猟兵に大量配備され、市街戦で威力を発揮した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M3 11h14'/><circle cx='11' cy='15' r='3'/><path d='M5 11v4'/></svg>",
+    "effects": [
+      "対人攻撃: 35/100",
+      "対物攻撃: 3/100",
+      "生存力: 8/100",
+      "機動力: 78/100",
+      "信頼度: 70/100"
+    ],
+    "prerequisites": [
+      "mp38"
+    ]
+  },
+  {
+    "id": "stg44",
+    "title": "シュトゥルムゲヴェーア44",
+    "year": 1943,
+    "x": 400,
+    "y": 350,
+    "research_time": 150,
+    "reliability": "配備（後期）",
+    "desc": "世界初の量産アサルトライフル。7.92mm短弾を使用し、歩兵火力の概念を一変させた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M3 11h14'/><circle cx='11' cy='15' r='3'/><path d='M5 11v4'/></svg>",
+    "effects": [
+      "対人攻撃: 60/100",
+      "対物攻撃: 14/100",
+      "生存力: 12/100",
+      "機動力: 62/100",
+      "信頼度: 55/100"
+    ],
+    "prerequisites": [
+      "mp40"
+    ]
+  },
+  {
+    "id": "stg45",
+    "title": "StG45(M)突撃銃",
+    "year": 1945,
+    "x": 400,
+    "y": 500,
+    "research_time": 113,
+    "reliability": "配備（制式採用）",
+    "desc": "遅延作動方式を採用した次世代突撃銃。戦後のCETME・H&K G3の直接の源流となった。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 11h14'/><circle cx='11' cy='15' r='3'/><path d='M5 11v4'/></svg>",
+    "effects": [
+      "対人攻撃: 42/100",
+      "対物攻撃: 6/100",
+      "生存力: 8/100",
+      "機動力: 78/100",
+      "信頼度: 68/100"
+    ],
+    "prerequisites": [
+      "stg44"
+    ]
+  },
+  {
+    "id": "t_gewehr",
+    "title": "M1918対戦車銃",
+    "year": 1936,
+    "x": 700,
+    "y": 50,
+    "research_time": 95,
+    "reliability": "配備（制式採用）",
+    "desc": "第一次大戦末期に登場した13mmマウザー対戦車銃。対装甲火器の系譜の起点。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "effects": [
+      "対人攻撃: 18/100",
+      "対物攻撃: 34/100",
+      "生存力: 8/100",
+      "機動力: 56/100",
+      "信頼度: 59/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "pzb_39",
+    "title": "Panzerbüchse 39",
+    "year": 1939,
+    "x": 700,
+    "y": 200,
+    "research_time": 101,
+    "reliability": "配備（制式採用）",
+    "desc": "7.92mm穿甲弾を使う単発式対戦車銃。開戦初期の歩兵対戦車手段で、装甲の進化により早期に役目を終えた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "effects": [
+      "対人攻撃: 18/100",
+      "対物攻撃: 38/100",
+      "生存力: 8/100",
+      "機動力: 56/100",
+      "信頼度: 61/100"
+    ],
+    "prerequisites": [
+      "t_gewehr"
+    ]
+  },
+  {
+    "id": "panzerfaust",
+    "title": "パンツァーファウスト",
+    "year": 1943,
+    "x": 700,
+    "y": 350,
+    "research_time": 100,
+    "reliability": "配備（大量装備）",
+    "desc": "使い捨て式の対戦車擲弾発射器。歩兵が単独で戦車と交戦できるようになり、対戦車防御を一変させた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M4 18h16'/><path d='M6 18l6-10h4l4 10'/><circle cx='9' cy='18' r='1'/></svg>",
+    "effects": [
+      "対戦車攻撃: 65/100",
+      "対人攻撃: 5/100",
+      "射程: 25/100",
+      "機動力: 80/100",
+      "信頼度: 75/100"
+    ],
+    "prerequisites": [
+      "pzb_39"
+    ]
+  },
+  {
+    "id": "panzerschreck",
+    "title": "パンツァーシュレック",
+    "year": 1943,
+    "x": 700,
+    "y": 500,
+    "research_time": 109,
+    "reliability": "配備（制式採用）",
+    "desc": "アメリカのバズーカを参考に口径を拡大した8.8cm成型炸薬弾無反動砲。歩兵の近接対戦車火力を一新した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "effects": [
+      "対人攻撃: 18/100",
+      "対物攻撃: 43/100",
+      "生存力: 8/100",
+      "機動力: 56/100",
+      "信頼度: 64/100"
+    ],
+    "prerequisites": [
+      "panzerfaust"
+    ]
+  },
+  {
+    "id": "ofenrohr",
+    "title": "オーフェンレーア RPzB 54",
+    "year": 1944,
+    "x": 700,
+    "y": 650,
+    "research_time": 111,
+    "reliability": "配備（制式採用）",
+    "desc": "防盾を追加したパンツァーシュレック改良型。射手を火傷から守り、冬季対策も施された量産型。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "effects": [
+      "対人攻撃: 18/100",
+      "対物攻撃: 45/100",
+      "生存力: 8/100",
+      "機動力: 56/100",
+      "信頼度: 64/100"
+    ],
+    "prerequisites": [
+      "panzerschreck"
     ]
   }
 ]

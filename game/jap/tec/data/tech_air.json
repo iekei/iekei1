@@ -1,10 +1,28 @@
 [
   {
+    "id": "type95_fighter",
+    "title": "九五式戦闘機",
+    "year": 1935,
+    "x": 100,
+    "y": 50,
+    "research_time": 113,
+    "reliability": "配備（制式採用）",
+    "desc": "複葉の九五式艦上戦闘機。日中戦争で活躍した最後の複葉戦闘機。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='12' cy='14' r='2'/></svg>",
+    "effects": [
+      "攻撃力: 41/100",
+      "生存力: 29/100",
+      "機動力: 68/100",
+      "信頼度: 67/100"
+    ],
+    "prerequisites": []
+  },
+  {
     "id": "zero_fighter",
     "title": "零式艦上戦闘機",
     "year": 1940,
     "x": 100,
-    "y": 50,
+    "y": 200,
     "research_time": 150,
     "reliability": "配備",
     "desc": "堀越二郎設計。長航続距離と優れた空戦性能を誇る。太平洋戦争初期で圧倒的強さを誇った。",
@@ -15,14 +33,76 @@
       "速力: 65/100",
       "装甲: 15/100"
     ],
-    "prerequisites": []
+    "prerequisites": [
+      "type95_fighter"
+    ]
+  },
+  {
+    "id": "hayabusa",
+    "title": "一式戦闘機「隼」",
+    "year": 1941,
+    "x": 100,
+    "y": 350,
+    "research_time": 125,
+    "reliability": "配備（制式採用）",
+    "desc": "陸軍の主力戦闘機。運動性と航続力に優れ、南方戦線を支えた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='12' cy='14' r='2'/></svg>",
+    "effects": [
+      "攻撃力: 51/100",
+      "生存力: 34/100",
+      "機動力: 75/100",
+      "信頼度: 74/100"
+    ],
+    "prerequisites": [
+      "zero_fighter"
+    ]
+  },
+  {
+    "id": "hien",
+    "title": "三式戦闘機「飛燕」",
+    "year": 1942,
+    "x": 100,
+    "y": 500,
+    "research_time": 127,
+    "reliability": "配備（制式採用）",
+    "desc": "液冷発動機と重装備の陸軍戦闘機。B-29迎撃や本土防空で活躍した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='12' cy='14' r='2'/></svg>",
+    "effects": [
+      "攻撃力: 53/100",
+      "生存力: 35/100",
+      "機動力: 76/100",
+      "信頼度: 75/100"
+    ],
+    "prerequisites": [
+      "hayabusa"
+    ]
+  },
+  {
+    "id": "raiden",
+    "title": "二式局地戦闘機「雷電」",
+    "year": 1942,
+    "x": 100,
+    "y": 650,
+    "research_time": 127,
+    "reliability": "配備（制式採用）",
+    "desc": "重武装の要撃戦闘機。B-29迎撃用に本土防空戦で用いられた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='12' cy='14' r='2'/></svg>",
+    "effects": [
+      "攻撃力: 53/100",
+      "生存力: 35/100",
+      "機動力: 76/100",
+      "信頼度: 75/100"
+    ],
+    "prerequisites": [
+      "hien"
+    ]
   },
   {
     "id": "hayate",
     "title": "烈風（試作）",
     "year": 1943,
     "x": 100,
-    "y": 200,
+    "y": 800,
     "research_time": 160,
     "reliability": "試作のみ",
     "desc": "零戦の後継機。性能は優秀だったが、エンジン不調と工業力不足で量産化できず。",
@@ -34,15 +114,53 @@
       "装甲: 25/100"
     ],
     "prerequisites": [
-      "zero_fighter"
+      "raiden"
     ]
+  },
+  {
+    "id": "shidenkai",
+    "title": "紫電改",
+    "year": 1944,
+    "x": 100,
+    "y": 950,
+    "research_time": 131,
+    "reliability": "配備（制式採用）",
+    "desc": "層流翼を採用した海軍の高性能局地戦闘機。最優秀の日本戦闘機と評価される。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='12' cy='14' r='2'/></svg>",
+    "effects": [
+      "攻撃力: 56/100",
+      "生存力: 37/100",
+      "機動力: 79/100",
+      "信頼度: 77/100"
+    ],
+    "prerequisites": [
+      "hayate"
+    ]
+  },
+  {
+    "id": "type96_rikko",
+    "title": "九六式陸上攻撃機",
+    "year": 1936,
+    "x": 400,
+    "y": 50,
+    "research_time": 115,
+    "reliability": "配備（制式採用）",
+    "desc": "長航程の陸上攻撃機。支那事変・初期の南方攻略で主力攻撃機として活動した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 46/100",
+      "生存力: 32/100",
+      "機動力: 38/100",
+      "信頼度: 68/100"
+    ],
+    "prerequisites": []
   },
   {
     "id": "g4m_bomber",
     "title": "一式陸上攻撃機",
     "year": 1941,
     "x": 400,
-    "y": 50,
+    "y": 200,
     "research_time": 140,
     "reliability": "配備",
     "desc": "長距離爆撃/雷撃機。優れた航続距離を持つが防弾性能に欠ける。",
@@ -53,6 +171,126 @@
       "速力: 55/100",
       "装甲: 10/100"
     ],
+    "prerequisites": [
+      "type96_rikko"
+    ]
+  },
+  {
+    "id": "shinzan",
+    "title": "深山 (HMK)",
+    "year": 1942,
+    "x": 400,
+    "y": 350,
+    "research_time": 127,
+    "reliability": "低（試作止まり）",
+    "desc": "米国のDC-4Eを参考にした四発重爆撃機。信頼性が低く少数生産に終わった。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 57/100",
+      "生存力: 39/100",
+      "機動力: 38/100",
+      "信頼度: 75/100"
+    ],
+    "prerequisites": [
+      "g4m_bomber"
+    ]
+  },
+  {
+    "id": "ginga",
+    "title": "銀河 (P1Y)",
+    "year": 1943,
+    "x": 400,
+    "y": 500,
+    "research_time": 129,
+    "reliability": "配備（制式採用）",
+    "desc": "高速・長距離の統合爆撃機。戦争末期に試験投入された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 59/100",
+      "生存力: 40/100",
+      "機動力: 38/100",
+      "信頼度: 76/100"
+    ],
+    "prerequisites": [
+      "shinzan"
+    ]
+  },
+  {
+    "id": "type97_carrier_attack",
+    "title": "九七式艦上攻撃機",
+    "year": 1937,
+    "x": 700,
+    "y": 50,
+    "research_time": 117,
+    "reliability": "配備（制式採用）",
+    "desc": "魚雷・水平爆撃をこなす艦上攻撃機。真珠湾攻撃の魚雷攻撃の主体。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 48/100",
+      "生存力: 33/100",
+      "機動力: 38/100",
+      "信頼度: 69/100"
+    ],
     "prerequisites": []
+  },
+  {
+    "id": "type99_carrier_bomber",
+    "title": "九九式艦上爆撃機",
+    "year": 1939,
+    "x": 700,
+    "y": 200,
+    "research_time": 121,
+    "reliability": "配備（制式採用）",
+    "desc": "真珠湾・珊瑚海を戦った急降下爆撃機。「バル」と呼ばれ米軍に恐れられた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 52/100",
+      "生存力: 36/100",
+      "機動力: 38/100",
+      "信頼度: 72/100"
+    ],
+    "prerequisites": [
+      "type97_carrier_attack"
+    ]
+  },
+  {
+    "id": "suisei",
+    "title": "彗星艦上爆撃機",
+    "year": 1942,
+    "x": 700,
+    "y": 350,
+    "research_time": 127,
+    "reliability": "配備（制式採用）",
+    "desc": "液冷発動機の高速急降下爆撃機。マリアナ沖海戦などに投入された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 57/100",
+      "生存力: 39/100",
+      "機動力: 38/100",
+      "信頼度: 75/100"
+    ],
+    "prerequisites": [
+      "type99_carrier_bomber"
+    ]
+  },
+  {
+    "id": "tenzan",
+    "title": "天山艦上攻撃機",
+    "year": 1943,
+    "x": 700,
+    "y": 500,
+    "research_time": 129,
+    "reliability": "配備（制式採用）",
+    "desc": "九七式艦攻の後継。高速・重武装の艦上攻撃機。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 59/100",
+      "生存力: 40/100",
+      "機動力: 38/100",
+      "信頼度: 76/100"
+    ],
+    "prerequisites": [
+      "suisei"
+    ]
   }
 ]

@@ -14,5 +14,57 @@
       "工兵効率: +10%"
     ],
     "prerequisites": []
+  },
+  {
+    "id": "maginot_comms",
+    "title": "マジノ線通信網",
+    "year": 1936,
+    "x": 100,
+    "y": 200,
+    "research_time": 75,
+    "reliability": "配備（制式採用）",
+    "desc": "要塞群を結ぶ有線・無線統制通信網。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='10' width='16' height='9' rx='1'/><path d='M7 10V5h4v5'/><path d='M15 13v3M18 13v3'/></svg>",
+    "effects": [
+      "研究速度: +6.2%",
+      "装備効率: +6.2%"
+    ],
+    "prerequisites": [
+      "fra_engineering_1"
+    ]
+  },
+  {
+    "id": "mechanized_research",
+    "title": "陸軍機械化研究所",
+    "year": 1936,
+    "x": 100,
+    "y": 350,
+    "research_time": 75,
+    "reliability": "配備（制式採用）",
+    "desc": "機甲戦力・軍用車両を研究する国営研究所。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='10' width='16' height='9' rx='1'/><path d='M7 10V5h4v5'/><path d='M15 13v3M18 13v3'/></svg>",
+    "effects": [
+      "研究速度: +6.2%",
+      "装備効率: +6.2%"
+    ],
+    "prerequisites": [
+      "maginot_comms"
+    ]
+  },
+  {
+    "id": "dca_network",
+    "title": "DCA高射統制網",
+    "year": 1938,
+    "x": 400,
+    "y": 50,
+    "research_time": 79,
+    "reliability": "配備（制式採用）",
+    "desc": "高射砲・聴音機を統合する防空統制網。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='10' width='16' height='9' rx='1'/><path d='M7 10V5h4v5'/><path d='M15 13v3M18 13v3'/></svg>",
+    "effects": [
+      "研究速度: +6.6%",
+      "装備効率: +6.6%"
+    ],
+    "prerequisites": []
   }
 ]

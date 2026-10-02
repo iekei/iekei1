@@ -1,10 +1,28 @@
 [
   {
+    "id": "gladiator",
+    "title": "グロースター・グラディエーター",
+    "year": 1937,
+    "x": 100,
+    "y": 50,
+    "research_time": 117,
+    "reliability": "配備（制式採用）",
+    "desc": "英軍最後の複葉戦闘機。マルタ島防衛「フォース・ハット」で有名になった。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='12' cy='14' r='2'/></svg>",
+    "effects": [
+      "攻撃力: 44/100",
+      "生存力: 31/100",
+      "機動力: 70/100",
+      "信頼度: 69/100"
+    ],
+    "prerequisites": []
+  },
+  {
     "id": "spitfire",
     "title": "スピットファイア",
     "year": 1938,
     "x": 100,
-    "y": 50,
+    "y": 200,
     "research_time": 150,
     "reliability": "配備",
     "desc": "バトル・オブ・ブリテンの英雄。優れた空戦性能を持つ。",
@@ -15,7 +33,69 @@
       "速力: 75/100",
       "装甲: 25/100"
     ],
-    "prerequisites": []
+    "prerequisites": [
+      "gladiator"
+    ]
+  },
+  {
+    "id": "typhoon",
+    "title": "ホーカー・タイフーン",
+    "year": 1941,
+    "x": 100,
+    "y": 350,
+    "research_time": 125,
+    "reliability": "配備（制式採用）",
+    "desc": "攻撃機に転用された戦闘機。ロケット弾で独装甲部隊を破壊した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='12' cy='14' r='2'/></svg>",
+    "effects": [
+      "攻撃力: 51/100",
+      "生存力: 34/100",
+      "機動力: 75/100",
+      "信頼度: 74/100"
+    ],
+    "prerequisites": [
+      "spitfire"
+    ]
+  },
+  {
+    "id": "meteor",
+    "title": "グロースター・ミーティア",
+    "year": 1944,
+    "x": 100,
+    "y": 500,
+    "research_time": 131,
+    "reliability": "配備（制式採用）",
+    "desc": "連合軍唯一の実戦ジェット戦闘機。V1迎撃に投入された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='12' cy='14' r='2'/></svg>",
+    "effects": [
+      "攻撃力: 56/100",
+      "生存力: 37/100",
+      "機動力: 79/100",
+      "信頼度: 77/100"
+    ],
+    "prerequisites": [
+      "typhoon"
+    ]
+  },
+  {
+    "id": "tempest",
+    "title": "ホーカー・テンペスト",
+    "year": 1944,
+    "x": 100,
+    "y": 650,
+    "research_time": 131,
+    "reliability": "配備（制式採用）",
+    "desc": "低空性能に優れた戦闘爆撃機。V1迎撃で活躍した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='12' cy='14' r='2'/></svg>",
+    "effects": [
+      "攻撃力: 56/100",
+      "生存力: 37/100",
+      "機動力: 79/100",
+      "信頼度: 77/100"
+    ],
+    "prerequisites": [
+      "meteor"
+    ]
   },
   {
     "id": "hurricane",
@@ -36,11 +116,71 @@
     "prerequisites": []
   },
   {
+    "id": "wellington",
+    "title": "ヴィッカース・ウェリントン",
+    "year": 1938,
+    "x": 400,
+    "y": 200,
+    "research_time": 119,
+    "reliability": "配備（制式採用）",
+    "desc": "網構造の双発中型爆撃機。開戦初期の爆撃作戦の中核。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 50/100",
+      "生存力: 35/100",
+      "機動力: 38/100",
+      "信頼度: 71/100"
+    ],
+    "prerequisites": [
+      "hurricane"
+    ]
+  },
+  {
+    "id": "halifax",
+    "title": "ハンドレイページ・ハリファックス",
+    "year": 1940,
+    "x": 400,
+    "y": 350,
+    "research_time": 123,
+    "reliability": "配備（制式採用）",
+    "desc": "ランカスターと並ぶ4発重爆撃機。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 53/100",
+      "生存力: 37/100",
+      "機動力: 38/100",
+      "信頼度: 73/100"
+    ],
+    "prerequisites": [
+      "wellington"
+    ]
+  },
+  {
+    "id": "mosquito",
+    "title": "デ・ハビランド・モスキート",
+    "year": 1941,
+    "x": 400,
+    "y": 500,
+    "research_time": 125,
+    "reliability": "配備（制式採用）",
+    "desc": "木製の高速多用途機。「ウッド・ワンダー」と呼ばれた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 55/100",
+      "生存力: 38/100",
+      "機動力: 38/100",
+      "信頼度: 74/100"
+    ],
+    "prerequisites": [
+      "halifax"
+    ]
+  },
+  {
     "id": "lancaster",
     "title": "ランカスター爆撃機",
     "year": 1942,
     "x": 400,
-    "y": 200,
+    "y": 650,
     "research_time": 180,
     "reliability": "配備",
     "desc": "4発重爆撃機。夜間爆撃の主力。",
@@ -51,6 +191,46 @@
       "速力: 55/100",
       "装甲: 30/100"
     ],
+    "prerequisites": [
+      "mosquito"
+    ]
+  },
+  {
+    "id": "swordfish",
+    "title": "フェアリー・ソードフィッシュ",
+    "year": 1936,
+    "x": 700,
+    "y": 50,
+    "research_time": 115,
+    "reliability": "配備（制式採用）",
+    "desc": "複葉雷撃機。タラント空襲・ビスマルク追撃で活躍した「文字列「ストリングバッグ」」。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 46/100",
+      "生存力: 32/100",
+      "機動力: 38/100",
+      "信頼度: 68/100"
+    ],
     "prerequisites": []
+  },
+  {
+    "id": "beaufighter",
+    "title": "ブリストル・ビューファイター",
+    "year": 1940,
+    "x": 700,
+    "y": 200,
+    "research_time": 123,
+    "reliability": "配備（制式採用）",
+    "desc": "重武装の双発夜間戦闘機・対艦攻撃機。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 53/100",
+      "生存力: 37/100",
+      "機動力: 38/100",
+      "信頼度: 73/100"
+    ],
+    "prerequisites": [
+      "swordfish"
+    ]
   }
 ]

@@ -17,11 +17,29 @@
     "prerequisites": []
   },
   {
+    "id": "freya_radar",
+    "title": "フレーヤ早期警戒レーダー",
+    "year": 1938,
+    "x": 100,
+    "y": 200,
+    "research_time": 79,
+    "reliability": "配備（制式採用）",
+    "desc": "ドイツ最初の実用早期警戒レーダー。距離約120kmを検知し、夜間戦闘・防空網の基軸となった。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='10' width='16' height='9' rx='1'/><path d='M7 10V5h4v5'/><path d='M15 13v3M18 13v3'/></svg>",
+    "effects": [
+      "研究速度: +6.6%",
+      "装備効率: +6.6%"
+    ],
+    "prerequisites": [
+      "enigma"
+    ]
+  },
+  {
     "id": "wurzburg_radar",
     "title": "ヴュルツブルク・レーダー",
     "year": 1940,
     "x": 100,
-    "y": 200,
+    "y": 350,
     "research_time": 120,
     "reliability": "運用中",
     "desc": "対空射撃管制レーダー。夜間戦闘機と組み合わせた「ヒンメルベッド」防空網の中核。",
@@ -32,7 +50,43 @@
       "夜間防空: +20%"
     ],
     "prerequisites": [
-      "enigma"
+      "freya_radar"
+    ]
+  },
+  {
+    "id": "peenemunde",
+    "title": "ペーネミュンデ研究施設",
+    "year": 1942,
+    "x": 100,
+    "y": 500,
+    "research_time": 87,
+    "reliability": "配備（制式採用）",
+    "desc": "V1・V2を開発した陸軍・空軍合同ロケット研究センター。ドイツ先端兵器の中心地。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='10' width='16' height='9' rx='1'/><path d='M7 10V5h4v5'/><path d='M15 13v3M18 13v3'/></svg>",
+    "effects": [
+      "研究速度: +7.4%",
+      "装備効率: +7.4%"
+    ],
+    "prerequisites": [
+      "wurzburg_radar"
+    ]
+  },
+  {
+    "id": "jagdschloss",
+    "title": "ヤークトシュロス・レーダー",
+    "year": 1944,
+    "x": 100,
+    "y": 650,
+    "research_time": 91,
+    "reliability": "配備（制式採用）",
+    "desc": "大型回転アンテナの夜間戦闘管制レーダー。遠距離・複数目標同時追尾を実現した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='10' width='16' height='9' rx='1'/><path d='M7 10V5h4v5'/><path d='M15 13v3M18 13v3'/></svg>",
+    "effects": [
+      "研究速度: +7.8%",
+      "装備効率: +7.8%"
+    ],
+    "prerequisites": [
+      "peenemunde"
     ]
   },
   {
@@ -40,7 +94,7 @@
     "title": "V-1飛行爆弾",
     "year": 1944,
     "x": 100,
-    "y": 350,
+    "y": 800,
     "research_time": 180,
     "reliability": "実戦配備",
     "desc": "「 reprisal weapon 1」。パルスジェット飛行爆弾で、ロンドンへ無人爆撃を行った。",
@@ -51,7 +105,7 @@
       "迎撃されやすさ: 高"
     ],
     "prerequisites": [
-      "wurzburg_radar"
+      "jagdschloss"
     ]
   },
   {
@@ -59,7 +113,7 @@
     "title": "V-2弾道ミサイル",
     "year": 1944,
     "x": 100,
-    "y": 500,
+    "y": 950,
     "research_time": 200,
     "reliability": "実戦配備",
     "desc": "世界初の弾道ミサイル。音速の3倍で飛来し、迎撃は不可能だった。",
@@ -72,6 +126,40 @@
     ],
     "prerequisites": [
       "v1"
+    ]
+  },
+  {
+    "id": "kryptografie",
+    "title": "暗号機改良計画",
+    "year": 1942,
+    "x": 400,
+    "y": 50,
+    "research_time": 87,
+    "reliability": "配備（制式採用）",
+    "desc": "エニグマの改良・暗号鍵管理を強化する電子工学計画。連合軍の解読に対抗する試み。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='10' width='16' height='9' rx='1'/><path d='M7 10V5h4v5'/><path d='M15 13v3M18 13v3'/></svg>",
+    "effects": [
+      "研究速度: +7.4%",
+      "装備効率: +7.4%"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "v3",
+    "title": "V3超長距離砲",
+    "year": 1945,
+    "x": 400,
+    "y": 200,
+    "research_time": 93,
+    "reliability": "低（試作止まり）",
+    "desc": "多段薬室による150km射程の超長距離列車砲。ロンドン砲撃を狙ったが実用化は至らなかった。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='10' width='16' height='9' rx='1'/><path d='M7 10V5h4v5'/><path d='M15 13v3M18 13v3'/></svg>",
+    "effects": [
+      "研究速度: +8.0%",
+      "装備効率: +8.0%"
+    ],
+    "prerequisites": [
+      "kryptografie"
     ]
   }
 ]
