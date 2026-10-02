@@ -1779,6 +1779,14 @@ class NuclearManager {
 
     CoreEngine.log('💥 核攻撃実行！' + targetName + 'に原子爆弾を投下！');
     GameUI.notify('核攻撃: ' + targetName + 'に投下完了！', 'alert');
+    // 世界に衝撃を与える核投下 → ニュースイベントとして全世界に配信
+    if (typeof NewsManager !== 'undefined') {
+      NewsManager.fireCustom({
+        icon: '☢️', title: '地球揺るがす新型爆弾 — ' + targetName + 'に投下',
+        body: '単一の爆弾が' + targetName + 'を破壊しました。この「原子爆弾」の威力に世界は戦慄しています。核の時代の幕開けです。',
+        reactions: ['恐怖だ…これが新時代か', '研究を急げ!', 'この戦争は終わるだろう']
+      });
+    }
 
     MultiplayerManager.broadcast({
       type: 'nuclear_strike',
@@ -2251,6 +2259,34 @@ class MapRenderer {
     return best ? [best.x, best.y] : null;
   }
 
+  // ---- 州同士の陸地隣接関係 (攻撃チェーン・AI戦争で使用) — 所有の変化に依存しないためキャッシュ可 ----
+  static stateAdjacency = null;
+  static buildStateAdjacency() {
+    if (MapRenderer.stateAdjacency) return MapRenderer.stateAdjacency;
+    const adj = new Map();
+    const add = (a, b) => {
+      if (!adj.has(a)) adj.set(a, new Set());
+      adj.get(a).add(b);
+    };
+    if (MapRenderer.provNeighbors) {
+      const typeNames = MapRenderer.provinces.types;
+      MapRenderer.provNeighbors.forEach((set, pid) => {
+        const sA = MapRenderer.provToState.get(pid);
+        if (sA == null) return;
+        set.forEach(n => {
+          const npd = MapRenderer.provinces.p[n];
+          if (!npd || typeNames[npd[3]] !== 'land') return;   // 陸の国境のみ
+          const sB = MapRenderer.provToState.get(n);
+          if (sB == null || sB === sA) return;
+          add(String(sA), String(sB));
+          add(String(sB), String(sA));
+        });
+      });
+    }
+    MapRenderer.stateAdjacency = adj;
+    return adj;
+  }
+
   // ---- マップモードごとのキャンバスを生成 (州の所有色・地形・境界線描画) ----
   static getModeCanvas(mode) {
     if (MapRenderer.modeCache[mode]) return MapRenderer.modeCache[mode];
@@ -2635,8 +2671,8 @@ class BattlePlanManager {
   static air = [];
   static selectedUnitId = null;
   static missions = {
-    navy: [{ id: 'patrol', label: '哨戒' }, { id: 'strike', label: '攻撃' }, { id: 'escort', label: '通商護衛' }],
-    air: [{ id: 'air_sup', label: '制空' }, { id: 'ground', label: '対地攻撃' }, { id: 'patrol', label: '哨戒' }]
+    navy: [{ id: 'patrol', label: '哨戒' }, { id: 'strike', label: '攻撃' }, { id: 'escort', label: '通商護衛' }, { id: 'shore', label: '艦砲射撃' }],
+    air: [{ id: 'air_sup', label: '制空' }, { id: 'ground', label: '対地攻撃' }, { id: 'patrol', label: '哨戒' }, { id: 'strategic', label: '戦略爆撃' }]
   };
   static activeMission = { navy: 'patrol', air: 'air_sup' };
 
@@ -2719,6 +2755,51 @@ class BattlePlanManager {
 
   static selectedArmy() {
     return BattlePlanManager.armies.find(a => a.id === BattlePlanManager.selectedArmyId) || null;
+  }
+
+  // ---- 攻撃チェーン構築: 前線 (自国領に隣接する敵州) から目標州まで、
+  //      陸路で連続する敵州のみを辿る。飛び地・中立国経由は不可。 ----
+  static buildAttackChain(targetSid) {
+    MapRenderer.buildStateAdjacency();
+    const player = CoreEngine.gameState.country;
+    const gs = CoreEngine.gameState;
+    const states = MapRenderer.states;
+    if (!states[targetSid]) return [];
+    // 目標から逆方向に BFS: 自国領 or 開戦済みの敵領のみ通過できる
+    const prev = new Map();
+    prev.set(targetSid, null);
+    const q = [targetSid];
+    while (q.length) {
+      const cur = q.shift();
+      (MapRenderer.stateAdjacency.get(String(cur)) || []).forEach(n => {
+        if (prev.has(n)) return;
+        const st = states[n];
+        if (!st) return;
+        if (st.owner === player || gs.atWar.includes(st.owner)) {
+          prev.set(n, cur);
+          q.push(n);
+        }
+        // 中立国・自国以外の味方領は通れない (飛び地跳躍の防止)
+      });
+    }
+    // チェーンの起点 = 「自国領に隣接する敵州」のうち目標までが最短の州。
+    // これが無ければ前線から陸路で到達できない (飛び地) ので攻撃不可。
+    let bestStart = null, bestLen = Infinity;
+    prev.forEach((p, n) => {
+      if (!states[n] || states[n].owner === player) return;
+      // 起点は自国領に直接隣接していなければならない (前線から広げる)
+      const nbrs = MapRenderer.stateAdjacency.get(String(n)) || [];
+      const touchesPlayer = [...nbrs].some(m => states[m] && states[m].owner === player);
+      if (!touchesPlayer) return;
+      let len = 0, c = n;
+      while (c !== null && c !== targetSid) { c = prev.get(c); len++; }
+      if (len < bestLen) { bestLen = len; bestStart = n; }
+    });
+    if (bestStart == null) return [];   // 前線から陸路で到達できない = 飛び地
+    const chain = [];
+    let c = bestStart;
+    while (c != null) { chain.push(c); c = prev.get(c); }
+    return chain;   // [最初に攻める敵州, ..., 目標州] — 前線から段階的に進撃
   }
 
   // ---- 前線描画 (右ドラッグ) / 海軍・空軍: マップクリックで任務海域・空域を指定 ----
@@ -2884,11 +2965,22 @@ class BattlePlanManager {
         else if (target.owner === CoreEngine.gameState.country) {
           GameUI.notify('自国の州は攻撃目標にできません。', 'alert');
         } else {
+          // 攻撃チェーンを構築 (飛び地への跳躍を禁止):
+          // 前線に接する敵州から目標州まで、陸路でつながった州を順に踏んでいく
+          const chain = BattlePlanManager.buildAttackChain(sid);
           army.arrow = { from: from, to: to };
           army.targetState = sid;
+          army.chain = chain;
+          army.chainIdx = 0;
           army.progress = 0;
-          CoreEngine.log(army.name + 'の攻撃作戦を描きました: → ' + target.name);
-          GameUI.notify('攻撃矢印設定: ' + target.name, 'success');
+          if (chain.length > 0) {
+            const firstTarget = MapRenderer.states[chain[0]];
+            CoreEngine.log(army.name + 'の攻撃作戦を描きました: → ' + target.name + ' (前線から' + chain.length + '州を段階的に進撃 — 最初: ' + (firstTarget ? firstTarget.name : '') + ')');
+            GameUI.notify('攻撃矢印設定: ' + target.name + ' — 前線から段階的に戦線を広げます (最初: ' + (firstTarget ? firstTarget.name : '?') + ')', 'success');
+          } else {
+            CoreEngine.log(army.name + 'の攻撃目標は陸路で接続されていません (飛び地への跳躍は不可)');
+            GameUI.notify('⛔ 攻撃目標が前線から陸路でつながっていません (飛び地には攻撃できません)', 'alert');
+          }
           MultiplayerManager.broadcast({ type: 'battle_arrow', army: army.id, from: from, to: to, state: sid });
         }
       }
@@ -2950,13 +3042,27 @@ class BattlePlanManager {
       GameUI.notify('⚔️ ' + targetOwner + 'とは開戦していません。先に宣戦布告してください。', 'alert');
       return;
     }
+    // 攻撃チェーン: 前線に接する敵州から順に段階的に進撃 (飛び地跳躍の禁止)
+    if (!army.chain || army.chain.length === 0) {
+      army.chain = BattlePlanManager.buildAttackChain(army.targetState);
+    }
+    if (!army.chain || army.chain.length === 0) {
+      GameUI.notify('⛔ 攻撃目標が前線から陸路でつながっていません (飛び地には攻撃できません)', 'alert');
+      return;
+    }
+    const firstSid = army.chain[0];
+    const firstSt = MapRenderer.states[firstSid];
+    if (!firstSt || !CoreEngine.gameState.atWar.includes(firstSt.owner)) {
+      GameUI.notify('⚔️ ' + (firstSt ? firstSt.owner : '?') + 'とは開戦していません。先に宣戦布告してください。', 'alert');
+      return;
+    }
     army.executing = true;
     army.progress = 0;
-    // 戦闘を開始 (勝敗・占領は BattleManager が解決)
-    const toPid = MapRenderer.provinceAt(army.arrow.to[0], army.arrow.to[1]) ||
-      target.provinces[0];
-    BattleManager.startOffensive(army, toPid, army.targetState);
-    CoreEngine.log(army.name + 'が作戦を開始: ' + (target ? target.name : '') + 'へ進撃！');
+    // 戦闘を開始 (勝敗・占領は BattleManager が解決 — 勝つと次の州へ前進する)
+    const firstProv = (firstSt.provinces && firstSt.provinces[0]) || null;
+    const toPid = MapRenderer.provinceAt(army.arrow.to[0], army.arrow.to[1]);
+    BattleManager.startOffensive(army, toPid || firstProv, firstSid);
+    CoreEngine.log(army.name + 'が作戦を開始: まず ' + (firstSt.name || '州' + firstSid) + 'へ進撃 (全' + army.chain.length + '州計画)！');
     MultiplayerManager.broadcast({ type: 'battle_execute', army: army.id });
     BattlePlanManager.renderPanel();
   }
@@ -2975,10 +3081,67 @@ class BattlePlanManager {
     if (!army) return;
     army.executing = false;
     army.progress = 0;
+    army.chain = null;
     // 進行中の戦闘も取り消す
     BattleManager.battles = BattleManager.battles.filter(b => b.attackerArmyId !== army.id);
     CoreEngine.log(army.name + 'の作戦を中止しました。');
     BattlePlanManager.renderPanel();
+  }
+
+  // ---- 海軍/空軍の継続的行動効果 (毎ゲーム日) ----
+  static applyForceAction(unit) {
+    if (!unit.zone || !MapRenderer.ready) return;
+    const gs = CoreEngine.gameState;
+    const player = gs.country;
+    // 任務区域に近い敵の州 (開戦国のみ) を探す
+    const typeNames = MapRenderer.provinces.types;
+    let target = null, bestD = 260;
+    Object.entries(MapRenderer.states).forEach(([sid, st]) => {
+      if (!gs.atWar.includes(st.owner)) return;
+      const c = MapRenderer.stateCenter.get(String(sid));
+      if (!c) return;
+      const d = Math.hypot(c[0] - unit.zone.x, c[1] - unit.zone.y);
+      if (d < bestD) { bestD = d; target = { sid: sid, st: st, c: c }; }
+    });
+    if (!target) return;
+    const st = target.st;
+    st.b = st.b || {};
+    // 空軍「戦略爆撃」: 敵の工場施設を破壊していく
+    if (unit.type === 'air' && unit.mission === 'strategic') {
+      const targets = ['arms_factory', 'industrial_complex', 'infrastructure'];
+      const key = targets[Math.floor(unit.progress / 30) % targets.length];
+      if (unit.progress % 25 < 1.2 && (st.b[key] || 0) > 0) {
+        st.b[key]--;
+        MapRenderer.invalidateModes();
+        CoreEngine.log('💥 戦略爆撃: ' + st.name + 'の' + key + 'を破壊 (' + st.b[key] + 'レベル残り)');
+        GameUI.notify('✈️ 戦略爆撃成功: ' + st.name + ' の施設を破壊！', 'success');
+        MultiplayerManager.broadcast({ type: 'bomb', state: target.sid, key: key });
+      }
+    }
+    // 海軍「艦砲射撃」: 沿岸州の要塞・施設を砲撃
+    if (unit.type === 'navy' && unit.mission === 'shore') {
+      const pd = MapRenderer.provinces.p[unit.zone.pid];
+      const isSea = pd && (typeNames[pd[3]] === 'sea' || typeNames[pd[3]] === 'lake');
+      if (isSea && (st.b.fort || 0) > 0 && unit.progress % 30 < 1.2) {
+        st.b.fort--;
+        MapRenderer.invalidateModes();
+        CoreEngine.log('💥 艦砲射撃: ' + st.name + 'の要塞を破壊 (残り' + st.b.fort + ')');
+        GameUI.notify('⚓ 艦砲射撃成功: ' + st.name + ' の要塞を破壊！', 'success');
+        MultiplayerManager.broadcast({ type: 'bomb', state: target.sid, key: 'fort' });
+      }
+    }
+    // 海軍「攻撃」: 敵輸送船団を攻撃 (護衛を持つ国がいれば相殺)
+    if (unit.type === 'navy' && unit.mission === 'strike' && unit.progress % 40 < 1.2) {
+      CoreEngine.log('⚔️ ' + unit.name + 'が敵輸送船団を攻撃しました。');
+    }
+    // 空軍「制空」: 制空権をじわじわ獲得
+    if (unit.type === 'air' && unit.mission === 'air_sup') {
+      gs.airSupremacy = Math.min(100, (gs.airSupremacy || 0) + 0.3);
+    }
+    // 海軍「哨戒」: 制海権をじわじわ獲得
+    if (unit.type === 'navy' && unit.mission === 'patrol') {
+      gs.navalSupremacy = Math.min(100, (gs.navalSupremacy || 0) + 0.3);
+    }
   }
 
   // 海軍/空軍ミッション完了時の効果
@@ -3038,6 +3201,7 @@ class BattlePlanManager {
     [...BattlePlanManager.navy, ...BattlePlanManager.air].forEach(unit => {
       if (unit.executing) {
         unit.progress += 1.2;
+        BattlePlanManager.applyForceAction(unit);
         if (unit.progress >= 100) {
           unit.executing = false;
           unit.progress = 0;
@@ -3135,6 +3299,11 @@ class BattlePlanManager {
         ctx.shadowBlur = 8;
         drawPolyline(army.frontline, 'rgba(125,232,122,0.95)', Math.max(2, 3));
         ctx.restore();
+      }
+      // 攻撃チェーン (残りの進撃経路: 破線の金線 — 段階的に広がる戦線)
+      if (army.chain && army.chain.length > 0) {
+        const pts = army.chain.map(sid => MapRenderer.stateCenter.get(String(sid))).filter(Boolean);
+        drawPolyline(pts, 'rgba(212,168,67,0.85)', 2, [6, 6]);
       }
       // 攻撃矢印 (赤)
       if (army.arrow) {
@@ -4521,6 +4690,11 @@ class CardSystem {
     const cards = CardSystem.allCards[country] || [];
     const card = cards.find(c => c.id === cardId);
     if (!card) return;
+    // 国家制限: プレイヤー国と同じ国のカードのみ雇用できる (WORLDパックは無関係)
+    if (country === 'WORLD' || country !== CoreEngine.gameState.country) {
+      GameUI.notify('🚫 ' + DataFetcher.getCountryFlag(country) + ' ' + country + 'のカードは雇用できません。自国 (' + CoreEngine.gameState.country + ') のカードのみ雇用できます。', 'alert');
+      return;
+    }
     if (CardSystem.isHired(cardId)) { GameUI.notify('すでに雇用しています。', 'alert'); return; }
     if (!CardSystem.isUnlocked(cardId, country)) {
       GameUI.notify('🔒 ガチャで引き当てたカードのみ雇用できます。', 'alert');
@@ -4574,9 +4748,16 @@ class CardSystem {
 
   static render() {
     const container = document.getElementById('cards-content');
+    const myCountry = CoreEngine.gameState.country;
+    const myPack = ['GER', 'SOV', 'JAP'].includes(myCountry) ? myCountry : null;
+    const gachaLink = myPack ? 'card/' + myPack + '/index.html' : null;
     let html = '<div class="card-deck-area"><h3>🃏 将軍・指導者カードデッキ</h3>' +
       '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">カードをクリックしてデッキに編成します。編成したカードの固有能力がゲームに適用されます。' +
-      ' ガチャで引き当てたカードは政治力を消費して「雇用・配備」できます。<a href="card/index.html" target="_blank" style="color:var(--text-gold);margin-left:8px;">🎴 ガチャを開く (10連で11連目SSR確定)</a></p>';
+      ' ガチャで引き当てたカードは政治力を消費して「雇用・配備」できます。' +
+      (gachaLink
+        ? '<a href="' + gachaLink + '" target="_blank" style="color:var(--text-gold);margin-left:8px;">🎴 ' + DataFetcher.getCountryFlag(myPack) + ' ' + myPack + ' ガチャを開く (10連で11連目SSR確定)</a>'
+        : '<span style="color:var(--text-secondary);margin-left:8px;">※ ' + DataFetcher.getCountryFlag(myCountry) + ' ' + myCountry + 'には専用カードパックがありません (GER/SOV/JAPのみ)</span>') +
+      '<span style="display:block;font-size:11px;color:var(--text-secondary);margin-top:2px;">🔒 雇用できるのは自国のカードパックのみです (WORLDパックはこのゲームと無関係)</span></p>';
 
     html += '<div style="background:var(--bg-panel);border:1px solid var(--text-gold);border-radius:8px;padding:10px;margin-bottom:12px;">' +
       '<strong style="color:var(--text-gold);">デッキ (' + CardSystem.deck.length + '枚)</strong>';
@@ -4606,7 +4787,8 @@ class CardSystem {
 
     Object.entries(CardSystem.allCards).forEach(entry => {
       const country = entry[0], cards = entry[1];
-      if (cards.length === 0) return;
+      // 国家制限: 自国のカードパックのみ表示 (WORLDパックは無関係)
+      if (cards.length === 0 || country === 'WORLD' || country !== myCountry) return;
       html += '<div style="margin-bottom:16px;"><h4 style="color:var(--text-secondary);margin-bottom:6px;">' + DataFetcher.getCountryFlag(country) + ' ' + country + ' パック</h4><div class="card-grid">';
       cards.forEach(card => {
         const inDeck = CardSystem.deck.find(c => c.id === card.id && c.country === card.country);
@@ -5467,6 +5649,8 @@ async function initGame() {
   CheatConsole.init();
   MultiplayerManager.init();
   UniqueNationSystems.init();
+  if (typeof NewsManager !== 'undefined') NewsManager.init();   // ニュースイベント (世界の出来事を報道)
+  if (typeof AIManager !== 'undefined') AIManager.init();       // 非プレイヤー国のAI自動操作 (史実準拠)
   if (typeof DLC !== 'undefined') DLC.onGameStart();   // 全DLC拡張 (ドクトリン/兵器設計/諜報/MIO・国際市場/講和会議/将軍特性)
   CardSystem.deck.forEach(card => CardSystem.applyModifiers(card.id));
   CoreEngine.renderStats();
@@ -5479,6 +5663,10 @@ window.addEventListener('DOMContentLoaded', () => StartScreen.show());
 </script>
 <!-- ==================== 戦闘シミュレーション (戦闘マーカー・占領ロジック) ==================== -->
 <script src="battle.js"></script>
+<!-- ==================== ニュースイベント (世界の出来事を報道するポップアップ) ==================== -->
+<script src="news.js"></script>
+<!-- ==================== AI自動操作 (非プレイヤー国の史実準拠AI) ==================== -->
+<script src="ai.js"></script>
 <!-- ==================== DLC拡張モジュール (ドクトリン/兵器設計/諜報/MIO・国際市場/講和会議/将軍特性) ==================== -->
 <script src="dlc.js"></script>
 </body>

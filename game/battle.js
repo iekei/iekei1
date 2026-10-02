@@ -77,7 +77,33 @@ class BattleManager {
     // 攻撃側: 平均組織力 / 防御側: 基礎戦力 + 要塞 + 補給ボーナス
     const org = army.divisions.reduce((s, d) => s + d.org, 0) / Math.max(1, army.divisions.length);
     const defense = 50 + (st && st.b ? (st.b.fort || 0) * 8 : 0) + (st && st.supply ? st.supply : 0) * 1.5;
-    return Math.max(-1, Math.min(1, (org - defense) / 100));
+    let adv = (org - defense) / 100;
+    // 海軍/空軍の行動支援: 周辺で任務実行中の部隊が戦闘を支援する
+    adv += BattleManager.supportBonus(st);
+    return Math.max(-1, Math.min(1, adv));
+  }
+
+  // ---- 海軍/空軍の戦闘支援ボーナス (行動が陸戦に影響する) ----
+  static supportBonus(st) {
+    let bonus = 0;
+    if (!MapRenderer.ready || !st) return 0;
+    const sid = null;
+    const centers = [];
+    const stateCenter = MapRenderer.stateCenter.get(String(Object.keys(MapRenderer.states).find(k => MapRenderer.states[k] === st)) || '');
+    [...(BattlePlanManager.navy || []), ...(BattlePlanManager.air || [])].forEach(u => {
+      if (!u.executing || !u.zone) return;
+      // 任務区域の海/空域と州の距離が近い (射程内) なら支援
+      const d = stateCenter ? Math.hypot(u.zone.x - stateCenter[0], u.zone.y - stateCenter[1]) : Infinity;
+      if (d > 220) return;
+      if (u.type === 'air') {
+        if (u.mission === 'ground') bonus += 0.15;        // 対地攻撃 = 近接航空支援
+        else if (u.mission === 'air_sup') bonus += 0.05;  // 制空 = 航空優勢
+        else if (u.mission === 'strategic') bonus += 0.05;
+      } else {
+        if (u.mission === 'strike' || u.mission === 'shore') bonus += 0.10;  // 艦砲射撃/海上攻撃
+      }
+    });
+    return Math.min(0.3, bonus);
   }
 
   static calcDefenseAdvantage(stateId) {
@@ -136,7 +162,35 @@ class BattleManager {
           s.warSupport = Math.min(100, s.warSupport + 3);
           CoreEngine.log('🏆 ' + name + 'を占領しました！ (' + b.attacker + ' 勝利)');
           GameUI.notify('🏆 ' + name + ' を占領！', 'success');
-          ConstructionManager.selectState(b.stateId);
+          if (typeof ConstructionManager !== 'undefined') ConstructionManager.selectState(b.stateId);
+        }
+        // ---- 攻撃チェーン: 勝つと戦線が広がり、次の州へ段階的に進撃する ----
+        if (army && Array.isArray(army.chain) && army.chain.length > 0) {
+          army.chain = army.chain.filter(sid => sid !== b.stateId);
+          // 組織力が尽きたら進撃停止 (待機して回復)
+          if (army.chain.length === 0 || army.divisions.every(d => d.org <= 10)) {
+            if (army.chain.length === 0) {
+              army.executing = false;
+              army.chain = null;
+              CoreEngine.log('🎯 ' + army.name + 'の攻撃作戦を完了: 目標地点に到達しました！');
+              GameUI.notify('🎯 ' + army.name + ': 作戦目標達成！', 'success');
+            } else {
+              army.executing = false;
+              CoreEngine.log('⏸️ ' + army.name + ': 組織力回復のため進撃を一時停止 (再度作戦開始で再進撃)');
+              GameUI.notify('⏸️ 組織力が低下 — 一時停止中 (再開で次の州へ)', 'alert');
+            }
+          } else {
+            const nextSid = army.chain[0];
+            const nextSt = MapRenderer.states[nextSid];
+            if (nextSt && CoreEngine.gameState.atWar.includes(nextSt.owner)) {
+              army.progress = 0;
+              BattleManager.startOffensive(army, (nextSt.provinces && nextSt.provinces[0]) || b.provId, nextSid);
+              CoreEngine.log('➡️ 戦線が広がりました: ' + army.name + 'が ' + (nextSt.name || '州' + nextSid) + 'へ進撃中 (' + army.chain.length + '州残り)');
+              return;   // チェーン進撃中は後続処理をスキップ
+            }
+          }
+        } else if (army) {
+          army.executing = false;
         }
       } else {
         CoreEngine.log('🛡️ ' + name + 'の防衛に成功！敵軍を撃退しました。');
@@ -146,7 +200,8 @@ class BattleManager {
     } else if (b.advantage <= -0.1) {
       // 劣勢で終了 → 逆に占領される
       if (b.kind === 'offensive') {
-        // 攻撃が失敗: 攻撃起点側の自国州を失う
+        // 攻撃が失敗: チェーンを放棄して待機に戻る (戦線は広がらない)
+        if (army) { army.chain = null; army.executing = false; }
         const loseSid = army ? BattleManager.nearestOwnState(army.base) : null;
         if (loseSid && MapRenderer.captureState(loseSid, b.defender)) {
           const lost = MapRenderer.states[loseSid];

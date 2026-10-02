@@ -429,6 +429,10 @@ class EquipmentDesigner {
 
     // 設計エディタ
     html += '<div class="dlc-section"><h3>設計エディタ (XPを消費してモジュールを組み替え)</h3>';
+    // ---- ブループリント (設計するにつれて図面が変わる) ----
+    html += '<div class="dlc-card"><h4>📐 設計図 (ブループリント)</h4>' +
+      '<canvas id="bp-canvas" width="440" height="250" style="width:100%;max-width:440px;height:auto;border:1px solid var(--border-mil,#3a4a5a);border-radius:6px;display:block;margin:6px 0 10px;"></canvas>' +
+      '<div style="font-size:10px;color:var(--text-secondary);">車体・モジュールを選ぶと図面が変化します (破線=未選択)</div></div>';
     html += '<div class="dlc-card"><h4>ベース (車体/船体/機体)</h4>';
     d.hulls.forEach(h => {
       html += '<div class="dlc-row"><input type="radio" ' + (draft.hull === h.id ? 'checked' : '') + ' onchange="EquipmentDesigner.pickHull(\'' + h.id + '\')">' + h.name + ' <span style="color:var(--text-gold)">' + h.cost + 'XP</span></div>';
@@ -458,10 +462,356 @@ class EquipmentDesigner {
     }
     html += '</div>';
     el.innerHTML = html;
+    // ブループリントを現在の下書きで描画
+    BlueprintRenderer.draw(cat, draft, document.getElementById('bp-canvas'));
   }
 
   static setCategory(k) { EquipmentDesigner.category = k; EquipmentDesigner.render(); }
 }
+
+// ==========================================================
+// BlueprintRenderer — 設計図 (ブループリント) の動的描画
+//   青い下地に白線で兵器を描く。選択したモジュールが
+//   「設計するにつれて」図面に反映される (未選択部分は破線の仮置き)
+// ==========================================================
+class BlueprintRenderer {
+  static INK = '#dceafc';
+  static FAINT = 'rgba(220,240,255,0.35)';
+  static FILL = 'rgba(220,240,255,0.08)';
+
+  static draw(cat, draft, canvas) {
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    // ---- 青い下地 + 方眼 ----
+    ctx.fillStyle = '#14406e';
+    ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = 'rgba(120,175,225,0.22)';
+    ctx.lineWidth = 1;
+    for (let x = 20; x < W; x += 20) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+    for (let y = 20; y < H; y += 20) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+    // 外枠 (図面枠)
+    ctx.strokeStyle = BlueprintRenderer.FAINT;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(8, 8, W - 16, H - 16);
+    // タイトルブロック
+    ctx.font = '10px monospace';
+    ctx.fillStyle = BlueprintRenderer.FAINT;
+    ctx.textAlign = 'left';
+    ctx.fillText('DESIGN NO. ' + (draft.hull || '----').toUpperCase() + '-' + String(Object.keys(draft.modules).length).padStart(2, '0'), 16, 22);
+
+    ctx.save();
+    ctx.strokeStyle = BlueprintRenderer.INK;
+    ctx.fillStyle = BlueprintRenderer.FILL;
+    ctx.lineWidth = 2;
+    ctx.lineJoin = 'round';
+    ctx.textAlign = 'center';
+    ctx.font = '10px sans-serif';
+    if (cat === 'tank') BlueprintRenderer.drawTank(ctx, W, H, draft);
+    else if (cat === 'ship') BlueprintRenderer.drawShip(ctx, W, H, draft);
+    else BlueprintRenderer.drawPlane(ctx, W, H, draft);
+    ctx.restore();
+  }
+
+  // ---- 破線の仮置き (未選択スロット) ----
+  static placeholder(ctx, x, y, w, h, label) {
+    ctx.save();
+    ctx.strokeStyle = BlueprintRenderer.FAINT;
+    ctx.setLineDash([5, 4]);
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(x - w / 2, y - h / 2, w, h);
+    ctx.setLineDash([]);
+    ctx.fillStyle = BlueprintRenderer.FAINT;
+    ctx.font = '9px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(label, x, y - h / 2 - 4);
+    ctx.restore();
+  }
+
+  static dashedCircle(ctx, x, y, r, label) {
+    ctx.save();
+    ctx.strokeStyle = BlueprintRenderer.FAINT;
+    ctx.setLineDash([5, 4]);
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = BlueprintRenderer.FAINT;
+    ctx.font = '9px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(label, x, y - r - 4);
+    ctx.restore();
+  }
+
+  // ================= 戦車 =================
+  static drawTank(ctx, W, H, draft) {
+    const cx = W / 2, gy = H * 0.72;
+    const sizes = { lt: 100, mt: 132, ht: 168 };
+    const hw = sizes[draft.hull];
+    if (!hw) {
+      BlueprintRenderer.placeholder(ctx, cx, gy - 20, 150, 46, '車体未選択');
+      BlueprintRenderer.dashedCircle(ctx, cx, gy - 48, 18, '砲塔未選択');
+      return;
+    }
+    const hh = draft.hull === 'ht' ? 30 : 24;
+    // 転輪 (キャタピラ)
+    const wheels = draft.hull === 'ht' ? 6 : 5;
+    const wr = 6.5, span = hw * 0.82;
+    ctx.beginPath();
+    for (let i = 0; i < wheels; i++) {
+      const x = cx - span / 2 + i * (span / (wheels - 1));
+      ctx.moveTo(x + wr, gy);
+      ctx.arc(x, gy, wr, 0, Math.PI * 2);
+    }
+    ctx.stroke();
+    // キャタピラ外周
+    ctx.beginPath();
+    const ty = gy - wr - 2.5;
+    ctx.roundRect(cx - span / 2 - wr, ty, span + wr * 2, wr * 2 + 5, 5);
+    ctx.stroke();
+    // 車体
+    ctx.beginPath();
+    if (draft.hull === 'lt') {
+      ctx.roundRect(cx - hw / 2, gy - hh, hw, hh, 6);
+    } else if (draft.hull === 'mt') {
+      ctx.moveTo(cx - hw / 2, gy);
+      ctx.lineTo(cx - hw / 2 - 4, gy - hh * 0.55);
+      ctx.lineTo(cx - hw / 2 + 8, gy - hh);
+      ctx.lineTo(cx + hw / 2, gy - hh);
+      ctx.lineTo(cx + hw / 2, gy);
+    } else {
+      ctx.moveTo(cx - hw / 2, gy);
+      ctx.lineTo(cx - hw / 2, gy - hh * 0.4);
+      ctx.lineTo(cx - hw / 2 + 14, gy - hh);
+      ctx.lineTo(cx + hw / 2, gy - hh);
+      ctx.lineTo(cx + hw / 2, gy);
+    }
+    ctx.closePath();
+    ctx.fill(); ctx.stroke();
+    // ---- 主砲/砲塔 ----
+    const gy2 = gy - hh;
+    const gun = draft.modules.gun;
+    if (!gun) {
+      BlueprintRenderer.dashedCircle(ctx, cx, gy2 - 12, 16, '主砲未選択');
+    } else {
+      // 砲塔形状 (榴弾砲=角い大型 / 対戦車砲=六角 / 高射砲=小型円形)
+      ctx.beginPath();
+      if (gun === 'how') {
+        ctx.roundRect(cx - 26, gy2 - 22, 52, 22, 5);
+      } else if (gun === 'at') {
+        ctx.moveTo(cx - 20, gy2); ctx.lineTo(cx - 13, gy2 - 20); ctx.lineTo(cx + 13, gy2 - 20);
+        ctx.lineTo(cx + 20, gy2); ctx.closePath();
+      } else {
+        ctx.arc(cx, gy2 - 11, 12, Math.PI, 0); ctx.closePath();
+      }
+      ctx.fill(); ctx.stroke();
+      // 砲身 (種類で長さが変わる)
+      let bl = 30, bt = 3;
+      if (gun === 'at') { bl = 52; bt = 2.5; }
+      if (gun === 'aa') { bl = 22; bt = 2.5; }
+      ctx.beginPath();
+      if (gun === 'aa') {
+        ctx.roundRect(cx + 8, gy2 - 17, bl, 3, 2);
+        ctx.roundRect(cx + 8, gy2 - 11, bl, 3, 2);
+      } else {
+        ctx.roundRect(cx + 10, gy2 - 14 - bt / 2, bl, bt, 2);
+        if (gun === 'how') { ctx.roundRect(cx + 10 + bl, gy2 - 17, 4, 8, 1); }   // 砲口制退器
+      }
+      ctx.stroke();
+    }
+    // ---- 装甲 ----
+    const armor = draft.modules.armor;
+    if (armor === 'steel') {
+      ctx.beginPath();
+      ctx.moveTo(cx - hw / 2 + 4, gy - 4); ctx.lineTo(cx - hw / 2 + 4, gy - hh + 3);
+      ctx.moveTo(cx + hw / 2 - 4, gy - 4); ctx.lineTo(cx + hw / 2 - 4, gy - hh + 3);
+      ctx.stroke();
+    } else if (armor === 'slope') {
+      ctx.beginPath();
+      ctx.moveTo(cx - hw / 2 - 2, gy);
+      ctx.lineTo(cx - hw / 2 + 16, gy - hh - 2);
+      ctx.moveTo(cx - hw / 2 - 2, gy - 6);
+      ctx.lineTo(cx - hw / 2 + 16, gy - hh - 8);
+      ctx.stroke();
+    }
+    // ---- エンジン (後部の換気・排気) ----
+    if (draft.modules.engine) {
+      ctx.beginPath();
+      ctx.moveTo(cx + hw / 2 - 12, gy - hh - 3); ctx.lineTo(cx + hw / 2 - 4, gy - hh - 3);
+      ctx.moveTo(cx + hw / 2 - 12, gy - hh - 7); ctx.lineTo(cx + hw / 2 - 4, gy - hh - 7);
+      ctx.moveTo(cx + hw / 2 - 2, gy - hh - 6); ctx.lineTo(cx + hw / 2 + 10, gy - hh - 10);
+      ctx.stroke();
+      ctx.font = '8px monospace';
+      ctx.fillStyle = BlueprintRenderer.INK;
+      ctx.fillText(draft.modules.engine === 'diesel' ? 'DIESEL' : 'GASOLINE', cx + hw / 2 + 4, gy - hh - 16);
+    }
+  }
+
+  // ================= 艦船 =================
+  static drawShip(ctx, W, H, draft) {
+    const cx = W / 2, wy = H * 0.68;
+    const spec = { dd: [130, 16], cl: [180, 22], bb: [230, 30], cv: [220, 24] }[draft.hull];
+    if (!spec) {
+      BlueprintRenderer.placeholder(ctx, cx, wy - 14, 200, 34, '船体未選択');
+      BlueprintRenderer.dashedCircle(ctx, cx, wy - 48, 12, '主砲未選択');
+      return;
+    }
+    const [len, dep] = spec;
+    // 船体 (側面輪郭)
+    ctx.beginPath();
+    ctx.moveTo(cx - len / 2, wy - dep);
+    ctx.lineTo(cx + len / 2 - 14, wy - dep);
+    ctx.lineTo(cx + len / 2 + 10, wy - dep * 0.35);
+    ctx.lineTo(cx + len / 2 - 6, wy);
+    ctx.lineTo(cx - len / 2, wy);
+    ctx.lineTo(cx - len / 2 + 10, wy - dep * 0.4);
+    ctx.closePath();
+    ctx.fill(); ctx.stroke();
+    // 水線
+    ctx.beginPath();
+    ctx.setLineDash([7, 5]);
+    ctx.moveTo(cx - len / 2 - 16, wy + 4);
+    ctx.lineTo(cx + len / 2 + 22, wy + 4);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    // ---- 主砲 (艦砲塔) ----
+    const gun = draft.modules.gun;
+    const turretN = draft.hull === 'bb' ? 3 : draft.hull === 'cv' ? 0 : 2;
+    if (!gun && draft.hull !== 'cv') {
+      BlueprintRenderer.dashedCircle(ctx, cx - len * 0.2, wy - dep - 12, 10, '主砲未選択');
+    } else if (gun === 'lgun') {
+      for (let i = 0; i < turretN; i++) {
+        const tx = cx - len * 0.32 + i * len * 0.28;
+        ctx.beginPath();
+        ctx.roundRect(tx - 9, wy - dep - 13, 18, 13, 3);
+        ctx.fill(); ctx.stroke();
+        ctx.beginPath();
+        ctx.roundRect(tx + 7, wy - dep - 10, 16, 2.5, 1);
+        ctx.roundRect(tx + 7, wy - dep - 6, 16, 2.5, 1);
+        ctx.stroke();
+      }
+    } else if (gun === 'aa') {
+      ctx.beginPath();
+      for (let i = 0; i < 3; i++) {
+        const tx = cx - len * 0.3 + i * len * 0.3;
+        ctx.moveTo(tx, wy - dep); ctx.lineTo(tx, wy - dep - 9);
+        ctx.moveTo(tx - 5, wy - dep - 9); ctx.lineTo(tx + 5, wy - dep - 9);
+      }
+      ctx.stroke();
+    }
+    // ---- 魚雷発射管 ----
+    if (draft.modules.torp === 'tub') {
+      ctx.beginPath();
+      for (let i = 0; i < 3; i++) {
+        ctx.roundRect(cx + len * 0.12 + i * 12, wy - dep - 4, 10, 5, 2);
+      }
+      ctx.stroke();
+      ctx.font = '8px monospace'; ctx.fillStyle = BlueprintRenderer.INK;
+      ctx.fillText('TORPEDO', cx + len * 0.2, wy - dep - 12);
+    }
+    // ---- 電装 (レーダーマスト) ----
+    if (draft.modules.radar === 'radar') {
+      const mx = draft.hull === 'cv' ? cx + len * 0.25 : cx - len * 0.02;
+      ctx.beginPath();
+      ctx.moveTo(mx, wy - dep); ctx.lineTo(mx, wy - dep - 26);
+      ctx.moveTo(mx - 7, wy - dep - 18); ctx.lineTo(mx + 7, wy - dep - 18);
+      ctx.stroke();
+      ctx.save();
+      ctx.setLineDash([3, 3]);
+      ctx.strokeStyle = BlueprintRenderer.FAINT;
+      ctx.beginPath();
+      ctx.arc(mx, wy - dep - 22, 12, -Math.PI * 0.9, -Math.PI * 0.1);
+      ctx.stroke();
+      ctx.restore();
+    }
+    // ---- 空母: 飛行甲板 + 艦橋 ----
+    if (draft.hull === 'cv') {
+      ctx.beginPath();
+      ctx.moveTo(cx - len / 2 - 6, wy - dep - 8);
+      ctx.lineTo(cx + len / 2 + 6, wy - dep - 8);
+      ctx.moveTo(cx - len / 2 - 6, wy - dep - 20);
+      ctx.lineTo(cx + len / 2 + 6, wy - dep - 20);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.roundRect(cx + len * 0.16, wy - dep - 24, 12, 20, 2);
+      ctx.stroke();
+    }
+  }
+
+  // ================= 航空機 =================
+  static drawPlane(ctx, W, H, draft) {
+    const cx = W / 2, cy = H * 0.55;
+    if (!draft.hull) {
+      BlueprintRenderer.placeholder(ctx, cx, cy, 150, 40, '機体未選択');
+      return;
+    }
+    const len = draft.hull === 'bomber' ? 130 : draft.hull === 'carrier' ? 110 : 100;
+    const fh = draft.hull === 'bomber' ? 22 : 14;
+    // 主翼 (上から見た断面)
+    const wingSpan = draft.hull === 'bomber' ? 70 : draft.hull === 'carrier' ? 55 : 48;
+    ctx.beginPath();
+    ctx.moveTo(cx - 8, cy + wingSpan * 0.55);
+    ctx.lineTo(cx - 2, cy - fh);
+    ctx.lineTo(cx + 10, cy - fh);
+    ctx.lineTo(cx + 16, cy + wingSpan * 0.55);
+    ctx.closePath();
+    ctx.fill(); ctx.stroke();
+    // 胴体
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, len / 2, fh, 0, 0, Math.PI * 2);
+    ctx.fill(); ctx.stroke();
+    // 尾翼
+    ctx.beginPath();
+    ctx.moveTo(cx - len / 2 + 4, cy - 2);
+    ctx.lineTo(cx - len / 2 - 8, cy + wingSpan * 0.28);
+    ctx.lineTo(cx - len / 2 + 12, cy + wingSpan * 0.28);
+    ctx.closePath();
+    ctx.fill(); ctx.stroke();
+    // ---- エンジン/プロペラ ----
+    const eng = draft.modules.engine;
+    if (!eng) {
+      BlueprintRenderer.dashedCircle(ctx, cx + len / 2 + 10, cy, 9, 'エンジン未選択');
+    } else {
+      ctx.beginPath();
+      ctx.arc(cx + len / 2 + 6, cy, 7, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.save();
+      ctx.setLineDash([3, 3]);
+      ctx.strokeStyle = eng === 'e2' ? BlueprintRenderer.INK : BlueprintRenderer.FAINT;
+      ctx.beginPath();
+      ctx.arc(cx + len / 2 + 6, cy, 15, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    }
+    // ---- 武装 ----
+    const wp = draft.modules.weapon;
+    if (wp === 'mg') {
+      ctx.beginPath();
+      for (let i = 0; i < 3; i++) {
+        ctx.arc(cx + len / 2 - 14, cy - fh + 4 + i * 6, 2, 0, Math.PI * 2);
+      }
+      ctx.stroke();
+    } else if (wp === 'rocket') {
+      ctx.beginPath();
+      ctx.roundRect(cx - 6, cy + wingSpan * 0.4, 14, 4, 2);
+      ctx.roundRect(cx + 4, cy + wingSpan * 0.45, 14, 4, 2);
+      ctx.stroke();
+      ctx.font = '8px monospace'; ctx.fillStyle = BlueprintRenderer.INK;
+      ctx.fillText('ROCKET', cx - 2, cy + wingSpan * 0.4 + 14);
+    }
+    // ---- 防弾 (コクピット装甲) ----
+    if (draft.modules.armor === 'plate') {
+      ctx.beginPath();
+      ctx.roundRect(cx + 6, cy - fh - 3, 16, fh + 6, 3);
+      ctx.stroke();
+      ctx.font = '8px monospace'; ctx.fillStyle = BlueprintRenderer.INK;
+      ctx.fillText('ARMOR', cx + 14, cy - fh - 8);
+    }
+  }
+}
+
+window.BlueprintRenderer = BlueprintRenderer;
 
 // ==========================================================
 // 3. IntelligenceManager — 諜報機関とスパイ活動 (La Résistance)
