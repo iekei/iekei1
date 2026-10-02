@@ -1,0 +1,115 @@
+[
+  {
+    "id": "JAP_technological_exchange",
+    "title": "技術交流",
+    "x": 2900,
+    "y": 700,
+    "cost": 70,
+    "effect": "我々は熊に立ち向かうための同盟国を必要としている。ドイツはその良い候補となるだけではなく、戦いに役立つ様々な先進的な技術を保有しており、それを共有することも可能だろう。",
+    "prerequisites": [
+      "JAP_non_aggression_pact_with_china",
+      "JAP_create_a_manchurian_imperial_air_force"
+    ]
+  },
+  {
+    "id": "JAP_preemptive_war",
+    "title": "予防戦争",
+    "x": 2900,
+    "y": 830,
+    "cost": 70,
+    "effect": "北方国境へのソビエトによる侵犯が増加したとの報告を偽造することにより、北方の脅威を取りのぞくための予防攻撃を実行可能とする。",
+    "prerequisites": [
+      "JAP_technological_exchange"
+    ]
+  },
+  {
+    "id": "JAP_establish_the_northern_resource_area",
+    "title": "北方資源地帯の確保",
+    "x": 2600,
+    "y": 960,
+    "cost": 70,
+    "effect": "シベリアの豊かな不毛地帯は我々の更なる兵器生産に役立てるべきである。",
+    "prerequisites": [
+      "JAP_preemptive_war",
+      "JAP_imperial_arsenals"
+    ]
+  },
+  {
+    "id": "JAP_german_rocketry",
+    "title": "ドイツのロケット技術",
+    "x": 2900,
+    "y": 960,
+    "cost": 70,
+    "effect": "更なるドイツの技術進歩は我々の戦争への取り組みに非常に有益なものとなるだろう。どんな犠牲を払ってでもこのロケットの設計図を手に入れなければならない。",
+    "prerequisites": [
+      "JAP_preemptive_war"
+    ]
+  },
+  {
+    "id": "JAP_strengthen_civilian_government",
+    "title": "文官政府を強化",
+    "x": 3500,
+    "y": 50,
+    "cost": 70,
+    "effect": "自由主義と民主主義の機運が高まりつつあることは、我が国にとって決して脅威ではないどころか、最大の強みとなり得ることである。その理想を守ることができるようにするため、我々の政府を強化しなければならない。",
+    "prerequisites": []
+  },
+  {
+    "id": "JAP_ally_with_the_zaibatsus",
+    "title": "財閥との協力",
+    "x": 3350,
+    "y": 180,
+    "cost": 70,
+    "effect": "我が国の財閥はかつてないほど政治的、経済的権力を所持している。それは全ての機会において自由や個性が尊重されていたからこその賜物であり、国家の利益のために彼らと一丸となるべきだ。",
+    "prerequisites": [
+      "JAP_strengthen_civilian_government"
+    ]
+  },
+  {
+    "id": "JAP_research_spending",
+    "title": "研究投資",
+    "x": 3650,
+    "y": 180,
+    "cost": 70,
+    "effect": "我が国の最も優秀な人材を満足に生かすためには、研究開発に巨額の予算を適切に割り当てる必要がある。",
+    "prerequisites": [
+      "JAP_strengthen_civilian_government"
+    ]
+  },
+  {
+    "id": "JAP_pre_emptive_coup",
+    "title": "先制蜂起",
+    "x": 3350,
+    "y": 310,
+    "cost": 70,
+    "effect": "我々は先制攻撃を仕掛け、子供達の為に我が国の未来を守らなければならない。我々の理想が独裁政権によって踏みつぶされてしまう前に。",
+    "prerequisites": [
+      "JAP_research_spending",
+      "JAP_ally_with_the_zaibatsus"
+    ]
+  },
+  {
+    "id": "JAP_purge_the_militarists",
+    "title": "軍国主義者の追放",
+    "x": 3650,
+    "y": 310,
+    "cost": 70,
+    "effect": "より分別のある思考のための余地を作るならば、軍事力が全てを解決してくれると信じ込んでいるような輩は我が列島から追い出すべきだ。連中は余所で自身の道を見つけるだろう。",
+    "prerequisites": [
+      "JAP_research_spending",
+      "JAP_ally_with_the_zaibatsus"
+    ]
+  },
+  {
+    "id": "JAP_the_showa_constitution",
+    "title": "昭和憲法",
+    "x": 3500,
+    "y": 440,
+    "cost": 70,
+    "effect": "我々は我が国の皇室の歴史を受け入れ、尊重している。しかしながら権威主義は我々が望む日本の姿ではない。名目上の元首として天皇の地位を維持しつつ、多くの西洋諸国に倣い、憲法によって陛下の権限を抑制するのだ。",
+    "prerequisites": [
+      "JAP_pre_emptive_coup",
+      "JAP_purge_the_militarists"
+    ]
+  }
+]

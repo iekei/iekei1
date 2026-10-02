@@ -1,0 +1,37 @@
+{
+  "scientists": [
+    {
+      "id": "rupert_tube",
+      "name": "ルパート・チューブ",
+      "name_en": "Rupert Tube",
+      "category": "nuclear",
+      "category_name": "原子核分野",
+      "icon": "special/data/image/nuke.png",
+      "project_icon": "special/data/image/nuke.png",
+      "overview": "イギリスの核開発（チューブ・アロイズ計画）の科学者。",
+      "weapons": "原子爆弾（試作）、ガス拡散分離技術"
+    },
+    {
+      "id": "frank_whittle",
+      "name": "フランク・ホイットル",
+      "name_en": "Frank Whittle",
+      "category": "air",
+      "category_name": "航空・ロケット分野",
+      "icon": "special/data/image/rocket.png",
+      "project_icon": "special/data/image/rocket.png",
+      "overview": "ジェットエンジンの発明者。",
+      "weapons": "グロスター・ミーティア（初代ジェット戦闘機）"
+    },
+    {
+      "id": "mullins_barnes",
+      "name": "バーンズ・ウォリス",
+      "name_en": "Barnes Wallis",
+      "category": "air",
+      "category_name": "航空兵器設計",
+      "icon": "special/data/image/rocket2.png",
+      "project_icon": "special/data/image/rocket2.png",
+      "overview": "航空工学の天才。特殊爆弾を設計。",
+      "weapons": "バウンス爆弾（ダムバスター）、 Tallboy、Grand Slam超重爆弾"
+    }
+  ]
+}

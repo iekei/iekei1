@@ -1,0 +1,113 @@
+[
+  {
+    "id": "FRA_carrier_planes",
+    "title": "輸送機",
+    "x": 10550,
+    "y": 440,
+    "cost": 70,
+    "effect": "輸送機は飛行機と同じくらい良いものだ。現代の飛行機がなければどんな輸送機も無駄な投資になる。",
+    "prerequisites": [
+      "FRA_carrier_focus"
+    ]
+  },
+  {
+    "id": "FRA_rush_the_richelieus",
+    "title": "リシュリュー級の緊急建造",
+    "x": 10400,
+    "y": 570,
+    "cost": 70,
+    "effect": "ヨーロッパの状況がますます緊迫しているため、従来の方法で新しい水上部隊を構築する時間がない。新しい戦艦をできるだけ早く使えるようにするには資源に優先順位をつける必要がある。",
+    "prerequisites": [
+      "FRA_capital_ship_focus"
+    ]
+  },
+  {
+    "id": "FRA_prioritize_the_joffre",
+    "title": "ジョフル級を優先",
+    "x": 10700,
+    "y": 570,
+    "cost": 70,
+    "effect": "我々の現在の空母艦隊は絶望的に時代遅れであり、潜在的な敵よりかは勝っている。新しい輸送計画が最優先されるようにしなければならない。",
+    "prerequisites": [
+      "FRA_carrier_focus"
+    ]
+  },
+  {
+    "id": "FRA_the_young_school",
+    "title": "青年学派",
+    "x": 11150,
+    "y": 180,
+    "cost": 70,
+    "effect": "航空機、潜水艦、魚雷の開発により、主力艦は時代遅れになった。限られた海軍産業では、現代の海上の脅威に対して巨大なだけの水上要塞の建設に時間とお金を浪費する余裕はない。代わりに、効率の改善に焦点を合わせて、より多くの小型艦を建造できるようにしなければならない。",
+    "prerequisites": [
+      "FRA_naval_rearmament"
+    ]
+  },
+  {
+    "id": "FRA_undersea_combat",
+    "title": "水中での戦闘",
+    "x": 11000,
+    "y": 310,
+    "cost": 70,
+    "effect": "潜水艦は過去10年の間で洗練された。その発見と撃破がますます困難になっていることから、今ではすべての水上艦の致命的脅威とみなされている。",
+    "prerequisites": [
+      "FRA_the_young_school"
+    ]
+  },
+  {
+    "id": "FRA_surface_combat",
+    "title": "水上での戦闘",
+    "x": 11300,
+    "y": 310,
+    "cost": 70,
+    "effect": "銃砲の進歩により、敵の主力艦との長期にわたる打撃戦を勝ち残ることができる艦船を建造することはほとんど不可能になった。魚雷の一斉射で敵艦を圧倒する新鋭駆逐艦と水雷艇の艦隊を組織する方がいいだろう。",
+    "prerequisites": [
+      "FRA_the_young_school"
+    ]
+  },
+  {
+    "id": "FRA_improved_screen_ships",
+    "title": "直衛艦改良",
+    "x": 11300,
+    "y": 570,
+    "cost": 70,
+    "effect": "駆逐艦と軽巡洋艦は戦艦や航空母艦といった大きな艦を防衛する上で重要な鍵となる。海上防衛線が破られれば、艦や人員全てを危険に晒す事になるだろう。艦船は最新の技術を用いて建造せなばならない。",
+    "prerequisites": [
+      "FRA_surface_combat",
+      "FRA_undersea_combat"
+    ]
+  },
+  {
+    "id": "FRA_naval_doctrine",
+    "title": "海軍ドクトリン",
+    "x": 10850,
+    "y": 700,
+    "cost": 70,
+    "effect": "艦船設計における近年の発展は、戦術的及び戦略的な機動作戦における新たな可能性を拓いた。それらの新理論に賭けるより前に、まずきちんと試験を行い計画を固める必要がある。",
+    "prerequisites": [
+      "FRA_prioritize_the_joffre",
+      "FRA_rush_the_richelieus",
+      "FRA_improved_screen_ships"
+    ]
+  },
+  {
+    "id": "FRA_air_focus",
+    "title": "空軍重視",
+    "x": 11900,
+    "y": 50,
+    "cost": 70,
+    "effect": "今こそ空軍を拡大化させる時だ！計画によってすでに航空機と人員の両者の増強を支えるための、新たな航空基地の建設が始められた。",
+    "prerequisites": []
+  },
+  {
+    "id": "FRA_fighter_focus",
+    "title": "戦闘機重視",
+    "x": 11750,
+    "y": 180,
+    "cost": 70,
+    "effect": "革新的な民間技術を応用することにより、戦闘機の速度、航続距離と最大高度を上昇させる事ができる。他国の進歩に遅れないようにするためにこれに注力する必要がある。",
+    "prerequisites": [
+      "FRA_air_focus"
+    ]
+  }
+]

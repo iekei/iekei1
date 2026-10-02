@@ -1,0 +1,176 @@
+[
+  {
+    "id": "d510",
+    "title": "デウォーティヌ D.510",
+    "year": 1934,
+    "x": 100,
+    "y": 50,
+    "research_time": 111,
+    "reliability": "配備（制式採用）",
+    "desc": "D.501の改良型戦闘機。20mm機関砲をモーター・カノンに装備した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='12' cy='14' r='2'/></svg>",
+    "effects": [
+      "攻撃力: 39/100",
+      "生存力: 28/100",
+      "機動力: 67/100",
+      "信頼度: 66/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "ms406",
+    "title": "モラーヌ・ソルニエ M.S.406",
+    "year": 1938,
+    "x": 100,
+    "y": 200,
+    "research_time": 119,
+    "reliability": "配備（制式採用）",
+    "desc": "開戦時の主力戦闘機。数は多かったが性能はBf 109に劣った。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='12' cy='14' r='2'/></svg>",
+    "effects": [
+      "攻撃力: 46/100",
+      "生存力: 31/100",
+      "機動力: 72/100",
+      "信頼度: 71/100"
+    ],
+    "prerequisites": [
+      "d510"
+    ]
+  },
+  {
+    "id": "bloch152",
+    "title": "ブロック MB.152",
+    "year": 1939,
+    "x": 100,
+    "y": 350,
+    "research_time": 121,
+    "reliability": "配備（制式採用）",
+    "desc": "重武装の戦闘機。フランス戦線でBf 109と戦った。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='12' cy='14' r='2'/></svg>",
+    "effects": [
+      "攻撃力: 48/100",
+      "生存力: 32/100",
+      "機動力: 73/100",
+      "信頼度: 72/100"
+    ],
+    "prerequisites": [
+      "ms406"
+    ]
+  },
+  {
+    "id": "d520",
+    "title": "D.520戦闘機",
+    "year": 1939,
+    "x": 100,
+    "y": 500,
+    "research_time": 130,
+    "reliability": "配備",
+    "desc": "フランス最優秀戦闘機。スピットファイアに匹敵する性能。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><path d='M12 2v8'/><path d='M2 10h20'/><path d='M8 10l-4 8'/><path d='M16 10l4 8'/></svg>",
+    "effects": [
+      "空戦: 72/100",
+      "航続: 50/100",
+      "速力: 70/100",
+      "装甲: 25/100"
+    ],
+    "prerequisites": [
+      "bloch152"
+    ]
+  },
+  {
+    "id": "vg33",
+    "title": "アルセナル VG.33",
+    "year": 1940,
+    "x": 100,
+    "y": 650,
+    "research_time": 123,
+    "reliability": "低（試作止まり）",
+    "desc": "木製の高性能戦闘機。生産が開戦に間に合わなかった。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='12' cy='14' r='2'/></svg>",
+    "effects": [
+      "攻撃力: 49/100",
+      "生存力: 33/100",
+      "機動力: 74/100",
+      "信頼度: 73/100"
+    ],
+    "prerequisites": [
+      "d520"
+    ]
+  },
+  {
+    "id": "leo451",
+    "title": "リオール・エ・オリヴィエ LeO 451",
+    "year": 1937,
+    "x": 400,
+    "y": 50,
+    "research_time": 117,
+    "reliability": "配備（制式採用）",
+    "desc": "高速中型爆撃機。フランス空軍の最良級爆撃機。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 48/100",
+      "生存力: 33/100",
+      "機動力: 38/100",
+      "信頼度: 69/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "amiot351",
+    "title": "アミオ 351爆撃機",
+    "year": 1939,
+    "x": 400,
+    "y": 200,
+    "research_time": 121,
+    "reliability": "配備（制式採用）",
+    "desc": "高速中型爆撃機。開戦時に少数が配備された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 52/100",
+      "生存力: 36/100",
+      "機動力: 38/100",
+      "信頼度: 72/100"
+    ],
+    "prerequisites": [
+      "leo451"
+    ]
+  },
+  {
+    "id": "farman222",
+    "title": "ファルマン F.222",
+    "year": 1936,
+    "x": 700,
+    "y": 50,
+    "research_time": 115,
+    "reliability": "配備（制式採用）",
+    "desc": "大型双発夜間爆撃機。ドイツ本土への夜間爆撃に投入された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 46/100",
+      "生存力: 32/100",
+      "機動力: 38/100",
+      "信頼度: 68/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "potez631",
+    "title": "ポテズ 63.11",
+    "year": 1939,
+    "x": 700,
+    "y": 200,
+    "research_time": 121,
+    "reliability": "配備（制式採用）",
+    "desc": "双発偵察・夜間戦闘機。フランス空軍の多用途双発機。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 52/100",
+      "生存力: 36/100",
+      "機動力: 38/100",
+      "信頼度: 72/100"
+    ],
+    "prerequisites": [
+      "farman222"
+    ]
+  }
+]

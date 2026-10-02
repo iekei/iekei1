@@ -1,0 +1,115 @@
+[
+  {
+    "id": "ITA_libyan_railway",
+    "title": "リビア鉄道",
+    "x": 1100,
+    "y": 830,
+    "cost": 70,
+    "effect": "リビアの道路網への投資は、間違いなく有意義なことなのだが、部隊、資源、物資などの大規模な輸送には、やはり近代的な鉄道網が不可欠だ。",
+    "prerequisites": [
+      "ITA_litoranea_balbo",
+      "ITA_prospect_for_oil"
+    ]
+  },
+  {
+    "id": "ITA_prospect_for_oil",
+    "title": "石油の産出調査",
+    "x": 1250,
+    "y": 570,
+    "cost": 35,
+    "effect": "古の諸帝国は、常に新たなる競合相手を利する事に怯えてきた。この例に沿って、我々は他の国家からの石油に頼るわけにはならず、帝国内での資源自給に尽力せねばならない。これによっは遠い将来まで競争力を保つことかできるのである。",
+    "prerequisites": [
+      "ITA_regional_development"
+    ]
+  },
+  {
+    "id": "ITA_libyan_refineries",
+    "title": "リビアの製油所",
+    "x": 1250,
+    "y": 700,
+    "cost": 35,
+    "effect": "石油資源と本土の工業地帯に双方に近いベンガジは、製油所の建設に完璧に適した地である。",
+    "prerequisites": [
+      "ITA_prospect_for_oil"
+    ]
+  },
+  {
+    "id": "ITA_polizia_dell_africa_italiana",
+    "title": "イタリア領アフリカ警察",
+    "x": 1550,
+    "y": 570,
+    "cost": 70,
+    "effect": "ここまでの間、植民地警察は有能な部隊であることが証明されている。もう少し手を加えれば、各植民地に投資した額に見合った収穫が確約されることだろう。",
+    "prerequisites": [
+      "ITA_regional_development"
+    ]
+  },
+  {
+    "id": "ITA_strengthen_ascari_corps",
+    "title": "アスカリ部隊の強化",
+    "x": 1850,
+    "y": 570,
+    "cost": 70,
+    "effect": "同じ帝国の人間でも、ヨーロッパからの部隊はしばしば、アフリカの厳しい気候に苦しめられている。当然のことながら、地元民は問題ない。暑い天候下で戦わねばならない時は、奴らをいくらか採用して部隊の支援に回すとしよう。",
+    "prerequisites": [
+      "ITA_regional_development"
+    ]
+  },
+  {
+    "id": "ITA_comandante_diavolo",
+    "title": "悪魔の指揮官",
+    "x": 1700,
+    "y": 700,
+    "cost": 70,
+    "effect": "エリトリア征服やエチオピア戦争の際、我々は地元の騎兵の素早さと粘り強さに、しばしば手を焼かされた。奴らと戦ったからこそ、味方に引き込めれば得るものが大きいと確信している。積極性のある若い将校ならあるいは、我らの陣営で「悪魔の指揮官」として活躍してくれるかもしれない。",
+    "prerequisites": [
+      "ITA_polizia_dell_africa_italiana",
+      "ITA_strengthen_ascari_corps"
+    ]
+  },
+  {
+    "id": "ITA_steel_industry_in_terni",
+    "title": "テルニの製鉄業",
+    "x": 2000,
+    "y": 180,
+    "cost": 70,
+    "effect": "テルニの製鋼所は長い間、イタリアの鉄鋼生産を支えてきた。今後の戦争では、これまで以上に彼らに頼ることになるだろう。今の内にいくらか投資しておけば、後々何倍もの利益になって返ってくるはずだ。",
+    "prerequisites": [
+      "ITA_italian_highways_bba"
+    ]
+  },
+  {
+    "id": "ITA_power_plants_in_terni",
+    "title": "テルニ発電所",
+    "x": 2300,
+    "y": 180,
+    "cost": 70,
+    "effect": "この地域を、より大規模な産業の中心地に成長させようと思ったら、今テルニにある発電所だけでは不十分だ。もっと数を増やさなくては。",
+    "prerequisites": [
+      "ITA_italian_highways_bba"
+    ]
+  },
+  {
+    "id": "ITA_industria_della_gomma_sintetica",
+    "title": "合成ゴム産業",
+    "x": 2150,
+    "y": 310,
+    "cost": 35,
+    "effect": "地中海の真ん中に位置する我が国は、敵国による封鎖攻撃に対して特に脆弱だ。我々が世界での正当な立場を獲得するためには、外国からの輸入に頼ることなく、国内の産業を維持できるようにしておかなくてはならない。",
+    "prerequisites": [
+      "ITA_steel_industry_in_terni",
+      "ITA_power_plants_in_terni"
+    ]
+  },
+  {
+    "id": "ITA_strengthen_northern_industry",
+    "title": "北部の工業を強化",
+    "x": 2000,
+    "y": 440,
+    "cost": 70,
+    "effect": "北イタリアは、昔から我が国の工業の中心地だった。地域全体が申し分ない位置にあるため、ちょっと時間をかけて少しばかりの資産を投資すれば、今後さらなる成長が期待できる。",
+    "prerequisites": [
+      "ITA_industria_della_gomma_sintetica"
+    ]
+  }
+]

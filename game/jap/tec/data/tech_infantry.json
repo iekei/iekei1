@@ -1,0 +1,248 @@
+[
+  {
+    "id": "type11_lmg",
+    "title": "十一年式軽機関銃",
+    "year": 1922,
+    "x": 100,
+    "y": 50,
+    "research_time": 67,
+    "reliability": "配備（制式採用）",
+    "desc": "三八式実包を使用するホッポ式軽機関銃。装弾が面倒な欠点があった分隊支援火器。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "effects": [
+      "対人攻撃: 34/100",
+      "対物攻撃: 10/100",
+      "生存力: 8/100",
+      "機動力: 62/100",
+      "信頼度: 70/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "type38_rifle",
+    "title": "三八式歩兵銃",
+    "year": 1936,
+    "x": 100,
+    "y": 200,
+    "research_time": 100,
+    "reliability": "配備（制式採用）",
+    "desc": "有坂成章設計のボルトアクション小銃。日清・日露戦争を経て制式採用され、長期間にわたり主力小銃として使用された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#d4a843' stroke-width='1.8' stroke-linecap='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/></svg>",
+    "effects": [
+      "対人攻撃: 30/100",
+      "対物攻撃: 8/100",
+      "生存力: 7/100",
+      "機動力: 70/100",
+      "信頼度: 85/100"
+    ],
+    "prerequisites": [
+      "type11_lmg"
+    ]
+  },
+  {
+    "id": "type96_lmg",
+    "title": "九六式軽機関銃",
+    "year": 1936,
+    "x": 100,
+    "y": 350,
+    "research_time": 95,
+    "reliability": "配備（制式採用）",
+    "desc": "三十発弾倉を使う本格的軽機関銃。九九式軽機関銃の基盤となった分隊支援火器。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "effects": [
+      "対人攻撃: 39/100",
+      "対物攻撃: 12/100",
+      "生存力: 8/100",
+      "機動力: 62/100",
+      "信頼度: 77/100"
+    ],
+    "prerequisites": [
+      "type38_rifle"
+    ]
+  },
+  {
+    "id": "type97_sniper",
+    "title": "九七式狙撃銃",
+    "year": 1937,
+    "x": 100,
+    "y": 500,
+    "research_time": 97,
+    "reliability": "配備（制式採用）",
+    "desc": "三八式歩兵銃を改造した狙撃銃。九九式狙撃銃と共に狙撃兵に用いられた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "effects": [
+      "対人攻撃: 40/100",
+      "対物攻撃: 12/100",
+      "生存力: 8/100",
+      "機動力: 62/100",
+      "信頼度: 78/100"
+    ],
+    "prerequisites": [
+      "type96_lmg"
+    ]
+  },
+  {
+    "id": "type99_lmg",
+    "title": "九九式軽機関銃",
+    "year": 1939,
+    "x": 100,
+    "y": 650,
+    "research_time": 110,
+    "reliability": "配備（制式採用）",
+    "desc": "九六式軽機関銃の7.7mm口径版。弾倉は湾曲した30発入り。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#d4a843' stroke-width='1.8' stroke-linecap='round'><path d='M2 12h18'/><path d='M6 12v4'/><path d='M16 12l2 3h-3z'/></svg>",
+    "effects": [
+      "対人攻撃: 40/100",
+      "対物攻撃: 8/100",
+      "生存力: 9/100",
+      "機動力: 55/100",
+      "信頼度: 70/100"
+    ],
+    "prerequisites": [
+      "type97_sniper"
+    ]
+  },
+  {
+    "id": "type99_rifle",
+    "title": "九九式小銃",
+    "year": 1939,
+    "x": 100,
+    "y": 800,
+    "research_time": 100,
+    "reliability": "配備（制式採用）",
+    "desc": "三八式の後継。7.7mm弾を使用し、対空表尺を備える。太平洋戦争で主力として使用された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#d4a843' stroke-width='1.8' stroke-linecap='round'><path d='M2 12h20'/><path d='M17 12l2 4h-3z'/></svg>",
+    "effects": [
+      "対人攻撃: 35/100",
+      "対物攻撃: 10/100",
+      "生存力: 8/100",
+      "機動力: 68/100",
+      "信頼度: 80/100"
+    ],
+    "prerequisites": [
+      "type99_lmg"
+    ]
+  },
+  {
+    "id": "type92_hmg",
+    "title": "九二式重機関銃",
+    "year": 1932,
+    "x": 400,
+    "y": 50,
+    "research_time": 87,
+    "reliability": "配備（制式採用）",
+    "desc": "保式の後継となる重機関銃。「ガタゴト」という特異な発射音で知られた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 11h14'/><circle cx='11' cy='15' r='3'/><path d='M5 11v4'/></svg>",
+    "effects": [
+      "対人攻撃: 32/100",
+      "対物攻撃: 4/100",
+      "生存力: 8/100",
+      "機動力: 78/100",
+      "信頼度: 59/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "type100_smg",
+    "title": "百式機関短銃",
+    "year": 1940,
+    "x": 400,
+    "y": 200,
+    "research_time": 80,
+    "reliability": "低（少数配備）",
+    "desc": "日本軍唯一の量産型短機関銃。少数が特務部隊等に配備された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8b949e' stroke-width='1.8' stroke-linecap='round'><path d='M3 11h14'/><circle cx='11' cy='15' r='3'/></svg>",
+    "effects": [
+      "対人攻撃: 28/100",
+      "対物攻撃: 3/100",
+      "生存力: 7/100",
+      "機動力: 80/100",
+      "信頼度: 50/100"
+    ],
+    "prerequisites": [
+      "type92_hmg"
+    ]
+  },
+  {
+    "id": "type100_smg_kai",
+    "title": "百式機関短銃改",
+    "year": 1942,
+    "x": 400,
+    "y": 350,
+    "research_time": 107,
+    "reliability": "配備（制式採用）",
+    "desc": "百式機関短銃の改良型。照尺・防盾を改良し、近接戦・特種部隊用に配備された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 11h14'/><circle cx='11' cy='15' r='3'/><path d='M5 11v4'/></svg>",
+    "effects": [
+      "対人攻撃: 40/100",
+      "対物攻撃: 6/100",
+      "生存力: 8/100",
+      "機動力: 78/100",
+      "信頼度: 66/100"
+    ],
+    "prerequisites": [
+      "type100_smg"
+    ]
+  },
+  {
+    "id": "type2_smg",
+    "title": "試製二式機関短銃",
+    "year": 1944,
+    "x": 400,
+    "y": 500,
+    "research_time": 111,
+    "reliability": "低（試作止まり）",
+    "desc": "量産化を狙った二式機関短銃計画。実包の共通化が進まず少数生産に終わった。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 11h14'/><circle cx='11' cy='15' r='3'/><path d='M5 11v4'/></svg>",
+    "effects": [
+      "対人攻撃: 41/100",
+      "対物攻撃: 6/100",
+      "生存力: 8/100",
+      "機動力: 78/100",
+      "信頼度: 67/100"
+    ],
+    "prerequisites": [
+      "type100_smg_kai"
+    ]
+  },
+  {
+    "id": "type97_atr",
+    "title": "九七式自動砲 (20mm対戦車銃)",
+    "year": 1937,
+    "x": 700,
+    "y": 50,
+    "research_time": 97,
+    "reliability": "配備（制式採用）",
+    "desc": "20mm実包を使う半自動対戦車銃。装甲の薄い軽戦車には有効だったが反動が大きかった。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "effects": [
+      "対人攻撃: 18/100",
+      "対物攻撃: 35/100",
+      "生存力: 8/100",
+      "機動力: 56/100",
+      "信頼度: 60/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "type4_atr",
+    "title": "試製四式七糎半対戦車砲",
+    "year": 1944,
+    "x": 700,
+    "y": 200,
+    "research_time": 111,
+    "reliability": "低（試作止まり）",
+    "desc": "成型炸薬弾を用いる投射型対戦車砲。米軍装甲に対抗する最後の近接手段として計画された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "effects": [
+      "対人攻撃: 18/100",
+      "対物攻撃: 45/100",
+      "生存力: 8/100",
+      "機動力: 56/100",
+      "信頼度: 64/100"
+    ],
+    "prerequisites": [
+      "type97_atr"
+    ]
+  }
+]

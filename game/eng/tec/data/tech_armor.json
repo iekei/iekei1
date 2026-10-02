@@ -1,0 +1,227 @@
+[
+  {
+    "id": "light_tank_vi",
+    "title": "軽戦車Mk VI",
+    "year": 1936,
+    "x": 100,
+    "y": 50,
+    "research_time": 115,
+    "reliability": "配備（制式採用）",
+    "desc": "開戦時の主力軽戦車。偵察用で、フランス戦線で多数失われた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "effects": [
+      "対人攻撃: 25/100",
+      "対物攻撃: 33/100",
+      "生存力: 28/100",
+      "機動力: 56/100",
+      "信頼度: 70/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "cruiser_mk_iv",
+    "title": "巡航戦車Mk IV",
+    "year": 1938,
+    "x": 100,
+    "y": 200,
+    "research_time": 119,
+    "reliability": "配備（制式採用）",
+    "desc": "速度重視の巡航戦車。機械的信頼性に課題があったが機甲部隊を構成した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "effects": [
+      "対人攻撃: 26/100",
+      "対物攻撃: 36/100",
+      "生存力: 29/100",
+      "機動力: 56/100",
+      "信頼度: 71/100"
+    ],
+    "prerequisites": [
+      "light_tank_vi"
+    ]
+  },
+  {
+    "id": "matilda_2",
+    "title": "マチルダII",
+    "year": 1939,
+    "x": 100,
+    "y": 350,
+    "research_time": 120,
+    "reliability": "配備",
+    "desc": "歩兵戦車。重装甲だが低速。北アフリカ戦線で活躍。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><rect x='4' y='8' width='16' height='8' rx='1'/><circle cx='8' cy='18' r='2'/><circle cx='16' cy='18' r='2'/></svg>",
+    "effects": [
+      "装甲: 55/100",
+      "攻撃: 35/100",
+      "突破: 15/100",
+      "機動力: 35/100",
+      "信頼度: 75/100"
+    ],
+    "prerequisites": [
+      "cruiser_mk_iv"
+    ]
+  },
+  {
+    "id": "crusader",
+    "title": "クルーセイダー巡航戦車",
+    "year": 1940,
+    "x": 100,
+    "y": 500,
+    "research_time": 123,
+    "reliability": "配備（制式採用）",
+    "desc": "北アフリカの主力巡航戦車。高速だが装甲・火力とも不足気味だった。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "effects": [
+      "対人攻撃: 27/100",
+      "対物攻撃: 38/100",
+      "生存力: 31/100",
+      "機動力: 56/100",
+      "信頼度: 73/100"
+    ],
+    "prerequisites": [
+      "matilda_2"
+    ]
+  },
+  {
+    "id": "valentine",
+    "title": "ヴァレンタイン歩兵戦車",
+    "year": 1940,
+    "x": 100,
+    "y": 650,
+    "research_time": 123,
+    "reliability": "配備（制式採用）",
+    "desc": "厚い装甲の歩兵戦車。量産性に優れソ連にも供給された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "effects": [
+      "対人攻撃: 27/100",
+      "対物攻撃: 38/100",
+      "生存力: 31/100",
+      "機動力: 56/100",
+      "信頼度: 73/100"
+    ],
+    "prerequisites": [
+      "crusader"
+    ]
+  },
+  {
+    "id": "churchill",
+    "title": "チャーチル戦車",
+    "year": 1941,
+    "x": 100,
+    "y": 800,
+    "research_time": 130,
+    "reliability": "配備",
+    "desc": "重歩兵戦車。厚い装甲と多様な派生型。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><rect x='3' y='7' width='18' height='9' rx='1'/><circle cx='7' cy='18' r='2'/><circle cx='17' cy='18' r='2'/><path d='M12 3v4'/></svg>",
+    "effects": [
+      "装甲: 65/100",
+      "攻撃: 40/100",
+      "突破: 20/100",
+      "機動力: 30/100",
+      "信頼度: 70/100"
+    ],
+    "prerequisites": [
+      "valentine"
+    ]
+  },
+  {
+    "id": "cromwell",
+    "title": "クロムウェル巡航戦車",
+    "year": 1944,
+    "x": 100,
+    "y": 950,
+    "research_time": 131,
+    "reliability": "配備（制式採用）",
+    "desc": "メテオ発動機を搭載した高速巡航戦車。ノルマンディーの機甲師団の中核。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "effects": [
+      "対人攻撃: 29/100",
+      "対物攻撃: 43/100",
+      "生存力: 35/100",
+      "機動力: 56/100",
+      "信頼度: 77/100"
+    ],
+    "prerequisites": [
+      "churchill"
+    ]
+  },
+  {
+    "id": "sherman_firefly",
+    "title": "シャーマン・ファイアフライ",
+    "year": 1944,
+    "x": 100,
+    "y": 1100,
+    "research_time": 120,
+    "reliability": "配備",
+    "desc": "M4シャーマンに17ポンド砲を搭載した対戦車強化型。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><rect x='3' y='7' width='18' height='9' rx='1'/><circle cx='7' cy='18' r='2'/><circle cx='17' cy='18' r='2'/><path d='M12 2v5'/></svg>",
+    "effects": [
+      "装甲: 40/100",
+      "攻撃: 60/100",
+      "突破: 35/100",
+      "機動力: 60/100",
+      "信頼度: 80/100"
+    ],
+    "prerequisites": [
+      "cromwell"
+    ]
+  },
+  {
+    "id": "archer",
+    "title": "アーチャー駆逐戦車",
+    "year": 1944,
+    "x": 400,
+    "y": 50,
+    "research_time": 131,
+    "reliability": "配備（制式採用）",
+    "desc": "17ポンド砲を後ろ向きに搭載した奇抜な駆逐戦車。待ち伏せ戦術に適した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "effects": [
+      "対人攻撃: 12/100",
+      "対物攻撃: 64/100",
+      "生存力: 37/100",
+      "機動力: 46/100",
+      "信頼度: 71/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "centurion",
+    "title": "センチュリオン重巡航戦車",
+    "year": 1945,
+    "x": 400,
+    "y": 200,
+    "research_time": 133,
+    "reliability": "低（試作止まり）",
+    "desc": "第二次大戦末期に登場したポスト・ウェポン的戦車。戦後の主力戦車の祖。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "effects": [
+      "対人攻撃: 12/100",
+      "対物攻撃: 66/100",
+      "生存力: 38/100",
+      "機動力: 46/100",
+      "信頼度: 72/100"
+    ],
+    "prerequisites": [
+      "archer"
+    ]
+  },
+  {
+    "id": "tortoise",
+    "title": "トータス超重突撃戦車",
+    "year": 1945,
+    "x": 700,
+    "y": 50,
+    "research_time": 133,
+    "reliability": "低（試作止まり）",
+    "desc": "要塞突破用の超重突撃戦車。試作数輌のみで実戦未投入。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "effects": [
+      "対人攻撃: 30/100",
+      "対物攻撃: 44/100",
+      "生存力: 36/100",
+      "機動力: 56/100",
+      "信頼度: 78/100"
+    ],
+    "prerequisites": []
+  }
+]

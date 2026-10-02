@@ -1,0 +1,113 @@
+[
+  {
+    "id": "FRA_loyalty_to_the_cause",
+    "title": "主義への忠誠",
+    "x": 3950,
+    "y": 1220,
+    "cost": 70,
+    "effect": "他国はそれぞれの共産主義のビジョンを策案するだろうが、我々の理想に妥協すべき理由はない。彼らの理想が中途半場であり、その完成をどう正当化したのか疑念を抱かずにはいられない。我々は、絶対に妥協しない。",
+    "prerequisites": [
+      "FRA_destroy_the_counter_revolution"
+    ]
+  },
+  {
+    "id": "FRA_carry_the_revolution_north",
+    "title": "革命を北に拡大",
+    "x": 3950,
+    "y": 1350,
+    "cost": 70,
+    "effect": "海峡の対岸には産業革命と近代資本主義の発祥地がある。我々はこの地が反革命派の連中への足掛かりとなることを容認することはできない。",
+    "prerequisites": [
+      "FRA_loyalty_to_the_cause"
+    ]
+  },
+  {
+    "id": "FRA_carry_the_revolution_west",
+    "title": "革命を西に拡大",
+    "x": 3800,
+    "y": 1480,
+    "cost": 70,
+    "effect": "イベリア半島の政権は風前の灯火であり、今にも市民革命によって一掃されようとしている。我々がその火をかき消すだろう。",
+    "prerequisites": [
+      "FRA_carry_the_revolution_north"
+    ]
+  },
+  {
+    "id": "FRA_carry_the_revolution_east",
+    "title": "革命を東に拡大",
+    "x": 4100,
+    "y": 1480,
+    "cost": 70,
+    "effect": "東の国境には我らの新秩序にとって最大の脅威が存在する。その国で召集された反動的な軍隊は、我々に最も余裕のない時に襲ってくるだろう—もっとも、我らが彼らにそのための時間を与えた場合の話だが。",
+    "prerequisites": [
+      "FRA_carry_the_revolution_north"
+    ]
+  },
+  {
+    "id": "FRA_carry_the_revolution_south",
+    "title": "革命を南に拡大",
+    "x": 3950,
+    "y": 1610,
+    "cost": 70,
+    "effect": "最初にファシズムの魔の手に堕ちた国はイタリアであった。結果として、そのイデオロギーはイタリアに強く定着した。彼我の世界観が平和的に共存することは有り得ない。彼らも我らと同様にこのことを自覚しているし、おそらく行動のための準備をしているだろう。我々もそうしなければならない。",
+    "prerequisites": [
+      "FRA_carry_the_revolution_west",
+      "FRA_carry_the_revolution_east"
+    ]
+  },
+  {
+    "id": "FRA_egalite_liberte_solidarite",
+    "title": "FRA egalite liberte solidarite",
+    "x": 3950,
+    "y": 1740,
+    "cost": 70,
+    "effect": "第一次フランス革命は、数千年続いた政権を一掃し、ヨーロッパの風景を永遠に変えた。我々がそれを終わらせるだろう。",
+    "prerequisites": [
+      "FRA_carry_the_revolution_south"
+    ]
+  },
+  {
+    "id": "FRA_reform_the_labour_laws",
+    "title": "労働法の改革",
+    "x": 3950,
+    "y": 310,
+    "cost": 70,
+    "effect": "フランスの労働者は悪条件で働き、低賃金で、手当もほとんどない。今こそ労働者の待遇改善のためのわかりやすく、抜本的な改革に着手すべきだ。",
+    "prerequisites": [
+      "FRA_form_the_popular_front"
+    ]
+  },
+  {
+    "id": "FRA_nationalize_key_industry",
+    "title": "主要産業の国有化",
+    "x": 3950,
+    "y": 440,
+    "cost": 70,
+    "effect": "現在の状況下においては、差し迫った脅威に対応するため、経済を根本から立て直す必要がある。時間はわずかだ－－我々は、自由市場での解決を待つことはできない。",
+    "prerequisites": [
+      "FRA_reform_the_labour_laws"
+    ]
+  },
+  {
+    "id": "FRA_reorganize_the_aviation_industry",
+    "title": "航空産業の再編",
+    "x": 3800,
+    "y": 570,
+    "cost": 70,
+    "effect": "我が国の航空機産業は小規模な数十社に分かれており、ドイツやアメリカから数十年遅れている。抜本的な改革が必要だ。",
+    "prerequisites": [
+      "FRA_nationalize_key_industry"
+    ]
+  },
+  {
+    "id": "FRA_form_the_state_arsenals",
+    "title": "国営武器庫の建設",
+    "x": 4100,
+    "y": 570,
+    "cost": 70,
+    "effect": "軍に最新装備を供給するためには、民間企業が必要な生産量を伸ばすまで待つことなどできない。",
+    "prerequisites": [
+      "FRA_nationalize_key_industry"
+    ]
+  }
+]

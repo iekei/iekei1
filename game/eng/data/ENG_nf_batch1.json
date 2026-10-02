@@ -1,0 +1,109 @@
+[
+  {
+    "id": "crypto_bomb_focus",
+    "title": "ボンべ暗号解読機",
+    "x": 50,
+    "y": 50,
+    "cost": 70,
+    "effect": "ポーランドはドイツのエニグマ暗号を解読できる、「暗号爆弾」と呼ばれる素晴らしい機械を開発してきた。我々はさらにそれの開発を進めるためのリソースを、ブレッチリー・パーク政府暗号学校に有している。",
+    "prerequisites": []
+  },
+  {
+    "id": "tizard_mission_focus",
+    "title": "ティザード使節団",
+    "x": 50,
+    "y": 440,
+    "cost": 70,
+    "effect": "我々は、資源と工業力不足のため十分に利用できない数多くの技術的ブレイクスルーを果たした。ヘンリー・ティザードがアメリカ合衆国との共同研究協定に向けた交渉団を率いてくれるだろう。",
+    "prerequisites": [
+      "crypto_bomb_focus",
+      "radar_focus"
+    ]
+  },
+  {
+    "id": "maud_focus",
+    "title": "MAUD委員会",
+    "x": 50,
+    "y": 570,
+    "cost": 70,
+    "effect": "「ウラン爆発の軍事的利用（Military Application of Uranium Detonation）」委員会は、ウランを制御不可能な核分裂反応を起こすために利用する事で、信じがたいほどの威力を持つ爆弾の製作が理論的に可能であると確信していた。だが、独力ではこの技術の開発は間に合わないかもしれない。アメリカ人との談合をすべきだろう。",
+    "prerequisites": [
+      "tizard_mission_focus"
+    ]
+  },
+  {
+    "id": "limited_rearmament_focus",
+    "title": "限定的再軍備",
+    "x": 800,
+    "y": 50,
+    "cost": 70,
+    "effect": "[Root.GetLimitedRearmamentDesc]",
+    "prerequisites": []
+  },
+  {
+    "id": "ENG_motorized_focus",
+    "title": "陸軍の自動車化",
+    "x": 800,
+    "y": 180,
+    "cost": 70,
+    "effect": "近年、陸軍は歩兵の自動車化を試みている。十分な自動車化が成されているとは言い難いが、陸軍大臣の言葉があれば間も無く可能となるだろう。",
+    "prerequisites": [
+      "limited_rearmament_focus"
+    ]
+  },
+  {
+    "id": "ENG_tank_focus",
+    "title": "[Root.GetRoyalTankRegimentName]",
+    "x": 800,
+    "y": 310,
+    "cost": 70,
+    "effect": "[Root.GetRoyalTankRegimentDesc]",
+    "prerequisites": [
+      "ENG_motorized_focus"
+    ]
+  },
+  {
+    "id": "air_defense_focus",
+    "title": "防空",
+    "x": 200,
+    "y": 180,
+    "cost": 70,
+    "effect": "敵はどこからやってくるか、そんなことは決まっている。我々は膨大な対空砲台で海岸を護らねばならない。",
+    "prerequisites": [
+      "limited_rearmament_focus"
+    ]
+  },
+  {
+    "id": "radar_focus",
+    "title": "レーダー",
+    "x": 200,
+    "y": 310,
+    "cost": 70,
+    "effect": "敵爆撃機の発見能力は戦争遂行には欠かせない。更なるレーダー技術の開発と、沿岸部の索敵網の構築に費用を惜しむべきではないだろう。",
+    "prerequisites": [
+      "air_defense_focus"
+    ]
+  },
+  {
+    "id": "shadow_scheme_focus",
+    "title": "シャドウ計画",
+    "x": 500,
+    "y": 180,
+    "cost": 70,
+    "effect": "航空省は、民需から軍需工業へ転換する妙案を発案した。重要ないくつかの企業に十分な支援と貸し出しを行う事で、彼らの工場を拡大させ、拡大した工場は円滑な軍需への転換を容易にするだろうという案である。",
+    "prerequisites": [
+      "limited_rearmament_focus"
+    ]
+  },
+  {
+    "id": "uk_industrial_focus",
+    "title": "産業の重点化",
+    "x": 500,
+    "y": 310,
+    "cost": 70,
+    "effect": "産業力の強化に注力する。",
+    "prerequisites": [
+      "shadow_scheme_focus"
+    ]
+  }
+]

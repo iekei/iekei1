@@ -1,0 +1,143 @@
+[
+  {
+    "id": "beretta_m1934",
+    "title": "ベレッタ M1934拳銃",
+    "year": 1934,
+    "x": 100,
+    "y": 50,
+    "research_time": 91,
+    "reliability": "配備（制式採用）",
+    "desc": "将校用の制式拳銃。精度・小型性で高評価を得た。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "effects": [
+      "対人攻撃: 37/100",
+      "対物攻撃: 11/100",
+      "生存力: 8/100",
+      "機動力: 62/100",
+      "信頼度: 75/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "breda_30",
+    "title": "ブレダ30",
+    "year": 1936,
+    "x": 100,
+    "y": 200,
+    "research_time": 100,
+    "reliability": "低",
+    "desc": "イタリア製軽機関銃。信頼性に問題あり。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.8' stroke-linecap='round'><path d='M2 12h18'/><path d='M6 12v4'/><path d='M16 12l2 3h-3z'/></svg>",
+    "effects": [
+      "対人攻撃: 35/100",
+      "対物攻撃: 7/100",
+      "生存力: 8/100",
+      "機動力: 55/100",
+      "信頼度: 45/100"
+    ],
+    "prerequisites": [
+      "beretta_m1934"
+    ]
+  },
+  {
+    "id": "carcano",
+    "title": "カルカノM91",
+    "year": 1936,
+    "x": 100,
+    "y": 350,
+    "research_time": 90,
+    "reliability": "配備",
+    "desc": "イタリア標準小銃。6.5mm口径。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.8' stroke-linecap='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/></svg>",
+    "effects": [
+      "対人攻撃: 30/100",
+      "対物攻撃: 8/100",
+      "生存力: 7/100",
+      "機動力: 72/100",
+      "信頼度: 70/100"
+    ],
+    "prerequisites": [
+      "breda_30"
+    ]
+  },
+  {
+    "id": "carcano_m38",
+    "title": "カルカノM38短小銃",
+    "year": 1938,
+    "x": 100,
+    "y": 500,
+    "research_time": 99,
+    "reliability": "配備（制式採用）",
+    "desc": "カルカノ小銃の騎兵・空挺用短小銃。7.35mm実包から6.5mmへの回帰が起きた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "effects": [
+      "対人攻撃: 40/100",
+      "対物攻撃: 12/100",
+      "生存力: 8/100",
+      "機動力: 62/100",
+      "信頼度: 80/100"
+    ],
+    "prerequisites": [
+      "carcano"
+    ]
+  },
+  {
+    "id": "breda_m37",
+    "title": "ブレダ M37重機関銃",
+    "year": 1937,
+    "x": 400,
+    "y": 50,
+    "research_time": 97,
+    "reliability": "配備（制式採用）",
+    "desc": "給弾板式の重機関銃。荒天・砂塵に強く北アフリカで用いられた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 11h14'/><circle cx='11' cy='15' r='3'/><path d='M5 11v4'/></svg>",
+    "effects": [
+      "対人攻撃: 36/100",
+      "対物攻撃: 5/100",
+      "生存力: 8/100",
+      "機動力: 78/100",
+      "信頼度: 63/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "beretta_m38",
+    "title": "ベレッタ M38短機関銃",
+    "year": 1938,
+    "x": 400,
+    "y": 200,
+    "research_time": 99,
+    "reliability": "配備（制式採用）",
+    "desc": "精度が高く量産された短機関銃。突撃部隊・空挺部隊に愛用された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 11h14'/><circle cx='11' cy='15' r='3'/><path d='M5 11v4'/></svg>",
+    "effects": [
+      "対人攻撃: 36/100",
+      "対物攻撃: 5/100",
+      "生存力: 8/100",
+      "機動力: 78/100",
+      "信頼度: 63/100"
+    ],
+    "prerequisites": [
+      "breda_m37"
+    ]
+  },
+  {
+    "id": "solothurn_atr",
+    "title": "ソロトゥルン S-18/1000",
+    "year": 1940,
+    "x": 700,
+    "y": 50,
+    "research_time": 103,
+    "reliability": "配備（制式採用）",
+    "desc": "20mm対戦車銃。軽装甲車両・軽戦車に有効な歩兵対装甲火器。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "effects": [
+      "対人攻撃: 18/100",
+      "対物攻撃: 39/100",
+      "生存力: 8/100",
+      "機動力: 56/100",
+      "信頼度: 62/100"
+    ],
+    "prerequisites": []
+  }
+]

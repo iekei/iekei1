@@ -1,0 +1,106 @@
+[
+  {
+    "id": "asdic",
+    "title": "アスディック (アクティブソナー)",
+    "year": 1936,
+    "x": 100,
+    "y": 50,
+    "research_time": 75,
+    "reliability": "配備（制式採用）",
+    "desc": "対潜探知用のアクティブソナー。Uボート対策の基本装備。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='10' width='16' height='9' rx='1'/><path d='M7 10V5h4v5'/><path d='M15 13v3M18 13v3'/></svg>",
+    "effects": [
+      "研究速度: +6.2%",
+      "装備効率: +6.2%"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "eng_engineering_1",
+    "title": "工兵装備改善",
+    "year": 1936,
+    "x": 100,
+    "y": 200,
+    "research_time": 80,
+    "reliability": "配備",
+    "desc": "工兵部隊の装備と訓練を改善する。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4ac46a' stroke-width='1.5'><path d='M3 18l6-6 4 4 8-8'/><path d='M14 8h6v6'/></svg>",
+    "effects": [
+      "工兵効率: +15%",
+      "要塞建設速度: +10%"
+    ],
+    "prerequisites": [
+      "asdic"
+    ]
+  },
+  {
+    "id": "chain_home",
+    "title": "チェーンホーム・レーダー網",
+    "year": 1938,
+    "x": 100,
+    "y": 350,
+    "research_time": 79,
+    "reliability": "配備（制式採用）",
+    "desc": "バトル・オブ・ブリテンの勝利を支えた早期警戒レーダー網。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='10' width='16' height='9' rx='1'/><path d='M7 10V5h4v5'/><path d='M15 13v3M18 13v3'/></svg>",
+    "effects": [
+      "研究速度: +6.6%",
+      "装備効率: +6.6%"
+    ],
+    "prerequisites": [
+      "eng_engineering_1"
+    ]
+  },
+  {
+    "id": "eng_engineering_2",
+    "title": "補給線改善",
+    "year": 1938,
+    "x": 100,
+    "y": 500,
+    "research_time": 90,
+    "reliability": "配備",
+    "desc": "補給線の効率を改善し、前線への物資供給を安定させる。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4ac46a' stroke-width='1.5'><path d='M3 12h18'/><circle cx='7' cy='12' r='2'/><circle cx='17' cy='12' r='2'/></svg>",
+    "effects": [
+      "補給効率: +20%",
+      "燃料消費: -10%"
+    ],
+    "prerequisites": [
+      "chain_home"
+    ]
+  },
+  {
+    "id": "tube_alloys",
+    "title": "チューブ・アロイズ計画",
+    "year": 1941,
+    "x": 100,
+    "y": 650,
+    "research_time": 85,
+    "reliability": "配備（制式採用）",
+    "desc": "イギリスの核兵器研究計画。マンハッタン計画に技術を提供した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='10' width='16' height='9' rx='1'/><path d='M7 10V5h4v5'/><path d='M15 13v3M18 13v3'/></svg>",
+    "effects": [
+      "研究速度: +7.2%",
+      "装備効率: +7.2%"
+    ],
+    "prerequisites": [
+      "eng_engineering_2"
+    ]
+  },
+  {
+    "id": "colossus",
+    "title": "コロッサス計算機",
+    "year": 1943,
+    "x": 400,
+    "y": 50,
+    "research_time": 89,
+    "reliability": "配備（制式採用）",
+    "desc": "世界初のプログラム可能電子計算機。ドイツ暗号解読を支えた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='10' width='16' height='9' rx='1'/><path d='M7 10V5h4v5'/><path d='M15 13v3M18 13v3'/></svg>",
+    "effects": [
+      "研究速度: +7.6%",
+      "装備効率: +7.6%"
+    ],
+    "prerequisites": []
+  }
+]

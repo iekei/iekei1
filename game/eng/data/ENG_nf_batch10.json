@@ -1,0 +1,113 @@
+[
+  {
+    "id": "ENG_no_further_appeasement",
+    "title": "宥和政策はもう必要ない",
+    "x": 6650,
+    "y": 440,
+    "cost": 70,
+    "effect": "失敗した宥和政策を続けることは馬鹿げている。敵が要求を撤回せず、要求がさらに肥大化することは明らかである。さらに多くの優位性を与えてしまう前に、今こそ奴らを止めなければならない。",
+    "prerequisites": [
+      "ENG_every_man_will_do_his_duty",
+      "ENG_motion_of_no_confidence"
+    ]
+  },
+  {
+    "id": "ENG_kickstart_the_war_industry",
+    "title": "軍需産業の促進",
+    "x": 6200,
+    "y": 570,
+    "cost": 70,
+    "effect": "期限は厳守しなければならない、我々に軍需産業の自然な成長を待つ時間はない。戦争に備えるのであれば、工場を迅速に建設するためにさらに大きな投資をしなければならない。",
+    "prerequisites": [
+      "ENG_no_further_appeasement"
+    ]
+  },
+  {
+    "id": "ENG_secure_the_oil_imports",
+    "title": "石油の輸入保護",
+    "x": 6200,
+    "y": 700,
+    "cost": 70,
+    "effect": "我々は石油輸入に関して気まぐれな外国政府と結ぶ貿易協定に頼ることはできない。他の国々の指導者の意思にかかわらず、油田の支配権を奪い取った方が油田の完全な支配権を維持することができるのだから。",
+    "prerequisites": [
+      "ENG_kickstart_the_war_industry"
+    ]
+  },
+  {
+    "id": "ENG_maintaining_imperial_integrity",
+    "title": "完全なる帝国を維持",
+    "x": 6500,
+    "y": 570,
+    "cost": 70,
+    "effect": "我々の帝国の防衛は、制海権と自治領の忠誠心から始まる。我々の海軍優勢が脅かされないように他国の海軍戦力に警告しなければならない。そして同時に、我々は世界中で強さを発揮するために、我々の臣民をより奮闘させなければならない。",
+    "prerequisites": [
+      "ENG_no_further_appeasement"
+    ]
+  },
+  {
+    "id": "ENG_enforce_the_naval_treaties",
+    "title": "海軍軍縮条約の施行",
+    "x": 6500,
+    "y": 700,
+    "cost": 70,
+    "effect": "ワシントン海軍軍縮条約の条項を無視することを選択した数か国を我々は注視している。この傾向は無視できないものだ。我々が優位性を維持し、同調国が現れないようにするためには、これらの国を一刻も早く攻撃し、我々の意思を無視する国はどうなるかを見せつけてやらねばならない。",
+    "prerequisites": [
+      "ENG_maintaining_imperial_integrity"
+    ]
+  },
+  {
+    "id": "ENG_maintaining_the_balance_of_power",
+    "title": "勢力均衡の維持",
+    "x": 6800,
+    "y": 570,
+    "cost": 70,
+    "effect": "帝国の強さは、ヨーロッパの軟弱さと停滞により成立する。我々が世界的な問題に集中することができるようになっているならば、ヨーロッパが我々に目を向ける暇がないほど、それぞれの情勢で手をつけられなくさせておかなければならない。我々はヨーロッパの情勢を気にすることなく、我々が望んでいるこの絶妙な勢力均衡を脅かす拡張主義体制に対して行動を続けるだろう。",
+    "prerequisites": [
+      "ENG_no_further_appeasement"
+    ]
+  },
+  {
+    "id": "ENG_continental_intervention",
+    "title": "大陸への介入",
+    "x": 6800,
+    "y": 700,
+    "cost": 70,
+    "effect": "行動せずにヨーロッパ大陸の力の均衡を保つのは不可能だ。我々は、混乱することなくブリテン諸島への侵攻に備えるために、統一ヨーロッパの脅威に直面することのないよう、近年台頭してきた拡張主義体制を打倒しなければならない。",
+    "prerequisites": [
+      "ENG_maintaining_the_balance_of_power"
+    ]
+  },
+  {
+    "id": "ENG_home_defence",
+    "title": "本土防衛",
+    "x": 8000,
+    "y": 180,
+    "cost": 70,
+    "effect": "我々がイギリスの民衆を保護することができないのならば、広大な帝国など何の意味も持たない。安全なブリテン島を維持することに力を集中するべきだ。",
+    "prerequisites": [
+      "ENG_steady_as_she_goes"
+    ]
+  },
+  {
+    "id": "uk_iraq_focus",
+    "title": "イラクの確保",
+    "x": 7100,
+    "y": 310,
+    "cost": 70,
+    "effect": "我々は1932年にイラクの独立を承諾した。だが現在の状況を考慮してみるとそれは誤りであったかもしれない。イラクで産出される石油が敵の手に渡ることを決して許してはならない……",
+    "prerequisites": [
+      "ENG_home_defence"
+    ]
+  },
+  {
+    "id": "uk_iran_focus",
+    "title": "イランの確保",
+    "x": 7100,
+    "y": 440,
+    "cost": 70,
+    "effect": "イランは石油産出が豊富なばかりでなく、インド・中東・ソ連を結ぶ戦略的要地でもある。そのため我々の敵を拒まなければならない。",
+    "prerequisites": [
+      "uk_iraq_focus"
+    ]
+  }
+]

@@ -1,0 +1,113 @@
+[
+  {
+    "id": "FRA_intervention_in_spain",
+    "title": "スペインへの介入",
+    "x": 5000,
+    "y": 310,
+    "cost": 35,
+    "effect": "スペイン内戦は我々の玄関口にイデオロギー間の衝突をもたらした。紛争が我が国に波及しないように慎重に踏み込まなければならない。",
+    "prerequisites": [
+      "FRA_form_the_popular_front",
+      "FRA_revive_the_national_bloc"
+    ]
+  },
+  {
+    "id": "FRA_support_the_finns",
+    "title": "フィンランド人への支援",
+    "x": 5750,
+    "y": 570,
+    "cost": 35,
+    "effect": "フィンランド人は命を懸けて戦っている。我々は彼らを援助しなければならない。",
+    "prerequisites": [
+      "FRA_review_foreign_policy"
+    ]
+  },
+  {
+    "id": "FRA_confirm_eastern_commitments",
+    "title": "東部約諾の確認",
+    "x": 5150,
+    "y": 700,
+    "cost": 70,
+    "effect": "先の大戦ののち、復活を果たしたドイツと拡張主義のソビエトへの対重として、東欧には同盟国間のネットワークが形成された。東欧地域の同盟国は、彼らの要求対し、我々が本当に援助を施すのか疑念を感じている。彼らが他の国に助けを求めると決断する前に我々は彼らを安心させるべきだ。",
+    "prerequisites": [
+      "FRA_review_foreign_policy"
+    ]
+  },
+  {
+    "id": "FRA_strengthen_the_little_entente",
+    "title": "小協商の強化",
+    "x": 5000,
+    "y": 830,
+    "cost": 70,
+    "effect": "小協商は我々を東欧とバルカン半島の援助に結び付ける。我々はこの同盟の破棄を是認したが、これまで以上に必要なものだ。今こそ復活させよう。",
+    "prerequisites": [
+      "FRA_confirm_eastern_commitments"
+    ]
+  },
+  {
+    "id": "FRA_invite_yugoslavia",
+    "title": "ユーゴスラビアの勧誘",
+    "x": 4850,
+    "y": 960,
+    "cost": 70,
+    "effect": "ユーゴスラビアは、拡張主義者の隣人達について懸念するには既に手一杯だ。彼らを小協商へ呼び戻すのは彼らと我らの双方にとって非常に良いことだろう。",
+    "prerequisites": [
+      "FRA_strengthen_the_little_entente"
+    ]
+  },
+  {
+    "id": "FRA_invite_romania",
+    "title": "ルーマニアの勧誘",
+    "x": 4850,
+    "y": 1090,
+    "cost": 70,
+    "effect": "ルーマニアの民主主義は脆弱であり、国内ファシズム派閥とソ連邦の共産主義の間で板挟みになっている。彼らを小協商に招き入れる事で、我が国の支援を得て安定を取り戻す事が可能だろう。",
+    "prerequisites": [
+      "FRA_invite_yugoslavia"
+    ]
+  },
+  {
+    "id": "FRA_invest_in_our_weaker_allies",
+    "title": "弱い同盟国への投資",
+    "x": 4850,
+    "y": 1220,
+    "cost": 70,
+    "effect": "戦時に頼りになる同盟国をつくるには、彼らの軍事的要求を我々が満たすことだ。彼らの産業への適切な投資プログラムは、彼らが必要となる軍需品を自国で賄うことを可能にするだろう。",
+    "prerequisites": [
+      "FRA_invite_romania"
+    ]
+  },
+  {
+    "id": "FRA_coordinate_rearmament",
+    "title": "共同再軍備",
+    "x": 4850,
+    "y": 1350,
+    "cost": 70,
+    "effect": "ドイツの、そして他の敵国の統合開発プロセスに追従するため、我々は同盟国との連携に注力しなければならない。",
+    "prerequisites": [
+      "FRA_invest_in_our_weaker_allies"
+    ]
+  },
+  {
+    "id": "FRA_foreign_guest_workers",
+    "title": "外国人労働者",
+    "x": 5450,
+    "y": 960,
+    "cost": 70,
+    "effect": "労働者の不足は産業と軍事力の拡大を行う上で大きな障害である。熟練した労働者を我々の同盟国より我々の工場へ派遣することで、軍事分野へ流せる人的資源が解放される。",
+    "prerequisites": [
+      "FRA_strengthen_the_little_entente"
+    ]
+  },
+  {
+    "id": "FRA_join_the_ententes",
+    "title": "協商加盟",
+    "x": 5150,
+    "y": 960,
+    "cost": 70,
+    "effect": "フランスは2つの相互防衛協定を同時に維持することはできない。イギリスが協定の同意事項を尊重しなければ、我々は選択しなければならない。異なる分断された陣営のネットワークを統合し、全体を一つに統合することにより、我々の陣営の抑止効果を飛躍的に高めることができるだろう。",
+    "prerequisites": [
+      "FRA_strengthen_the_little_entente"
+    ]
+  }
+]

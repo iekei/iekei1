@@ -1,0 +1,116 @@
+[
+  {
+    "id": "SOV_gain_support_from_party_members",
+    "title": "党員からの支持の獲得",
+    "x": 9650,
+    "y": 310,
+    "cost": 70,
+    "effect": "スターリンの操り人形の何人かは、主に恐ろしいからという理由だけで操られている者もいる。我々の計画が成功することと、彼らに重労働をしなくても英雄になれる方法があると説得するべきだ。方法はいくつかあるが……",
+    "prerequisites": [
+      "SOV_the_left_opposition",
+      "SOV_the_right_opposition"
+    ]
+  },
+  {
+    "id": "SOV_sway_the_railway_workers",
+    "title": "鉄道職員をこちら側へ",
+    "x": 9050,
+    "y": 310,
+    "cost": 35,
+    "effect": "革命には物資が必要だ。鉄道職員を味方につける必要がある。そうすれば、作戦基地周辺に補給基地を用意し隠すことができる。",
+    "prerequisites": [
+      "SOV_the_left_opposition",
+      "SOV_the_right_opposition"
+    ]
+  },
+  {
+    "id": "SOV_infiltrate_the_nkvd",
+    "title": "NKVDへの潜入",
+    "x": 9350,
+    "y": 310,
+    "cost": 70,
+    "effect": "NKVDの平職員はスターリンの汚れ仕事をして、大抵は忠実な家臣として仕事をこなしている。だが壁にもひびは入る。できるだけ多くの者たちを我々のために働くようにし、暴君に間違った情報を与えるべきだ。",
+    "prerequisites": [
+      "SOV_the_left_opposition",
+      "SOV_the_right_opposition"
+    ]
+  },
+  {
+    "id": "SOV_cooperation_against_stalin",
+    "title": "対スターリン協同",
+    "x": 9650,
+    "y": 440,
+    "cost": 70,
+    "effect": "どのような違いがあれども、この闘争の段階ではスターリンに反対するという点で一致しなければならない。",
+    "prerequisites": [
+      "SOV_gain_support_from_party_members"
+    ]
+  },
+  {
+    "id": "SOV_align_the_zinovyevites",
+    "title": "ジノヴィエフ一派との連携",
+    "x": 9500,
+    "y": 570,
+    "cost": 70,
+    "effect": "$SOV_grigory_zinovyev$はかつてトロツキーに対抗するためスターリンに味方した。その直後にスターリンは彼を裏切り、あらゆる地位から追放した。彼はその些細なことを忘れていないだろうし、もし我々が$SOV_grigory_zinovyev$に復讐の機会を与えたのなら、それを受け入れるだろう。",
+    "prerequisites": [
+      "SOV_cooperation_against_stalin"
+    ]
+  },
+  {
+    "id": "SOV_liberate_ryutin",
+    "title": "リューチンの解放",
+    "x": 9800,
+    "y": 570,
+    "cost": 70,
+    "effect": "同志リューチンはスターリンの多くの欠点や短所を躊躇なく非難してきた。スターリンが彼を見せしめにしたのは当然といえば当然かもしれない。しかし今は、彼がスターリン亡き後の国家運営に協力できるように、スターリンが排除されるまでの間海外に逃亡させるよう裏から手を回すべきだ。",
+    "prerequisites": [
+      "SOV_cooperation_against_stalin"
+    ]
+  },
+  {
+    "id": "SOV_return_democracy_to_the_party",
+    "title": "党内民主主義の復活",
+    "x": 9650,
+    "y": 960,
+    "cost": 70,
+    "effect": "革命の最中には、進むべき最良の道についての絶え間ない議論に執着する余裕のない時期があった。しかし時代は変わり、労働者に約束した生活でのあらゆる面における民主主義を実現させる時が来た。このことは同時に、かつて善意の批判を妨害工作とみなされた人々を党に復帰させることができるようになったという意味でもある。",
+    "prerequisites": [
+      "SOV_cooperation_against_stalin"
+    ]
+  },
+  {
+    "id": "SOV_strengthen_the_trade_unions",
+    "title": "労働組合の強化",
+    "x": 9650,
+    "y": 1480,
+    "cost": 70,
+    "effect": "スターリンの指導の下で、労働組合は労働者を代表し経営者に対抗するための手段から経営者が労働者を管理するための手段へと変質していった。このことは彼が犯した罪の中では軽いもののように思われるかもしれないが、労働者の民主主義的自己統率という考えを根底から覆し、事実上労働者が革命の恩恵を享受することを阻むものであった。",
+    "prerequisites": [
+      "SOV_all_power_to_the_soviets",
+      "SOV_incorporate_local_organizations"
+    ]
+  },
+  {
+    "id": "SOV_the_peoples_revolution",
+    "title": "人民革命",
+    "x": 9650,
+    "y": 1610,
+    "cost": 70,
+    "effect": "もし革命が持続するなら、それは社会のあらゆる面を埋め合わせなければならない。国民全体が革命の担い手であると考えてこそ、数多の脅威に耐えることができる。",
+    "prerequisites": [
+      "SOV_strengthen_the_trade_unions"
+    ]
+  },
+  {
+    "id": "SOV_the_supreme_soviet",
+    "title": "最高会議",
+    "x": 9650,
+    "y": 1740,
+    "cost": 70,
+    "effect": "一人の人間が国全体を代表することは、根本的に非民主的であり、故に反革命的である。そのようなカルト的行為は廃し、代わって最高会議に集う人民の集団的意思によって、我らが連邦の代表を永遠に務めることを宣言する。",
+    "prerequisites": [
+      "SOV_the_peoples_revolution"
+    ]
+  }
+]

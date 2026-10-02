@@ -1,0 +1,115 @@
+[
+  {
+    "id": "GER_see_to_the_eastern_front",
+    "title": "東部戦線へ目を向ける",
+    "x": 6950,
+    "y": 700,
+    "cost": 70,
+    "effect": "もし先の大戦から学ぶものがあるとすれば、それは東の外側にある我々の領土への攻撃の準備をしておかねばならないということである。これらの領土を取り戻し、侵略に備えて強化しておかねばならない。",
+    "prerequisites": [
+      "GER_return_of_the_kaiser"
+    ]
+  },
+  {
+    "id": "GER_danzig_for_guarantees",
+    "title": "独立保障と引き換えにダンツィヒを",
+    "x": 7250,
+    "y": 960,
+    "cost": 70,
+    "effect": "ポーランド人がボリシェヴィキに危険を感じているのは間違いない。おそらくアカの侵攻時の軍事支援の保障と引き換えに、ダンツィヒとポズナニ、シロンスクの返還合意に達することができるだろう。",
+    "prerequisites": [
+      "GER_see_to_the_eastern_front",
+      "GER_bulwark_against_bolshevism"
+    ]
+  },
+  {
+    "id": "GER_safeguard_the_baltic",
+    "title": "バルト諸国の保護",
+    "x": 6950,
+    "y": 830,
+    "cost": 70,
+    "effect": "バルト三国は数十年前まではロシア帝国の一部だったが、これはソビエトがもう一度彼らを併合しようとするかもしれない理由として妥当である。これを防ぎ、ソビエト進行の際には軍事的支援を行わなければならない。",
+    "prerequisites": [
+      "GER_see_to_the_eastern_front"
+    ]
+  },
+  {
+    "id": "GER_support_the_finns",
+    "title": "フィンランド人への支援",
+    "x": 6950,
+    "y": 960,
+    "cost": 70,
+    "effect": "フィンランド人はソビエトとの最前線にいる。彼らに共産主義者の脅威に対する保証を提供し、またいくらかの細やかな産業援助を与える。",
+    "prerequisites": [
+      "GER_safeguard_the_baltic"
+    ]
+  },
+  {
+    "id": "GER_anti_comintern_pact_unaligned",
+    "title": "イデオロギーの防衛",
+    "x": 7100,
+    "y": 1090,
+    "cost": 70,
+    "effect": "我々が受ける脅威は軍事的脅威だけではない。共産主義を遠ざけておく方法を検討しなければならず、そのために共産主義者でない仲間と協定を結び、共産主義の進展に対抗することを決意した。",
+    "prerequisites": [
+      "GER_support_the_finns",
+      "GER_danzig_for_guarantees"
+    ]
+  },
+  {
+    "id": "GER_anti_soviet_pact_unaligned",
+    "title": "条約の公式化",
+    "x": 7100,
+    "y": 1220,
+    "cost": 70,
+    "effect": "共産主義との軍事的紛争に備えるためには、反共軍協約の全ての加盟国に、ソビエトの侵略に対する軍事的支援を求める追加条項への同意を呼びかけなければならない。すでに多くの方法でお互いに約束しているため、これは公式化以上のものではない。",
+    "prerequisites": [
+      "GER_anti_comintern_pact_unaligned"
+    ]
+  },
+  {
+    "id": "GER_tackle_the_communist_threat",
+    "title": "共産主義の脅威に立ち向かう",
+    "x": 7100,
+    "y": 1350,
+    "cost": 70,
+    "effect": "ソ連が存在する限り、その存在は我々にとって脅威になり続けるだろう。ソ連が攻撃してくるのを待つのではなく、我々が先制攻撃しなければならない。",
+    "prerequisites": [
+      "GER_anti_soviet_pact_unaligned",
+      "GER_carte_blanche_for_alsace_and_french_colonies"
+    ]
+  },
+  {
+    "id": "GER_the_iberian_problem",
+    "title": "イベリア問題",
+    "x": 7100,
+    "y": 1480,
+    "cost": 70,
+    "effect": "共産主義の砦がまだ残っている。スペインの共産主義者をはじめとして、全ての共産主義者が根絶されたことを確認しなければならない。",
+    "prerequisites": [
+      "GER_tackle_the_communist_threat"
+    ]
+  },
+  {
+    "id": "GER_reestablish_free_elections",
+    "title": "自由選挙の復活",
+    "x": 6950,
+    "y": 310,
+    "cost": 70,
+    "effect": "自由選挙制を再開することにより民主主義の理想への復帰を目指す。選挙は近い将来に実施されることになるだろう。",
+    "prerequisites": [
+      "GER_secure_the_new_state"
+    ]
+  },
+  {
+    "id": "GER_the_monarchy_compromise",
+    "title": "君主主義者との妥協",
+    "x": 7250,
+    "y": 440,
+    "cost": 70,
+    "effect": "ナチスの圧政からの自由のために戦った軍が王党派に傾倒していることが明らかになった。彼らを満足させ、国家のとる道を確実にするため、我々は妥協し、王室を戻さなければならない。 ",
+    "prerequisites": [
+      "GER_reestablish_free_elections"
+    ]
+  }
+]

@@ -1,0 +1,110 @@
+[
+  {
+    "id": "ENG_prepare_for_the_inevitable",
+    "title": "必然への備え",
+    "x": 7850,
+    "y": 310,
+    "cost": 70,
+    "effect": "我が国が再び世界規模の紛争に巻き込まれる事はほぼ確実であると見られる。再軍備を加速させるために産業支出を拡張せねばならない。",
+    "prerequisites": [
+      "ENG_home_defence"
+    ]
+  },
+  {
+    "id": "ENG_benelux_intervention",
+    "title": "ベネルクスへの介入",
+    "x": 8150,
+    "y": 310,
+    "cost": 70,
+    "effect": "ベネルクス地域の政治状況は我が国にますます敵対的になっている。民主主義の敵は誰であれ許されず、必要であれば武力行使を辞さないという警告を送るべきだろう。",
+    "prerequisites": [
+      "ENG_home_defence"
+    ]
+  },
+  {
+    "id": "ENG_belgium_security",
+    "title": "ベルギーの確保",
+    "x": 8000,
+    "y": 440,
+    "cost": 70,
+    "effect": "警告は明らかに不十分だった。政治的緊張が今後も続く場合、ベルギーは我が国の制海権の直接的脅威となるだろう。我が国はこれに介入し、ヨーロッパ本土への戦略的足掛かりを確立しなければならない。",
+    "prerequisites": [
+      "ENG_benelux_intervention"
+    ]
+  },
+  {
+    "id": "ENG_dutch_security",
+    "title": "オランダの確保",
+    "x": 8300,
+    "y": 440,
+    "cost": 70,
+    "effect": "オランダでは敵を支援する政治運動が続いている。自由なヨーロッパを確実にする為にはオランダは征伐されなければならない。",
+    "prerequisites": [
+      "ENG_benelux_intervention"
+    ]
+  },
+  {
+    "id": "ENG_a_change_in_course",
+    "title": "方針転換",
+    "x": 9950,
+    "y": 50,
+    "cost": 35,
+    "effect": "世界の緊張が増して行っている現状において、このままの政治指導では国益を保護する力に欠けていることは明白である。直近数十年の政治を抜本的に改革し、新たな政道に乗り出す時が来た。",
+    "prerequisites": []
+  },
+  {
+    "id": "ENG_the_kings_party",
+    "title": "王党派",
+    "x": 10700,
+    "y": 50,
+    "cost": 70,
+    "effect": "危機が去り、内閣が倒れた今、王の願いにより従うことを望む、熱狂的な支持者たちによる内閣を組むことができるかもしれない。王党派はデイヴィッド・ロイド・ジョージ、ウィンストン・チャーチル、オズワルド・モズレーらによって形成されており、各々の政党の枠を超えた挙国一致修復への助けとなるだろう。",
+    "prerequisites": [
+      "ENG_a_change_in_course"
+    ]
+  },
+  {
+    "id": "ENG_reassess_continental_commitments",
+    "title": "大陸における責任の再評価",
+    "x": 10550,
+    "y": 180,
+    "cost": 70,
+    "effect": "近年の我が国におけるヨーロッパへの政治的姿勢は先の大戦における我が同盟国への関与であったが、蘇った[GER.GetName]と迫りくる[SOV.GetName]が対立している今、我々とかつての同盟国との政治的な差異は顕著なものとなってきている。我々の考え方を再考するときが来ているのかもしれない。",
+    "prerequisites": [
+      "ENG_the_kings_party"
+    ]
+  },
+  {
+    "id": "ENG_isolate_the_mediterranean_threat",
+    "title": "地中海の脅威を孤立化",
+    "x": 10550,
+    "y": 310,
+    "cost": 70,
+    "effect": "[ITA.GetAdjective]海軍は、地中海への我々の輸送を脅かしている。我々は、脅威を封じ込めるために彼らを外交的に孤立させる運動を始めなければならない。",
+    "prerequisites": [
+      "ENG_reassess_continental_commitments"
+    ]
+  },
+  {
+    "id": "ENG_alliance_with_germany",
+    "title": "ドイツとの同盟",
+    "x": 10400,
+    "y": 440,
+    "cost": 70,
+    "effect": "我々の利益はドイツ人と一致している。彼らはヨーロッパ大陸の覇権を望んでおり、我々は世界の帝国を望んでいる間、イギリスの島々を脅かさないヨーロッパを望んでいる。おそらく、国王の希望どおりの同盟は、奇妙なものではないだろう。",
+    "prerequisites": [
+      "ENG_isolate_the_mediterranean_threat"
+    ]
+  },
+  {
+    "id": "ENG_noninterference_treaty_with_germany",
+    "title": "ドイツとの不干渉条約",
+    "x": 10700,
+    "y": 440,
+    "cost": 70,
+    "effect": "我が帝国の野心はヨーロッパの安定性の上に拠っている。おそらくこれは継続的な平和関係と大英帝国に関する問題に干渉しないという[GER.GetNameDef]の約束の見返りとして、彼に対してヨーロッパにおける白紙委任を与えることにより容易に達成されることだろう。",
+    "prerequisites": [
+      "ENG_isolate_the_mediterranean_threat"
+    ]
+  }
+]

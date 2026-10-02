@@ -1,0 +1,114 @@
+[
+  {
+    "id": "USA_send_lindbergh_to_germany",
+    "title": "リンドバーグのドイツ派遣",
+    "x": 5000,
+    "y": 570,
+    "cost": 70,
+    "effect": "あの著名な飛行士が、ドイツが先の大戦から如何に復興したか調査するため、ヨーロッパに行きたいのだと申し出てきた。これは我々にとって貴重な経験をもたらしてくれるに違いない。リンドバーグはまた、彼が顧問の立場から政府に加わることも厭わないと暗に示してきた。",
+    "prerequisites": [
+      "USA_invite_foreign_support"
+    ]
+  },
+  {
+    "id": "USA_work_with_the_bund",
+    "title": "ドイツ系アメリカ人協会と連携",
+    "x": 4700,
+    "y": 700,
+    "cost": 70,
+    "effect": "ドイツ系アメリカ人協会（German-American Bund）は、ドイツにルーツを持つアメリカ国民の多くに、我々の立場を伝える手助けをしてくれた。これで彼らの多い州に我々と共感する支持母体が生まれるのは、確実なものとなるだろう。",
+    "prerequisites": [
+      "USA_send_lindbergh_to_germany"
+    ]
+  },
+  {
+    "id": "USA_recruit_the_free_corps",
+    "title": "自由軍団の雇用",
+    "x": 5000,
+    "y": 700,
+    "cost": 70,
+    "effect": "益々疑心暗鬼を生じている軍部に対し、我々は先の大戦の英雄たちに声を呼びかけるべきだろう。時局匡救のためにと、ドイツの義勇軍、フライコールはドイツ共和国を支援するために集結した。我々にもこれに似た、必要な時に助けてくれる忠実な組織が必要だ。",
+    "prerequisites": [
+      "USA_send_lindbergh_to_germany"
+    ]
+  },
+  {
+    "id": "USA_honor_the_confederacy",
+    "title": "連合国の称揚",
+    "x": 4400,
+    "y": 830,
+    "cost": 70,
+    "effect": "あまりにも長きに渡って、南北戦争の物語は北軍視点で語られてきた。要は不運の叛逆の物語としてだ。今こそ、もう一方の視点から語り始める時である。",
+    "prerequisites": [
+      "USA_work_with_the_bund",
+      "USA_national_employment_strategy"
+    ]
+  },
+  {
+    "id": "USA_war_powers_act",
+    "title": "戦争権限法",
+    "x": 5450,
+    "y": 310,
+    "cost": 70,
+    "effect": "次々に高速化する航空機が次々に爆弾を積み増すこの世界において、また潜水艦や化学兵器の溢れるこの世界において、大統領は国家防衛に必要な事柄について、一々議会の同意を求めるよう権力を制限されているのは、災厄をおびき寄せているようなものであろう。",
+    "prerequisites": [
+      "USA_america_first"
+    ]
+  },
+  {
+    "id": "USA_seize_cuba",
+    "title": "キューバの確保",
+    "x": 5300,
+    "y": 440,
+    "cost": 70,
+    "effect": "我々の裏庭に、攻撃者が基地として利用できる準備のできている不沈空母がある。これを敵に利用させてはならない。",
+    "prerequisites": [
+      "USA_war_powers_act"
+    ]
+  },
+  {
+    "id": "USA_manifest_destiny",
+    "title": "明白なる運命",
+    "x": 5600,
+    "y": 440,
+    "cost": 70,
+    "effect": "建国と歴史にまつわる我が国の特殊な環境は、世界の不公正や抑圧に対し介入するべきであるという天命を我々にもたらしている。平和な国際的共同体の創造のため、最優先に輸出しなければならないものは自由なのだ。",
+    "prerequisites": [
+      "USA_war_powers_act"
+    ]
+  },
+  {
+    "id": "USA_eliminate_the_southern_threat",
+    "title": "南の脅威の排除",
+    "x": 5300,
+    "y": 570,
+    "cost": 70,
+    "effect": "この30年間ずっとメキシコは不安定な混乱の中にあった。暴力が国境を越えて流入してくるだとか、国民が団結して北へ行進するだとか、そんなことはどうでもいい。我々は南の横腹を守らなければならない。",
+    "prerequisites": [
+      "USA_seize_cuba"
+    ]
+  },
+  {
+    "id": "USA_the_canadian_corridor",
+    "title": "カナダ回廊",
+    "x": 5600,
+    "y": 570,
+    "cost": 70,
+    "effect": "貧相な人口しかないカナダの領土の一片が、アラスカと合衆国本土を分け隔てている。故に北方の防衛はカナダの善意で成り立っている。しかし、最も攻撃する可能性が高い国もカナダである。これを阻止しなければならない。",
+    "prerequisites": [
+      "USA_manifest_destiny"
+    ]
+  },
+  {
+    "id": "USA_north_american_dominion",
+    "title": "北アメリカの支配",
+    "x": 5450,
+    "y": 700,
+    "cost": 70,
+    "effect": "我々の目と鼻の先にある国境は安全となった。これからは北米に対する遍く脅威に先制防衛行動を取るために、我々はより遠くを見つめなければならない。この地域では如何なる悪徳国家も許されることはない。",
+    "prerequisites": [
+      "USA_the_canadian_corridor",
+      "USA_eliminate_the_southern_threat"
+    ]
+  }
+]

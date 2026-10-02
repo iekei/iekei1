@@ -1,0 +1,61 @@
+[
+  {
+    "id": "SOV_free_rutenia",
+    "title": "ルテニアの解放",
+    "x": 20150,
+    "y": 570,
+    "cost": 70,
+    "effect": "ルテニアの解放を掲げ、周辺地域の支援を受ける。",
+    "prerequisites": [
+      "SOV_independent_synod_west",
+      "SOV_educate_the_masses_west"
+    ]
+  },
+  {
+    "id": "SOV_friendship_of_nations_university",
+    "title": "諸民族友好大学",
+    "x": 20450,
+    "y": 1220,
+    "cost": 70,
+    "effect": "諸民族友好大学を設立し、民族統合を進める。",
+    "prerequisites": [
+      "SOV_educate_the_masses_west",
+      "SOV_educate_the_masses_caucasus",
+      "SOV_educate_the_masses_east"
+    ]
+  },
+  {
+    "id": "SOV_independent_koranic_school",
+    "title": "独立コーラン学校",
+    "x": 20750,
+    "y": 440,
+    "cost": 70,
+    "effect": "独立したコーラン学校を設立し、イスラム系住民の教育を担う。",
+    "prerequisites": [
+      "SOV_consolidate_the_east"
+    ]
+  },
+  {
+    "id": "SOV_educate_the_masses_east",
+    "title": "民衆教育 (東部)",
+    "x": 21050,
+    "y": 700,
+    "cost": 70,
+    "effect": "東部地域の民衆教育を推進する。",
+    "prerequisites": [
+      "SOV_consolidate_the_east"
+    ]
+  },
+  {
+    "id": "SOV_free_bukharan_republic",
+    "title": "ブハラ共和国の復活",
+    "x": 20750,
+    "y": 570,
+    "cost": 70,
+    "effect": "ブハラ人民共和国の復活を支持する。",
+    "prerequisites": [
+      "SOV_independent_koranic_school",
+      "SOV_educate_the_masses_east"
+    ]
+  }
+]

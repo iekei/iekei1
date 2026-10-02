@@ -1,0 +1,106 @@
+[
+  {
+    "id": "jap_engineering_1",
+    "title": "工兵装備改善",
+    "year": 1936,
+    "x": 100,
+    "y": 50,
+    "research_time": 80,
+    "reliability": "配備",
+    "desc": "工兵部隊の装備と訓練を改善する。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4ac46a' stroke-width='1.5'><path d='M3 18l6-6 4 4 8-8'/><path d='M14 8h6v6'/></svg>",
+    "effects": [
+      "工兵効率: +15%",
+      "要塞建設速度: +10%"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "type93_hydrophone",
+    "title": "九三式水中聴音機",
+    "year": 1937,
+    "x": 100,
+    "y": 200,
+    "research_time": 77,
+    "reliability": "配備（制式採用）",
+    "desc": "潜水艦用の水中聴音装置。静粛な日本潜水艦戦術を支えた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='10' width='16' height='9' rx='1'/><path d='M7 10V5h4v5'/><path d='M15 13v3M18 13v3'/></svg>",
+    "effects": [
+      "研究速度: +6.4%",
+      "装備効率: +6.4%"
+    ],
+    "prerequisites": [
+      "jap_engineering_1"
+    ]
+  },
+  {
+    "id": "jap_engineering_2",
+    "title": "補給線改善",
+    "year": 1938,
+    "x": 100,
+    "y": 350,
+    "research_time": 90,
+    "reliability": "配備",
+    "desc": "補給線の効率を改善し、前線への物資供給を安定させる。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4ac46a' stroke-width='1.5'><path d='M3 12h18'/><circle cx='7' cy='12' r='2'/><circle cx='17' cy='12' r='2'/></svg>",
+    "effects": [
+      "補給効率: +20%",
+      "燃料消費: -10%"
+    ],
+    "prerequisites": [
+      "type93_hydrophone"
+    ]
+  },
+  {
+    "id": "type13_radar",
+    "title": "十三号電探",
+    "year": 1943,
+    "x": 100,
+    "y": 500,
+    "research_time": 89,
+    "reliability": "配備（制式採用）",
+    "desc": "艦載用の対空捜索レーダー。B-29迎撃や艦隊防空に装備された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='10' width='16' height='9' rx='1'/><path d='M7 10V5h4v5'/><path d='M15 13v3M18 13v3'/></svg>",
+    "effects": [
+      "研究速度: +7.6%",
+      "装備効率: +7.6%"
+    ],
+    "prerequisites": [
+      "jap_engineering_2"
+    ]
+  },
+  {
+    "id": "kure_naval_arsenal",
+    "title": "呉鎮海軍工廠改修",
+    "year": 1938,
+    "x": 400,
+    "y": 50,
+    "research_time": 79,
+    "reliability": "配備（制式採用）",
+    "desc": "海軍工廠の造船・修理能力を拡大する統合投資。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='10' width='16' height='9' rx='1'/><path d='M7 10V5h4v5'/><path d='M15 13v3M18 13v3'/></svg>",
+    "effects": [
+      "研究速度: +6.6%",
+      "装備効率: +6.6%"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "type21_radar",
+    "title": "二十一号電探",
+    "year": 1942,
+    "x": 400,
+    "y": 200,
+    "research_time": 87,
+    "reliability": "配備（制式採用）",
+    "desc": "艦載用の対空・対水上捜索レーダー。大和型に装備された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='10' width='16' height='9' rx='1'/><path d='M7 10V5h4v5'/><path d='M15 13v3M18 13v3'/></svg>",
+    "effects": [
+      "研究速度: +7.4%",
+      "装備効率: +7.4%"
+    ],
+    "prerequisites": [
+      "kure_naval_arsenal"
+    ]
+  }
+]

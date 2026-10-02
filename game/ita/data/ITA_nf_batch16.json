@@ -1,0 +1,116 @@
+[
+  {
+    "id": "ITA_proclaim_the_italian_empire",
+    "title": "イタリア帝国の宣言",
+    "x": 14900,
+    "y": 1220,
+    "cost": 70,
+    "effect": "近頃新たにアフリカの土地を獲得したことで、我々は新たな一日を迎えることとなった。急成長する帝国と、軍への堅実な投資を行った今、我が国はもはや単なる王国ではない。ようやく確信を持って宣言できる。イタリア帝国の幕開けを！我々はこの時を長らく待っていたのだ！",
+    "prerequisites": [
+      "ITA_anglo_italian_pact",
+      "ITA_franco_italian_pact"
+    ]
+  },
+  {
+    "id": "ITA_reorganize_the_party",
+    "title": "党の再編",
+    "x": 14300,
+    "y": 1090,
+    "cost": 70,
+    "effect": "陰謀と優越感に満ちた国家ファシスト党は、新鮮味に欠けた扱いづらい党となってしまった。政党関連の組織への支配力を強めた今なら、党を一から再編成し、より高効率で動きの活発な党を作り上げることができる。",
+    "prerequisites": [
+      "ITA_dino_grandi_focus",
+      "ITA_consolidate_power"
+    ]
+  },
+  {
+    "id": "ITA_meritocracy",
+    "title": "実力主義社会",
+    "x": 14300,
+    "y": 1350,
+    "cost": 70,
+    "effect": "兵士の反対を抑え込んだことで、一部の機関をファシスト党以外の党員にも解放できるようになった。これにより刺激的な新アイデアや、新しいチャンスが生まれるはずだ。",
+    "prerequisites": [
+      "ITA_reorganize_the_party",
+      "ITA_purge_the_party"
+    ]
+  },
+  {
+    "id": "ITA_economic_reforms",
+    "title": "経済改革",
+    "x": 14600,
+    "y": 1220,
+    "cost": 70,
+    "effect": "旧政権のもとで経済はひどく停滞していたが、国家ファシスト党が復活したことで、この重大な問題に取り組む準備が整った！今なら、経済を再活性化させる能力のある人間を任命できる。",
+    "prerequisites": [
+      "ITA_reorganize_the_party"
+    ]
+  },
+  {
+    "id": "ITA_improve_the_industries",
+    "title": "産業改革",
+    "x": 14600,
+    "y": 1350,
+    "cost": 70,
+    "effect": "経済が蘇ったことで、我々の注意を産業に向け、大規模な改革を行えるだけの資源が手に入った。産業が高効率になるほど、我らの軍により素早く装備を届けられるようになるのは間違いない。",
+    "prerequisites": [
+      "ITA_economic_reforms"
+    ]
+  },
+  {
+    "id": "ITA_expanded_corporatism",
+    "title": "協調組合主義の拡大",
+    "x": 14450,
+    "y": 1480,
+    "cost": 70,
+    "effect": "ファシズムの考えの基礎となっている協調主義は、我々が新たに獲得した領土で最大限に実行されるべき主義だ。しかしこのためには、その土地の優秀な人材に頼らざるを得ず、またファシズムにおける地位の向上の機会も設けてやらなければならないだろう。この方法なら、簡単に新しい領土で忠誠心を植え付け、物事の効率を上げることができる。",
+    "prerequisites": [
+      "ITA_meritocracy",
+      "ITA_improve_the_industries"
+    ]
+  },
+  {
+    "id": "ITA_monarchia_d_italia",
+    "title": "イタリアの君主制",
+    "x": 15800,
+    "y": 830,
+    "cost": 35,
+    "effect": "ヴィットーリオ・エマヌエーレは、イタリア政治の戸をファシズムに開いてはならなかった。この過ちを正し、ファシストたちを政府の脇役にまわす時だ。",
+    "prerequisites": [
+      "ITA_depose_mussolini"
+    ]
+  },
+  {
+    "id": "ITA_extraction_industry",
+    "title": "採取産業",
+    "x": 15500,
+    "y": 960,
+    "cost": 70,
+    "effect": "我々は生産ラインの需要に応えるためにも、資源採取産業を拡大しなければならない。原材料の不足で軍事生産が危うくなることは避けなければならない。",
+    "prerequisites": [
+      "ITA_monarchia_d_italia"
+    ]
+  },
+  {
+    "id": "ITA_new_corporations",
+    "title": "新興企業",
+    "x": 15350,
+    "y": 1090,
+    "cost": 70,
+    "effect": "我々はファシスト政権が使用した以前の企業の概念を、新しい政府の必要性に合わせて適応させなければならない。",
+    "prerequisites": [
+      "ITA_extraction_industry"
+    ]
+  },
+  {
+    "id": "ITA_prepare_for_the_coming_wars",
+    "title": "来たるべき戦争への準備",
+    "x": 15500,
+    "y": 1220,
+    "cost": 70,
+    "effect": "戦争が差し迫っており、軍のニーズに応えるために強固な軍需産業が必要だ。",
+    "prerequisites": [
+      "ITA_extraction_industry"
+    ]
+  }
+]

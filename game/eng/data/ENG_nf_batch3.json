@@ -1,0 +1,115 @@
+[
+  {
+    "id": "bomber_command_focus",
+    "title": "爆撃機司令部",
+    "x": 1250,
+    "y": 570,
+    "cost": 70,
+    "effect": "ジュリオ・ドゥーエが絶えず言っていたように、「爆撃機は常に通り抜ける！」。レーダー技術と対空防御のみでは不十分であり、より優れた爆撃機の開発を優先すべきだろう。",
+    "prerequisites": [
+      "air_rearmament_focus"
+    ]
+  },
+  {
+    "id": "coastal_command_focus",
+    "title": "沿岸防衛隊司令部",
+    "x": 1400,
+    "y": 700,
+    "cost": 70,
+    "effect": "[Root.GetCoastalCommandDesc]",
+    "prerequisites": [
+      "air_rearmament_focus"
+    ]
+  },
+  {
+    "id": "aircraft_production_focus",
+    "title": "航空機生産団",
+    "x": 1250,
+    "y": 830,
+    "cost": 70,
+    "effect": "航空機生産は今もなお我々の最優先事項である。ロンドン航空機生産団を創設し、あらゆる航空機関連産業を指揮、管理させるべきだ。",
+    "prerequisites": [
+      "fighter_command_focus",
+      "bomber_command_focus",
+      "coastal_command_focus"
+    ]
+  },
+  {
+    "id": "uk_jet_focus",
+    "title": "ジェット航空機",
+    "x": 1250,
+    "y": 960,
+    "cost": 70,
+    "effect": "航空機のプロペラエンジンがジェットエンジンに置き換わることは疑いの余地が無い。その潜在性は高く、イギリスはこの研究において他国への遅れを許してはならない。",
+    "prerequisites": [
+      "aircraft_production_focus"
+    ]
+  },
+  {
+    "id": "naval_rearmament_focus",
+    "title": "海軍再軍備",
+    "x": 1850,
+    "y": 440,
+    "cost": 70,
+    "effect": "[Root.GetNavalRearmamentDesc]",
+    "prerequisites": [
+      "general_rearmament_focus"
+    ]
+  },
+  {
+    "id": "ENG_anti_non_contact_committee",
+    "title": "非接触委員会",
+    "x": 2150,
+    "y": 570,
+    "cost": 70,
+    "effect": "機雷技術者は、磁場、音及びその他の反応により活性化する新しいタイプが次の戦争で重要な役割を果たす可能性が高いと助言している。今回、これらの掃海手法を研究するために海軍に特別反非接触委員会（Anti-Non-Contact Committee）を設置することで、船舶の安全のみならず、その検討過程において我が軍の機雷技術の進展にも貢献することだろう。",
+    "prerequisites": [
+      "naval_rearmament_focus"
+    ]
+  },
+  {
+    "id": "ENG_secure_the_imperial_shipping_routes",
+    "title": "帝国貿易路の保護",
+    "x": 2300,
+    "y": 700,
+    "cost": 70,
+    "effect": "我が植民地帝国における結束は、これを結びつける商船に対する護衛能力及び商船が必要とするあらゆる地域における軍備計画にかかっている。我々は常に膨大な数の軽巡洋艦を展開させることで対応してきた。我々はあらゆる地域における護衛を行うために可能な軍備を保ち続けなければならない。",
+    "prerequisites": [
+      "naval_rearmament_focus",
+      "uk_service_focus"
+    ]
+  },
+  {
+    "id": "uk_destroyer_focus",
+    "title": "駆逐艦重視",
+    "x": 1700,
+    "y": 700,
+    "cost": 70,
+    "effect": "現代の戦艦は確かに圧倒的な力を有するが、艦隊の保護に必要な駆逐艦の役割を無視してはならないだろう。",
+    "prerequisites": [
+      "naval_rearmament_focus"
+    ]
+  },
+  {
+    "id": "ENG_a_s_warfare",
+    "title": "対潜戦",
+    "x": 1700,
+    "y": 960,
+    "cost": 70,
+    "effect": "大西洋は我々の生命線だ。脆弱な船舶輸送が水平線の上下にわたって餌食になることを払拭させねばならない。最良の兵器と探知装備による護衛を確保するために、対潜水艦戦の分野における最新技術の開発に注力する。",
+    "prerequisites": [
+      "uk_destroyer_focus"
+    ]
+  },
+  {
+    "id": "uk_convoy_focus",
+    "title": "船団護衛重視",
+    "x": 1550,
+    "y": 830,
+    "cost": 70,
+    "effect": "輸送船団は生命線であり、いくら増強してもしすぎるということはない。船団を護衛し、失われた船団を補うために早急に全力を尽くす必要がある。",
+    "prerequisites": [
+      "uk_destroyer_focus"
+    ]
+  }
+]

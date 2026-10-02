@@ -1,0 +1,256 @@
+[
+  {
+    "id": "p40_warhawk",
+    "title": "P-40ウォーホーク",
+    "year": 1939,
+    "x": 100,
+    "y": 50,
+    "research_time": 121,
+    "reliability": "配備（制式採用）",
+    "desc": "開戦初期の主力戦闘機。飛虎隊・北アフリカで戦った。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='12' cy='14' r='2'/></svg>",
+    "effects": [
+      "攻撃力: 48/100",
+      "生存力: 32/100",
+      "機動力: 73/100",
+      "信頼度: 72/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "p38_lightning",
+    "title": "P-38ライトニング",
+    "year": 1941,
+    "x": 100,
+    "y": 200,
+    "research_time": 125,
+    "reliability": "配備（制式採用）",
+    "desc": "双発双胴の長距離戦闘機。太平洋で山本五十六機を撃墜した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='12' cy='14' r='2'/></svg>",
+    "effects": [
+      "攻撃力: 51/100",
+      "生存力: 34/100",
+      "機動力: 75/100",
+      "信頼度: 74/100"
+    ],
+    "prerequisites": [
+      "p40_warhawk"
+    ]
+  },
+  {
+    "id": "f4u_corsair",
+    "title": "F4Uコルセア",
+    "year": 1942,
+    "x": 100,
+    "y": 350,
+    "research_time": 127,
+    "reliability": "配備（制式採用）",
+    "desc": "逆ガル翼の艦上戦闘機。太平洋で最も高い撃墜率を誇った。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='12' cy='14' r='2'/></svg>",
+    "effects": [
+      "攻撃力: 53/100",
+      "生存力: 35/100",
+      "機動力: 76/100",
+      "信頼度: 75/100"
+    ],
+    "prerequisites": [
+      "p38_lightning"
+    ]
+  },
+  {
+    "id": "p47_thunderbolt",
+    "title": "P-47サンダーボルト",
+    "year": 1942,
+    "x": 100,
+    "y": 500,
+    "research_time": 127,
+    "reliability": "配備（制式採用）",
+    "desc": "最重量級の単発戦闘機。護衛戦闘機・戦闘爆撃機として大量配備された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='12' cy='14' r='2'/></svg>",
+    "effects": [
+      "攻撃力: 53/100",
+      "生存力: 35/100",
+      "機動力: 76/100",
+      "信頼度: 75/100"
+    ],
+    "prerequisites": [
+      "f4u_corsair"
+    ]
+  },
+  {
+    "id": "p51_mustang",
+    "title": "P-51マスタング",
+    "year": 1942,
+    "x": 100,
+    "y": 650,
+    "research_time": 150,
+    "reliability": "配備",
+    "desc": "護衛戦闘機。落下式増槽でベルリンまで往復可能。最優秀戦闘機の一つ。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><path d='M12 2v8'/><path d='M2 10h20'/><path d='M8 10l-4 8'/><path d='M16 10l4 8'/></svg>",
+    "effects": [
+      "空戦: 80/100",
+      "航続: 85/100",
+      "速力: 80/100",
+      "装甲: 30/100"
+    ],
+    "prerequisites": [
+      "p47_thunderbolt"
+    ]
+  },
+  {
+    "id": "b17_fortress",
+    "title": "B-17フライングフォートレス",
+    "year": 1937,
+    "x": 400,
+    "y": 50,
+    "research_time": 180,
+    "reliability": "配備",
+    "desc": "重爆撃機。強固な防御火器と高い耐久性を持つ。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><path d='M12 4v6'/><path d='M2 10h20'/><path d='M4 10l-2 6'/><path d='M20 10l2 6'/><path d='M8 10v6'/><path d='M16 10v6'/></svg>",
+    "effects": [
+      "爆撃: 70/100",
+      "航続: 75/100",
+      "速力: 50/100",
+      "装甲: 40/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "a20_havoc",
+    "title": "A-20ハボック",
+    "year": 1940,
+    "x": 400,
+    "y": 200,
+    "research_time": 123,
+    "reliability": "配備（制式採用）",
+    "desc": "軽攻撃・急襲爆撃機。ソ連にもレンドリースされ地上攻撃に用いられた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 53/100",
+      "生存力: 37/100",
+      "機動力: 38/100",
+      "信頼度: 73/100"
+    ],
+    "prerequisites": [
+      "b17_fortress"
+    ]
+  },
+  {
+    "id": "b24_liberator",
+    "title": "B-24リベレイター",
+    "year": 1941,
+    "x": 400,
+    "y": 350,
+    "research_time": 125,
+    "reliability": "配備（制式採用）",
+    "desc": "長航程の重爆撃機。生産数はB-17を超えた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 55/100",
+      "生存力: 38/100",
+      "機動力: 38/100",
+      "信頼度: 74/100"
+    ],
+    "prerequisites": [
+      "a20_havoc"
+    ]
+  },
+  {
+    "id": "b25_mitchell",
+    "title": "B-25ミッチェル",
+    "year": 1941,
+    "x": 400,
+    "y": 500,
+    "research_time": 125,
+    "reliability": "配備（制式採用）",
+    "desc": "中型爆撃機。ドーリットル空襲で名声を得た。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 55/100",
+      "生存力: 38/100",
+      "機動力: 38/100",
+      "信頼度: 74/100"
+    ],
+    "prerequisites": [
+      "b24_liberator"
+    ]
+  },
+  {
+    "id": "b29_superfortress",
+    "title": "B-29スーパーフォートレス",
+    "year": 1944,
+    "x": 400,
+    "y": 650,
+    "research_time": 250,
+    "reliability": "配備",
+    "desc": "超重爆撃機。与圧室を備え、高高度から日本本土を爆撃した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><path d='M12 3v7'/><path d='M1 10h22'/><path d='M3 10l-2 7'/><path d='M21 10l2 7'/><path d='M7 10v7'/><path d='M17 10v7'/></svg>",
+    "effects": [
+      "爆撃: 90/100",
+      "航続: 95/100",
+      "速力: 60/100",
+      "装甲: 35/100"
+    ],
+    "prerequisites": [
+      "b25_mitchell"
+    ]
+  },
+  {
+    "id": "sbd_dauntless",
+    "title": "SBDドーントレス",
+    "year": 1940,
+    "x": 700,
+    "y": 50,
+    "research_time": 123,
+    "reliability": "配備（制式採用）",
+    "desc": "艦上急降下爆撃機。ミッドウェーで日本空母4隻を撃沈した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 53/100",
+      "生存力: 37/100",
+      "機動力: 38/100",
+      "信頼度: 73/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "tbf_avenger",
+    "title": "TBFアベンジャー",
+    "year": 1942,
+    "x": 700,
+    "y": 200,
+    "research_time": 127,
+    "reliability": "配備（制式採用）",
+    "desc": "艦上雷撃機。太平洋で主力雷撃機となった。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 57/100",
+      "生存力: 39/100",
+      "機動力: 38/100",
+      "信頼度: 75/100"
+    ],
+    "prerequisites": [
+      "sbd_dauntless"
+    ]
+  },
+  {
+    "id": "f6f_hellcat",
+    "title": "F6Fヘルキャット",
+    "year": 1943,
+    "x": 700,
+    "y": 350,
+    "research_time": 129,
+    "reliability": "配備（制式採用）",
+    "desc": "ゼロ戦を圧倒する艦上戦闘機。マリアナの雁群で圧倒的制空を得た。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "effects": [
+      "攻撃力: 59/100",
+      "生存力: 40/100",
+      "機動力: 38/100",
+      "信頼度: 76/100"
+    ],
+    "prerequisites": [
+      "tbf_avenger"
+    ]
+  }
+]

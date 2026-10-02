@@ -1,0 +1,26 @@
+{
+  "scientists": [
+    {
+      "id": "joliot_curie",
+      "name": "フレデリック・ジョリオ＝キュリー",
+      "name_en": "Frederic Joliot-Curie",
+      "category": "nuclear",
+      "category_name": "原子核分野",
+      "icon": "special/data/image/nuke.png",
+      "project_icon": "special/data/image/nuke.png",
+      "overview": "フランスの核物理学者。人工放射性同位体の発見者。",
+      "weapons": "重水炉（試作）、原子核研究データ"
+    },
+    {
+      "id": "morane_saulnier",
+      "name": "モラーヌ・ソルニエ",
+      "name_en": "Morane-Saulnier",
+      "category": "air",
+      "category_name": "航空機設計",
+      "icon": "special/data/image/rocket.png",
+      "project_icon": "special/data/image/rocket.png",
+      "overview": "フランスの航空機設計チーム。",
+      "weapons": "MS.406戦闘機、M.B.150シリーズ"
+    }
+  ]
+}

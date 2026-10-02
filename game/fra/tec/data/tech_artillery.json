@@ -1,0 +1,121 @@
+[
+  {
+    "id": "canon105_court",
+    "title": "105mm野砲 mle 1934",
+    "year": 1934,
+    "x": 100,
+    "y": 50,
+    "research_time": 91,
+    "reliability": "配備（制式採用）",
+    "desc": "シュナイダー製の105mm軽榴弾砲。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "effects": [
+      "対人攻撃: 37/100",
+      "対物攻撃: 36/100",
+      "生存力: 15/100",
+      "機動力: 48/100",
+      "信頼度: 70/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "fra_75mm",
+    "title": "75mm野砲 M1897",
+    "year": 1936,
+    "x": 100,
+    "y": 200,
+    "research_time": 80,
+    "reliability": "配備",
+    "desc": "第一次大戦の名砲。まだ現役で使用されていた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><path d='M4 18h16'/><path d='M8 18l4-8h4l4 8'/></svg>",
+    "effects": [
+      "攻撃: 40/100",
+      "射程: 50/100",
+      "機動力: 65/100",
+      "信頼度: 80/100"
+    ],
+    "prerequisites": [
+      "canon105_court"
+    ]
+  },
+  {
+    "id": "gpf_155",
+    "title": "Canon de 155mm GPF",
+    "year": 1936,
+    "x": 100,
+    "y": 350,
+    "research_time": 95,
+    "reliability": "配備（制式採用）",
+    "desc": "「グラン・プシュ・フィイユ」の155mm重砲。米軍にもコピーされた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "effects": [
+      "対人攻撃: 38/100",
+      "対物攻撃: 39/100",
+      "生存力: 15/100",
+      "機動力: 48/100",
+      "信頼度: 72/100"
+    ],
+    "prerequisites": [
+      "fra_75mm"
+    ]
+  },
+  {
+    "id": "sa34_25mm",
+    "title": "Canon de 25mm SA34",
+    "year": 1934,
+    "x": 400,
+    "y": 50,
+    "research_time": 91,
+    "reliability": "配備（制式採用）",
+    "desc": "軽量な25mm対戦車砲。歩兵に配備された初期対戦車手段。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "effects": [
+      "対人攻撃: 14/100",
+      "対物攻撃: 46/100",
+      "生存力: 14/100",
+      "機動力: 44/100",
+      "信頼度: 64/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "sa37",
+    "title": "Canon de 47mm SA37",
+    "year": 1937,
+    "x": 400,
+    "y": 200,
+    "research_time": 97,
+    "reliability": "配備（制式採用）",
+    "desc": "独戦車を貫通できる強力な47mm対戦車砲。フランス降伏後も独軍が使用した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "effects": [
+      "対人攻撃: 14/100",
+      "対物攻撃: 51/100",
+      "生存力: 14/100",
+      "機動力: 44/100",
+      "信頼度: 67/100"
+    ],
+    "prerequisites": [
+      "sa34_25mm"
+    ]
+  },
+  {
+    "id": "schneider_280",
+    "title": "280mmシュナイダー重榴弾砲",
+    "year": 1936,
+    "x": 700,
+    "y": 50,
+    "research_time": 95,
+    "reliability": "配備（制式採用）",
+    "desc": "第一次大戦由来の重砲。要塞攻撃用に保存された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "effects": [
+      "対人攻撃: 38/100",
+      "対物攻撃: 39/100",
+      "生存力: 15/100",
+      "機動力: 48/100",
+      "信頼度: 72/100"
+    ],
+    "prerequisites": []
+  }
+]

@@ -1,0 +1,118 @@
+[
+  {
+    "id": "SOV_incorporate_local_organizations",
+    "title": "現地組織の組み込み",
+    "x": 10550,
+    "y": 1350,
+    "cost": 70,
+    "effect": "地元の組織は首都住民よりも労働者が直面している問題をよく理解していることが多い。閣僚や党幹部といった役職を重視せず、地元民により大きな権力を与えるべきだ。",
+    "prerequisites": [
+      "SOV_administrative_reforms",
+      "SOV_a_new_theory_of_revolution"
+    ]
+  },
+  {
+    "id": "SOV_for_the_common_good",
+    "title": "共通善のために",
+    "x": 10550,
+    "y": 1480,
+    "cost": 70,
+    "effect": "同盟者が下すあらゆる決定の基本原則は、可能な限り最善を尽くすことでなければならない。最初は犠牲に払ったことがすぐには改善されないとしても、長期的にはこれが最も良いことであることを明確にしなければならない。",
+    "prerequisites": [
+      "SOV_incorporate_local_organizations",
+      "SOV_international_revolutionary_marxist_centre"
+    ]
+  },
+  {
+    "id": "SOV_victory_over_devastation",
+    "title": "荒廃の克服",
+    "x": 10550,
+    "y": 1610,
+    "cost": 70,
+    "effect": "国民の総力を結集した努力によって、我々は内戦による破壊から立ち直ることができた。国家再建のその速さは労働者の技能と献身の象徴として永久に残るだろう。",
+    "prerequisites": [
+      "SOV_for_the_common_good"
+    ]
+  },
+  {
+    "id": "SOV_socialist_humanism",
+    "title": "社会主義人文主義",
+    "x": 10550,
+    "y": 1740,
+    "cost": 70,
+    "effect": "人間は自身の運命に何の影響も及ぼさず、自身の人生は完全に物質的要因で決まると考えるマルクス主義の理論家がいる。これは明らかに間違っており、労働者階級に対するブルジョワ的な見方を示している。人間は単なる臓器の集合体ではなく、主体的な存在として扱われるべきだ。",
+    "prerequisites": [
+      "SOV_victory_over_devastation"
+    ]
+  },
+  {
+    "id": "SOV_international_revolutionary_marxist_centre",
+    "title": "国際革命マルクス主義",
+    "x": 10850,
+    "y": 1350,
+    "cost": 70,
+    "effect": "第三インターナショナルはスターリン主義的全体主義に陥り、十中八九救いようがない。我々は世界の共産主義政党に調和と協力の新たな道を提示する必要がある。",
+    "prerequisites": [
+      "SOV_a_new_theory_of_revolution",
+      "SOV_administrative_reforms",
+      "SOV_planned_economy"
+    ]
+  },
+  {
+    "id": "SOV_a_sustainable_economy",
+    "title": "持続可能な経済",
+    "x": 11300,
+    "y": 1350,
+    "cost": 70,
+    "effect": "新経済政策への移行に伴い、消費財生産への移行が顕著になったが、その代償として工業化の速度が全体的に遅れている。長期的に競争力を維持するために、経済をより持続可能な様式に移行する必要がある。",
+    "prerequisites": [
+      "SOV_paced_industrialization"
+    ]
+  },
+  {
+    "id": "SOV_the_enemies_of_the_people",
+    "title": "人民の敵",
+    "x": 10850,
+    "y": 1480,
+    "cost": 70,
+    "effect": "反動勢力は未だ存在しており、我々が成し遂げたすべてを覆す日を待ち望んでいる。我々と同盟国は、この脅威に対して絶えず警戒し、革命を守るため万が一にも闘争に備えなければならない。",
+    "prerequisites": [
+      "SOV_international_revolutionary_marxist_centre"
+    ]
+  },
+  {
+    "id": "SOV_proclaim_soviet_hegemony",
+    "title": "ソビエトの覇権を宣言",
+    "x": 10850,
+    "y": 1610,
+    "cost": 70,
+    "effect": "ソビエトの政府制度、ソビエトの経済、ソビエトの社会は、それまでの制度に比べてあらゆる面で圧倒的に優れていることは明らかだ。それまでの旧態依然とした制度が世界の他の地域に残っていたとしても、それに異議を唱える人は必ずおり、それを活用すべきだ。",
+    "prerequisites": [
+      "SOV_the_enemies_of_the_people"
+    ]
+  },
+  {
+    "id": "SOV_military_support",
+    "title": "軍の支持",
+    "x": 9950,
+    "y": 310,
+    "cost": 70,
+    "effect": "たとえ我々の策略がスターリンの密告者どもに嗅ぎつけられる危険を冒すことを意味しても、軍内部からの支持を得ることは有益だ。奴にバレるにしても手遅れになっていることを願う。",
+    "prerequisites": [
+      "SOV_the_left_opposition",
+      "SOV_the_right_opposition"
+    ]
+  },
+  {
+    "id": "SOV_divert_attention_towards_military",
+    "title": "軍へ注意を逸らす",
+    "x": 10250,
+    "y": 310,
+    "cost": 35,
+    "effect": "もしスターリンに軍が不満を感じていると思い込ませれば、奴は我々の代わりに彼らを攻撃するだろう。そして最終的に軍は本当に奴に対して不満を感じることになるだろう……",
+    "prerequisites": [
+      "SOV_the_left_opposition",
+      "SOV_the_right_opposition"
+    ]
+  }
+]

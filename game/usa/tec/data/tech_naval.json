@@ -1,0 +1,246 @@
+[
+  {
+    "id": "yorktown",
+    "title": "ヨークタウン級正規空母",
+    "year": 1937,
+    "x": 100,
+    "y": 50,
+    "research_time": 137,
+    "reliability": "配備（制式採用）",
+    "desc": "大戦初期の主力正規空母。ミッドウェーで日本機動部隊を迎撃した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 16l2-6h16l2 6H2z'/><path d='M12 10V4'/><path d='M12 4l4 4-4 2'/></svg>",
+    "effects": [
+      "対人攻撃: 26/100",
+      "対物攻撃: 54/100",
+      "生存力: 45/100",
+      "機動力: 52/100",
+      "信頼度: 68/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "north_carolina",
+    "title": "ノースカロライナ級戦艦",
+    "year": 1941,
+    "x": 100,
+    "y": 200,
+    "research_time": 145,
+    "reliability": "配備（制式採用）",
+    "desc": "開戦後最初の新型高速戦艦。太平洋艦隊の空母護衛の主軸。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 16l2-6h16l2 6H2z'/><path d='M12 10V4'/><path d='M12 4l4 4-4 2'/></svg>",
+    "effects": [
+      "対人攻撃: 26/100",
+      "対物攻撃: 61/100",
+      "生存力: 52/100",
+      "機動力: 52/100",
+      "信頼度: 71/100"
+    ],
+    "prerequisites": [
+      "yorktown"
+    ]
+  },
+  {
+    "id": "essex_carrier",
+    "title": "エセックス級航空母艦",
+    "year": 1942,
+    "x": 100,
+    "y": 350,
+    "research_time": 250,
+    "reliability": "就役",
+    "desc": "大型艦隊航空母艦。24隻が建造され、太平洋艦隊の中核となった。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><path d='M2 14h20l-1 3H3z'/><path d='M4 14V8h16v6'/></svg>",
+    "effects": [
+      "航空戦力: 90/100",
+      "速力: 60/100",
+      "装甲: 40/100",
+      "対空: 50/100"
+    ],
+    "prerequisites": [
+      "north_carolina"
+    ]
+  },
+  {
+    "id": "south_dakota",
+    "title": "サウスダコタ級戦艦",
+    "year": 1942,
+    "x": 100,
+    "y": 500,
+    "research_time": 147,
+    "reliability": "配備（制式採用）",
+    "desc": "短縮設計で厚い装甲を実現した高速戦艦。第二次ソロモン海戦で活躍した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 16l2-6h16l2 6H2z'/><path d='M12 10V4'/><path d='M12 4l4 4-4 2'/></svg>",
+    "effects": [
+      "対人攻撃: 26/100",
+      "対物攻撃: 63/100",
+      "生存力: 53/100",
+      "機動力: 52/100",
+      "信頼度: 72/100"
+    ],
+    "prerequisites": [
+      "essex_carrier"
+    ]
+  },
+  {
+    "id": "iowa_battleship",
+    "title": "アイオワ級戦艦",
+    "year": 1943,
+    "x": 100,
+    "y": 650,
+    "research_time": 300,
+    "reliability": "就役",
+    "desc": "高速戦艦。40.6cm砲3基9門搭載。史上最速の戦艦。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><path d='M2 16h20l-2 2H4z'/><path d='M6 16V6h12v10'/><path d='M10 6V3h4v3'/></svg>",
+    "effects": [
+      "火力: 85/100",
+      "装甲: 80/100",
+      "速力: 60/100",
+      "対空: 50/100"
+    ],
+    "prerequisites": [
+      "south_dakota"
+    ]
+  },
+  {
+    "id": "midway",
+    "title": "ミッドウェイ級正規空母",
+    "year": 1945,
+    "x": 100,
+    "y": 800,
+    "research_time": 153,
+    "reliability": "配備（制式採用）",
+    "desc": "装甲飛行甲板を採用した次世代空母。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 16l2-6h16l2 6H2z'/><path d='M12 10V4'/><path d='M12 4l4 4-4 2'/></svg>",
+    "effects": [
+      "対人攻撃: 26/100",
+      "対物攻撃: 68/100",
+      "生存力: 58/100",
+      "機動力: 52/100",
+      "信頼度: 74/100"
+    ],
+    "prerequisites": [
+      "iowa_battleship"
+    ]
+  },
+  {
+    "id": "gato",
+    "title": "ガトー級潜水艦",
+    "year": 1941,
+    "x": 400,
+    "y": 50,
+    "research_time": 145,
+    "reliability": "配備（制式採用）",
+    "desc": "太平洋通商破壊の主力潜水艦。日本商船隊を事実上封鎖した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 16l2-6h16l2 6H2z'/><path d='M12 10V4'/><path d='M12 4l4 4-4 2'/></svg>",
+    "effects": [
+      "対人攻撃: 22/100",
+      "対物攻撃: 40/100",
+      "生存力: 30/100",
+      "機動力: 80/100",
+      "信頼度: 75/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "liberty_ship",
+    "title": "リバティ船",
+    "year": 1941,
+    "x": 400,
+    "y": 200,
+    "research_time": 145,
+    "reliability": "配備（制式採用）",
+    "desc": "プレス加工で急速量産された標準貨物船。2700隻建造され連合軍の補給線を支えた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 16l2-6h16l2 6H2z'/><path d='M12 10V4'/><path d='M12 4l4 4-4 2'/></svg>",
+    "effects": [
+      "対人攻撃: 22/100",
+      "対物攻撃: 40/100",
+      "生存力: 30/100",
+      "機動力: 80/100",
+      "信頼度: 75/100"
+    ],
+    "prerequisites": [
+      "gato"
+    ]
+  },
+  {
+    "id": "cleveland",
+    "title": "クリーブランド級軽巡洋艦",
+    "year": 1942,
+    "x": 400,
+    "y": 350,
+    "research_time": 147,
+    "reliability": "配備（制式採用）",
+    "desc": "量産軽巡の傑作。空母護衛・上陸支援に大量投入された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 16l2-6h16l2 6H2z'/><path d='M12 10V4'/><path d='M12 4l4 4-4 2'/></svg>",
+    "effects": [
+      "対人攻撃: 22/100",
+      "対物攻撃: 41/100",
+      "生存力: 30/100",
+      "機動力: 80/100",
+      "信頼度: 76/100"
+    ],
+    "prerequisites": [
+      "liberty_ship"
+    ]
+  },
+  {
+    "id": "fletcher",
+    "title": "フレッチャー級駆逐艦",
+    "year": 1942,
+    "x": 400,
+    "y": 500,
+    "research_time": 147,
+    "reliability": "配備（制式採用）",
+    "desc": "量産駆逐艦の決定版。175隻建造され太平洋のあらゆる海戦に参戦した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 16l2-6h16l2 6H2z'/><path d='M12 10V4'/><path d='M12 4l4 4-4 2'/></svg>",
+    "effects": [
+      "対人攻撃: 22/100",
+      "対物攻撃: 41/100",
+      "生存力: 30/100",
+      "機動力: 80/100",
+      "信頼度: 76/100"
+    ],
+    "prerequisites": [
+      "cleveland"
+    ]
+  },
+  {
+    "id": "lcvp_higgins",
+    "title": "LCVPヒギンズ艇",
+    "year": 1942,
+    "x": 700,
+    "y": 50,
+    "research_time": 147,
+    "reliability": "配備（制式採用）",
+    "desc": "「ヒギンズボート」と呼ばれる歩兵揚陸艇。ノルマンディーのビーチに最初に着岸した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><ellipse cx='12' cy='14' rx='9' ry='4'/><path d='M12 10V6h5'/><path d='M4 14h16'/></svg>",
+    "effects": [
+      "対人攻撃: 10/100",
+      "対物攻撃: 50/100",
+      "生存力: 28/100",
+      "機動力: 60/100",
+      "信頼度: 68/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "lst",
+    "title": "LST戦車揚陸艦",
+    "year": 1942,
+    "x": 700,
+    "y": 200,
+    "research_time": 147,
+    "reliability": "配備（制式採用）",
+    "desc": "戦車を直接揚陸できる大批量揚陸艦。ノルマンディー・太平洋上陸作戦の中核。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><ellipse cx='12' cy='14' rx='9' ry='4'/><path d='M12 10V6h5'/><path d='M4 14h16'/></svg>",
+    "effects": [
+      "対人攻撃: 10/100",
+      "対物攻撃: 50/100",
+      "生存力: 28/100",
+      "機動力: 60/100",
+      "信頼度: 68/100"
+    ],
+    "prerequisites": [
+      "lcvp_higgins"
+    ]
+  }
+]

@@ -1,0 +1,113 @@
+[
+  {
+    "id": "GER_the_great_red_menace",
+    "title": "強大なる赤き脅威",
+    "x": 7250,
+    "y": 700,
+    "cost": 70,
+    "effect": "我々の先の大戦での行いは、いまだ多くの人々の記憶に留まっている。大陸における脅威の認識を、本来の危険に向けなければならない。つまり、東にそびえ立つ強大な共産主義の脅威を。そのために、大陸に目を向けるための大規模な宣伝活動を始めるつもりだ。",
+    "prerequisites": [
+      "GER_the_monarchy_compromise"
+    ]
+  },
+  {
+    "id": "GER_central_european_alliance",
+    "title": "中央ヨーロッパ同盟",
+    "x": 7250,
+    "y": 830,
+    "cost": 70,
+    "effect": "今こそ我々が注意深く目を向けてきたヨーロッパ大陸の問題の解決に乗り出すべきだ。我々はヨーロッパの小さな国々全ての将来を最も深刻な脅威から守るため、彼らをまとめ上げ盟主となる。",
+    "prerequisites": [
+      "GER_the_great_red_menace",
+      "GER_bulwark_against_bolshevism"
+    ]
+  },
+  {
+    "id": "GER_danubian_membership",
+    "title": "ドナウ諸国との同盟",
+    "x": 6950,
+    "y": 960,
+    "cost": 70,
+    "effect": "オーストリア＝ハンガリー帝国の後継であるドナウの国々は、我々の同盟国であることが何を意味するのか忘れていない。彼らを陣営に招きいれ、共産主義の脅威から防護しなければならない。 ",
+    "prerequisites": [
+      "GER_central_european_alliance"
+    ]
+  },
+  {
+    "id": "GER_danubian_expansion",
+    "title": "ドナウ諸国との同盟拡張",
+    "x": 6950,
+    "y": 1090,
+    "cost": 70,
+    "effect": "ソビエトの侵略を受けやすいバルカン諸国への影響力を拡大する必要がある。残りのドナウ諸国を陣営に招き入れ、共産主義の脅威から防護しなければならない。",
+    "prerequisites": [
+      "GER_danubian_membership"
+    ]
+  },
+  {
+    "id": "GER_no_balkan_communism",
+    "title": "バルカンに共産主義など要らぬ",
+    "x": 6950,
+    "y": 1220,
+    "cost": 70,
+    "effect": "共産主義勢力の影響がバルカン諸国に入り込んできた。これを許すことはできない。共産主義が根付く前に破壊しなければならない。",
+    "prerequisites": [
+      "GER_danubian_expansion"
+    ]
+  },
+  {
+    "id": "GER_low_countries_membership",
+    "title": "低地諸国との同盟",
+    "x": 7250,
+    "y": 960,
+    "cost": 70,
+    "effect": "ヨーロッパの東の国境から遠く離れているとはいえ、もし中欧が陥落すれば次に狙われるのは自分達であることを低地諸国は自覚している。共に共産主義の脅威に対して立ち向かえるよう、彼らに同盟を提供するべきだ。",
+    "prerequisites": [
+      "GER_central_european_alliance"
+    ]
+  },
+  {
+    "id": "GER_no_reds_in_western_europe",
+    "title": "西ヨーロッパにアカなど要らぬ",
+    "x": 7250,
+    "y": 1090,
+    "cost": 70,
+    "effect": "共産主義の影響が西ヨーロッパに浸透してきた。これを許してはならない。共産主義が根付く前に破壊しなければならない。",
+    "prerequisites": [
+      "GER_low_countries_membership"
+    ]
+  },
+  {
+    "id": "GER_scandinavian_membership",
+    "title": "スカンディナヴィア諸国との同盟",
+    "x": 7700,
+    "y": 960,
+    "cost": 70,
+    "effect": "山と寒さはアカのろくでなしどもに対する防御としては全く役に立たず、スカンディナヴィア人もそれを知っているはずだ。彼らに共産主義の脅威に対する保護と同盟を提供するべきだ。",
+    "prerequisites": [
+      "GER_central_european_alliance"
+    ]
+  },
+  {
+    "id": "GER_baltic_membership",
+    "title": "バルト諸国との同盟",
+    "x": 7400,
+    "y": 1220,
+    "cost": 70,
+    "effect": "20年間、バルト人は再併合と共産主義という二重の危機に脅かされながら生きてきた。彼らに共産主義の脅威に対する保護と同盟を提供するべきだ。",
+    "prerequisites": [
+      "GER_scandinavian_membership"
+    ]
+  },
+  {
+    "id": "GER_polish_membership",
+    "title": "ポーランドとの同盟",
+    "x": 7700,
+    "y": 1220,
+    "cost": 70,
+    "effect": "ポーランド人は周辺国全てを不信の眼差しで見ている、だとしても最大の脅威が東から到来することは理解しているはずだ。彼らに共産主義の脅威に対する保護と同盟を提供するべきだ。",
+    "prerequisites": [
+      "GER_scandinavian_membership"
+    ]
+  }
+]

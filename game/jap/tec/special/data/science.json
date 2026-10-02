@@ -1,0 +1,48 @@
+{
+  "scientists": [
+    {
+      "id": "jiro_horikoshi",
+      "name": "堀越二郎",
+      "name_en": "Jiro Horikoshi",
+      "category": "air",
+      "category_name": "航空機設計",
+      "icon": "special/data/image/zero.png",
+      "project_icon": "special/data/image/zero.png",
+      "overview": "零式艦上戦闘機の設計者。三菱重工の航空機設計者。",
+      "weapons": "零戦、烈風、雷電"
+    },
+    {
+      "id": "kuroda_nagamichi",
+      "name": "黒田長道",
+      "name_en": "Nagamichi Kuroda",
+      "category": "armor",
+      "category_name": "戦車開発",
+      "icon": "special/data/image/tank.png",
+      "project_icon": "special/data/image/tank.png",
+      "overview": "日本軍の戦車開発を主導した技術将校。",
+      "weapons": "九七式中戦車改、三式中戦車、五式中戦車（試作）"
+    },
+    {
+      "id": "okochi_masatoshi",
+      "name": "大河内正敏",
+      "name_en": "Masatoshi Okochi",
+      "category": "industry",
+      "category_name": "工業技術",
+      "icon": "special/data/image/industry.png",
+      "project_icon": "special/data/image/industry.png",
+      "overview": "理化学研究所所長。科学技術の工業化を推進。",
+      "weapons": "合成燃料、特殊鋼、アルミニウム精錬技術"
+    },
+    {
+      "id": "yoshio_nishina",
+      "name": "仁科芳雄",
+      "name_en": "Yoshio Nishina",
+      "category": "nuclear",
+      "category_name": "原子核研究",
+      "icon": "special/data/image/nuke.png",
+      "project_icon": "special/data/image/nuke.png",
+      "overview": "日本の原子核研究の先駆者。理化学研究所で原爆研究を主導。",
+      "weapons": "熱拡散分離装置（F号研究）、遠心分離装置"
+    }
+  ]
+}

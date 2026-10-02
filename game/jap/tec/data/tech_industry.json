@@ -1,0 +1,124 @@
+[
+  {
+    "id": "jap_industry_1",
+    "title": "工業生産力向上",
+    "year": 1936,
+    "x": 100,
+    "y": 50,
+    "research_time": 100,
+    "reliability": "配備",
+    "desc": "工場の生産効率を向上させる。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#d4843a' stroke-width='1.5'><path d='M4 20V10l4 4V10l4 4V10l4 4V10l4 10z'/></svg>",
+    "effects": [
+      "工場出力: +10%",
+      "建設速度: +10%"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "manchuria_industry",
+    "title": "満州重工業開発",
+    "year": 1937,
+    "x": 100,
+    "y": 200,
+    "research_time": 127,
+    "reliability": "配備（制式採用）",
+    "desc": "満州の重工業を統括する満鉄子会社。戦争経済の資源供給基地。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
+    "effects": [
+      "生産効率上限: +9.9%",
+      "生産効率保持率: +9.9%"
+    ],
+    "prerequisites": [
+      "jap_industry_1"
+    ]
+  },
+  {
+    "id": "jap_industry_2",
+    "title": "集中生産",
+    "year": 1938,
+    "x": 100,
+    "y": 350,
+    "research_time": 110,
+    "reliability": "配備",
+    "desc": "工場を特定の生産に集中させることで効率を上げる。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#d4843a' stroke-width='1.5'><rect x='4' y='10' width='16' height='10'/><path d='M8 10V6h8v4'/></svg>",
+    "effects": [
+      "工場出力: +15%",
+      "生産効率: +10%"
+    ],
+    "prerequisites": [
+      "manchuria_industry"
+    ]
+  },
+  {
+    "id": "shipbuilding_expansion",
+    "title": "造船所拡張計画",
+    "year": 1938,
+    "x": 100,
+    "y": 500,
+    "research_time": 129,
+    "reliability": "配備（制式採用）",
+    "desc": "呉・横須賀・三菱長崎の造船能力を拡張する投資計画。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
+    "effects": [
+      "生産効率上限: +10.1%",
+      "生産効率保持率: +10.1%"
+    ],
+    "prerequisites": [
+      "jap_industry_2"
+    ]
+  },
+  {
+    "id": "wartime_control",
+    "title": "戦時統制経済",
+    "year": 1938,
+    "x": 100,
+    "y": 650,
+    "research_time": 129,
+    "reliability": "配備（制式採用）",
+    "desc": "国家総動員法に基づく生産統制体制。軍需産業に資源を集中させた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
+    "effects": [
+      "生産効率上限: +10.1%",
+      "生産効率保持率: +10.1%"
+    ],
+    "prerequisites": [
+      "shipbuilding_expansion"
+    ]
+  },
+  {
+    "id": "aircraft_expansion",
+    "title": "航空機増産計画",
+    "year": 1940,
+    "x": 400,
+    "y": 50,
+    "research_time": 133,
+    "reliability": "配備（制式採用）",
+    "desc": "航空機生産を倍増させる人員・設備拡張計画。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
+    "effects": [
+      "生産効率上限: +10.7%",
+      "生産効率保持率: +10.7%"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "kawasaki_expansion",
+    "title": "川崎重工業拡張",
+    "year": 1941,
+    "x": 400,
+    "y": 200,
+    "research_time": 135,
+    "reliability": "配備（制式採用）",
+    "desc": "飛行機・戦車生産を強化する重工業拡張。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
+    "effects": [
+      "生産効率上限: +10.9%",
+      "生産効率保持率: +10.9%"
+    ],
+    "prerequisites": [
+      "aircraft_expansion"
+    ]
+  }
+]

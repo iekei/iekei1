@@ -1,0 +1,113 @@
+[
+  {
+    "id": "SOV_seek_a_defense_pact_with_the_allies",
+    "title": "連合国との防衛協定を模索",
+    "x": 13100,
+    "y": 570,
+    "cost": 35,
+    "effect": "西側民主主義諸国との非公式な接触はあったものの、具体的で法的拘束力のある合意は皆無だった。西側民主主義諸国がファシストの拡大に対抗して、我々と合同戦線を結成しようとしていることをペンを執って世界に宣言する時だ。",
+    "prerequisites": [
+      "SOV_anti_fascist_policies"
+    ]
+  },
+  {
+    "id": "SOV_the_khakimov_proposal",
+    "title": "ハキーモフの提案",
+    "x": 12950,
+    "y": 700,
+    "cost": 35,
+    "effect": "ハキーモフ同志は[SAU.GetNameDef]政府との関係を改善するためにたゆまぬ努力をしてきた。一部の専門家は、この地域には大量の天然資源があり、資本家たちはそれを利用しようとしているに違いないと推測している。[SAU.GetNameDef]を敵対勢力から守り、発見された資源の優先権を我々に与えるためにも、我々は相互信頼関係を構築し続けるべきだ。",
+    "prerequisites": [
+      "SOV_seek_a_defense_pact_with_the_allies"
+    ]
+  },
+  {
+    "id": "SOV_eradicate_western_fascism",
+    "title": "西方のファシズムを根絶",
+    "x": 13100,
+    "y": 830,
+    "cost": 70,
+    "effect": "西ヨーロッパのファシスト政権が攻撃を望んだ時まで待つなどできない。ファシストに対処する最善の方法は、最初に殴り、そして強く殴ることだ。",
+    "prerequisites": [
+      "SOV_seek_a_defense_pact_with_the_allies"
+    ]
+  },
+  {
+    "id": "SOV_policy_of_individual_security",
+    "title": "個別安全保障政策",
+    "x": 13400,
+    "y": 310,
+    "cost": 35,
+    "effect": "我が国に友人は少なく、多くの敵を抱えている。我々は取引相手に過剰にこだわるべきではない－－彼らも我々も、一度目的を果たせば、いずれ取引を破棄するだろう。",
+    "prerequisites": [
+      "SOV_the_comintern"
+    ]
+  },
+  {
+    "id": "SOV_approach_germany",
+    "title": "ドイツへの接近",
+    "x": 13400,
+    "y": 570,
+    "cost": 35,
+    "effect": "我が国とドイツが和解してはいけない理由などない。無論、永久的な平和共存ができるわけはないが、西側の連合国がまだ背後に存在している間ならば、ドイツ人は我々を攻撃しないだろうし、まずドイツに連中への対処をするよう促すべきだ。",
+    "prerequisites": [
+      "SOV_policy_of_individual_security",
+      "SOV_anti_capitalist_policies"
+    ]
+  },
+  {
+    "id": "SOV_liberation_of_the_european_proletariat",
+    "title": "欧州プロレタリアートの解放",
+    "x": 13400,
+    "y": 830,
+    "cost": 70,
+    "effect": "西ヨーロッパの骨無しブルジョワ政府はファシズムに立ち向かうことに対し全くの消極的姿勢を示した。将来のファシズムと共産主義間の大闘争では連中は役割を果たせない。しかし、それらの国々の労働者たちはファシズムの惨禍に対して、我らと共に喜んで戦うつもりだ。つまり戦う意思のある政府を彼らに与えればいいだけだ。",
+    "prerequisites": [
+      "SOV_approach_germany"
+    ]
+  },
+  {
+    "id": "SOV_anti_capitalist_policies",
+    "title": "反資本主義政策",
+    "x": 13700,
+    "y": 440,
+    "cost": 35,
+    "effect": "すべてではないにせよ、ほとんどの資本主義諸国は、ファシストが勢力拡張を計画する際に、単に別の方向を示すだけで完全に満足していることは明らかだ。ブルジョワは、選択肢を与えられたら、常に（そして、最終的には）プロレタリアートを抑圧することを選ぶだろう。しかるに、我々は奴らを信用することはできないし、奴らに戦いを挑む準備をする必要がある。",
+    "prerequisites": [
+      "SOV_the_comintern"
+    ]
+  },
+  {
+    "id": "SOV_recover_alaska",
+    "title": "アラスカの奪還",
+    "x": 13700,
+    "y": 570,
+    "cost": 70,
+    "effect": "アラスカのアメリカ人への売却は、当時の指導者たちによるロシア国民への裏切りだった。この裏切りが覆され、土地が回復したのは過去のことだ。現在の搾取制度の一部で暮らすよりも、我が連邦の一部で暮らす方が彼らは遥かに幸せになれるだろう。",
+    "prerequisites": [
+      "SOV_anti_capitalist_policies"
+    ]
+  },
+  {
+    "id": "SOV_the_fight_for_the_pacific",
+    "title": "太平洋の戦い",
+    "x": 13700,
+    "y": 700,
+    "cost": 70,
+    "effect": "地上でどれだけ強くとも、太平洋地域の敵と戦うためには海を越えなければならない。したがって世界中の海で効率的な戦争を行う前に、沿岸インフラと造船産業を発展させなければならない。",
+    "prerequisites": [
+      "SOV_recover_alaska"
+    ]
+  },
+  {
+    "id": "SOV_baltic_security",
+    "title": "バルト地域の安全保障",
+    "x": 14150,
+    "y": 310,
+    "cost": 35,
+    "effect": "バルト海は我々の庭であり、あらゆる犠牲を払ってでも守られねばならない。レニングラードに対する緩衝地帯としてカレリアを割譲させる必要があるだろう。エストニアの自治などはもってのほかである！",
+    "prerequisites": [
+      "SOV_the_comintern"
+    ]
+  }
+]

@@ -1,0 +1,183 @@
+[
+  {
+    "id": "type41_mountain",
+    "title": "四一式山砲",
+    "year": 1908,
+    "x": 100,
+    "y": 50,
+    "research_time": 39,
+    "reliability": "配備（制式採用）",
+    "desc": "分解して山岳を越えられる75mm山砲。大戦末期まで第一線で用いられた歩兵砲。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "effects": [
+      "対人攻撃: 34/100",
+      "対物攻撃: 30/100",
+      "生存力: 15/100",
+      "機動力: 48/100",
+      "信頼度: 66/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "type91_105",
+    "title": "九一式十糎榴弾砲",
+    "year": 1931,
+    "x": 100,
+    "y": 200,
+    "research_time": 85,
+    "reliability": "配備（制式採用）",
+    "desc": "10cm榴弾砲。ノモンハン以後の主力機動砲兵火力。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "effects": [
+      "対人攻撃: 35/100",
+      "対物攻撃: 31/100",
+      "生存力: 15/100",
+      "機動力: 48/100",
+      "信頼度: 67/100"
+    ],
+    "prerequisites": [
+      "type41_mountain"
+    ]
+  },
+  {
+    "id": "type92_100mm",
+    "title": "九二式十糎加農",
+    "year": 1932,
+    "x": 100,
+    "y": 350,
+    "research_time": 87,
+    "reliability": "配備（制式採用）",
+    "desc": "長射程の10cm加農。対砲兵戦・要塞砲撃に用いられた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "effects": [
+      "対人攻撃: 35/100",
+      "対物攻撃: 33/100",
+      "生存力: 15/100",
+      "機動力: 48/100",
+      "信頼度: 68/100"
+    ],
+    "prerequisites": [
+      "type91_105"
+    ]
+  },
+  {
+    "id": "type90_field_gun",
+    "title": "九〇式野砲",
+    "year": 1936,
+    "x": 100,
+    "y": 500,
+    "research_time": 100,
+    "reliability": "配備",
+    "desc": "75mm野砲。日本軍の標準的な野戦砲。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#d4a843' stroke-width='1.5'><path d='M4 18h16'/><path d='M8 18l4-8h4l4 8'/></svg>",
+    "effects": [
+      "攻撃: 45/100",
+      "射程: 60/100",
+      "機動力: 65/100",
+      "信頼度: 75/100"
+    ],
+    "prerequisites": [
+      "type92_100mm"
+    ]
+  },
+  {
+    "id": "type96_howitzer",
+    "title": "九六式十五糎榴弾砲",
+    "year": 1936,
+    "x": 100,
+    "y": 650,
+    "research_time": 120,
+    "reliability": "配備",
+    "desc": "150mm榴弾砲。大口径の支援用火砲。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#d4a843' stroke-width='1.5'><path d='M4 18h16'/><path d='M6 18l6-10h4l4 10'/></svg>",
+    "effects": [
+      "攻撃: 60/100",
+      "射程: 55/100",
+      "機動力: 40/100",
+      "信頼度: 70/100"
+    ],
+    "prerequisites": [
+      "type90_field_gun"
+    ]
+  },
+  {
+    "id": "type96_150",
+    "title": "九六式十五糎榴弾砲",
+    "year": 1936,
+    "x": 400,
+    "y": 50,
+    "research_time": 95,
+    "reliability": "配備（制式採用）",
+    "desc": "15cm榴弾砲。バターン・シンガポール攻略で威力を発揮した重砲。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "effects": [
+      "対人攻撃: 14/100",
+      "対物攻撃: 50/100",
+      "生存力: 14/100",
+      "機動力: 44/100",
+      "信頼度: 66/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "type4_ho-ro",
+    "title": "四式十五糎自走榴弾砲 ホ・ロ",
+    "year": 1944,
+    "x": 400,
+    "y": 200,
+    "research_time": 111,
+    "reliability": "配備（制式採用）",
+    "desc": "九七式中戦車車台に15cm榴弾砲を載せた自走砲。本土決戦用に少数製造された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "effects": [
+      "対人攻撃: 14/100",
+      "対物攻撃: 62/100",
+      "生存力: 14/100",
+      "機動力: 44/100",
+      "信頼度: 73/100"
+    ],
+    "prerequisites": [
+      "type96_150"
+    ]
+  },
+  {
+    "id": "type99_105",
+    "title": "九九式山砲",
+    "year": 1939,
+    "x": 700,
+    "y": 50,
+    "research_time": 101,
+    "reliability": "配備（制式採用）",
+    "desc": "分解して馬力で運べる105mm山砲。南方ジャングル戦線の機動砲兵。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "effects": [
+      "対人攻撃: 40/100",
+      "対物攻撃: 43/100",
+      "生存力: 15/100",
+      "機動力: 48/100",
+      "信頼度: 74/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "type7_75mm_at",
+    "title": "試製七糎半対戦車砲",
+    "year": 1944,
+    "x": 700,
+    "y": 200,
+    "research_time": 111,
+    "reliability": "低（試作止まり）",
+    "desc": "米軍中戦車に対抗する75mm対戦車砲計画。実用化に至らなかった。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e0a890' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "effects": [
+      "対人攻撃: 43/100",
+      "対物攻撃: 51/100",
+      "生存力: 15/100",
+      "機動力: 48/100",
+      "信頼度: 79/100"
+    ],
+    "prerequisites": [
+      "type99_105"
+    ]
+  }
+]

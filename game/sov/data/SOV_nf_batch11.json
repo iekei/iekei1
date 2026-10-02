@@ -1,0 +1,114 @@
+[
+  {
+    "id": "SOV_the_collectivization_process",
+    "title": "農業集団化工程",
+    "x": 6950,
+    "y": 700,
+    "cost": 70,
+    "effect": "未だに多くの課題が残されており、一部地域ではひどく混乱しているが、ソビエト連邦の農業集団化工程はほぼ完了した、まもなく農業部門の生産は増加するだろう。",
+    "prerequisites": [
+      "SOV_socialism_in_one_country",
+      "SOV_secure_the_administration"
+    ]
+  },
+  {
+    "id": "SOV_the_anti_soviet_trotskyist_center",
+    "title": "反ソ・トロツキスト本部",
+    "x": 7250,
+    "y": 700,
+    "cost": 35,
+    "effect": "ジノヴィエフの一派の陰謀を調査した結果、我々の政権内に反ソビエト・テロリストの大規模なネットワークが存在することが判明した。そしてメンバーの中には、自分が誰を助けているのかを十分に認識していない者もいる！この陰謀を根絶しなければならないが、そのためには抜本的な対策が必要になるかもしれないだろう。",
+    "prerequisites": [
+      "SOV_the_zinovyevite_terrorist_center"
+    ]
+  },
+  {
+    "id": "SOV_the_workers_dictatorship",
+    "title": "労働者独裁",
+    "x": 7250,
+    "y": 830,
+    "cost": 70,
+    "effect": "我らが連邦の全権力は最終的には労働者たちになければならない。我々は派閥主義で分派する余裕などなく、従って労働者の意志は常に政治局の決定で表明されることを確実にしなければならない。",
+    "prerequisites": [
+      "SOV_the_anti_soviet_trotskyist_center"
+    ]
+  },
+  {
+    "id": "SOV_organization_centralization_discipline",
+    "title": "集権化と統制",
+    "x": 6950,
+    "y": 960,
+    "cost": 35,
+    "effect": "この不確実な時代に人民は政治局に安定と指導を求めている。この意思決定機関がスターリン同志の意思決定を支持するだけでなく、その陰で団結することを確実にしなければならない。",
+    "prerequisites": [
+      "SOV_the_collectivization_process",
+      "SOV_the_workers_dictatorship"
+    ]
+  },
+  {
+    "id": "SOV_war_economy",
+    "title": "戦争経済",
+    "x": 6950,
+    "y": 1090,
+    "cost": 70,
+    "effect": "国境の資本主義および反動主義諸国は、我々が弱体化した瞬間に攻撃をしようと目論んでいることは明らかだ。経済を戦時体制に移行させるのは早ければ早いほどよい。",
+    "prerequisites": [
+      "SOV_organization_centralization_discipline"
+    ]
+  },
+  {
+    "id": "SOV_the_military_conspiracy",
+    "title": "軍部の陰謀",
+    "x": 7250,
+    "y": 960,
+    "cost": 35,
+    "effect": "我が国のトロツキストの陰謀は軍隊にまで達していた。我々は今、主要な将軍や更には元帥までもが政府転覆のために、外国の諜報機関と共謀していたという証拠を手に入れた！忠誠心が少しでも疑わしい将校は、我が軍をより一層弱体化させることが可能な地位に留まることを許すことはできない。",
+    "prerequisites": [
+      "SOV_the_workers_dictatorship"
+    ]
+  },
+  {
+    "id": "SOV_the_bloc_of_rights_and_trotskyites",
+    "title": "右翼トロツキスト・ブロック",
+    "x": 7250,
+    "y": 1090,
+    "cost": 70,
+    "effect": "ついに我々は内部の陰謀の核心に到達した。ニコライ・ブハーリンはその実トロツキー＝ジノヴィエフ一派の一員であり、政府内で反革命を企てた者たちの首領であった可能性が高い。これに対し疑いの余地のない証拠を我々は入手した。そして最後の裁判で、これらの事実を白日の下に晒すことができる。",
+    "prerequisites": [
+      "SOV_the_military_conspiracy"
+    ]
+  },
+  {
+    "id": "SOV_behead_the_snake",
+    "title": "蛇の頭を刎ねる",
+    "x": 7550,
+    "y": 1090,
+    "cost": 35,
+    "effect": "トロツキストによるクーデターの脅威を完全に排除しない限り、連邦に安寧は訪れないことが明らかとなった。トロツキーを裁判にかけ、奴の反ソビエト活動を白日の下に晒すのは良いことだが、我々にそんな余裕はない。我々の唯一の選択肢は、奴を暗殺して政府に対する陰謀から指導者と主要な扇動者を排除することである。",
+    "prerequisites": [
+      "SOV_the_military_conspiracy"
+    ]
+  },
+  {
+    "id": "SOV_stalins_cult_of_personality",
+    "title": "スターリンの個人崇拝",
+    "x": 7250,
+    "y": 1220,
+    "cost": 35,
+    "effect": "連邦に対する衝撃的な陰謀が暴露された後、スターリン同志の明敏な指導力だけが内戦かそれ以上の事態への転落を阻止したのは明らかである。全ソビエト市民、そして万国の労働者階級に属するすべての者が、スターリン同志が革命を擁護する不断の努力をしてくれたことに対し、永遠の感謝の念を抱いている。",
+    "prerequisites": [
+      "SOV_the_bloc_of_rights_and_trotskyites"
+    ]
+  },
+  {
+    "id": "SOV_they_will_know_fear",
+    "title": "奴らに恐怖を",
+    "x": 6800,
+    "y": 1350,
+    "cost": 35,
+    "effect": "我々の敵は赤軍とソビエト人民を恐れることを学んだ。最初の猛攻に耐え抜いた今こそ反撃の時だ。しかし、最も堅固な敵の防衛線さえも突破できる恐るべき新たな戦争機械を開発する必要がある。ただ命名されただけで敵の心に恐怖を抱かせる様な兵器を……",
+    "prerequisites": [
+      "SOV_stalins_cult_of_personality"
+    ]
+  }
+]

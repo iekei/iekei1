@@ -1,0 +1,118 @@
+[
+  {
+    "id": "SOV_left_opposition_coup",
+    "title": "点火",
+    "x": 8600,
+    "y": 830,
+    "cost": 35,
+    "effect": "時は来た。圧制者に反旗を翻そう。新たな革命が始まるのだ！",
+    "prerequisites": [
+      "SOV_approach_tukhachevsky",
+      "SOV_approach_primakov"
+    ]
+  },
+  {
+    "id": "SOV_the_vanguard_of_the_true_revolution",
+    "title": "真の革命の前衛",
+    "x": 8300,
+    "y": 960,
+    "cost": 70,
+    "effect": "我らの革命を世界中に知らせよう。世界中の革命家に我々の旗へ集うよう呼びかけよう。我らは共にスターリンを打ち負かすことができる。我らは共に革命を勝利に導くことができる。",
+    "prerequisites": [
+      "SOV_left_opposition_coup",
+      "SOV_funds_for_the_cause"
+    ]
+  },
+  {
+    "id": "SOV_long_live_the_workers_government",
+    "title": "労働者政府万歳",
+    "x": 8750,
+    "y": 960,
+    "cost": 70,
+    "effect": "労働者階級の真の解放に向けて長い道のりを歩み始めた今、エリートによる政府を別の政府に替える誘惑に陥ってはならない。連邦政府は常に、労働者の、労働者による、労働者のための真の政府であるべきだ。",
+    "prerequisites": [
+      "SOV_left_opposition_coup"
+    ]
+  },
+  {
+    "id": "SOV_left_purges",
+    "title": "反革命派の排除",
+    "x": 9050,
+    "y": 960,
+    "cost": 70,
+    "effect": "スターリンに怒りを抱いている者は他にも数多くいる。我々が支配を固めつつある間に、これらの者が反革命的細胞を形成し始めるのを許すと、すぐさま再び内戦に突入するだろう。",
+    "prerequisites": [
+      "SOV_left_opposition_coup"
+    ]
+  },
+  {
+    "id": "SOV_the_builder_of_the_red_army",
+    "title": "赤軍の創設者",
+    "x": 8600,
+    "y": 1090,
+    "cost": 70,
+    "effect": "何が起ころうとも、赤軍の生みの親はいつだって$SOV_lev_trotsky$だ。今こそ彼を元の地位へと復帰させ、生まれ変わって回復した赤軍を率いて戦いに臨むべき時だ。",
+    "prerequisites": [
+      "SOV_long_live_the_workers_government"
+    ]
+  },
+  {
+    "id": "SOV_reigniting_the_revolutionary_spirit",
+    "title": "革命精神の再燃",
+    "x": 8900,
+    "y": 1090,
+    "cost": 70,
+    "effect": "何年にもわたるスターリン主義の支配は、人民の革命熱意を失わせた。労働者たちは革命が起こるだろうと聞かされていた、いつかは、と。これが事実ではないことを我々は知った。現在の国際的な発展水準の中で、さほど発展していない他国で革命は燃え上がるべきだ。そして我々が、その火付け役となる。",
+    "prerequisites": [
+      "SOV_long_live_the_workers_government"
+    ]
+  },
+  {
+    "id": "SOV_the_permanent_revolution",
+    "title": "永続革命論",
+    "x": 8150,
+    "y": 1090,
+    "cost": 70,
+    "effect": "マルクス主義の理論では、状況が正しければ革命は不可避であると教示している。しかし、状況は明らかに正しくなく、あらゆる場所でも正しくない。我々は何世紀も先になるやもしれぬ世界革命を甘んじて待つべきではない。今、万国の労働者と農民が苦しんでいる、彼らの解放を待つことなど出来ない。",
+    "prerequisites": [
+      "SOV_left_opposition_coup",
+      "SOV_committee_in_exile"
+    ]
+  },
+  {
+    "id": "SOV_depoliticize_the_military",
+    "title": "軍隊の非政治化",
+    "x": 8450,
+    "y": 1220,
+    "cost": 70,
+    "effect": "軍隊の主たる目的は労働者階級を守ることである。我が国の兵士はその大部分がすでに労働者階級の一員であり、それゆえ監視者を必要としない。さらに重要なことは、赤軍はその第一の任務に集中すべきであり、政治ごっこに興じてはならないということだ。",
+    "prerequisites": [
+      "SOV_the_builder_of_the_red_army",
+      "SOV_reigniting_the_revolutionary_spirit"
+    ]
+  },
+  {
+    "id": "SOV_system_decentralization",
+    "title": "体制の分権化",
+    "x": 8750,
+    "y": 1220,
+    "cost": 70,
+    "effect": "スターリンは党だけでなく、国全体の権力を自身へ集権化した。これは明らかに反革命に等しく、労働者から権力を奪い、それを腐敗したエリートに手渡していた。我々はこの方針を逆転させ、労働者たちが再び自分の運命は自分で決定できるようにしなければならない。",
+    "prerequisites": [
+      "SOV_the_builder_of_the_red_army",
+      "SOV_reigniting_the_revolutionary_spirit"
+    ]
+  },
+  {
+    "id": "SOV_strengthen_heavy_industry",
+    "title": "重工業の強化",
+    "x": 9050,
+    "y": 1220,
+    "cost": 70,
+    "effect": "重工業は我が国の経済の中心である。革命の単なる生存ではなく繁栄を確かなものとしたいならば、この部門をさらに強化しなければならない。",
+    "prerequisites": [
+      "SOV_the_builder_of_the_red_army",
+      "SOV_reigniting_the_revolutionary_spirit"
+    ]
+  }
+]

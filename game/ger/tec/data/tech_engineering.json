@@ -1,202 +1,165 @@
 [
   {
-    "id": "prototype_radio_1936",
-    "title": "試作型無線機",
-    "year": 1936, "x": 100, "y": 50, "research_time": 60,
+    "id": "enigma",
+    "title": "エニグマ暗号機",
+    "year": 1936,
+    "x": 100,
+    "y": 50,
+    "research_time": 100,
+    "reliability": "運用中",
+    "desc": "軍用ローター暗号機。ドイツ軍の通信を保護したが、連合軍のウルトラ解読によって破られた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='6' width='16' height='12' rx='2'/><path d='M8 6V4h8v2'/><circle cx='9' cy='12' r='1'/><circle cx='15' cy='12' r='1'/></svg>",
+    "effects": [
+      "通信保安: 70/100",
+      "暗号強度: 75/100",
+      "諜報防御: 40/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "freya_radar",
+    "title": "フレーヤ早期警戒レーダー",
+    "year": 1938,
+    "x": 100,
+    "y": 200,
+    "research_time": 79,
+    "reliability": "配備（制式採用）",
+    "desc": "ドイツ最初の実用早期警戒レーダー。距離約120kmを検知し、夜間戦闘・防空網の基軸となった。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='10' width='16' height='9' rx='1'/><path d='M7 10V5h4v5'/><path d='M15 13v3M18 13v3'/></svg>",
+    "effects": [
+      "研究速度: +6.6%",
+      "装備効率: +6.6%"
+    ],
+    "prerequisites": [
+      "enigma"
+    ]
+  },
+  {
+    "id": "wurzburg_radar",
+    "title": "ヴュルツブルク・レーダー",
+    "year": 1940,
+    "x": 100,
+    "y": 350,
+    "research_time": 120,
+    "reliability": "運用中",
+    "desc": "対空射撃管制レーダー。夜間戦闘機と組み合わせた「ヒンメルベッド」防空網の中核。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M12 12L4 4'/><path d='M12 3a9 9 0 019 9'/><path d='M12 7a5 5 0 015 5'/><circle cx='12' cy='12' r='1'/></svg>",
+    "effects": [
+      "対空効率: +25%",
+      "レーダー範囲: +30%",
+      "夜間防空: +20%"
+    ],
+    "prerequisites": [
+      "freya_radar"
+    ]
+  },
+  {
+    "id": "peenemunde",
+    "title": "ペーネミュンデ研究施設",
+    "year": 1942,
+    "x": 100,
+    "y": 500,
+    "research_time": 87,
+    "reliability": "配備（制式採用）",
+    "desc": "V1・V2を開発した陸軍・空軍合同ロケット研究センター。ドイツ先端兵器の中心地。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='10' width='16' height='9' rx='1'/><path d='M7 10V5h4v5'/><path d='M15 13v3M18 13v3'/></svg>",
+    "effects": [
+      "研究速度: +7.4%",
+      "装備効率: +7.4%"
+    ],
+    "prerequisites": [
+      "wurzburg_radar"
+    ]
+  },
+  {
+    "id": "jagdschloss",
+    "title": "ヤークトシュロス・レーダー",
+    "year": 1944,
+    "x": 100,
+    "y": 650,
+    "research_time": 91,
+    "reliability": "配備（制式採用）",
+    "desc": "大型回転アンテナの夜間戦闘管制レーダー。遠距離・複数目標同時追尾を実現した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='10' width='16' height='9' rx='1'/><path d='M7 10V5h4v5'/><path d='M15 13v3M18 13v3'/></svg>",
+    "effects": [
+      "研究速度: +7.8%",
+      "装備効率: +7.8%"
+    ],
+    "prerequisites": [
+      "peenemunde"
+    ]
+  },
+  {
+    "id": "v1",
+    "title": "V-1飛行爆弾",
+    "year": 1944,
+    "x": 100,
+    "y": 800,
+    "research_time": 180,
+    "reliability": "実戦配備",
+    "desc": "「 reprisal weapon 1」。パルスジェット飛行爆弾で、ロンドンへ無人爆撃を行った。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2c3 3 4 7 4 11h-8c0-4 1-8 4-11z'/><path d='M8 13l-3 4h5'/><path d='M16 13l3 4h-5'/><path d='M10 17v5h4v-5'/></svg>",
+    "effects": [
+      "対地攻撃: 55/100",
+      "射程: 200km級",
+      "迎撃されやすさ: 高"
+    ],
+    "prerequisites": [
+      "jagdschloss"
+    ]
+  },
+  {
+    "id": "v2",
+    "title": "V-2弾道ミサイル",
+    "year": 1944,
+    "x": 100,
+    "y": 950,
+    "research_time": 200,
+    "reliability": "実戦配備",
+    "desc": "世界初の弾道ミサイル。音速の3倍で飛来し、迎撃は不可能だった。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2c3 3 4 7 4 11h-8c0-4 1-8 4-11z'/><path d='M8 13l-3 4h5'/><path d='M16 13l3 4h-5'/><path d='M10 17v5h4v-5'/></svg>",
+    "effects": [
+      "対地攻撃: 70/100",
+      "射程: 320km級",
+      "迎撃不能",
+      "生産コスト: 極大"
+    ],
+    "prerequisites": [
+      "v1"
+    ]
+  },
+  {
+    "id": "kryptografie",
+    "title": "暗号機改良計画",
+    "year": 1942,
+    "x": 400,
+    "y": 50,
+    "research_time": 87,
+    "reliability": "配備（制式採用）",
+    "desc": "エニグマの改良・暗号鍵管理を強化する電子工学計画。連合軍の解読に対抗する試み。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='10' width='16' height='9' rx='1'/><path d='M7 10V5h4v5'/><path d='M15 13v3M18 13v3'/></svg>",
+    "effects": [
+      "研究速度: +7.4%",
+      "装備効率: +7.4%"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "v3",
+    "title": "V3超長距離砲",
+    "year": 1945,
+    "x": 400,
+    "y": 200,
+    "research_time": 93,
     "reliability": "低（試作止まり）",
-    "desc": "",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8b949e' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M4 11h16v8H4z'/><path d='M6 11V6'/><path d='M18 11V8'/><circle cx='8' cy='15' r='1.5'/><circle cx='13' cy='15' r='1.5'/></svg>",
-    "effects": ["攻撃力: 5/100", "生存力: 10/100", "機動力: 20/100", "信頼度: 35/100"],
-    "prerequisites": []
-  },
-  {
-    "id": "prototype_radar_1936",
-    "title": "試作型レーダー",
-    "year": 1936, "x": 400, "y": 50, "research_time": 70,
-    "reliability": "低（試作止まり）",
-    "desc": "",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8b949e' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16z'/><path d='M12 12l4-4'/><path d='M12 12v-8'/></svg>",
-    "effects": ["攻撃力: 8/100", "生存力: 15/100", "機動力: 10/100", "信頼度: 30/100"],
-    "prerequisites": []
-  },
-  {
-    "id": "early_radio_1938",
-    "title": "初期型無線機",
-    "year": 1938, "x": 100, "y": 180, "research_time": 80,
-    "reliability": "配備（制式採用）",
-    "desc": "",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M4 11h16v8H4z'/><path d='M6 11V5'/><circle cx='9' cy='15' r='1.5'/><path d='M14 15h3'/></svg>",
-    "effects": ["攻撃力: 12/100", "生存力: 18/100", "機動力: 30/100", "信頼度: 50/100"],
-    "prerequisites": ["prototype_radio_1936"]
-  },
-  {
-    "id": "prototype_cipher_1938",
-    "title": "試作型暗号解読機",
-    "year": 1938, "x": 700, "y": 180, "research_time": 90,
-    "reliability": "低（試作止まり）",
-    "desc": "",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8b949e' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='11' width='18' height='10' rx='2'/><path d='M7 11V7a5 5 0 0 1 10 0v4'/></svg>",
-    "effects": ["攻撃力: 15/100", "生存力: 20/100", "機動力: 10/100", "信頼度: 40/100"],
-    "prerequisites": []
-  },
-  {
-    "id": "early_radar_1939",
-    "title": "初期型レーダー",
-    "year": 1939, "x": 400, "y": 300, "research_time": 90,
-    "reliability": "配備（制式採用）",
-    "desc": "",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z'/><path d='M12 12l5-5'/><circle cx='12' cy='12' r='2'/></svg>",
-    "effects": ["攻撃力: 20/100", "生存力: 30/100", "機動力: 15/100", "信頼度: 60/100"],
-    "prerequisites": ["prototype_radar_1936"]
-  },
-  {
-    "id": "nuclear_project_1940",
-    "title": "原子核（核物理学研究・核開発プロジェクト）",
-    "year": 1940, "x": 250, "y": 420, "research_time": 180,
-    "reliability": "研究段階",
-    "desc": "",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e3b341' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='2'/><ellipse cx='12' cy='12' rx='9' ry='4'/><ellipse cx='12' cy='12' rx='9' ry='4' transform='rotate(60 12 12)'/><ellipse cx='12' cy='12' rx='9' ry='4' transform='rotate(120 12 12)'/></svg>",
-    "effects": ["攻撃力: 25/100", "生存力: 25/100", "機動力: 10/100", "信頼度: 30/100"],
-    "prerequisites": []
-  },
-  {
-    "id": "mass_radio_1941",
-    "title": "量産型無線機",
-    "year": 1941, "x": 100, "y": 540, "research_time": 100,
-    "reliability": "配備（制式採用）",
-    "desc": "",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 10h18v10H3z'/><path d='M6 10V4'/><circle cx='8' cy='15' r='2'/><circle cx='16' cy='15' r='2'/></svg>",
-    "effects": ["攻撃力: 30/100", "生存力: 35/100", "機動力: 50/100", "信頼度: 75/100"],
-    "prerequisites": ["early_radio_1938"]
-  },
-  {
-    "id": "mass_radar_1941",
-    "title": "量産型レーダー",
-    "year": 1941, "x": 400, "y": 540, "research_time": 110,
-    "reliability": "配備（制式採用）",
-    "desc": "",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16z'/><path d='M12 12l6-2'/><path d='M12 12l-4-4'/></svg>",
-    "effects": ["攻撃力: 35/100", "生存力: 45/100", "機動力: 25/100", "信頼度: 75/100"],
-    "prerequisites": ["early_radar_1939"]
-  },
-  {
-    "id": "early_cipher_1941",
-    "title": "初期型暗号解読機",
-    "year": 1941, "x": 700, "y": 540, "research_time": 100,
-    "reliability": "配備（制式採用）",
-    "desc": "",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='11' width='18' height='10' rx='2'/><path d='M7 11V7a5 5 0 0 1 10 0v4'/><circle cx='12' cy='16' r='1'/></svg>",
-    "effects": ["攻撃力: 35/100", "生存力: 40/100", "機動力: 20/100", "信頼度: 65/100"],
-    "prerequisites": ["prototype_cipher_1938"]
-  },
-  {
-    "id": "proto_missile_1942",
-    "title": "試作型弾道ミサイル（ロケット）",
-    "year": 1942, "x": 550, "y": 660, "research_time": 120,
-    "reliability": "低（試作止まり）",
-    "desc": "",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8b949e' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2l3 6v9l-3 3-3-3V8z'/><path d='M9 14l-3 3v2h3'/><path d='M15 14l3 3v2h-3'/></svg>",
-    "effects": ["攻撃力: 50/100", "生存力: 30/100", "機動力: 40/100", "信頼度: 45/100"],
-    "prerequisites": []
-  },
-  {
-    "id": "mass_cipher_1943",
-    "title": "量産型暗号解読機",
-    "year": 1943, "x": 700, "y": 780, "research_time": 110,
-    "reliability": "配備（制式採用）",
-    "desc": "",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='11' width='18' height='10' rx='2'/><path d='M7 11V7a5 5 0 0 1 10 0v4'/><path d='M12 15v3'/></svg>",
-    "effects": ["攻撃力: 45/100", "生存力: 50/100", "機動力: 30/100", "信頼度: 80/100"],
-    "prerequisites": ["early_cipher_1941"]
-  },
-  {
-    "id": "improved_radio_1944",
-    "title": "改良型無線機",
-    "year": 1944, "x": 100, "y": 900, "research_time": 110,
-    "reliability": "配備（制式採用）",
-    "desc": "",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 9h18v11H3z'/><path d='M8 9V3'/><path d='M12 9V5'/><circle cx='8' cy='14' r='2'/><circle cx='16' cy='14' r='2'/></svg>",
-    "effects": ["攻撃力: 50/100", "生存力: 55/100", "機動力: 65/100", "信頼度: 85/100"],
-    "prerequisites": ["mass_radio_1941"]
-  },
-  {
-    "id": "mass_missile_1944",
-    "title": "量産型弾道ミサイル（ロケット）",
-    "year": 1944, "x": 550, "y": 900, "research_time": 130,
-    "reliability": "配備（制式採用）",
-    "desc": "",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2l3 6v9l-3 3-3-3V8z'/><path d='M9 14l-3 3v2h3'/><path d='M15 14l3 3v2h-3'/><path d='M12 20v3'/></svg>",
-    "effects": ["攻撃力: 65/100", "生存力: 45/100", "機動力: 55/100", "信頼度: 70/100"],
-    "prerequisites": ["proto_missile_1942"]
-  },
-  {
-    "id": "improved_radar_1945",
-    "title": "改良型レーダー",
-    "year": 1945, "x": 400, "y": 1020, "research_time": 120,
-    "reliability": "配備（制式採用）",
-    "desc": "",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16z'/><path d='M12 12l5-5'/><circle cx='17' cy='7' r='1.5'/></svg>",
-    "effects": ["攻撃力: 60/100", "生存力: 65/100", "機動力: 40/100", "信頼度: 85/100"],
-    "prerequisites": ["mass_radar_1941"]
-  },
-  {
-    "id": "improved_missile_1946",
-    "title": "改良型弾道ミサイル（ロケット）",
-    "year": 1946, "x": 550, "y": 1140, "research_time": 140,
-    "reliability": "配備（制式採用）",
-    "desc": "",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2l3 6v9l-3 3-3-3V8z'/><path d='M9 14l-3 3v2h3'/><path d='M15 14l3 3v2h-3'/><path d='M10 21l2 2 2-2'/></svg>",
-    "effects": ["攻撃力: 75/100", "生存力: 55/100", "機動力: 70/100", "信頼度: 80/100"],
-    "prerequisites": ["mass_missile_1944"]
-  },
-  {
-    "id": "improved_cipher_1948",
-    "title": "改良型暗号解読機",
-    "year": 1948, "x": 700, "y": 1260, "research_time": 130,
-    "reliability": "配備（制式採用）",
-    "desc": "",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='11' width='18' height='10' rx='2'/><path d='M7 11V7a5 5 0 0 1 10 0v4'/><path d='M9 16h6'/></svg>",
-    "effects": ["攻撃力: 70/100", "生存力: 70/100", "機動力: 50/100", "信頼度: 90/100"],
-    "prerequisites": ["mass_cipher_1943"]
-  },
-  {
-    "id": "advanced_radio_1950s",
-    "title": "高度化型無線機（超短波・小型化技術）",
-    "year": 1952, "x": 100, "y": 1400, "research_time": 150,
-    "reliability": "配備（制式採用）",
-    "desc": "",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e3b341' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M5 10h14v10H5z'/><path d='M12 10V3'/><path d='M8 6l4-3 4 3'/><circle cx='10' cy='15' r='1.5'/><circle cx='14' cy='15' r='1.5'/></svg>",
-    "effects": ["攻撃力: 80/100", "生存力: 80/100", "機動力: 90/100", "信頼度: 92/100"],
-    "prerequisites": ["improved_radio_1944"]
-  },
-  {
-    "id": "advanced_radar_1950s",
-    "title": "高度化型レーダー（対空・艦載ミサイル連動）",
-    "year": 1953, "x": 400, "y": 1400, "research_time": 160,
-    "reliability": "配備（制式採用）",
-    "desc": "",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e3b341' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16z'/><path d='M12 12l4-6'/><circle cx='12' cy='12' r='3'/></svg>",
-    "effects": ["攻撃力: 85/100", "生存力: 88/100", "機動力: 60/100", "信頼度: 94/100"],
-    "prerequisites": ["improved_radar_1945"]
-  },
-  {
-    "id": "advanced_cipher_1950s",
-    "title": "高度化型暗号解読機（初期コンピュータ導入）",
-    "year": 1954, "x": 700, "y": 1400, "research_time": 170,
-    "reliability": "配備（制式採用）",
-    "desc": "",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e3b341' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='4' width='20' height='12' rx='2'/><path d='M6 20h12'/><path d='M12 16v4'/><path d='M6 8h4'/><path d='M6 12h8'/></svg>",
-    "effects": ["攻撃力: 88/100", "生存力: 85/100", "機動力: 60/100", "信頼度: 95/100"],
-    "prerequisites": ["improved_cipher_1948"]
-  },
-  {
-    "id": "icbm_tech_1950s",
-    "title": "長距離・多段式弾道ミサイル（ICBM技術）",
-    "year": 1957, "x": 550, "y": 1550, "research_time": 200,
-    "reliability": "配備（制式採用）",
-    "desc": "",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#e3b341' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 1l3 5v11l-3 3-3-3V6z'/><path d='M8 13l-4 4v2h4'/><path d='M16 13l4 4v2h-4'/><path d='M12 20v3'/><circle cx='12' cy='8' r='1'/></svg>",
-    "effects": ["攻撃力: 98/100", "生存力: 75/100", "機動力: 85/100", "信頼度: 88/100"],
-    "prerequisites": ["improved_missile_1946", "nuclear_project_1940"]
+    "desc": "多段薬室による150km射程の超長距離列車砲。ロンドン砲撃を狙ったが実用化は至らなかった。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='10' width='16' height='9' rx='1'/><path d='M7 10V5h4v5'/><path d='M15 13v3M18 13v3'/></svg>",
+    "effects": [
+      "研究速度: +8.0%",
+      "装備効率: +8.0%"
+    ],
+    "prerequisites": [
+      "kryptografie"
+    ]
   }
 ]

@@ -1,0 +1,116 @@
+[
+  {
+    "id": "SOV_middle_east_diplomacy",
+    "title": "中東外交",
+    "x": 14750,
+    "y": 310,
+    "cost": 35,
+    "effect": "アラビア半島とアジアにおける我々の立場を強化する機会はいくらでもある。イギリス人とのグレートゲームはまもなく次のターンに突入するのだ。",
+    "prerequisites": [
+      "SOV_the_comintern"
+    ]
+  },
+  {
+    "id": "SOV_the_southern_thrust",
+    "title": "南方への進出",
+    "x": 14600,
+    "y": 440,
+    "cost": 70,
+    "effect": "我が国の南部国境は、敵が弱点を突くことが可能な広く開けた脇腹だ。我々はこれを容認せず、この地域の平和的変化を待つことなど出来ない。",
+    "prerequisites": [
+      "SOV_middle_east_diplomacy"
+    ]
+  },
+  {
+    "id": "SOV_support_afghan_ideology",
+    "title": "アフガニスタン[GetIdeologyNameWithCaps]を支援",
+    "x": 14900,
+    "y": 440,
+    "cost": 35,
+    "effect": "アフガニスタンは誇り高い国々の誇りが挫かれる地だ。この国での軍事作戦の費用は高くかかり、成功すらしないかもしれない。アフガニスタンにはイデオロギー的により我々に近い政府を樹立したいと考えている関係者が数人いる。我々はこの活動を支援すべきだ。",
+    "prerequisites": [
+      "SOV_middle_east_diplomacy"
+    ]
+  },
+  {
+    "id": "SOV_preemptive_invasion_of_iran",
+    "title": "イランへの先制介入",
+    "x": 14900,
+    "y": 570,
+    "cost": 35,
+    "effect": "[PER.GetNameDef]政府は戦争が起こった際には我が国を支援すると言うが信じられる訳もなく、ましてや我が国と開戦しないということも完全に信用することはできない。成り行きを見守るのではなく、強引にでも事態を収拾すべきだ。",
+    "prerequisites": [
+      "SOV_support_afghan_ideology"
+    ]
+  },
+  {
+    "id": "SOV_the_threat_from_the_land_of_the_rising_sun",
+    "title": "日出ずる処からの脅威",
+    "x": 15500,
+    "y": 310,
+    "cost": 35,
+    "effect": "日本が中国を支配しようとしているのは明らかだ。これが達成されれば、シベリアの膨大な資源を奪い取ろうと北へ向かうことは間違いない。奴らが中国で忙しくしている限り、我が国と敵対することを望まないことから、我々が日本人と戦う準備ができるまで中国での戦争を長引かせるべきだ。",
+    "prerequisites": [
+      "SOV_the_comintern"
+    ]
+  },
+  {
+    "id": "SOV_the_gobi_gambit",
+    "title": "ゴビでの策略",
+    "x": 15200,
+    "y": 440,
+    "cost": 35,
+    "effect": "日中間の紛争が激化している今、ゴビ砂漠周辺を占領し、中国の未来についての発言権と議論の席を確保する好機だ。",
+    "prerequisites": [
+      "SOV_the_threat_from_the_land_of_the_rising_sun"
+    ]
+  },
+  {
+    "id": "SOV_two_red_flags",
+    "title": "二本の赤旗",
+    "x": 15500,
+    "y": 440,
+    "cost": 35,
+    "effect": "中国における革命は完全には成功していないが、これは予想外のことではない。この国には、しっかりとした社会主義革命に必要不可欠な産業社会がまだない。しかしなお、共産党は中国人民が共産主義の未来を実現するための絶好の機会であるということを意味している。",
+    "prerequisites": [
+      "SOV_the_threat_from_the_land_of_the_rising_sun"
+    ]
+  },
+  {
+    "id": "SOV_support_the_kuomintang",
+    "title": "中国国民党を支援",
+    "x": 15800,
+    "y": 440,
+    "cost": 35,
+    "effect": "中国共産党は軍事的に脆弱で、更なる大軍を作るための産業基盤を有していない。共産主義革命を成功させるための前提条件として必要なブルジョワ社会を作るには、中国国民党が最も適していることは明らかであり、中国を支配すべきだ。",
+    "prerequisites": [
+      "SOV_the_threat_from_the_land_of_the_rising_sun"
+    ]
+  },
+  {
+    "id": "SOV_intervention_in_china",
+    "title": "中国への介入",
+    "x": 15350,
+    "y": 570,
+    "cost": 70,
+    "effect": "中国情勢は悪化し安全保障上の脅威となっている。我々はこの地域に介入して信頼できる政府を設置すべきだ。",
+    "prerequisites": [
+      "SOV_the_gobi_gambit",
+      "SOV_two_red_flags",
+      "SOV_support_the_kuomintang"
+    ]
+  },
+  {
+    "id": "SOV_prepare_a_war_with_japan",
+    "title": "日本との交戦準備",
+    "x": 15650,
+    "y": 570,
+    "cost": 35,
+    "effect": "日本への攻撃をする前に、不測の事態が起きぬよう偵察を強化するべきだ。",
+    "prerequisites": [
+      "SOV_the_gobi_gambit",
+      "SOV_two_red_flags",
+      "SOV_support_the_kuomintang"
+    ]
+  }
+]

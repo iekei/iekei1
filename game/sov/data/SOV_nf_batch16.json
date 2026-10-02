@@ -1,0 +1,113 @@
+[
+  {
+    "id": "SOV_reverse_the_collectivization_process",
+    "title": "農業集団化工程の転換",
+    "x": 11150,
+    "y": 310,
+    "cost": 70,
+    "effect": "農業集団化は、かつて国家的な穀倉地帯だった地域に貧困と飢饉をもたらす未曾有の大惨事となった。これらは迅速に転換されなければならない。",
+    "prerequisites": [
+      "SOV_the_right_opposition"
+    ]
+  },
+  {
+    "id": "SOV_organize_uprisings_in_the_country",
+    "title": "国内での組織的暴動",
+    "x": 10550,
+    "y": 440,
+    "cost": 70,
+    "effect": "何らかの武装闘争なしに、スターリンを権力の座から引きずり下ろすことができないのは明らかだ。スターリンの注意を逸らすことによって、邪魔されずに計画の進展を確実なものにできる。",
+    "prerequisites": [
+      "SOV_the_need_for_policy_changes"
+    ]
+  },
+  {
+    "id": "SOV_dissent_in_the_party",
+    "title": "党内の異論",
+    "x": 10850,
+    "y": 440,
+    "cost": 70,
+    "effect": "我々はスターリンの党支配を弱体化させるために、いくつかの面でスターリンを追い込む必要がある。一つの切り口は、党の新聞に批判的な記事やエッセイを数多く掲載し、改革を要求し、彼の決定の欠点を指摘することである。スターリンはこれを非常に不愉快に思うだろうが、これは様々な反対派に対する我々の立場を向上させるものでもある。",
+    "prerequisites": [
+      "SOV_the_need_for_policy_changes"
+    ]
+  },
+  {
+    "id": "SOV_eliminate_the_left",
+    "title": "左翼の排除",
+    "x": 10250,
+    "y": 440,
+    "cost": 35,
+    "effect": "我々の第一の敵はスターリンだが、党の中には絶え間ない論争で国を掌握しようとする我々の努力を台無しにしようとする時を待つだけの者が多数いることを認めざるをえない。スターリンが我々の行動に対して次第に疑心暗鬼になってきており、いま一石二鳥の好機が訪れている。",
+    "prerequisites": [
+      "SOV_the_need_for_policy_changes"
+    ]
+  },
+  {
+    "id": "SOV_concessions_to_foreign_powers",
+    "title": "外国勢力への譲歩",
+    "x": 11000,
+    "y": 570,
+    "cost": 35,
+    "effect": "祖国を救う闘争のために外国の援助を乞わなければならないというのは誠に屈辱的だが、スターリンの圧政と被害妄想の前ではこのような手段を取らざるをえない。",
+    "prerequisites": [
+      "SOV_reverse_the_collectivization_process"
+    ]
+  },
+  {
+    "id": "SOV_covert_support_for_spanish_poum",
+    "title": "スペインPOUMの秘密支援",
+    "x": 11300,
+    "y": 570,
+    "cost": 35,
+    "effect": "スペインでは、反革命運動が猛威を振るっている。ファシストと反動勢力がスペイン国粋派を支援しているのだ。スペイン共和派は熱意に溢れているが、残念ながら銃や弾薬の代わりにはならないし、十分発達した政治意識を持つことの代わりにもならない。我々なら、これら三つ全てをもたらすことができる。",
+    "prerequisites": [
+      "SOV_reverse_the_collectivization_process"
+    ]
+  },
+  {
+    "id": "SOV_undermine_stalins_authority",
+    "title": "スターリンの権威を弱体化",
+    "x": 10400,
+    "y": 570,
+    "cost": 70,
+    "effect": "スターリンが権力の座に留まれる理由はただ一つ、奴が何をするか分からないことを人民が恐れているからだ。まだ人民の恐怖を完全に取り除くことはできないが、スターリンの他者を害する力を削ることは可能だ。上手くいけば、奴をまた一人の人間に戻せるほど、孤立させられるかもしれない。",
+    "prerequisites": [
+      "SOV_organize_uprisings_in_the_country"
+    ]
+  },
+  {
+    "id": "SOV_clandestine_cells",
+    "title": "秘密細胞",
+    "x": 10700,
+    "y": 570,
+    "cost": 70,
+    "effect": "スターリン主義者は至る所で壊し屋、スパイ、破壊工作員を見つけてきた。奴らは非常に長きにわたって行っていたため、今更オオカミが来たと叫んだところで大半の人々はもはや信じないだろう。スターリンが我々の権力奪取に挑むのなら、これを利用して主要な工場に細胞を形成し、破壊活動を行うことが可能になる。",
+    "prerequisites": [
+      "SOV_organize_uprisings_in_the_country"
+    ]
+  },
+  {
+    "id": "SOV_the_plan_for_the_coup",
+    "title": "クーデター計画",
+    "x": 10550,
+    "y": 700,
+    "cost": 70,
+    "effect": "この権力闘争は、必ずしも公然たる暴力へと発展させる必要はない。上手く事を運び、然るべき人物を然るべき地位に就けてやれば、スターリンを権力から締め出した後に彼を排除できるかもしれない。",
+    "prerequisites": [
+      "SOV_undermine_stalins_authority",
+      "SOV_clandestine_cells"
+    ]
+  },
+  {
+    "id": "SOV_the_socialist_bulwark",
+    "title": "社会主義の防波堤",
+    "x": 11300,
+    "y": 830,
+    "cost": 35,
+    "effect": "我々はスペインの同志たちと共に肩を並べている。彼らの闘争は我々の闘争であり、我々の闘争は彼らの闘争であり、これは国際的連帯の手本である。我々は共に、ヨーロッパの対極にある二つの社会主義革命の中心地を形成する。",
+    "prerequisites": [
+      "SOV_covert_support_for_spanish_poum"
+    ]
+  }
+]

@@ -1,0 +1,115 @@
+[
+  {
+    "id": "SOV_russian_corporate_state",
+    "title": "ロシア協調主義国",
+    "x": 21950,
+    "y": 700,
+    "cost": 70,
+    "effect": "ロシアの未来は階級闘争ではなく、むしろ階級間の協調にこそある。この目的のため、国家は労働者と資本家の利害を調整するための全国的な組合を設立し、これを通じて生産を統制するべきである。",
+    "prerequisites": [
+      "SOV_dismantle_the_zemsky_sobor"
+    ]
+  },
+  {
+    "id": "SOV_romanov_reconstruction",
+    "title": "ロマノフ朝の復興",
+    "x": 20150,
+    "y": 570,
+    "cost": 70,
+    "effect": "遂に、我が国は再びツァーリを戴くことになった。最後の正当な統治者が迫害されてから二十年、今こそ我が国を率いる王朝を再び受け入れ、ツァーリの意志を実行するための小さな障害を取り除くべき時である。",
+    "prerequisites": [
+      "SOV_reconvene_the_zemsky_sobor"
+    ]
+  },
+  {
+    "id": "SOV_capital_of_the_tsars",
+    "title": "ツァーリの首都",
+    "x": 19850,
+    "y": 700,
+    "cost": 70,
+    "effect": "サンクトペテルブルクは、歴史を通じて我らが誇りある国の首都であり続けた。ロマノフ家が再び冬宮の住人となった今こそ、この壮麗な都市に再び公式の首都を移しその栄華を高めることに全力を傾ける時だ。",
+    "prerequisites": [
+      "SOV_romanov_reconstruction"
+    ]
+  },
+  {
+    "id": "SOV_church_candidates",
+    "title": "[SOV.GetChurchCandidatesName]",
+    "x": 20900,
+    "y": 700,
+    "cost": 70,
+    "effect": "[SOV.GetChurchCandidatesDesc]",
+    "prerequisites": [
+      "SOV_romanov_reconstruction",
+      "SOV_dismantle_the_zemsky_sobor"
+    ]
+  },
+  {
+    "id": "SOV_reinstitute_the_mestnichestvo",
+    "title": "門地制の再導入",
+    "x": 19400,
+    "y": 700,
+    "cost": 70,
+    "effect": "かつては、最も古く威厳ある一族が国政を司っていた。これにより、上流階級は自らの統治する国家に忠実であり、新世代は親世代の厳格な基準に達するまで育成されることが保証された。新たな体制を確固たるものとするため、この制度を再び導入するべきだ。",
+    "prerequisites": [
+      "SOV_romanov_reconstruction"
+    ]
+  },
+  {
+    "id": "SOV_the_iron_wall_of_russian_resolve",
+    "title": "ロシアの決意の鉄壁",
+    "x": 19250,
+    "y": 830,
+    "cost": 70,
+    "effect": "ツァーリは、既存の戦車を凌駕し戦場で並ぶものなき巨大な戦争兵器の軍団を建設することを目論んでいる。ロシア人は征服されぬ、征服されえぬのだ！これらの機械はその決意を具現化したものであり、我らに攻撃を浴びせるあらゆる軍勢を打ち破るだろう。",
+    "prerequisites": [
+      "SOV_reinstitute_the_mestnichestvo"
+    ]
+  },
+  {
+    "id": "SOV_my_brothers_keeper",
+    "title": "兄弟を守る者",
+    "x": 19400,
+    "y": 960,
+    "cost": 70,
+    "effect": "旧ロマノフ朝は他の多くの貴族家系と王朝のつながりがあった。彼らの中にはまだ権力を握っている者もいれば、玉座を失った者もいる。我々は自らの君主制を回復したので、他の国々でも正しき統治者が置かれるようにするべきだ。",
+    "prerequisites": [
+      "SOV_reinstitute_the_mestnichestvo",
+      "SOV_the_triple_entente"
+    ]
+  },
+  {
+    "id": "SOV_the_rightful_heir_to_the_empire",
+    "title": "帝国の正統後継者",
+    "x": 20900,
+    "y": 960,
+    "cost": 70,
+    "effect": "かつてのビザンツ帝国が滅んだ後も、誰かが聖地への巡礼者を守護せねばならない。イギリスやフランスがその役目を果たせないのは明らかであり、我々こそがその使命を果たすべきである。",
+    "prerequisites": [
+      "SOV_church_candidates"
+    ]
+  },
+  {
+    "id": "SOV_the_third_rome",
+    "title": "第三のローマ",
+    "x": 20900,
+    "y": 1090,
+    "cost": 70,
+    "effect": "我々は聖地の守護者としての役割を確実に果たしており、紛れもない信仰の擁護者と言える。そのためには、自らの称号を確立する必要がある。すなわち、コンスタンティノープルが陥落した後、モスクワは間違いなく第三のローマとなったのだ。",
+    "prerequisites": [
+      "SOV_the_rightful_heir_to_the_empire"
+    ]
+  },
+  {
+    "id": "SOV_vengeance_for_the_yoke",
+    "title": "くびきに対する報復",
+    "x": 21200,
+    "y": 700,
+    "cost": 70,
+    "effect": "数世紀前、モンゴル人はロシアの地へ残忍な侵略をしかけた。彼らは、今なおロシアを文字通り征服したと呼べる唯一の民族である。奴らは今では貧弱に見えるかもしれないが、我らが二度とタタールのくびきに苦しむことがないよう連中にかつての強大さを決して取り戻させないようにする必要がある。",
+    "prerequisites": [
+      "SOV_romanov_reconstruction",
+      "SOV_dismantle_the_zemsky_sobor"
+    ]
+  }
+]

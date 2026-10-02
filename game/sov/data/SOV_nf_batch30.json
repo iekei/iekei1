@@ -1,0 +1,119 @@
+[
+  {
+    "id": "SOV_westward_bound",
+    "title": "西方へ向かう",
+    "x": 20300,
+    "y": 700,
+    "cost": 70,
+    "effect": "革命による帝国の崩壊によって、我が国の西方領土の多くが失われた。今こそ、我が国の正当な領土を奪還するためインフラを増強する時である。",
+    "prerequisites": [
+      "SOV_romanov_reconstruction",
+      "SOV_dismantle_the_zemsky_sobor"
+    ]
+  },
+  {
+    "id": "SOV_the_triple_entente",
+    "title": "三国協商の再生",
+    "x": 19700,
+    "y": 830,
+    "cost": 70,
+    "effect": "中央ヨーロッパの旧敵を封じ込めなければならない。かつてこの目的のために同盟が存在していたが、先の大戦からの恥ずべき離脱によってその終わりを告げた。今こそ、その関係を再生させる時だ。",
+    "prerequisites": [
+      "SOV_westward_bound",
+      "SOV_romanov_reconstruction"
+    ]
+  },
+  {
+    "id": "SOV_our_slavic_commitments",
+    "title": "我らスラヴの責務",
+    "x": 19700,
+    "y": 960,
+    "cost": 70,
+    "effect": "かつて我らは弱きスラヴの同胞を守るため、先の大戦にも参戦した全スラヴ人の擁護者だった。もう一度この責務を負い、彼らの防衛に我が軍事力を貸す時が来た。",
+    "prerequisites": [
+      "SOV_the_triple_entente"
+    ]
+  },
+  {
+    "id": "SOV_the_old_enemy",
+    "title": "旧敵",
+    "x": 20000,
+    "y": 830,
+    "cost": 70,
+    "effect": "長年にわたり、スウェーデンは帝国にとって悩みの種だった。奴らは幾度もロシアを攻撃し我らに対する包囲網を作ろうとした。ツァーリ・ピョートル1世は初めて奴らを押し返し、ポルタヴァの戦いに勝利した。1809年に我らは再び奴らを打ち破り、連中に自らの立場を思い知らせたと考えられてきた。しかし、奴らはバルト地域における我が国の利益を奪おうとし続けている。今こそ、断固としてこの小国を黙らせる時である。",
+    "prerequisites": [
+      "SOV_westward_bound"
+    ]
+  },
+  {
+    "id": "SOV_secure_finland",
+    "title": "フィンランドの確保",
+    "x": 20300,
+    "y": 830,
+    "cost": 70,
+    "effect": "フィンランド大公国は一世紀以上にわたり我が国の北部国境を守ってきたが、内戦によって袂を分かった。フィンランドと祖国を再び統合する時が来たのである。",
+    "prerequisites": [
+      "SOV_westward_bound"
+    ]
+  },
+  {
+    "id": "SOV_secure_the_baltics",
+    "title": "バルトの確保",
+    "x": 20600,
+    "y": 830,
+    "cost": 70,
+    "effect": "バルト地域は長い間、分かたれざるロシアの一部であった。国家が弱体化した時に離脱したのであり、一刻も早く取り戻さねばならない。",
+    "prerequisites": [
+      "SOV_westward_bound"
+    ]
+  },
+  {
+    "id": "SOV_panslavic_nationalism",
+    "title": "汎スラヴ民族主義",
+    "x": 20300,
+    "y": 960,
+    "cost": 70,
+    "effect": "ロシアは長きにわたり、スラヴの家族の中で最も大きな長男だった。もし大昔から学ぶべき教訓が一つあるとすれば、我らが団結しない限りスラヴ人は常に攻撃され、虐げられ、迫害されるということだ。",
+    "prerequisites": [
+      "SOV_secure_the_baltics",
+      "SOV_secure_finland",
+      "SOV_the_old_enemy"
+    ]
+  },
+  {
+    "id": "SOV_the_fate_of_romania",
+    "title": "ルーマニアの運命",
+    "x": 20000,
+    "y": 1090,
+    "cost": 70,
+    "effect": "ルーマニアは相当数のスラヴ系少数民族を抱えており、またバルカン半島のスラヴ系民族との陸上交通を遮断している。これら二つの問題を一挙に解決するためには、必要とあらば武力を以てルーマニアの独立に終止符を打つ必要がある。",
+    "prerequisites": [
+      "SOV_our_slavic_commitments",
+      "SOV_panslavic_nationalism"
+    ]
+  },
+  {
+    "id": "SOV_pacify_the_rim",
+    "title": "周縁の制圧",
+    "x": 21500,
+    "y": 700,
+    "cost": 70,
+    "effect": "極東領土が攻撃され、我らが猛攻に対し何の備えもできていないことを明らかにした1905年の戦争の二の舞は避けなければならない。いざという時に素早く部隊を移動できるよう、現地のインフラに投資する必要がある。",
+    "prerequisites": [
+      "SOV_dismantle_the_zemsky_sobor",
+      "SOV_romanov_reconstruction"
+    ]
+  },
+  {
+    "id": "SOV_eastern_expansion",
+    "title": "東方への拡大",
+    "x": 22250,
+    "y": 830,
+    "cost": 70,
+    "effect": "ロシアの未来は東洋にある。シベリアを治めたからには、さらに土地や資源を獲得する努力をしなければならない。",
+    "prerequisites": [
+      "SOV_pacify_the_rim",
+      "SOV_dismantle_the_zemsky_sobor"
+    ]
+  }
+]

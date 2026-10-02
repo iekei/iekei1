@@ -1,0 +1,115 @@
+[
+  {
+    "id": "SOV_eastern_development",
+    "title": "東部の開発",
+    "x": 800,
+    "y": 440,
+    "cost": 35,
+    "effect": "ウラル山脈を越えた極東地域には、未開発の資源と産業開発の為の広大な土地がある。我々はより大きな計画に動力を与えられるようそれらを準備しなければならない。",
+    "prerequisites": [
+      "SOV_national_specialists",
+      "SOV_foreign_experts"
+    ]
+  },
+  {
+    "id": "SOV_develop_the_urals",
+    "title": "ウラルの開発",
+    "x": 1100,
+    "y": 440,
+    "cost": 35,
+    "effect": "我が国に対する最大の脅威はおそらくヨーロッパの国から訪れるだろう。ウラル山脈を越えた地域を開発することで、最長距離を走る爆撃機でも到達が困難な産業能力を確保できる。",
+    "prerequisites": [
+      "SOV_national_specialists",
+      "SOV_foreign_experts"
+    ]
+  },
+  {
+    "id": "SOV_the_ussr_academy_of_sciences",
+    "title": "[GetTheUssrAcademyOfSciencesName]",
+    "x": 950,
+    "y": 570,
+    "cost": 70,
+    "effect": "応用科学の分野で競争力を維持するためには、理論科学の分野でも最先端を行く必要がある。我々には既に定評のある科学アカデミーが存在しているが、さらに資金を投入することで、真に世界的な研究インフラを整えることが出来る。",
+    "prerequisites": [
+      "SOV_eastern_development",
+      "SOV_develop_the_urals"
+    ]
+  },
+  {
+    "id": "SOV_national_academies_of_sciences",
+    "title": "国立科学アカデミー",
+    "x": 950,
+    "y": 960,
+    "cost": 35,
+    "effect": "同盟国にも国家の研究能力を高めるため、我が国の科学アカデミーに倣った同様の研究所を設立するように奨励すべきである。",
+    "prerequisites": [
+      "SOV_the_ussr_academy_of_sciences"
+    ]
+  },
+  {
+    "id": "SOV_transformation_of_nature",
+    "title": "自然改造計画",
+    "x": 1100,
+    "y": 1350,
+    "cost": 70,
+    "effect": "科学の世界ではこれまで限界とされてきた境界線が押し広げられつつあり、最も大規模で最も侵略的な計画でさえも実現可能になりつつある。",
+    "prerequisites": [
+      "SOV_fourth_five_year_plan",
+      "SOV_national_academies_of_sciences"
+    ]
+  },
+  {
+    "id": "SOV_transformation_of_nature_alt",
+    "title": "$SOV_transformation_of_nature$",
+    "x": 1100,
+    "y": 1350,
+    "cost": 70,
+    "effect": "$SOV_transformation_of_nature_desc$",
+    "prerequisites": [
+      "SOV_fourth_five_year_plan",
+      "SOV_national_academies_of_sciences"
+    ]
+  },
+  {
+    "id": "SOV_transpolar_flights",
+    "title": "極地飛行",
+    "x": 1700,
+    "y": 50,
+    "cost": 35,
+    "effect": "我が国の最も勇敢なる飛行士たちは、北極を横断する大胆な航路が可能であることを証明しようとしている。航空戦の計画にこの予期せぬ近道を用いることで、敵を奇襲することが可能となるやもしれない。",
+    "prerequisites": []
+  },
+  {
+    "id": "SOV_expand_the_aircraft_industry",
+    "title": "航空機産業の拡大",
+    "x": 1550,
+    "y": 180,
+    "cost": 70,
+    "effect": "来る戦争では、我々の空軍は最新装備を備えた敵に対して空を確保しなければならないだろう。同等の航空機を持つだけでなく、十分な数を確実に確保しなければならない。",
+    "prerequisites": [
+      "SOV_transpolar_flights"
+    ]
+  },
+  {
+    "id": "SOV_modernize_aircraft_facilities",
+    "title": "航空基地の近代化",
+    "x": 1400,
+    "y": 310,
+    "cost": 70,
+    "effect": "世界で最も優れた飛行機でも、でこぼこの滑走路から離陸したり雨漏りのする小屋で整備したらすぐに使い物にならなくなるだろう。最良のパフォーマンスを発揮するためには最良のインフラが必要である。",
+    "prerequisites": [
+      "SOV_expand_the_aircraft_industry"
+    ]
+  },
+  {
+    "id": "SOV_merge_aircraft_plants",
+    "title": "航空機工場の統合",
+    "x": 1250,
+    "y": 570,
+    "cost": 35,
+    "effect": "設計局間の競争は、常に向上しようとする自然な動機を得られる一方で、重複した作業に資源を浪費することにもなりかねない。このような無駄をなくすために設計局を統合するべきだ。",
+    "prerequisites": [
+      "SOV_modernize_aircraft_facilities"
+    ]
+  }
+]

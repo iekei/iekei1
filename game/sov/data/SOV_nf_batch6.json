@@ -1,0 +1,115 @@
+[
+  {
+    "id": "SOV_offensive_maritime_strategy",
+    "title": "攻撃的海事戦略",
+    "x": 2750,
+    "y": 570,
+    "cost": 70,
+    "effect": "我々は敵が来るのを黙って待つことなどできない。何処であろうと主導権を握り敵を攻撃すべきだ。",
+    "prerequisites": [
+      "SOV_surface_warfare"
+    ]
+  },
+  {
+    "id": "SOV_an_oceangoing_navy",
+    "title": "外洋海軍",
+    "x": 3050,
+    "y": 570,
+    "cost": 70,
+    "effect": "$SOV_ocean_going_navy_desc$",
+    "prerequisites": [
+      "SOV_surface_warfare",
+      "SOV_submarine_warfare"
+    ]
+  },
+  {
+    "id": "SOV_mine_warfare",
+    "title": "機雷戦",
+    "x": 3350,
+    "y": 570,
+    "cost": 70,
+    "effect": "船で我が国の海岸線全体を守ろうとするのは不経済だ。戦略的な場所に機雷原を設置することで沿岸に接近しようとする敵艦隊を阻止、あるいは少なくとも損害を与えることはできる。",
+    "prerequisites": [
+      "SOV_surface_warfare",
+      "SOV_submarine_warfare"
+    ]
+  },
+  {
+    "id": "SOV_long_range_raiders",
+    "title": "長距離襲撃艦",
+    "x": 3650,
+    "y": 570,
+    "cost": 70,
+    "effect": "海軍基地から主要航路までは距離があるため、現在の潜水艦が豊かな狩場に到達するのは難しい。敵に最も痛打を与えられる所を攻撃できるように、より長射程の潜水艦を開発すべきだ。",
+    "prerequisites": [
+      "SOV_submarine_warfare"
+    ]
+  },
+  {
+    "id": "SOV_advanced_maneuvers",
+    "title": "高度な演習",
+    "x": 2600,
+    "y": 700,
+    "cost": 70,
+    "effect": "大型で近代的な艦艇であっても乗員が使い方を知らなければ無意味だ。乗員や士官に現代的海戦の訓練を行うため、定期的かつ大規模な海軍演習を実施しなければならない。",
+    "prerequisites": [
+      "SOV_expand_shipbuilding_plants",
+      "SOV_an_oceangoing_navy"
+    ]
+  },
+  {
+    "id": "SOV_expand_the_morskaya_aviatsiya",
+    "title": "海軍航空隊の拡大",
+    "x": 2300,
+    "y": 830,
+    "cost": 70,
+    "effect": "航空機は既に地上戦の様相を劇的に変化させた。将来的には最新鋭の水上艦にすらも重大な脅威をもたらすだろう。我々は他の艦艇を支援する近代的な海軍航空隊を常に備えるべきだ。",
+    "prerequisites": [
+      "SOV_increase_aircraft_production",
+      "SOV_intensify_pilot_training_program",
+      "SOV_advanced_maneuvers"
+    ]
+  },
+  {
+    "id": "SOV_naval_infantry",
+    "title": "海軍歩兵",
+    "x": 2600,
+    "y": 830,
+    "cost": 70,
+    "effect": "[GetNavalInfantryDesc]",
+    "prerequisites": [
+      "SOV_advanced_maneuvers"
+    ]
+  },
+  {
+    "id": "SOV_found_the_pcdi",
+    "title": "[GetFoundThePcdiName]",
+    "x": 4850,
+    "y": 50,
+    "cost": 35,
+    "effect": "[GetFoundThePcdiDesc]",
+    "prerequisites": []
+  },
+  {
+    "id": "SOV_pc_of_mechanical_engineering",
+    "title": "[GetPcOfMechanicalEngineeringName]",
+    "x": 4100,
+    "y": 180,
+    "cost": 70,
+    "effect": "我々の産業は大型で複雑な工作機械や重機の製造が可能となり、これらの製造計画を調整するために新しい政府組織の設立が求められている。",
+    "prerequisites": [
+      "SOV_found_the_pcdi"
+    ]
+  },
+  {
+    "id": "SOV_superior_war_machines",
+    "title": "最高の戦争機械",
+    "x": 3950,
+    "y": 310,
+    "cost": 70,
+    "effect": "戦車や装甲戦闘車両はこの十年間で大きく発展した。大量に生産と供給が可能な大規模な軍需産業によって、我々は優れた車輌を作り、敵に対して大量に使用することができる。",
+    "prerequisites": [
+      "SOV_pc_of_mechanical_engineering"
+    ]
+  }
+]

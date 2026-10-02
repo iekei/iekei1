@@ -1,0 +1,115 @@
+[
+  {
+    "id": "SOV_military_reorganization",
+    "title": "軍の再編",
+    "x": 5900,
+    "y": 570,
+    "cost": 70,
+    "effect": "粛清後の赤軍は良い状態にあるとは言いがたかった。新たな指導部は未熟で非効率的である。そして我々の戦闘教条を発展させるための努力はなされていない。こうした事態を直ちに是正せねばならない！",
+    "prerequisites": [
+      "SOV_rehabilitated_military"
+    ]
+  },
+  {
+    "id": "SOV_desperate_measures",
+    "title": "窮余の策",
+    "x": 6350,
+    "y": 310,
+    "cost": 35,
+    "effect": "この絶望的状況では、我々は以前不可能だと考えていた措置を講じる必要がある。侵攻を食い止めるために可能なことは何でもしなければならない。",
+    "prerequisites": [
+      "SOV_strengthen_the_mobilization_plan"
+    ]
+  },
+  {
+    "id": "SOV_an_adaptable_army",
+    "title": "適応する軍",
+    "x": 6050,
+    "y": 440,
+    "cost": 70,
+    "effect": "この戦争は複数の気候帯と多くの異なる地形に跨っている。戦争に勝つためには、いかなる天候にもあらゆる地形でも戦えなければならない。",
+    "prerequisites": [
+      "SOV_rehabilitated_military",
+      "SOV_desperate_measures"
+    ]
+  },
+  {
+    "id": "SOV_lessons_of_war",
+    "title": "戦争の教訓",
+    "x": 6350,
+    "y": 440,
+    "cost": 35,
+    "effect": "限定的戦争によって得られた経験により、機甲戦においていくつかの大きな発見があった。さらに劣化した将校団についても最終的に鍛えあげることが可能かもしれない。",
+    "prerequisites": [
+      "SOV_rehabilitated_military",
+      "SOV_desperate_measures"
+    ]
+  },
+  {
+    "id": "SOV_penal_battalions",
+    "title": "懲罰大隊",
+    "x": 6650,
+    "y": 440,
+    "cost": 35,
+    "effect": "退却中、ある点では優秀な兵士の多くは陣地が失われる前に退却したり、また別のある点では我が軍の善行に反する行動によって自らを辱めてきた。だが現況においては、単に彼らを投獄したり処刑したりするだけで非常に優秀な戦闘員を奪うことになるだろう。この者たちが戦闘を通じて汚名返上することが可能になる特別な部隊を設立するべきだ。",
+    "prerequisites": [
+      "SOV_desperate_measures"
+    ]
+  },
+  {
+    "id": "SOV_organization_of_the_partisans",
+    "title": "パルチザンの組織化",
+    "x": 6200,
+    "y": 570,
+    "cost": 70,
+    "effect": "蹂躙された後、敵地に残された多くの兵士たちは捕虜の屈辱を味わわず、戦い続けることを選ぶ。彼らは占領地の農民や労働者と共に侵略者との戦いを続けてきた。より多くの敵部隊を足止めできるように彼らを支援を送るべきだ。",
+    "prerequisites": [
+      "SOV_lessons_of_war"
+    ]
+  },
+  {
+    "id": "SOV_smersh",
+    "title": "スメルシ",
+    "x": 6650,
+    "y": 570,
+    "cost": 70,
+    "effect": "「スパイに死を」としても知られるスメルシは防諜構想案として以下の2つの目的に従事する。すなわち敵スパイの摘発と、赤軍内部における脱走兵およびパルチザンの処刑である。",
+    "prerequisites": [
+      "SOV_lessons_of_war"
+    ]
+  },
+  {
+    "id": "SOV_barrier_troops",
+    "title": "督戦隊",
+    "x": 6650,
+    "y": 700,
+    "cost": 35,
+    "effect": "戦闘はしばしば混沌としており、兵士が高等司令部との連絡を失うことがあるのは理解できる。これらの落伍者を集めて戦闘に引き戻すための部隊を前線の十分後方に配置して、同志を裏切って任務を避けようとする者を阻むべきだ。",
+    "prerequisites": [
+      "SOV_smersh"
+    ]
+  },
+  {
+    "id": "SOV_experts_in_camouflage",
+    "title": "偽装の専門家",
+    "x": 5750,
+    "y": 700,
+    "cost": 35,
+    "effect": "意外性を維持し成し得るためには、部隊の位置や移動を敵が手遅れになるまで察知させないように確実にしなければならない。全兵士は擬装術の訓練を受ける必要がある。",
+    "prerequisites": [
+      "SOV_military_reorganization"
+    ]
+  },
+  {
+    "id": "SOV_keep_commissars_organization",
+    "title": "政治委員機構の維持",
+    "x": 6050,
+    "y": 700,
+    "cost": 70,
+    "effect": "新たな組織においても、軍隊は政府に対し絶対的に忠実であり続けることを人々に保証する必要がある。もし兵士たちが政府への信頼を失えば、この戦争には負けるだろうし、それはすぐにも負けるだろう。",
+    "prerequisites": [
+      "SOV_military_reorganization",
+      "SOV_lessons_of_war"
+    ]
+  }
+]

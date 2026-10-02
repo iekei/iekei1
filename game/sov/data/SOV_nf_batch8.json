@@ -1,0 +1,117 @@
+[
+  {
+    "id": "SOV_the_road_of_life",
+    "title": "命の道",
+    "x": 4700,
+    "y": 700,
+    "cost": 35,
+    "effect": "いくつかの都市が包囲下で脅かされている、そうした場所の戦闘部隊が必要としている支援を与えることに専念すべきだ、いかなる犠牲を払おうとも。",
+    "prerequisites": [
+      "SOV_leningrad_polytechnical_institute",
+      "SOV_move_industry_to_the_urals"
+    ]
+  },
+  {
+    "id": "SOV_the_molotov_line",
+    "title": "[GetTheMolotovLineName]",
+    "x": 5000,
+    "y": 310,
+    "cost": 70,
+    "effect": "ヨーロッパの政治地理学的な最近の変化により、我が国の西部国境はより西へ移動した。古い要塞化計画はどれも時代遅れだ。反撃するための軍隊を動員できるようになるまで、敵の攻撃を遅延させる新たな国境に沿った新要塞線を作らなければならない。",
+    "prerequisites": [
+      "SOV_military_engineering_university"
+    ]
+  },
+  {
+    "id": "SOV_improve_the_stalin_line",
+    "title": "[GetImproveTheStalinLineName]",
+    "x": 5300,
+    "y": 310,
+    "cost": 70,
+    "effect": "我が国の西部国境は全体を強化するには長大すぎる。だが敵の攻撃が予測可能な地域に要塞の一式を集中建設することは可能であり、そこでなら大兵力をもって敵を簡単に反撃することができる。",
+    "prerequisites": [
+      "SOV_military_engineering_university"
+    ]
+  },
+  {
+    "id": "SOV_the_defense_of_moscow",
+    "title": "モスクワの防衛",
+    "x": 4850,
+    "y": 440,
+    "cost": 35,
+    "effect": "敵はモスクワの前門に立っている。この地こそ我々が立ち向かい奴らを後退させ敗北せしめる場所だ、ナポレオンの時と同様に！",
+    "prerequisites": [
+      "SOV_move_industry_to_the_urals",
+      "SOV_improve_the_stalin_line",
+      "SOV_the_molotov_line"
+    ]
+  },
+  {
+    "id": "SOV_impregnable_forts",
+    "title": "堅固な要塞",
+    "x": 5150,
+    "y": 440,
+    "cost": 70,
+    "effect": "[ROOT.GetAdjective]の技術者は今では真に恐れられる要塞を作れ、それは非常に激しい爆撃にも容易に耐え、攻撃を加えることすらほぼ不可能なものだ。豊富な弾薬と補給品を備えたこれら要塞は、必要ならば敵からの攻撃に何年も持ち堪えられるだろう。",
+    "prerequisites": [
+      "SOV_improve_the_stalin_line",
+      "SOV_the_molotov_line"
+    ]
+  },
+  {
+    "id": "SOV_protect_the_white_sea_baltic_canal",
+    "title": "白海・バルト運河の保護",
+    "x": 5450,
+    "y": 440,
+    "cost": 35,
+    "effect": "バルト海と白海の間の運河は現代工学の驚異であり、敵の手に落ちることは許されない。",
+    "prerequisites": [
+      "SOV_military_engineering_university"
+    ]
+  },
+  {
+    "id": "SOV_far_east_fortification",
+    "title": "極東の要塞化",
+    "x": 5600,
+    "y": 310,
+    "cost": 70,
+    "effect": "日本はソ満国境の侵犯を絶えず行なっている。奴らを永遠に抑止すべく、東方辺境の防御を固めねばならない。",
+    "prerequisites": [
+      "SOV_military_engineering_university"
+    ]
+  },
+  {
+    "id": "SOV_restore_cossack_units",
+    "title": "コサック部隊の復活",
+    "x": 5750,
+    "y": 180,
+    "cost": 35,
+    "effect": "いざというとき、母国は誰が国を守るために働きたいかなどと詳細は尋ねない。侵略者に対して武器を持つ意思のある者は誰でも歓迎され、その能力の限り登用されることになる。",
+    "prerequisites": [
+      "SOV_strengthen_the_mobilization_plan"
+    ]
+  },
+  {
+    "id": "SOV_cohesion_first",
+    "title": "結束第一",
+    "x": 6050,
+    "y": 180,
+    "cost": 35,
+    "effect": "この状況で我々が最も必要なことは水準を下げることだ。軍隊で働きたい者は誰でも歓迎しよう、しかし、彼らは既存の部隊で任務を遂行し、適切な軍事基準に沿った訓練を受けることになる。",
+    "prerequisites": [
+      "SOV_strengthen_the_mobilization_plan"
+    ]
+  },
+  {
+    "id": "SOV_rehabilitated_military",
+    "title": "軍の信用回復",
+    "x": 5900,
+    "y": 310,
+    "cost": 70,
+    "effect": "トロツキズムの汚染は将校団からついに拭い去られ、政治的干渉に対するある程度の自由を軍に与えることが再び可能となった。",
+    "prerequisites": [
+      "SOV_restore_cossack_units",
+      "SOV_cohesion_first"
+    ]
+  }
+]

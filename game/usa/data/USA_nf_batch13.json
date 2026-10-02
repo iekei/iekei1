@@ -1,0 +1,112 @@
+[
+  {
+    "id": "USA_maritime_commission",
+    "title": "海事委員会",
+    "x": 9950,
+    "y": 310,
+    "cost": 70,
+    "effect": "素人はただ軍艦だけに集中しようとするが、本物の専門家は粗末な貨物船が戦争を勝利に導くと解っている。戦時に利用できる輸送量を増強するため、船舶建造の調整を行う特別委員会を設置する。",
+    "prerequisites": [
+      "USA_two_ocean_navy_act"
+    ]
+  },
+  {
+    "id": "USA_liberty_ships",
+    "title": "リバティ船",
+    "x": 9950,
+    "y": 440,
+    "cost": 70,
+    "effect": "兵士や物資が必要とされる場所に安全に輸送されるために、貨物船の大量生産は必要な産業技術である。",
+    "prerequisites": [
+      "USA_maritime_commission"
+    ]
+  },
+  {
+    "id": "USA_bureau_of_ships",
+    "title": "艦船局",
+    "x": 10700,
+    "y": 310,
+    "cost": 70,
+    "effect": "将来的な海軍の発展を見越して、我々は建艦・修理局（Bureau of Construction and Repair）と技術局（Bureau of Engineering）を一つに統合する。",
+    "prerequisites": [
+      "USA_two_ocean_navy_act"
+    ]
+  },
+  {
+    "id": "USA_battleship_primacy",
+    "title": "戦艦優先",
+    "x": 10250,
+    "y": 440,
+    "cost": 70,
+    "effect": "日本のワシントン海軍軍縮条約からの離脱に際して、我々は次なる建艦競争を繰り広げることだろう。最強の戦艦をどこより多く揃えることを約束しよう。",
+    "prerequisites": [
+      "USA_bureau_of_ships"
+    ]
+  },
+  {
+    "id": "USA_advanced_mahanian_doctrine",
+    "title": "マハン・ドクトリンの発展",
+    "x": 10250,
+    "y": 570,
+    "cost": 70,
+    "effect": "アルフレッド・セイヤー・マハンの提唱した海戦における作用は過小評価されている。彼の理論に基づいた作戦立案によって、彼が決定的な要素と位置付ける戦艦を最大限活用することが可能となる。",
+    "prerequisites": [
+      "USA_battleship_primacy"
+    ]
+  },
+  {
+    "id": "USA_advanced_basing",
+    "title": "発展的な基地",
+    "x": 10250,
+    "y": 700,
+    "cost": 70,
+    "effect": "我々の近海から敵を遠ざければ遠ざけるほど、状況もより良くなっていく。",
+    "prerequisites": [
+      "USA_advanced_mahanian_doctrine"
+    ]
+  },
+  {
+    "id": "USA_carrier_primacy",
+    "title": "空母優先",
+    "x": 10550,
+    "y": 440,
+    "cost": 70,
+    "effect": "制空力は来たるべき海戦に必ず求められるものであり、その拡大に当たっては、空母の活用が最適であると言える。我々はより先進的で専門化した新型艦を生み出さなければならない。",
+    "prerequisites": [
+      "USA_bureau_of_ships"
+    ]
+  },
+  {
+    "id": "USA_bureau_of_aeronautics",
+    "title": "航空局",
+    "x": 10550,
+    "y": 570,
+    "cost": 70,
+    "effect": "海軍航空隊発展の要求を満たすため、こうした課題の解決を担い続けてきた航空局（Bureau of Aeronautics）を強化しなければならない。",
+    "prerequisites": [
+      "USA_carrier_primacy"
+    ]
+  },
+  {
+    "id": "USA_naval_radar",
+    "title": "海軍用レーダー",
+    "x": 10550,
+    "y": 700,
+    "cost": 70,
+    "effect": "レーダーは我々の敵から夜闇の緞帳を剥ぎ取り、たとえ悪天候の中にいても連中を見つけ出し、我々がゆっくりと愉しむ機会を与えてくれる。",
+    "prerequisites": [
+      "USA_bureau_of_aeronautics"
+    ]
+  },
+  {
+    "id": "USA_escort_effort",
+    "title": "護衛艦への注力",
+    "x": 10850,
+    "y": 440,
+    "cost": 70,
+    "effect": "潜水艦によって商船団が危険に晒されている。新たな駆逐艦の開発は、効率的な対潜水艦戦の展開を可能とするだろう。",
+    "prerequisites": [
+      "USA_bureau_of_ships"
+    ]
+  }
+]

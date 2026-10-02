@@ -1,0 +1,109 @@
+[
+  {
+    "id": "USA_",
+    "title": "大恐慌",
+    "x": 50,
+    "y": 50,
+    "cost": 70,
+    "effect": "大恐慌からの脱出に向けた最初の国家方針。ニューディール政策の土台を築く。",
+    "prerequisites": []
+  },
+  {
+    "id": "USA_continue_the_new_deal",
+    "title": "ニューディールの継続",
+    "x": 2600,
+    "y": 50,
+    "cost": 70,
+    "effect": "ニューディール政策は機能していることが証明された。今後もこの道を踏み外してはならない。",
+    "prerequisites": []
+  },
+  {
+    "id": "USA_suspend_the_presecution",
+    "title": "迫害の停止",
+    "x": 1550,
+    "y": 180,
+    "cost": 70,
+    "effect": "アメリカ市民の各々の政治的見解に対する迫害は（たとえどれほど恐ろしい思想であったとしても）この国の基本的価値観にそぐわない。直ちに迫害を中止するべきだ。",
+    "prerequisites": [
+      "USA_continue_the_new_deal"
+    ]
+  },
+  {
+    "id": "USA_desegregate_the_armed_forces",
+    "title": "軍内の人種差別撤廃",
+    "x": 650,
+    "y": 310,
+    "cost": 70,
+    "effect": "自国の軍隊の一員として奉仕するのは人によっては歓迎されない責務かもしれない。だが人から大事に扱われる権利でもある。我らが多くの国民の権利は、それぞれの先祖の評価によって拒絶されているのだ。",
+    "prerequisites": [
+      "USA_suspend_the_presecution"
+    ]
+  },
+  {
+    "id": "USA_full_desegregation",
+    "title": "人種差別の完全撤廃",
+    "x": 500,
+    "y": 440,
+    "cost": 70,
+    "effect": "あまりにも長期に渡って、いくつかの州は古臭く時代遅れで非人間的な規準に基づいて、人々を異なる方法で扱ってきた。この自由な共和国において、すべての人民は平等に扱われなければならない。故に別々に扱ってはならない。",
+    "prerequisites": [
+      "USA_desegregate_the_armed_forces"
+    ]
+  },
+  {
+    "id": "USA_democratic_socialism",
+    "title": "民主社会主義",
+    "x": 800,
+    "y": 440,
+    "cost": 70,
+    "effect": "善良な考えを持った人々は皆、社会主義が人類文明の未来であることを否定しない。同時に、誇り高く愛国心に溢れる共和国の人民は皆、もはや人民の人民によるものではなくなった政府に対し、支援し得ることもありえない。我らの誇り高き祖先たちのように、我々は両方を結合させた新しい政体を創り上げる。",
+    "prerequisites": [
+      "USA_desegregate_the_armed_forces"
+    ]
+  },
+  {
+    "id": "USA_liberty_for_the_philippines",
+    "title": "フィリピンの解放",
+    "x": 650,
+    "y": 570,
+    "cost": 70,
+    "effect": "フィリピンの国民は自らの手で政を組織する能力を示した。かの国に対するアメリカの支配の最後の残滓を正式に取り除く時が来た。",
+    "prerequisites": [
+      "USA_democratic_socialism",
+      "USA_full_desegregation"
+    ]
+  },
+  {
+    "id": "USA_pacific_decolonisation",
+    "title": "太平洋の植民地解放",
+    "x": 650,
+    "y": 700,
+    "cost": 70,
+    "effect": "ヨーロッパの列強が太平洋への駐留を続ける、あるいは太平洋の人々にヨーロッパの主人へと奉仕させ続ける、そんなことに正統性など「決して」無い。こんな正義に背くことが続くならば、アメリカはもはや悠長に構えてはいられない。",
+    "prerequisites": [
+      "USA_liberty_for_the_philippines"
+    ]
+  },
+  {
+    "id": "USA_union_representation_act",
+    "title": "組合代表法",
+    "x": 1100,
+    "y": 310,
+    "cost": 70,
+    "effect": "労働は人間の生活の主幹であり、労働組合を組織する事とは民主主義社会を組織する為の原理的主幹である。このことを我々が認識し、労働組合が議会に対し委任代表権を有することを確実なものにするのは当然である。",
+    "prerequisites": [
+      "USA_suspend_the_presecution"
+    ]
+  },
+  {
+    "id": "USA_old_age_pension_act",
+    "title": "老齢年金法",
+    "x": 1100,
+    "y": 440,
+    "cost": 70,
+    "effect": "仕事ばかりの人生を送ったなら、その人々は皆、経済の安定に楽しみつつ老齢者として尊敬されるに値する。こんな人達を支えるために存在するべき法制度が明らかに足りていない。",
+    "prerequisites": [
+      "USA_union_representation_act"
+    ]
+  }
+]

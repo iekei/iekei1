@@ -1,0 +1,114 @@
+[
+  {
+    "id": "FRA_invite_communist_ministers",
+    "title": "共産主義閣僚の招致",
+    "x": 3500,
+    "y": 180,
+    "cost": 70,
+    "effect": "急進右翼からの反発の恐れは実際の政府に共産主義者を含めることを妨げてきた。しかし恐怖とは貧弱な顧問である。衝突が避けられないのなら、彼らを招いてみよう。",
+    "prerequisites": [
+      "FRA_form_the_popular_front"
+    ]
+  },
+  {
+    "id": "FRA_strengthen_the_unions",
+    "title": "組合の強化",
+    "x": 3350,
+    "y": 310,
+    "cost": 70,
+    "effect": "長きに渡って、労働者個人が同志と共に団体交渉を行う権利は攻撃に晒されてきた。今はないことだが。",
+    "prerequisites": [
+      "FRA_invite_communist_ministers"
+    ]
+  },
+  {
+    "id": "FRA_celebrate_the_commune",
+    "title": "コミューンを祝う",
+    "x": 3350,
+    "y": 700,
+    "cost": 70,
+    "effect": "短命だったかも知れないが、パリ・コミューンはフランスの大地に共産主義社会を作り上げる最初の試みだった。",
+    "prerequisites": [
+      "FRA_strengthen_the_unions"
+    ]
+  },
+  {
+    "id": "FRA_womens_suffrage",
+    "title": "FRA womens suffrage",
+    "x": 3650,
+    "y": 310,
+    "cost": 70,
+    "effect": "幾度となくバリケードで自らの権利を得るために戦ってきたフランスの勤勉な女性労働者に投票権がないことは不条理で嘆かわしい。この不平等は絶たれることになるだろう。",
+    "prerequisites": [
+      "FRA_invite_communist_ministers"
+    ]
+  },
+  {
+    "id": "FRA_legal_equality",
+    "title": "法的平等",
+    "x": 3650,
+    "y": 700,
+    "cost": 70,
+    "effect": "あらゆる点で女性はまだ二級市民と考えられており、常に男性の意思に従属している。この馬鹿げた状態はいま終わる。",
+    "prerequisites": [
+      "FRA_womens_suffrage"
+    ]
+  },
+  {
+    "id": "FRA_industrial_collectivization",
+    "title": "産業集産化",
+    "x": 3500,
+    "y": 440,
+    "cost": 70,
+    "effect": "今日のフランス経済は、小さな会社で少数の労働者が働いており、互いに永遠に競合を続けているため、非効率で小規模な生産に資源を吸い上げられている。これら小規模な会社を、最終的には世界を舞台に競合できる会社に統合すべきだ。",
+    "prerequisites": [
+      "FRA_womens_suffrage",
+      "FRA_strengthen_the_unions"
+    ]
+  },
+  {
+    "id": "FRA_agricultural_collectivization",
+    "title": "FRA agricultural collectivization",
+    "x": 3500,
+    "y": 570,
+    "cost": 70,
+    "effect": "産業に適用できることはフランス全土の農業にも適用できるはずだ。小規模農家は近代的な機器を買う余裕がなく、彼らの高祖父と何ら変わらない方法で働いている。小規模農家を農業生産単位に統合し、効率と生産量を増加させるべきだ。",
+    "prerequisites": [
+      "FRA_industrial_collectivization"
+    ]
+  },
+  {
+    "id": "FRA_force_the_issue",
+    "title": "決断を迫る",
+    "x": 3500,
+    "y": 830,
+    "cost": 70,
+    "effect": "我々が人民戦線を結成してから、大きく成長した。だが仕事を中途半端にしておくわけにはいかない。あらゆる左派の人々が選択をし、立場を示す時が来たのだ、革命を支持するか、反対するかだ。",
+    "prerequisites": [
+      "FRA_celebrate_the_commune",
+      "FRA_legal_equality"
+    ]
+  },
+  {
+    "id": "FRA_reconciliation",
+    "title": "和解",
+    "x": 3200,
+    "y": 960,
+    "cost": 70,
+    "effect": "過去において、フランスの革命は余りにも頻繁に国中を革命と反革命テロの終わりのない痙攣に放り込んだ。おそらく、革命を支持したかどうかではなく、個々人がそれぞれの居場所を持つ、共和国を設立すべき時が来たのだ。",
+    "prerequisites": [
+      "FRA_force_the_issue"
+    ]
+  },
+  {
+    "id": "FRA_constitutional_convention",
+    "title": "憲法制定会議",
+    "x": 3200,
+    "y": 1090,
+    "cost": 70,
+    "effect": "我らが共和国の本質を根本的に変えることを一夜にして行える訳がなく、新憲法の交渉なしにはできない。",
+    "prerequisites": [
+      "FRA_reconciliation"
+    ]
+  }
+]

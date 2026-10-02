@@ -1,0 +1,106 @@
+[
+  {
+    "id": "usa_industry_1",
+    "title": "大量生産方式",
+    "year": 1936,
+    "x": 100,
+    "y": 50,
+    "research_time": 100,
+    "reliability": "配備",
+    "desc": "フォード式流れ作業を軍需生産に応用。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#d4843a' stroke-width='1.5'><path d='M4 20V10l4 4V10l4 4V10l4 4V10l4 10z'/></svg>",
+    "effects": [
+      "工場出力: +15%",
+      "建設速度: +10%"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "detroit_tank_arsenal",
+    "title": "デトロイト戦車工廠",
+    "year": 1940,
+    "x": 100,
+    "y": 200,
+    "research_time": 133,
+    "reliability": "配備（制式採用）",
+    "desc": "クライスラー工場を転用した戦車専用工廠。戦車生産の中心地。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
+    "effects": [
+      "生産効率上限: +10.7%",
+      "生産効率保持率: +10.7%"
+    ],
+    "prerequisites": [
+      "usa_industry_1"
+    ]
+  },
+  {
+    "id": "usa_industry_2",
+    "title": "戦時生産局",
+    "year": 1942,
+    "x": 100,
+    "y": 350,
+    "research_time": 120,
+    "reliability": "配備",
+    "desc": "国家総力戦体制を確立し、工業生産を最大化する。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#d4843a' stroke-width='1.5'><rect x='4' y='10' width='16' height='10'/><path d='M8 10V6h8v4'/></svg>",
+    "effects": [
+      "工場出力: +25%",
+      "生産効率: +15%"
+    ],
+    "prerequisites": [
+      "detroit_tank_arsenal"
+    ]
+  },
+  {
+    "id": "war_production_board",
+    "title": "戦時生産局 (WPB)",
+    "year": 1942,
+    "x": 100,
+    "y": 500,
+    "research_time": 137,
+    "reliability": "配備（制式採用）",
+    "desc": "民需から軍需への転換を統括する国家生産統制機関。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
+    "effects": [
+      "生産効率上限: +11.2%",
+      "生産効率保持率: +11.2%"
+    ],
+    "prerequisites": [
+      "usa_industry_2"
+    ]
+  },
+  {
+    "id": "kaiser_shipyard",
+    "title": "カイザー造船所",
+    "year": 1942,
+    "x": 400,
+    "y": 50,
+    "research_time": 137,
+    "reliability": "配備（制式採用）",
+    "desc": "リバティ船を最短10日で建造した量産造船所。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
+    "effects": [
+      "生産効率上限: +11.2%",
+      "生産効率保持率: +11.2%"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "willow_run",
+    "title": "ウィロー・ラン工場",
+    "year": 1942,
+    "x": 400,
+    "y": 200,
+    "research_time": 137,
+    "reliability": "配備（制式採用）",
+    "desc": "フォード社の爆撃機量産工場。1時間に1機のB-24生産を実現した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
+    "effects": [
+      "生産効率上限: +11.2%",
+      "生産効率保持率: +11.2%"
+    ],
+    "prerequisites": [
+      "kaiser_shipyard"
+    ]
+  }
+]

@@ -1,0 +1,112 @@
+[
+  {
+    "id": "SOV_addressing_internal_affairs",
+    "title": "国内問題への対処",
+    "x": 11900,
+    "y": 180,
+    "cost": 35,
+    "effect": "革命にはいまだ世界中に多くの敵が存在し、何百万もの労働者がいまだ解放を待ち望んでいるが、我々は国内で待ち受けている多くの問題に目を向けることを忘れてはならない。",
+    "prerequisites": [
+      "SOV_the_path_of_marxism_leninism"
+    ]
+  },
+  {
+    "id": "SOV_nkvd_primacy",
+    "title": "NKVD優先",
+    "x": 11600,
+    "y": 310,
+    "cost": 35,
+    "effect": "軍は一切信用ならないということが明らかとなった。それゆえNKVDを拡大し、より大きな権限を与える必要があるだろう。より多くの政治将校を配備し、士官を監視させるのだ。",
+    "prerequisites": [
+      "SOV_addressing_internal_affairs"
+    ]
+  },
+  {
+    "id": "SOV_the_new_soviet_woman",
+    "title": "新たなソビエト女性",
+    "x": 12200,
+    "y": 310,
+    "cost": 35,
+    "effect": "政治革命によって連邦の数百万もの人々に自由がもたらされ、とりわけ数百万の女性たちはもはや単に妻や母であることに留まらず、今や職場においても完全に対等な立場に立つことができるようになった。",
+    "prerequisites": [
+      "SOV_addressing_internal_affairs"
+    ]
+  },
+  {
+    "id": "SOV_expand_the_agitprop",
+    "title": "アギトプロープの浸透",
+    "x": 11900,
+    "y": 310,
+    "cost": 35,
+    "effect": "労働者は我らが連邦全域において何百万人にも達する、我々は彼らの言葉を話すべきだ。我々の議論を単純かつ理解しやすいものとし、そうすることで一般市民の記憶にも残るはずだ。我々はこの領域での取り組みを更に浸透させなければならない。",
+    "prerequisites": [
+      "SOV_addressing_internal_affairs"
+    ]
+  },
+  {
+    "id": "SOV_positive_heroism",
+    "title": "積極的な英雄主義",
+    "x": 11600,
+    "y": 440,
+    "cost": 70,
+    "effect": "今こそ古きレーニン主義的集産主義プロパガンダを脱し、様々な分野で特異な能力を示した個々人を伝説的な社会主義英雄として讃え崇めるのだ！",
+    "prerequisites": [
+      "SOV_expand_the_agitprop"
+    ]
+  },
+  {
+    "id": "SOV_revive_the_stakhanovite_movement",
+    "title": "スタハノフ運動の復活",
+    "x": 11600,
+    "y": 570,
+    "cost": 70,
+    "effect": "資本主義国では工場所有者の為に、より多くを生産させようと非情な搾取で労働者を駆り立てる。しかし我が国においては、労働者が永久に搾取されない世界を築く貢献ができると理解するアレクセイ・スタハノフの様な労働者たちが、レンガを余剰に積み、石炭を余剰に採掘し、鋲を余剰に取り付け、自分自身を駆り立てているのだ。",
+    "prerequisites": [
+      "SOV_positive_heroism"
+    ]
+  },
+  {
+    "id": "SOV_war_heroes",
+    "title": "戦争の英雄",
+    "x": 11600,
+    "y": 700,
+    "cost": 70,
+    "effect": "ロシア人は常に祖国の侵略者を打ち負かすための、極めて勇敢な行為を行うことをいとわない。敵との戦いで団結している今、我が軍内に任務を大きく逸脱する兵士はいないなどと偽るべきではない。",
+    "prerequisites": [
+      "SOV_revive_the_stakhanovite_movement"
+    ]
+  },
+  {
+    "id": "SOV_collectivist_propaganda",
+    "title": "集産主義プロパガンダ",
+    "x": 11900,
+    "y": 440,
+    "cost": 70,
+    "effect": "ソビエト連邦に個人の栄光が入り込む余地はない。生産目標の超過達成や、探検遠征の成功、大規模建築計画といった集産主義的努力を我が党のプロパガンダは断固として強調すべきである。",
+    "prerequisites": [
+      "SOV_expand_the_agitprop"
+    ]
+  },
+  {
+    "id": "SOV_socialist_emulation",
+    "title": "社会主義的競争",
+    "x": 11900,
+    "y": 570,
+    "cost": 70,
+    "effect": "資本主義体制下では、労働者は毎日のパンを勝ち取るために競争し合わなければならないが、工場の経営者は労働者が生産性の向上に繋げようとした改善から利益を得ている。これは無駄であり非人道的だ。社会主義体制ならば、まだ一流ではない者たちが、優れた者たちから学ぶことによって、彼らの能力を伸ばすための必要な支援を可能とするだろう。",
+    "prerequisites": [
+      "SOV_collectivist_propaganda"
+    ]
+  },
+  {
+    "id": "SOV_socialist_realism",
+    "title": "社会主義リアリズム",
+    "x": 11900,
+    "y": 700,
+    "cost": 70,
+    "effect": "ソビエト連邦のあらゆる芸術作品は、プロレタリアートの日常風景を写実的に描き出すなどして、共産主義の目標と意味について人民に教育するようなものであるよう努力せねばならない。ソビエトの芸術家は魂の技術者なのだ！",
+    "prerequisites": [
+      "SOV_socialist_emulation"
+    ]
+  }
+]
