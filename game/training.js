@@ -11,6 +11,7 @@
 
 class TrainingManager {
   static nextId = 1;
+  static targetArmyId = null;   // 徴兵した師団の配備先軍集団 (null = 自動配備)
 
   // 大隊ごとの兵器消費量 (師団編成によって必要装備が変わる)
   static BATTALION_COST = {
@@ -63,7 +64,8 @@ class TrainingManager {
       manpowerNeed: req.manpowerNeed, equipmentNeed: req.equipNeed,
       trainDays: req.trainDays,
       phase: 'gathering',   // gathering (資源待ち) → training (訓練中)
-      progress: 0
+      progress: 0,
+      targetArmyId: TrainingManager.targetArmyId   // 配備先軍集団
     };
     TrainingManager.queue.push(order);
     CoreEngine.log('📝 ' + order.name + 'を徴兵リストに追加 (兵員 ' + (req.manpowerNeed / 10000) + '万 / 兵器 ' + req.equipNeed + ' / 訓練約' + req.trainDays + '日)');
@@ -102,10 +104,14 @@ class TrainingManager {
         if (o.progress >= o.trainDays) {
           o.done = true;
           s.divisions = (s.divisions || 0) + 1;
-          // 新師団を最も少ない軍集団に配属
+          // 新師団を指定の軍集団に配属 (未指定なら最も少ない軍集団)
           const armies = BattlePlanManager.armies || [];
           if (armies.length) {
-            const a = armies.reduce((m, x) => x.divisions.length < m.divisions.length ? x : m, armies[0]);
+            let a;
+            if (o.targetArmyId != null) {
+              a = armies.find(x => x.id === o.targetArmyId);
+            }
+            if (!a) a = armies.reduce((m, x) => x.divisions.length < m.divisions.length ? x : m, armies[0]);
             a.divisions.push({
               id: s.divisions, org: 30, maxOrg: 60,
               x: a.base[0], y: a.base[1]
