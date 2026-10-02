@@ -144,6 +144,62 @@ class BattleManager {
       if (b.progress >= 1) resolved.push(b);
     });
     resolved.forEach(b => BattleManager.resolve(b));
+    BattleManager.checkEncirclement();
+  }
+
+  // ---- 包囲判定: 自国州が陸路で他の自国州に到達できない場合、
+  //      その州の師団は消滅し、州は包囲した敵国に占領される ----
+  static checkEncirclement() {
+    if (!MapRenderer.ready || !MapRenderer.states) return;
+    MapRenderer.buildStateAdjacency();
+    const player = CoreEngine.gameState.country;
+    const gs = CoreEngine.gameState;
+    const ownStates = Object.keys(MapRenderer.states).filter(sid => MapRenderer.states[sid].owner === player);
+    if (ownStates.length < 2) return;
+
+    // 最大連結成分を見つける (自国領のみ経由したBFS)
+    const visited = new Set();
+    let largest = new Set();
+    ownStates.forEach(sid => {
+      if (visited.has(sid)) return;
+      const comp = new Set([sid]);
+      const q = [sid];
+      visited.add(sid);
+      while (q.length) {
+        const cur = q.shift();
+        (MapRenderer.stateAdjacency.get(String(cur)) || []).forEach(n => {
+          if (comp.has(n)) return;
+          const st = MapRenderer.states[n];
+          if (st && st.owner === player) { comp.add(n); visited.add(n); q.push(n); }
+        });
+      }
+      if (comp.size > largest.size) largest = comp;
+    });
+    // 最大連結成分に含まれない自国州 = 包囲されている
+    const encircled = ownStates.filter(sid => !largest.has(String(sid)));
+    encircled.forEach(sid => {
+      const st = MapRenderer.states[sid];
+      if (!st) return;
+      // 包囲している敵国を特定 (隣接する開戦済みの敵国)
+      const nbrs = MapRenderer.stateAdjacency.get(String(sid)) || [];
+      const enemy = [...nbrs].map(n => MapRenderer.states[n]).find(s => s && gs.atWar.includes(s.owner));
+      const captor = enemy ? enemy.owner : (gs.atWar[0] || '???');
+      // この州に駐留している軍集団の師団を全滅
+      BattlePlanManager.armies.forEach(army => {
+        const c = MapRenderer.stateCenter.get(String(sid));
+        if (!c || !army.base) return;
+        const d = Math.hypot(army.base[0] - c[0], army.base[1] - c[1]);
+        if (d < 80) {
+          const lost = army.divisions.length;
+          army.divisions = [];
+          CoreEngine.log('💀 ' + army.name + 'の師団 ' + lost + '個が' + st.name + 'で包囲殲滅されました！');
+          GameUI.notify('💀 包囲殲滅: ' + army.name + 'の' + lost + '師団が' + st.name + 'で全滅', 'alert');
+        }
+      });
+      MapRenderer.captureState(sid, captor);
+      CoreEngine.log('🏴 ' + st.name + 'が包囲され陥落しました (' + captor + 'が占領)');
+      GameUI.notify('🏴 ' + st.name + 'が包囲されて陥落！', 'alert');
+    });
   }
 
   // ---- 戦闘結果の確定 → 占領 / 逆占領 ----
