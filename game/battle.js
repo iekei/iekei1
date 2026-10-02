@@ -188,6 +188,7 @@ class BattleManager {
 
   // ---- 敵軍の偶発侵攻 (交戦国がいる場合) ----
   static maybeEnemyOffensive() {
+    if (!MapRenderer.ready) return;
     const s = CoreEngine.gameState;
     if (!s.atWar || s.atWar.length === 0) return;
     if (BattleManager.battles.length >= 4) return;
