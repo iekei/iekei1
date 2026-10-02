@@ -11,87 +11,78 @@
     ]
   },
   {
-    "id": "SOV_consolidate_power",
-    "title": "権力基盤を固める",
-    "x": 20300,
-    "y": 180,
-    "cost": 70,
-    "effect": "いま我が国を引き裂いた戦争に勝利した。我々は立場を強め、我々に反対した無謀な者どもを念入りに排除すべきだ。",
-    "prerequisites": []
-  },
-  {
     "id": "SOV_consolidate_the_caucasus",
-    "title": "SOV consolidate the caucasus",
+    "title": "カフカスの統合",
     "x": 19550,
     "y": 310,
     "cost": 70,
-    "effect": "",
+    "effect": "カフカス地域への支配を固める。",
     "prerequisites": [
       "SOV_consolidate_power"
     ]
   },
   {
     "id": "SOV_consolidate_the_west",
-    "title": "SOV consolidate the west",
+    "title": "西部の統合",
     "x": 20300,
     "y": 310,
     "cost": 70,
-    "effect": "",
+    "effect": "西部地域への支配を固める。",
     "prerequisites": [
       "SOV_consolidate_power"
     ]
   },
   {
     "id": "SOV_consolidate_the_east",
-    "title": "SOV consolidate the east",
+    "title": "東部の統合",
     "x": 20900,
     "y": 310,
     "cost": 70,
-    "effect": "",
+    "effect": "東部地域への支配を固める。",
     "prerequisites": [
       "SOV_consolidate_power"
     ]
   },
   {
     "id": "SOV_sufi_stronghold",
-    "title": "SOV sufi stronghold",
+    "title": "スーフィーの砦",
     "x": 19250,
     "y": 440,
     "cost": 70,
-    "effect": "",
+    "effect": "スーフィー教団の拠点を通じてカフカスの民衆に影響を与える。",
     "prerequisites": [
       "SOV_consolidate_the_caucasus"
     ]
   },
   {
     "id": "SOV_independent_synod",
-    "title": "SOV independent synod",
+    "title": "独立教会会議",
     "x": 19550,
     "y": 440,
     "cost": 70,
-    "effect": "",
+    "effect": "独立した教会会議を設立し宗教政策を統率する。",
     "prerequisites": [
       "SOV_consolidate_the_caucasus"
     ]
   },
   {
     "id": "SOV_educate_the_masses_caucasus",
-    "title": "SOV educate the masses caucasus",
+    "title": "民衆教育 (カフカス)",
     "x": 19850,
     "y": 700,
     "cost": 70,
-    "effect": "",
+    "effect": "カフカス地域の民衆教育を推進する。",
     "prerequisites": [
       "SOV_consolidate_the_caucasus"
     ]
   },
   {
     "id": "SOV_transcaucasian_republic",
-    "title": "SOV transcaucasian republic",
+    "title": "沿カフカス共和国",
     "x": 19550,
     "y": 570,
     "cost": 70,
-    "effect": "",
+    "effect": "沿カフカス諸共和国を再編する。",
     "prerequisites": [
       "SOV_sufi_stronghold",
       "SOV_independent_synod",
@@ -100,11 +91,22 @@
   },
   {
     "id": "SOV_independent_synod_west",
-    "title": "SOV independent synod west",
+    "title": "独立教会会議 (西部)",
     "x": 20150,
     "y": 440,
     "cost": 70,
-    "effect": "",
+    "effect": "西部に独立した教会会議を設立する。",
+    "prerequisites": [
+      "SOV_consolidate_the_west"
+    ]
+  },
+  {
+    "id": "SOV_educate_the_masses_west",
+    "title": "民衆教育 (西部)",
+    "x": 20450,
+    "y": 700,
+    "cost": 70,
+    "effect": "西部地域の民衆教育を推進する。",
     "prerequisites": [
       "SOV_consolidate_the_west"
     ]

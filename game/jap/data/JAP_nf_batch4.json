@@ -5,7 +5,7 @@
     "x": 1700,
     "y": 310,
     "cost": 70,
-    "effect": "",
+    "effect": "我々の手には負えない困難が目の前に迫っている。我々は同じ目的を持つ他の政府に手を差し伸べるべきだ。協力を取り付けられるかもしれない。",
     "prerequisites": [
       "JAP_liaison_conference"
     ]
@@ -16,7 +16,7 @@
     "x": 1850,
     "y": 180,
     "cost": 70,
-    "effect": "",
+    "effect": "財閥はかつてないほどの政治的、経済的権力を持っている。策略を巡らせることにより、彼らの取り組みを我々の利益となるものへと誘導することができるかもしれない。",
     "prerequisites": [
       "JAP_purge_the_kodoha_faction"
     ]
@@ -27,7 +27,7 @@
     "x": 1850,
     "y": 440,
     "cost": 70,
-    "effect": "",
+    "effect": "軍需産業に対して国家の統制を強める事は効率を向上させ、そして生産量が増えることに大きく貢献するだろう。",
     "prerequisites": [
       "JAP_guide_the_zaibatsus",
       "JAP_national_mobilization_law"
@@ -39,7 +39,7 @@
     "x": 1850,
     "y": 960,
     "cost": 70,
-    "effect": "",
+    "effect": "[JAP.GetNameDefCap]は石油が不足しているため、合成石油の分野により一段と取り組まなくてはならない。",
     "prerequisites": [
       "JAP_nationalize_war_industry"
     ]
@@ -50,7 +50,7 @@
     "x": 2150,
     "y": 310,
     "cost": 70,
-    "effect": "",
+    "effect": "新しい法律は、兵役をより広汎なものにすることで国民に義務感を与え、戦争の必要性を明確にするだろう。",
     "prerequisites": [
       "JAP_guide_the_zaibatsus",
       "JAP_challenge_the_zaibatsus"
@@ -62,7 +62,7 @@
     "x": 2150,
     "y": 440,
     "cost": 70,
-    "effect": "",
+    "effect": "政府による研究機関への支援と管理は研究開発計画の柔軟性と生産性を向上させる。",
     "prerequisites": [
       "JAP_national_mobilization_law"
     ]
@@ -73,7 +73,7 @@
     "x": 2450,
     "y": 440,
     "cost": 70,
-    "effect": "",
+    "effect": "軍需産業に対して帝国の統制を強める事は効率を向上させ、そして生産量が増えることに大きく貢献するだろう。",
     "prerequisites": [
       "JAP_national_mobilization_law",
       "JAP_challenge_the_zaibatsus"
@@ -85,7 +85,7 @@
     "x": 2150,
     "y": 570,
     "cost": 70,
-    "effect": "",
+    "effect": "全ての国民は我々の国家をどんな攻撃にも耐えられる砦に変える必要性に気付くべきだ。",
     "prerequisites": [
       "JAP_nationalize_war_industry",
       "JAP_imperial_arsenals"
@@ -97,7 +97,7 @@
     "x": 2000,
     "y": 700,
     "cost": 70,
-    "effect": "",
+    "effect": "神道により国民を教化し義務感を養うことで新兵を増やすことができる。",
     "prerequisites": [
       "JAP_national_defense_state"
     ]
@@ -108,7 +108,7 @@
     "x": 2300,
     "y": 700,
     "cost": 70,
-    "effect": "",
+    "effect": "国家神道によって、御国と皇室の繁栄のため自己犠牲をする必要性を国民に植え付けることができる。",
     "prerequisites": [
       "JAP_national_defense_state"
     ]

@@ -77,11 +77,11 @@
   },
   {
     "id": "GER_naval_effort",
-    "title": "GER naval effort",
+    "title": "海軍の努力",
     "x": 5300,
     "y": 570,
     "cost": 35,
-    "effect": "",
+    "effect": "海軍の拡張を進める。",
     "prerequisites": [
       "GER_naval_rearmament"
     ]

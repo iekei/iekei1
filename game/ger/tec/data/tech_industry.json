@@ -1,10 +1,92 @@
 [
   {
-    "id": "basic_machine_tools",
-    "title": "基本工作機械",
-    "year": 1936, "x": 200, "y": 50, "research_time": 130,
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#58a6ff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/><line x1='18' y1='10' x2='18' y2='6'/></svg>",
-    "effects": ["生産効率上限: +10.0%", "生産効率保持率: +10.0%"],
+    "id": "autobahn",
+    "title": "アウトバーン建設",
+    "year": 1936,
+    "x": 100,
+    "y": 50,
+    "research_time": 110,
+    "reliability": "完成",
+    "desc": "高速自動車網の建設。軍需輸送とモータリゼーションの基盤となった。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M4 20V10l4 4V10l4 4V10l4 4V10l4 10z'/></svg>",
+    "effects": [
+      "建設速度: +10%",
+      "輸送効率: +12%"
+    ],
     "prerequisites": []
+  },
+  {
+    "id": "synthetic_fuel",
+    "title": "合成燃料工場",
+    "year": 1936,
+    "x": 100,
+    "y": 200,
+    "research_time": 140,
+    "reliability": "運用中",
+    "desc": "石炭液化による合成燃料。ルーマニア石油への依存を減らす国家的事業。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M8 3h6v18H8z'/><path d='M14 8h3v8'/><path d='M10 7v3'/></svg>",
+    "effects": [
+      "燃料生産: +25%",
+      "石油依存: -15%"
+    ],
+    "prerequisites": [
+      "autobahn"
+    ]
+  },
+  {
+    "id": "synthetic_rubber",
+    "title": "合成ゴム (ブナ)",
+    "year": 1937,
+    "x": 400,
+    "y": 200,
+    "research_time": 120,
+    "reliability": "運用中",
+    "desc": "天然ゴム代替の合成ゴム生産。タイヤ・ホースなど軍需資材を自給した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M8 3h6v18H8z'/><path d='M14 8h3v8'/><path d='M10 7v3'/></svg>",
+    "effects": [
+      "ゴム自給: +30%",
+      "車両信頼度: +5%"
+    ],
+    "prerequisites": [
+      "synthetic_fuel"
+    ]
+  },
+  {
+    "id": "rheinmetall",
+    "title": "ラインメタル拡張",
+    "year": 1938,
+    "x": 100,
+    "y": 350,
+    "research_time": 130,
+    "reliability": "運用中",
+    "desc": "火砲・装甲車両の生産ライン拡張。開戦時の軍需生産を支えた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M4 20V10l4 4V10l4 4V10l4 4V10l4 10z'/></svg>",
+    "effects": [
+      "軍需工場出力: +10%",
+      "装備生産効率: +8%"
+    ],
+    "prerequisites": [
+      "synthetic_fuel"
+    ]
+  },
+  {
+    "id": "four_year_plan_ind",
+    "title": "四ヵ年計画の産業動員",
+    "year": 1938,
+    "x": 400,
+    "y": 350,
+    "research_time": 150,
+    "reliability": "運用中",
+    "desc": "ゲーリング主宰の四ヵ年計画。戦争経済への全面移行を推進した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M4 20V10l4 4V10l4 4V10l4 4V10l4 10z'/></svg>",
+    "effects": [
+      "工場出力: +12%",
+      "資源採掘: +10%",
+      "建設速度: +8%"
+    ],
+    "prerequisites": [
+      "rheinmetall",
+      "synthetic_rubber"
+    ]
   }
 ]

@@ -5,7 +5,7 @@
     "x": 500,
     "y": 50,
     "cost": 70,
-    "effect": "",
+    "effect": "我が国の将来は今までの指導者たちが決して想像し得なかった道を必要としている。この選択肢を真剣に考慮しなければならない。",
     "prerequisites": []
   },
   {
@@ -14,7 +14,7 @@
     "x": 350,
     "y": 180,
     "cost": 70,
-    "effect": "",
+    "effect": "老いぼれは彼らの常識にとらわれ、新たな考え方を受け入れることができない。今は彼らの代わりに、より若い世代の力を用いる必要がある。",
     "prerequisites": [
       "JAP_the_unthinkable_option"
     ]
@@ -25,7 +25,7 @@
     "x": 650,
     "y": 180,
     "cost": 70,
-    "effect": "",
+    "effect": "我が国は以前、左翼的な役人と公務員を満州国に非公式に追放したが、今回は代わりにもっと右翼的な者と入れ替えよう。",
     "prerequisites": [
       "JAP_the_unthinkable_option"
     ]
@@ -36,7 +36,7 @@
     "x": 800,
     "y": 310,
     "cost": 70,
-    "effect": "",
+    "effect": "社会的地位に関係なく、誰もが学べる環境でなくてはならない。",
     "prerequisites": [
       "JAP_exchange_the_exiles"
     ]
@@ -47,7 +47,7 @@
     "x": 500,
     "y": 310,
     "cost": 70,
-    "effect": "",
+    "effect": "我々の政治的・軍事的な基盤は万全だ。我々が運命を握る時が来た！",
     "prerequisites": [
       "JAP_approach_the_young_officers",
       "JAP_exchange_the_exiles"
@@ -59,7 +59,7 @@
     "x": 200,
     "y": 440,
     "cost": 70,
-    "effect": "",
+    "effect": "日本を代々支配していた一家の最後の痕跡に目を向ける時が来た。我々は天皇とその家族にどのような運命を下すかを決定しなくてはならない。",
     "prerequisites": [
       "JAP_cast_the_die"
     ]
@@ -70,7 +70,7 @@
     "x": 50,
     "y": 570,
     "cost": 70,
-    "effect": "",
+    "effect": "我が国を適切に管理するためには、行政を有能な人材により再建する必要がある。",
     "prerequisites": [
       "JAP_the_fate_of_the_imperial_family"
     ]
@@ -81,7 +81,7 @@
     "x": 350,
     "y": 570,
     "cost": 70,
-    "effect": "",
+    "effect": "我々の偉大な革命の余波の中に不安が広がりつつある。最も適切な行動とは何かを人々に再教育しなければならない。",
     "prerequisites": [
       "JAP_the_fate_of_the_imperial_family"
     ]
@@ -92,7 +92,7 @@
     "x": 200,
     "y": 700,
     "cost": 70,
-    "effect": "",
+    "effect": "かつての植民地に闘争をもたらし、日本のイデオロギー的敵対者の最後の砦を陥落させなければならない。",
     "prerequisites": [
       "JAP_rebuild_the_civil_service",
       "JAP_reeducation_campaign"
@@ -104,7 +104,7 @@
     "x": 200,
     "y": 830,
     "cost": 70,
-    "effect": "",
+    "effect": "我々は世界で孤立しているわけにはいかない。革命を守護するため、共産主義の生みの親と協力し合う必要がある！",
     "prerequisites": [
       "JAP_finish_the_fight",
       "JAP_communist_volunteers"

@@ -5,7 +5,7 @@
     "x": 16400,
     "y": 1090,
     "cost": 35,
-    "effect": "",
+    "effect": "黒シャツ隊はファシズムに奉仕する非常に危険な組織である。よって、彼らのファシスト政権と同様、彼らも消滅する時が来たのだ。活動中の部隊をすべて直ちに解散させる。",
     "prerequisites": [
       "ITA_power_to_the_king",
       "ITA_revoke_the_acerbo_law"
@@ -17,7 +17,7 @@
     "x": 16700,
     "y": 1090,
     "cost": 35,
-    "effect": "",
+    "effect": "黒シャツ隊は歴史的にファシスト政権とドゥーチェに忠実だったが、もし我々が彼らの組織がこの新しい政権で活躍する余地があることを示せば、我々の利益のために彼らを利用することができるかもしれない。結局、この2つの体制にそんなに大きな違いがあるのだろうか？",
     "prerequisites": [
       "ITA_power_to_the_king"
     ]
@@ -28,7 +28,7 @@
     "x": 16550,
     "y": 1220,
     "cost": 70,
-    "effect": "",
+    "effect": "イタリア王室に忠実で、あらゆる軍事作戦において必要な役割を果たすことができる信頼性の高い軍隊を持つために、近衛隊を強化し拡充する。",
     "prerequisites": [
       "ITA_disband_the_blackshirts",
       "ITA_utilize_the_blackshirts"
@@ -40,7 +40,7 @@
     "x": 16250,
     "y": 1350,
     "cost": 35,
-    "effect": "",
+    "effect": "王制は時代遅れの政治システムだと主張する人々は、高貴で堅固な手のもとに、謙虚な国家が世界最大の権力の1つになることを理解できない愚か者だ。\n王様万歳！",
     "prerequisites": [
       "ITA_expand_the_royal_guard",
       "ITA_democratic_king"
@@ -52,7 +52,7 @@
     "x": 16700,
     "y": 1350,
     "cost": 70,
-    "effect": "",
+    "effect": "今こそ志願兵軍の組織を拡大し、彼らの軍事教育を充実させるべきだ。新兵の訓練や黒シャツ隊の指揮には、精鋭部隊の優秀な将校を起用する。",
     "prerequisites": [
       "ITA_expand_the_royal_guard",
       "ITA_utilize_the_blackshirts"
@@ -64,7 +64,7 @@
     "x": 17000,
     "y": 1090,
     "cost": 35,
-    "effect": "",
+    "effect": "我が国の社会的そして政治的安定の高まりに対処するためには、歴史的にイタリア国民に大きな影響力を及ぼしてきた教会に寄り添うことが必要だ。ローマ法王の承認と支持を求めて歩み寄る必要がある。",
     "prerequisites": [
       "ITA_power_to_the_king"
     ]
@@ -75,7 +75,7 @@
     "x": 17000,
     "y": 1220,
     "cost": 35,
-    "effect": "",
+    "effect": "教会は世界中に数え切れないほどの代表者がいる。もしバチカンを味方につけることができれば、教会の使者という完璧な隠れ蓑を持った新しい諜報員を自由に使うことができ、情報網を向上させることができる。",
     "prerequisites": [
       "ITA_seek_papal_support"
     ]
@@ -86,7 +86,7 @@
     "x": 17000,
     "y": 1350,
     "cost": 35,
-    "effect": "",
+    "effect": "イタリア社会におけるローマ法王の影響力が大変強い事は明らかだ。国家の安定を維持するためには、イタリア王国の中で教会に力を与えるしかない。",
     "prerequisites": [
       "ITA_agents_of_the_church"
     ]
@@ -97,7 +97,7 @@
     "x": 16100,
     "y": 1610,
     "cost": 70,
-    "effect": "",
+    "effect": "イタリア王国はその運命を全うする準備が整っている。偉大さと栄光が誇り高きイタリア国民を待っている、今こそどう進むかを決める時だ。",
     "prerequisites": [
       "ITA_gloria_al_regno_d_italia",
       "ITA_crush_opposition",
@@ -110,7 +110,7 @@
     "x": 20750,
     "y": 1610,
     "cost": 35,
-    "effect": "",
+    "effect": "かつて、古代ローマは海軍の力のもって、初めてカルタゴを降した。イタリアが地中海の覇権を握るには、海軍への投資が不可欠だ。そうなれば、再びここを「Mare Nostrum」（我らが海）と呼べるようになるだろう。",
     "prerequisites": [
       "ITA_setting_course",
       "ITA_strengthen_the_regime",

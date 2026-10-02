@@ -1,11 +1,11 @@
 [
   {
     "id": "GER_naval_air_effort",
-    "title": "GER naval air effort",
+    "title": "海軍航空の努力",
     "x": 2600,
     "y": 570,
     "cost": 70,
-    "effect": "",
+    "effect": "海軍航空隊の拡充を進める。",
     "prerequisites": [
       "GER_tactical_air_effort"
     ]

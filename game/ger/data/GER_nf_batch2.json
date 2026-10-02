@@ -80,11 +80,11 @@
   },
   {
     "id": "GER_air_innovation",
-    "title": "GER air innovation",
+    "title": "航空の革新",
     "x": 2450,
     "y": 50,
     "cost": 70,
-    "effect": "",
+    "effect": "航空産業の革新を推進し、空軍戦力を強化する。",
     "prerequisites": []
   },
   {

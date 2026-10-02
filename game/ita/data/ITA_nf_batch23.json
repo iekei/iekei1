@@ -5,7 +5,7 @@
     "x": 19100,
     "y": 960,
     "cost": 70,
-    "effect": "",
+    "effect": "$ITA_anti_uk_war_goals_desc$",
     "prerequisites": [
       "ITA_italy_first",
       "ITA_italian_irredentism"
@@ -17,7 +17,7 @@
     "x": 18950,
     "y": 1090,
     "cost": 35,
-    "effect": "",
+    "effect": "ギリシャなくして大帝国の設立を語ることができるであろうか？容易い目標な筈である…",
     "prerequisites": [
       "ITA_italian_irredentism"
     ]
@@ -28,7 +28,7 @@
     "x": 19250,
     "y": 1090,
     "cost": 70,
-    "effect": "",
+    "effect": "$ITA_greece_friend_desc$",
     "prerequisites": [
       "ITA_italy_first"
     ]
@@ -39,7 +39,7 @@
     "x": 18950,
     "y": 1220,
     "cost": 35,
-    "effect": "",
+    "effect": "$ITA_claims_on_turkey_desc$",
     "prerequisites": [
       "ITA_war_with_greece",
       "ITA_befriend_greece"
@@ -51,7 +51,7 @@
     "x": 19250,
     "y": 1220,
     "cost": 70,
-    "effect": "",
+    "effect": "$ITA_turkey_friend_desc$",
     "prerequisites": [
       "ITA_war_with_greece",
       "ITA_befriend_greece"
@@ -63,7 +63,7 @@
     "x": 19550,
     "y": 570,
     "cost": 35,
-    "effect": "",
+    "effect": "$ITA_support_nationalist_spain_desc$",
     "prerequisites": [
       "ITA_foreign_affairs"
     ]
@@ -74,7 +74,7 @@
     "x": 19400,
     "y": 830,
     "cost": 35,
-    "effect": "",
+    "effect": "$ITA_spanish_italian_faction_desc$",
     "prerequisites": [
       "ITA_corpo_di_truppe_volontarie",
       "ITA_italy_first"
@@ -86,7 +86,7 @@
     "x": 19700,
     "y": 830,
     "cost": 35,
-    "effect": "",
+    "effect": "$ITA_demand_balearic_islands_desc$",
     "prerequisites": [
       "ITA_corpo_di_truppe_volontarie"
     ]
@@ -97,7 +97,7 @@
     "x": 19550,
     "y": 960,
     "cost": 35,
-    "effect": "",
+    "effect": "$ITA_portugal_friend_desc$",
     "prerequisites": [
       "ITA_spanish_italian_alliance",
       "ITA_demand_balearic_islands_bba"
@@ -109,7 +109,7 @@
     "x": 350,
     "y": 50,
     "cost": 35,
-    "effect": "",
+    "effect": "ファシストに対抗し、彼らの病んだ政権を打倒する時が来た！イタリア全土の反ファシストのパルチザンは、この国家解放戦争で戦い、命を捧げる用意がある！",
     "prerequisites": []
   }
 ]

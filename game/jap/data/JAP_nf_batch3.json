@@ -5,7 +5,7 @@
     "x": 1250,
     "y": 440,
     "cost": 70,
-    "effect": "",
+    "effect": "[Root.GetNameDefCap]は資源に乏しいが、隣国はそうではない。その穴埋めをしなければならないが、それを正当化する為の理由が必要だ。その口実は主戦派の士官たちが用意してくれるだろう、その後は陛下がいかに戦争に懐疑的であったとしても、開戦に同意せざるを得まい。",
     "prerequisites": [
       "JAP_greater_east_asian_co_prosperity_sphere"
     ]
@@ -16,7 +16,7 @@
     "x": 1250,
     "y": 570,
     "cost": 70,
-    "effect": "",
+    "effect": "中国の抵抗運動は諦めが悪く手に負えないことが分かっている。本土平定に向けて全力で取り組まなくてはならない。",
     "prerequisites": [
       "JAP_intervene_in_china"
     ]
@@ -27,7 +27,7 @@
     "x": 1250,
     "y": 700,
     "cost": 70,
-    "effect": "",
+    "effect": "中国に眠る豊富な資源を開発し、それを手に出来れば次の戦争への大事な糧になるだろう。",
     "prerequisites": [
       "JAP_secure_china"
     ]
@@ -38,7 +38,7 @@
     "x": 1550,
     "y": 440,
     "cost": 70,
-    "effect": "",
+    "effect": "中国では我らが必要とするすべての資源を賄うことはできない。しかし、遠く南にはオランダ領東インドとマラヤとボルネオのイギリス植民地がある。真の自給自足のためには、ヨーロッパの帝国主義者から離れたこれらの地域を支配する必要があるだろう。",
     "prerequisites": [
       "JAP_greater_east_asian_co_prosperity_sphere",
       "JAP_sign_tripartite_pact"
@@ -50,7 +50,7 @@
     "x": 1550,
     "y": 700,
     "cost": 70,
-    "effect": "",
+    "effect": "北の守りを確固たるものにすることができれば心置きなく南に進出できる。速やかに[SOV.GetNameDef]との交渉を進めたほうが良いだろう。",
     "prerequisites": [
       "JAP_strike_south_doctrine"
     ]
@@ -61,7 +61,7 @@
     "x": 1400,
     "y": 830,
     "cost": 70,
-    "effect": "",
+    "effect": "フィリピンは我々の真の目標への望まざる障害である。我々は一旦、彼の地を捨ておくべきだろう。",
     "prerequisites": [
       "JAP_non_aggression_pact_with_the_soviet_union"
     ]
@@ -72,7 +72,7 @@
     "x": 1700,
     "y": 830,
     "cost": 70,
-    "effect": "",
+    "effect": "フィリピンは我々の真の目標への礎となる重要な拠点である。将来的に彼の地を確保する軍事作戦を立案するべきだろう。",
     "prerequisites": [
       "JAP_non_aggression_pact_with_the_soviet_union"
     ]
@@ -83,7 +83,7 @@
     "x": 1550,
     "y": 960,
     "cost": 70,
-    "effect": "",
+    "effect": "計画を実行する時がついに来た。南に向かい、資源豊かな西洋の植民地を占領するのだ。",
     "prerequisites": [
       "JAP_secure_the_philippines",
       "JAP_bypass_the_philippines"
@@ -95,7 +95,7 @@
     "x": 1700,
     "y": 570,
     "cost": 70,
-    "effect": "",
+    "effect": "シャムは、我々の来るべき西洋列強との戦争の中で我々の補給にとって重要な場所に位置している。シャムを我々の側につけることで、マラヤと東インド諸島の占領を容易にすることができるだろう。",
     "prerequisites": [
       "JAP_strike_south_doctrine"
     ]
@@ -106,7 +106,7 @@
     "x": 1700,
     "y": 1090,
     "cost": 70,
-    "effect": "",
+    "effect": "戦争における我が軍の維持のためには、東インド諸島の豊かな資源を開発し拡大する必要がある。",
     "prerequisites": [
       "JAP_strike_on_the_southern_resource_area",
       "JAP_coal_liquification"

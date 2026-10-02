@@ -5,7 +5,7 @@
     "x": 500,
     "y": 440,
     "cost": 70,
-    "effect": "",
+    "effect": "男女一人ひとりに国家を守る義務がある。彼らにその機会があることを保証しよう。",
     "prerequisites": [
       "JAP_cast_the_die"
     ]
@@ -16,7 +16,7 @@
     "x": 500,
     "y": 700,
     "cost": 70,
-    "effect": "",
+    "effect": "我々の闘争はこれで終わりではない。我々は他の国々の革命も促していかなくてはならない。革命を受け入れた国々で我々の主義を支援するために、最高に栄誉ある同志を送るべきだ！",
     "prerequisites": [
       "JAP_red_brigades"
     ]
@@ -27,7 +27,7 @@
     "x": 500,
     "y": 830,
     "cost": 70,
-    "effect": "",
+    "effect": "我々はアジアの兄弟たちと共に立ち上がらなければならない。隣人と共にいれば西洋型の共産主義ではなく、アジア圏で求められる共産主義を広げて行くことができる。",
     "prerequisites": [
       "JAP_finish_the_fight",
       "JAP_communist_volunteers"
@@ -39,7 +39,7 @@
     "x": 800,
     "y": 440,
     "cost": 70,
-    "effect": "",
+    "effect": "我が国の財閥は未曽有の政治的・経済的影響力を長いこと持ち続けてきた。しかし、それもここで終結し、最早この国の主権は脅かされることはない。",
     "prerequisites": [
       "JAP_cast_the_die"
     ]
@@ -50,7 +50,7 @@
     "x": 650,
     "y": 570,
     "cost": 70,
-    "effect": "",
+    "effect": "鉱山で働く人々自身にその鉱山の所有を許可することによって、彼らのモチベーションと労働効率を上げることができるだろう。",
     "prerequisites": [
       "JAP_nationalize_the_zaibatsus"
     ]
@@ -61,7 +61,7 @@
     "x": 950,
     "y": 570,
     "cost": 70,
-    "effect": "",
+    "effect": "一連の新たな公共事業は全国のインフラを改善するだけでなく、全ての事業をより確かなものにするだろう。",
     "prerequisites": [
       "JAP_nationalize_the_zaibatsus"
     ]
@@ -72,7 +72,7 @@
     "x": 800,
     "y": 700,
     "cost": 70,
-    "effect": "",
+    "effect": "労働者の力を利用し、国家の自給自足をより促進させる。",
     "prerequisites": [
       "JAP_people_owned_mines",
       "JAP_public_works"
@@ -84,7 +84,7 @@
     "x": 1700,
     "y": 50,
     "cost": 70,
-    "effect": "",
+    "effect": "政府を支配し、北のソビエト連邦に一撃を与えようとする新たな派閥が現れた。取り返しのつかない損害を被る前に、連中を排除する必要がある。",
     "prerequisites": []
   },
   {
@@ -93,7 +93,7 @@
     "x": 1550,
     "y": 180,
     "cost": 70,
-    "effect": "",
+    "effect": "政府と軍のすべての支部の連絡を中央部に送ることで、意思決定のスピードを大幅に高めることができる。",
     "prerequisites": [
       "JAP_purge_the_kodoha_faction"
     ]
@@ -104,7 +104,7 @@
     "x": 1400,
     "y": 310,
     "cost": 70,
-    "effect": "",
+    "effect": "西洋帝国主義の時代は終わった。アジアの民族は一致団結し、我が国を盟主とした、強力で統一された連盟とならなければならない。アジアはアジアのために！",
     "prerequisites": [
       "JAP_liaison_conference"
     ]

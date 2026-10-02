@@ -1,70 +1,70 @@
 {
   "scientists": [
     {
-      "id": "boris_stechkin",
-      "name": "ボリス・ステチキン",
-      "name_en": "Boris Stechkin",
-      "category": "air",
-      "category_name": "航空・ロケット分野",
-      "icon": "special/data/image/Portrait_SOV_boris_stechkin.png",
+      "id": "von_braun",
+      "name": "ヴェルナー・フォン・ブラウン",
+      "name_en": "Wernher von Braun",
+      "category": "rocket",
+      "category_name": "ロケット分野",
+      "icon": "special/data/image/rocket.png",
       "project_icon": "special/data/image/rocket.png",
-      "overview": "ジェット推進・熱機関の専門家。",
-      "weapons": "初期型ジェット戦闘機（MiG-9、Yak-15）、後退翼ジェット戦闘機（MiG-15）"
+      "overview": "ペーネミュンデのロケット開発を主導した天才技術者。",
+      "weapons": "V-2弾道ミサイル、A4b（案）、後の宇宙ロケットの基礎"
     },
     {
-      "id": "sergey_korolyov",
-      "name": "セルゲイ・コロリョフ",
-      "name_en": "Sergey Korolyov",
-      "category": "air",
-      "category_name": "航空・ロケット分野",
-      "icon": "special/data/image/Portrait_SOV_sergei_korolev.png",
-      "project_icon": "special/data/image/rocket2.png",
-      "overview": "ソ連の宇宙開発・ロケット工学の父。",
-      "weapons": "長距離ロケット（V2相当）、ICBM（R-7）、試作ロケット戦闘機（BI-1）"
-    },
-    {
-      "id": "arkady_nazarov",
-      "name": "アルカディ・ナザロフ",
-      "name_en": "Arkady Nazarov",
-      "category": "air",
-      "category_name": "航空・ロケット分野",
-      "icon": "special/data/image/Portrait_SOV_arkady_nazarov.png",
-      "project_icon": "special/data/image/engine.png",
-      "overview": "先進的機体構造および航空エンジンの研究者。",
-      "weapons": "試作超音速機、ジェット爆撃機（Il-28、Tu-16）"
-    },
-    {
-      "id": "igor_kurchatov",
-      "name": "イーゴリ・クルチャトフ",
-      "name_en": "Igor Kurchatov",
+      "id": "heisenberg",
+      "name": "ヴェルナー・ハイゼンベルク",
+      "name_en": "Werner Heisenberg",
       "category": "nuclear",
       "category_name": "原子核分野",
-      "icon": "special/data/image/Portrait_SOV_igor_kurchatov.png",
+      "icon": "special/data/image/nuke.png",
       "project_icon": "special/data/image/nuke.png",
-      "overview": "ソ連の原爆開発（RDS-1計画）を主導した核物理学者。",
-      "weapons": "原子爆弾（RDS-1）、水爆（RDS-6s）"
+      "overview": "「ウランクラブ」を率いた理論物理学者。不確定性原理の提唱者。",
+      "weapons": "重水素原子炉（試作）、ウラン濃縮研究"
     },
     {
-      "id": "abram_ioffe",
-      "name": "アブラム・ヨッフェ",
-      "name_en": "Abram Ioffe",
+      "id": "kurt_tank",
+      "name": "クルト・タンク",
+      "name_en": "Kurt Tank",
+      "category": "air",
+      "category_name": "航空機設計",
+      "icon": "special/data/image/engine.png",
+      "project_icon": "special/data/image/engine.png",
+      "overview": "フォッケウルフの設計責任者。実用性を重視した設計思想で知られる。",
+      "weapons": "Fw190、Ta152、Ta183（ジェット試作）"
+    },
+    {
+      "id": "messerschmitt",
+      "name": "ヴィリー・メッサーシュミット",
+      "name_en": "Willy Messerschmitt",
+      "category": "air",
+      "category_name": "航空・ジェット分野",
+      "icon": "special/data/image/rocket2.png",
+      "project_icon": "special/data/image/rocket2.png",
+      "overview": "Bf109の設計者。世界初の実用ジェット戦闘機Me262を完成させた。",
+      "weapons": "Me262シュヴァルベ、Me163（ロケット迎撃機）"
+    },
+    {
+      "id": "porsche",
+      "name": "フェルディナント・ポルシェ",
+      "name_en": "Ferdinand Porsche",
+      "category": "armor",
+      "category_name": "戦車設計",
+      "icon": "special/data/image/tank.png",
+      "project_icon": "special/data/image/tank.png",
+      "overview": "電気駆動方式を好んだ天才自動車技術者。重戦車設計競争に参加。",
+      "weapons": "ティーガー(P)型、フェルディナント/エレファント、マウス（試作）"
+    },
+    {
+      "id": "otto_hahn",
+      "name": "オットー・ハーン",
+      "name_en": "Otto Hahn",
       "category": "nuclear",
       "category_name": "原子核分野",
-      "icon": "special/data/image/Portrait_SOV_abram_ioffe.png",
+      "icon": "special/data/image/nuke1.png",
       "project_icon": "special/data/image/nuke1.png",
-      "overview": "ソ連の物理学・半導体・原子核研究の先駆者。",
-      "weapons": "原子力駆動装置（原子力潜水艦ノヴェンバー級用）"
-    },
-    {
-      "id": "vladimir_kotelnikov",
-      "name": "ウラジーミル・コテルニコフ",
-      "name_en": "Vladimir Kotelnikov",
-      "category": "artillery",
-      "category_name": "陸上兵器砲術分野",
-      "icon": "special/data/image/Portrait_SOV_vladimir_kotelnikov.png",
-      "project_icon": "special/data/image/rader.png",
-      "overview": "情報理論および無線工学の先駆者（標本化定理の発明者）。",
-      "weapons": "高精度レーダーシステム（対空・艦載・地上警戒レーダー）"
+      "overview": "核分裂の発見者（1938年）。ドイツ核研究の科学的出発点。",
+      "weapons": "核分裂研究データ、重水素抽出技術"
     }
   ]
 }

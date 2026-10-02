@@ -82,22 +82,22 @@
   },
   {
     "id": "SOV_constitutional_monarchy",
-    "title": "SOV constitutional monarchy",
+    "title": "立憲君主制",
     "x": 21800,
     "y": 570,
     "cost": 70,
-    "effect": "",
+    "effect": "ロシアに立憲君主制を敷く。",
     "prerequisites": [
       "SOV_reconvene_the_zemsky_sobor"
     ]
   },
   {
     "id": "SOV_the_sobors_choice",
-    "title": "SOV the sobors choice",
+    "title": "ソボルの選択",
     "x": 21800,
     "y": 700,
     "cost": 70,
-    "effect": "",
+    "effect": "ソボル（国民会議）の決断が国家の進路を決める。",
     "prerequisites": [
       "SOV_constitutional_monarchy"
     ]

@@ -98,11 +98,11 @@
   },
   {
     "id": "GER_extra_tech_slot",
-    "title": "GER extra tech slot",
+    "title": "研究スロットの追加",
     "x": 1700,
     "y": 570,
     "cost": 70,
-    "effect": "",
+    "effect": "研究スロットを1つ追加する。",
     "prerequisites": [
       "GER_kdf_wagen",
       "GER_synthetic_rubber"

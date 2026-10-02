@@ -5,7 +5,7 @@
     "x": 4700,
     "y": 180,
     "cost": 70,
-    "effect": "",
+    "effect": "大規模な工業化のための必要不可欠な前提として、徹底的な生産の向上のために昭和製鋼所の拡大をしなければならない。",
     "prerequisites": [
       "JAP_the_manchurian_project"
     ]
@@ -16,7 +16,7 @@
     "x": 4700,
     "y": 310,
     "cost": 70,
-    "effect": "",
+    "effect": "航空産業の計画には十分なアルミ資源が要求される。それゆえ満州の資源は広範に開発されなければならない。",
     "prerequisites": [
       "JAP_expand_the_showa_steel_works"
     ]
@@ -27,7 +27,7 @@
     "x": 4100,
     "y": 180,
     "cost": 70,
-    "effect": "",
+    "effect": "工業化を進めるための劇的な輸送力の拡大が、満州のインフラには必須だ。",
     "prerequisites": [
       "JAP_the_manchurian_project"
     ]
@@ -38,7 +38,7 @@
     "x": 3950,
     "y": 310,
     "cost": 70,
-    "effect": "",
+    "effect": "軽軍需工業は軍の基本的な需要に必要不可欠であり、拡大されなければならない。",
     "prerequisites": [
       "JAP_expand_manchurian_railways"
     ]
@@ -49,7 +49,7 @@
     "x": 4250,
     "y": 310,
     "cost": 70,
-    "effect": "",
+    "effect": "重軍需工業は軍の先進的な需要に必要不可欠であり、拡張されなければならない。",
     "prerequisites": [
       "JAP_expand_manchurian_railways"
     ]
@@ -60,7 +60,7 @@
     "x": 4100,
     "y": 440,
     "cost": 70,
-    "effect": "",
+    "effect": "国民を満州に移住させ労働力を増やす事でより多くの工業用地を得ることができるだろう。",
     "prerequisites": [
       "JAP_heavy_industry_development",
       "JAP_light_industry_development"
@@ -72,7 +72,7 @@
     "x": 4400,
     "y": 180,
     "cost": 70,
-    "effect": "",
+    "effect": "北の国境は殆ど防衛体制が整っていない。我が国は北方からの攻撃に備え、防衛の準備をする必要がある。",
     "prerequisites": [
       "JAP_the_manchurian_project"
     ]
@@ -83,7 +83,7 @@
     "x": 5300,
     "y": 50,
     "cost": 70,
-    "effect": "",
+    "effect": "政府は即時的かつ徹底的な軍備拡張を中核とするべきだ。",
     "prerequisites": []
   },
   {
@@ -92,7 +92,7 @@
     "x": 5150,
     "y": 180,
     "cost": 70,
-    "effect": "",
+    "effect": "我が軍は、潜在敵国に対抗し得る近代的兵器を装備する必要がある。",
     "prerequisites": [
       "JAP_army_expansion_law"
     ]
@@ -103,7 +103,7 @@
     "x": 5150,
     "y": 310,
     "cost": 70,
-    "effect": "",
+    "effect": "我々を勝利に導くのは技術である。軍と装備の観点で敵をかけ離すことにすべての努力は向けられなければならない。",
     "prerequisites": [
       "JAP_small_arms_modernization"
     ]

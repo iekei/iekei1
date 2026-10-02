@@ -5,7 +5,7 @@
     "x": 350,
     "y": 180,
     "cost": 35,
-    "effect": "",
+    "effect": "ファシスト政権打倒の試みにおいて王立カラビニエリが果たした役割を考慮し、我々は直ちにこの軍隊に取って代わる事にする。黒シャツ隊を再結成し、警察と軍事機能を担う共和国兵を設立する計画もすでにある。",
     "prerequisites": [
       "ITA_the_italian_social_republic"
     ]
@@ -16,7 +16,7 @@
     "x": 200,
     "y": 310,
     "cost": 35,
-    "effect": "",
+    "effect": "植民地警察がイタリアと我が政権に忠実であるうちに統合しなければならない。パルチザンはすぐにでもこの部隊を手に入れようとするに違いない…",
     "prerequisites": [
       "ITA_guardia_nazionale_repubblicana"
     ]
@@ -27,7 +27,7 @@
     "x": 50,
     "y": 440,
     "cost": 35,
-    "effect": "",
+    "effect": "近頃、敵のパルチザンが非常に活発で、我々の予備軍を攻撃し、補給線を脅かしている。反パルチザン戦争に特化した新しい部隊を配備し、この呪われたギャングを寄せ付けないようにしなければならない。",
     "prerequisites": [
       "ITA_integrate_polizia_dell_africa_italiana"
     ]
@@ -38,7 +38,7 @@
     "x": 350,
     "y": 440,
     "cost": 35,
-    "effect": "",
+    "effect": "この血なまぐさい戦争に勝つためには、皆が戦争に貢献することが必要だ。しかし、敵と直接戦うことがすべてではない。前線は、兵士と同じくらい、強固な産業と兵站に支えられている必要がある。",
     "prerequisites": [
       "ITA_guardia_nazionale_repubblicana"
     ]
@@ -49,7 +49,7 @@
     "x": 500,
     "y": 310,
     "cost": 35,
-    "effect": "",
+    "effect": "敵の攻撃を封じ込めるために新たな精鋭部隊が必要だ。戦闘で功績のあった黒シャツ隊を変革、そして強化し、この部隊で前線の弱点を補強し、敵を元の場所へ押し戻さなければならない。",
     "prerequisites": [
       "ITA_guardia_nazionale_repubblicana"
     ]
@@ -60,7 +60,7 @@
     "x": 650,
     "y": 440,
     "cost": 35,
-    "effect": "",
+    "effect": "敵部隊の進行を阻止するために防衛線を強化しなければならない。イタリア社会共和国はここでくじけてはならない！",
     "prerequisites": [
       "ITA_battaglioni_m"
     ]
@@ -71,7 +71,7 @@
     "x": 350,
     "y": 570,
     "cost": 35,
-    "effect": "",
+    "effect": "我々は操りやすい裏切り者たちが始めたこの苦い戦争で、あまりにも多くの血を流した。だが、それに終止符を打つ時だ。イタリア国家はこれまで以上に強く生まれ変わるだろう！",
     "prerequisites": [
       "ITA_anti_partisan_measures",
       "ITA_all_within_the_state",
@@ -84,7 +84,7 @@
     "x": 350,
     "y": 700,
     "cost": 35,
-    "effect": "",
+    "effect": "$ITA_independence_rds_desc$",
     "prerequisites": [
       "ITA_the_social_republic_prevails"
     ]
@@ -95,7 +95,7 @@
     "x": 8300,
     "y": 180,
     "cost": 35,
-    "effect": "",
+    "effect": "イタリアにはファシズムの根が強く、それを根絶するためには多大な努力が必要だ。我々はファシスト政権に反対する様々なグループ間で共通の目標を見つけなければならない。団結してこそ憎むべきドゥーチェを打倒することができる。",
     "prerequisites": [
       "ITA_the_abyssinian_fiasco"
     ]
@@ -106,7 +106,7 @@
     "x": 8600,
     "y": 440,
     "cost": 35,
-    "effect": "",
+    "effect": "同志であるマルクス主義の哲学者アントニオ・グラムシは、ファシスト政府によって10年以上も獄中に置かれ、今や彼の健康状態は急速に悪化している。彼を解放し、命を救うための秘密作戦を組織しなければならない。彼は必ず我々の労働者革命の重要な役者となるだろう。",
     "prerequisites": [
       "ITA_unite_the_opposition",
       "ITA_triumph_in_africa_bba"

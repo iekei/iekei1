@@ -879,6 +879,8 @@
 class DataFetcher {
   static HOI4_REPO_RAW = 'https://raw.githubusercontent.com/cbrzeczysz/hoi4-history/main';
   static cache = new Map();
+  // データバージョン: データファイル更新時に上げる (fetchURLのキャッシュバスティング用)
+  static DATA_VERSION = '2';
 
   // Local card data paths (relative to game/index.html)
   static CARD_PATHS = {
@@ -889,17 +891,16 @@ class DataFetcher {
   };
 
   // Focus tree data paths (country-specific, extracted from hoi4-history/common/national_focus)
-  // Actual filenames use per-country prefixes with contiguous numbering:
-  //   ger/sov: nnf_batchN.json / jap: JAP_nf_batchN.json + shared nnf_batchN.json / etc.
+  // Unified naming: <TAG>_nf_batchN.json, contiguous 1..N per country.
   static FOCUS_DIR = { GER: 'ger', SOV: 'sov', JAP: 'jap', USA: 'usa', ENG: 'eng', FRA: 'fra', ITA: 'ita' };
   static FOCUS_BATCHES = {
-    GER: [['nnf_batch', 13]],
-    SOV: [['nnf_batch', 33]],
-    JAP: [['JAP_nf_batch', 11], ['nnf_batch', 11]],
-    USA: [['USA_nf_batch', 14], ['nnf_batch', 14]],
-    ENG: [['ENG_nf_batch', 16], ['nnf_batch', 16]],
-    FRA: [['FRA_nf_batch', 19], ['nnf_batch', 19]],
-    ITA: [['ITA_nf_batch', 32], ['nnf_batch', 32]]
+    GER: [['GER_nf_batch', 13]],
+    SOV: [['SOV_nf_batch', 33]],
+    JAP: [['JAP_nf_batch', 11]],
+    USA: [['USA_nf_batch', 14]],
+    ENG: [['ENG_nf_batch', 16]],
+    FRA: [['FRA_nf_batch', 19]],
+    ITA: [['ITA_nf_batch', 32]]
   };
   static FOCUS_PATHS = Object.fromEntries(
     Object.entries(DataFetcher.FOCUS_BATCHES).map(([tag, batches]) => [
@@ -963,7 +964,8 @@ class DataFetcher {
   static async fetchJSON(path) {
     if (DataFetcher.cache.has(path)) return DataFetcher.cache.get(path);
     try {
-      const res = await fetch(path);
+      // キャッシュバスティング: データ更新後もブラウザの古いキャッシュを使わない
+      const res = await fetch(path + '?v=' + DataFetcher.DATA_VERSION);
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
       DataFetcher.cache.set(path, data);
