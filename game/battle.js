@@ -12,6 +12,9 @@ class BattleManager {
   static nextId = 1;
   static hoverId = null;
 
+  // 将軍カードの階級別攻勢ボーナス (軍集団に割り当てた将軍が戦闘に影響する)
+  static GENERAL_BONUS = { SSR: 0.12, SR: 0.07, R: 0.03 };
+
   static COLORS = {
     advantage: '#4ac46a',     // 優勢 (緑)
     even: '#e0c040',          // 均等 (黄)
@@ -78,6 +81,8 @@ class BattleManager {
     const org = army.divisions.reduce((s, d) => s + d.org, 0) / Math.max(1, army.divisions.length);
     const defense = 50 + (st && st.b ? (st.b.fort || 0) * 8 : 0) + (st && st.supply ? st.supply : 0) * 1.5;
     let adv = (org - defense) / 100;
+    // 将軍カードの攻勢ボーナス (軍集団に割り当てられた将軍の階級で決まる)
+    if (army.general && army.general.rank) adv += (BattleManager.GENERAL_BONUS[army.general.rank] || 0);
     // 海軍/空軍の行動支援: 周辺で任務実行中の部隊が戦闘を支援する
     adv += BattleManager.supportBonus(st);
     return Math.max(-1, Math.min(1, adv));
@@ -111,8 +116,10 @@ class BattleManager {
     const allDivs = BattlePlanManager.armies.reduce((a, army) => a.concat(army.divisions), []);
     const org = allDivs.length ? allDivs.reduce((t, d) => t + d.org, 0) / allDivs.length : 40;
     const defense = org + 25; // 地形・要塞相当の防衛ボーナス
+    // 割り当て済み将軍の防衛指揮ボーナス (最大の階級ボーナスの半分)
+    const genBonus = Math.max(0, ...(BattlePlanManager.armies || []).map(a => a.general ? (BattleManager.GENERAL_BONUS[a.general.rank] || 0) : 0));
     const enemyPower = 60 + Math.random() * 20;
-    return Math.max(-1, Math.min(1, (defense - enemyPower) / 100));
+    return Math.max(-1, Math.min(1, (defense + genBonus * 50 - enemyPower) / 100));
   }
 
   static serialize(b) {
@@ -241,19 +248,30 @@ class BattleManager {
     return best;
   }
 
-  // ---- 敵軍の偶発侵攻 (交戦国がいる場合) ----
+  // ---- AI軍の攻勢 (攻撃チェーン): 各交戦国は「前線に接する州」から1州ずつ
+  //      段階的に進撃する。飛び地への跳躍は禁止。勝つ (防衛失敗) と次の州へ
+  //      自動的に進撃する (戦闘が解決した翌日に前線の次の州へ再開)。 ----
   static maybeEnemyOffensive() {
     if (!MapRenderer.ready) return;
     const s = CoreEngine.gameState;
     if (!s.atWar || s.atWar.length === 0) return;
-    if (BattleManager.battles.length >= 4) return;
-    if (Math.random() > 0.03) return;
-    const pool = MapRenderer.borderStateList(s.country);
-    const fallback = pool.length ? pool : Object.keys(MapRenderer.states).filter(sid => MapRenderer.states[sid].owner === s.country);
-    if (!fallback.length) return;
-    const sid = fallback[Math.floor(Math.random() * fallback.length)];
-    const enemy = s.atWar[Math.floor(Math.random() * s.atWar.length)];
-    BattleManager.startDefense(enemy, sid);
+    if (BattleManager.battles.length >= 6) return;
+    MapRenderer.buildStateAdjacency();
+    const player = s.country;
+    s.atWar.forEach(enemy => {
+      // 各AI国は1正面ずつ (現在進行中の戦闘が解決してから次の州へ進撃)
+      if (BattleManager.battles.some(b => b.attacker === enemy)) return;
+      // 前線 = 自国防衛州のうち敵領に陸路で接する州のみ (飛び地は攻めない)
+      const frontier = Object.keys(MapRenderer.states).filter(sid => {
+        const st = MapRenderer.states[sid];
+        if (!st || st.owner !== player) return false;
+        return [...(MapRenderer.stateAdjacency.get(String(sid)) || [])]
+          .some(n => MapRenderer.states[n] && MapRenderer.states[n].owner === enemy);
+      });
+      if (!frontier.length) return;
+      const sid = frontier[Math.floor(Math.random() * frontier.length)];
+      BattleManager.startDefense(enemy, sid);
+    });
   }
 
   // ---- 描画: 戦闘マーカー (丸) ----

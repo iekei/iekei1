@@ -1101,7 +1101,7 @@ class CoreEngine {
       const s = CoreEngine.gameState;
       const b = s.cardModifiers.stabilityBonus || 0;
       return { title: '安定度 (Stability)',
-        rows: ['現在値: <b>' + s.stability + '%</b>',
+        rows: ['現在値: <b>' + Number(s.stability).toFixed(1) + '%</b>',
                '国家精神/カード補正: <b>+' + b + '%</b>',
                '低下要因: 戦争・燃料不足・世論',
                '用途: 生産ボーナス・抵抗運動軽減'] };
@@ -1109,7 +1109,7 @@ class CoreEngine {
     ws: () => {
       const s = CoreEngine.gameState;
       return { title: '戦争協力度 (War Support)',
-        rows: ['現在値: <b>' + s.warSupport + '%</b>',
+        rows: ['現在値: <b>' + Number(s.warSupport).toFixed(1) + '%</b>',
                '宣戦布告や敵の攻撃で上昇',
                '用途: 徴兵法律の解禁・降伏閾値'] };
     },
@@ -1177,7 +1177,7 @@ class CoreEngine {
   static renderWorldTension() {
     const el = document.getElementById('world-tension');
     if (!el) return;
-    const t = Math.round(CoreEngine.gameState.worldTension);
+    const t = Number(CoreEngine.gameState.worldTension).toFixed(1);
     el.querySelector('.wt-val').textContent = t + '%';
     el.style.borderColor = t >= 75 ? 'var(--accent-red)' : t >= 40 ? 'var(--accent-orange)' : 'var(--border-mil)';
   }
@@ -1255,9 +1255,9 @@ class CoreEngine {
     const s = CoreEngine.gameState;
     const html =
       '<div class="stat-item" data-tip-key="pp">🏛️ <span class="stat-val">' + Math.floor(s.politicalPower) + '</span></div>' +
-      '<div class="stat-item" data-tip-key="stab">📊 <span class="stat-val">' + s.stability + '%</span>' +
+      '<div class="stat-item" data-tip-key="stab">📊 <span class="stat-val">' + Number(s.stability).toFixed(1) + '%</span>' +
         '<div class="stat-bar"><div class="stat-bar-fill" style="width:' + s.stability + '%;background:var(--accent-green)"></div></div></div>' +
-      '<div class="stat-item" data-tip-key="ws">⚔️ <span class="stat-val">' + s.warSupport + '%</span>' +
+      '<div class="stat-item" data-tip-key="ws">⚔️ <span class="stat-val">' + Number(s.warSupport).toFixed(1) + '%</span>' +
         '<div class="stat-bar"><div class="stat-bar-fill" style="width:' + s.warSupport + '%;background:var(--accent-orange)"></div></div></div>' +
       '<div class="stat-item" data-tip-key="mp">👥 <span class="stat-val">' + (s.manpower/1000).toFixed(0) + 'K</span></div>' +
       '<div class="stat-item" data-tip-key="fac">🏭 <span class="stat-val">' + s.civilianFactories + 'C / ' + s.militaryFactories + 'M</span></div>' +
@@ -2757,6 +2757,56 @@ class BattlePlanManager {
     return BattlePlanManager.armies.find(a => a.id === BattlePlanManager.selectedArmyId) || null;
   }
 
+  // ---- 将軍カードの割り当て (軍集団ごと / 自国の雇用カードのみ / 1将軍1部隊) ----
+  static assignGeneral(armyId) {
+    const army = BattlePlanManager.armies.find(a => a.id === armyId);
+    if (!army) return;
+    const player = CoreEngine.gameState.country;
+    const assigned = BattlePlanManager.armies.map(a => a.general && a.general.id).filter(Boolean);
+    const pool = (CardSystem.hiredCards || []).filter(c => c.country === player && !assigned.includes(c.id));
+    let html = '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">' +
+      '雇用済みの将軍カード (' + DataFetcher.getCountryFlag(player) + ' 自国のみ) をこの軍集団に割り当てます。<br>' +
+      '階級ボーナス: SSR +12% / SR +7% / R +3% (攻勢・防衛の戦況に影響)</p>';
+    if (army.general) {
+      html += '<div class="army-row"><div class="army-name">🎖️ 現在: ' + army.general.name + ' (' + army.general.rank + ')</div>' +
+        '<button class="army-btn abort" onclick="BattlePlanManager.clearGeneral(' + army.id + ')">✕ 解任</button></div>';
+    }
+    if (pool.length === 0) {
+      html += '<p style="font-size:12px;color:var(--text-secondary);margin-top:8px;">割り当て可能な将軍カードがありません。将軍カードのウィンドウから雇用してください。</p>';
+    } else {
+      pool.forEach(c => {
+        const bonus = (BattleManager.GENERAL_BONUS[c.rank] || 0) * 100;
+        html += '<div class="army-row" style="cursor:pointer;" onclick="BattlePlanManager.pickGeneral(' + armyId + ',\'' + c.id + '\')">' +
+          '<div class="army-name">' + DataFetcher.getCountryFlag(c.country) + ' ' + c.name +
+          ' <span style="color:var(--accent-orange);">(' + c.rank + ')</span></div>' +
+          '<div class="army-info">攻勢ボーナス +' + bonus + '%</div></div>';
+      });
+    }
+    GameUI.openModal('🎖️ ' + army.name + ' — 将軍の割り当て', html);
+  }
+
+  static pickGeneral(armyId, cardId) {
+    const army = BattlePlanManager.armies.find(a => a.id === armyId);
+    const card = (CardSystem.hiredCards || []).find(c => c.id === cardId);
+    if (!army || !card) return;
+    army.general = { id: card.id, name: card.name, rank: card.rank };
+    CoreEngine.log('🎖️ ' + army.name + 'に将軍 ' + card.name + ' (' + card.rank + ') を着任させました');
+    GameUI.notify('🎖️ ' + card.name + 'を' + army.name + 'に配属しました (+' + ((BattleManager.GENERAL_BONUS[card.rank] || 0) * 100) + '% 攻勢)', 'success');
+    MultiplayerManager.broadcast({ type: 'army_general', army: army.id, general: army.general });
+    GameUI.closeModal();
+    BattlePlanManager.renderPanel();
+  }
+
+  static clearGeneral(armyId) {
+    const army = BattlePlanManager.armies.find(a => a.id === armyId);
+    if (!army || !army.general) return;
+    CoreEngine.log('🎖️ ' + army.name + 'の将軍 ' + army.general.name + 'を解任しました');
+    army.general = null;
+    MultiplayerManager.broadcast({ type: 'army_general', army: army.id, general: null });
+    GameUI.closeModal();
+    BattlePlanManager.renderPanel();
+  }
+
   // ---- 攻撃チェーン構築: 前線 (自国領に隣接する敵州) から目標州まで、
   //      陸路で連続する敵州のみを辿る。飛び地・中立国経由は不可。 ----
   static buildAttackChain(targetSid) {
@@ -3259,6 +3309,9 @@ class BattlePlanManager {
       const maxOrg = army.divisions.reduce((s, d) => s + d.maxOrg, 0);
       html += '<div class="army-row ' + (army.id === BattlePlanManager.selectedArmyId ? 'selected' : '') + '" onclick="BattlePlanManager.selectArmy(' + army.id + ')">' +
         '<div class="army-name">' + army.name + (army.id === BattlePlanManager.selectedArmyId ? ' ✅' : '') + '</div>' +
+        '<div class="army-info">🎖️ 将軍: ' + (army.general
+          ? army.general.name + ' <span style="color:var(--accent-orange);">(' + army.general.rank + ')</span>'
+          : '—') + '</div>' +
         '<div class="army-info">師団 ' + army.divisions.length + '個 | ' +
         (army.frontline ? '前線✅' : '前線—') + ' | ' +
         (army.arrow ? '矢印✅' : '矢印—') + '</div>' +
@@ -3268,6 +3321,7 @@ class BattlePlanManager {
             '<button class="army-btn abort" onclick="BattlePlanManager.abort(' + army.id + ')">⛔ 中止</button>'
           : '<button class="army-btn" onclick="BattlePlanManager.execute(' + army.id + ')" ' + (army.arrow ? '' : 'disabled') + '>▶ 作戦開始</button>') +
         '<button class="army-btn" style="background:var(--bg-panel-light)" onclick="BattleManager_clearFront(' + army.id + ')">✕ 前線</button>' +
+        '<button class="army-btn" style="background:var(--accent-blue)" onclick="event.stopPropagation();BattlePlanManager.assignGeneral(' + army.id + ')">🎖️ 将軍</button>' +
         '</div>';
     });
     html += '<div style="font-size:10px;color:var(--text-secondary);margin-top:4px;">マップ上で右ドラッグ=前線 / Shift+右ドラッグ=攻撃矢印</div>';
@@ -4090,9 +4144,14 @@ class DivisionDesigner {
       '<div class="division-stat-row"><span>大隊数</span><span>' + stats.count + '</span></div>' +
       '<div class="division-stat-row"><span>機甲速度ボーナス</span><span>' + (CoreEngine.gameState.cardModifiers.armorSpeed > 0 ? '+' : '') + (CoreEngine.gameState.cardModifiers.armorSpeed * 100) + '%</span></div>' +
       '<div class="division-stat-row"><span>歩兵防御ボーナス</span><span>' + (CoreEngine.gameState.cardModifiers.infantryDefense > 0 ? '+' : '') + (CoreEngine.gameState.cardModifiers.infantryDefense * 100) + '%</span></div>' +
-      '</div></div></div>';
+      '<div class="division-stat-row"><span>訓練期間</span><span style="color:var(--accent-blue);">' + (TrainingManager.requirements() ? TrainingManager.requirements().trainDays + '日 (約' + Math.round(TrainingManager.requirements().trainDays / 30) + 'ヶ月)' : '編成してください') + '</span></div>' +
+      '</div>' +
+      '<div style="margin-top:10px;"><button class="sp-btn" onclick="TrainingManager.recruit()">📝 この編成で徴兵 (兵員・兵器が揃い次第訓練開始)</button></div>' +
+      '</div></div>' +
+      '<div id="training-queue"></div>';
 
     container.innerHTML = html;
+    if (typeof TrainingManager !== 'undefined') TrainingManager.renderQueue();
   }
 
   static selectBattalion(battId) {
@@ -4586,6 +4645,16 @@ class MultiplayerManager {
         break;
       case 'construction_add':
         CoreEngine.log('他プレイヤーが建設を開始しました');
+        break;
+      case 'recruit_add':
+        if (!TrainingManager.queue.some(o => o.id === data.order.id)) {
+          TrainingManager.queue.push(data.order);
+          TrainingManager.renderQueue();
+        }
+        break;
+      case 'army_general':
+        var ga = BattlePlanManager.armies.find(a => a.id === data.army);
+        if (ga) { ga.general = data.general; BattlePlanManager.renderPanel(); }
         break;
       case 'construction_done':
         var cdst = MapRenderer.states[data.state];
@@ -5646,6 +5715,7 @@ async function initGame() {
   await CardSystem.init();
   PoliticsManager.init();
   PoliticsManager.render();
+  TrainingManager.init();       // 徴兵・訓練 (師団は徴兵→訓練でのみ増える)
   CheatConsole.init();
   MultiplayerManager.init();
   UniqueNationSystems.init();
@@ -5667,6 +5737,8 @@ window.addEventListener('DOMContentLoaded', () => StartScreen.show());
 <script src="news.js"></script>
 <!-- ==================== AI自動操作 (非プレイヤー国の史実準拠AI) ==================== -->
 <script src="ai.js"></script>
+<!-- ==================== 徴兵・訓練システム (師団は徴兵→訓練でのみ増える) ==================== -->
+<script src="training.js"></script>
 <!-- ==================== DLC拡張モジュール (ドクトリン/兵器設計/諜報/MIO・国際市場/講和会議/将軍特性) ==================== -->
 <script src="dlc.js"></script>
 </body>
