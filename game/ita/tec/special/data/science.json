@@ -1,0 +1,26 @@
+{
+  "scientists": [
+    {
+      "id": "fermi_ita",
+      "name": "エンリコ・フェルミ（伊）",
+      "name_en": "Enrico Fermi (ITA)",
+      "category": "nuclear",
+      "category_name": "原子核分野",
+      "icon": "special/data/image/nuke.png",
+      "project_icon": "special/data/image/nuke.png",
+      "overview": "イタリア出身の核物理学者（後にアメリカへ移住）。",
+      "weapons": "中性子研究、初期原子炉設計"
+    },
+    {
+      "id": "caproni",
+      "name": "ジャンニ・カプローニ",
+      "name_en": "Gianni Caproni",
+      "category": "air",
+      "category_name": "航空機設計",
+      "icon": "special/data/image/rocket.png",
+      "project_icon": "special/data/image/rocket.png",
+      "overview": "イタリアの航空機産業の先駆者。",
+      "weapons": "カプロニCa.3爆撃機、カプロニ・カンプini N.1（ジェット試作機）"
+    }
+  ]
+}

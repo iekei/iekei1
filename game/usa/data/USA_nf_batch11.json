@@ -1,0 +1,113 @@
+[
+  {
+    "id": "USA_airborne_divisions",
+    "title": "空挺師団",
+    "x": 8150,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_louisiana_maneuvers"
+    ]
+  },
+  {
+    "id": "USA_army_of_the_united_states",
+    "title": "合衆国陸軍",
+    "x": 8450,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_louisiana_maneuvers"
+    ]
+  },
+  {
+    "id": "USA_womens_armed_service_integration_act",
+    "title": "女性武装勤務統合法",
+    "x": 8450,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_army_of_the_united_states"
+    ]
+  },
+  {
+    "id": "USA_support_rock_island",
+    "title": "ロックアイランド工廠への支援",
+    "x": 8750,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_selective_training_act"
+    ]
+  },
+  {
+    "id": "USA_tank_experiments",
+    "title": "戦車実験",
+    "x": 8750,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_support_rock_island"
+    ]
+  },
+  {
+    "id": "USA_tank_destroyer_doctrine",
+    "title": "戦車駆逐ドクトリン",
+    "x": 8750,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_tank_experiments"
+    ]
+  },
+  {
+    "id": "USA_main_battle_tanks",
+    "title": "主力戦車",
+    "x": 9050,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_tank_experiments"
+    ]
+  },
+  {
+    "id": "USA_armored_infantry",
+    "title": "装甲歩兵",
+    "x": 8750,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_main_battle_tanks",
+      "USA_tank_destroyer_doctrine"
+    ]
+  },
+  {
+    "id": "USA_build_the_pentagon",
+    "title": "ペンタゴンの建設",
+    "x": 9050,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_war_department"
+    ]
+  },
+  {
+    "id": "USA_department_of_defense",
+    "title": "国防総省",
+    "x": 9050,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_build_the_pentagon"
+    ]
+  }
+]

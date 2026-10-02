@@ -1,0 +1,115 @@
+[
+  {
+    "id": "ITA_war_with_the_uk",
+    "title": "イギリスとの交戦",
+    "x": 19100,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_italy_first",
+      "ITA_italian_irredentism"
+    ]
+  },
+  {
+    "id": "ITA_war_with_greece",
+    "title": "ギリシャとの交戦",
+    "x": 18950,
+    "y": 1090,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_italian_irredentism"
+    ]
+  },
+  {
+    "id": "ITA_befriend_greece",
+    "title": "ギリシャとの友好",
+    "x": 19250,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_italy_first"
+    ]
+  },
+  {
+    "id": "ITA_claims_on_turkey_bba",
+    "title": "トルコへの請求",
+    "x": 18950,
+    "y": 1220,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_war_with_greece",
+      "ITA_befriend_greece"
+    ]
+  },
+  {
+    "id": "ITA_befriend_turkey",
+    "title": "トルコとの友好",
+    "x": 19250,
+    "y": 1220,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_war_with_greece",
+      "ITA_befriend_greece"
+    ]
+  },
+  {
+    "id": "ITA_corpo_di_truppe_volontarie",
+    "title": "イタリア義勇軍団",
+    "x": 19550,
+    "y": 570,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_foreign_affairs"
+    ]
+  },
+  {
+    "id": "ITA_spanish_italian_alliance",
+    "title": "西伊同盟",
+    "x": 19400,
+    "y": 830,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_corpo_di_truppe_volontarie",
+      "ITA_italy_first"
+    ]
+  },
+  {
+    "id": "ITA_demand_balearic_islands_bba",
+    "title": "バレアレス諸島の要求",
+    "x": 19700,
+    "y": 830,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_corpo_di_truppe_volontarie"
+    ]
+  },
+  {
+    "id": "ITA_befriend_portugal",
+    "title": "ポルトガルとの友好",
+    "x": 19550,
+    "y": 960,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_spanish_italian_alliance",
+      "ITA_demand_balearic_islands_bba"
+    ]
+  },
+  {
+    "id": "ITA_the_italian_liberation_war",
+    "title": "イタリア解放戦争",
+    "x": 350,
+    "y": 50,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": []
+  }
+]

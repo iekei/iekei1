@@ -1,0 +1,113 @@
+[
+  {
+    "id": "FRA_devalue_the_franc",
+    "title": "FRA devalue the franc",
+    "x": 50,
+    "y": 50,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": []
+  },
+  {
+    "id": "FRA_autoroutes",
+    "title": "高速道路",
+    "x": 350,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_devalue_the_franc"
+    ]
+  },
+  {
+    "id": "FRA_invest_in_the_metropole",
+    "title": "本国の開発",
+    "x": 50,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_devalue_the_franc"
+    ]
+  },
+  {
+    "id": "FRA_metropolitan_france",
+    "title": "フランス本土への投資",
+    "x": 50,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_invest_in_the_metropole"
+    ]
+  },
+  {
+    "id": "FRA_industrial_expansion",
+    "title": "工業の拡張",
+    "x": 50,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_metropolitan_france",
+      "FRA_algerie_france"
+    ]
+  },
+  {
+    "id": "FRA_military_factories",
+    "title": "軍需工場",
+    "x": 350,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_industrial_expansion",
+      "FRA_colonial_industry"
+    ]
+  },
+  {
+    "id": "FRA_algerie_france",
+    "title": "フランス領アルジェリアへの投資",
+    "x": 350,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_invest_in_the_metropole",
+      "FRA_invest_in_the_colonies"
+    ]
+  },
+  {
+    "id": "FRA_invest_in_the_colonies",
+    "title": "植民地の開発",
+    "x": 650,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_devalue_the_franc"
+    ]
+  },
+  {
+    "id": "FRA_invest_in_west_africa",
+    "title": "西アフリカへの投資",
+    "x": 650,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_invest_in_the_colonies"
+    ]
+  },
+  {
+    "id": "FRA_invest_in_indochina",
+    "title": "インドシナへの投資",
+    "x": 950,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_invest_in_the_colonies"
+    ]
+  }
+]

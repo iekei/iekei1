@@ -1,0 +1,58 @@
+[
+  {
+    "id": "zero_fighter",
+    "title": "零式艦上戦闘機",
+    "year": 1940,
+    "x": 100,
+    "y": 50,
+    "research_time": 150,
+    "reliability": "配備",
+    "desc": "堀越二郎設計。長航続距離と優れた空戦性能を誇る。太平洋戦争初期で圧倒的強さを誇った。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#d4a843' stroke-width='1.5'><path d='M12 2v8'/><path d='M2 10h20'/><path d='M8 10l-4 8'/><path d='M16 10l4 8'/></svg>",
+    "effects": [
+      "空戦: 75/100",
+      "航続: 90/100",
+      "速力: 65/100",
+      "装甲: 15/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "hayate",
+    "title": "烈風（試作）",
+    "year": 1943,
+    "x": 100,
+    "y": 200,
+    "research_time": 160,
+    "reliability": "試作のみ",
+    "desc": "零戦の後継機。性能は優秀だったが、エンジン不調と工業力不足で量産化できず。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#d4a843' stroke-width='1.5'><path d='M12 2v8'/><path d='M2 10h20'/><path d='M6 10l-3 8'/><path d='M18 10l3 8'/></svg>",
+    "effects": [
+      "空戦: 85/100",
+      "航続: 70/100",
+      "速力: 75/100",
+      "装甲: 25/100"
+    ],
+    "prerequisites": [
+      "zero_fighter"
+    ]
+  },
+  {
+    "id": "g4m_bomber",
+    "title": "一式陸上攻撃機",
+    "year": 1941,
+    "x": 400,
+    "y": 50,
+    "research_time": 140,
+    "reliability": "配備",
+    "desc": "長距離爆撃/雷撃機。優れた航続距離を持つが防弾性能に欠ける。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#d4a843' stroke-width='1.5'><path d='M12 4v6'/><path d='M4 10h16'/><path d='M6 10l-3 6'/><path d='M18 10l3 6'/></svg>",
+    "effects": [
+      "爆撃: 60/100",
+      "航続: 85/100",
+      "速力: 55/100",
+      "装甲: 10/100"
+    ],
+    "prerequisites": []
+  }
+]

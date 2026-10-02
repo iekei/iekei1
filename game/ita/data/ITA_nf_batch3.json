@@ -1,0 +1,115 @@
+[
+  {
+    "id": "ITA_modernize_the_mezzogiorno",
+    "title": "南部の近代化",
+    "x": 2300,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_industria_della_gomma_sintetica"
+    ]
+  },
+  {
+    "id": "ITA_new_industrialization_program",
+    "title": "新・工業化計画",
+    "x": 2150,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_strengthen_northern_industry",
+      "ITA_modernize_the_mezzogiorno",
+      "ITA_expand_national_universities"
+    ]
+  },
+  {
+    "id": "ITA_railway_innovations",
+    "title": "鉄道改革",
+    "x": 2600,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_italian_highways_bba"
+    ]
+  },
+  {
+    "id": "ITA_expand_foggia_farm_fields",
+    "title": "フォッジャの圃場を拡大",
+    "x": 2450,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_railway_innovations"
+    ]
+  },
+  {
+    "id": "ITA_investments_in_edison",
+    "title": "エジソンへの投資",
+    "x": 2600,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_railway_innovations"
+    ]
+  },
+  {
+    "id": "ITA_expand_national_universities",
+    "title": "国立大学の拡充",
+    "x": 2600,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_investments_in_edison"
+    ]
+  },
+  {
+    "id": "ITA_fiocchi_munizioni",
+    "title": "フィオッキの砲弾",
+    "x": 2900,
+    "y": 180,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_italian_highways_bba"
+    ]
+  },
+  {
+    "id": "ITA_brescia_small_arms_industry",
+    "title": "ブレシアの小火器産業",
+    "x": 2750,
+    "y": 310,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_fiocchi_munizioni"
+    ]
+  },
+  {
+    "id": "ITA_milan_comms_industry",
+    "title": "ミラノの通信産業",
+    "x": 3050,
+    "y": 310,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_fiocchi_munizioni"
+    ]
+  },
+  {
+    "id": "ITA_redirect_alfa_romeo_production",
+    "title": "アルファロメオの生産方針を転換",
+    "x": 2900,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_brescia_small_arms_industry",
+      "ITA_milan_comms_industry"
+    ]
+  }
+]

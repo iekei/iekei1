@@ -1,0 +1,40 @@
+[
+  {
+    "id": "m2_105mm",
+    "title": "M2 105mm榴弾砲",
+    "year": 1936,
+    "x": 100,
+    "y": 50,
+    "research_time": 100,
+    "reliability": "配備",
+    "desc": "標準的な105mm榴弾砲。高い信頼性と生産性。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><path d='M4 18h16'/><path d='M8 18l4-8h4l4 8'/></svg>",
+    "effects": [
+      "攻撃: 55/100",
+      "射程: 65/100",
+      "機動力: 70/100",
+      "信頼度: 90/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "m1_155mm",
+    "title": "M1 155mm榴弾砲",
+    "year": 1941,
+    "x": 100,
+    "y": 200,
+    "research_time": 120,
+    "reliability": "配備",
+    "desc": "重榴弾砲。強力な火力を持つ。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><path d='M4 18h16'/><path d='M6 18l6-10h4l4 10'/></svg>",
+    "effects": [
+      "攻撃: 70/100",
+      "射程: 60/100",
+      "機動力: 45/100",
+      "信頼度: 85/100"
+    ],
+    "prerequisites": [
+      "m2_105mm"
+    ]
+  }
+]

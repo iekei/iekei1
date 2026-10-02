@@ -1,0 +1,115 @@
+[
+  {
+    "id": "ITA_bomber_designs",
+    "title": "爆撃機の設計",
+    "x": 5000,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_standardization",
+      "ITA_specialization"
+    ]
+  },
+  {
+    "id": "ITA_fighter_designs",
+    "title": "戦闘機の設計",
+    "x": 5300,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_standardization",
+      "ITA_specialization"
+    ]
+  },
+  {
+    "id": "ITA_multirole_aircraft",
+    "title": "多目的航空機",
+    "x": 5600,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_specialization"
+    ]
+  },
+  {
+    "id": "ITA_supremacy_in_the_skies",
+    "title": "空の支配権",
+    "x": 5150,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_multirole_aircraft",
+      "ITA_long_range_aircraft",
+      "ITA_fighter_designs",
+      "ITA_bomber_designs"
+    ]
+  },
+  {
+    "id": "ITA_naval_power_projection",
+    "title": "海軍戦力投射",
+    "x": 6800,
+    "y": 50,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": []
+  },
+  {
+    "id": "ITA_intensify_torpedo_manufacturing",
+    "title": "魚雷製造の強化",
+    "x": 6500,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_naval_power_projection"
+    ]
+  },
+  {
+    "id": "ITA_expand_naval_facilities",
+    "title": "海軍施設の拡張",
+    "x": 6800,
+    "y": 180,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_naval_power_projection"
+    ]
+  },
+  {
+    "id": "ITA_oto_naval_guns",
+    "title": "OTOの艦砲",
+    "x": 7100,
+    "y": 180,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_naval_power_projection"
+    ]
+  },
+  {
+    "id": "ITA_improve_overseas_naval_bases",
+    "title": "海外の海軍基地を強化",
+    "x": 6200,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_expand_naval_facilities"
+    ]
+  },
+  {
+    "id": "ITA_milizia_marittima_di_artiglieria",
+    "title": "海事砲兵民兵",
+    "x": 6500,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_expand_naval_facilities"
+    ]
+  }
+]

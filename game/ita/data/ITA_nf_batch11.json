@@ -1,0 +1,116 @@
+[
+  {
+    "id": "ITA_the_man_of_providence",
+    "title": "神に導かれし男",
+    "x": 11000,
+    "y": 700,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_culto_del_duce"
+    ]
+  },
+  {
+    "id": "ITA_legge_bottai",
+    "title": "ボッタイ法",
+    "x": 11000,
+    "y": 830,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_man_of_providence"
+    ]
+  },
+  {
+    "id": "ITA_boost_the_grand_council_of_fascism",
+    "title": "ファシズム大評議会の促進",
+    "x": 10850,
+    "y": 1090,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_man_of_providence"
+    ]
+  },
+  {
+    "id": "ITA_to_live_as_a_lion",
+    "title": "獅子の如く生きるには",
+    "x": 11150,
+    "y": 1090,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_man_of_providence"
+    ]
+  },
+  {
+    "id": "ITA_la_battaglia_del_grano",
+    "title": "小麦の戦い",
+    "x": 11300,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_culto_del_duce"
+    ]
+  },
+  {
+    "id": "ITA_la_battaglia_per_la_terra",
+    "title": "地の戦い",
+    "x": 11600,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_culto_del_duce"
+    ]
+  },
+  {
+    "id": "ITA_la_battaglia_per_le_nascite",
+    "title": "誕生の戦い",
+    "x": 11450,
+    "y": 960,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_la_battaglia_del_grano",
+      "ITA_la_battaglia_per_la_terra"
+    ]
+  },
+  {
+    "id": "ITA_strengthen_the_regime",
+    "title": "政権の強化",
+    "x": 11450,
+    "y": 1610,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_la_battaglia_per_le_nascite"
+    ]
+  },
+  {
+    "id": "ITA_devotion",
+    "title": "献身",
+    "x": 11000,
+    "y": 1740,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_to_live_as_a_lion",
+      "ITA_boost_the_grand_council_of_fascism",
+      "ITA_strengthen_the_regime"
+    ]
+  },
+  {
+    "id": "ITA_ministero_della_cultura_popolare",
+    "title": "民俗文科省",
+    "x": 11900,
+    "y": 700,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_culto_del_duce",
+      "ITA_convene_the_grand_council"
+    ]
+  }
+]

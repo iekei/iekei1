@@ -1,0 +1,20 @@
+[
+  {
+    "id": "d520",
+    "title": "D.520戦闘機",
+    "year": 1939,
+    "x": 100,
+    "y": 50,
+    "research_time": 130,
+    "reliability": "配備",
+    "desc": "フランス最優秀戦闘機。スピットファイアに匹敵する性能。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><path d='M12 2v8'/><path d='M2 10h20'/><path d='M8 10l-4 8'/><path d='M16 10l4 8'/></svg>",
+    "effects": [
+      "空戦: 72/100",
+      "航続: 50/100",
+      "速力: 70/100",
+      "装甲: 25/100"
+    ],
+    "prerequisites": []
+  }
+]

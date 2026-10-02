@@ -1,0 +1,120 @@
+[
+  {
+    "id": "ITA_disband_the_blackshirts",
+    "title": "黒シャツ隊の解散",
+    "x": 16400,
+    "y": 1090,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_power_to_the_king",
+      "ITA_revoke_the_acerbo_law"
+    ]
+  },
+  {
+    "id": "ITA_utilize_the_blackshirts",
+    "title": "黒シャツ隊の活用",
+    "x": 16700,
+    "y": 1090,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_power_to_the_king"
+    ]
+  },
+  {
+    "id": "ITA_expand_the_royal_guard",
+    "title": "近衛隊の拡充",
+    "x": 16550,
+    "y": 1220,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_disband_the_blackshirts",
+      "ITA_utilize_the_blackshirts"
+    ]
+  },
+  {
+    "id": "ITA_gloria_al_regno_d_italia",
+    "title": "イタリア王国の栄光",
+    "x": 16250,
+    "y": 1350,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_expand_the_royal_guard",
+      "ITA_democratic_king"
+    ]
+  },
+  {
+    "id": "ITA_paramilitary_training",
+    "title": "準軍事訓練",
+    "x": 16700,
+    "y": 1350,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_expand_the_royal_guard",
+      "ITA_utilize_the_blackshirts"
+    ]
+  },
+  {
+    "id": "ITA_seek_papal_support",
+    "title": "ローマ教皇の支援の要請",
+    "x": 17000,
+    "y": 1090,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_power_to_the_king"
+    ]
+  },
+  {
+    "id": "ITA_agents_of_the_church",
+    "title": "教会の諜報員",
+    "x": 17000,
+    "y": 1220,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_seek_papal_support"
+    ]
+  },
+  {
+    "id": "ITA_strengthen_the_papacy",
+    "title": "教皇制度の強化",
+    "x": 17000,
+    "y": 1350,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_agents_of_the_church"
+    ]
+  },
+  {
+    "id": "ITA_setting_course",
+    "title": "進路の設定",
+    "x": 16100,
+    "y": 1610,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_gloria_al_regno_d_italia",
+      "ITA_crush_opposition",
+      "ITA_strengthen_the_papacy"
+    ]
+  },
+  {
+    "id": "ITA_mare_nostrum_bba",
+    "title": "我らが海",
+    "x": 20750,
+    "y": 1610,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_setting_course",
+      "ITA_strengthen_the_regime",
+      "ITA_blackshirt_loyalty"
+    ]
+  }
+]

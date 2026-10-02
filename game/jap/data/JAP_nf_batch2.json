@@ -1,0 +1,112 @@
+[
+  {
+    "id": "JAP_red_brigades",
+    "title": "赤色旅団",
+    "x": 500,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_cast_the_die"
+    ]
+  },
+  {
+    "id": "JAP_communist_volunteers",
+    "title": "共産主義義勇兵",
+    "x": 500,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_red_brigades"
+    ]
+  },
+  {
+    "id": "JAP_asian_communist_solidarity",
+    "title": "亜細亜共産主義連帯",
+    "x": 500,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_finish_the_fight",
+      "JAP_communist_volunteers"
+    ]
+  },
+  {
+    "id": "JAP_nationalize_the_zaibatsus",
+    "title": "財閥の国有化",
+    "x": 800,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_cast_the_die"
+    ]
+  },
+  {
+    "id": "JAP_people_owned_mines",
+    "title": "人民鉱山",
+    "x": 650,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_nationalize_the_zaibatsus"
+    ]
+  },
+  {
+    "id": "JAP_public_works",
+    "title": "公共事業",
+    "x": 950,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_nationalize_the_zaibatsus"
+    ]
+  },
+  {
+    "id": "JAP_tokyo_aluminum_plant",
+    "title": "東京アルミニウム工場",
+    "x": 800,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_people_owned_mines",
+      "JAP_public_works"
+    ]
+  },
+  {
+    "id": "JAP_purge_the_kodoha_faction",
+    "title": "皇道派を粛清",
+    "x": 1700,
+    "y": 50,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": []
+  },
+  {
+    "id": "JAP_liaison_conference",
+    "title": "連絡会議",
+    "x": 1550,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_purge_the_kodoha_faction"
+    ]
+  },
+  {
+    "id": "JAP_greater_east_asian_co_prosperity_sphere",
+    "title": "大東亜共栄圏",
+    "x": 1400,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_liaison_conference"
+    ]
+  }
+]

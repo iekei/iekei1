@@ -1,0 +1,112 @@
+[
+  {
+    "id": "JAP_strengthen_the_divine_wind",
+    "title": "神風の強化",
+    "x": 2150,
+    "y": 830,
+    "cost": 70,
+    "effect": "神風、特別攻撃隊の戦術は自爆攻撃を急場しのぎの手段から確立された戦闘教義へと変えた。実質的に有人ミサイルである新型航空機での攻撃が止むことはないだろう。",
+    "prerequisites": [
+      "JAP_spiritual_mobilization",
+      "JAP_warrior_spirit"
+    ]
+  },
+  {
+    "id": "JAP_support_the_kodoha_faction",
+    "title": "皇道派を支持",
+    "x": 2900,
+    "y": 50,
+    "cost": 35,
+    "effect": "政府を支配し、北のソビエト連邦に一撃を与えようとする新たな派閥が現れた。天皇陛下と皇国の未来の為に、この派閥の勝利を確実なものとしなければならない！",
+    "prerequisites": []
+  },
+  {
+    "id": "JAP_challenge_the_zaibatsus",
+    "title": "財閥の束縛",
+    "x": 2450,
+    "y": 180,
+    "cost": 70,
+    "effect": "財閥は長きにわたって未曾有の経済力及び政治力を我が国に与え続けた。我々は今こそ彼らが天皇陛下の臣民であることを自覚させる時期にさしかかっていると考えるべきだ。",
+    "prerequisites": [
+      "JAP_support_the_kodoha_faction"
+    ]
+  },
+  {
+    "id": "JAP_showa_restoration",
+    "title": "昭和維新",
+    "x": 3050,
+    "y": 180,
+    "cost": 70,
+    "effect": "飾り物の元首の時代はとうに過ぎ去った。天皇陛下の御親政が行われなければならない。そうすることによってのみ、我が皇国は西洋の帝国主義者に立ち向かうことができるようになるだろう。",
+    "prerequisites": [
+      "JAP_support_the_kodoha_faction"
+    ]
+  },
+  {
+    "id": "JAP_modern_shogunate",
+    "title": "近代幕府",
+    "x": 2750,
+    "y": 180,
+    "cost": 70,
+    "effect": "天皇陛下は儀礼的な立場に留まるべきであり、陛下の御名において活動する強靭な仲介人を伴うべきである。結果として陛下の御言葉はより広範に伝播するに違いない。",
+    "prerequisites": [
+      "JAP_support_the_kodoha_faction"
+    ]
+  },
+  {
+    "id": "JAP_prepare_for_war_with_the_soviet_union",
+    "title": "ソ連との戦争準備",
+    "x": 2900,
+    "y": 310,
+    "cost": 70,
+    "effect": "我が国の北の国境へ向かってきている共産主義の脅威に対処しなければならない。[SOV.GetNameDef]との戦争の準備を進める必要がある。",
+    "prerequisites": [
+      "JAP_modern_shogunate",
+      "JAP_showa_restoration"
+    ]
+  },
+  {
+    "id": "JAP_join_the_london_naval_treaty",
+    "title": "ロンドン海軍軍縮条約へ参加",
+    "x": 2750,
+    "y": 440,
+    "cost": 70,
+    "effect": "もしも熊とやりあうつもりであるならば、ちゃんと脇腹を守っておかねばならない。我が国の海軍の増強を規制する一片の紙切れに署名すれば、それで完了だ。",
+    "prerequisites": [
+      "JAP_prepare_for_war_with_the_soviet_union"
+    ]
+  },
+  {
+    "id": "JAP_build_up_the_manchurian_army",
+    "title": "満州陸軍の訓練",
+    "x": 3050,
+    "y": 440,
+    "cost": 70,
+    "effect": "[MAN.GetNameDefCap]は北部における戦争の最前線に立たされることとなる。彼らをあらゆる潜在的な敵の攻撃に対しても立ち向かえるように強くしてやらねばならない。",
+    "prerequisites": [
+      "JAP_prepare_for_war_with_the_soviet_union"
+    ]
+  },
+  {
+    "id": "JAP_create_a_manchurian_imperial_air_force",
+    "title": "満州帝国空軍の創設",
+    "x": 3050,
+    "y": 570,
+    "cost": 70,
+    "effect": "戦争に勝利するためには航空戦での優位が鍵になる。[MAN.GetNameDef]が独自に空軍を持つことになれば、これは航空戦の状況を改善をするために大きく貢献するだろう。",
+    "prerequisites": [
+      "JAP_build_up_the_manchurian_army"
+    ]
+  },
+  {
+    "id": "JAP_non_aggression_pact_with_china",
+    "title": "日華不可侵条約",
+    "x": 2750,
+    "y": 570,
+    "cost": 70,
+    "effect": "我が国と中国との歴史的な関係は、控えめに言っても厳しいものであった。だが今となっては北へ向かって行く部隊の負担を取り除くため、彼らと不可侵条約を結ぶ必要がある。",
+    "prerequisites": [
+      "JAP_join_the_london_naval_treaty"
+    ]
+  }
+]

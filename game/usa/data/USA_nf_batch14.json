@@ -1,0 +1,68 @@
+[
+  {
+    "id": "USA_convoy_tactics",
+    "title": "船団戦術",
+    "x": 10850,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_escort_effort"
+    ]
+  },
+  {
+    "id": "USA_fleet_submarines",
+    "title": "艦隊型潜水艦",
+    "x": 11150,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_bureau_of_ships"
+    ]
+  },
+  {
+    "id": "USA_unrestricted_submarine_warfare",
+    "title": "無制限潜水艦作戦",
+    "x": 11150,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_fleet_submarines"
+    ]
+  },
+  {
+    "id": "USA_fund_the_navy",
+    "title": "海軍への投資",
+    "x": 11450,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_two_ocean_navy_act"
+    ]
+  },
+  {
+    "id": "USA_expand_the_USMC",
+    "title": "USMCの拡充",
+    "x": 11450,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_fund_the_navy"
+    ]
+  },
+  {
+    "id": "USA_amphibious_operations",
+    "title": "上陸作戦",
+    "x": 11450,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_expand_the_USMC"
+    ]
+  }
+]

@@ -1,0 +1,58 @@
+[
+  {
+    "id": "p51_mustang",
+    "title": "P-51マスタング",
+    "year": 1942,
+    "x": 100,
+    "y": 50,
+    "research_time": 150,
+    "reliability": "配備",
+    "desc": "護衛戦闘機。落下式増槽でベルリンまで往復可能。最優秀戦闘機の一つ。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><path d='M12 2v8'/><path d='M2 10h20'/><path d='M8 10l-4 8'/><path d='M16 10l4 8'/></svg>",
+    "effects": [
+      "空戦: 80/100",
+      "航続: 85/100",
+      "速力: 80/100",
+      "装甲: 30/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "b17_fortress",
+    "title": "B-17フライングフォートレス",
+    "year": 1937,
+    "x": 400,
+    "y": 50,
+    "research_time": 180,
+    "reliability": "配備",
+    "desc": "重爆撃機。強固な防御火器と高い耐久性を持つ。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><path d='M12 4v6'/><path d='M2 10h20'/><path d='M4 10l-2 6'/><path d='M20 10l2 6'/><path d='M8 10v6'/><path d='M16 10v6'/></svg>",
+    "effects": [
+      "爆撃: 70/100",
+      "航続: 75/100",
+      "速力: 50/100",
+      "装甲: 40/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "b29_superfortress",
+    "title": "B-29スーパーフォートレス",
+    "year": 1944,
+    "x": 400,
+    "y": 200,
+    "research_time": 250,
+    "reliability": "配備",
+    "desc": "超重爆撃機。与圧室を備え、高高度から日本本土を爆撃した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><path d='M12 3v7'/><path d='M1 10h22'/><path d='M3 10l-2 7'/><path d='M21 10l2 7'/><path d='M7 10v7'/><path d='M17 10v7'/></svg>",
+    "effects": [
+      "爆撃: 90/100",
+      "航続: 95/100",
+      "速力: 60/100",
+      "装甲: 35/100"
+    ],
+    "prerequisites": [
+      "b17_fortress"
+    ]
+  }
+]

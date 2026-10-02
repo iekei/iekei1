@@ -1,0 +1,113 @@
+[
+  {
+    "id": "SOV_expand_the_red_fleet",
+    "title": "[GetSovietArmyAdjectiveBasedOnIdeology]艦隊の拡充",
+    "x": 2600,
+    "y": 50,
+    "cost": 35,
+    "effect": "[GetExpandTheRedFleetDesc]",
+    "prerequisites": []
+  },
+  {
+    "id": "SOV_reinforce_western_naval_bases",
+    "title": "西方海軍基地の強化",
+    "x": 2150,
+    "y": 180,
+    "cost": 35,
+    "effect": "バルト海艦隊の基地は極めて無防備だ。停泊地の防護と修理能力を向上させるためにある程度の資金を投資すべきだ。",
+    "prerequisites": [
+      "SOV_expand_the_red_fleet"
+    ]
+  },
+  {
+    "id": "SOV_reinforce_northern_naval_bases",
+    "title": "北方海軍基地の強化",
+    "x": 2450,
+    "y": 180,
+    "cost": 35,
+    "effect": "ムルマンスクは北極圏の北側に位置しているにもかかわらず、皮肉にも年間を通じて不凍であり外洋に出ることが可能な唯一の港である。全世界へのより良い通航を可能とするため、ここを更に開発するべきだ。",
+    "prerequisites": [
+      "SOV_expand_the_red_fleet"
+    ]
+  },
+  {
+    "id": "SOV_reinforce_southern_naval_bases",
+    "title": "南方海軍基地の強化",
+    "x": 2750,
+    "y": 180,
+    "cost": 35,
+    "effect": "黒海は第二戦域の様に見えるかもしれない。しかし、もし我々がその支配権を失えばクリミア戦争で起きた時の様に、敵の侵攻に対しても、全南部領土への門戸を開いてしまうだろう。こうした事態は二度とあってはならず、当地域の海軍基地を強化するべきだ。",
+    "prerequisites": [
+      "SOV_expand_the_red_fleet"
+    ]
+  },
+  {
+    "id": "SOV_reinforce_eastern_naval_bases",
+    "title": "東方海軍基地の強化",
+    "x": 3050,
+    "y": 180,
+    "cost": 35,
+    "effect": "1905年の屈辱の後ですら、日本人は我が国の領土への侵略について騒ぎ立てるのをやめなかった。我々は奴らとの戦争に備えなければならず、それは当地域の海軍基地の強化を意味する。",
+    "prerequisites": [
+      "SOV_expand_the_red_fleet"
+    ]
+  },
+  {
+    "id": "SOV_expand_shipbuilding_plants",
+    "title": "造船所の拡張",
+    "x": 2600,
+    "y": 310,
+    "cost": 70,
+    "effect": "地理の影響で我々は様々な艦隊を支援するための造船所を広範に分散させる必要がある。したがって造船能力を高めようとするならば、広い範囲を整備せねばならない。",
+    "prerequisites": [
+      "SOV_reinforce_western_naval_bases",
+      "SOV_reinforce_northern_naval_bases",
+      "SOV_reinforce_southern_naval_bases",
+      "SOV_reinforce_eastern_naval_bases"
+    ]
+  },
+  {
+    "id": "SOV_merge_naval_plants",
+    "title": "造船工場の統合",
+    "x": 2450,
+    "y": 570,
+    "cost": 35,
+    "effect": "艦艇の建造と船舶の設計は時間のかかる工程であり、過度な競争は単純に非効率的だ。この労力の無駄を無くすために設計局を統合すべきだ。",
+    "prerequisites": [
+      "SOV_expand_shipbuilding_plants"
+    ]
+  },
+  {
+    "id": "SOV_pc_of_the_ussr_navy",
+    "title": "[GetPcOfTheUssrNavyName]",
+    "x": 3200,
+    "y": 310,
+    "cost": 35,
+    "effect": "我が国の海軍がより近代的に、より有用的になった今、重要性においては陸軍に匹敵する戦闘兵種になったと認識すべき時である。その第一歩目は、海軍が陸軍から独立した組織を樹立するのを可能にすることだ。",
+    "prerequisites": [
+      "SOV_expand_the_red_fleet"
+    ]
+  },
+  {
+    "id": "SOV_surface_warfare",
+    "title": "水上戦",
+    "x": 2900,
+    "y": 440,
+    "cost": 70,
+    "effect": "主力艦は膨大な時間と資源を必要とし、建造が完了する前に時代遅れになってしまうことも多い。一方で小型船舶は、より速く建造することができ、結果的に、より容易に技術開発に対応することができる。我々は海戦の主力として軽装戦力を発展させることを重視すべきだ。",
+    "prerequisites": [
+      "SOV_pc_of_the_ussr_navy"
+    ]
+  },
+  {
+    "id": "SOV_submarine_warfare",
+    "title": "潜水艦戦",
+    "x": 3500,
+    "y": 440,
+    "cost": 70,
+    "effect": "潜水艦は海戦で大きな強みをもたらす。優れた設計の現代の潜水艦は、魚雷を発射する前には事実上探知できず、その大きさと費用の何倍もの巨大な主力艦を機能不全に陥らせる可能性がある。海軍の主要な攻撃力として、これらの艦艇の開発に力を注ぐべきだ。",
+    "prerequisites": [
+      "SOV_pc_of_the_ussr_navy"
+    ]
+  }
+]

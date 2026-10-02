@@ -1,0 +1,36 @@
+[
+  {
+    "id": "jap_engineering_1",
+    "title": "工兵装備改善",
+    "year": 1936,
+    "x": 100,
+    "y": 50,
+    "research_time": 80,
+    "reliability": "配備",
+    "desc": "工兵部隊の装備と訓練を改善する。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4ac46a' stroke-width='1.5'><path d='M3 18l6-6 4 4 8-8'/><path d='M14 8h6v6'/></svg>",
+    "effects": [
+      "工兵効率: +15%",
+      "要塞建設速度: +10%"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "jap_engineering_2",
+    "title": "補給線改善",
+    "year": 1938,
+    "x": 100,
+    "y": 200,
+    "research_time": 90,
+    "reliability": "配備",
+    "desc": "補給線の効率を改善し、前線への物資供給を安定させる。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4ac46a' stroke-width='1.5'><path d='M3 12h18'/><circle cx='7' cy='12' r='2'/><circle cx='17' cy='12' r='2'/></svg>",
+    "effects": [
+      "補給効率: +20%",
+      "燃料消費: -10%"
+    ],
+    "prerequisites": [
+      "jap_engineering_1"
+    ]
+  }
+]

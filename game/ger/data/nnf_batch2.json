@@ -1,0 +1,113 @@
+[
+  {
+    "id": "GER_autobahn",
+    "title": "ライヒスアウトバーン",
+    "x": 1250,
+    "y": 310,
+    "cost": 70,
+    "effect": "アウトバーン計画は1933年の発足以来、栄えある成功を収めてきた。建設努力は失業率を低下させ、広い道路はドイツの経済復興の象徴である。しかし、未だ道半ば\nである。",
+    "prerequisites": [
+      "GER_autarky"
+    ]
+  },
+  {
+    "id": "GER_german_war_economy",
+    "title": "ドイツ戦争経済",
+    "x": 1250,
+    "y": 440,
+    "cost": 70,
+    "effect": "我らが偉大な国民は、戦争の遂行に役立つよう活躍しなければならない。すべての人がそれぞれの役割を果たすことが期待される完全な戦争経済に移行する。",
+    "prerequisites": [
+      "GER_autobahn"
+    ]
+  },
+  {
+    "id": "GER_grosraumwirtschaft",
+    "title": "大経済圏",
+    "x": 950,
+    "y": 180,
+    "cost": 70,
+    "effect": "ドイツはヨーロッパの中心的存在となる運命にあり、それに向けた準備をしなければならない。我々の経済基盤は、東西南北にうまく結びついている。",
+    "prerequisites": [
+      "GER_four_year_plan"
+    ]
+  },
+  {
+    "id": "GER_align_hungary",
+    "title": "ハンガリーとの提携",
+    "x": 950,
+    "y": 310,
+    "cost": 70,
+    "effect": "ハンガリーは既に我々の影響下にあるが、将来より容易に彼らを操作できる様にするため、彼らをさらに我々の考え方へ誘導できるかもしれない。",
+    "prerequisites": [
+      "GER_grosraumwirtschaft"
+    ]
+  },
+  {
+    "id": "GER_align_romania",
+    "title": "ルーマニアとの提携",
+    "x": 650,
+    "y": 310,
+    "cost": 70,
+    "effect": "ルーマニアは既に我々の影響下にあるが、将来より容易に彼らを操作できる様にするため、彼らをさらに我々の考え方へ誘導できるかもしれない。",
+    "prerequisites": [
+      "GER_grosraumwirtschaft"
+    ]
+  },
+  {
+    "id": "GER_integrate_war_economies",
+    "title": "戦争経済の統合",
+    "x": 950,
+    "y": 440,
+    "cost": 70,
+    "effect": "我々の影響下にある国々は、我々に経済的に非常に依存している。この経済的な依存を利用し、各国の経済・外交政策へ影響を与えることができるだろう。",
+    "prerequisites": [
+      "GER_align_hungary",
+      "GER_align_romania"
+    ]
+  },
+  {
+    "id": "GER_form_the_reichskommissariats",
+    "title": "国家弁務官区の設置",
+    "x": 1100,
+    "y": 570,
+    "cost": 70,
+    "effect": "現地での資源、工業、人的資源の利用を改善するために、われわれは征服地域において半自治的な傀儡政権を樹立することを検討すべきである。",
+    "prerequisites": [
+      "GER_german_war_economy",
+      "GER_integrate_war_economies"
+    ]
+  },
+  {
+    "id": "GER_air_innovation",
+    "title": "GER air innovation",
+    "x": 2450,
+    "y": 50,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": []
+  },
+  {
+    "id": "GER_tactical_air_effort",
+    "title": "戦術空軍への注力",
+    "x": 2600,
+    "y": 310,
+    "cost": 70,
+    "effect": "勝利は敵陸兵を一掃することで達成される。敵目標を近く、奥深くまで攻撃する戦術支援に注力すべきだ。",
+    "prerequisites": [
+      "GER_air_innovation"
+    ]
+  },
+  {
+    "id": "GER_long_range_escorts",
+    "title": "長距離護衛",
+    "x": 2450,
+    "y": 440,
+    "cost": 70,
+    "effect": "戦術及び戦略爆撃機は目標地域までの道程を守り、帰還できる長距離護衛機を必要としている。",
+    "prerequisites": [
+      "GER_tactical_air_effort",
+      "GER_strategic_air_effort"
+    ]
+  }
+]

@@ -1,0 +1,114 @@
+[
+  {
+    "id": "USA_america_first",
+    "title": "アメリカ第一主義",
+    "x": 3800,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_reestablish_the_gold_standard"
+    ]
+  },
+  {
+    "id": "USA_extend_the_chinese_exclusion_acts",
+    "title": "中国人排斥法の延長",
+    "x": 3800,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_america_first"
+    ]
+  },
+  {
+    "id": "USA_empower_the_huac",
+    "title": "下院非米活動委員会の強化",
+    "x": 3800,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_extend_the_chinese_exclusion_acts",
+      "USA_labour_management_relations_act"
+    ]
+  },
+  {
+    "id": "USA_voter_registration_act",
+    "title": "有権者登録法",
+    "x": 3800,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_empower_the_huac"
+    ]
+  },
+  {
+    "id": "USA_ally_with_the_silver_shirts",
+    "title": "銀シャツ隊との同盟",
+    "x": 4550,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_america_first"
+    ]
+  },
+  {
+    "id": "USA_national_prosperity_program",
+    "title": "国益成長戦略",
+    "x": 4250,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_ally_with_the_silver_shirts"
+    ]
+  },
+  {
+    "id": "USA_privatize_the_TVA",
+    "title": "TVAの民営化",
+    "x": 4100,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_national_prosperity_program"
+    ]
+  },
+  {
+    "id": "USA_de_regulate_the_banking_sector",
+    "title": "銀行業の規制緩和",
+    "x": 4400,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_national_prosperity_program"
+    ]
+  },
+  {
+    "id": "USA_national_employment_strategy",
+    "title": "国家雇用戦略",
+    "x": 4250,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_privatize_the_TVA",
+      "USA_de_regulate_the_banking_sector"
+    ]
+  },
+  {
+    "id": "USA_invite_foreign_support",
+    "title": "海外支援の誘致",
+    "x": 5000,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_ally_with_the_silver_shirts"
+    ]
+  }
+]

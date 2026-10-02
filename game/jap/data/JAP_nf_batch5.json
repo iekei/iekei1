@@ -1,0 +1,112 @@
+[
+  {
+    "id": "JAP_strengthen_the_divine_wind",
+    "title": "神風の強化",
+    "x": 2150,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_spiritual_mobilization",
+      "JAP_warrior_spirit"
+    ]
+  },
+  {
+    "id": "JAP_support_the_kodoha_faction",
+    "title": "皇道派を支持",
+    "x": 2900,
+    "y": 50,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": []
+  },
+  {
+    "id": "JAP_challenge_the_zaibatsus",
+    "title": "財閥の束縛",
+    "x": 2450,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_support_the_kodoha_faction"
+    ]
+  },
+  {
+    "id": "JAP_showa_restoration",
+    "title": "昭和維新",
+    "x": 3050,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_support_the_kodoha_faction"
+    ]
+  },
+  {
+    "id": "JAP_modern_shogunate",
+    "title": "近代幕府",
+    "x": 2750,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_support_the_kodoha_faction"
+    ]
+  },
+  {
+    "id": "JAP_prepare_for_war_with_the_soviet_union",
+    "title": "ソ連との戦争準備",
+    "x": 2900,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_modern_shogunate",
+      "JAP_showa_restoration"
+    ]
+  },
+  {
+    "id": "JAP_join_the_london_naval_treaty",
+    "title": "ロンドン海軍軍縮条約へ参加",
+    "x": 2750,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_prepare_for_war_with_the_soviet_union"
+    ]
+  },
+  {
+    "id": "JAP_build_up_the_manchurian_army",
+    "title": "満州陸軍の訓練",
+    "x": 3050,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_prepare_for_war_with_the_soviet_union"
+    ]
+  },
+  {
+    "id": "JAP_create_a_manchurian_imperial_air_force",
+    "title": "満州帝国空軍の創設",
+    "x": 3050,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_build_up_the_manchurian_army"
+    ]
+  },
+  {
+    "id": "JAP_non_aggression_pact_with_china",
+    "title": "日華不可侵条約",
+    "x": 2750,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_join_the_london_naval_treaty"
+    ]
+  }
+]

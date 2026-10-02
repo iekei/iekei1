@@ -1,0 +1,118 @@
+[
+  {
+    "id": "ITA_believe_obey_fight",
+    "title": "信じ、従い、戦う",
+    "x": 11900,
+    "y": 830,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_ministero_della_cultura_popolare"
+    ]
+  },
+  {
+    "id": "ITA_banda_carita",
+    "title": "チャリティー楽団",
+    "x": 11900,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_believe_obey_fight"
+    ]
+  },
+  {
+    "id": "ITA_banda_koch",
+    "title": "コッホ楽団",
+    "x": 11900,
+    "y": 1350,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_banda_carita"
+    ]
+  },
+  {
+    "id": "ITA_security_militias",
+    "title": "治安維持民兵",
+    "x": 12350,
+    "y": 830,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_culto_del_duce",
+      "ITA_convene_the_grand_council"
+    ]
+  },
+  {
+    "id": "ITA_battaglioni_d_assalto",
+    "title": "襲撃部隊",
+    "x": 12200,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_security_militias"
+    ]
+  },
+  {
+    "id": "ITA_strengthen_the_blackshirts",
+    "title": "黒シャツ隊の強化",
+    "x": 12500,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_security_militias"
+    ]
+  },
+  {
+    "id": "ITA_milizia_coloniale",
+    "title": "植民地の市民軍",
+    "x": 12350,
+    "y": 1350,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_battaglioni_d_assalto",
+      "ITA_strengthen_the_blackshirts"
+    ]
+  },
+  {
+    "id": "ITA_towards_a_greater_italy",
+    "title": "大イタリアを目指して",
+    "x": 11450,
+    "y": 1740,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_strengthen_the_regime",
+      "ITA_blackshirt_loyalty",
+      "ITA_setting_course"
+    ]
+  },
+  {
+    "id": "ITA_heroes_of_the_nation",
+    "title": "国家の英雄達",
+    "x": 10850,
+    "y": 1870,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_towards_a_greater_italy",
+      "ITA_devotion"
+    ]
+  },
+  {
+    "id": "ITA_capo_supremo",
+    "title": "至高の指導者",
+    "x": 11150,
+    "y": 1870,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_towards_a_greater_italy",
+      "ITA_devotion"
+    ]
+  }
+]

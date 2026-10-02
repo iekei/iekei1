@@ -1,0 +1,116 @@
+[
+  {
+    "id": "GER_bulwark_against_bolshevism",
+    "title": "ボリシェヴィズムの防波堤",
+    "x": 7400,
+    "y": 700,
+    "cost": 70,
+    "effect": "我々の国はボリシェヴィズムに対する盾となる位置にあり、西洋を共産主義の影響から守っている。誇りをもって責任を全うし、必要に応じて武器を取る準備をしなければならない。",
+    "prerequisites": [
+      "GER_fan_the_prussian_militarism",
+      "GER_a_new_and_better_germany"
+    ]
+  },
+  {
+    "id": "GER_return_of_the_kaiser",
+    "title": "カイザーの帰還",
+    "x": 6950,
+    "y": 440,
+    "cost": 70,
+    "effect": "カイザーライヒにはカイザーが必要であり、ヴィルヘルム2世陛下は亡命先のオランダにて未だ健在だ。西方の民主主義者がどう思うかはさておき、我々は陛下の追放を解除し、再び帝位へと返り咲くのだ。",
+    "prerequisites": [
+      "GER_revive_the_kaiserreich"
+    ]
+  },
+  {
+    "id": "GER_focus_on_the_true_enemy",
+    "title": "真の敵を重視",
+    "x": 6050,
+    "y": 570,
+    "cost": 70,
+    "effect": "我々の敵は内ではなく外にいる。西洋の植民地独占という継続的な犯罪行為は、我々に強制されたヴェルサイユ条約の不正によりますます悪徳の度を増した。我々は正当な領土を獲得しようとしただけなのだ。だが、それも今終わる。",
+    "prerequisites": [
+      "GER_return_of_the_kaiser",
+      "GER_naval_effort"
+    ]
+  },
+  {
+    "id": "GER_rebuild_the_high_seas_fleet",
+    "title": "大洋艦隊の再建",
+    "x": 6050,
+    "y": 830,
+    "cost": 70,
+    "effect": "西方への挑戦に支障をきたさないよう、かつて栄華を誇った大洋艦隊を再建するべく海軍の増強措置を要求する。",
+    "prerequisites": [
+      "GER_focus_on_the_true_enemy"
+    ]
+  },
+  {
+    "id": "GER_our_place_in_the_sun",
+    "title": "我々の陽の当たる場所",
+    "x": 6050,
+    "y": 960,
+    "cost": 35,
+    "effect": "ドイツ帝国は再び陽の当たる場所をつかみ取る権利を求めることを、皆に知らしめるのだ！我等が臣民が日陰で恥辱に耐え忍ぶことは最早ない。",
+    "prerequisites": [
+      "GER_rebuild_the_high_seas_fleet"
+    ]
+  },
+  {
+    "id": "GER_pride_of_the_modern_germany",
+    "title": "現代ドイツの誇り",
+    "x": 6050,
+    "y": 1090,
+    "cost": 70,
+    "effect": "英国海軍と同等の規模になるまで何年もかかるだろう。故に品質で勝る必要がある。わが国の船は海を渡る最も現代的で強力なものになる！",
+    "prerequisites": [
+      "GER_our_place_in_the_sun"
+    ]
+  },
+  {
+    "id": "GER_prepare_for_the_next_blockade",
+    "title": "次の封鎖への備え",
+    "x": 5900,
+    "y": 1220,
+    "cost": 70,
+    "effect": "前大戦では英国の非道な海上封鎖が行われた。同じ間違いを起こしてはならない。今度は、より長い期間をかけ、来る封鎖に向け国民を備えさせよう。",
+    "prerequisites": [
+      "GER_our_place_in_the_sun"
+    ]
+  },
+  {
+    "id": "GER_break_the_anglo_french_colonial_hegemony",
+    "title": "英仏の植民地覇権の打破",
+    "x": 5900,
+    "y": 1350,
+    "cost": 70,
+    "effect": "あまりにも長い間行われてきた西欧諸国の植民地主義による独占を粉砕する時が来た。",
+    "prerequisites": [
+      "GER_prepare_for_the_next_blockade"
+    ]
+  },
+  {
+    "id": "GER_schlieffen_once_more",
+    "title": "シュリーフェン再び",
+    "x": 5900,
+    "y": 1480,
+    "cost": 28,
+    "effect": "マジノ線は迂回する必要がある。我々は勝利するための迅速な一撃を加えるべく、再びベルギーとルクセンブルクを横切るのだ。",
+    "prerequisites": [
+      "GER_break_the_anglo_french_colonial_hegemony"
+    ]
+  },
+  {
+    "id": "GER_crossing_the_atlantic",
+    "title": "大西洋を越えて",
+    "x": 5300,
+    "y": 1610,
+    "cost": 70,
+    "effect": "我々を縛る全ての大陸の圧力に打ち勝ち、イギリスやアメリカに戦いを挑めるだけの巨大な海軍の創設のため再び造船に力を入れなければならない。我々は休んではならない……神のご加護のある時代に、旧世界の力とその全力をもって、新世界の征服と屈辱に足を踏み出すまで。",
+    "prerequisites": [
+      "GER_break_the_anglo_french_colonial_hegemony",
+      "GER_plan_z",
+      "GER_modular_construction"
+    ]
+  }
+]

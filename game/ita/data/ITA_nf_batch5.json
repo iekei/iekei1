@@ -1,0 +1,118 @@
+[
+  {
+    "id": "ITA_army_leaders",
+    "title": "軍隊の指揮官達",
+    "x": 3800,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_preserve_army_traditions",
+      "ITA_a_bandits_war"
+    ]
+  },
+  {
+    "id": "ITA_superesercito",
+    "title": "超大軍",
+    "x": 4100,
+    "y": 310,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_preserve_army_traditions",
+      "ITA_a_bandits_war"
+    ]
+  },
+  {
+    "id": "ITA_italian_tankettes",
+    "title": "イタリアの豆戦車",
+    "x": 4400,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_preserve_army_traditions",
+      "ITA_a_bandits_war"
+    ]
+  },
+  {
+    "id": "ITA_bersaglieri",
+    "title": "ベルサリエーリ",
+    "x": 3950,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_army_leaders",
+      "ITA_superesercito"
+    ]
+  },
+  {
+    "id": "ITA_divisioni_alpine",
+    "title": "アルプス師団",
+    "x": 3800,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_bersaglieri"
+    ]
+  },
+  {
+    "id": "ITA_fanti_dell_aria",
+    "title": "空中歩兵",
+    "x": 3950,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_bersaglieri"
+    ]
+  },
+  {
+    "id": "ITA_self_propelled_guns",
+    "title": "自走砲",
+    "x": 4250,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_superesercito",
+      "ITA_italian_tankettes"
+    ]
+  },
+  {
+    "id": "ITA_end_fiat_ansaldo_duopoly",
+    "title": "フィアット・アンサルドの複占に終止符を",
+    "x": 4100,
+    "y": 570,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_self_propelled_guns"
+    ]
+  },
+  {
+    "id": "ITA_modernize_ansaldo_facilities",
+    "title": "アンサルドの施設の近代化",
+    "x": 4400,
+    "y": 570,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_self_propelled_guns"
+    ]
+  },
+  {
+    "id": "ITA_ferrea_mole_ferreo_cuore",
+    "title": "鉄の体、鉄の心",
+    "x": 4250,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_end_fiat_ansaldo_duopoly",
+      "ITA_modernize_ansaldo_facilities"
+    ]
+  }
+]

@@ -1,0 +1,116 @@
+[
+  {
+    "id": "ENG_reclaim_the_jewel_in_the_crown",
+    "title": "帝冠最大の宝石を取り戻す",
+    "x": 10850,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_ceylon_forward_operating_base"
+    ]
+  },
+  {
+    "id": "ENG_pre_empt_the_ideological_threat",
+    "title": "イデオロギーの脅威を阻止",
+    "x": 10700,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_reclaim_the_jewel_in_the_crown",
+      "ENG_noninterference_treaty_with_germany",
+      "ENG_alliance_with_germany"
+    ]
+  },
+  {
+    "id": "ENG_expose_the_belly_of_the_bear",
+    "title": "巨大化する熊の横っ腹",
+    "x": 10550,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_pre_empt_the_ideological_threat"
+    ]
+  },
+  {
+    "id": "ENG_imperial_conscription",
+    "title": "帝国の徴兵",
+    "x": 10850,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_reclaim_the_jewel_in_the_crown"
+    ]
+  },
+  {
+    "id": "ENG_consolidate_the_british_isles",
+    "title": "ブリテン諸島の統合",
+    "x": 11000,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_god_save_the_king"
+    ]
+  },
+  {
+    "id": "ENG_unite_the_anglosphere",
+    "title": "英語圏の統合",
+    "x": 11000,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_consolidate_the_british_isles",
+      "ENG_reclaim_the_jewel_in_the_crown",
+      "ENG_bring_the_dominions_back_into_the_fold"
+    ]
+  },
+  {
+    "id": "ENG_appeal_to_imperial_loyalists",
+    "title": "帝国支持派への訴え",
+    "x": 11150,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_god_save_the_king"
+    ]
+  },
+  {
+    "id": "ENG_bring_the_dominions_back_into_the_fold",
+    "title": "自治領の差し戻し",
+    "x": 11150,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_appeal_to_imperial_loyalists"
+    ]
+  },
+  {
+    "id": "ENG_the_sun_never_sets",
+    "title": "太陽の沈まない国",
+    "x": 11150,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_bring_the_dominions_back_into_the_fold"
+    ]
+  },
+  {
+    "id": "ENG_pre_empt_the_strategic_threat",
+    "title": "戦略的脅威の回避",
+    "x": 11300,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_bring_the_dominions_back_into_the_fold"
+    ]
+  }
+]

@@ -1,0 +1,114 @@
+[
+  {
+    "id": "SOV_the_means_to_wage_war",
+    "title": "戦争遂行の手段",
+    "x": 4250,
+    "y": 310,
+    "cost": 70,
+    "effect": "軍隊では多くの場合、航空機、火砲、戦車が特に注目を集め、パレードでも最もよく映えるが、一般的な兵士は自身の銃の品質と軍靴の履き心地を気に掛けている。これらの物を少なくとも戦闘機や重榴弾砲と同程度には重要であることを認めるべきだ。",
+    "prerequisites": [
+      "SOV_pc_of_mechanical_engineering"
+    ]
+  },
+  {
+    "id": "SOV_soviet_artillery",
+    "title": "[ROOT.GetAdjective]砲兵",
+    "x": 3800,
+    "y": 440,
+    "cost": 70,
+    "effect": "今日の戦争では、適切な場所で科学的に火力を適用することによって勝利する。砲の改良だけでなく、より効果的な運用方法に対しても力を注ぐべきだ。",
+    "prerequisites": [
+      "SOV_superior_war_machines"
+    ]
+  },
+  {
+    "id": "SOV_pc_of_mortar_armament",
+    "title": "[GetPcOfMortarArmamentName]",
+    "x": 4100,
+    "y": 440,
+    "cost": 70,
+    "effect": "地味な迫撃砲が、部隊の間接的火力支援の主要形態へと急速になりつつある。したがって、あらゆる規模の迫撃砲をできるだけ多く生産し、それを唯一の目的とする政府機関を設立するよう努めなければならない。",
+    "prerequisites": [
+      "SOV_pc_of_mechanical_engineering"
+    ]
+  },
+  {
+    "id": "SOV_development_of_tankograd",
+    "title": "タンコグラードの開発",
+    "x": 4400,
+    "y": 440,
+    "cost": 70,
+    "effect": "我が国は長大な距離を跨いでいるため、工場から工場へ従属部品を輸送することは非現実的だ。その様なことはせず、戦車工場を上から鋼鉄が入り下から完成した戦車が出る様な垂直的な統合をする。",
+    "prerequisites": [
+      "SOV_the_means_to_wage_war"
+    ]
+  },
+  {
+    "id": "SOV_merge_tank_and_materiel_plants",
+    "title": "戦車および軍需品工場の統合",
+    "x": 4100,
+    "y": 570,
+    "cost": 35,
+    "effect": "戦車と火砲は経済の規模を生かした大量生産に最も適しているだろう。したがって、これを利用するために戦車と資材生産場の統合を強制しなければならない。",
+    "prerequisites": [
+      "SOV_development_of_tankograd",
+      "SOV_pc_of_mortar_armament",
+      "SOV_soviet_artillery"
+    ]
+  },
+  {
+    "id": "SOV_strengthen_the_mobilization_plan",
+    "title": "動員計画の強化",
+    "x": 5900,
+    "y": 50,
+    "cost": 35,
+    "effect": "我が国の最大の軍事的利点は常に広大な国土とそこに住まう人々の数だった。しかし、兵士を前線に送り込むということになると、この二者は互いに足を引っ張り合う可能性がある。戦争が起こった場合、迅速に戦力を集中させることができるよう、動員計画を絶えず改善し更新しなければならない。",
+    "prerequisites": []
+  },
+  {
+    "id": "SOV_military_engineering_university",
+    "title": "軍事工学大学",
+    "x": 5150,
+    "y": 180,
+    "cost": 35,
+    "effect": "戦車や航空機の開発によって塹壕戦の終結が宣言されてはいるが、軍事工学が現代の戦場にまだ存在することは明らかである。現代的な野戦築城を建設する現代的方法を研究する機関を設立すべきだ。",
+    "prerequisites": [
+      "SOV_found_the_pcdi",
+      "SOV_strengthen_the_mobilization_plan"
+    ]
+  },
+  {
+    "id": "SOV_leningrad_polytechnical_institute",
+    "title": "[195.GetName]工科大学",
+    "x": 4550,
+    "y": 570,
+    "cost": 70,
+    "effect": "[195.GetName]工科大学は長年にわたって技術者や工業意匠者を我が国に輩出してきた。成長している産業で新たに誕生した役職に就くことが可能な最高の人材を、常に確保するため更に拡大させる必要がある。",
+    "prerequisites": [
+      "SOV_the_means_to_wage_war",
+      "SOV_military_engineering_university"
+    ]
+  },
+  {
+    "id": "SOV_soviet_atomic_bomb_project",
+    "title": "[ROOT.GetAdjective]原爆計画",
+    "x": 4550,
+    "y": 830,
+    "cost": 70,
+    "effect": "他の国々の科学者たちが宇宙最大の基本相互作用を、新たな兵器に変換する開発方法に懸命に取り組んでいることは分かっている。我々は後ろを歩いているが、彼らの仕事を利用すれば我々は前進することができ、また破壊の平等を確保することもできる。",
+    "prerequisites": [
+      "SOV_leningrad_polytechnical_institute"
+    ]
+  },
+  {
+    "id": "SOV_move_industry_to_the_urals",
+    "title": "ウラルへの産業移転",
+    "x": 4700,
+    "y": 310,
+    "cost": 70,
+    "effect": "戦争が勃発し、祖国が脅威にさらされている。わが軍は一歩も譲らず最後の一弾まで戦うつもりであるが、我らに相対する戦力を考えるとそれで十分であるとは言い切れない。工場が制圧される前に安全な場所に避難させなければならない。",
+    "prerequisites": [
+      "SOV_military_engineering_university"
+    ]
+  }
+]

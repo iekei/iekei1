@@ -1,0 +1,115 @@
+[
+  {
+    "id": "ITA_increase_production",
+    "title": "生産量の増加",
+    "x": 2750,
+    "y": 700,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_expand_national_universities",
+      "ITA_redirect_alfa_romeo_production"
+    ]
+  },
+  {
+    "id": "ITA_keep_specialization",
+    "title": "特殊技術の保持",
+    "x": 3050,
+    "y": 700,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_expand_national_universities",
+      "ITA_redirect_alfa_romeo_production"
+    ]
+  },
+  {
+    "id": "ITA_thermojet_research",
+    "title": "サーモジェットの研究",
+    "x": 2900,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_increase_production",
+      "ITA_keep_specialization"
+    ]
+  },
+  {
+    "id": "ITA_army_primacy_bba",
+    "title": "陸軍優先",
+    "x": 4100,
+    "y": 50,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": []
+  },
+  {
+    "id": "ITA_preserve_army_traditions",
+    "title": "軍隊の伝統的な在り方の保持",
+    "x": 3650,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_army_primacy_bba"
+    ]
+  },
+  {
+    "id": "ITA_increase_artillery_production",
+    "title": "大砲生産の増強",
+    "x": 3350,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_fiocchi_munizioni",
+      "ITA_army_primacy_bba"
+    ]
+  },
+  {
+    "id": "ITA_vallo_alpino_del_littorio",
+    "title": "リットリオのアルパインウォール",
+    "x": 3200,
+    "y": 440,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_milan_comms_industry",
+      "ITA_increase_artillery_production"
+    ]
+  },
+  {
+    "id": "ITA_moschettieri_del_duce",
+    "title": "[GetAppropriateMoschetieridelDuceName]",
+    "x": 3650,
+    "y": 440,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_preserve_army_traditions"
+    ]
+  },
+  {
+    "id": "ITA_a_bandits_war",
+    "title": "無法者達の戦い",
+    "x": 4550,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_army_primacy_bba"
+    ]
+  },
+  {
+    "id": "ITA_carica_di_isbuscenskij",
+    "title": "イスブシェンスキーの突撃",
+    "x": 4550,
+    "y": 440,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_a_bandits_war"
+    ]
+  }
+]

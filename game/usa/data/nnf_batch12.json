@@ -1,0 +1,113 @@
+[
+  {
+    "id": "USA_air_war_plans_division",
+    "title": "航空戦争計画局",
+    "x": 9500,
+    "y": 180,
+    "cost": 70,
+    "effect": "航空術、航空機産業に十分な割り当てを組むのは骨の折れる作業だ。航空戦争計画局（AWPD、Air War Plans Division）は我々の軍備、秩序、戦略を保障する。",
+    "prerequisites": [
+      "USA_war_department"
+    ]
+  },
+  {
+    "id": "USA_air_support",
+    "title": "航空支援",
+    "x": 9350,
+    "y": 310,
+    "cost": 70,
+    "effect": "空の戦いはまずは他の軍事作戦のために行われるべきだ。",
+    "prerequisites": [
+      "USA_air_war_plans_division"
+    ]
+  },
+  {
+    "id": "USA_strategic_bombing",
+    "title": "戦略爆撃",
+    "x": 9650,
+    "y": 310,
+    "cost": 70,
+    "effect": "精密爆撃を遂行する能力によって戦争の道を突き進む国を必ず止めることができるだろう。",
+    "prerequisites": [
+      "USA_air_war_plans_division"
+    ]
+  },
+  {
+    "id": "USA_TAC",
+    "title": "戦術爆撃機への注力",
+    "x": 9350,
+    "y": 570,
+    "cost": 70,
+    "effect": "戦術目標を攻撃する飛行機を製造することでより安全に進撃をすることが可能となるだろう。",
+    "prerequisites": [
+      "USA_air_support"
+    ]
+  },
+  {
+    "id": "USA_CAS",
+    "title": "USA CAS",
+    "x": 9200,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_air_support"
+    ]
+  },
+  {
+    "id": "USA_combined_bomber_offensive",
+    "title": "混合爆撃機攻勢",
+    "x": 9650,
+    "y": 570,
+    "cost": 70,
+    "effect": "我々の陣営にある列強国のおかげで、大規模攻勢爆撃の研究と遂行に思いがけない利益がもたらされた。",
+    "prerequisites": [
+      "USA_strategic_bombing"
+    ]
+  },
+  {
+    "id": "USA_escort_fighters",
+    "title": "護衛戦闘機",
+    "x": 9500,
+    "y": 440,
+    "cost": 70,
+    "effect": "爆撃機部隊はいつも乗り切っているが、護衛戦闘機により守られていない限りいつか撃墜されるだろう。",
+    "prerequisites": [
+      "USA_air_support",
+      "USA_strategic_bombing"
+    ]
+  },
+  {
+    "id": "USA_us_army_airforce",
+    "title": "合衆国陸軍航空隊",
+    "x": 9350,
+    "y": 700,
+    "cost": 70,
+    "effect": "軍事空軍力の主目的は地上部隊の支援であり、それ以外は二の次である。",
+    "prerequisites": [
+      "USA_TAC"
+    ]
+  },
+  {
+    "id": "USA_us_air_force",
+    "title": "合衆国空軍",
+    "x": 9650,
+    "y": 700,
+    "cost": 70,
+    "effect": "軍事空軍力の主目的は戦争に勝つことであり、戦略爆撃は敵の継戦能力を奪うことにつながる。",
+    "prerequisites": [
+      "USA_combined_bomber_offensive"
+    ]
+  },
+  {
+    "id": "USA_two_ocean_navy_act",
+    "title": "両洋艦隊法",
+    "x": 10400,
+    "y": 180,
+    "cost": 70,
+    "effect": "開戦の機運が高まってきている以上、我々はアメリカの大地に、敵が足を踏み入れることが決して叶わぬように努めなければならない。我が国の海軍は、我が国の国境線を形作る、二つの大海洋のいずれかで戦えなければならない。",
+    "prerequisites": [
+      "USA_war_department"
+    ]
+  }
+]

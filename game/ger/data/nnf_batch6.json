@@ -1,0 +1,111 @@
+[
+  {
+    "id": "GER_nationalist_spain_ally",
+    "title": "スペインとの同盟",
+    "x": 3800,
+    "y": 1090,
+    "cost": 70,
+    "effect": "スペイン内戦での国粋派の勝利は、両国間のより親密な関係の道を開いた。フランコは地中海への鍵を握っているだろう。",
+    "prerequisites": [
+      "GER_italy_ally"
+    ]
+  },
+  {
+    "id": "GER_danzig_vs_slovakia",
+    "title": "スロヴァキアと引き換えにダンツィヒを",
+    "x": 4100,
+    "y": 830,
+    "cost": 70,
+    "effect": "ポーランド人は、我々のレーベンスラウム（生存圏）計画を邪魔している。一方で我々の長期的優先事項を変更し、代わりに彼らとの友好を模索するとしても、まだ猶予は残っている。その達成への唯一の手段は、領土の取引にある。スロヴァキアを見返りとしたダンツィヒ要求。ポーランドもザオルジェ地域の占領について関心を示しているようだ。",
+    "prerequisites": [
+      "GER_end_of_czechoslovakia"
+    ]
+  },
+  {
+    "id": "GER_poland_friend",
+    "title": "ポーランドとの友好",
+    "x": 4100,
+    "y": 960,
+    "cost": 70,
+    "effect": "ポーランドは海への出口を喪失したが、スロヴァキアを与えたことによって我々は友好の意図を示した。ポーランドの東方における将来的な領土拡張をちらつかせることで、彼らを我らに接近させる事は可能だろう。",
+    "prerequisites": [
+      "GER_danzig_vs_slovakia"
+    ]
+  },
+  {
+    "id": "GER_war_with_france",
+    "title": "フランスとの交戦",
+    "x": 4400,
+    "y": 1220,
+    "cost": 70,
+    "effect": "今やドイツは東方国境問題に満足のゆく答えを出した。そして今、そのまなざしを西へ向ける時が来た。アルザス＝ロレーヌの喪失はドイツの名誉に付いた汚点であり、正当かつ同義に則った戦争によってのみ、この汚点は払拭されるのだ。",
+    "prerequisites": [
+      "GER_around_maginot",
+      "GER_weserubung"
+    ]
+  },
+  {
+    "id": "GER_operation_tannenbaum",
+    "title": "タンネンバウム作戦",
+    "x": 4400,
+    "y": 1350,
+    "cost": 70,
+    "effect": "スイスは最も最低で惨めな民衆と政治制度を有している。我が国はようやくこれら新ドイツの不倶戴天の敵に会える時間ができた。",
+    "prerequisites": [
+      "GER_war_with_france"
+    ]
+  },
+  {
+    "id": "GER_reintegrate_luxemburg_and_alsace_lorraine",
+    "title": "ルクセンブルクとアルザス＝ロレーヌの再統合",
+    "x": 4100,
+    "y": 1350,
+    "cost": 70,
+    "effect": "歴史的なドイツ領土の再征服が成功したことにより、我々は今、それらの領土の[Root.GetName]への再統一のプロセスを開始することができる。かの人民は、祖国に愛国的義務を果たす機会が必要だ。",
+    "prerequisites": [
+      "GER_war_with_france"
+    ]
+  },
+  {
+    "id": "GER_naval_rearmament",
+    "title": "海軍再軍備",
+    "x": 5300,
+    "y": 180,
+    "cost": 35,
+    "effect": "1935年の英独海軍協定の締結により、海軍の大規模な増強が可能となった。我々はそれを成し遂げるための努力を惜しむべきではない。",
+    "prerequisites": []
+  },
+  {
+    "id": "GER_naval_effort",
+    "title": "GER naval effort",
+    "x": 5300,
+    "y": 570,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "GER_naval_rearmament"
+    ]
+  },
+  {
+    "id": "GER_naval_effort2",
+    "title": "造船所設備の拡張",
+    "x": 5300,
+    "y": 700,
+    "cost": 70,
+    "effect": "真に注目に値する海軍に創り直すため、造船能力を大いに拡大しなければならない。",
+    "prerequisites": [
+      "GER_naval_effort"
+    ]
+  },
+  {
+    "id": "GER_plan_z",
+    "title": "Z計画",
+    "x": 5150,
+    "y": 960,
+    "cost": 70,
+    "effect": "レーダー提督は、イギリスを水上襲撃作戦によって最も容易に打倒しうると信じている。これを達成するために十分な数の戦艦と空母を建造することは難題であり、時間がかかるに違いない。気が遠くなるほどの……一方、現在我々が有している水上艦隊は悲しいほどに不十分だ。",
+    "prerequisites": [
+      "GER_naval_effort"
+    ]
+  }
+]

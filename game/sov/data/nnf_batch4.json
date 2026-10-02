@@ -1,0 +1,117 @@
+[
+  {
+    "id": "SOV_found_the_jet_institute",
+    "title": "ジェット研究所の設立",
+    "x": 1250,
+    "y": 830,
+    "cost": 70,
+    "effect": "現在のピストンエンジンでは限界がある。これからの飛行機は新たな推進方法に頼らなければならない。他国に負けないためにもジェットエンジンの研究機関を設立するべきだろう。",
+    "prerequisites": [
+      "SOV_the_ussr_academy_of_sciences",
+      "SOV_merge_aircraft_plants"
+    ]
+  },
+  {
+    "id": "SOV_increase_aircraft_production",
+    "title": "航空機の増産",
+    "x": 1550,
+    "y": 440,
+    "cost": 70,
+    "effect": "最近は安全性に注力しすぎているため、新型機の生産数に悪影響を及ぼし始めている。我々は非常に安全で有能な空軍を維持しつつ、過剰な安全システムを排除することでかなりの資源を節約することが出来る。",
+    "prerequisites": [
+      "SOV_expand_the_aircraft_industry"
+    ]
+  },
+  {
+    "id": "SOV_foster_flying_clubs",
+    "title": "飛行倶楽部の育成",
+    "x": 1850,
+    "y": 180,
+    "cost": 70,
+    "effect": "訓練を始める前に新米操縦士が飛行機を見たことがないとなると、余計に訓練費用がかかる。しかし、多くの若者は飛行機の操縦に魅了されており、ある程度の支援を得て航空機操縦の基本をあらかじめ知ることが出来れば、空中戦の細かな部分を極めて迅速に習得して非常に優秀な操縦士へと成長する可能性がある。",
+    "prerequisites": [
+      "SOV_transpolar_flights"
+    ]
+  },
+  {
+    "id": "SOV_women_in_aviation",
+    "title": "女性飛行士",
+    "x": 2000,
+    "y": 310,
+    "cost": 70,
+    "effect": "過去に、空を飛ぶことは男性の領域であると社会的後方分子に宣言されていた。しかし、世界中の女性はこれを無視し、自らが男性の同僚と全く同じくらい優秀であることを示した。我々は彼女達の中から最も優柔な操縦士を選ぶため、飛行に挑戦するよう女性たちに奨励すべきだ。",
+    "prerequisites": [
+      "SOV_foster_flying_clubs"
+    ]
+  },
+  {
+    "id": "SOV_raskovas_aviation_group",
+    "title": "[GetRaskovasAviationGroupName]",
+    "x": 2150,
+    "y": 440,
+    "cost": 70,
+    "effect": "[GetRaskovasAviationGroupDesc]",
+    "prerequisites": [
+      "SOV_women_in_aviation"
+    ]
+  },
+  {
+    "id": "SOV_intensify_pilot_training_program",
+    "title": "操縦士養成計画の強化",
+    "x": 1850,
+    "y": 440,
+    "cost": 70,
+    "effect": "競争力を保つためには、空軍はいかなる状況でも飛んで戦わなければならない。これを達成する最善の方法は、操縦士を最高水準にまで訓練することだ。不足している数や技術的な知識は完璧な技能で埋め合わせる。",
+    "prerequisites": [
+      "SOV_foster_flying_clubs"
+    ]
+  },
+  {
+    "id": "SOV_expand_aviation_institutes",
+    "title": "航空機関の拡大",
+    "x": 1700,
+    "y": 310,
+    "cost": 70,
+    "effect": "空軍の規模を拡大するにあたっての最大の障害は、操縦士訓練の実施能力だ。航空士学校を拡大することで、より大きくより有用な空軍の基礎を築くことができる。",
+    "prerequisites": [
+      "SOV_expand_the_aircraft_industry",
+      "SOV_foster_flying_clubs"
+    ]
+  },
+  {
+    "id": "SOV_ground_support",
+    "title": "地上支援",
+    "x": 1550,
+    "y": 570,
+    "cost": 70,
+    "effect": "我が空軍の主な任務は地上軍の支援でなければならない。この根本的事実はあらゆる決定に反映されるべきだ。",
+    "prerequisites": [
+      "SOV_increase_aircraft_production",
+      "SOV_intensify_pilot_training_program"
+    ]
+  },
+  {
+    "id": "SOV_long_range_aircraft",
+    "title": "長距離航空機",
+    "x": 1850,
+    "y": 570,
+    "cost": 70,
+    "effect": "我々の爆撃機は敵国本土の全地点に達することができ、戦争の遂行能力を短期間で破壊可能なまでに技術は進歩した。陸軍は第一義的に、これが達成されるまでの戦線維持のために存在するものだ。",
+    "prerequisites": [
+      "SOV_increase_aircraft_production",
+      "SOV_intensify_pilot_training_program"
+    ]
+  },
+  {
+    "id": "SOV_the_modern_war_in_the_skies",
+    "title": "空の現代戦",
+    "x": 1700,
+    "y": 700,
+    "cost": 70,
+    "effect": "航空戦は塹壕の上で複葉機が戦っていた時代から大きく進歩した。現在の航空戦では工業的側面も有し、24時間体制で敵に圧力をかけ続けるために、作戦速度が加速している。この事実を認めて相応の計画を立てるべきだ。",
+    "prerequisites": [
+      "SOV_ground_support",
+      "SOV_long_range_aircraft"
+    ]
+  }
+]

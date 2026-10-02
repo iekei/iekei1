@@ -1,0 +1,111 @@
+[
+  {
+    "id": "USA_strategic_interests",
+    "title": "戦略的関心",
+    "x": 5300,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_north_american_dominion"
+    ]
+  },
+  {
+    "id": "USA_protect_south_america",
+    "title": "南アメリカの保護",
+    "x": 5300,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_strategic_interests"
+    ]
+  },
+  {
+    "id": "USA_pacific_pacification",
+    "title": "太平洋に太平を",
+    "x": 5600,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_north_american_dominion"
+    ]
+  },
+  {
+    "id": "USA_secure_asia",
+    "title": "アジアの確保",
+    "x": 5600,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_pacific_pacification"
+    ]
+  },
+  {
+    "id": "USA_global_hegemony",
+    "title": "世界的覇権",
+    "x": 5450,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_secure_asia",
+      "USA_protect_south_america"
+    ]
+  },
+  {
+    "id": "USA_war_plans_division",
+    "title": "戦争計画課",
+    "x": 6800,
+    "y": 50,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": []
+  },
+  {
+    "id": "USA_intervention_in_the_americas",
+    "title": "アメリカ州での介入",
+    "x": 6200,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_war_plans_division"
+    ]
+  },
+  {
+    "id": "USA_war_plan_green",
+    "title": "グリーン計画",
+    "x": 6050,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_intervention_in_the_americas"
+    ]
+  },
+  {
+    "id": "USA_war_plan_crimson",
+    "title": "クリムゾン計画",
+    "x": 6350,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_intervention_in_the_americas"
+    ]
+  },
+  {
+    "id": "USA_reinforce_monroe_doctrine",
+    "title": "モンロー主義の再確認",
+    "x": 6200,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_intervention_in_the_americas"
+    ]
+  }
+]

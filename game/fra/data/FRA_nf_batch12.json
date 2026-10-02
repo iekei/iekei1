@@ -1,0 +1,113 @@
+[
+  {
+    "id": "FRA_economic_devolution",
+    "title": "経済の革命",
+    "x": 6500,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_agricultural_protectionism",
+      "FRA_laissez_faire"
+    ]
+  },
+  {
+    "id": "FRA_promote_entrepeneurship",
+    "title": "起業家精神の促進",
+    "x": 6500,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_economic_devolution"
+    ]
+  },
+  {
+    "id": "FRA_ban_communism",
+    "title": "FRA ban communism",
+    "x": 5900,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_revive_the_national_bloc"
+    ]
+  },
+  {
+    "id": "FRA_utilize_the_leagues",
+    "title": "政治団体の利用",
+    "x": 7550,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_revive_the_national_bloc"
+    ]
+  },
+  {
+    "id": "FRA_national_regeneration",
+    "title": "国内の再生",
+    "x": 7550,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_utilize_the_leagues"
+    ]
+  },
+  {
+    "id": "FRA_destroy_decadence",
+    "title": "堕落の撲滅",
+    "x": 6950,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_national_regeneration"
+    ]
+  },
+  {
+    "id": "FRA_integralism",
+    "title": "統合主義",
+    "x": 7250,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_national_regeneration"
+    ]
+  },
+  {
+    "id": "FRA_work",
+    "title": "労働",
+    "x": 6950,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_integralism"
+    ]
+  },
+  {
+    "id": "FRA_family",
+    "title": "家族",
+    "x": 7250,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_integralism"
+    ]
+  },
+  {
+    "id": "FRA_fatherland",
+    "title": "祖国",
+    "x": 7550,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_integralism"
+    ]
+  }
+]

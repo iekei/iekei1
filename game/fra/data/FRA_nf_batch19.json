@@ -1,0 +1,58 @@
+[
+  {
+    "id": "FRA_heavy_fighter_focus",
+    "title": "重戦闘機重視",
+    "x": 11600,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_fighter_focus"
+    ]
+  },
+  {
+    "id": "FRA_bomber_focus",
+    "title": "爆撃機重視",
+    "x": 12050,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_air_focus"
+    ]
+  },
+  {
+    "id": "FRA_air_doctrine",
+    "title": "空軍ドクトリン",
+    "x": 11900,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_fighter_focus",
+      "FRA_bomber_focus"
+    ]
+  },
+  {
+    "id": "FRA_heavy_bomber_focus",
+    "title": "重爆撃機重視",
+    "x": 12200,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_bomber_focus"
+    ]
+  },
+  {
+    "id": "FRA_naval_bomber_focus",
+    "title": "対艦攻撃機重視",
+    "x": 12500,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_bomber_focus"
+    ]
+  }
+]

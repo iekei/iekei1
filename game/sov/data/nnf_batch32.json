@@ -1,0 +1,112 @@
+[
+  {
+    "id": "SOV_japanese_overtures",
+    "title": "日本の交渉",
+    "x": 21800,
+    "y": 960,
+    "cost": 70,
+    "effect": "西側の側面が確保された今、東側の側面に注意するべきだ。日本人はドイツ人と多くの共通点を持っており、彼らの認識以上に我が新政府と共通点がある。彼らにも招待状を送り、ドイツ人にどうするか尋ねてみることにしよう。",
+    "prerequisites": [
+      "SOV_the_berlin_moscow_axis"
+    ]
+  },
+  {
+    "id": "SOV_consolidate_power",
+    "title": "権力基盤を固める",
+    "x": 20300,
+    "y": 180,
+    "cost": 70,
+    "effect": "いま我が国を引き裂いた戦争に勝利した。我々は立場を強め、我々に反対した無謀な者どもを念入りに排除すべきだ。",
+    "prerequisites": []
+  },
+  {
+    "id": "SOV_consolidate_the_caucasus",
+    "title": "SOV consolidate the caucasus",
+    "x": 19550,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "SOV_consolidate_power"
+    ]
+  },
+  {
+    "id": "SOV_consolidate_the_west",
+    "title": "SOV consolidate the west",
+    "x": 20300,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "SOV_consolidate_power"
+    ]
+  },
+  {
+    "id": "SOV_consolidate_the_east",
+    "title": "SOV consolidate the east",
+    "x": 20900,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "SOV_consolidate_power"
+    ]
+  },
+  {
+    "id": "SOV_sufi_stronghold",
+    "title": "SOV sufi stronghold",
+    "x": 19250,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "SOV_consolidate_the_caucasus"
+    ]
+  },
+  {
+    "id": "SOV_independent_synod",
+    "title": "SOV independent synod",
+    "x": 19550,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "SOV_consolidate_the_caucasus"
+    ]
+  },
+  {
+    "id": "SOV_educate_the_masses_caucasus",
+    "title": "SOV educate the masses caucasus",
+    "x": 19850,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "SOV_consolidate_the_caucasus"
+    ]
+  },
+  {
+    "id": "SOV_transcaucasian_republic",
+    "title": "SOV transcaucasian republic",
+    "x": 19550,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "SOV_sufi_stronghold",
+      "SOV_independent_synod",
+      "SOV_educate_the_masses_caucasus"
+    ]
+  },
+  {
+    "id": "SOV_independent_synod_west",
+    "title": "SOV independent synod west",
+    "x": 20150,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "SOV_consolidate_the_west"
+    ]
+  }
+]

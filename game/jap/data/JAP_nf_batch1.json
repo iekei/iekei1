@@ -1,0 +1,113 @@
+[
+  {
+    "id": "JAP_the_unthinkable_option",
+    "title": "思いもよらぬ選択",
+    "x": 500,
+    "y": 50,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": []
+  },
+  {
+    "id": "JAP_approach_the_young_officers",
+    "title": "青年将校への接触",
+    "x": 350,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_the_unthinkable_option"
+    ]
+  },
+  {
+    "id": "JAP_exchange_the_exiles",
+    "title": "追放者の交換",
+    "x": 650,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_the_unthinkable_option"
+    ]
+  },
+  {
+    "id": "JAP_open_up_the_universities",
+    "title": "大学の開放",
+    "x": 800,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_exchange_the_exiles"
+    ]
+  },
+  {
+    "id": "JAP_cast_the_die",
+    "title": "賽を投げる",
+    "x": 500,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_approach_the_young_officers",
+      "JAP_exchange_the_exiles"
+    ]
+  },
+  {
+    "id": "JAP_the_fate_of_the_imperial_family",
+    "title": "皇室の運命",
+    "x": 200,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_cast_the_die"
+    ]
+  },
+  {
+    "id": "JAP_rebuild_the_civil_service",
+    "title": "政府官庁の再建",
+    "x": 50,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_the_fate_of_the_imperial_family"
+    ]
+  },
+  {
+    "id": "JAP_reeducation_campaign",
+    "title": "再教育運動",
+    "x": 350,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_the_fate_of_the_imperial_family"
+    ]
+  },
+  {
+    "id": "JAP_finish_the_fight",
+    "title": "闘争の完遂",
+    "x": 200,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_rebuild_the_civil_service",
+      "JAP_reeducation_campaign"
+    ]
+  },
+  {
+    "id": "JAP_join_comintern",
+    "title": "コミンテルン加盟",
+    "x": 200,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_finish_the_fight",
+      "JAP_communist_volunteers"
+    ]
+  }
+]

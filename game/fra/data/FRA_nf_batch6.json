@@ -1,0 +1,114 @@
+[
+  {
+    "id": "FRA_anti_fascist_coalition",
+    "title": "反ファシスト連合",
+    "x": 3050,
+    "y": 1220,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_constitutional_convention"
+    ]
+  },
+  {
+    "id": "FRA_invite_anti_fascist_emigrants",
+    "title": "反ファシストの移民を招待",
+    "x": 3050,
+    "y": 1350,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_anti_fascist_coalition"
+    ]
+  },
+  {
+    "id": "FRA_reconnect_to_the_balkans",
+    "title": "バルカンとの再接続",
+    "x": 3050,
+    "y": 1480,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_invite_anti_fascist_emigrants"
+    ]
+  },
+  {
+    "id": "FRA_pre_empt_the_fascist_attack",
+    "title": "ファシストへの先制攻撃",
+    "x": 3200,
+    "y": 1610,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_reconnect_to_the_balkans",
+      "FRA_host_the_german_exiles"
+    ]
+  },
+  {
+    "id": "FRA_loyalty_to_moscow",
+    "title": "モスクワへの忠誠",
+    "x": 3500,
+    "y": 1220,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_constitutional_convention",
+      "FRA_destroy_the_counter_revolution"
+    ]
+  },
+  {
+    "id": "FRA_league_of_french_bolshevist_volunteers",
+    "title": "FRA league of french bolshevist volunteers",
+    "x": 3500,
+    "y": 1350,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_loyalty_to_moscow"
+    ]
+  },
+  {
+    "id": "FRA_host_the_german_exiles",
+    "title": "ドイツ人亡命者の受け入れ",
+    "x": 3500,
+    "y": 1480,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_league_of_french_bolshevist_volunteers"
+    ]
+  },
+  {
+    "id": "FRA_revolution_to_the_utmost",
+    "title": "最大限の革命",
+    "x": 3800,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_force_the_issue"
+    ]
+  },
+  {
+    "id": "FRA_destroy_the_counter_revolution",
+    "title": "反革命の粉砕",
+    "x": 3800,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_revolution_to_the_utmost"
+    ]
+  },
+  {
+    "id": "FRA_revolutionary_zeal",
+    "title": "FRA revolutionary zeal",
+    "x": 4250,
+    "y": 1220,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_destroy_the_counter_revolution"
+    ]
+  }
+]

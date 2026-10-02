@@ -1,0 +1,112 @@
+[
+  {
+    "id": "SOV_intervention_in_the_americas",
+    "title": "アメリカ大陸への介入",
+    "x": 22400,
+    "y": 960,
+    "cost": 70,
+    "effect": "カリブ海やラテンアメリカの多くの小国は、長い間不安定な政府に悩まされてきた。我が国は今こそ政治力を発揮し、彼らの内政の進化を強さと安定の方向へと 「後押し」 すべきだ。もし彼らが我が国と同じ思想の政府を樹立できれば、我が国の拡大する軍事同盟の一員としての地位が提供されるだろう。",
+    "prerequisites": [
+      "SOV_eastern_expansion"
+    ]
+  },
+  {
+    "id": "SOV_restore_the_old_eastern_empire",
+    "title": "帝国の旧き東の地",
+    "x": 22400,
+    "y": 1090,
+    "cost": 70,
+    "effect": "かつて我らが輝かしき帝国は太平洋の端を超え、アメリカ大陸の奥深くまで広がっていた。その後、軽率な決定でこの領地を目先の金銭的利益で交換してしまった。だが我々の指導の下でなら、ロシアはもう一度アメリカの領地を取り戻せるかもしれない。この地の現在の持ち主たちを引っ込ませなければならない。",
+    "prerequisites": [
+      "SOV_intervention_in_the_americas"
+    ]
+  },
+  {
+    "id": "SOV_into_central_asia",
+    "title": "中央アジアへ",
+    "x": 22100,
+    "y": 960,
+    "cost": 70,
+    "effect": "中央アジア征服によりインドへの影響力を強め、ペルシャ湾へのアクセスも可能になる。戦略上の必要性は明らかであり、我々の帝国がこの地を墓場とすることはないだろう。",
+    "prerequisites": [
+      "SOV_eastern_expansion"
+    ]
+  },
+  {
+    "id": "SOV_the_last_break_southward",
+    "title": "最後の南進",
+    "x": 22100,
+    "y": 1090,
+    "cost": 70,
+    "effect": "この最後の征服で、残った西アジアとボスポラス海峡を確保し、側面を安全なものにしてインドの支配権の奪取を最終的に可能とする。ついに此方の地中海から彼方のインド洋まで、我々は絶対的な通航権を得られるだろう。",
+    "prerequisites": [
+      "SOV_into_central_asia"
+    ]
+  },
+  {
+    "id": "SOV_rebuild_the_far_eastern_fleet",
+    "title": "極東艦隊の再建",
+    "x": 21500,
+    "y": 830,
+    "cost": 70,
+    "effect": "極東の権益を確保するためには、この地域の造船および修理能力を大幅に拡大しなければならず、ましてや攻撃どころではない。",
+    "prerequisites": [
+      "SOV_pacify_the_rim"
+    ]
+  },
+  {
+    "id": "SOV_modernize_the_far_eastern_fleet",
+    "title": "極東艦隊の近代化",
+    "x": 21200,
+    "y": 960,
+    "cost": 70,
+    "effect": "数を重視しても頼りにならないと対馬は教えてくれた。真の海戦での勝利を収めるために、我々はよく訓練された乗組員と、彼らが航海するための完璧で近代的な軍艦を必要としている。我が国が建造する新艦隊は、太平洋の技術的に進んだ敵対者たちと戦えるものであるべきだ。",
+    "prerequisites": [
+      "SOV_rebuild_the_far_eastern_fleet"
+    ]
+  },
+  {
+    "id": "SOV_memories_of_1905",
+    "title": "1905年の記憶",
+    "x": 21500,
+    "y": 960,
+    "cost": 70,
+    "effect": "1905年の日露戦争は、我が国民の集団記憶の中にまだ汚点として残っている。我々はこれを利用し、我々が太平洋を支配しうる新しい艦隊を創設するための記念碑的努力で労働者を励まし、彼らの憎しみを煽り、旧敵に復讐を果たすためにその努力を要求するようにしなければならない。",
+    "prerequisites": [
+      "SOV_rebuild_the_far_eastern_fleet"
+    ]
+  },
+  {
+    "id": "SOV_the_lonely_island",
+    "title": "[SOV.GetLonelyIslandName]",
+    "x": 21500,
+    "y": 1090,
+    "cost": 70,
+    "effect": "[SOV.GetLonelyIslandDesc]",
+    "prerequisites": [
+      "SOV_memories_of_1905"
+    ]
+  },
+  {
+    "id": "SOV_an_empire_in_the_pacific",
+    "title": "太平洋の帝国",
+    "x": 21500,
+    "y": 1220,
+    "cost": 70,
+    "effect": "我が帝国が太平洋を横断し始めるにあたり、この広大なる大洋で力と影響力を行使できるよう、艦艇の設計もそれに倣わなければならない。",
+    "prerequisites": [
+      "SOV_the_lonely_island"
+    ]
+  },
+  {
+    "id": "SOV_the_berlin_moscow_axis",
+    "title": "ベルリン＝モスクワ枢軸",
+    "x": 21800,
+    "y": 830,
+    "cost": 70,
+    "effect": "ドイツとイタリアを手本にした堅固な新政府が発足した今、我が国は西方の隣国とのこれまでの関係を修復するために手を打つべきだ。共通の見解に着目すれば、我が国と[GER.GetName]との間に強固かつ永続的な同盟関係を築くことができるだろう。",
+    "prerequisites": [
+      "SOV_pacify_the_rim"
+    ]
+  }
+]

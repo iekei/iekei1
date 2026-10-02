@@ -1,0 +1,114 @@
+[
+  {
+    "id": "FRA_invite_communist_ministers",
+    "title": "共産主義閣僚の招致",
+    "x": 3500,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_form_the_popular_front"
+    ]
+  },
+  {
+    "id": "FRA_strengthen_the_unions",
+    "title": "組合の強化",
+    "x": 3350,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_invite_communist_ministers"
+    ]
+  },
+  {
+    "id": "FRA_celebrate_the_commune",
+    "title": "コミューンを祝う",
+    "x": 3350,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_strengthen_the_unions"
+    ]
+  },
+  {
+    "id": "FRA_womens_suffrage",
+    "title": "FRA womens suffrage",
+    "x": 3650,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_invite_communist_ministers"
+    ]
+  },
+  {
+    "id": "FRA_legal_equality",
+    "title": "法的平等",
+    "x": 3650,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_womens_suffrage"
+    ]
+  },
+  {
+    "id": "FRA_industrial_collectivization",
+    "title": "産業集産化",
+    "x": 3500,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_womens_suffrage",
+      "FRA_strengthen_the_unions"
+    ]
+  },
+  {
+    "id": "FRA_agricultural_collectivization",
+    "title": "FRA agricultural collectivization",
+    "x": 3500,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_industrial_collectivization"
+    ]
+  },
+  {
+    "id": "FRA_force_the_issue",
+    "title": "決断を迫る",
+    "x": 3500,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_celebrate_the_commune",
+      "FRA_legal_equality"
+    ]
+  },
+  {
+    "id": "FRA_reconciliation",
+    "title": "和解",
+    "x": 3200,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_force_the_issue"
+    ]
+  },
+  {
+    "id": "FRA_constitutional_convention",
+    "title": "憲法制定会議",
+    "x": 3200,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_reconciliation"
+    ]
+  }
+]

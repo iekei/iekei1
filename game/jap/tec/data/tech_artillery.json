@@ -1,0 +1,40 @@
+[
+  {
+    "id": "type90_field_gun",
+    "title": "九〇式野砲",
+    "year": 1936,
+    "x": 100,
+    "y": 50,
+    "research_time": 100,
+    "reliability": "配備",
+    "desc": "75mm野砲。日本軍の標準的な野戦砲。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#d4a843' stroke-width='1.5'><path d='M4 18h16'/><path d='M8 18l4-8h4l4 8'/></svg>",
+    "effects": [
+      "攻撃: 45/100",
+      "射程: 60/100",
+      "機動力: 65/100",
+      "信頼度: 75/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "type96_howitzer",
+    "title": "九六式十五糎榴弾砲",
+    "year": 1936,
+    "x": 100,
+    "y": 200,
+    "research_time": 120,
+    "reliability": "配備",
+    "desc": "150mm榴弾砲。大口径の支援用火砲。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#d4a843' stroke-width='1.5'><path d='M4 18h16'/><path d='M6 18l6-10h4l4 10'/></svg>",
+    "effects": [
+      "攻撃: 60/100",
+      "射程: 55/100",
+      "機動力: 40/100",
+      "信頼度: 70/100"
+    ],
+    "prerequisites": [
+      "type90_field_gun"
+    ]
+  }
+]

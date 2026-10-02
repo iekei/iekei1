@@ -1,0 +1,117 @@
+[
+  {
+    "id": "ITA_compagnie_auto_avio_sahariane",
+    "title": "サハラ自動空挺中隊の拡大",
+    "x": 12950,
+    "y": 1220,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_reorganize_regio_esercito",
+      "ITA_reinforce_regia_aeronautica"
+    ]
+  },
+  {
+    "id": "ITA_combined_land_and_air_warfare",
+    "title": "陸軍と空軍の共同戦",
+    "x": 12950,
+    "y": 1350,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_compagnie_auto_avio_sahariane"
+    ]
+  },
+  {
+    "id": "ITA_the_fourth_shore",
+    "title": "第四の沿岸",
+    "x": 13400,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_italo_balbo_focus",
+      "ITA_stop_the_squandering"
+    ]
+  },
+  {
+    "id": "ITA_oil_in_tripoli",
+    "title": "トリポリの石油",
+    "x": 13250,
+    "y": 1220,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_fourth_shore"
+    ]
+  },
+  {
+    "id": "ITA_steel_in_tripoli",
+    "title": "トリポリの鋼鉄",
+    "x": 13550,
+    "y": 1220,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_fourth_shore"
+    ]
+  },
+  {
+    "id": "ITA_novus_ordo",
+    "title": "ノヴス・オルド",
+    "x": 13400,
+    "y": 1350,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_steel_in_tripoli",
+      "ITA_oil_in_tripoli"
+    ]
+  },
+  {
+    "id": "ITA_seek_british_military_cooperation",
+    "title": "イギリス軍に協力を要請",
+    "x": 14750,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_dino_grandi_focus",
+      "ITA_monarchia_d_italia"
+    ]
+  },
+  {
+    "id": "ITA_anglo_italian_pact",
+    "title": "英伊条約に署名",
+    "x": 14750,
+    "y": 1090,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_seek_british_military_cooperation"
+    ]
+  },
+  {
+    "id": "ITA_invite_france_to_military_partnership",
+    "title": "フランスを軍事同盟に招待",
+    "x": 15050,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_dino_grandi_focus",
+      "ITA_monarchia_d_italia"
+    ]
+  },
+  {
+    "id": "ITA_franco_italian_pact",
+    "title": "仏伊条約に署名",
+    "x": 15050,
+    "y": 1090,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_invite_france_to_military_partnership"
+    ]
+  }
+]

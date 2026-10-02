@@ -1,0 +1,112 @@
+[
+  {
+    "id": "FRA_no_further_humiliations",
+    "title": "これ以上の屈辱を許すな",
+    "x": 8900,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_counter_action"
+    ]
+  },
+  {
+    "id": "FRA_slum_clearing",
+    "title": "スラムの排除",
+    "x": 9200,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_counter_action"
+    ]
+  },
+  {
+    "id": "FRA_public_welfare",
+    "title": "公共福祉",
+    "x": 9200,
+    "y": 1220,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_slum_clearing"
+    ]
+  },
+  {
+    "id": "FRA_the_legitimate_heir",
+    "title": "正当な後継者",
+    "x": 9650,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_repeal_the_law_of_exile"
+    ]
+  },
+  {
+    "id": "FRA_secure_the_crown_of_spain",
+    "title": "スペイン王冠の確保",
+    "x": 9650,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_the_legitimate_heir"
+    ]
+  },
+  {
+    "id": "FRA_unite_the_crowns",
+    "title": "王冠の統合",
+    "x": 9500,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_secure_the_crown_of_spain"
+    ]
+  },
+  {
+    "id": "FRA_two_countries_two_crowns",
+    "title": "二つの国、二つの冠",
+    "x": 9800,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_secure_the_crown_of_spain"
+    ]
+  },
+  {
+    "id": "FRA_proclaim_the_third_empire",
+    "title": "第三帝政の宣言",
+    "x": 10100,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_repeal_the_law_of_exile"
+    ]
+  },
+  {
+    "id": "FRA_avenge_waterloo",
+    "title": "ワーテルローの復讐",
+    "x": 10100,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_proclaim_the_third_empire"
+    ]
+  },
+  {
+    "id": "FRA_reorganize_the_dutch",
+    "title": "オランダの再編",
+    "x": 10400,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_avenge_waterloo"
+    ]
+  }
+]

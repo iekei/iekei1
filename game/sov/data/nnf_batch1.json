@@ -1,0 +1,109 @@
+[
+  {
+    "id": "SOV_infrastructure_effort_nsb",
+    "title": "インフラへの注力",
+    "x": 200,
+    "y": 50,
+    "cost": 35,
+    "effect": "$SOV_infrastructure_effort_desc$",
+    "prerequisites": []
+  },
+  {
+    "id": "SOV_heavy_industry",
+    "title": "重工業",
+    "x": 500,
+    "y": 50,
+    "cost": 35,
+    "effect": "我が国の工業化計画は加速し続けており、より多くの軍需物資を生産するために重工業に重点を置くべき時が来ている。",
+    "prerequisites": []
+  },
+  {
+    "id": "SOV_finish_the_five_year_plan",
+    "title": "[GetFinishTheFiveYearPlanName]",
+    "x": 350,
+    "y": 180,
+    "cost": 70,
+    "effect": "[GetFinishTheFiveYearPlanDesc]",
+    "prerequisites": [
+      "SOV_infrastructure_effort_nsb",
+      "SOV_heavy_industry"
+    ]
+  },
+  {
+    "id": "SOV_improve_railway_network",
+    "title": "鉄道網の改善",
+    "x": 50,
+    "y": 310,
+    "cost": 70,
+    "effect": "第一次五カ年計画はあまりにも大きな成功を収めた。これによる重工業の大規模な拡大はソビエト連邦の防衛力をより強固にしたものの、ソビエトの鉄道網が致命的なボトルネックとして残されることとなった。鉄道人民委員部（NKPS）はこのボトルネックを解消し、祖国防衛を確かなものとするための野心的な計画を有している。",
+    "prerequisites": [
+      "SOV_finish_the_five_year_plan"
+    ]
+  },
+  {
+    "id": "SOV_third_five_year_plan",
+    "title": "[GetThirdFiveYearPlanName]",
+    "x": 350,
+    "y": 310,
+    "cost": 70,
+    "effect": "[GetThirdFiveYearPlanDesc]",
+    "prerequisites": [
+      "SOV_finish_the_five_year_plan"
+    ]
+  },
+  {
+    "id": "SOV_reorganize_the_pc_of_heavy_industry",
+    "title": "[GetReorganizeThePcOfHeavyIndustryName]",
+    "x": 50,
+    "y": 570,
+    "cost": 70,
+    "effect": "これまでの重工業への転換の中で、行政の非効率性が明らかとなった。再び事業を円滑に行うために、適材適所を徹底しなければならない。",
+    "prerequisites": [
+      "SOV_third_five_year_plan"
+    ]
+  },
+  {
+    "id": "SOV_industrial_modernization",
+    "title": "産業の近代化",
+    "x": 50,
+    "y": 960,
+    "cost": 70,
+    "effect": "西側諸国では、新しい生産方式や新技術の導入が急速に進んでいる。単に彼らに追いつくことに甘んじることはできない。－－彼らを追い越さなければ！",
+    "prerequisites": [
+      "SOV_reorganize_the_pc_of_heavy_industry"
+    ]
+  },
+  {
+    "id": "SOV_increase_state_reserves",
+    "title": "国家備蓄の拡大",
+    "x": 350,
+    "y": 440,
+    "cost": 35,
+    "effect": "産業は成長し続けており、より多くの資源を必要としている。資源生産量が現在の増加ペースを維持できる保証はないため、可能な限り備蓄を増やす必要があるだろう。",
+    "prerequisites": [
+      "SOV_third_five_year_plan"
+    ]
+  },
+  {
+    "id": "SOV_shift_to_armaments_production",
+    "title": "兵器生産への移行",
+    "x": 650,
+    "y": 570,
+    "cost": 70,
+    "effect": "戦争がすぐそこまで迫りつつある。誰が最初に仕掛けるかは分からないが、遅かれ早かれ我々は攻撃を受けるだろう。その時に備え、今から準備をする必要がある。",
+    "prerequisites": [
+      "SOV_third_five_year_plan"
+    ]
+  },
+  {
+    "id": "SOV_optimize_production_lines",
+    "title": "生産ラインの最適化",
+    "x": 650,
+    "y": 960,
+    "cost": 70,
+    "effect": "他国では工場で「フォーディズム」なるものを導入し、生産量を最大化することに成功している。我々は彼らの例に学ばなければならない。",
+    "prerequisites": [
+      "SOV_shift_to_armaments_production"
+    ]
+  }
+]

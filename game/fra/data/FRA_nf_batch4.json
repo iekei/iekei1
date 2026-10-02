@@ -1,0 +1,113 @@
+[
+  {
+    "id": "FRA_battle_of_maneuver",
+    "title": "機動戦",
+    "x": 2600,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_aggressive_focus"
+    ]
+  },
+  {
+    "id": "FRA_motorized_focus",
+    "title": "自動車化重視",
+    "x": 2600,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_battle_of_maneuver"
+    ]
+  },
+  {
+    "id": "FRA_mechanized_focus",
+    "title": "機械化重視",
+    "x": 2600,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_motorized_focus"
+    ]
+  },
+  {
+    "id": "FRA_light_medium_armor",
+    "title": "オートミトラィユーズ",
+    "x": 2600,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_mechanized_focus"
+    ]
+  },
+  {
+    "id": "FRA_air_dominance",
+    "title": "FRA air dominance",
+    "x": 2900,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_aggressive_focus"
+    ]
+  },
+  {
+    "id": "FRA_cas_focus",
+    "title": "近接航空支援機重視",
+    "x": 2900,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_air_dominance"
+    ]
+  },
+  {
+    "id": "FRA_air_ground_cooperation",
+    "title": "空陸共同",
+    "x": 2900,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_cas_focus"
+    ]
+  },
+  {
+    "id": "FRA_flying_artillery",
+    "title": "FRA flying artillery",
+    "x": 2900,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_air_ground_cooperation"
+    ]
+  },
+  {
+    "id": "FRA_army_reform",
+    "title": "陸軍再編",
+    "x": 2450,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_light_medium_armor",
+      "FRA_heavy_armor_focus",
+      "FRA_extend_the_maginot_line",
+      "FRA_flying_artillery"
+    ]
+  },
+  {
+    "id": "FRA_form_the_popular_front",
+    "title": "人民戦線の形成",
+    "x": 3950,
+    "y": 50,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": []
+  }
+]

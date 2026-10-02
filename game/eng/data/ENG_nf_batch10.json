@@ -1,0 +1,113 @@
+[
+  {
+    "id": "ENG_no_further_appeasement",
+    "title": "宥和政策はもう必要ない",
+    "x": 6650,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_every_man_will_do_his_duty",
+      "ENG_motion_of_no_confidence"
+    ]
+  },
+  {
+    "id": "ENG_kickstart_the_war_industry",
+    "title": "軍需産業の促進",
+    "x": 6200,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_no_further_appeasement"
+    ]
+  },
+  {
+    "id": "ENG_secure_the_oil_imports",
+    "title": "石油の輸入保護",
+    "x": 6200,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_kickstart_the_war_industry"
+    ]
+  },
+  {
+    "id": "ENG_maintaining_imperial_integrity",
+    "title": "完全なる帝国を維持",
+    "x": 6500,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_no_further_appeasement"
+    ]
+  },
+  {
+    "id": "ENG_enforce_the_naval_treaties",
+    "title": "海軍軍縮条約の施行",
+    "x": 6500,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_maintaining_imperial_integrity"
+    ]
+  },
+  {
+    "id": "ENG_maintaining_the_balance_of_power",
+    "title": "勢力均衡の維持",
+    "x": 6800,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_no_further_appeasement"
+    ]
+  },
+  {
+    "id": "ENG_continental_intervention",
+    "title": "大陸への介入",
+    "x": 6800,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_maintaining_the_balance_of_power"
+    ]
+  },
+  {
+    "id": "ENG_home_defence",
+    "title": "本土防衛",
+    "x": 8000,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_steady_as_she_goes"
+    ]
+  },
+  {
+    "id": "uk_iraq_focus",
+    "title": "イラクの確保",
+    "x": 7100,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_home_defence"
+    ]
+  },
+  {
+    "id": "uk_iran_focus",
+    "title": "イランの確保",
+    "x": 7100,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "uk_iraq_focus"
+    ]
+  }
+]

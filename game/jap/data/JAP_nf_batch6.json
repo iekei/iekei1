@@ -1,0 +1,115 @@
+[
+  {
+    "id": "JAP_technological_exchange",
+    "title": "技術交流",
+    "x": 2900,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_non_aggression_pact_with_china",
+      "JAP_create_a_manchurian_imperial_air_force"
+    ]
+  },
+  {
+    "id": "JAP_preemptive_war",
+    "title": "予防戦争",
+    "x": 2900,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_technological_exchange"
+    ]
+  },
+  {
+    "id": "JAP_establish_the_northern_resource_area",
+    "title": "北方資源地帯の確保",
+    "x": 2600,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_preemptive_war",
+      "JAP_imperial_arsenals"
+    ]
+  },
+  {
+    "id": "JAP_german_rocketry",
+    "title": "ドイツのロケット技術",
+    "x": 2900,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_preemptive_war"
+    ]
+  },
+  {
+    "id": "JAP_strengthen_civilian_government",
+    "title": "文官政府を強化",
+    "x": 3500,
+    "y": 50,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": []
+  },
+  {
+    "id": "JAP_ally_with_the_zaibatsus",
+    "title": "財閥との協力",
+    "x": 3350,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_strengthen_civilian_government"
+    ]
+  },
+  {
+    "id": "JAP_research_spending",
+    "title": "研究投資",
+    "x": 3650,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_strengthen_civilian_government"
+    ]
+  },
+  {
+    "id": "JAP_pre_emptive_coup",
+    "title": "先制蜂起",
+    "x": 3350,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_research_spending",
+      "JAP_ally_with_the_zaibatsus"
+    ]
+  },
+  {
+    "id": "JAP_purge_the_militarists",
+    "title": "軍国主義者の追放",
+    "x": 3650,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_research_spending",
+      "JAP_ally_with_the_zaibatsus"
+    ]
+  },
+  {
+    "id": "JAP_the_showa_constitution",
+    "title": "昭和憲法",
+    "x": 3500,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_pre_emptive_coup",
+      "JAP_purge_the_militarists"
+    ]
+  }
+]

@@ -1,0 +1,112 @@
+[
+  {
+    "id": "ITA_air_innovations_bba",
+    "title": "空軍改革",
+    "x": 5150,
+    "y": 50,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": []
+  },
+  {
+    "id": "ITA_citta_dell_aria",
+    "title": "空中都市",
+    "x": 5150,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_air_innovations_bba"
+    ]
+  },
+  {
+    "id": "ITA_expand_rome_flying_school",
+    "title": "ローマ航空学校の拡張",
+    "x": 5750,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_air_innovations_bba"
+    ]
+  },
+  {
+    "id": "ITA_reggianes_exports",
+    "title": "レジアーネの輸出",
+    "x": 4850,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_citta_dell_aria"
+    ]
+  },
+  {
+    "id": "ITA_diving_bombers",
+    "title": "急降下爆撃機",
+    "x": 5450,
+    "y": 310,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_citta_dell_aria",
+      "ITA_expand_rome_flying_school"
+    ]
+  },
+  {
+    "id": "ITA_superaereo",
+    "title": "空軍最高司令部",
+    "x": 5150,
+    "y": 310,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_citta_dell_aria"
+    ]
+  },
+  {
+    "id": "ITA_officers_of_the_service_role",
+    "title": "兵役中の士官達",
+    "x": 5600,
+    "y": 440,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_superaereo",
+      "ITA_expand_rome_flying_school"
+    ]
+  },
+  {
+    "id": "ITA_standardization",
+    "title": "画一化",
+    "x": 5000,
+    "y": 440,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_superaereo"
+    ]
+  },
+  {
+    "id": "ITA_specialization",
+    "title": "専門化",
+    "x": 5300,
+    "y": 440,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_superaereo"
+    ]
+  },
+  {
+    "id": "ITA_long_range_aircraft",
+    "title": "長距離航空機",
+    "x": 4700,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_standardization"
+    ]
+  }
+]

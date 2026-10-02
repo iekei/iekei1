@@ -1,0 +1,116 @@
+[
+  {
+    "id": "ENG_self_government_for_the_americas",
+    "title": "アメリカの自治政府",
+    "x": 5900,
+    "y": 570,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ENG_self_government_for_the_middle_east"
+    ]
+  },
+  {
+    "id": "ENG_self_government_for_asia",
+    "title": "アジアの自治政府",
+    "x": 5900,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_self_government_for_the_americas"
+    ]
+  },
+  {
+    "id": "ENG_decolonization",
+    "title": "脱植民地化",
+    "x": 5600,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_self_government_for_africa",
+      "ENG_self_government_for_asia",
+      "ENG_towards_indian_independence"
+    ]
+  },
+  {
+    "id": "uk_colonial_focus",
+    "title": "植民地エリートの奨励",
+    "x": 3350,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "uk_service_focus"
+    ]
+  },
+  {
+    "id": "uk_asia_focus",
+    "title": "東アジアの強化",
+    "x": 2750,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "uk_colonial_focus"
+    ]
+  },
+  {
+    "id": "uk_burma_focus",
+    "title": "ビルマ公路",
+    "x": 2450,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "uk_asia_focus"
+    ]
+  },
+  {
+    "id": "uk_sanction_japan_focus",
+    "title": "日本への制裁",
+    "x": 2450,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "uk_burma_focus"
+    ]
+  },
+  {
+    "id": "ENG_war_with_japan",
+    "title": "日本との交戦",
+    "x": 2750,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "uk_sanction_japan_focus",
+      "peninsular_focus",
+      "hk_air_focus"
+    ]
+  },
+  {
+    "id": "singapore_focus",
+    "title": "シンガポール戦略",
+    "x": 2750,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "uk_asia_focus"
+    ]
+  },
+  {
+    "id": "sp_landward_forts_focus",
+    "title": "陸の要塞",
+    "x": 2750,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "singapore_focus"
+    ]
+  }
+]

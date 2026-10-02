@@ -1,0 +1,115 @@
+[
+  {
+    "id": "ITA_pugno_alzato",
+    "title": "突き上げられた拳",
+    "x": 6800,
+    "y": 1350,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_gruppi_di_difesa_della_donna",
+      "ITA_a_new_era_for_the_red_shirts"
+    ]
+  },
+  {
+    "id": "ITA_a_leader_steps_forward",
+    "title": "前進する指導者",
+    "x": 7250,
+    "y": 1090,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_popular_front"
+    ]
+  },
+  {
+    "id": "ITA_the_path_to_progress",
+    "title": "状況進展への道のり",
+    "x": 7250,
+    "y": 1220,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_a_leader_steps_forward"
+    ]
+  },
+  {
+    "id": "ITA_industrial_socialization",
+    "title": "産業社会化",
+    "x": 7550,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_popular_front"
+    ]
+  },
+  {
+    "id": "ITA_institute_the_five_year_plan",
+    "title": "五カ年計画の策定",
+    "x": 7550,
+    "y": 1220,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_industrial_socialization"
+    ]
+  },
+  {
+    "id": "ITA_new_ricostruzione_industriale",
+    "title": "新産業改革",
+    "x": 7550,
+    "y": 1350,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_institute_the_five_year_plan"
+    ]
+  },
+  {
+    "id": "ITA_political_commissars",
+    "title": "政治将校",
+    "x": 7850,
+    "y": 1220,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_industrial_socialization"
+    ]
+  },
+  {
+    "id": "ITA_common_ground",
+    "title": "共通の土台",
+    "x": 8150,
+    "y": 1090,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_popular_front",
+      "ITA_italian_socialism"
+    ]
+  },
+  {
+    "id": "ITA_appease_the_military",
+    "title": "軍隊の宥和",
+    "x": 8150,
+    "y": 1220,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_common_ground"
+    ]
+  },
+  {
+    "id": "ITA_crush_the_mafia",
+    "title": "マフィアの殲滅",
+    "x": 8450,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_popular_front",
+      "ITA_italian_socialism"
+    ]
+  }
+]

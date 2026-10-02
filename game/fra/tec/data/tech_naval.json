@@ -1,0 +1,20 @@
+[
+  {
+    "id": "dunkerque",
+    "title": "ダンケルク級戦艦",
+    "year": 1936,
+    "x": 100,
+    "y": 50,
+    "research_time": 250,
+    "reliability": "就役",
+    "desc": "高速戦艦。33cm砲8門を2基に集中配置。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><path d='M2 16h20l-2 2H4z'/><path d='M6 16V6h12v10'/></svg>",
+    "effects": [
+      "火力: 60/100",
+      "装甲: 55/100",
+      "速力: 60/100",
+      "対空: 30/100"
+    ],
+    "prerequisites": []
+  }
+]

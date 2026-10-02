@@ -1,0 +1,18 @@
+[
+  {
+    "id": "ita_industry_1",
+    "title": "工業生産力向上",
+    "year": 1936,
+    "x": 100,
+    "y": 50,
+    "research_time": 100,
+    "reliability": "配備",
+    "desc": "工場の生産効率を向上させる。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#d4843a' stroke-width='1.5'><path d='M4 20V10l4 4V10l4 4V10l4 4V10l4 10z'/></svg>",
+    "effects": [
+      "工場出力: +8%",
+      "建設速度: +8%"
+    ],
+    "prerequisites": []
+  }
+]

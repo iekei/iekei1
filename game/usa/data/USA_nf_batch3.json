@@ -1,0 +1,113 @@
+[
+  {
+    "id": "USA_end_monarchism",
+    "title": "君主主義の終焉",
+    "x": 2150,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_reach_out_to_the_ware_group"
+    ]
+  },
+  {
+    "id": "USA_shatter_the_empires",
+    "title": "帝国の粉砕",
+    "x": 2150,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_end_monarchism"
+    ]
+  },
+  {
+    "id": "USA_wpa",
+    "title": "WPA",
+    "x": 2000,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_continue_the_new_deal"
+    ]
+  },
+  {
+    "id": "USA_agricultural_adjustment_act",
+    "title": "農業調整法",
+    "x": 2000,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_wpa"
+    ]
+  },
+  {
+    "id": "USA_fair_labour_standards_act",
+    "title": "公正労働基準法",
+    "x": 2000,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_agricultural_adjustment_act"
+    ]
+  },
+  {
+    "id": "USA_federal_housing_act",
+    "title": "連邦住宅法",
+    "x": 2000,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_fair_labour_standards_act"
+    ]
+  },
+  {
+    "id": "USA_office_of_scientific_research_and_development",
+    "title": "科学研究開発局",
+    "x": 2300,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_wpa"
+    ]
+  },
+  {
+    "id": "USA_rubber_reserve_company",
+    "title": "ゴム備蓄会社",
+    "x": 2300,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_office_of_scientific_research_and_development"
+    ]
+  },
+  {
+    "id": "USA_limited_intervention",
+    "title": "限定的な介入",
+    "x": 2600,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_continue_the_new_deal",
+      "USA_reestablish_the_gold_standard"
+    ]
+  },
+  {
+    "id": "USA_war_propaganda",
+    "title": "戦争プロパガンダ",
+    "x": 2600,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_limited_intervention"
+    ]
+  }
+]

@@ -1,0 +1,114 @@
+[
+  {
+    "id": "ITA_organize_strikes_in_the_north",
+    "title": "北部でストライキを扇動",
+    "x": 8150,
+    "y": 310,
+    "cost": 35,
+    "effect": "侵攻前に、イタリアの産業労働者の支持を獲得し、北部の工業化の進んだ地域が我々と共にファシスト政権に立ち向かうようにするために、全力を傾けよう。",
+    "prerequisites": [
+      "ITA_unite_the_opposition"
+    ]
+  },
+  {
+    "id": "ITA_the_southern_farmlands",
+    "title": "南の農村地",
+    "x": 8450,
+    "y": 310,
+    "cost": 35,
+    "effect": "ファシスト政権の無駄な努力にもかかわらず、イタリアは実質的に農村のままである。革命を成功させるためには農民に頼らなければならない。そして、農民が最も力を発揮するのは南イタリアである。",
+    "prerequisites": [
+      "ITA_unite_the_opposition"
+    ]
+  },
+  {
+    "id": "ITA_defy_the_duce",
+    "title": "ドゥーチェへの反抗",
+    "x": 8300,
+    "y": 570,
+    "cost": 35,
+    "effect": "ファシスト政権に対抗して立ち上がり、イタリア国民にとっての災難の元を根絶やしにする時が来た。\nイタリアの労働者と農民よ、武器を取れ！",
+    "prerequisites": [
+      "ITA_organize_strikes_in_the_north",
+      "ITA_the_southern_farmlands",
+      "ITA_triumph_in_africa_bba"
+    ]
+  },
+  {
+    "id": "ITA_appeal_to_the_bourgeoisie",
+    "title": "ブルジョワへの訴え",
+    "x": 8150,
+    "y": 700,
+    "cost": 35,
+    "effect": "我々はファシスト政権の崩壊に関心を持つブルジョワ集団に働きかけなければならない。彼らが自由に使える資源と、革命家の勇気があれば、この血なまぐさい戦争に速やかに終止符を打つことができるだろう。",
+    "prerequisites": [
+      "ITA_defy_the_duce"
+    ]
+  },
+  {
+    "id": "ITA_seize_old_equipment",
+    "title": "旧装備の入手",
+    "x": 8450,
+    "y": 700,
+    "cost": 35,
+    "effect": "全国各地の兵器庫には大量の旧軍用品が保管されている。古くても、この機材を押収して我が軍に配備することが、戦争に勝つための大きな力になる。",
+    "prerequisites": [
+      "ITA_defy_the_duce"
+    ]
+  },
+  {
+    "id": "ITA_the_italian_republic",
+    "title": "イタリア共和国",
+    "x": 8300,
+    "y": 830,
+    "cost": 35,
+    "effect": "王制は古くて腐った制度で、我々の革命を妨げる以外の何ものでもない。今こそ王室を排除し、彼らの信奉者を保護する時だ。",
+    "prerequisites": [
+      "ITA_defy_the_duce"
+    ]
+  },
+  {
+    "id": "ITA_the_popular_front",
+    "title": "人民戦線",
+    "x": 7550,
+    "y": 960,
+    "cost": 35,
+    "effect": "内戦は、共産主義者がイタリア国民をファシズムに対する勝利に導くだけでなく、わが国が切実に必要としていた社会的、そして産業的進歩に導くことができることを示した。",
+    "prerequisites": [
+      "ITA_the_italian_republic"
+    ]
+  },
+  {
+    "id": "ITA_the_garibaldi_legion",
+    "title": "ガリバルディ軍団",
+    "x": 6800,
+    "y": 1090,
+    "cost": 35,
+    "effect": "スペイン共和国の同志たちと共に戦うために、スペイン内戦における国際旅団の一員となる志願兵を組織しよう。",
+    "prerequisites": [
+      "ITA_the_popular_front"
+    ]
+  },
+  {
+    "id": "ITA_gruppi_di_difesa_della_donna",
+    "title": "女性護衛団",
+    "x": 6650,
+    "y": 1220,
+    "cost": 35,
+    "effect": "様々な政治形態の革命的女性たちは、戦争勃発時にすべての階級と社会階層からの積極な参加と動員を可能にするために、女性防衛団を形成することを提案している。",
+    "prerequisites": [
+      "ITA_the_garibaldi_legion"
+    ]
+  },
+  {
+    "id": "ITA_a_new_era_for_the_red_shirts",
+    "title": "赤シャツ隊の新しい時代",
+    "x": 6950,
+    "y": 1220,
+    "cost": 35,
+    "effect": "ジュゼッペ・ガリバルディと赤シャツ隊の足跡をたどり、これらの民兵を強化し、イタリア軍の一部として、あるいは外国での義勇旅団として、その任務を最適に遂行できるように強化し訓練していこう。",
+    "prerequisites": [
+      "ITA_the_garibaldi_legion"
+    ]
+  }
+]

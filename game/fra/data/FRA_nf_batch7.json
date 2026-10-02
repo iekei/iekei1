@@ -1,0 +1,113 @@
+[
+  {
+    "id": "FRA_loyalty_to_the_cause",
+    "title": "主義への忠誠",
+    "x": 3950,
+    "y": 1220,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_destroy_the_counter_revolution"
+    ]
+  },
+  {
+    "id": "FRA_carry_the_revolution_north",
+    "title": "革命を北に拡大",
+    "x": 3950,
+    "y": 1350,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_loyalty_to_the_cause"
+    ]
+  },
+  {
+    "id": "FRA_carry_the_revolution_west",
+    "title": "革命を西に拡大",
+    "x": 3800,
+    "y": 1480,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_carry_the_revolution_north"
+    ]
+  },
+  {
+    "id": "FRA_carry_the_revolution_east",
+    "title": "革命を東に拡大",
+    "x": 4100,
+    "y": 1480,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_carry_the_revolution_north"
+    ]
+  },
+  {
+    "id": "FRA_carry_the_revolution_south",
+    "title": "革命を南に拡大",
+    "x": 3950,
+    "y": 1610,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_carry_the_revolution_west",
+      "FRA_carry_the_revolution_east"
+    ]
+  },
+  {
+    "id": "FRA_egalite_liberte_solidarite",
+    "title": "FRA egalite liberte solidarite",
+    "x": 3950,
+    "y": 1740,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_carry_the_revolution_south"
+    ]
+  },
+  {
+    "id": "FRA_reform_the_labour_laws",
+    "title": "労働法の改革",
+    "x": 3950,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_form_the_popular_front"
+    ]
+  },
+  {
+    "id": "FRA_nationalize_key_industry",
+    "title": "主要産業の国有化",
+    "x": 3950,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_reform_the_labour_laws"
+    ]
+  },
+  {
+    "id": "FRA_reorganize_the_aviation_industry",
+    "title": "航空産業の再編",
+    "x": 3800,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_nationalize_key_industry"
+    ]
+  },
+  {
+    "id": "FRA_form_the_state_arsenals",
+    "title": "国営武器庫の建設",
+    "x": 4100,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_nationalize_key_industry"
+    ]
+  }
+]

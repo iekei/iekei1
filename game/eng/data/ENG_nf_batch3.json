@@ -1,0 +1,115 @@
+[
+  {
+    "id": "bomber_command_focus",
+    "title": "爆撃機司令部",
+    "x": 1250,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "air_rearmament_focus"
+    ]
+  },
+  {
+    "id": "coastal_command_focus",
+    "title": "沿岸防衛隊司令部",
+    "x": 1400,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "air_rearmament_focus"
+    ]
+  },
+  {
+    "id": "aircraft_production_focus",
+    "title": "航空機生産団",
+    "x": 1250,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "fighter_command_focus",
+      "bomber_command_focus",
+      "coastal_command_focus"
+    ]
+  },
+  {
+    "id": "uk_jet_focus",
+    "title": "ジェット航空機",
+    "x": 1250,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "aircraft_production_focus"
+    ]
+  },
+  {
+    "id": "naval_rearmament_focus",
+    "title": "海軍再軍備",
+    "x": 1850,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "general_rearmament_focus"
+    ]
+  },
+  {
+    "id": "ENG_anti_non_contact_committee",
+    "title": "非接触委員会",
+    "x": 2150,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "naval_rearmament_focus"
+    ]
+  },
+  {
+    "id": "ENG_secure_the_imperial_shipping_routes",
+    "title": "帝国貿易路の保護",
+    "x": 2300,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "naval_rearmament_focus",
+      "uk_service_focus"
+    ]
+  },
+  {
+    "id": "uk_destroyer_focus",
+    "title": "駆逐艦重視",
+    "x": 1700,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "naval_rearmament_focus"
+    ]
+  },
+  {
+    "id": "ENG_a_s_warfare",
+    "title": "対潜戦",
+    "x": 1700,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "uk_destroyer_focus"
+    ]
+  },
+  {
+    "id": "uk_convoy_focus",
+    "title": "船団護衛重視",
+    "x": 1550,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "uk_destroyer_focus"
+    ]
+  }
+]

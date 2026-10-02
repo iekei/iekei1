@@ -1,0 +1,113 @@
+[
+  {
+    "id": "FRA_carrier_planes",
+    "title": "輸送機",
+    "x": 10550,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_carrier_focus"
+    ]
+  },
+  {
+    "id": "FRA_rush_the_richelieus",
+    "title": "リシュリュー級の緊急建造",
+    "x": 10400,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_capital_ship_focus"
+    ]
+  },
+  {
+    "id": "FRA_prioritize_the_joffre",
+    "title": "ジョフル級を優先",
+    "x": 10700,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_carrier_focus"
+    ]
+  },
+  {
+    "id": "FRA_the_young_school",
+    "title": "青年学派",
+    "x": 11150,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_naval_rearmament"
+    ]
+  },
+  {
+    "id": "FRA_undersea_combat",
+    "title": "水中での戦闘",
+    "x": 11000,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_the_young_school"
+    ]
+  },
+  {
+    "id": "FRA_surface_combat",
+    "title": "水上での戦闘",
+    "x": 11300,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_the_young_school"
+    ]
+  },
+  {
+    "id": "FRA_improved_screen_ships",
+    "title": "直衛艦改良",
+    "x": 11300,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_surface_combat",
+      "FRA_undersea_combat"
+    ]
+  },
+  {
+    "id": "FRA_naval_doctrine",
+    "title": "海軍ドクトリン",
+    "x": 10850,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_prioritize_the_joffre",
+      "FRA_rush_the_richelieus",
+      "FRA_improved_screen_ships"
+    ]
+  },
+  {
+    "id": "FRA_air_focus",
+    "title": "空軍重視",
+    "x": 11900,
+    "y": 50,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": []
+  },
+  {
+    "id": "FRA_fighter_focus",
+    "title": "戦闘機重視",
+    "x": 11750,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_air_focus"
+    ]
+  }
+]

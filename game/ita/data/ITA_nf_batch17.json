@@ -1,0 +1,115 @@
+[
+  {
+    "id": "ITA_mobilize_the_railway_guns",
+    "title": "列車砲の動員",
+    "x": 15350,
+    "y": 1350,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_prepare_for_the_coming_wars"
+    ]
+  },
+  {
+    "id": "ITA_bring_back_old_glories",
+    "title": "過去の栄光の奪還",
+    "x": 15650,
+    "y": 1350,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_prepare_for_the_coming_wars"
+    ]
+  },
+  {
+    "id": "ITA_new_forms_of_weaponry",
+    "title": "兵器の新たな形",
+    "x": 15500,
+    "y": 1480,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_prepare_for_the_coming_wars"
+    ]
+  },
+  {
+    "id": "ITA_revoke_the_acerbo_law",
+    "title": "アチェルボ法の破棄",
+    "x": 15950,
+    "y": 960,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_monarchia_d_italia"
+    ]
+  },
+  {
+    "id": "ITA_christian_democracy",
+    "title": "キリスト教民主主義",
+    "x": 15800,
+    "y": 1090,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_revoke_the_acerbo_law"
+    ]
+  },
+  {
+    "id": "ITA_democratic_king",
+    "title": "民主主義の王",
+    "x": 16100,
+    "y": 1090,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_revoke_the_acerbo_law"
+    ]
+  },
+  {
+    "id": "ITA_cooperate_with_moderates",
+    "title": "穏健派との協力",
+    "x": 15800,
+    "y": 1220,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_christian_democracy",
+      "ITA_democratic_king"
+    ]
+  },
+  {
+    "id": "ITA_expand_intelligence_services",
+    "title": "諜報機関の拡大",
+    "x": 16100,
+    "y": 1220,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_democratic_king",
+      "ITA_christian_democracy"
+    ]
+  },
+  {
+    "id": "ITA_crush_opposition",
+    "title": "反対派の鎮圧",
+    "x": 15950,
+    "y": 1350,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_cooperate_with_moderates",
+      "ITA_expand_intelligence_services"
+    ]
+  },
+  {
+    "id": "ITA_power_to_the_king",
+    "title": "王に権力を",
+    "x": 16700,
+    "y": 960,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_monarchia_d_italia"
+    ]
+  }
+]

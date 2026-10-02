@@ -1,0 +1,42 @@
+[
+  {
+    "id": "renault_r35",
+    "title": "ルノーR35",
+    "year": 1936,
+    "x": 100,
+    "y": 50,
+    "research_time": 110,
+    "reliability": "配備",
+    "desc": "軽歩兵戦車。37mm砲搭載。装甲は厚いが低速。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><rect x='4' y='8' width='16' height='8' rx='1'/><circle cx='8' cy='18' r='2'/><circle cx='16' cy='18' r='2'/></svg>",
+    "effects": [
+      "装甲: 45/100",
+      "攻撃: 25/100",
+      "突破: 10/100",
+      "機動力: 35/100",
+      "信頼度: 70/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "char_b1",
+    "title": "B1重戦車",
+    "year": 1936,
+    "x": 100,
+    "y": 200,
+    "research_time": 140,
+    "reliability": "配備",
+    "desc": "重戦車。75mm車体砲と47mm砲塔砲を搭載。強力だが低速。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><rect x='3' y='7' width='18' height='9' rx='1'/><circle cx='7' cy='18' r='2'/><circle cx='17' cy='18' r='2'/><path d='M12 3v4'/></svg>",
+    "effects": [
+      "装甲: 60/100",
+      "攻撃: 50/100",
+      "突破: 20/100",
+      "機動力: 25/100",
+      "信頼度: 65/100"
+    ],
+    "prerequisites": [
+      "renault_r35"
+    ]
+  }
+]

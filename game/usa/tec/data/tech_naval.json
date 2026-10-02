@@ -1,0 +1,38 @@
+[
+  {
+    "id": "iowa_battleship",
+    "title": "アイオワ級戦艦",
+    "year": 1943,
+    "x": 100,
+    "y": 50,
+    "research_time": 300,
+    "reliability": "就役",
+    "desc": "高速戦艦。40.6cm砲3基9門搭載。史上最速の戦艦。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><path d='M2 16h20l-2 2H4z'/><path d='M6 16V6h12v10'/><path d='M10 6V3h4v3'/></svg>",
+    "effects": [
+      "火力: 85/100",
+      "装甲: 80/100",
+      "速力: 60/100",
+      "対空: 50/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "essex_carrier",
+    "title": "エセックス級航空母艦",
+    "year": 1942,
+    "x": 100,
+    "y": 200,
+    "research_time": 250,
+    "reliability": "就役",
+    "desc": "大型艦隊航空母艦。24隻が建造され、太平洋艦隊の中核となった。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><path d='M2 14h20l-1 3H3z'/><path d='M4 14V8h16v6'/></svg>",
+    "effects": [
+      "航空戦力: 90/100",
+      "速力: 60/100",
+      "装甲: 40/100",
+      "対空: 50/100"
+    ],
+    "prerequisites": []
+  }
+]

@@ -1,0 +1,112 @@
+[
+  {
+    "id": "SOV_call_for_aid",
+    "title": "援助要請",
+    "x": 16400,
+    "y": 1090,
+    "cost": 35,
+    "effect": "ロシアにおける共産主義との闘争は、世界各地のより大規模な共産主義との闘争の一部である。しかし、ロシアにおける共産主義に対する勝利は世界的な共産主義運動に対する致命的な一撃となるであろうから、我々を熱心に援助しようとする国は多くある。",
+    "prerequisites": [
+      "SOV_the_hands_do"
+    ]
+  },
+  {
+    "id": "SOV_request_imperial_protection",
+    "title": "帝国の保護を要求",
+    "x": 16400,
+    "y": 1220,
+    "cost": 70,
+    "effect": "絶望的な時には、絶望的な手段が必要になる。共産主義を打破する唯一の方法が、天皇に服従することだとすれば、それでいい。いずれロシアは独自の帝国となれる時が来るだろう。だが今は他者からの手助けが必要なのだ。",
+    "prerequisites": [
+      "SOV_call_for_aid"
+    ]
+  },
+  {
+    "id": "SOV_sabotage_behind_enemy_lines",
+    "title": "背後からの一撃",
+    "x": 16700,
+    "y": 1090,
+    "cost": 35,
+    "effect": "数十年にわたる共産主義者の失政により、非常に多くの人々が共産主義政権に対し怒りと幻滅を覚えている。共産主義者が未だ権力に居座っている地では、このような人々を利用し連中の敗北に拍車をかけることができる。",
+    "prerequisites": [
+      "SOV_the_hands_do"
+    ]
+  },
+  {
+    "id": "SOV_aristocratic_investments",
+    "title": "貴族の出資",
+    "x": 17000,
+    "y": 1090,
+    "cost": 70,
+    "effect": "旧ロシア貴族の多くは依然として世界中に散らばっており、相当な富を有している。その富の一部を武器や装備の購入費として利用できる様にする。",
+    "prerequisites": [
+      "SOV_the_hands_do"
+    ]
+  },
+  {
+    "id": "SOV_consolidate_power",
+    "title": "権力基盤を固める",
+    "x": 16850,
+    "y": 1220,
+    "cost": 35,
+    "effect": "いま我が国を引き裂いた戦争に勝利した。我々は立場を強め、我々に反対した無謀な者どもを念入りに排除すべきだ。",
+    "prerequisites": [
+      "SOV_the_hands_do"
+    ]
+  },
+  {
+    "id": "SOV_rebuild_the_nation",
+    "title": "国家の再建",
+    "x": 20300,
+    "y": 310,
+    "cost": 35,
+    "effect": "いま戦争で荒廃した我が国は再建する必要がある。あらゆる男性、女性、子供をプロパガンダ活動によって、再建努力に従事させることを確実なものにすることができる。",
+    "prerequisites": [
+      "SOV_consolidate_power"
+    ]
+  },
+  {
+    "id": "SOV_bringing_breakaways_back_to_the_fold",
+    "title": "逃げた子羊を囲いへ戻す",
+    "x": 20000,
+    "y": 310,
+    "cost": 70,
+    "effect": "国の大部分を取り戻した今、分離した国に対処すべきだ。まさかロシア帝国領の永久的な喪失を我々が認めるなどと思っていなかろう？",
+    "prerequisites": [
+      "SOV_consolidate_power"
+    ]
+  },
+  {
+    "id": "SOV_offer_autonomy_to_former_soviet_republics",
+    "title": "旧ソビエト共和国への自治権付与",
+    "x": 19700,
+    "y": 310,
+    "cost": 35,
+    "effect": "我々は目的を達するため帝国領の喪失を甘受せねばならなかったが、これらの地域が実際には帝政ロシアの領域の一部であることは皆が認識せねばならないことである。しかし彼らは帝国の奪還に手を貸してくれたのだから、感謝の意を示すという意味でいくらかの自治権を与えるべきだろう。",
+    "prerequisites": [
+      "SOV_consolidate_power"
+    ]
+  },
+  {
+    "id": "SOV_restore_the_glory_of_the_motherland",
+    "title": "祖国の栄光を回復",
+    "x": 20300,
+    "y": 440,
+    "cost": 70,
+    "effect": "新たな指導部の下で、ロシアがかつてないほど輝かしきものとなるのは間違いないだろう！我々はあらゆる種類の大規模な建設計画に着手し、我が国を西欧世界の羨望の的とするのだ！",
+    "prerequisites": [
+      "SOV_rebuild_the_nation"
+    ]
+  },
+  {
+    "id": "SOV_article_124",
+    "title": "憲法第124条",
+    "x": 18050,
+    "y": 180,
+    "cost": 35,
+    "effect": "[SOV.GetArticle124Desc]",
+    "prerequisites": [
+      "SOV_beaten_but_not_defeated"
+    ]
+  }
+]

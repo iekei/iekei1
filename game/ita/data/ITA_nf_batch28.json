@@ -1,0 +1,115 @@
+[
+  {
+    "id": "ITA_empower_the_carabinieri",
+    "title": "カラビニエリに権力を",
+    "x": 8450,
+    "y": 1220,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_crush_the_mafia"
+    ]
+  },
+  {
+    "id": "ITA_army_modernization",
+    "title": "陸軍の近代化",
+    "x": 8150,
+    "y": 1350,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_appease_the_military",
+      "ITA_political_commissars",
+      "ITA_empower_the_carabinieri"
+    ]
+  },
+  {
+    "id": "ITA_union_in_the_party",
+    "title": "党内の連合",
+    "x": 7250,
+    "y": 1480,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_path_to_progress"
+    ]
+  },
+  {
+    "id": "ITA_follow_the_soviet_union",
+    "title": "ソビエト連邦に従え",
+    "x": 6950,
+    "y": 1610,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_union_in_the_party"
+    ]
+  },
+  {
+    "id": "ITA_military_cooperation",
+    "title": "軍事協力",
+    "x": 6950,
+    "y": 1740,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_follow_the_soviet_union"
+    ]
+  },
+  {
+    "id": "ITA_defense_against_capitalism",
+    "title": "資本主義に対する防衛",
+    "x": 6800,
+    "y": 1870,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_military_cooperation"
+    ]
+  },
+  {
+    "id": "ITA_combined_research_effort",
+    "title": "共同研究活動",
+    "x": 6950,
+    "y": 2000,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_military_cooperation"
+    ]
+  },
+  {
+    "id": "ITA_special_brigades",
+    "title": "特殊旅団",
+    "x": 7250,
+    "y": 1870,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_follow_the_soviet_union",
+      "ITA_defend_the_land"
+    ]
+  },
+  {
+    "id": "ITA_defend_the_land",
+    "title": "土地を守れ",
+    "x": 7550,
+    "y": 1610,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_union_in_the_party"
+    ]
+  },
+  {
+    "id": "ITA_united_anarchist_confederations",
+    "title": "統一無政府主義連合",
+    "x": 7400,
+    "y": 1740,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_defend_the_land"
+    ]
+  }
+]

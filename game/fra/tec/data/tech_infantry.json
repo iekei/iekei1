@@ -1,0 +1,42 @@
+[
+  {
+    "id": "mas36",
+    "title": "MAS-36",
+    "year": 1936,
+    "x": 100,
+    "y": 50,
+    "research_time": 100,
+    "reliability": "配備",
+    "desc": "フランス製ボルトアクション小銃。7.5mm弾を使用。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.8' stroke-linecap='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/></svg>",
+    "effects": [
+      "対人攻撃: 35/100",
+      "対物攻撃: 10/100",
+      "生存力: 8/100",
+      "機動力: 70/100",
+      "信頼度: 80/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "fmg_24_29",
+    "title": "FM 24/29",
+    "year": 1936,
+    "x": 100,
+    "y": 200,
+    "research_time": 100,
+    "reliability": "配備",
+    "desc": "フランス製軽機関銃。7.5mm口径。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.8' stroke-linecap='round'><path d='M2 12h18'/><path d='M6 12v4'/><path d='M16 12l2 3h-3z'/></svg>",
+    "effects": [
+      "対人攻撃: 40/100",
+      "対物攻撃: 8/100",
+      "生存力: 9/100",
+      "機動力: 55/100",
+      "信頼度: 75/100"
+    ],
+    "prerequisites": [
+      "mas36"
+    ]
+  }
+]

@@ -1,0 +1,112 @@
+[
+  {
+    "id": "peninsular_focus",
+    "title": "半島戦争",
+    "x": 2750,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "sp_landward_forts_focus"
+    ]
+  },
+  {
+    "id": "hongkong_focus",
+    "title": "香港の保持",
+    "x": 3050,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "uk_asia_focus"
+    ]
+  },
+  {
+    "id": "hk_landward_forts_focus",
+    "title": "陸の要塞",
+    "x": 3050,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "hongkong_focus"
+    ]
+  },
+  {
+    "id": "hk_air_focus",
+    "title": "防空",
+    "x": 3050,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "hk_landward_forts_focus"
+    ]
+  },
+  {
+    "id": "uk_china_focus",
+    "title": "中国への影響力",
+    "x": 3050,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "hk_air_focus"
+    ]
+  },
+  {
+    "id": "uk_commonwealth_focus",
+    "title": "英連邦の結束",
+    "x": 3950,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "uk_colonial_focus"
+    ]
+  },
+  {
+    "id": "ENG_british_commonwealth_air_training_plan",
+    "title": "イギリス連邦航空訓練計画",
+    "x": 3800,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "uk_commonwealth_focus"
+    ]
+  },
+  {
+    "id": "uk_india_focus",
+    "title": "インドの開発",
+    "x": 3500,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "uk_commonwealth_focus"
+    ]
+  },
+  {
+    "id": "uk_free_india_focus",
+    "title": "インド独立",
+    "x": 3350,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "uk_india_focus"
+    ]
+  },
+  {
+    "id": "uk_australia_focus",
+    "title": "オーストラリアの開発",
+    "x": 4100,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "uk_commonwealth_focus"
+    ]
+  }
+]

@@ -1,0 +1,47 @@
+[
+  {
+    "id": "ITA_the_fight_overseas",
+    "title": "国外での戦い",
+    "x": 10250,
+    "y": 1350,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_cooperatives_for_intensive_exploitation",
+      "ITA_the_italian_confederation"
+    ]
+  },
+  {
+    "id": "ITA_irregulars",
+    "title": "非正規軍",
+    "x": 9950,
+    "y": 1480,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_fight_overseas"
+    ]
+  },
+  {
+    "id": "ITA_liberate_the_workers_of_africa",
+    "title": "アフリカの労働者の解放",
+    "x": 10250,
+    "y": 1480,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_fight_overseas"
+    ]
+  },
+  {
+    "id": "ITA_ascari",
+    "title": "アスカリ",
+    "x": 10550,
+    "y": 1480,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_fight_overseas"
+    ]
+  }
+]

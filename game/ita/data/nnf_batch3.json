@@ -1,0 +1,115 @@
+[
+  {
+    "id": "ITA_modernize_the_mezzogiorno",
+    "title": "南部の近代化",
+    "x": 2300,
+    "y": 440,
+    "cost": 70,
+    "effect": "イタリアの南部は国家統一以来、ずっと「問題児」と見做されてきた。だが、我々の地中海の覇者となる野望を叶えるためには、その眠ったままの潜在的な力を、余すところなく発揮してもらう必要がある。",
+    "prerequisites": [
+      "ITA_industria_della_gomma_sintetica"
+    ]
+  },
+  {
+    "id": "ITA_new_industrialization_program",
+    "title": "新・工業化計画",
+    "x": 2150,
+    "y": 700,
+    "cost": 70,
+    "effect": "世界に遅れを取らずに邁進し続けるには、常に革新と向上を繰り返して行く必要がある。名声に酔って休むようなことがあっては、競争力を維持できない。どんな時も、より上を目指して戦い続けるのだ。",
+    "prerequisites": [
+      "ITA_strengthen_northern_industry",
+      "ITA_modernize_the_mezzogiorno",
+      "ITA_expand_national_universities"
+    ]
+  },
+  {
+    "id": "ITA_railway_innovations",
+    "title": "鉄道改革",
+    "x": 2600,
+    "y": 180,
+    "cost": 70,
+    "effect": "自動車の時代になってもなお、強力な鉄道網は、強い経済を支える重要な役割を担っている。イタリアの鉄道をさらに拡張させることが、我々の今後の成長にもつながるのだ。",
+    "prerequisites": [
+      "ITA_italian_highways_bba"
+    ]
+  },
+  {
+    "id": "ITA_expand_foggia_farm_fields",
+    "title": "フォッジャの圃場を拡大",
+    "x": 2450,
+    "y": 310,
+    "cost": 70,
+    "effect": "フォッジャ一帯は昔からある、イタリア全土の民の腹を満たす穀倉地帯だ。戦争が始まれば、農場で働く相当数の男達を、軍隊に徴募しなくてはならない。これからも民衆を食べさせて行こうと思ったら、地域の農業の近代化と拡張に取り組む必要がある。",
+    "prerequisites": [
+      "ITA_railway_innovations"
+    ]
+  },
+  {
+    "id": "ITA_investments_in_edison",
+    "title": "エジソンへの投資",
+    "x": 2600,
+    "y": 440,
+    "cost": 70,
+    "effect": "イタリアはヨーロッパ初の発電所を建設したことを誇り、常に最先端の科学技術を積極的に取り込んできた。エジソンの会社に投資しておけば、これからもずっとトップを走り続けていけるだろう。",
+    "prerequisites": [
+      "ITA_railway_innovations"
+    ]
+  },
+  {
+    "id": "ITA_expand_national_universities",
+    "title": "国立大学の拡充",
+    "x": 2600,
+    "y": 570,
+    "cost": 70,
+    "effect": "我々のように技術的に進んでいる国は、常に多くの技術者を必要としている。だが、どうやら国内の大学こそが、我が国の競争力の源となる、未来の専門家達を育てる妨げになっているらしいことが判明した。",
+    "prerequisites": [
+      "ITA_investments_in_edison"
+    ]
+  },
+  {
+    "id": "ITA_fiocchi_munizioni",
+    "title": "フィオッキの砲弾",
+    "x": 2900,
+    "y": 180,
+    "cost": 35,
+    "effect": "フィオッキはもう長いこと、高品質な砲弾で我らの部隊を支援してきてくれている。今後の戦争において、安定した砲弾の供給は必須。フィオッキが、しっかりとその役目を果たせるようにせねば。",
+    "prerequisites": [
+      "ITA_italian_highways_bba"
+    ]
+  },
+  {
+    "id": "ITA_brescia_small_arms_industry",
+    "title": "ブレシアの小火器産業",
+    "x": 2750,
+    "y": 310,
+    "cost": 35,
+    "effect": "イタリアの小火器は、世界中でその品質の高さを讃えられている。しかし、戦場で我が軍の兵士達が、どんな敵にも打ち勝てるようにするには、最新型の武器も十分に取り揃えておく必要がある。",
+    "prerequisites": [
+      "ITA_fiocchi_munizioni"
+    ]
+  },
+  {
+    "id": "ITA_milan_comms_industry",
+    "title": "ミラノの通信産業",
+    "x": 3050,
+    "y": 310,
+    "cost": 35,
+    "effect": "無線探知と距離測定という新たな分野は今後、様々な挑戦を可能にすると共に、これからの軍事技術において、間違いなく重要な位置を占めることになるだろう。この分野の成長に、乗り遅れることのないようにしておかねばな。",
+    "prerequisites": [
+      "ITA_fiocchi_munizioni"
+    ]
+  },
+  {
+    "id": "ITA_redirect_alfa_romeo_production",
+    "title": "アルファロメオの生産方針を転換",
+    "x": 2900,
+    "y": 440,
+    "cost": 70,
+    "effect": "何十年もの間、イタリアのスポーツカーは、およそ人の技術が生み出せる至高の作品であり続けた。しかし、戦争の暗雲が立ち込める今、イタリアの民一人一人が、自らの役割を果たさせねばならない。無意味な贅沢品を維持する余裕など、もはやないのだ。アルファロメオの車を生産していた工場は軍事目的に転用したほうが今後のためだ。",
+    "prerequisites": [
+      "ITA_brescia_small_arms_industry",
+      "ITA_milan_comms_industry"
+    ]
+  }
+]

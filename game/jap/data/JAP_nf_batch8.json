@@ -1,0 +1,111 @@
+[
+  {
+    "id": "JAP_expand_the_showa_steel_works",
+    "title": "昭和製鋼所の拡張",
+    "x": 4700,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_the_manchurian_project"
+    ]
+  },
+  {
+    "id": "JAP_develop_aluminum_sources",
+    "title": "アルミ資源の開発",
+    "x": 4700,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_expand_the_showa_steel_works"
+    ]
+  },
+  {
+    "id": "JAP_expand_manchurian_railways",
+    "title": "満州鉄道の延伸",
+    "x": 4100,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_the_manchurian_project"
+    ]
+  },
+  {
+    "id": "JAP_light_industry_development",
+    "title": "軽工業の開発",
+    "x": 3950,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_expand_manchurian_railways"
+    ]
+  },
+  {
+    "id": "JAP_heavy_industry_development",
+    "title": "重工業の開発",
+    "x": 4250,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_expand_manchurian_railways"
+    ]
+  },
+  {
+    "id": "JAP_japanese_settlement",
+    "title": "日系移民",
+    "x": 4100,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_heavy_industry_development",
+      "JAP_light_industry_development"
+    ]
+  },
+  {
+    "id": "JAP_fortify_the_border",
+    "title": "国境の要塞化",
+    "x": 4400,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_the_manchurian_project"
+    ]
+  },
+  {
+    "id": "JAP_army_expansion_law",
+    "title": "陸軍拡大法",
+    "x": 5300,
+    "y": 50,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": []
+  },
+  {
+    "id": "JAP_small_arms_modernization",
+    "title": "小火器の近代化",
+    "x": 5150,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_army_expansion_law"
+    ]
+  },
+  {
+    "id": "JAP_supremacy_of_technology",
+    "title": "技術的優越",
+    "x": 5150,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_small_arms_modernization"
+    ]
+  }
+]

@@ -1,0 +1,113 @@
+[
+  {
+    "id": "FRA_revive_the_franco_polish_alliance",
+    "title": "仏波同盟の回復",
+    "x": 5300,
+    "y": 830,
+    "cost": 70,
+    "effect": "フランスは独立したポーランドを常に援助してきた。近年、我らの関係はやや冷え込んでいる。ドイツの脅威が差し迫っている今こそ、我々の条約を甦らせる時だろう。",
+    "prerequisites": [
+      "FRA_confirm_eastern_commitments"
+    ]
+  },
+  {
+    "id": "FRA_buy_time",
+    "title": "時間を稼ぐ",
+    "x": 6050,
+    "y": 700,
+    "cost": 70,
+    "effect": "我々はドイツと相対する準備ができていない。同盟国は弱体であり、我が軍は時代遅れのものである。生き残りたいのならば、生け贄を用意する必要があるかもしれない。",
+    "prerequisites": [
+      "FRA_review_foreign_policy"
+    ]
+  },
+  {
+    "id": "FRA_strengthen_government_support",
+    "title": "政府の強化",
+    "x": 5750,
+    "y": 960,
+    "cost": 70,
+    "effect": "フランス全国民の願いを叶える為、来る数年間にわたる計画を作成した。政府がフランスを統べるだけの価値を持ち、行動する能力があることを国民に示す事で、フランスは再び結束し、立ち上がることができるだろう。",
+    "prerequisites": [
+      "FRA_strengthen_the_little_entente",
+      "FRA_buy_time"
+    ]
+  },
+  {
+    "id": "FRA_defensive_strategems",
+    "title": "防衛戦略",
+    "x": 5750,
+    "y": 1090,
+    "cost": 70,
+    "effect": "フランス国民を戦わせようとするならば、明確な指針を持つ事がこれまで以上に重要である。内輪揉めを終わらせ、フランスと\"Liberté, égalité, fraternité（自由・平等・博愛）\"のために戦わねばならない。",
+    "prerequisites": [
+      "FRA_strengthen_government_support"
+    ]
+  },
+  {
+    "id": "FRA_go_with_britain",
+    "title": "イギリス協調",
+    "x": 6050,
+    "y": 830,
+    "cost": 70,
+    "effect": "ロシアが永久に戻らない今、フランスとイギリスのみがかつての三国協商国として残っている。歴史が繰り返す運命にあるならば、ヨーロッパにおける自由と民主主義の砦たる両国は同盟国であり続けなければならない。",
+    "prerequisites": [
+      "FRA_buy_time"
+    ]
+  },
+  {
+    "id": "FRA_arms_purchases_in_the_us",
+    "title": "アメリカからの武器購入",
+    "x": 6050,
+    "y": 960,
+    "cost": 70,
+    "effect": "我々の軍需産業は、近代火器を我々軍に供給する役割にかなっていない。だがアメリカには十分な生産能力がある。彼らが孤立主義に回帰しなければ、彼らが我々の必要とする武器を輸出するように交渉できるはずだ。",
+    "prerequisites": [
+      "FRA_go_with_britain"
+    ]
+  },
+  {
+    "id": "FRA_france_leads",
+    "title": "フランスの先導",
+    "x": 6350,
+    "y": 830,
+    "cost": 70,
+    "effect": "誇り高き歴史を持つフランスは、外交政策を余所から指示されたりはしない。我々は自ら選び、自らの利益へと導く。",
+    "prerequisites": [
+      "FRA_buy_time"
+    ]
+  },
+  {
+    "id": "FRA_concessions_to_italy",
+    "title": "イタリアへの譲歩",
+    "x": 6350,
+    "y": 960,
+    "cost": 70,
+    "effect": "イタリアはいまだにアフリカの帝国を夢見ている。もしも我々が譲歩を打診し、さらにエチオピアの征服を承認したならば、ローマとベルリンによる枢軸の形成を阻めるかもしれない。",
+    "prerequisites": [
+      "FRA_france_leads"
+    ]
+  },
+  {
+    "id": "FRA_ratify_the_stresa_front",
+    "title": "ストレーザ戦線の承認",
+    "x": 6350,
+    "y": 1090,
+    "cost": 70,
+    "effect": "イタリアはアフリカの領土と引き換えに我々の陣営へ参加するとほのめかしている。今こそ筆を執り、必要な条約に批准する時だ。",
+    "prerequisites": [
+      "FRA_concessions_to_italy"
+    ]
+  },
+  {
+    "id": "FRA_franco_soviet_treaty",
+    "title": "仏ソ条約",
+    "x": 6650,
+    "y": 960,
+    "cost": 70,
+    "effect": "ソ連はちょうど我々と同じように欧州にファシズムが台頭するのを憂慮している。おそらく、その時が来たならば、我々を支援するよう説得することも可能である。",
+    "prerequisites": [
+      "FRA_france_leads"
+    ]
+  }
+]

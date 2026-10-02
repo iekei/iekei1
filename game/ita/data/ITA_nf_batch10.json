@@ -1,0 +1,115 @@
+[
+  {
+    "id": "ITA_undermine_the_duce",
+    "title": "首領の弱体化",
+    "x": 12650,
+    "y": 180,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_struggle_in_ethiopia"
+    ]
+  },
+  {
+    "id": "ITA_servizio_informazione_militare",
+    "title": "軍事諜報機関",
+    "x": 11450,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_solid_progress",
+      "ITA_the_abyssinian_fiasco",
+      "ITA_struggle_in_ethiopia"
+    ]
+  },
+  {
+    "id": "ITA_conspiracies_in_the_shadows",
+    "title": "知られざる陰謀",
+    "x": 12650,
+    "y": 310,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_undermine_the_duce"
+    ]
+  },
+  {
+    "id": "ITA_triumph_in_africa_bba",
+    "title": "アフリカでの大勝利",
+    "x": 11450,
+    "y": 310,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_servizio_informazione_militare"
+    ]
+  },
+  {
+    "id": "ITA_convene_the_grand_council",
+    "title": "大評議会の招集",
+    "x": 14450,
+    "y": 570,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_triumph_in_africa_bba",
+      "ITA_conspiracies_in_the_shadows"
+    ]
+  },
+  {
+    "id": "ITA_devaluate_the_lire",
+    "title": "リラの平価切下げ",
+    "x": 11000,
+    "y": 440,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_triumph_in_africa_bba"
+    ]
+  },
+  {
+    "id": "ITA_anglo_italian_agreements",
+    "title": "英・伊合意",
+    "x": 11300,
+    "y": 440,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_triumph_in_africa_bba"
+    ]
+  },
+  {
+    "id": "ITA_topple_amhara_rulers",
+    "title": "アムハラの支配者達の打倒",
+    "x": 11600,
+    "y": 440,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_triumph_in_africa_bba"
+    ]
+  },
+  {
+    "id": "ITA_the_new_emperor_of_ethiopia",
+    "title": "エチオピアの新たな皇帝",
+    "x": 11900,
+    "y": 440,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_triumph_in_africa_bba"
+    ]
+  },
+  {
+    "id": "ITA_culto_del_duce",
+    "title": "皇帝の崇拝",
+    "x": 11450,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_triumph_in_africa_bba"
+    ]
+  }
+]

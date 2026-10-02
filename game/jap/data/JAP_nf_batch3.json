@@ -1,0 +1,115 @@
+[
+  {
+    "id": "JAP_intervene_in_china",
+    "title": "盧溝橋事件",
+    "x": 1250,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_greater_east_asian_co_prosperity_sphere"
+    ]
+  },
+  {
+    "id": "JAP_secure_china",
+    "title": "中国の確保",
+    "x": 1250,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_intervene_in_china"
+    ]
+  },
+  {
+    "id": "JAP_develop_chinese_resources",
+    "title": "中国資源の開発",
+    "x": 1250,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_secure_china"
+    ]
+  },
+  {
+    "id": "JAP_strike_south_doctrine",
+    "title": "南方戦略",
+    "x": 1550,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_greater_east_asian_co_prosperity_sphere",
+      "JAP_sign_tripartite_pact"
+    ]
+  },
+  {
+    "id": "JAP_non_aggression_pact_with_the_soviet_union",
+    "title": "日ソ中立条約",
+    "x": 1550,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_strike_south_doctrine"
+    ]
+  },
+  {
+    "id": "JAP_bypass_the_philippines",
+    "title": "フィリピンの迂回",
+    "x": 1400,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_non_aggression_pact_with_the_soviet_union"
+    ]
+  },
+  {
+    "id": "JAP_secure_the_philippines",
+    "title": "フィリピンの確保",
+    "x": 1700,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_non_aggression_pact_with_the_soviet_union"
+    ]
+  },
+  {
+    "id": "JAP_strike_on_the_southern_resource_area",
+    "title": "南方資源地帯への一撃",
+    "x": 1550,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_secure_the_philippines",
+      "JAP_bypass_the_philippines"
+    ]
+  },
+  {
+    "id": "JAP_alliance_with_siam",
+    "title": "シャムと同盟",
+    "x": 1700,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_strike_south_doctrine"
+    ]
+  },
+  {
+    "id": "JAP_exploit_the_southern_resource_area",
+    "title": "南方資源地帯の拡張",
+    "x": 1700,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_strike_on_the_southern_resource_area",
+      "JAP_coal_liquification"
+    ]
+  }
+]

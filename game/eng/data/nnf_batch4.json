@@ -1,0 +1,109 @@
+[
+  {
+    "id": "ENG_anti_submarine_training_school",
+    "title": "対潜訓練学校",
+    "x": 1550,
+    "y": 1090,
+    "cost": 70,
+    "effect": "我々の利点の一つは、新たな乗組員を訓練するために先次対戦の経験を持つ熟練乗員が多数いる環境を利用できることだ。対潜水艦戦の専門家であるコモドール・ギルバート・スティーブンソンが担当し、トバモーリに新たな対潜水艦訓練学校（Anti-Submarine Training School）を設立することで、大西洋における護衛任務に着手し、Uボートの脅威に直面する前に、乗組員が必要な練度を習得できるよ...",
+    "prerequisites": [
+      "uk_convoy_focus"
+    ]
+  },
+  {
+    "id": "uk_waves_focus",
+    "title": "ブリタニア、大海原を統べよ",
+    "x": 2000,
+    "y": 700,
+    "cost": 70,
+    "effect": "[Root.GetBritanniaRulesTheWavesDesc]",
+    "prerequisites": [
+      "naval_rearmament_focus"
+    ]
+  },
+  {
+    "id": "uk_carrier_focus",
+    "title": "空母重視",
+    "x": 1850,
+    "y": 830,
+    "cost": 70,
+    "effect": "海軍の理論家の間で戦艦の継続的有用性について激しい論争が起こっている。中には、近代がもたらした空軍力が海軍を支配するようになり、海の王者の地位が戦艦から空母に置き換わるだろうと主張する人々も存在する。",
+    "prerequisites": [
+      "uk_waves_focus"
+    ]
+  },
+  {
+    "id": "uk_battleship_focus",
+    "title": "戦艦重視",
+    "x": 2150,
+    "y": 830,
+    "cost": 70,
+    "effect": "理論家は制空権や制海権について議論しているが、自分の家が艦砲の標的になる事など誰も望まないだろう。たとえ空母推進者が最終的に正しかったとしても、戦艦は少なくとも数年は海を支配し続けるに違いない。",
+    "prerequisites": [
+      "uk_waves_focus"
+    ]
+  },
+  {
+    "id": "uk_amphibious_focus",
+    "title": "上陸作戦",
+    "x": 1850,
+    "y": 570,
+    "cost": 70,
+    "effect": "「大海原を統べる」のは結構なことだが、自らの脚を濡らすことも時には必要だろう。敵領地を攻める陸戦力の増強を怠ってはならない。",
+    "prerequisites": [
+      "naval_rearmament_focus"
+    ]
+  },
+  {
+    "id": "ENG_expand_the_repair_yards",
+    "title": "修理ドックの拡張",
+    "x": 2000,
+    "y": 960,
+    "cost": 70,
+    "effect": "我が海軍は世界最大級の規模であるが、戦闘でダメージを受けた場合や、艦船が消耗した場合には、速やかに船を修理する手段が必要である。我が軍の修理作業場を拡張することはこれを達成するだけではなく、古い艦船を改修することを可能にするだろう。",
+    "prerequisites": [
+      "uk_battleship_focus",
+      "uk_carrier_focus"
+    ]
+  },
+  {
+    "id": "ENG_vanguard",
+    "title": "ヴァンガード",
+    "x": 2150,
+    "y": 1090,
+    "cost": 70,
+    "effect": "[Root.GetVanguardDesc]",
+    "prerequisites": [
+      "uk_battleship_focus"
+    ]
+  },
+  {
+    "id": "uk_embargo_focus",
+    "title": "禁輸政策",
+    "x": 1850,
+    "y": 50,
+    "cost": 70,
+    "effect": "赤にしろ茶色にしろ、独裁者達を打倒する最も良い手段は、単純に彼らが戦争を遂行するための資源を干上がらせることだ。問題は奴らと取引をしている銀行家や企業を怒鳴りつけることだが……",
+    "prerequisites": []
+  },
+  {
+    "id": "uk_empire_focus",
+    "title": "帝国の強化",
+    "x": 4400,
+    "y": 50,
+    "cost": 70,
+    "effect": "我々の帝国は広大で、大国であるにもかかわらず、防御が手薄だ。これに対処する為、帝国領全土において臣民の愛国主義を奨励する必要がある。",
+    "prerequisites": []
+  },
+  {
+    "id": "uk_service_focus",
+    "title": "海外勤務",
+    "x": 4100,
+    "y": 180,
+    "cost": 70,
+    "effect": "兵士を植民地と本国の間でローテーション勤務させることで、戦線毎に異なる環境を知り、経験を得て、本国の僚友とそれを共有する事が可能になる。",
+    "prerequisites": [
+      "uk_empire_focus"
+    ]
+  }
+]

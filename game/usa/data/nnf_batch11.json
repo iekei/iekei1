@@ -1,0 +1,113 @@
+[
+  {
+    "id": "USA_airborne_divisions",
+    "title": "空挺師団",
+    "x": 8150,
+    "y": 440,
+    "cost": 70,
+    "effect": "航空機の航続距離と積載量の発展は多くの可能性を切り開いている。輸送機は敵前線の遥か後方に部隊の全師団を届けることができる。そうなれば、敵に大混乱をもたらすだろう。",
+    "prerequisites": [
+      "USA_louisiana_maneuvers"
+    ]
+  },
+  {
+    "id": "USA_army_of_the_united_states",
+    "title": "合衆国陸軍",
+    "x": 8450,
+    "y": 440,
+    "cost": 70,
+    "effect": "来るべき戦いにとって、アメリカ陸軍は小さすぎる。達成する必要のある規模までの劇的な増加を監督するためには、我々は新たな組織を創出する必要があるだろう。",
+    "prerequisites": [
+      "USA_louisiana_maneuvers"
+    ]
+  },
+  {
+    "id": "USA_womens_armed_service_integration_act",
+    "title": "女性武装勤務統合法",
+    "x": 8450,
+    "y": 570,
+    "cost": 70,
+    "effect": "奉仕を望む人々を排除する余裕は我々にはない。制服を着たすべての女性が前線で戦う男性を解放するのだ。",
+    "prerequisites": [
+      "USA_army_of_the_united_states"
+    ]
+  },
+  {
+    "id": "USA_support_rock_island",
+    "title": "ロックアイランド工廠への支援",
+    "x": 8750,
+    "y": 310,
+    "cost": 70,
+    "effect": "可能な限りの手段でもって味方の勇敢な兵士たちを支えることが勝利への鍵となる。遠距離からあるいは戦場にて直接大口径野砲の砲火によって支援することこそ、我が軍の兵士たちに必要なのだ。",
+    "prerequisites": [
+      "USA_selective_training_act"
+    ]
+  },
+  {
+    "id": "USA_tank_experiments",
+    "title": "戦車実験",
+    "x": 8750,
+    "y": 440,
+    "cost": 70,
+    "effect": "現代の戦場において戦車は欠かすことができない。我々は戦車をどう運用するべきか研究しなければならない。",
+    "prerequisites": [
+      "USA_support_rock_island"
+    ]
+  },
+  {
+    "id": "USA_tank_destroyer_doctrine",
+    "title": "戦車駆逐ドクトリン",
+    "x": 8750,
+    "y": 570,
+    "cost": 70,
+    "effect": "何人かの砲兵将校によって展開された物議をかもす理論によると、装甲突破に対する最善の兵器は、高速かつ軽量だが重装備の武装車両である。",
+    "prerequisites": [
+      "USA_tank_experiments"
+    ]
+  },
+  {
+    "id": "USA_main_battle_tanks",
+    "title": "主力戦車",
+    "x": 9050,
+    "y": 570,
+    "cost": 70,
+    "effect": "戦場での経験から、戦車部隊は歩兵支援から敵戦車との戦闘まで多くの任務を遂行しなければならないことが明らかとなった。これらの任務に合った車両を設計することで、生産を合理化することが可能となる。",
+    "prerequisites": [
+      "USA_tank_experiments"
+    ]
+  },
+  {
+    "id": "USA_armored_infantry",
+    "title": "装甲歩兵",
+    "x": 8750,
+    "y": 700,
+    "cost": 70,
+    "effect": "戦車だけでは勝利を掴むことはできない。領土を保持するためには歩兵がひつようだ。歩兵に装甲車両を提供することで、彼らは戦車についていくことができて、様々な攻撃から生き延びることができる。",
+    "prerequisites": [
+      "USA_main_battle_tanks",
+      "USA_tank_destroyer_doctrine"
+    ]
+  },
+  {
+    "id": "USA_build_the_pentagon",
+    "title": "ペンタゴンの建設",
+    "x": 9050,
+    "y": 180,
+    "cost": 70,
+    "effect": "軍の拡大は、指揮に強大な本部を必要としている。",
+    "prerequisites": [
+      "USA_war_department"
+    ]
+  },
+  {
+    "id": "USA_department_of_defense",
+    "title": "国防総省",
+    "x": 9050,
+    "y": 310,
+    "cost": 70,
+    "effect": "陸軍省の名を変更するということは、それが試される瞬間まで保護を無視するということがもはやできないということを強調するものだ。我々は用心深く在らねばならない。",
+    "prerequisites": [
+      "USA_build_the_pentagon"
+    ]
+  }
+]

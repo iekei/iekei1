@@ -1,0 +1,20 @@
+[
+  {
+    "id": "eng_25pdr",
+    "title": "25ポンド野砲",
+    "year": 1936,
+    "x": 100,
+    "y": 50,
+    "research_time": 100,
+    "reliability": "配備",
+    "desc": "イギリス標準野戦砲。87.6mm。高い汎用性。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><path d='M4 18h16'/><path d='M8 18l4-8h4l4 8'/></svg>",
+    "effects": [
+      "攻撃: 50/100",
+      "射程: 60/100",
+      "機動力: 68/100",
+      "信頼度: 85/100"
+    ],
+    "prerequisites": []
+  }
+]

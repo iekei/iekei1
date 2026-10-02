@@ -1,0 +1,116 @@
+[
+  {
+    "id": "USA_accumulated_wealth_tax_act",
+    "title": "貯蓄財産富裕税法",
+    "x": 1400,
+    "y": 440,
+    "cost": 70,
+    "effect": "一部の国民は途方に暮れるほど大量の資本を蓄えている。蓄えた金は銀行口座で眠るか、非実用的な巨大建造物だの金メッキの家具だの高価な絵画だのに費やされる。これらはどれ一つ取っても有益な経済効果をもたらさない。新しい税制を設けることで、我々は今述べたような無駄に富を蓄える国民に対し、再び国内経済に金を落とさせ\nる。",
+    "prerequisites": [
+      "USA_union_representation_act"
+    ]
+  },
+  {
+    "id": "USA_guarantee_the_american_dream",
+    "title": "アメリカン・ドリームの保証",
+    "x": 1100,
+    "y": 570,
+    "cost": 70,
+    "effect": "国民の多くは、その生活に多くは望んでいない。ただ雇用の安定、健康の維持、子供を持てる家を望んでいる。人々がそんな願いを持ってはならぬ理由などない。",
+    "prerequisites": [
+      "USA_democratic_socialism",
+      "USA_old_age_pension_act",
+      "USA_accumulated_wealth_tax_act"
+    ]
+  },
+  {
+    "id": "USA_worker_management_act",
+    "title": "労働者管理法",
+    "x": 1100,
+    "y": 700,
+    "cost": 70,
+    "effect": "工場や事務所の監督者が現場での経験がないという事例が頻繁に起きている。生産現場の現実を理解できないが故に、彼らは非現実的な生産目標を設ける。このような無能な監督者が引き起こす損害から我が国の経済を守るために、我々は、労働者の労働者による労働者のための労働管理を強く推し進めねばならぬ！",
+    "prerequisites": [
+      "USA_guarantee_the_american_dream"
+    ]
+  },
+  {
+    "id": "USA_militia_organization_act",
+    "title": "民兵組織法",
+    "x": 1400,
+    "y": 700,
+    "cost": 70,
+    "effect": "誇り高き我らが共和国には、公民の兵隊という長い伝統がある。異国の敵が我が国を侵略したならば、いかなる時でも十分に武装し且つ見事に組織された、自らの家庭を守るために見知った土地で戦い続ける、男女の民兵を見ることになるだろう。",
+    "prerequisites": [
+      "USA_guarantee_the_american_dream"
+    ]
+  },
+  {
+    "id": "USA_communal_property_act",
+    "title": "共有財産法",
+    "x": 1100,
+    "y": 830,
+    "cost": 70,
+    "effect": "多数派による要求が、少数の人々やただ一人の願望を押し潰すことなど、決してあってはならない。このことを確実なものとするために、我々は地域社会がより簡単に土地の収用を執行できる新法制を通過させる。",
+    "prerequisites": [
+      "USA_worker_management_act",
+      "USA_militia_organization_act"
+    ]
+  },
+  {
+    "id": "USA_reintegration",
+    "title": "再統合",
+    "x": 1100,
+    "y": 960,
+    "cost": 70,
+    "effect": "戦争は我らの国を引き裂いた。だが最終的には、我々に対し決起した人々もまた、こちら側に還ることができる。その人々が自分たちの歩む道が誤っていると気づいた時に、我々の誇り高き共和国の政治プロセスに、再び彼らを迎え入れるべきである。",
+    "prerequisites": [
+      "USA_communal_property_act"
+    ]
+  },
+  {
+    "id": "USA_reach_out_to_the_ware_group",
+    "title": "ウェア・グループとの意思疎通",
+    "x": 1550,
+    "y": 570,
+    "cost": 70,
+    "effect": "我々の政府の内部には献身的な共産主義者による小規模な集団が存在する。彼らは秘密裏に活動していると思い込んでるが、我々は名前も顔も知っている。だがもしかすると、彼らを我々の目標について手を結ぶように見出して、政府に参加させるよう説得できるかもしれない。",
+    "prerequisites": [
+      "USA_suspend_the_presecution",
+      "USA_agricultural_adjustment_act"
+    ]
+  },
+  {
+    "id": "USA_us_ussr_economic_cooperation",
+    "title": "米ソ経済協力",
+    "x": 1550,
+    "y": 830,
+    "cost": 70,
+    "effect": "その混沌と鮮血に包まれた誕生にもかかわらず、ソビエト連邦は現代工業化社会の建設において著しい進歩を成し遂げてきた。我々は彼らを助けるために手を差し伸べるべきだ。",
+    "prerequisites": [
+      "USA_reach_out_to_the_ware_group"
+    ]
+  },
+  {
+    "id": "USA_unholy_alliance",
+    "title": "非神聖同盟",
+    "x": 1550,
+    "y": 960,
+    "cost": 70,
+    "effect": "我々は敵を選ぶこともあるだろう。選択は簡単なこととは限らない。将来、独裁者とともにいた咎を受けるかもしれないし、独裁者から人々を守ったことを称賛されるかも知れない。",
+    "prerequisites": [
+      "USA_us_ussr_economic_cooperation"
+    ]
+  },
+  {
+    "id": "USA_secure_china",
+    "title": "中国の確保",
+    "x": 1850,
+    "y": 960,
+    "cost": 70,
+    "effect": "中国は長く血生臭い内戦に巻き込まれてきた。国民党政府の腐敗は酷く、人々からの支持を完全に失っている。我々は彼らを支援する時が来た、中国を統一し国内を平定し得る唯一の立役者たる中国共産党を。",
+    "prerequisites": [
+      "USA_reach_out_to_the_ware_group"
+    ]
+  }
+]

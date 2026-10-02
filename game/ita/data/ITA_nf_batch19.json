@@ -1,0 +1,113 @@
+[
+  {
+    "id": "ITA_auxiliaries",
+    "title": "援助者たち",
+    "x": 20450,
+    "y": 1740,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_mare_nostrum_bba"
+    ]
+  },
+  {
+    "id": "ITA_the_italian_legions",
+    "title": "イタリア軍団",
+    "x": 20750,
+    "y": 1740,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_mare_nostrum_bba"
+    ]
+  },
+  {
+    "id": "ITA_new_roman_citizens",
+    "title": "新ローマの市民",
+    "x": 21050,
+    "y": 1740,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_mare_nostrum_bba"
+    ]
+  },
+  {
+    "id": "ITA_all_roads_lead_to_rome",
+    "title": "すべての道はローマに通ず",
+    "x": 20750,
+    "y": 1870,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_italian_legions"
+    ]
+  },
+  {
+    "id": "ITA_the_king_of_the_skies",
+    "title": "天空の王",
+    "x": 20450,
+    "y": 2000,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_all_roads_lead_to_rome"
+    ]
+  },
+  {
+    "id": "ITA_modern_musculus",
+    "title": "近代の肉体",
+    "x": 20750,
+    "y": 2000,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_all_roads_lead_to_rome"
+    ]
+  },
+  {
+    "id": "ITA_caligulas_pride",
+    "title": "カリギュラの誇り",
+    "x": 21050,
+    "y": 2000,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_all_roads_lead_to_rome"
+    ]
+  },
+  {
+    "id": "ITA_iberian_protection",
+    "title": "イベリアの保護",
+    "x": 21350,
+    "y": 1870,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_mare_nostrum_bba",
+      "ITA_deus_vult"
+    ]
+  },
+  {
+    "id": "ITA_south_american_alliances",
+    "title": "南アメリカ同盟",
+    "x": 21350,
+    "y": 2000,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_iberian_protection"
+    ]
+  },
+  {
+    "id": "ITA_the_papacy_reborn",
+    "title": "教皇制度の復活",
+    "x": 17000,
+    "y": 1740,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_strengthen_the_papacy"
+    ]
+  }
+]

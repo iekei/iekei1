@@ -1,0 +1,113 @@
+[
+  {
+    "id": "FRA_economic_devolution",
+    "title": "経済の革命",
+    "x": 6500,
+    "y": 310,
+    "cost": 70,
+    "effect": "パリの官僚の何人かが、ボルドーの会社に何が最適かを知っていると考えるのは馬鹿げた考えだ。我々は企業を信頼し、彼らが独自の解決策を考案できるようにしなければならない。",
+    "prerequisites": [
+      "FRA_agricultural_protectionism",
+      "FRA_laissez_faire"
+    ]
+  },
+  {
+    "id": "FRA_promote_entrepeneurship",
+    "title": "起業家精神の促進",
+    "x": 6500,
+    "y": 440,
+    "cost": 70,
+    "effect": "ダイナミックな市場の鼓動は、常に機会をとらえ、素早く事業化した個人を中心としている。近年この精神は不要な規制により、抑圧されている。時を巻き戻し、規制を緩和せねば。",
+    "prerequisites": [
+      "FRA_economic_devolution"
+    ]
+  },
+  {
+    "id": "FRA_ban_communism",
+    "title": "FRA ban communism",
+    "x": 5900,
+    "y": 180,
+    "cost": 70,
+    "effect": "自らの祖国に共産主義革命の混沌と流血が訪れて欲しいと思う者はいないだろうが、我々の内部にはそのような輩が少なからず存在する。彼らが国家に対し陰謀を企てることを最早看過できない。最も厳しい措置が執られるべきだろう。",
+    "prerequisites": [
+      "FRA_revive_the_national_bloc"
+    ]
+  },
+  {
+    "id": "FRA_utilize_the_leagues",
+    "title": "政治団体の利用",
+    "x": 7550,
+    "y": 180,
+    "cost": 70,
+    "effect": "フランスで政治的暴力が当たり前になっているのは悲しき現実である。国家が共産主義革命の脅威を乗り切るには、道端で共産主義者の凶漢と会って争えるであろう人々の助けをためらってはならない。",
+    "prerequisites": [
+      "FRA_revive_the_national_bloc"
+    ]
+  },
+  {
+    "id": "FRA_national_regeneration",
+    "title": "国内の再生",
+    "x": 7550,
+    "y": 310,
+    "cost": 70,
+    "effect": "過度な民主主義と誤った共和主義は我が国に害をもたらし、人々を対立させた。この傷が癒えるには長い時間がかかるだろうが、ようやく第一歩が踏み出された。",
+    "prerequisites": [
+      "FRA_utilize_the_leagues"
+    ]
+  },
+  {
+    "id": "FRA_destroy_decadence",
+    "title": "堕落の撲滅",
+    "x": 6950,
+    "y": 440,
+    "cost": 70,
+    "effect": "未だかつてちょっとした問題についてさえ何ヶ月も議論することに甘んじて強大になった国などない。海に囲まれ安全で世界帝国に支援された国の中には、このような贅沢をする余裕があると思っている国もある。我々にはそのような余裕はない。",
+    "prerequisites": [
+      "FRA_national_regeneration"
+    ]
+  },
+  {
+    "id": "FRA_integralism",
+    "title": "統合主義",
+    "x": 7250,
+    "y": 440,
+    "cost": 70,
+    "effect": "統合主義のイデオロギーは、全ての面において、国が統合されている状態を示すものであり、それぞれが大きな塊の1ピースのようになっている。この中で社会は全てのピースが調和し、機能することを保証するために秩序だっていなければならない。",
+    "prerequisites": [
+      "FRA_national_regeneration"
+    ]
+  },
+  {
+    "id": "FRA_work",
+    "title": "労働",
+    "x": 6950,
+    "y": 570,
+    "cost": 70,
+    "effect": "職人こそ経済の最も重要な要素である。才能ある人に指導されれば、祖国へ奉仕するための労働に自らの身を置くことほど、誇り高い徴用はないだろう。",
+    "prerequisites": [
+      "FRA_integralism"
+    ]
+  },
+  {
+    "id": "FRA_family",
+    "title": "家族",
+    "x": 7250,
+    "y": 570,
+    "cost": 70,
+    "effect": "社会の最小単位は個人ではなく、家族である。この明白な事実に異議を唱えたことが、古い共和国の最大の過ちだったのだ。",
+    "prerequisites": [
+      "FRA_integralism"
+    ]
+  },
+  {
+    "id": "FRA_fatherland",
+    "title": "祖国",
+    "x": 7550,
+    "y": 570,
+    "cost": 70,
+    "effect": "祖国はすべてに優先する。これは疑いようがない。",
+    "prerequisites": [
+      "FRA_integralism"
+    ]
+  }
+]

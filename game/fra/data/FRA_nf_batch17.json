@@ -1,0 +1,110 @@
+[
+  {
+    "id": "FRA_retribution_for_sedan",
+    "title": "セダンの報復",
+    "x": 10100,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_avenge_waterloo"
+    ]
+  },
+  {
+    "id": "FRA_disunite_germany",
+    "title": "ドイツの分裂",
+    "x": 10400,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_retribution_for_sedan"
+    ]
+  },
+  {
+    "id": "FRA_return_to_borodino",
+    "title": "ボロジノへの帰還",
+    "x": 10100,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_retribution_for_sedan"
+    ]
+  },
+  {
+    "id": "FRA_je_suis_la_deluge",
+    "title": "我は洪水なり",
+    "x": 10100,
+    "y": 1220,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_return_to_borodino"
+    ]
+  },
+  {
+    "id": "FRA_naval_rearmament",
+    "title": "海軍の再軍備",
+    "x": 10550,
+    "y": 50,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": []
+  },
+  {
+    "id": "FRA_colonial_naval_bases",
+    "title": "植民地の海軍基地",
+    "x": 10100,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_naval_rearmament"
+    ]
+  },
+  {
+    "id": "FRA_develop_colonial_dockyards",
+    "title": "植民地の造船所開発",
+    "x": 10100,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_colonial_naval_bases"
+    ]
+  },
+  {
+    "id": "FRA_the_old_school",
+    "title": "壮年学派",
+    "x": 10550,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_naval_rearmament"
+    ]
+  },
+  {
+    "id": "FRA_capital_ship_focus",
+    "title": "主力艦重視",
+    "x": 10400,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_the_old_school"
+    ]
+  },
+  {
+    "id": "FRA_carrier_focus",
+    "title": "空母重視",
+    "x": 10700,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_the_old_school"
+    ]
+  }
+]

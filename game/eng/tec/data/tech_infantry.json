@@ -1,0 +1,61 @@
+[
+  {
+    "id": "lee_enfield",
+    "title": "リー・エンフィールド No.4",
+    "year": 1936,
+    "x": 100,
+    "y": 50,
+    "research_time": 100,
+    "reliability": "配備",
+    "desc": "ボルトアクション小銃。.303ブリティッシュ弾を使用。速射性に優れる。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.8' stroke-linecap='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/></svg>",
+    "effects": [
+      "対人攻撃: 38/100",
+      "対物攻撃: 10/100",
+      "生存力: 9/100",
+      "機動力: 72/100",
+      "信頼度: 92/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "sten_smg",
+    "title": "ステン短機関銃",
+    "year": 1941,
+    "x": 400,
+    "y": 200,
+    "research_time": 60,
+    "reliability": "配備",
+    "desc": "簡易設計の短機関銃。低コストで大量生産された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8b949e' stroke-width='1.8' stroke-linecap='round'><path d='M3 11h14'/><circle cx='11' cy='15' r='3'/></svg>",
+    "effects": [
+      "対人攻撃: 32/100",
+      "対物攻撃: 4/100",
+      "生存力: 7/100",
+      "機動力: 75/100",
+      "信頼度: 55/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "bren_lmg",
+    "title": "ブレン軽機関銃",
+    "year": 1937,
+    "x": 100,
+    "y": 200,
+    "research_time": 100,
+    "reliability": "配備",
+    "desc": "チェコ製ZB26のイギリス版。.303口径。高い信頼性。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.8' stroke-linecap='round'><path d='M2 12h18'/><path d='M6 12v4'/><path d='M16 12l2 3h-3z'/></svg>",
+    "effects": [
+      "対人攻撃: 42/100",
+      "対物攻撃: 9/100",
+      "生存力: 10/100",
+      "機動力: 55/100",
+      "信頼度: 85/100"
+    ],
+    "prerequisites": [
+      "lee_enfield"
+    ]
+  }
+]

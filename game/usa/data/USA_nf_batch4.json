@@ -1,0 +1,116 @@
+[
+  {
+    "id": "USA_focus_on_europe",
+    "title": "ヨーロッパ重視",
+    "x": 2450,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_war_propaganda"
+    ]
+  },
+  {
+    "id": "USA_office_of_strategic_services",
+    "title": "戦略諜報局",
+    "x": 2450,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_focus_on_europe"
+    ]
+  },
+  {
+    "id": "USA_focus_on_asia",
+    "title": "アジア重視",
+    "x": 2750,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_war_propaganda"
+    ]
+  },
+  {
+    "id": "USA_magic",
+    "title": "マジック情報",
+    "x": 2750,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_focus_on_asia"
+    ]
+  },
+  {
+    "id": "USA_black_chamber",
+    "title": "ブラックチェンバー作戦",
+    "x": 2750,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_magic",
+      "USA_office_of_strategic_services"
+    ]
+  },
+  {
+    "id": "USA_scientist_haven",
+    "title": "科学者の避難地",
+    "x": 2900,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_black_chamber",
+      "USA_arsenal_of_democracy"
+    ]
+  },
+  {
+    "id": "USA_manhattan_project",
+    "title": "マンハッタン計画",
+    "x": 2900,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_scientist_haven"
+    ]
+  },
+  {
+    "id": "USA_neutrality_act",
+    "title": "中立法",
+    "x": 3200,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_continue_the_new_deal",
+      "USA_reestablish_the_gold_standard"
+    ]
+  },
+  {
+    "id": "USA_lend_lease_act",
+    "title": "レンドリース法",
+    "x": 2900,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_neutrality_act",
+      "USA_limited_intervention"
+    ]
+  },
+  {
+    "id": "USA_arsenal_of_democracy",
+    "title": "民主主義の兵器廠",
+    "x": 3200,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_neutrality_act"
+    ]
+  }
+]

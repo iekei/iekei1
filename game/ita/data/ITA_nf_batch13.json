@@ -1,0 +1,113 @@
+[
+  {
+    "id": "ITA_bend_the_bars",
+    "title": "力づくで自由を",
+    "x": 11450,
+    "y": 1870,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_towards_a_greater_italy"
+    ]
+  },
+  {
+    "id": "ITA_subdue_the_sentinels",
+    "title": "衛兵の制圧",
+    "x": 11450,
+    "y": 2000,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_bend_the_bars"
+    ]
+  },
+  {
+    "id": "ITA_a_colonial_empire",
+    "title": "植民地帝国",
+    "x": 11450,
+    "y": 2130,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_subdue_the_sentinels"
+    ]
+  },
+  {
+    "id": "ITA_by_blood_alone",
+    "title": "流血こそ唯一の道",
+    "x": 11450,
+    "y": 2260,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_a_colonial_empire"
+    ]
+  },
+  {
+    "id": "ITA_masters_of_the_aegean",
+    "title": "エーゲ海の支配者",
+    "x": 11750,
+    "y": 2000,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_bend_the_bars"
+    ]
+  },
+  {
+    "id": "ITA_masters_of_the_mediterranean",
+    "title": "地中海の支配者",
+    "x": 11750,
+    "y": 2130,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_masters_of_the_aegean"
+    ]
+  },
+  {
+    "id": "ITA_depose_mussolini",
+    "title": "ムッソリーニの追放",
+    "x": 14450,
+    "y": 700,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_convene_the_grand_council"
+    ]
+  },
+  {
+    "id": "ITA_italo_balbo_focus",
+    "title": "イタロ・バルボ",
+    "x": 12950,
+    "y": 830,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_depose_mussolini"
+    ]
+  },
+  {
+    "id": "ITA_dino_grandi_focus",
+    "title": "ディーノ・グランディ",
+    "x": 14450,
+    "y": 830,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_depose_mussolini"
+    ]
+  },
+  {
+    "id": "ITA_stop_the_squandering",
+    "title": "浪費に終止符を",
+    "x": 13700,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_italo_balbo_focus",
+      "ITA_dino_grandi_focus"
+    ]
+  }
+]

@@ -1,0 +1,116 @@
+[
+  {
+    "id": "USA_accumulated_wealth_tax_act",
+    "title": "貯蓄財産富裕税法",
+    "x": 1400,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_union_representation_act"
+    ]
+  },
+  {
+    "id": "USA_guarantee_the_american_dream",
+    "title": "アメリカン・ドリームの保証",
+    "x": 1100,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_democratic_socialism",
+      "USA_old_age_pension_act",
+      "USA_accumulated_wealth_tax_act"
+    ]
+  },
+  {
+    "id": "USA_worker_management_act",
+    "title": "労働者管理法",
+    "x": 1100,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_guarantee_the_american_dream"
+    ]
+  },
+  {
+    "id": "USA_militia_organization_act",
+    "title": "民兵組織法",
+    "x": 1400,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_guarantee_the_american_dream"
+    ]
+  },
+  {
+    "id": "USA_communal_property_act",
+    "title": "共有財産法",
+    "x": 1100,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_worker_management_act",
+      "USA_militia_organization_act"
+    ]
+  },
+  {
+    "id": "USA_reintegration",
+    "title": "再統合",
+    "x": 1100,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_communal_property_act"
+    ]
+  },
+  {
+    "id": "USA_reach_out_to_the_ware_group",
+    "title": "ウェア・グループとの意思疎通",
+    "x": 1550,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_suspend_the_presecution",
+      "USA_agricultural_adjustment_act"
+    ]
+  },
+  {
+    "id": "USA_us_ussr_economic_cooperation",
+    "title": "米ソ経済協力",
+    "x": 1550,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_reach_out_to_the_ware_group"
+    ]
+  },
+  {
+    "id": "USA_unholy_alliance",
+    "title": "非神聖同盟",
+    "x": 1550,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_us_ussr_economic_cooperation"
+    ]
+  },
+  {
+    "id": "USA_secure_china",
+    "title": "中国の確保",
+    "x": 1850,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_reach_out_to_the_ware_group"
+    ]
+  }
+]

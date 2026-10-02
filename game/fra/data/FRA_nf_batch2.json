@@ -1,0 +1,113 @@
+[
+  {
+    "id": "FRA_invest_in_syria",
+    "title": "シリアへの投資",
+    "x": 1250,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_invest_in_the_colonies"
+    ]
+  },
+  {
+    "id": "FRA_colonial_industry",
+    "title": "植民地工業",
+    "x": 650,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_algerie_france",
+      "FRA_invest_in_west_africa",
+      "FRA_invest_in_indochina",
+      "FRA_invest_in_syria"
+    ]
+  },
+  {
+    "id": "FRA_extra_research_slot",
+    "title": "グラン・ゼコールへの支援",
+    "x": 50,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_industrial_expansion"
+    ]
+  },
+  {
+    "id": "FRA_extra_research_slot_2",
+    "title": "国立研究所の設立",
+    "x": 650,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_colonial_industry"
+    ]
+  },
+  {
+    "id": "FRA_global_integration",
+    "title": "国際統合",
+    "x": 950,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_colonial_industry"
+    ]
+  },
+  {
+    "id": "FRA_begin_rearmament",
+    "title": "再軍備の開始",
+    "x": 2450,
+    "y": 50,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": []
+  },
+  {
+    "id": "FRA_defensive_focus",
+    "title": "防衛重視",
+    "x": 2300,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_begin_rearmament"
+    ]
+  },
+  {
+    "id": "FRA_firepower_kills",
+    "title": "火力による蹂躙",
+    "x": 1700,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_defensive_focus"
+    ]
+  },
+  {
+    "id": "FRA_methodical_battle",
+    "title": "秩序ある戦い",
+    "x": 2300,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_defensive_focus"
+    ]
+  },
+  {
+    "id": "FRA_fortification_focus",
+    "title": "要塞重視",
+    "x": 2300,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_methodical_battle"
+    ]
+  }
+]

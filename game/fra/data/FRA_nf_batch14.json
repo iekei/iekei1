@@ -1,0 +1,114 @@
+[
+  {
+    "id": "FRA_establish_spheres_of_influence",
+    "title": "影響圏の確立",
+    "x": 8450,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_towards_a_new_europe"
+    ]
+  },
+  {
+    "id": "FRA_split_belgium",
+    "title": "ベルギーの分割",
+    "x": 8300,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_establish_spheres_of_influence"
+    ]
+  },
+  {
+    "id": "FRA_align_belgium",
+    "title": "ベルギーとの連携",
+    "x": 8600,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_establish_spheres_of_influence"
+    ]
+  },
+  {
+    "id": "FRA_grow_the_empire",
+    "title": "帝国の成長",
+    "x": 8450,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_split_belgium",
+      "FRA_align_belgium"
+    ]
+  },
+  {
+    "id": "FRA_bring_home_quebec",
+    "title": "ケベックへの訴え",
+    "x": 8450,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_grow_the_empire"
+    ]
+  },
+  {
+    "id": "FRA_expand_to_the_suez",
+    "title": "スエズへの展開",
+    "x": 8150,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_intervention_in_greece",
+      "FRA_grow_the_empire"
+    ]
+  },
+  {
+    "id": "FRA_dominate_the_middle_east",
+    "title": "中東の支配",
+    "x": 8150,
+    "y": 1220,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_expand_to_the_suez"
+    ]
+  },
+  {
+    "id": "FRA_right_wing_rhetoric",
+    "title": "右翼理論",
+    "x": 7100,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_revive_the_national_bloc"
+    ]
+  },
+  {
+    "id": "FRA_army_of_aggression",
+    "title": "侵略軍",
+    "x": 7100,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_right_wing_rhetoric"
+    ]
+  },
+  {
+    "id": "FRA_france_first",
+    "title": "フランス第一主義",
+    "x": 6800,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_army_of_aggression"
+    ]
+  }
+]

@@ -1,0 +1,72 @@
+[
+  {
+    "id": "GER_finnish_membership",
+    "title": "フィンランドとの同盟",
+    "x": 8000,
+    "y": 1220,
+    "cost": 70,
+    "effect": "ヨーロッパの中心から離れたフィンランド人はアカどもと単独で直面する危険性がある。しかし、そうなるには及ばない。彼らに共産主義の脅威に対する保護と同盟を提供するべきだ。",
+    "prerequisites": [
+      "GER_scandinavian_membership"
+    ]
+  },
+  {
+    "id": "GER_strike_at_the_source",
+    "title": "大元を断つ",
+    "x": 7700,
+    "y": 1350,
+    "cost": 70,
+    "effect": "恐怖の中で生きる人生はまったくもって人生ではない。この脅威を我々の生活様式のためにきっぱりと終わらせる必要がある。ヨーロッパにおける共産主義の影響源は破壊されなければならない。",
+    "prerequisites": [
+      "GER_baltic_membership",
+      "GER_polish_membership",
+      "GER_finnish_membership"
+    ]
+  },
+  {
+    "id": "GER_reverse_the_brain_drain",
+    "title": "科学者のUターン",
+    "x": 7550,
+    "y": 570,
+    "cost": 70,
+    "effect": "圧政者や権威主義体制が破られた今、国から逃げた科学者達にとって、帰国し、もう一度故郷で働くことが魅力的なものとなるよう試みることができる。",
+    "prerequisites": [
+      "GER_the_monarchy_compromise"
+    ]
+  },
+  {
+    "id": "GER_shared_rd_programs",
+    "title": "研究開発共有計画",
+    "x": 8300,
+    "y": 960,
+    "cost": 70,
+    "effect": "我々の目的を達成するためには、科学的知見や技術進歩を新たな同盟国と共有する必要がある。",
+    "prerequisites": [
+      "GER_reverse_the_brain_drain",
+      "GER_central_european_alliance"
+    ]
+  },
+  {
+    "id": "GER_the_mannheim_project",
+    "title": "マンハイム計画",
+    "x": 8150,
+    "y": 1090,
+    "cost": 70,
+    "effect": "ノルウェーの重水プラントが我々の勢力圏下に収まった今、原子の秘密を解き明かし、ボリシェヴィキに対抗する為の兵器転用の可能性を調査するという我々の取り組みをさらに加速させることができる。",
+    "prerequisites": [
+      "GER_shared_rd_programs",
+      "GER_scandinavian_membership"
+    ]
+  },
+  {
+    "id": "GER_pool_technical_know_how",
+    "title": "技術ノウハウの蓄積",
+    "x": 8450,
+    "y": 1090,
+    "cost": 70,
+    "effect": "全ての国家は独自の工場管理や機器整備の方法が存在する。他の同盟諸国との間でこの情報を広めるために技術班を送ることで互いに習得することが可能となる。",
+    "prerequisites": [
+      "GER_shared_rd_programs"
+    ]
+  }
+]

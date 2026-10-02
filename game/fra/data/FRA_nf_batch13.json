@@ -1,0 +1,113 @@
+[
+  {
+    "id": "FRA_political_unity",
+    "title": "政治的結束",
+    "x": 7550,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_national_regeneration"
+    ]
+  },
+  {
+    "id": "FRA_diplomatic_freedom",
+    "title": "外交的自由",
+    "x": 7850,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_national_regeneration"
+    ]
+  },
+  {
+    "id": "FRA_latin_entente",
+    "title": "ラテン協商",
+    "x": 7850,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_diplomatic_freedom"
+    ]
+  },
+  {
+    "id": "FRA_reach_out_to_spain",
+    "title": "スペインに手を差し伸べる",
+    "x": 7700,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_latin_entente"
+    ]
+  },
+  {
+    "id": "FRA_invite_portugal",
+    "title": "ポルトガルを招待",
+    "x": 7700,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_reach_out_to_spain"
+    ]
+  },
+  {
+    "id": "FRA_compensate_italy",
+    "title": "イタリアへの補償",
+    "x": 8000,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_latin_entente"
+    ]
+  },
+  {
+    "id": "FRA_intervention_in_greece",
+    "title": "ギリシャへの介入",
+    "x": 8000,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_compensate_italy"
+    ]
+  },
+  {
+    "id": "FRA_the_congress_of_paris",
+    "title": "パリ会議",
+    "x": 7850,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_invite_portugal",
+      "FRA_intervention_in_greece"
+    ]
+  },
+  {
+    "id": "FRA_the_natural_borders_of_france",
+    "title": "フランスの自然国境",
+    "x": 7850,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_the_congress_of_paris"
+    ]
+  },
+  {
+    "id": "FRA_towards_a_new_europe",
+    "title": "新しいヨーロッパに向けて",
+    "x": 8450,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_diplomatic_freedom"
+    ]
+  }
+]

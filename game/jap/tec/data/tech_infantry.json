@@ -1,0 +1,82 @@
+[
+  {
+    "id": "type38_rifle",
+    "title": "三八式歩兵銃",
+    "year": 1936,
+    "x": 100,
+    "y": 50,
+    "research_time": 100,
+    "reliability": "配備（制式採用）",
+    "desc": "有坂成章設計のボルトアクション小銃。日清・日露戦争を経て制式採用され、長期間にわたり主力小銃として使用された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#d4a843' stroke-width='1.8' stroke-linecap='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/></svg>",
+    "effects": [
+      "対人攻撃: 30/100",
+      "対物攻撃: 8/100",
+      "生存力: 7/100",
+      "機動力: 70/100",
+      "信頼度: 85/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "type99_rifle",
+    "title": "九九式小銃",
+    "year": 1939,
+    "x": 100,
+    "y": 200,
+    "research_time": 100,
+    "reliability": "配備（制式採用）",
+    "desc": "三八式の後継。7.7mm弾を使用し、対空表尺を備える。太平洋戦争で主力として使用された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#d4a843' stroke-width='1.8' stroke-linecap='round'><path d='M2 12h20'/><path d='M17 12l2 4h-3z'/></svg>",
+    "effects": [
+      "対人攻撃: 35/100",
+      "対物攻撃: 10/100",
+      "生存力: 8/100",
+      "機動力: 68/100",
+      "信頼度: 80/100"
+    ],
+    "prerequisites": [
+      "type38_rifle"
+    ]
+  },
+  {
+    "id": "type100_smg",
+    "title": "百式機関短銃",
+    "year": 1940,
+    "x": 400,
+    "y": 200,
+    "research_time": 80,
+    "reliability": "低（少数配備）",
+    "desc": "日本軍唯一の量産型短機関銃。少数が特務部隊等に配備された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8b949e' stroke-width='1.8' stroke-linecap='round'><path d='M3 11h14'/><circle cx='11' cy='15' r='3'/></svg>",
+    "effects": [
+      "対人攻撃: 28/100",
+      "対物攻撃: 3/100",
+      "生存力: 7/100",
+      "機動力: 80/100",
+      "信頼度: 50/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "type99_lmg",
+    "title": "九九式軽機関銃",
+    "year": 1939,
+    "x": 100,
+    "y": 350,
+    "research_time": 110,
+    "reliability": "配備（制式採用）",
+    "desc": "九六式軽機関銃の7.7mm口径版。弾倉は湾曲した30発入り。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#d4a843' stroke-width='1.8' stroke-linecap='round'><path d='M2 12h18'/><path d='M6 12v4'/><path d='M16 12l2 3h-3z'/></svg>",
+    "effects": [
+      "対人攻撃: 40/100",
+      "対物攻撃: 8/100",
+      "生存力: 9/100",
+      "機動力: 55/100",
+      "信頼度: 70/100"
+    ],
+    "prerequisites": [
+      "type99_rifle"
+    ]
+  }
+]

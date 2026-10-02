@@ -1,0 +1,115 @@
+[
+  {
+    "id": "FRA_general_work_council",
+    "title": "一般労働評議会",
+    "x": 3950,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_reorganize_the_aviation_industry",
+      "FRA_form_the_state_arsenals"
+    ]
+  },
+  {
+    "id": "FRA_dirigisme",
+    "title": "FRA dirigisme",
+    "x": 3800,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_general_work_council"
+    ]
+  },
+  {
+    "id": "FRA_national_champions",
+    "title": "国家的優秀企業",
+    "x": 4100,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_general_work_council"
+    ]
+  },
+  {
+    "id": "FRA_ban_the_leagues",
+    "title": "同盟の解散",
+    "x": 4100,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_form_the_popular_front"
+    ]
+  },
+  {
+    "id": "FRA_the_blum_viollette_proposal",
+    "title": "ブルム＝ヴィオレット提案",
+    "x": 4550,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_reform_the_labour_laws",
+      "FRA_protect_the_rights_of_man"
+    ]
+  },
+  {
+    "id": "FRA_expand_the_citizenship",
+    "title": "市民権の拡大",
+    "x": 4550,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_the_blum_viollette_proposal"
+    ]
+  },
+  {
+    "id": "FRA_france_undividable",
+    "title": "FRA france undividable",
+    "x": 4400,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_expand_the_citizenship"
+    ]
+  },
+  {
+    "id": "FRA_french_union",
+    "title": "フランス連合",
+    "x": 4400,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_france_undividable"
+    ]
+  },
+  {
+    "id": "FRA_encourage_immigration",
+    "title": "移民の奨励",
+    "x": 4700,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_expand_the_citizenship"
+    ]
+  },
+  {
+    "id": "FRA_review_foreign_policy",
+    "title": "外交政策の見直し",
+    "x": 5450,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_reform_the_labour_laws",
+      "FRA_protect_the_rights_of_man"
+    ]
+  }
+]

@@ -1,0 +1,112 @@
+[
+  {
+    "id": "USA_maritime_commission",
+    "title": "海事委員会",
+    "x": 9950,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_two_ocean_navy_act"
+    ]
+  },
+  {
+    "id": "USA_liberty_ships",
+    "title": "リバティ船",
+    "x": 9950,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_maritime_commission"
+    ]
+  },
+  {
+    "id": "USA_bureau_of_ships",
+    "title": "艦船局",
+    "x": 10700,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_two_ocean_navy_act"
+    ]
+  },
+  {
+    "id": "USA_battleship_primacy",
+    "title": "戦艦優先",
+    "x": 10250,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_bureau_of_ships"
+    ]
+  },
+  {
+    "id": "USA_advanced_mahanian_doctrine",
+    "title": "マハン・ドクトリンの発展",
+    "x": 10250,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_battleship_primacy"
+    ]
+  },
+  {
+    "id": "USA_advanced_basing",
+    "title": "発展的な基地",
+    "x": 10250,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_advanced_mahanian_doctrine"
+    ]
+  },
+  {
+    "id": "USA_carrier_primacy",
+    "title": "空母優先",
+    "x": 10550,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_bureau_of_ships"
+    ]
+  },
+  {
+    "id": "USA_bureau_of_aeronautics",
+    "title": "航空局",
+    "x": 10550,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_carrier_primacy"
+    ]
+  },
+  {
+    "id": "USA_naval_radar",
+    "title": "海軍用レーダー",
+    "x": 10550,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_bureau_of_aeronautics"
+    ]
+  },
+  {
+    "id": "USA_escort_effort",
+    "title": "護衛艦への注力",
+    "x": 10850,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_bureau_of_ships"
+    ]
+  }
+]

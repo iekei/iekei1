@@ -1,0 +1,113 @@
+[
+  {
+    "id": "GER_the_central_powers",
+    "title": "中央同盟国",
+    "x": 6200,
+    "y": 1220,
+    "cost": 35,
+    "effect": "我が国が西方に立ち向かうためには同盟国が必要だ。民主主義者による弾圧に対抗する為の独自の陣営を設立しようではないか。",
+    "prerequisites": [
+      "GER_our_place_in_the_sun"
+    ]
+  },
+  {
+    "id": "GER_prepare_italian_coup",
+    "title": "イタリアでのクーデターの準備",
+    "x": 6200,
+    "y": 1350,
+    "cost": 70,
+    "effect": "ファシズムに堕ちたイタリアを元に戻さなければならない。イタリアの王党派に、我々の支援を受けクーデターを行わないか提案する。",
+    "prerequisites": [
+      "GER_the_central_powers"
+    ]
+  },
+  {
+    "id": "GER_assassinate_mussolini",
+    "title": "ムッソリーニ暗殺",
+    "x": 6200,
+    "y": 1480,
+    "cost": 70,
+    "effect": "イタリアのファシズム政権の中枢にとどめを刺す時が来た。ドイツの手が伸び指導者を暗殺し、その後、イタリアの王党派が迅速な動きで権力を掌握するだろう。",
+    "prerequisites": [
+      "GER_prepare_italian_coup"
+    ]
+  },
+  {
+    "id": "GER_rekindle_imperial_sentiment",
+    "title": "帝国感情の再燃",
+    "x": 6500,
+    "y": 1350,
+    "cost": 70,
+    "effect": "先の大戦によってオーストリア＝ハンガリー帝国は崩壊したが、かつての帝国を哀惜する者も未だいる。我々はそうした帝国感情を再燃させ、後継国家らが彼ら自身の力を再結成することを望んでいる。",
+    "prerequisites": [
+      "GER_the_central_powers"
+    ]
+  },
+  {
+    "id": "GER_expatriate_the_communists",
+    "title": "共産主義者の追放",
+    "x": 6650,
+    "y": 570,
+    "cost": 70,
+    "effect": "共産主義の内部的な脅威は我々の国家を悩ませ続けている。信者がどこに逃げようと、奴らを駆除しなければならない。",
+    "prerequisites": [
+      "GER_return_of_the_kaiser"
+    ]
+  },
+  {
+    "id": "GER_accept_british_naval_dominance",
+    "title": "イギリスによる海上支配の容認",
+    "x": 6650,
+    "y": 830,
+    "cost": 70,
+    "effect": "我々は共産主義と戦うことを同盟国に求めており、イギリスは主要な候補者だ。英国海軍の優位性を受け入れ、海軍の大規模な増強を否定することで、彼らの懸念を緩和するだろう。",
+    "prerequisites": [
+      "GER_expatriate_the_communists"
+    ]
+  },
+  {
+    "id": "GER_ally_the_shade",
+    "title": "日陰との同盟",
+    "x": 6650,
+    "y": 960,
+    "cost": 70,
+    "effect": "我々が優位を確立することができないならば、我々の上に影を投げかけた人々と同盟せねばなるまい。",
+    "prerequisites": [
+      "GER_accept_british_naval_dominance"
+    ]
+  },
+  {
+    "id": "GER_carte_blanche_for_alsace_and_french_colonies",
+    "title": "アルザスとフランス植民地の白紙委任",
+    "x": 6650,
+    "y": 1220,
+    "cost": 70,
+    "effect": "我々の正当な領土であるアルザス＝ロレーヌの回復、およびアフリカ植民地の配分についての自由裁量権を与えるよう、新たな同盟国に対して請求しなければならない。",
+    "prerequisites": [
+      "GER_ally_the_shade"
+    ]
+  },
+  {
+    "id": "GER_bypass_maginot_in_the_south",
+    "title": "南側からのマジノ線迂回",
+    "x": 6650,
+    "y": 1480,
+    "cost": 28,
+    "effect": "イギリスは低地諸国へ関心を寄せているため、他のマジノ線周囲のルートを見つける必要がある。南側は山岳地帯であり、横断するのは厳しいがそれでも準備をしなければならない。ドイツの創意工夫によってそれは可能となるだろう。",
+    "prerequisites": [
+      "GER_carte_blanche_for_alsace_and_french_colonies"
+    ]
+  },
+  {
+    "id": "GER_reinstate_imperial_possessions",
+    "title": "帝国領の復興",
+    "x": 5900,
+    "y": 1610,
+    "cost": 70,
+    "effect": "ドイツの歴史的な領土を取り戻す事に成功したことで、それらを中核州として[Root.GetName]に復帰させるプロセスを開始することができる。ヴェルサイユで味わった屈辱も最早これでまでだ！",
+    "prerequisites": [
+      "GER_schlieffen_once_more",
+      "GER_bypass_maginot_in_the_south"
+    ]
+  }
+]

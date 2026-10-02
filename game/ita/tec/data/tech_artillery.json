@@ -1,0 +1,20 @@
+[
+  {
+    "id": "ita_100mm",
+    "title": "100mm榴弾砲",
+    "year": 1936,
+    "x": 100,
+    "y": 50,
+    "research_time": 90,
+    "reliability": "配備",
+    "desc": "イタリア標準榴弾砲。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><path d='M4 18h16'/><path d='M8 18l4-8h4l4 8'/></svg>",
+    "effects": [
+      "攻撃: 45/100",
+      "射程: 55/100",
+      "機動力: 60/100",
+      "信頼度: 70/100"
+    ],
+    "prerequisites": []
+  }
+]

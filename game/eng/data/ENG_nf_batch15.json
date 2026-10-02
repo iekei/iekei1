@@ -1,0 +1,116 @@
+[
+  {
+    "id": "ENG_concessions_to_the_trade_unions",
+    "title": "労働組合への譲歩",
+    "x": 9200,
+    "y": 50,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_a_change_in_course"
+    ]
+  },
+  {
+    "id": "ENG_move_to_secure_the_dominions",
+    "title": "自治領確保の動き",
+    "x": 9350,
+    "y": 50,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ENG_organize_the_blackshirts",
+      "ENG_concessions_to_the_trade_unions"
+    ]
+  },
+  {
+    "id": "ENG_the_fate_of_the_royal_family",
+    "title": "王室の運命",
+    "x": 9050,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_concessions_to_the_trade_unions"
+    ]
+  },
+  {
+    "id": "ENG_eliminate_the_upper_class",
+    "title": "上流階級の排除",
+    "x": 9350,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_concessions_to_the_trade_unions"
+    ]
+  },
+  {
+    "id": "ENG_for_the_good_of_the_revolution",
+    "title": "良き革命のために",
+    "x": 9200,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_the_fate_of_the_royal_family",
+      "ENG_eliminate_the_upper_class"
+    ]
+  },
+  {
+    "id": "ENG_the_british_communist_alternative",
+    "title": "イギリス共産主義非主流派",
+    "x": 8900,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_for_the_good_of_the_revolution"
+    ]
+  },
+  {
+    "id": "ENG_enforce_decolonization",
+    "title": "脱植民地化の実行",
+    "x": 8750,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_the_british_communist_alternative"
+    ]
+  },
+  {
+    "id": "ENG_reach_out_across_the_channel",
+    "title": "海峡を越えて",
+    "x": 9050,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_the_british_communist_alternative"
+    ]
+  },
+  {
+    "id": "ENG_soviet_cooperation",
+    "title": "ソビエトの協力",
+    "x": 8750,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_enforce_decolonization",
+      "ENG_reach_out_across_the_channel"
+    ]
+  },
+  {
+    "id": "ENG_the_one_true_revolution",
+    "title": "真にして唯一の革命",
+    "x": 9050,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_enforce_decolonization",
+      "ENG_reach_out_across_the_channel"
+    ]
+  }
+]

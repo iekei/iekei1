@@ -1,0 +1,115 @@
+[
+  {
+    "id": "ENG_take_out_the_regia_marina",
+    "title": "イタリア王立海軍の排除",
+    "x": 10550,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_noninterference_treaty_with_germany",
+      "ENG_alliance_with_germany"
+    ]
+  },
+  {
+    "id": "ENG_organize_the_blackshirts",
+    "title": "黒シャツ隊を組織",
+    "x": 10100,
+    "y": 50,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_a_change_in_course"
+    ]
+  },
+  {
+    "id": "ENG_the_british_path_to_fascism",
+    "title": "英国流のファシズムへの道",
+    "x": 10250,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_organize_the_blackshirts"
+    ]
+  },
+  {
+    "id": "ENG_secure_the_italian_alliance",
+    "title": "イタリアとの同盟締結",
+    "x": 10250,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_the_british_path_to_fascism"
+    ]
+  },
+  {
+    "id": "ENG_gibraltar_for_spanish_support",
+    "title": "スペインからの援助の見返りにジブラルタルを",
+    "x": 10100,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_secure_the_italian_alliance"
+    ]
+  },
+  {
+    "id": "ENG_pre_empt_spanish_alignment",
+    "title": "スペインとの同盟を先取り",
+    "x": 10400,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_secure_the_italian_alliance"
+    ]
+  },
+  {
+    "id": "ENG_prevent_a_continental_hegemony",
+    "title": "大陸覇権の阻止",
+    "x": 10250,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_gibraltar_for_spanish_support",
+      "ENG_pre_empt_spanish_alignment"
+    ]
+  },
+  {
+    "id": "ENG_enact_the_mosley_manifesto",
+    "title": "モズレー宣言の制定",
+    "x": 10550,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_the_british_path_to_fascism"
+    ]
+  },
+  {
+    "id": "ENG_god_save_the_king",
+    "title": "神よ王を護り賜え",
+    "x": 11000,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_the_kings_party",
+      "ENG_organize_the_blackshirts"
+    ]
+  },
+  {
+    "id": "ENG_ceylon_forward_operating_base",
+    "title": "セイロン前線基地",
+    "x": 10850,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_god_save_the_king"
+    ]
+  }
+]

@@ -1,0 +1,116 @@
+[
+  {
+    "id": "ITA_consolidate_power",
+    "title": "権力基盤を固める",
+    "x": 14000,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_italo_balbo_focus",
+      "ITA_dino_grandi_focus"
+    ]
+  },
+  {
+    "id": "ITA_purge_the_party",
+    "title": "党の粛清",
+    "x": 13850,
+    "y": 1090,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_consolidate_power",
+      "ITA_stop_the_squandering"
+    ]
+  },
+  {
+    "id": "ITA_the_fate_of_mussolini",
+    "title": "ムッソリーニの運命",
+    "x": 13850,
+    "y": 1220,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_purge_the_party"
+    ]
+  },
+  {
+    "id": "ITA_divino_duce",
+    "title": "神に等しき首領",
+    "x": 13700,
+    "y": 1350,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_fate_of_mussolini"
+    ]
+  },
+  {
+    "id": "ITA_blackshirt_loyalty",
+    "title": "黒シャツ隊の忠誠を獲得",
+    "x": 13700,
+    "y": 1610,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_divino_duce"
+    ]
+  },
+  {
+    "id": "ITA_a_greater_purpose",
+    "title": "より大いなる目的",
+    "x": 14000,
+    "y": 1350,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_fate_of_mussolini"
+    ]
+  },
+  {
+    "id": "ITA_spreading_the_eagles_wings",
+    "title": "広がる鷲の翼",
+    "x": 14000,
+    "y": 1480,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_a_greater_purpose"
+    ]
+  },
+  {
+    "id": "ITA_italian_hegemony",
+    "title": "イタリアの覇権",
+    "x": 14000,
+    "y": 1610,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_spreading_the_eagles_wings"
+    ]
+  },
+  {
+    "id": "ITA_reorganize_regio_esercito",
+    "title": "王国陸軍の再編成",
+    "x": 12800,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_italo_balbo_focus",
+      "ITA_stop_the_squandering"
+    ]
+  },
+  {
+    "id": "ITA_reinforce_regia_aeronautica",
+    "title": "王国空軍の再編成",
+    "x": 13100,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_italo_balbo_focus",
+      "ITA_stop_the_squandering"
+    ]
+  }
+]

@@ -1,0 +1,112 @@
+[
+  {
+    "id": "uk_new_zealand_focus",
+    "title": "ニュージーランドの開発",
+    "x": 4100,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "uk_australia_focus"
+    ]
+  },
+  {
+    "id": "uk_canada_focus",
+    "title": "カナダの開発",
+    "x": 3950,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "uk_commonwealth_focus"
+    ]
+  },
+  {
+    "id": "uk_south_africa_focus",
+    "title": "南アフリカの開発",
+    "x": 4250,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "uk_commonwealth_focus"
+    ]
+  },
+  {
+    "id": "ENG_indian_autonomy",
+    "title": "インドの自治",
+    "x": 3650,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "uk_india_focus"
+    ]
+  },
+  {
+    "id": "ENG_imperial_conference",
+    "title": "帝国会議を開催",
+    "x": 4100,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "uk_canada_focus",
+      "uk_new_zealand_focus",
+      "uk_south_africa_focus"
+    ]
+  },
+  {
+    "id": "ENG_imperial_federation",
+    "title": "帝国連邦",
+    "x": 4100,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_imperial_conference"
+    ]
+  },
+  {
+    "id": "ENG_steady_as_she_goes",
+    "title": "進路を保て",
+    "x": 7250,
+    "y": 50,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": []
+  },
+  {
+    "id": "ENG_global_defense",
+    "title": "国際防衛",
+    "x": 6650,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_steady_as_she_goes"
+    ]
+  },
+  {
+    "id": "ENG_every_man_will_do_his_duty",
+    "title": "各員がその義務を尽くせ",
+    "x": 6500,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_global_defense"
+    ]
+  },
+  {
+    "id": "ENG_motion_of_no_confidence",
+    "title": "内閣不信任決議",
+    "x": 6800,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_global_defense"
+    ]
+  }
+]

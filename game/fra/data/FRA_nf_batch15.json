@@ -1,0 +1,113 @@
+[
+  {
+    "id": "FRA_woo_italy",
+    "title": "イタリアへの懇願",
+    "x": 7100,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_army_of_aggression"
+    ]
+  },
+  {
+    "id": "FRA_dismantle_the_democracies",
+    "title": "民主主義の解体",
+    "x": 7100,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_woo_italy"
+    ]
+  },
+  {
+    "id": "FRA_join_germany",
+    "title": "ドイツ陣営に加盟",
+    "x": 7400,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_army_of_aggression"
+    ]
+  },
+  {
+    "id": "FRA_the_council_of_rambouillet",
+    "title": "ランブイエ評議委員会",
+    "x": 9650,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_utilize_the_leagues"
+    ]
+  },
+  {
+    "id": "FRA_revise_the_constitution",
+    "title": "憲法改正",
+    "x": 9650,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_the_council_of_rambouillet"
+    ]
+  },
+  {
+    "id": "FRA_repeal_the_law_of_exile",
+    "title": "亡命法の撤回",
+    "x": 9650,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_revise_the_constitution"
+    ]
+  },
+  {
+    "id": "FRA_orleanist_restoration",
+    "title": "オルレアン家の復興",
+    "x": 9200,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_repeal_the_law_of_exile"
+    ]
+  },
+  {
+    "id": "FRA_guarantee_the_constitution",
+    "title": "憲法による保障",
+    "x": 9050,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_orleanist_restoration"
+    ]
+  },
+  {
+    "id": "FRA_the_first_citizen_of_the_state",
+    "title": "国家第一の市民",
+    "x": 9350,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_orleanist_restoration"
+    ]
+  },
+  {
+    "id": "FRA_counter_action",
+    "title": "FRA counter action",
+    "x": 9200,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_guarantee_the_constitution",
+      "FRA_the_first_citizen_of_the_state"
+    ]
+  }
+]

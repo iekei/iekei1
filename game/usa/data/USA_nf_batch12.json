@@ -1,0 +1,113 @@
+[
+  {
+    "id": "USA_air_war_plans_division",
+    "title": "航空戦争計画局",
+    "x": 9500,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_war_department"
+    ]
+  },
+  {
+    "id": "USA_air_support",
+    "title": "航空支援",
+    "x": 9350,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_air_war_plans_division"
+    ]
+  },
+  {
+    "id": "USA_strategic_bombing",
+    "title": "戦略爆撃",
+    "x": 9650,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_air_war_plans_division"
+    ]
+  },
+  {
+    "id": "USA_TAC",
+    "title": "戦術爆撃機への注力",
+    "x": 9350,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_air_support"
+    ]
+  },
+  {
+    "id": "USA_CAS",
+    "title": "USA CAS",
+    "x": 9200,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_air_support"
+    ]
+  },
+  {
+    "id": "USA_combined_bomber_offensive",
+    "title": "混合爆撃機攻勢",
+    "x": 9650,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_strategic_bombing"
+    ]
+  },
+  {
+    "id": "USA_escort_fighters",
+    "title": "護衛戦闘機",
+    "x": 9500,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_air_support",
+      "USA_strategic_bombing"
+    ]
+  },
+  {
+    "id": "USA_us_army_airforce",
+    "title": "合衆国陸軍航空隊",
+    "x": 9350,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_TAC"
+    ]
+  },
+  {
+    "id": "USA_us_air_force",
+    "title": "合衆国空軍",
+    "x": 9650,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_combined_bomber_offensive"
+    ]
+  },
+  {
+    "id": "USA_two_ocean_navy_act",
+    "title": "両洋艦隊法",
+    "x": 10400,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_war_department"
+    ]
+  }
+]

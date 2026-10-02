@@ -1,0 +1,115 @@
+[
+  {
+    "id": "ITA_guardia_nazionale_repubblicana",
+    "title": "国家共和党警備隊",
+    "x": 350,
+    "y": 180,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_italian_social_republic"
+    ]
+  },
+  {
+    "id": "ITA_integrate_polizia_dell_africa_italiana",
+    "title": "イタリア領アフリカ警察",
+    "x": 200,
+    "y": 310,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_guardia_nazionale_repubblicana"
+    ]
+  },
+  {
+    "id": "ITA_anti_partisan_measures",
+    "title": "反パルチザン対策",
+    "x": 50,
+    "y": 440,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_integrate_polizia_dell_africa_italiana"
+    ]
+  },
+  {
+    "id": "ITA_all_within_the_state",
+    "title": "すべてを州内に",
+    "x": 350,
+    "y": 440,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_guardia_nazionale_repubblicana"
+    ]
+  },
+  {
+    "id": "ITA_battaglioni_m",
+    "title": "M大隊",
+    "x": 500,
+    "y": 310,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_guardia_nazionale_repubblicana"
+    ]
+  },
+  {
+    "id": "ITA_reinforce_the_gustav_line",
+    "title": "グスタフ戦線の強化",
+    "x": 650,
+    "y": 440,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_battaglioni_m"
+    ]
+  },
+  {
+    "id": "ITA_the_social_republic_prevails",
+    "title": "社会主義共和国が勝利する！",
+    "x": 350,
+    "y": 570,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_anti_partisan_measures",
+      "ITA_all_within_the_state",
+      "ITA_reinforce_the_gustav_line"
+    ]
+  },
+  {
+    "id": "ITA_independence_rsi",
+    "title": "$ITA_independence_rds$",
+    "x": 350,
+    "y": 700,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_social_republic_prevails"
+    ]
+  },
+  {
+    "id": "ITA_unite_the_opposition",
+    "title": "対立勢力の統一",
+    "x": 8300,
+    "y": 180,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_abyssinian_fiasco"
+    ]
+  },
+  {
+    "id": "ITA_liberate_gramsci",
+    "title": "グラムシの解放",
+    "x": 8600,
+    "y": 440,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_unite_the_opposition",
+      "ITA_triumph_in_africa_bba"
+    ]
+  }
+]

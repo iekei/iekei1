@@ -1,0 +1,115 @@
+[
+  {
+    "id": "ITA_deus_vult",
+    "title": "神の欲するままに",
+    "x": 17000,
+    "y": 1870,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_papacy_reborn"
+    ]
+  },
+  {
+    "id": "ITA_il_vento_aureo",
+    "title": "黄金の風",
+    "x": 17600,
+    "y": 2000,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_deus_vult"
+    ]
+  },
+  {
+    "id": "ITA_catholic_action",
+    "title": "カトリック教会の活動",
+    "x": 17300,
+    "y": 1870,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_papacy_reborn"
+    ]
+  },
+  {
+    "id": "ITA_a_time_for_war",
+    "title": "戦いの時",
+    "x": 17000,
+    "y": 2000,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_deus_vult"
+    ]
+  },
+  {
+    "id": "ITA_the_holy_lands",
+    "title": "神聖なる土地",
+    "x": 17300,
+    "y": 2000,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_deus_vult"
+    ]
+  },
+  {
+    "id": "ITA_the_catholic_dominion",
+    "title": "カトリック自治領",
+    "x": 17150,
+    "y": 2130,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_a_time_for_war",
+      "ITA_the_holy_lands"
+    ]
+  },
+  {
+    "id": "ITA_foreign_affairs",
+    "title": "外政",
+    "x": 18950,
+    "y": 440,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_triumph_in_africa_bba",
+      "ITA_conspiracies_in_the_shadows"
+    ]
+  },
+  {
+    "id": "ITA_balkan_ambition",
+    "title": "バルカンの野望",
+    "x": 18800,
+    "y": 570,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_foreign_affairs"
+    ]
+  },
+  {
+    "id": "ITA_potential_allies_in_the_balkans",
+    "title": "バルカンにおける潜在的な味方",
+    "x": 19100,
+    "y": 570,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_foreign_affairs"
+    ]
+  },
+  {
+    "id": "ITA_albanian_occupation",
+    "title": "アルバニア占領",
+    "x": 17300,
+    "y": 700,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_potential_allies_in_the_balkans",
+      "ITA_balkan_ambition"
+    ]
+  }
+]

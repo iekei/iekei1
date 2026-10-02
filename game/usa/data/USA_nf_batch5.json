@@ -1,0 +1,110 @@
+[
+  {
+    "id": "USA_the_giant_wakes",
+    "title": "巨人の目覚め",
+    "x": 3200,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_arsenal_of_democracy"
+    ]
+  },
+  {
+    "id": "USA_wartime_industry",
+    "title": "戦時産業",
+    "x": 3200,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_the_giant_wakes"
+    ]
+  },
+  {
+    "id": "USA_military_construction",
+    "title": "軍備増強",
+    "x": 3350,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_arsenal_of_democracy"
+    ]
+  },
+  {
+    "id": "USA_USACE_projects",
+    "title": "合衆国工兵隊計画",
+    "x": 3350,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_military_construction"
+    ]
+  },
+  {
+    "id": "USA_reestablish_the_gold_standard",
+    "title": "金本位制の再導入",
+    "x": 3200,
+    "y": 50,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": []
+  },
+  {
+    "id": "USA_adjusted_compensation_act",
+    "title": "調整補償法",
+    "x": 3500,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_reestablish_the_gold_standard"
+    ]
+  },
+  {
+    "id": "USA_labour_management_relations_act",
+    "title": "労使関係法",
+    "x": 3500,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_adjusted_compensation_act"
+    ]
+  },
+  {
+    "id": "USA_protectionist_tariffs",
+    "title": "保護主義関税",
+    "x": 3500,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_labour_management_relations_act"
+    ]
+  },
+  {
+    "id": "USA_income_tax_reform",
+    "title": "所得税改革",
+    "x": 3500,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_protectionist_tariffs"
+    ]
+  },
+  {
+    "id": "USA_institute_of_american_sciences",
+    "title": "アメリカ科学研究所",
+    "x": 3500,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_income_tax_reform"
+    ]
+  }
+]

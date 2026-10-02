@@ -1,0 +1,110 @@
+[
+  {
+    "id": "ENG_revisit_colonial_policy",
+    "title": "植民地政策の再考",
+    "x": 5150,
+    "y": 50,
+    "cost": 70,
+    "effect": "時代は移り変わっている。帝国の各地で独立運動がより活発になることは明確である。我々がますます膨大な資産をこれらの運動の抑制につぎ込むことを強いられたくないならば、我々の帝国が自然に消滅することを認め、その経過を世界に見せつけなければならない。",
+    "prerequisites": []
+  },
+  {
+    "id": "ENG_guide_the_colonies",
+    "title": "植民地の統治",
+    "x": 5600,
+    "y": 180,
+    "cost": 70,
+    "effect": "長期間の統治の後、完全なる独立への一歩を踏み出すことは簡単ではない。我々の自治領は政府を再編成する際、我々の指導の元、完全なる独立の際にその機能が上手くいくように、援助が必要になるだろう。",
+    "prerequisites": [
+      "ENG_revisit_colonial_policy"
+    ]
+  },
+  {
+    "id": "ENG_towards_dominion_independence",
+    "title": "自治領の独立に向けて",
+    "x": 5450,
+    "y": 310,
+    "cost": 70,
+    "effect": "自治領政府の再構築について分かったことは、我々はウェストミンスターとの公的関係を解除することに対する最終的な措置を行う際、我々の自治領を援助しなければならないという事だ。[Root.GetNameDef]の一部であり続けたい人々が移住する際の大規模な移動の集団を見ることになりそうだ。",
+    "prerequisites": [
+      "ENG_guide_the_colonies"
+    ]
+  },
+  {
+    "id": "ENG_foundations_for_an_indian_state",
+    "title": "インド国家の基礎",
+    "x": 5300,
+    "y": 440,
+    "cost": 70,
+    "effect": "もしそれが独立国家として機能するのであれば、インドの工業化を促進すると同時にインド政府を抜本的に再構築しなければならない。アジア大陸全体を統治するという課題は、我々が発見したように単純なものではなく、成功するためにはインドを準備しなければならない。",
+    "prerequisites": [
+      "ENG_towards_dominion_independence"
+    ]
+  },
+  {
+    "id": "ENG_the_three_nation_solution",
+    "title": "三民族論",
+    "x": 5450,
+    "y": 570,
+    "cost": 70,
+    "effect": "文化並びに宗教上の差異はインド亜大陸全土に顕著である。既に異なる忠誠心を持った様々なグループ間で対立が発生している。全てを単一国家とするのではなく、中央にヒンドゥー教国家のインド、北西と北東にイスラム教国家の、それぞれパキスタンとバングラデシュの三国家にする事が良い解決策になるだろう。",
+    "prerequisites": [
+      "ENG_foundations_for_an_indian_state"
+    ]
+  },
+  {
+    "id": "ENG_towards_indian_independence",
+    "title": "インド独立に向けて",
+    "x": 5300,
+    "y": 700,
+    "cost": 70,
+    "effect": "インドを独立への道へと向かわせる時が来た。我々は政府機能を徐々に移管し始め、完全な独立の準備として自治を増加させる。",
+    "prerequisites": [
+      "ENG_foundations_for_an_indian_state"
+    ]
+  },
+  {
+    "id": "ENG_withdraw_from_contested_territories",
+    "title": "競合地域からの撤退",
+    "x": 5750,
+    "y": 310,
+    "cost": 35,
+    "effect": "世界中に多数存在するイギリスの海外領土の一部は近隣諸国によって領土主張されている。これは外交上の緊張を引き起こすため、イギリスの管轄権の下でそれら海外領土の状態を再評価するほうがより良いかもしれない。",
+    "prerequisites": [
+      "ENG_guide_the_colonies"
+    ]
+  },
+  {
+    "id": "ENG_self_government_for_the_mediterranean",
+    "title": "地中海の自治政府",
+    "x": 5600,
+    "y": 440,
+    "cost": 35,
+    "effect": "地中海の国々は完全な独立のために高度な自治権を得る準備ができている。これは、独立が正式な物となる前にイギリス国籍を取得しようとしている移民の流入をもたらす可能性が高い。",
+    "prerequisites": [
+      "ENG_withdraw_from_contested_territories"
+    ]
+  },
+  {
+    "id": "ENG_self_government_for_africa",
+    "title": "アフリカの自治政府",
+    "x": 5600,
+    "y": 700,
+    "cost": 70,
+    "effect": "アフリカの国々は完全な独立のために高度な自治権を得る準備ができている。これは、独立が正式な物となる前にイギリス国籍を取得しようとしている移民の流入をもたらす可能性が高い。",
+    "prerequisites": [
+      "ENG_self_government_for_the_mediterranean"
+    ]
+  },
+  {
+    "id": "ENG_self_government_for_the_middle_east",
+    "title": "中東の自治政府",
+    "x": 5900,
+    "y": 440,
+    "cost": 35,
+    "effect": "中東の国々は完全な独立のために高度な自治権を得る準備ができている。これは、独立が正式な物となる前にイギリス国籍を取得しようとしている移民の流入をもたらす可能性が高い。",
+    "prerequisites": [
+      "ENG_withdraw_from_contested_territories"
+    ]
+  }
+]

@@ -1,0 +1,113 @@
+[
+  {
+    "id": "ITA_social_stability",
+    "title": "社会不安",
+    "x": 9350,
+    "y": 1480,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_bring_back_exiled_intellectuals"
+    ]
+  },
+  {
+    "id": "ITA_aid_for_the_spanish_republic",
+    "title": "スペイン共和国への救援",
+    "x": 9650,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_italian_socialism"
+    ]
+  },
+  {
+    "id": "ITA_italia_libera",
+    "title": "イタリア・リベラ",
+    "x": 9200,
+    "y": 1740,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_social_stability"
+    ]
+  },
+  {
+    "id": "ITA_european_democracies",
+    "title": "ヨーロッパの民主主義国",
+    "x": 9050,
+    "y": 1870,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_italia_libera"
+    ]
+  },
+  {
+    "id": "ITA_peace_preservation",
+    "title": "保安",
+    "x": 8900,
+    "y": 2000,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_european_democracies"
+    ]
+  },
+  {
+    "id": "ITA_scientific_cooperation",
+    "title": "科学協力協定",
+    "x": 9350,
+    "y": 1870,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_italia_libera",
+      "ITA_reestablish_old_alliances"
+    ]
+  },
+  {
+    "id": "ITA_secure_the_borders",
+    "title": "国境の確保",
+    "x": 9200,
+    "y": 2000,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_scientific_cooperation"
+    ]
+  },
+  {
+    "id": "ITA_bring_down_fascist_strongholds",
+    "title": "ファシストの拠点の破壊",
+    "x": 9500,
+    "y": 2000,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_scientific_cooperation"
+    ]
+  },
+  {
+    "id": "ITA_reestablish_old_alliances",
+    "title": "古き同盟の再結成",
+    "x": 9500,
+    "y": 1740,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_social_stability"
+    ]
+  },
+  {
+    "id": "ITA_military_agreements",
+    "title": "軍事協定",
+    "x": 9650,
+    "y": 1870,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_reestablish_old_alliances"
+    ]
+  }
+]

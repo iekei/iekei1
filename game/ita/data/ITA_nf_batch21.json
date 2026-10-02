@@ -1,0 +1,114 @@
+[
+  {
+    "id": "ITA_albanian_oil",
+    "title": "アルバニアの油",
+    "x": 17000,
+    "y": 830,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_albanian_occupation"
+    ]
+  },
+  {
+    "id": "ITA_support_albanian_irredentism",
+    "title": "アルバニアの領土回復主義を支持",
+    "x": 17300,
+    "y": 830,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_albanian_occupation"
+    ]
+  },
+  {
+    "id": "ITA_albanian_fascist_militia",
+    "title": "[GetAppropriateAlbanianFascistMilitiaName]",
+    "x": 17300,
+    "y": 960,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_support_albanian_irredentism"
+    ]
+  },
+  {
+    "id": "ITA_guarantee_austrian_independence",
+    "title": "オーストリアの独立を保障",
+    "x": 17600,
+    "y": 700,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_potential_allies_in_the_balkans",
+      "ITA_balkan_ambition"
+    ]
+  },
+  {
+    "id": "ITA_negotiate_italian_claims",
+    "title": "イタリアの請求権に関する交渉",
+    "x": 17600,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_guarantee_austrian_independence"
+    ]
+  },
+  {
+    "id": "ITA_ratify_the_stresa_front",
+    "title": "ストレーザ戦線の承認",
+    "x": 17600,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_negotiate_italian_claims"
+    ]
+  },
+  {
+    "id": "ITA_joint_military_programs",
+    "title": "共同軍事計画",
+    "x": 17300,
+    "y": 1090,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_ratify_the_stresa_front"
+    ]
+  },
+  {
+    "id": "ITA_italys_destiny",
+    "title": "イタリアの宿命",
+    "x": 17600,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_ratify_the_stresa_front"
+    ]
+  },
+  {
+    "id": "ITA_the_eastern_threat",
+    "title": "東の脅威",
+    "x": 17600,
+    "y": 1220,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_italys_destiny"
+    ]
+  },
+  {
+    "id": "ITA_pact_of_steel",
+    "title": "鋼鉄条約",
+    "x": 18500,
+    "y": 700,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_potential_allies_in_the_balkans",
+      "ITA_balkan_ambition"
+    ]
+  }
+]

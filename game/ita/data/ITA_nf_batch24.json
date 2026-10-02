@@ -1,0 +1,113 @@
+[
+  {
+    "id": "ITA_fronte_militare_clandestino",
+    "title": "前線の秘密",
+    "x": 350,
+    "y": 180,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_italian_liberation_war"
+    ]
+  },
+  {
+    "id": "ITA_corpo_volontari_della_liberta",
+    "title": "祖国解放義勇部隊",
+    "x": 200,
+    "y": 310,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_fronte_militare_clandestino"
+    ]
+  },
+  {
+    "id": "ITA_the_carabinieri",
+    "title": "カラビニエリ",
+    "x": 500,
+    "y": 310,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_fronte_militare_clandestino"
+    ]
+  },
+  {
+    "id": "ITA_gappisti",
+    "title": "愛国活動過激派",
+    "x": 50,
+    "y": 440,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_corpo_volontari_della_liberta"
+    ]
+  },
+  {
+    "id": "ITA_partisan_republics",
+    "title": "パルチザン共和国",
+    "x": 350,
+    "y": 440,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_corpo_volontari_della_liberta",
+      "ITA_the_carabinieri"
+    ]
+  },
+  {
+    "id": "ITA_the_kings_finest",
+    "title": "国王直属軍",
+    "x": 650,
+    "y": 440,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_carabinieri"
+    ]
+  },
+  {
+    "id": "ITA_grande_rivolta_rurale",
+    "title": "大農民反乱",
+    "x": 350,
+    "y": 570,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_partisan_republics",
+      "ITA_gappisti",
+      "ITA_the_kings_finest"
+    ]
+  },
+  {
+    "id": "ITA_liberation_or_death",
+    "title": "解放か、死か！",
+    "x": 350,
+    "y": 700,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_grande_rivolta_rurale"
+    ]
+  },
+  {
+    "id": "ITA_independence_rds",
+    "title": "イタリアの独立",
+    "x": 350,
+    "y": 830,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_liberation_or_death"
+    ]
+  },
+  {
+    "id": "ITA_the_italian_social_republic",
+    "title": "イタリア社会主義共和国",
+    "x": 350,
+    "y": 50,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": []
+  }
+]

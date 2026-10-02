@@ -1,0 +1,20 @@
+[
+  {
+    "id": "fra_75mm",
+    "title": "75mm野砲 M1897",
+    "year": 1936,
+    "x": 100,
+    "y": 50,
+    "research_time": 80,
+    "reliability": "配備",
+    "desc": "第一次大戦の名砲。まだ現役で使用されていた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><path d='M4 18h16'/><path d='M8 18l4-8h4l4 8'/></svg>",
+    "effects": [
+      "攻撃: 40/100",
+      "射程: 50/100",
+      "機動力: 65/100",
+      "信頼度: 80/100"
+    ],
+    "prerequisites": []
+  }
+]

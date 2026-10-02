@@ -1,0 +1,36 @@
+[
+  {
+    "id": "usa_industry_1",
+    "title": "大量生産方式",
+    "year": 1936,
+    "x": 100,
+    "y": 50,
+    "research_time": 100,
+    "reliability": "配備",
+    "desc": "フォード式流れ作業を軍需生産に応用。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#d4843a' stroke-width='1.5'><path d='M4 20V10l4 4V10l4 4V10l4 4V10l4 10z'/></svg>",
+    "effects": [
+      "工場出力: +15%",
+      "建設速度: +10%"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "usa_industry_2",
+    "title": "戦時生産局",
+    "year": 1942,
+    "x": 100,
+    "y": 200,
+    "research_time": 120,
+    "reliability": "配備",
+    "desc": "国家総力戦体制を確立し、工業生産を最大化する。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#d4843a' stroke-width='1.5'><rect x='4' y='10' width='16' height='10'/><path d='M8 10V6h8v4'/></svg>",
+    "effects": [
+      "工場出力: +25%",
+      "生産効率: +15%"
+    ],
+    "prerequisites": [
+      "usa_industry_1"
+    ]
+  }
+]

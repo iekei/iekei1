@@ -1,0 +1,112 @@
+[
+  {
+    "id": "USA_war_plan_gray",
+    "title": "グレー計画",
+    "x": 6200,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_reinforce_monroe_doctrine"
+    ]
+  },
+  {
+    "id": "USA_hemisphere_defense",
+    "title": "西半球の防衛",
+    "x": 6200,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_war_plan_gray"
+    ]
+  },
+  {
+    "id": "USA_intervention_in_europe",
+    "title": "ヨーロッパへの介入",
+    "x": 6800,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_war_plans_division"
+    ]
+  },
+  {
+    "id": "USA_war_plan_gold",
+    "title": "ゴールド計画",
+    "x": 6500,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_intervention_in_europe"
+    ]
+  },
+  {
+    "id": "USA_war_plan_silver",
+    "title": "シルバー計画",
+    "x": 6650,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_intervention_in_europe"
+    ]
+  },
+  {
+    "id": "USA_war_plan_black",
+    "title": "ブラック計画",
+    "x": 6800,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_intervention_in_europe"
+    ]
+  },
+  {
+    "id": "USA_destroyers_for_bases",
+    "title": "駆逐艦と基地の交換",
+    "x": 6800,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_war_plan_black"
+    ]
+  },
+  {
+    "id": "USA_war_plan_white",
+    "title": "ホワイト計画",
+    "x": 7100,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_intervention_in_europe"
+    ]
+  },
+  {
+    "id": "USA_anti_bolshevist_aid",
+    "title": "防共援助",
+    "x": 7100,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_war_plan_white"
+    ]
+  },
+  {
+    "id": "USA_war_plan_red",
+    "title": "レッド計画",
+    "x": 7400,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_intervention_in_europe"
+    ]
+  }
+]

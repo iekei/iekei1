@@ -1,0 +1,115 @@
+[
+  {
+    "id": "JAP_strategic_bomber_effort",
+    "title": "戦略爆撃機への注力",
+    "x": 5750,
+    "y": 700,
+    "cost": 70,
+    "effect": "戦争は直接の軍事対決だけでは容易に勝つことはできない。産業能力は戦争の成果に大きく影響するものであり、故に敵の産業基盤を破壊する新たな戦略爆撃機の開発に投資をする必要がある。",
+    "prerequisites": [
+      "JAP_range_focus",
+      "JAP_bomber_modernization"
+    ]
+  },
+  {
+    "id": "JAP_unified_fighter_development",
+    "title": "戦闘機の統合開発",
+    "x": 6050,
+    "y": 700,
+    "cost": 70,
+    "effect": "陸軍と海軍が別々に航空機を開発していたことは長きに渡って問題の原因となっていた。軍備の一貫性を保持し、限られた研究資源をより有効活用するために、これらの規格を統一する必要がある。",
+    "prerequisites": [
+      "JAP_agility_focus",
+      "JAP_the_zero"
+    ]
+  },
+  {
+    "id": "JAP_jet_prototypes",
+    "title": "ジェット試作機",
+    "x": 5900,
+    "y": 830,
+    "cost": 70,
+    "effect": "飛行機の未来はプロペラにはない。我々は航空機の能力向上のために、ジェット推進機の研究を進めなければならない。",
+    "prerequisites": [
+      "JAP_unified_fighter_development",
+      "JAP_strategic_bomber_effort"
+    ]
+  },
+  {
+    "id": "JAP_new_naval_estimates",
+    "title": "新たな海軍の予算案",
+    "x": 6500,
+    "y": 50,
+    "cost": 70,
+    "effect": "海軍の増強のための、そしてその増強に伴って必要とされるであろう湾岸施設についての新たな予算案を提出しなければならない。",
+    "prerequisites": []
+  },
+  {
+    "id": "JAP_carrier_warfare_experiments",
+    "title": "空母航空戦の試み",
+    "x": 6350,
+    "y": 180,
+    "cost": 70,
+    "effect": "戦艦は過ぎ去った過去の遺物である。海軍の未来は航空戦力の保有にあるのだ。航空母艦があれば太平洋を越えて航空戦力を投射することがきるようになる。",
+    "prerequisites": [
+      "JAP_new_naval_estimates"
+    ]
+  },
+  {
+    "id": "JAP_expand_the_snlf",
+    "title": "海軍特別陸戦隊の拡充",
+    "x": 6500,
+    "y": 310,
+    "cost": 70,
+    "effect": "太平洋における戦争では海上からの上陸戦が頻繁に行われる。海軍特別陸戦隊が任務を遂行するためには拡大が必須だ。",
+    "prerequisites": [
+      "JAP_carrier_warfare_experiments",
+      "JAP_supremacy_of_the_battlefleet"
+    ]
+  },
+  {
+    "id": "JAP_first_air_fleet",
+    "title": "第一航空艦隊",
+    "x": 6350,
+    "y": 440,
+    "cost": 70,
+    "effect": "最大限の攻撃かつ打撃力を発揮するために、多数の航空母艦を1つの艦隊にまとめる。この艦隊を運用するために必要なドクトリンを発展させることによって、我が軍が海軍航空戦力の優位性を失うことはなくなるであろう。",
+    "prerequisites": [
+      "JAP_carrier_warfare_experiments"
+    ]
+  },
+  {
+    "id": "JAP_modern_escorts",
+    "title": "近代的護衛艦",
+    "x": 6500,
+    "y": 570,
+    "cost": 70,
+    "effect": "艦隊には敵の潜水艦や魚雷艇によって妨害されないための最新式の護衛艦が必要\nだ。",
+    "prerequisites": [
+      "JAP_first_air_fleet",
+      "JAP_the_ultimate_battleship"
+    ]
+  },
+  {
+    "id": "JAP_supremacy_of_the_battlefleet",
+    "title": "戦闘艦隊の優位",
+    "x": 6650,
+    "y": 180,
+    "cost": 70,
+    "effect": "我々の優れた戦艦設計により、たった一回の決戦で海戦の雌雄を決することができる。そのような戦いを遂行し勝利するため、戦闘艦隊の最適化が必要だ。",
+    "prerequisites": [
+      "JAP_new_naval_estimates"
+    ]
+  },
+  {
+    "id": "JAP_the_ultimate_battleship",
+    "title": "究極の戦艦",
+    "x": 6650,
+    "y": 440,
+    "cost": 70,
+    "effect": "我が国は資源に乏しく、その運用を効率的に行う必要がある。史上最強にして、相対する如何なる敵も粉砕し得る戦艦を建造する。",
+    "prerequisites": [
+      "JAP_supremacy_of_the_battlefleet"
+    ]
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "id": "spitfire",
+    "title": "スピットファイア",
+    "year": 1938,
+    "x": 100,
+    "y": 50,
+    "research_time": 150,
+    "reliability": "配備",
+    "desc": "バトル・オブ・ブリテンの英雄。優れた空戦性能を持つ。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><path d='M12 2v8'/><path d='M2 10h20'/><path d='M8 10l-4 8'/><path d='M16 10l4 8'/></svg>",
+    "effects": [
+      "空戦: 82/100",
+      "航続: 55/100",
+      "速力: 75/100",
+      "装甲: 25/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "hurricane",
+    "title": "ハリケーン",
+    "year": 1937,
+    "x": 400,
+    "y": 50,
+    "research_time": 120,
+    "reliability": "配備",
+    "desc": "スピットファイアと並ぶ主力戦闘機。爆撃機迎撃で活躍。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><path d='M12 3v7'/><path d='M2 10h20'/><path d='M6 10l-3 7'/><path d='M18 10l3 7'/></svg>",
+    "effects": [
+      "空戦: 70/100",
+      "航続: 50/100",
+      "速力: 65/100",
+      "装甲: 30/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "lancaster",
+    "title": "ランカスター爆撃機",
+    "year": 1942,
+    "x": 400,
+    "y": 200,
+    "research_time": 180,
+    "reliability": "配備",
+    "desc": "4発重爆撃機。夜間爆撃の主力。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><path d='M12 4v6'/><path d='M2 10h20'/><path d='M4 10l-2 6'/><path d='M20 10l2 6'/><path d='M8 10v6'/><path d='M16 10v6'/></svg>",
+    "effects": [
+      "爆撃: 75/100",
+      "航続: 80/100",
+      "速力: 55/100",
+      "装甲: 30/100"
+    ],
+    "prerequisites": []
+  }
+]

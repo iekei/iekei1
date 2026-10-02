@@ -1,0 +1,36 @@
+[
+  {
+    "id": "eng_industry_1",
+    "title": "工業生産力向上",
+    "year": 1936,
+    "x": 100,
+    "y": 50,
+    "research_time": 100,
+    "reliability": "配備",
+    "desc": "工場の生産効率を向上させる。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#d4843a' stroke-width='1.5'><path d='M4 20V10l4 4V10l4 4V10l4 4V10l4 10z'/></svg>",
+    "effects": [
+      "工場出力: +10%",
+      "建設速度: +10%"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "eng_industry_2",
+    "title": "分散生産",
+    "year": 1938,
+    "x": 100,
+    "y": 200,
+    "research_time": 110,
+    "reliability": "配備",
+    "desc": "工場を分散配置し、爆撃に対する耐性を高める。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#d4843a' stroke-width='1.5'><rect x='4' y='10' width='16' height='10'/><path d='M8 10V6h8v4'/></svg>",
+    "effects": [
+      "工場出力: +12%",
+      "生産効率: +8%"
+    ],
+    "prerequisites": [
+      "eng_industry_1"
+    ]
+  }
+]

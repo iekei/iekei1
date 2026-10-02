@@ -1,0 +1,115 @@
+[
+  {
+    "id": "ITA_mobilize_the_railway_guns",
+    "title": "列車砲の動員",
+    "x": 15350,
+    "y": 1350,
+    "cost": 35,
+    "effect": "必死な状況には必死の手段が必要だ。古い列車砲を再び稼働させる時が来た。",
+    "prerequisites": [
+      "ITA_prepare_for_the_coming_wars"
+    ]
+  },
+  {
+    "id": "ITA_bring_back_old_glories",
+    "title": "過去の栄光の奪還",
+    "x": 15650,
+    "y": 1350,
+    "cost": 70,
+    "effect": "様々な港に、スクラップを待っている多くの古い船がある。技術者や海軍士官の中には、少し調整すればこれらの古い栄光を再び稼働させることができると主張する者もいる。",
+    "prerequisites": [
+      "ITA_prepare_for_the_coming_wars"
+    ]
+  },
+  {
+    "id": "ITA_new_forms_of_weaponry",
+    "title": "兵器の新たな形",
+    "x": 15500,
+    "y": 1480,
+    "cost": 70,
+    "effect": "イタリアが世界一の軍事大国になるためには、新しい兵器を模索する必要がある。科学者たちは、先駆的な原子力研究プログラムの開発が大きな可能性を持っていると確信している。",
+    "prerequisites": [
+      "ITA_prepare_for_the_coming_wars"
+    ]
+  },
+  {
+    "id": "ITA_revoke_the_acerbo_law",
+    "title": "アチェルボ法の破棄",
+    "x": 15950,
+    "y": 960,
+    "cost": 35,
+    "effect": "アチェルボ法は、ムッソリーニとそのファシスト政党に、彼らが切望していたイタリアに対する確固たる支配権を与えた。二度とこのようなことが起こらないように、この法律を撤回するべきだ。",
+    "prerequisites": [
+      "ITA_monarchia_d_italia"
+    ]
+  },
+  {
+    "id": "ITA_christian_democracy",
+    "title": "キリスト教民主主義",
+    "x": 15800,
+    "y": 1090,
+    "cost": 35,
+    "effect": "キリスト教民主党は、アルチーデ・デ・ガスペリを党首とする保守的な中央政治団体で、キリスト教の理想と自由の理念を融合させることで民衆の支持を得ることに成功している。王制に忠実である限り、組閣を認めるべきだ。",
+    "prerequisites": [
+      "ITA_revoke_the_acerbo_law"
+    ]
+  },
+  {
+    "id": "ITA_democratic_king",
+    "title": "民主主義の王",
+    "x": 16100,
+    "y": 1090,
+    "cost": 35,
+    "effect": "イタリア王室は、国王という主たる指導者の姿を維持しつつ、より民主的な国家へと一歩を踏み出すべき時が来ている。",
+    "prerequisites": [
+      "ITA_revoke_the_acerbo_law"
+    ]
+  },
+  {
+    "id": "ITA_cooperate_with_moderates",
+    "title": "穏健派との協力",
+    "x": 15800,
+    "y": 1220,
+    "cost": 35,
+    "effect": "旧ファシスト政権の過激でない人々と協力しない理由はない。彼らは非常に有能で、この新しく生まれ変わったイタリア国家を前進させるために役立ってくれるだろう。",
+    "prerequisites": [
+      "ITA_christian_democracy",
+      "ITA_democratic_king"
+    ]
+  },
+  {
+    "id": "ITA_expand_intelligence_services",
+    "title": "諜報機関の拡大",
+    "x": 16100,
+    "y": 1220,
+    "cost": 35,
+    "effect": "この新しい時代において、知識は力になる。諸外国の秘密警察と張り合えるよう、さまざまな情報部門を拡充しなければならない。",
+    "prerequisites": [
+      "ITA_democratic_king",
+      "ITA_christian_democracy"
+    ]
+  },
+  {
+    "id": "ITA_crush_opposition",
+    "title": "反対派の鎮圧",
+    "x": 15950,
+    "y": 1350,
+    "cost": 35,
+    "effect": "我々の政策に反対し、新政府の仕事を妨げる旧ファシスト政権の支持者がまだ多く残っている。彼らに対処する時が来た。",
+    "prerequisites": [
+      "ITA_cooperate_with_moderates",
+      "ITA_expand_intelligence_services"
+    ]
+  },
+  {
+    "id": "ITA_power_to_the_king",
+    "title": "王に権力を",
+    "x": 16700,
+    "y": 960,
+    "cost": 35,
+    "effect": "社会的、そして政治的緊張が高まる今、ファシストであれ共産主義者であれ、過激な政権がイタリアで優勢にならないようにする唯一の方法は、間違いなく我が国の指導者に最もふさわしい人物である国王への権力集中を高めることだ。",
+    "prerequisites": [
+      "ITA_monarchia_d_italia"
+    ]
+  }
+]

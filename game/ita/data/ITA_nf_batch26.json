@@ -1,0 +1,114 @@
+[
+  {
+    "id": "ITA_organize_strikes_in_the_north",
+    "title": "北部でストライキを扇動",
+    "x": 8150,
+    "y": 310,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_unite_the_opposition"
+    ]
+  },
+  {
+    "id": "ITA_the_southern_farmlands",
+    "title": "南の農村地",
+    "x": 8450,
+    "y": 310,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_unite_the_opposition"
+    ]
+  },
+  {
+    "id": "ITA_defy_the_duce",
+    "title": "ドゥーチェへの反抗",
+    "x": 8300,
+    "y": 570,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_organize_strikes_in_the_north",
+      "ITA_the_southern_farmlands",
+      "ITA_triumph_in_africa_bba"
+    ]
+  },
+  {
+    "id": "ITA_appeal_to_the_bourgeoisie",
+    "title": "ブルジョワへの訴え",
+    "x": 8150,
+    "y": 700,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_defy_the_duce"
+    ]
+  },
+  {
+    "id": "ITA_seize_old_equipment",
+    "title": "旧装備の入手",
+    "x": 8450,
+    "y": 700,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_defy_the_duce"
+    ]
+  },
+  {
+    "id": "ITA_the_italian_republic",
+    "title": "イタリア共和国",
+    "x": 8300,
+    "y": 830,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_defy_the_duce"
+    ]
+  },
+  {
+    "id": "ITA_the_popular_front",
+    "title": "人民戦線",
+    "x": 7550,
+    "y": 960,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_italian_republic"
+    ]
+  },
+  {
+    "id": "ITA_the_garibaldi_legion",
+    "title": "ガリバルディ軍団",
+    "x": 6800,
+    "y": 1090,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_popular_front"
+    ]
+  },
+  {
+    "id": "ITA_gruppi_di_difesa_della_donna",
+    "title": "女性護衛団",
+    "x": 6650,
+    "y": 1220,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_garibaldi_legion"
+    ]
+  },
+  {
+    "id": "ITA_a_new_era_for_the_red_shirts",
+    "title": "赤シャツ隊の新しい時代",
+    "x": 6950,
+    "y": 1220,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_garibaldi_legion"
+    ]
+  }
+]

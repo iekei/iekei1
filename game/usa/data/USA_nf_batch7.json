@@ -1,0 +1,114 @@
+[
+  {
+    "id": "USA_send_lindbergh_to_germany",
+    "title": "リンドバーグのドイツ派遣",
+    "x": 5000,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_invite_foreign_support"
+    ]
+  },
+  {
+    "id": "USA_work_with_the_bund",
+    "title": "ドイツ系アメリカ人協会と連携",
+    "x": 4700,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_send_lindbergh_to_germany"
+    ]
+  },
+  {
+    "id": "USA_recruit_the_free_corps",
+    "title": "自由軍団の雇用",
+    "x": 5000,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_send_lindbergh_to_germany"
+    ]
+  },
+  {
+    "id": "USA_honor_the_confederacy",
+    "title": "連合国の称揚",
+    "x": 4400,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_work_with_the_bund",
+      "USA_national_employment_strategy"
+    ]
+  },
+  {
+    "id": "USA_war_powers_act",
+    "title": "戦争権限法",
+    "x": 5450,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_america_first"
+    ]
+  },
+  {
+    "id": "USA_seize_cuba",
+    "title": "キューバの確保",
+    "x": 5300,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_war_powers_act"
+    ]
+  },
+  {
+    "id": "USA_manifest_destiny",
+    "title": "明白なる運命",
+    "x": 5600,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_war_powers_act"
+    ]
+  },
+  {
+    "id": "USA_eliminate_the_southern_threat",
+    "title": "南の脅威の排除",
+    "x": 5300,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_seize_cuba"
+    ]
+  },
+  {
+    "id": "USA_the_canadian_corridor",
+    "title": "カナダ回廊",
+    "x": 5600,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_manifest_destiny"
+    ]
+  },
+  {
+    "id": "USA_north_american_dominion",
+    "title": "北アメリカの支配",
+    "x": 5450,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_the_canadian_corridor",
+      "USA_eliminate_the_southern_threat"
+    ]
+  }
+]

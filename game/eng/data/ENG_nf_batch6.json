@@ -1,0 +1,110 @@
+[
+  {
+    "id": "ENG_revisit_colonial_policy",
+    "title": "植民地政策の再考",
+    "x": 5150,
+    "y": 50,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": []
+  },
+  {
+    "id": "ENG_guide_the_colonies",
+    "title": "植民地の統治",
+    "x": 5600,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_revisit_colonial_policy"
+    ]
+  },
+  {
+    "id": "ENG_towards_dominion_independence",
+    "title": "自治領の独立に向けて",
+    "x": 5450,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_guide_the_colonies"
+    ]
+  },
+  {
+    "id": "ENG_foundations_for_an_indian_state",
+    "title": "インド国家の基礎",
+    "x": 5300,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_towards_dominion_independence"
+    ]
+  },
+  {
+    "id": "ENG_the_three_nation_solution",
+    "title": "三民族論",
+    "x": 5450,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_foundations_for_an_indian_state"
+    ]
+  },
+  {
+    "id": "ENG_towards_indian_independence",
+    "title": "インド独立に向けて",
+    "x": 5300,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_foundations_for_an_indian_state"
+    ]
+  },
+  {
+    "id": "ENG_withdraw_from_contested_territories",
+    "title": "競合地域からの撤退",
+    "x": 5750,
+    "y": 310,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ENG_guide_the_colonies"
+    ]
+  },
+  {
+    "id": "ENG_self_government_for_the_mediterranean",
+    "title": "地中海の自治政府",
+    "x": 5600,
+    "y": 440,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ENG_withdraw_from_contested_territories"
+    ]
+  },
+  {
+    "id": "ENG_self_government_for_africa",
+    "title": "アフリカの自治政府",
+    "x": 5600,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_self_government_for_the_mediterranean"
+    ]
+  },
+  {
+    "id": "ENG_self_government_for_the_middle_east",
+    "title": "中東の自治政府",
+    "x": 5900,
+    "y": 440,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ENG_withdraw_from_contested_territories"
+    ]
+  }
+]

@@ -1,0 +1,109 @@
+[
+  {
+    "id": "ENG_anti_submarine_training_school",
+    "title": "対潜訓練学校",
+    "x": 1550,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "uk_convoy_focus"
+    ]
+  },
+  {
+    "id": "uk_waves_focus",
+    "title": "ブリタニア、大海原を統べよ",
+    "x": 2000,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "naval_rearmament_focus"
+    ]
+  },
+  {
+    "id": "uk_carrier_focus",
+    "title": "空母重視",
+    "x": 1850,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "uk_waves_focus"
+    ]
+  },
+  {
+    "id": "uk_battleship_focus",
+    "title": "戦艦重視",
+    "x": 2150,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "uk_waves_focus"
+    ]
+  },
+  {
+    "id": "uk_amphibious_focus",
+    "title": "上陸作戦",
+    "x": 1850,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "naval_rearmament_focus"
+    ]
+  },
+  {
+    "id": "ENG_expand_the_repair_yards",
+    "title": "修理ドックの拡張",
+    "x": 2000,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "uk_battleship_focus",
+      "uk_carrier_focus"
+    ]
+  },
+  {
+    "id": "ENG_vanguard",
+    "title": "ヴァンガード",
+    "x": 2150,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "uk_battleship_focus"
+    ]
+  },
+  {
+    "id": "uk_embargo_focus",
+    "title": "禁輸政策",
+    "x": 1850,
+    "y": 50,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": []
+  },
+  {
+    "id": "uk_empire_focus",
+    "title": "帝国の強化",
+    "x": 4400,
+    "y": 50,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": []
+  },
+  {
+    "id": "uk_service_focus",
+    "title": "海外勤務",
+    "x": 4100,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "uk_empire_focus"
+    ]
+  }
+]

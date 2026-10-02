@@ -1,0 +1,113 @@
+[
+  {
+    "id": "ITA_the_fight_against_stalinism",
+    "title": "[GetAppropriateRussianGovernmentIdeology]",
+    "x": 7700,
+    "y": 1740,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_defend_the_land"
+    ]
+  },
+  {
+    "id": "ITA_raise_the_peoples",
+    "title": "人民の召集",
+    "x": 7550,
+    "y": 2000,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_defend_the_land"
+    ]
+  },
+  {
+    "id": "ITA_il_sol_dell_avvenire",
+    "title": "アヴェニーレの太陽",
+    "x": 7250,
+    "y": 2130,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_combined_research_effort",
+      "ITA_raise_the_peoples"
+    ]
+  },
+  {
+    "id": "ITA_italian_socialism",
+    "title": "イタリア社会主義",
+    "x": 9200,
+    "y": 960,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_italian_republic"
+    ]
+  },
+  {
+    "id": "ITA_cooperate_with_the_mafia",
+    "title": "マフィアとの協力",
+    "x": 8750,
+    "y": 1090,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_italian_socialism"
+    ]
+  },
+  {
+    "id": "ITA_mafia_abroad",
+    "title": "海外マフィア",
+    "x": 8750,
+    "y": 1350,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_cooperate_with_the_mafia"
+    ]
+  },
+  {
+    "id": "ITA_empower_the_unions",
+    "title": "組合に権力を",
+    "x": 9050,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_italian_socialism"
+    ]
+  },
+  {
+    "id": "ITA_production_lines",
+    "title": "生産ライン",
+    "x": 9050,
+    "y": 1220,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_empower_the_unions"
+    ]
+  },
+  {
+    "id": "ITA_the_republics_leadership",
+    "title": "共和国の指導権",
+    "x": 9350,
+    "y": 1090,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_italian_socialism"
+    ]
+  },
+  {
+    "id": "ITA_bring_back_exiled_intellectuals",
+    "title": "亡命した知識人たちの奪還",
+    "x": 9350,
+    "y": 1220,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_republics_leadership"
+    ]
+  }
+]

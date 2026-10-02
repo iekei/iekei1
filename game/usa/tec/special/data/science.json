@@ -1,0 +1,48 @@
+{
+  "scientists": [
+    {
+      "id": "oppenheimer",
+      "name": "J・ロバート・オッペンハイマー",
+      "name_en": "J. Robert Oppenheimer",
+      "category": "nuclear",
+      "category_name": "原子核分野",
+      "icon": "special/data/image/nuke.png",
+      "project_icon": "special/data/image/nuke.png",
+      "overview": "マンハッタン計画の科学ディレクター。",
+      "weapons": "原子爆弾（リトルボーイ、ファットマン）、水爆（試作）"
+    },
+    {
+      "id": "groves",
+      "name": "レズリー・グローヴス",
+      "name_en": "Leslie Groves",
+      "category": "nuclear",
+      "category_name": "原子核分野",
+      "icon": "special/data/image/nuke1.png",
+      "project_icon": "special/data/image/nuke1.png",
+      "overview": "マンハッタン計画の軍事責任者。プロジェクト管理の天才。",
+      "weapons": "プルトニウム生産炉、ガス拡散分離施設"
+    },
+    {
+      "id": "northrop",
+      "name": "ジャック・ノースロップ",
+      "name_en": "Jack Northrop",
+      "category": "air",
+      "category_name": "航空・ロケット分野",
+      "icon": "special/data/image/rocket.png",
+      "project_icon": "special/data/image/rocket.png",
+      "overview": "全翼機の先駆者。ノースロップ社創設者。",
+      "weapons": "B-35全翼爆撃機（試作）、XB-49（試作）"
+    },
+    {
+      "id": "pershing_tank",
+      "name": "J・P・クリスティー",
+      "name_en": "J.P. Christie",
+      "category": "armor",
+      "category_name": "戦車設計",
+      "icon": "special/data/image/tank.png",
+      "project_icon": "special/data/image/tank.png",
+      "overview": "クリスティー懸架装置の発明者。高速戦車の先駆者。",
+      "weapons": "M3リーチ、M4シャーマン（懸架装置）、T14突撃戦車"
+    }
+  ]
+}

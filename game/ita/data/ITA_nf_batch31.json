@@ -1,0 +1,113 @@
+[
+  {
+    "id": "ITA_the_enemies_of_capitalism",
+    "title": "資本主義の敵",
+    "x": 9800,
+    "y": 2000,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_military_agreements"
+    ]
+  },
+  {
+    "id": "ITA_the_ethiopian_question",
+    "title": "エチオピア問題",
+    "x": 10250,
+    "y": 700,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_defy_the_duce"
+    ]
+  },
+  {
+    "id": "ITA_abolish_the_colonies",
+    "title": "植民地の廃止",
+    "x": 10100,
+    "y": 830,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_ethiopian_question"
+    ]
+  },
+  {
+    "id": "ITA_cooperatives_for_intensive_exploitation",
+    "title": "集中開発の協同組合",
+    "x": 9950,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_abolish_the_colonies"
+    ]
+  },
+  {
+    "id": "ITA_condemn_colonialism",
+    "title": "植民地への非難",
+    "x": 9950,
+    "y": 1220,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_cooperatives_for_intensive_exploitation"
+    ]
+  },
+  {
+    "id": "ITA_new_colonial_policies",
+    "title": "新植民地政策",
+    "x": 10400,
+    "y": 830,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_ethiopian_question"
+    ]
+  },
+  {
+    "id": "ITA_negotiations_with_albania",
+    "title": "アルバニアとの交渉",
+    "x": 10250,
+    "y": 960,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_abolish_the_colonies",
+      "ITA_new_colonial_policies"
+    ]
+  },
+  {
+    "id": "ITA_enlist_the_bashkimi_kombetar",
+    "title": "バシキミ・コンベータの動員",
+    "x": 10250,
+    "y": 1090,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_negotiations_with_albania"
+    ]
+  },
+  {
+    "id": "ITA_the_italian_confederation",
+    "title": "イタリア連邦",
+    "x": 10550,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_new_colonial_policies"
+    ]
+  },
+  {
+    "id": "ITA_planned_economy",
+    "title": "計画経済",
+    "x": 10550,
+    "y": 1220,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_the_italian_confederation"
+    ]
+  }
+]

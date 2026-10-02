@@ -1,0 +1,104 @@
+[
+  {
+    "id": "ENG_follow_moscow",
+    "title": "モスクワに従う",
+    "x": 9500,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_for_the_good_of_the_revolution"
+    ]
+  },
+  {
+    "id": "ENG_tackle_fascism",
+    "title": "ファシズム対策",
+    "x": 9350,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_follow_moscow"
+    ]
+  },
+  {
+    "id": "ENG_preparing_the_second_front",
+    "title": "第二戦線の準備",
+    "x": 9350,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_tackle_fascism"
+    ]
+  },
+  {
+    "id": "ENG_tackle_capitalism",
+    "title": "資本主義対策",
+    "x": 9650,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_follow_moscow"
+    ]
+  },
+  {
+    "id": "ENG_bermuda_invasion_launch_point",
+    "title": "侵攻拠点バミューダ",
+    "x": 9650,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_tackle_capitalism"
+    ]
+  },
+  {
+    "id": "ENG_crush_the_dream",
+    "title": "夢を打ち砕け",
+    "x": 9650,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_bermuda_invasion_launch_point"
+    ]
+  },
+  {
+    "id": "ENG_socialist_science_pool",
+    "title": "社会主義技術共同",
+    "x": 9950,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_follow_moscow"
+    ]
+  },
+  {
+    "id": "ENG_liberate_the_home_of_marx",
+    "title": "マルクスの故郷を解放",
+    "x": 9200,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_the_one_true_revolution",
+      "ENG_preparing_the_second_front"
+    ]
+  },
+  {
+    "id": "ENG_spirit_of_the_industrial_revolution",
+    "title": "産業革命の精神",
+    "x": 8750,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_soviet_cooperation",
+      "ENG_liberate_the_home_of_marx",
+      "ENG_crush_the_dream"
+    ]
+  }
+]

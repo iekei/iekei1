@@ -1,0 +1,116 @@
+[
+  {
+    "id": "SOV_reopen_novodevichi",
+    "title": "ノヴォデヴィチ女子修道院の再開",
+    "x": 18050,
+    "y": 440,
+    "cost": 35,
+    "effect": "教会は新たな神父を養成する権限を長きにわたり拒否されてきた。教会を復興させるためには、次世代の神父と修道士を育成できる場を設ける必要がある。ならば旧ノヴォデヴィチ女子修道院が当然の選択に見える。",
+    "prerequisites": [
+      "SOV_article_124"
+    ]
+  },
+  {
+    "id": "SOV_rebuild_the_savior_cathedral",
+    "title": "救世主大聖堂の再建",
+    "x": 17750,
+    "y": 700,
+    "cost": 70,
+    "effect": "[SOV.GetRebuildtheSaviorCathedralDesc]",
+    "prerequisites": [
+      "SOV_reopen_novodevichi"
+    ]
+  },
+  {
+    "id": "SOV_the_synod",
+    "title": "教会会議",
+    "x": 18350,
+    "y": 700,
+    "cost": 35,
+    "effect": "ノボデヴィチでの講習会を再開するにあたり、前回の教会会議以来、どのような信仰上の問題が生じているかを議論するための会合を開催することを促すべきだ。",
+    "prerequisites": [
+      "SOV_reopen_novodevichi"
+    ]
+  },
+  {
+    "id": "SOV_the_declaration",
+    "title": "宣言",
+    "x": 18350,
+    "y": 960,
+    "cost": 35,
+    "effect": "[SOV.GetTheDeclarationDesc]",
+    "prerequisites": [
+      "SOV_the_synod"
+    ]
+  },
+  {
+    "id": "SOV_return_of_the_rocor",
+    "title": "在外ロシア正教会の帰還",
+    "x": 18350,
+    "y": 1350,
+    "cost": 35,
+    "effect": "在外ロシア正教会は、ロシア内戦後に自らの信仰と信条を捨てずに亡命を選択した人々で構成されている。今、彼らに国外退去を強いた共産主義政権の敗北によって、ついに彼らを故郷に迎え復権させる時が来た。",
+    "prerequisites": [
+      "SOV_the_declaration",
+      "SOV_consolidate_power",
+      "SOV_reformalize_the_role_of_the_patriarchate"
+    ]
+  },
+  {
+    "id": "SOV_reformalize_the_role_of_the_patriarchate",
+    "title": "総主教の役割の再公認",
+    "x": 18050,
+    "y": 1220,
+    "cost": 35,
+    "effect": "[SOV.GetReformalizetheRoleofthePatriarchateDesc]",
+    "prerequisites": [
+      "SOV_rebuild_the_savior_cathedral",
+      "SOV_the_synod"
+    ]
+  },
+  {
+    "id": "SOV_reconvene_the_zemsky_sobor",
+    "title": "ゼムスキー・ソボルの再召集",
+    "x": 20900,
+    "y": 440,
+    "cost": 70,
+    "effect": "かつて、ロシア国民はゼムスキー・ソボルと呼ばれる議会の形式に集まって議論し、問題を決定していた。国の進むべき道が決まるまでは、国民の関係事は国民が決めるべきだ。",
+    "prerequisites": [
+      "SOV_consolidate_power",
+      "SOV_reformalize_the_role_of_the_patriarchate"
+    ]
+  },
+  {
+    "id": "SOV_constitutional_monarchy",
+    "title": "SOV constitutional monarchy",
+    "x": 21800,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "SOV_reconvene_the_zemsky_sobor"
+    ]
+  },
+  {
+    "id": "SOV_the_sobors_choice",
+    "title": "SOV the sobors choice",
+    "x": 21800,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "SOV_constitutional_monarchy"
+    ]
+  },
+  {
+    "id": "SOV_dismantle_the_zemsky_sobor",
+    "title": "ゼムスキー・ソボルの解体",
+    "x": 21650,
+    "y": 570,
+    "cost": 70,
+    "effect": "ゼムスキー・ソボルはその使命を果たした。1917年に示されたように行き過ぎた民主主義は危険なものである。過去の過ちを繰り返してはならない。",
+    "prerequisites": [
+      "SOV_reconvene_the_zemsky_sobor"
+    ]
+  }
+]

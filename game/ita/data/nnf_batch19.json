@@ -1,0 +1,113 @@
+[
+  {
+    "id": "ITA_auxiliaries",
+    "title": "援助者たち",
+    "x": 20450,
+    "y": 1740,
+    "cost": 35,
+    "effect": "ローマ時代の先祖がそうであったように、補助部隊は今日も正規軍隊の支援、地形の偵察、敵の妨害などで重要な役割を担っている。軍隊を強化するためには、こうした準軍事的な民兵を拡大する必要がある。",
+    "prerequisites": [
+      "ITA_mare_nostrum_bba"
+    ]
+  },
+  {
+    "id": "ITA_the_italian_legions",
+    "title": "イタリア軍団",
+    "x": 20750,
+    "y": 1740,
+    "cost": 70,
+    "effect": "ここ最近、我が軍は危機にうまく対応できていないかもしれない。しかし、イタリア国民がローマの伝統をかつてないほど誇りに思っている今、我々は軍隊に新しい方針を課し、数千年前と同様に今も我が部隊が恐ろしい存在であるようにしなければならない。",
+    "prerequisites": [
+      "ITA_mare_nostrum_bba"
+    ]
+  },
+  {
+    "id": "ITA_new_roman_citizens",
+    "title": "新ローマの市民",
+    "x": 21050,
+    "y": 1740,
+    "cost": 35,
+    "effect": "植民地の原住民に市民権を与えることは、彼らの賛同と協力を得るために必ず役に立つ。",
+    "prerequisites": [
+      "ITA_mare_nostrum_bba"
+    ]
+  },
+  {
+    "id": "ITA_all_roads_lead_to_rome",
+    "title": "すべての道はローマに通ず",
+    "x": 20750,
+    "y": 1870,
+    "cost": 70,
+    "effect": "かつてローマ軍は、軍隊が活動するために必要な道路やインフラを、迅速かつ効率的に整備したことで有名だった。それから数千年後、戦争を行う際の兵站や補給線はより重要になっている。",
+    "prerequisites": [
+      "ITA_the_italian_legions"
+    ]
+  },
+  {
+    "id": "ITA_the_king_of_the_skies",
+    "title": "天空の王",
+    "x": 20450,
+    "y": 2000,
+    "cost": 70,
+    "effect": "ローマ時代の先祖とは異なり、我が軍は陸と海で最適な活動を行うために空を支配する必要がある。イタリアの航空機はすでにその多用性と品質で有名だが、今、我が国の航空技術者は真の空飛ぶ要塞を開発する時だ。",
+    "prerequisites": [
+      "ITA_all_roads_lead_to_rome"
+    ]
+  },
+  {
+    "id": "ITA_modern_musculus",
+    "title": "近代の肉体",
+    "x": 20750,
+    "y": 2000,
+    "cost": 70,
+    "effect": "ローマ人のように、戦場を支配する強力な兵器を開発しなければならない。前線を襲撃し、敵の心臓に恐怖を与える究極の戦車を設計する。",
+    "prerequisites": [
+      "ITA_all_roads_lead_to_rome"
+    ]
+  },
+  {
+    "id": "ITA_caligulas_pride",
+    "title": "カリギュラの誇り",
+    "x": 21050,
+    "y": 2000,
+    "cost": 35,
+    "effect": "史上最強の軍艦を開発する時が来た。我が国の最高の海軍技術者たちは完璧な設計に取り組み、試作機をテストし、今ではネプトゥーヌスが地中海だけでなく世界の王になることを確信している。",
+    "prerequisites": [
+      "ITA_all_roads_lead_to_rome"
+    ]
+  },
+  {
+    "id": "ITA_iberian_protection",
+    "title": "イベリアの保護",
+    "x": 21350,
+    "y": 1870,
+    "cost": 35,
+    "effect": "イベリア半島の国々は、これまで比較的安全な暮らしを送ってきたが、今、自分たちだけでは敵の大国から身を守ることができないのは明らかだ。",
+    "prerequisites": [
+      "ITA_mare_nostrum_bba",
+      "ITA_deus_vult"
+    ]
+  },
+  {
+    "id": "ITA_south_american_alliances",
+    "title": "南アメリカ同盟",
+    "x": 21350,
+    "y": 2000,
+    "cost": 70,
+    "effect": "勢力の枠を広げる時が来た。ラテンアメリカの国々に働きかけ、皆を取り巻く多くの脅威に対して強力な同盟を形成することの重要性を説得しよう。",
+    "prerequisites": [
+      "ITA_iberian_protection"
+    ]
+  },
+  {
+    "id": "ITA_the_papacy_reborn",
+    "title": "教皇制度の復活",
+    "x": 17000,
+    "y": 1740,
+    "cost": 35,
+    "effect": "聖下が国王を倒し、イタリアを完全に掌握した今、イタリア国民は教会のビジョンと目標に向かって足並みをそろえるべきだ。",
+    "prerequisites": [
+      "ITA_strengthen_the_papacy"
+    ]
+  }
+]

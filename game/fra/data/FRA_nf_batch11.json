@@ -1,0 +1,112 @@
+[
+  {
+    "id": "FRA_leftist_rhetoric",
+    "title": "左翼理論",
+    "x": 3500,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_form_the_popular_front"
+    ]
+  },
+  {
+    "id": "FRA_national_mobilization",
+    "title": "国家総動員",
+    "x": 3500,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_leftist_rhetoric"
+    ]
+  },
+  {
+    "id": "FRA_join_comintern",
+    "title": "コミンテルン加盟",
+    "x": 3650,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_national_mobilization"
+    ]
+  },
+  {
+    "id": "FRA_humanite_unie",
+    "title": "ユマニテ・ユニ",
+    "x": 3350,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_national_mobilization"
+    ]
+  },
+  {
+    "id": "FRA_revive_the_national_bloc",
+    "title": "国民ブロックの復活",
+    "x": 6350,
+    "y": 50,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": []
+  },
+  {
+    "id": "FRA_laissez_faire",
+    "title": "自由放任主義",
+    "x": 6200,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_revive_the_national_bloc"
+    ]
+  },
+  {
+    "id": "FRA_protect_the_rights_of_man",
+    "title": "人権の保護",
+    "x": 6200,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_laissez_faire",
+      "FRA_agricultural_protectionism"
+    ]
+  },
+  {
+    "id": "FRA_freedom_front",
+    "title": "自由戦線",
+    "x": 6200,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_protect_the_rights_of_man"
+    ]
+  },
+  {
+    "id": "FRA_stimulate_the_dynamic_market",
+    "title": "活発な市場を刺激",
+    "x": 6350,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_freedom_front",
+      "FRA_promote_entrepeneurship"
+    ]
+  },
+  {
+    "id": "FRA_agricultural_protectionism",
+    "title": "FRA agricultural protectionism",
+    "x": 6500,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_revive_the_national_bloc"
+    ]
+  }
+]

@@ -1,0 +1,117 @@
+[
+  {
+    "id": "ITA_german_military_cooperation",
+    "title": "ドイツとの軍事協力",
+    "x": 18050,
+    "y": 830,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_pact_of_steel"
+    ]
+  },
+  {
+    "id": "ITA_sea_wolves_bba",
+    "title": "海の狼",
+    "x": 17900,
+    "y": 960,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_german_military_cooperation"
+    ]
+  },
+  {
+    "id": "ITA_secret_weapons",
+    "title": "$secret_weapons$",
+    "x": 18200,
+    "y": 960,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_german_military_cooperation"
+    ]
+  },
+  {
+    "id": "ITA_treaty_with_germany",
+    "title": "ドイツとの条約",
+    "x": 18350,
+    "y": 830,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_pact_of_steel"
+    ]
+  },
+  {
+    "id": "ITA_request_control_of_french_territories",
+    "title": "フランス領の支配権を要求",
+    "x": 18500,
+    "y": 960,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_pact_of_steel",
+      "ITA_italian_irredentism"
+    ]
+  },
+  {
+    "id": "ITA_italy_first",
+    "title": "イタリア第一主義",
+    "x": 19100,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_potential_allies_in_the_balkans",
+      "ITA_balkan_ambition"
+    ]
+  },
+  {
+    "id": "ITA_befriend_japan",
+    "title": "日本との友好",
+    "x": 18650,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_pact_of_steel",
+      "ITA_italy_first"
+    ]
+  },
+  {
+    "id": "ITA_italian_irredentism",
+    "title": "イタリアの領土回復主義",
+    "x": 18950,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_pact_of_steel",
+      "ITA_italy_first"
+    ]
+  },
+  {
+    "id": "ITA_war_with_france",
+    "title": "[FRA.GetName]との交戦",
+    "x": 18800,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_italian_irredentism"
+    ]
+  },
+  {
+    "id": "ITA_demand_ticino",
+    "title": "ティチーノの奪取",
+    "x": 18650,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_war_with_france",
+      "ITA_request_control_of_french_territories"
+    ]
+  }
+]

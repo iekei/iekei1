@@ -1,0 +1,109 @@
+[
+  {
+    "id": "crypto_bomb_focus",
+    "title": "ボンべ暗号解読機",
+    "x": 50,
+    "y": 50,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": []
+  },
+  {
+    "id": "tizard_mission_focus",
+    "title": "ティザード使節団",
+    "x": 50,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "crypto_bomb_focus",
+      "radar_focus"
+    ]
+  },
+  {
+    "id": "maud_focus",
+    "title": "MAUD委員会",
+    "x": 50,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "tizard_mission_focus"
+    ]
+  },
+  {
+    "id": "limited_rearmament_focus",
+    "title": "限定的再軍備",
+    "x": 800,
+    "y": 50,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": []
+  },
+  {
+    "id": "ENG_motorized_focus",
+    "title": "陸軍の自動車化",
+    "x": 800,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "limited_rearmament_focus"
+    ]
+  },
+  {
+    "id": "ENG_tank_focus",
+    "title": "[Root.GetRoyalTankRegimentName]",
+    "x": 800,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_motorized_focus"
+    ]
+  },
+  {
+    "id": "air_defense_focus",
+    "title": "防空",
+    "x": 200,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "limited_rearmament_focus"
+    ]
+  },
+  {
+    "id": "radar_focus",
+    "title": "レーダー",
+    "x": 200,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "air_defense_focus"
+    ]
+  },
+  {
+    "id": "shadow_scheme_focus",
+    "title": "シャドウ計画",
+    "x": 500,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "limited_rearmament_focus"
+    ]
+  },
+  {
+    "id": "uk_industrial_focus",
+    "title": "uk industrial focus",
+    "x": 500,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "shadow_scheme_focus"
+    ]
+  }
+]

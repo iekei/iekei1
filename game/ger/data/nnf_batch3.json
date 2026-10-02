@@ -1,0 +1,113 @@
+[
+  {
+    "id": "GER_naval_air_effort",
+    "title": "GER naval air effort",
+    "x": 2600,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "GER_tactical_air_effort"
+    ]
+  },
+  {
+    "id": "GER_strategic_air_effort",
+    "title": "戦略空軍への注力",
+    "x": 2300,
+    "y": 310,
+    "cost": 70,
+    "effect": "勝利は敵工業力を破壊することで達成される。戦略爆撃機の開発と生産に注力すべきだ。",
+    "prerequisites": [
+      "GER_air_innovation"
+    ]
+  },
+  {
+    "id": "GER_army_innovation",
+    "title": "陸軍改革",
+    "x": 2900,
+    "y": 50,
+    "cost": 70,
+    "effect": "ハインツ・グデーリアンと幾人かの革新的理論家は、諸兵科間の情報伝達、「重心（schwerpunkte）」の特定、局所的戦力集中を重視する、野心的な新ドクトリンを提案している。彼らに自由な裁量を与えることは、先の大戦の轍を踏まないための助けになるかもしれない。",
+    "prerequisites": []
+  },
+  {
+    "id": "GER_soviet_treaty",
+    "title": "ソ連との条約",
+    "x": 2900,
+    "y": 310,
+    "cost": 70,
+    "effect": "我々は、まず第一に優れた戦車を開発するためソビエト連邦と新しい研究条約を続けることができる。彼らが同意すれば、1933年に閉鎖したカマの戦車学校を再開することができる。無論、ソビエトとの協力は、彼らも技術革新がもたらす恩恵に浴することを意味するが……",
+    "prerequisites": [
+      "GER_army_innovation"
+    ]
+  },
+  {
+    "id": "GER_air_innovation_2",
+    "title": "空軍改革 II",
+    "x": 2300,
+    "y": 570,
+    "cost": 70,
+    "effect": "航空省の役割は非常に重要である。ルフトヴァッフェ（空軍）は世界中で最も先進的で無ければならないのだ！",
+    "prerequisites": [
+      "GER_strategic_air_effort",
+      "GER_tactical_air_effort",
+      "GER_soviet_treaty"
+    ]
+  },
+  {
+    "id": "GER_army_innovation_2",
+    "title": "陸軍改革 II",
+    "x": 2900,
+    "y": 570,
+    "cost": 70,
+    "effect": "ソ連領内における我々の施設から得た教訓は、さらなるドクトリンや装備の改善に寄与した。しかし、今回は我々自身で進歩を維持するのだ！",
+    "prerequisites": [
+      "GER_soviet_treaty"
+    ]
+  },
+  {
+    "id": "GER_rocketry_focus",
+    "title": "ロケット工学",
+    "x": 2000,
+    "y": 700,
+    "cost": 70,
+    "effect": "ロケット推進は3つの軍種への大幅な技術革新の鍵を握っている。",
+    "prerequisites": [
+      "GER_extra_tech_slot",
+      "GER_air_innovation_2"
+    ]
+  },
+  {
+    "id": "GER_wunderwaffe",
+    "title": "ヴンダーヴァッフェ",
+    "x": 2000,
+    "y": 830,
+    "cost": 70,
+    "effect": "ハイゼンベルクとフォン・ブラウンは真の破滅的兵器についてのあるアイデアを実行に移したがっている。追加の資源さえあれば、問題はないようだ……",
+    "prerequisites": [
+      "GER_rocketry_focus"
+    ]
+  },
+  {
+    "id": "GER_mol_rib_pact",
+    "title": "モロトフ＝リッベントロップ協定",
+    "x": 3050,
+    "y": 700,
+    "cost": 70,
+    "effect": "ソ連との友好及び不可侵条約の締結は唾棄すべきものだが、条約によってドイツの石油輸入を維持することが可能だ。付属する秘密条約では、ルーマニア、ポーランド、リトアニア、ラトビア、エストニア、フィンランドを互いの勢力圏に二分することを規定している……",
+    "prerequisites": [
+      "GER_soviet_treaty"
+    ]
+  },
+  {
+    "id": "GER_soviet_ally",
+    "title": "ソ連との同盟",
+    "x": 3200,
+    "y": 830,
+    "cost": 70,
+    "effect": "ソ連との思想上の差異を無視し、共通項を重視することは恐らく可能ではないだろうか。つまり、利己的な自由主義と退廃的な西側諸国への嫌悪をである。ソ連を同盟国として迎えることで、必要なだけの資源を獲得することが可能となるだろう。勿論彼らの軍事力も……",
+    "prerequisites": [
+      "GER_mol_rib_pact"
+    ]
+  }
+]

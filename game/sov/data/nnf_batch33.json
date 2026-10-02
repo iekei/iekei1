@@ -1,0 +1,72 @@
+[
+  {
+    "id": "SOV_educate_the_masses_west",
+    "title": "SOV educate the masses west",
+    "x": 20450,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "SOV_consolidate_the_west"
+    ]
+  },
+  {
+    "id": "SOV_free_rutenia",
+    "title": "SOV free rutenia",
+    "x": 20150,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "SOV_independent_synod_west",
+      "SOV_educate_the_masses_west"
+    ]
+  },
+  {
+    "id": "SOV_friendship_of_nations_university",
+    "title": "SOV friendship of nations university",
+    "x": 20450,
+    "y": 1220,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "SOV_educate_the_masses_west",
+      "SOV_educate_the_masses_caucasus",
+      "SOV_educate_the_masses_east"
+    ]
+  },
+  {
+    "id": "SOV_independent_koranic_school",
+    "title": "SOV independent koranic school",
+    "x": 20750,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "SOV_consolidate_the_east"
+    ]
+  },
+  {
+    "id": "SOV_educate_the_masses_east",
+    "title": "SOV educate the masses east",
+    "x": 21050,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "SOV_consolidate_the_east"
+    ]
+  },
+  {
+    "id": "SOV_free_bukharan_republic",
+    "title": "SOV free bukharan republic",
+    "x": 20750,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "SOV_independent_koranic_school",
+      "SOV_educate_the_masses_east"
+    ]
+  }
+]

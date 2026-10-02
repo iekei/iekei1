@@ -1,0 +1,115 @@
+[
+  {
+    "id": "ITA_libyan_railway",
+    "title": "リビア鉄道",
+    "x": 1100,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_litoranea_balbo",
+      "ITA_prospect_for_oil"
+    ]
+  },
+  {
+    "id": "ITA_prospect_for_oil",
+    "title": "石油の産出調査",
+    "x": 1250,
+    "y": 570,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_regional_development"
+    ]
+  },
+  {
+    "id": "ITA_libyan_refineries",
+    "title": "リビアの製油所",
+    "x": 1250,
+    "y": 700,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_prospect_for_oil"
+    ]
+  },
+  {
+    "id": "ITA_polizia_dell_africa_italiana",
+    "title": "イタリア領アフリカ警察",
+    "x": 1550,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_regional_development"
+    ]
+  },
+  {
+    "id": "ITA_strengthen_ascari_corps",
+    "title": "アスカリ部隊の強化",
+    "x": 1850,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_regional_development"
+    ]
+  },
+  {
+    "id": "ITA_comandante_diavolo",
+    "title": "悪魔の指揮官",
+    "x": 1700,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_polizia_dell_africa_italiana",
+      "ITA_strengthen_ascari_corps"
+    ]
+  },
+  {
+    "id": "ITA_steel_industry_in_terni",
+    "title": "テルニの製鉄業",
+    "x": 2000,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_italian_highways_bba"
+    ]
+  },
+  {
+    "id": "ITA_power_plants_in_terni",
+    "title": "テルニ発電所",
+    "x": 2300,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_italian_highways_bba"
+    ]
+  },
+  {
+    "id": "ITA_industria_della_gomma_sintetica",
+    "title": "合成ゴム産業",
+    "x": 2150,
+    "y": 310,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_steel_industry_in_terni",
+      "ITA_power_plants_in_terni"
+    ]
+  },
+  {
+    "id": "ITA_strengthen_northern_industry",
+    "title": "北部の工業を強化",
+    "x": 2000,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_industria_della_gomma_sintetica"
+    ]
+  }
+]

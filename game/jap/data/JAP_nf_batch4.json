@@ -1,0 +1,116 @@
+[
+  {
+    "id": "JAP_sign_tripartite_pact",
+    "title": "三国間条約に調印",
+    "x": 1700,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_liaison_conference"
+    ]
+  },
+  {
+    "id": "JAP_guide_the_zaibatsus",
+    "title": "財閥を誘導",
+    "x": 1850,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_purge_the_kodoha_faction"
+    ]
+  },
+  {
+    "id": "JAP_nationalize_war_industry",
+    "title": "軍需産業の国営化",
+    "x": 1850,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_guide_the_zaibatsus",
+      "JAP_national_mobilization_law"
+    ]
+  },
+  {
+    "id": "JAP_coal_liquification",
+    "title": "石炭液化",
+    "x": 1850,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_nationalize_war_industry"
+    ]
+  },
+  {
+    "id": "JAP_national_mobilization_law",
+    "title": "国家総動員法",
+    "x": 2150,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_guide_the_zaibatsus",
+      "JAP_challenge_the_zaibatsus"
+    ]
+  },
+  {
+    "id": "JAP_national_research_policy",
+    "title": "国家研究政策",
+    "x": 2150,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_national_mobilization_law"
+    ]
+  },
+  {
+    "id": "JAP_imperial_arsenals",
+    "title": "帝国工廠",
+    "x": 2450,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_national_mobilization_law",
+      "JAP_challenge_the_zaibatsus"
+    ]
+  },
+  {
+    "id": "JAP_national_defense_state",
+    "title": "国防国家",
+    "x": 2150,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_nationalize_war_industry",
+      "JAP_imperial_arsenals"
+    ]
+  },
+  {
+    "id": "JAP_spiritual_mobilization",
+    "title": "精神的動員",
+    "x": 2000,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_national_defense_state"
+    ]
+  },
+  {
+    "id": "JAP_warrior_spirit",
+    "title": "武士の魂",
+    "x": 2300,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_national_defense_state"
+    ]
+  }
+]

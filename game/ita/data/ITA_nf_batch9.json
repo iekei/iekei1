@@ -1,0 +1,109 @@
+[
+  {
+    "id": "ITA_midget_submarines",
+    "title": "小型潜水艦",
+    "x": 6200,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_incrociatori_leggeri"
+    ]
+  },
+  {
+    "id": "ITA_cacciatorpediniere_di_scorta",
+    "title": "護衛駆逐艦",
+    "x": 6500,
+    "y": 570,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_incrociatori_leggeri"
+    ]
+  },
+  {
+    "id": "ITA_ispettorato_dei_mezzi_antisommergibili",
+    "title": "対潜車両視察団",
+    "x": 6800,
+    "y": 570,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_incrociatori_leggeri",
+      "ITA_incrociatori_pesanti"
+    ]
+  },
+  {
+    "id": "ITA_navi_da_battaglia",
+    "title": "戦艦",
+    "x": 7100,
+    "y": 570,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_incrociatori_pesanti"
+    ]
+  },
+  {
+    "id": "ITA_proper_carriers",
+    "title": "正規の母艦",
+    "x": 7400,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_incrociatori_pesanti"
+    ]
+  },
+  {
+    "id": "ITA_refit_civilian_ships",
+    "title": "民間船の改装",
+    "x": 7700,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_incrociatori_pesanti"
+    ]
+  },
+  {
+    "id": "ITA_flotta_d_evasione",
+    "title": "回避艦隊",
+    "x": 6800,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_ispettorato_dei_mezzi_antisommergibili",
+      "ITA_cacciatorpediniere_di_scorta",
+      "ITA_navi_da_battaglia"
+    ]
+  },
+  {
+    "id": "ITA_the_abyssinian_fiasco",
+    "title": "アビシニアの失態",
+    "x": 11150,
+    "y": 50,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": []
+  },
+  {
+    "id": "ITA_solid_progress",
+    "title": "確固たる進捗",
+    "x": 11450,
+    "y": 50,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": []
+  },
+  {
+    "id": "ITA_struggle_in_ethiopia",
+    "title": "エチオピアでの闘い",
+    "x": 11750,
+    "y": 50,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": []
+  }
+]

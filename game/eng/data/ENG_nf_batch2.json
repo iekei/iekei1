@@ -1,0 +1,114 @@
+[
+  {
+    "id": "uk_extra_tech_slot",
+    "title": "uk extra tech slot",
+    "x": 500,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "uk_industrial_focus"
+    ]
+  },
+  {
+    "id": "general_rearmament_focus",
+    "title": "本格的再軍備",
+    "x": 1550,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "limited_rearmament_focus"
+    ]
+  },
+  {
+    "id": "ENG_special_air_service",
+    "title": "特殊空挺部隊",
+    "x": 1550,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "general_rearmament_focus"
+    ]
+  },
+  {
+    "id": "ENG_parachute_regiments",
+    "title": "空挺部隊訓練基地",
+    "x": 1550,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ENG_special_air_service"
+    ]
+  },
+  {
+    "id": "royal_ordinance_focus",
+    "title": "[Root.GetRoyalOrdnanceFactoriesName]",
+    "x": 350,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "uk_industrial_focus"
+    ]
+  },
+  {
+    "id": "uk_small_arms_focus",
+    "title": "バーミンガム小火器会社",
+    "x": 500,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "royal_ordinance_focus"
+    ]
+  },
+  {
+    "id": "UK_secret_focus",
+    "title": "秘密兵器",
+    "x": 200,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "royal_ordinance_focus",
+      "maud_focus"
+    ]
+  },
+  {
+    "id": "air_rearmament_focus",
+    "title": "空軍再軍備",
+    "x": 1250,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "general_rearmament_focus"
+    ]
+  },
+  {
+    "id": "ENG_chiefs_of_staff_committee",
+    "title": "参謀本部委員会",
+    "x": 1550,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "air_rearmament_focus",
+      "naval_rearmament_focus"
+    ]
+  },
+  {
+    "id": "fighter_command_focus",
+    "title": "戦闘機司令部",
+    "x": 1100,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "air_rearmament_focus"
+    ]
+  }
+]

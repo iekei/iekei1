@@ -1,0 +1,115 @@
+[
+  {
+    "id": "JAP_strategic_bomber_effort",
+    "title": "戦略爆撃機への注力",
+    "x": 5750,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_range_focus",
+      "JAP_bomber_modernization"
+    ]
+  },
+  {
+    "id": "JAP_unified_fighter_development",
+    "title": "戦闘機の統合開発",
+    "x": 6050,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_agility_focus",
+      "JAP_the_zero"
+    ]
+  },
+  {
+    "id": "JAP_jet_prototypes",
+    "title": "ジェット試作機",
+    "x": 5900,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_unified_fighter_development",
+      "JAP_strategic_bomber_effort"
+    ]
+  },
+  {
+    "id": "JAP_new_naval_estimates",
+    "title": "新たな海軍の予算案",
+    "x": 6500,
+    "y": 50,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": []
+  },
+  {
+    "id": "JAP_carrier_warfare_experiments",
+    "title": "空母航空戦の試み",
+    "x": 6350,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_new_naval_estimates"
+    ]
+  },
+  {
+    "id": "JAP_expand_the_snlf",
+    "title": "海軍特別陸戦隊の拡充",
+    "x": 6500,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_carrier_warfare_experiments",
+      "JAP_supremacy_of_the_battlefleet"
+    ]
+  },
+  {
+    "id": "JAP_first_air_fleet",
+    "title": "第一航空艦隊",
+    "x": 6350,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_carrier_warfare_experiments"
+    ]
+  },
+  {
+    "id": "JAP_modern_escorts",
+    "title": "近代的護衛艦",
+    "x": 6500,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_first_air_fleet",
+      "JAP_the_ultimate_battleship"
+    ]
+  },
+  {
+    "id": "JAP_supremacy_of_the_battlefleet",
+    "title": "戦闘艦隊の優位",
+    "x": 6650,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_new_naval_estimates"
+    ]
+  },
+  {
+    "id": "JAP_the_ultimate_battleship",
+    "title": "究極の戦艦",
+    "x": 6650,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_supremacy_of_the_battlefleet"
+    ]
+  }
+]

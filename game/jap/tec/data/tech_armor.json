@@ -1,0 +1,63 @@
+[
+  {
+    "id": "type89_tank",
+    "title": "八九式中戦車",
+    "year": 1936,
+    "x": 100,
+    "y": 50,
+    "research_time": 120,
+    "reliability": "配備",
+    "desc": "日本初の国産中戦車。37mm砲を搭載。中国戦線で活躍したが、対戦車能力は低い。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#d4a843' stroke-width='1.5'><rect x='4' y='8' width='16' height='8' rx='1'/><circle cx='8' cy='18' r='2'/><circle cx='16' cy='18' r='2'/></svg>",
+    "effects": [
+      "装甲: 15/100",
+      "攻撃: 25/100",
+      "突破: 10/100",
+      "機動力: 50/100",
+      "信頼度: 65/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "type97_tank",
+    "title": "九七式中戦車 チハ",
+    "year": 1937,
+    "x": 100,
+    "y": 200,
+    "research_time": 130,
+    "reliability": "配備",
+    "desc": "日本軍主力中戦車。57mm砲搭載。対歩兵火力は高いが対戦車能力に欠ける。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#d4a843' stroke-width='1.5'><rect x='3' y='7' width='18' height='9' rx='1'/><circle cx='7' cy='18' r='2'/><circle cx='17' cy='18' r='2'/><path d='M12 3v4'/></svg>",
+    "effects": [
+      "装甲: 20/100",
+      "攻撃: 35/100",
+      "突破: 15/100",
+      "機動力: 55/100",
+      "信頼度: 60/100"
+    ],
+    "prerequisites": [
+      "type89_tank"
+    ]
+  },
+  {
+    "id": "type1_chihe",
+    "title": "一式中戦車 チヘ",
+    "year": 1941,
+    "x": 100,
+    "y": 350,
+    "research_time": 140,
+    "reliability": "少数配備",
+    "desc": "九七式の改良型。47mm砲に強化し、装甲も増加。ただし生産数は少ない。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#d4a843' stroke-width='1.5'><rect x='3' y='6' width='18' height='10' rx='1'/><circle cx='7' cy='18' r='2'/><circle cx='17' cy='18' r='2'/><path d='M12 2v4'/></svg>",
+    "effects": [
+      "装甲: 30/100",
+      "攻撃: 40/100",
+      "突破: 20/100",
+      "機動力: 50/100",
+      "信頼度: 55/100"
+    ],
+    "prerequisites": [
+      "type97_tank"
+    ]
+  }
+]

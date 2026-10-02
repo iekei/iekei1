@@ -1,0 +1,111 @@
+[
+  {
+    "id": "USA_war_plan_ruby",
+    "title": "ルビー計画",
+    "x": 7400,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_war_plan_red"
+    ]
+  },
+  {
+    "id": "USA_war_plan_scarlet_garnet",
+    "title": "スカーレット・ガーネット計画",
+    "x": 7700,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_war_plan_red"
+    ]
+  },
+  {
+    "id": "USA_intervention_in_asia",
+    "title": "アジアへの介入",
+    "x": 7700,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_war_plans_division"
+    ]
+  },
+  {
+    "id": "USA_war_plan_orange",
+    "title": "オレンジ計画",
+    "x": 7550,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_intervention_in_asia"
+    ]
+  },
+  {
+    "id": "USA_war_plan_yellow",
+    "title": "イエロー計画",
+    "x": 7850,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_intervention_in_asia"
+    ]
+  },
+  {
+    "id": "USA_defense_of_the_pacific",
+    "title": "太平洋の防衛",
+    "x": 7700,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_war_plan_yellow",
+      "USA_war_plan_orange"
+    ]
+  },
+  {
+    "id": "USA_war_department",
+    "title": "陸軍省",
+    "x": 9200,
+    "y": 50,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": []
+  },
+  {
+    "id": "USA_selective_training_act",
+    "title": "選抜徴兵法",
+    "x": 8450,
+    "y": 180,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_war_department"
+    ]
+  },
+  {
+    "id": "USA_first_special_service_force",
+    "title": "第1特殊任務部隊",
+    "x": 8150,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_selective_training_act"
+    ]
+  },
+  {
+    "id": "USA_louisiana_maneuvers",
+    "title": "ルイジアナ演習",
+    "x": 8450,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "USA_selective_training_act"
+    ]
+  }
+]

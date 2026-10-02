@@ -1,0 +1,119 @@
+[
+  {
+    "id": "SOV_embrace_the_black_hundreds",
+    "title": "黒百人組の受容",
+    "x": 16850,
+    "y": 440,
+    "cost": 35,
+    "effect": "革命の混沌より以前の昔、信ずる者たちがいた。彼らは強いロシア、統一されたロシア、恐れないロシアを信じていた。彼らは黒百人組と呼ばれた。彼らの中で生き残った者たちは現在、数多くの国々へと散らばったが、彼らは今なお信じている。彼らを探し、連れ戻す。",
+    "prerequisites": [
+      "SOV_womens_fascist_movement",
+      "SOV_the_true_tsars",
+      "SOV_national_unification"
+    ]
+  },
+  {
+    "id": "SOV_covert_operations",
+    "title": "秘密作戦",
+    "x": 16400,
+    "y": 570,
+    "cost": 35,
+    "effect": "共産主義者は不信と内紛を起こすことがよくある。うまくやれば、連中がお互いを喰いあうよう仕向けることができるかもしれない。",
+    "prerequisites": [
+      "SOV_embrace_the_black_hundreds"
+    ]
+  },
+  {
+    "id": "SOV_muster_the_old_guard",
+    "title": "守旧派の結集",
+    "x": 16700,
+    "y": 570,
+    "cost": 70,
+    "effect": "かつてツァーリと国家のために戦った者たちはまだ大勢いる。彼らは老いて軟弱になったが、戦争の教訓は何にも替えがたい。もし我々が手を差し伸べることができれば、彼らの国を奪還する時、新たな軍隊の経験豊かな中核を成すだろう。",
+    "prerequisites": [
+      "SOV_embrace_the_black_hundreds"
+    ]
+  },
+  {
+    "id": "SOV_approach_semyonov",
+    "title": "セミョーノフとの接触",
+    "x": 17300,
+    "y": 570,
+    "cost": 35,
+    "effect": "$SOV_grigory_semyonov$は[MAN.GetName]の顧問としての地位を得た。大義が刻一刻と強力なものになる中、我々は彼をロシアに戻るよう説得せねばならない。彼の最初の仕事は新たなロシア帝国のため強力な騎兵軍を組織することだ。",
+    "prerequisites": [
+      "SOV_embrace_the_black_hundreds"
+    ]
+  },
+  {
+    "id": "SOV_fascist_youth_union",
+    "title": "ファシスト青年団",
+    "x": 17000,
+    "y": 570,
+    "cost": 70,
+    "effect": "若者と未来の科学技術のため、我々は過去を振り返るより未来に目を向ける方が良いだろう。若きファシストたちはロシアがより強くなってほしいと切に願っている。彼らは経験こそ欠けるものの、純粋なる熱意でそれを補っている。",
+    "prerequisites": [
+      "SOV_embrace_the_black_hundreds"
+    ]
+  },
+  {
+    "id": "SOV_tolkachi",
+    "title": "トルカチ",
+    "x": 16850,
+    "y": 700,
+    "cost": 35,
+    "effect": "ソ連経済には、生産計画の数値と実際に産業が提供できる数値が一致しているかどうかを確認する仕事をする、ある種の人間が存在する。この者たちを我々のために動くよう説得すれば、ソビエトにはある数値を、工場長には別の数値を与えて、その差分を来る時まで保存できる場所に移動させられるだろう。",
+    "prerequisites": [
+      "SOV_muster_the_old_guard",
+      "SOV_fascist_youth_union"
+    ]
+  },
+  {
+    "id": "SOV_south_manchuria_railway",
+    "title": "南満洲鉄道",
+    "x": 17150,
+    "y": 700,
+    "cost": 35,
+    "effect": "日本の南満洲鉄道会社は[MAN.GetName]の国家の内部にある国家である。彼らの援助があれば、今後の戦いに必要な供給網を備えることができるはずだ。",
+    "prerequisites": [
+      "SOV_muster_the_old_guard",
+      "SOV_fascist_youth_union"
+    ]
+  },
+  {
+    "id": "SOV_organize_wreckers",
+    "title": "壊し屋の組織化",
+    "x": 16550,
+    "y": 700,
+    "cost": 35,
+    "effect": "ソビエト側は既にスパイや階級の敵からの多くの妨害工作を予想している。最も小さな製鉄所にすらある見せ掛けだけの警備は、皮肉にも多くの労働者を苛立たせた、これにより、我々が手段を与えれば工場の下劣な暴君たちに報復しようとする人民を簡単に見つけ出せた。",
+    "prerequisites": [
+      "SOV_muster_the_old_guard",
+      "SOV_fascist_youth_union"
+    ]
+  },
+  {
+    "id": "SOV_the_eyes_fear",
+    "title": "目は恐怖する……",
+    "x": 16850,
+    "y": 830,
+    "cost": 35,
+    "effect": "我々の目の前にある課題は容易なものではない。我々は何十年もかけて自らを確固たるものとした政府を相手取らなければならず、また国民のかなりの割合がその政府を支持するであろうからだ。しかし何をする必要があるかわかっている以上、我々がしなければならないのはそれを実行することだけだ。",
+    "prerequisites": [
+      "SOV_tolkachi",
+      "SOV_organize_wreckers",
+      "SOV_south_manchuria_railway"
+    ]
+  },
+  {
+    "id": "SOV_the_hands_do",
+    "title": "……だが手は動く",
+    "x": 16850,
+    "y": 960,
+    "cost": 35,
+    "effect": "時は来た。我々は聖なる使命、我々の祖国からソビエト体制を排除するという使命を果たさなければならない。子供たちがいつの日か共産主義の恐怖から自由になるように。",
+    "prerequisites": [
+      "SOV_the_eyes_fear"
+    ]
+  }
+]

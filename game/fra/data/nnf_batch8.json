@@ -1,0 +1,115 @@
+[
+  {
+    "id": "FRA_general_work_council",
+    "title": "一般労働評議会",
+    "x": 3950,
+    "y": 700,
+    "cost": 70,
+    "effect": "労使紛争を処理するための国家機関を設立し、労働者が最も効率的に雇用されるようにすべきだ。",
+    "prerequisites": [
+      "FRA_reorganize_the_aviation_industry",
+      "FRA_form_the_state_arsenals"
+    ]
+  },
+  {
+    "id": "FRA_dirigisme",
+    "title": "FRA dirigisme",
+    "x": 3800,
+    "y": 830,
+    "cost": 70,
+    "effect": "ソビエト式の全面的な計画経済は明らかに極端な手法であり、我々の経済には最適な計画と方向性があるはずだ。",
+    "prerequisites": [
+      "FRA_general_work_council"
+    ]
+  },
+  {
+    "id": "FRA_national_champions",
+    "title": "国家的優秀企業",
+    "x": 4100,
+    "y": 830,
+    "cost": 70,
+    "effect": "国際的なレベルで競争する可能性のある企業をいくつか選び抜き、それらを最高度に支援することで、他国と同等の現代経済を創造することができる。",
+    "prerequisites": [
+      "FRA_general_work_council"
+    ]
+  },
+  {
+    "id": "FRA_ban_the_leagues",
+    "title": "同盟の解散",
+    "x": 4100,
+    "y": 180,
+    "cost": 70,
+    "effect": "極右勢力は未制圧の組織であり、クーデターを企てるには今は弱小であるが、今後何をしでかすかはわからない。今すぐ解散させるのが最適だろう。",
+    "prerequisites": [
+      "FRA_form_the_popular_front"
+    ]
+  },
+  {
+    "id": "FRA_the_blum_viollette_proposal",
+    "title": "ブルム＝ヴィオレット提案",
+    "x": 4550,
+    "y": 440,
+    "cost": 70,
+    "effect": "フランス共和国の市民権はすべての人に与えられるべきものだ。我々に忠実なアルジェリアの人民の多くは市民権を望んでいるが、未だ許可されていない。彼らに完全な市民権を付与することで、アルジェリアとフランスはもっと近づけるはずだ。",
+    "prerequisites": [
+      "FRA_reform_the_labour_laws",
+      "FRA_protect_the_rights_of_man"
+    ]
+  },
+  {
+    "id": "FRA_expand_the_citizenship",
+    "title": "市民権の拡大",
+    "x": 4550,
+    "y": 570,
+    "cost": 70,
+    "effect": "共和国において、一部の市民は国に住んでいながら、市民権を得られないことになっており、我々はこの制度の継続が許されている。だがすぐにでも正すべきだろう。",
+    "prerequisites": [
+      "FRA_the_blum_viollette_proposal"
+    ]
+  },
+  {
+    "id": "FRA_france_undividable",
+    "title": "FRA france undividable",
+    "x": 4400,
+    "y": 700,
+    "cost": 70,
+    "effect": "フランスは一つの旗の下に一つにならなければならない。分断の恐怖に終止符を打つため、これを是認しなければならない。",
+    "prerequisites": [
+      "FRA_expand_the_citizenship"
+    ]
+  },
+  {
+    "id": "FRA_french_union",
+    "title": "フランス連合",
+    "x": 4400,
+    "y": 830,
+    "cost": 70,
+    "effect": "域内すべてが統合された世界にまたがる新たなフランスを宣言する時だ。我々はすべてにおいて国民投票を行い、この新たで、強大なフランスに参加するすべての人の意思を確認するだろう。",
+    "prerequisites": [
+      "FRA_france_undividable"
+    ]
+  },
+  {
+    "id": "FRA_encourage_immigration",
+    "title": "移民の奨励",
+    "x": 4700,
+    "y": 700,
+    "cost": 70,
+    "effect": "我が祖国は先の大戦で生じた損失を補うために労働者を切実に欲している。フランスへの移住を容易にすることにより、労働力の不足を補うことのできる有能な労働者を引き付けることができるだろう。",
+    "prerequisites": [
+      "FRA_expand_the_citizenship"
+    ]
+  },
+  {
+    "id": "FRA_review_foreign_policy",
+    "title": "外交政策の見直し",
+    "x": 5450,
+    "y": 440,
+    "cost": 70,
+    "effect": "1919年に確立された欧州大陸の秩序はますます大きな脅威に晒されている。来るべき嵐を乗り切るための新たなる同盟を確保するために、外交政策の選択肢を検討すべきだ。",
+    "prerequisites": [
+      "FRA_reform_the_labour_laws",
+      "FRA_protect_the_rights_of_man"
+    ]
+  }
+]

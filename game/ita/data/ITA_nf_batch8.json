@@ -1,0 +1,113 @@
+[
+  {
+    "id": "ITA_supermarina",
+    "title": "スーパーマリーナ",
+    "x": 6800,
+    "y": 310,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_expand_naval_facilities"
+    ]
+  },
+  {
+    "id": "ITA_stockpile_fuel",
+    "title": "燃料の備蓄",
+    "x": 7100,
+    "y": 310,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_expand_naval_facilities"
+    ]
+  },
+  {
+    "id": "ITA_forza_navale_especiale",
+    "title": "特別陸戦隊",
+    "x": 7400,
+    "y": 310,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_expand_naval_facilities"
+    ]
+  },
+  {
+    "id": "ITA_naval_air_coordination",
+    "title": "海空連携",
+    "x": 5900,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_supermarina",
+      "ITA_expand_rome_flying_school"
+    ]
+  },
+  {
+    "id": "ITA_decima_flottiglia_mas",
+    "title": "デチマ・フロッティリアMAS",
+    "x": 6200,
+    "y": 440,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_supermarina"
+    ]
+  },
+  {
+    "id": "ITA_incrociatori_leggeri",
+    "title": "軽巡洋艦",
+    "x": 6500,
+    "y": 440,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_supermarina"
+    ]
+  },
+  {
+    "id": "ITA_incrociatori_pesanti",
+    "title": "重巡洋艦",
+    "x": 7100,
+    "y": 440,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_supermarina"
+    ]
+  },
+  {
+    "id": "ITA_expand_naval_intelligence",
+    "title": "海軍情報部の拡張",
+    "x": 7400,
+    "y": 440,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "ITA_supermarina"
+    ]
+  },
+  {
+    "id": "ITA_cooperation_programs",
+    "title": "協力計画",
+    "x": 7700,
+    "y": 440,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_supermarina"
+    ]
+  },
+  {
+    "id": "ITA_cruiser_submarines",
+    "title": "巡洋型潜水艦",
+    "x": 5900,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "ITA_incrociatori_leggeri"
+    ]
+  }
+]

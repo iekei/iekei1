@@ -1,0 +1,111 @@
+[
+  {
+    "id": "GER_fate_of_yugoslavia",
+    "title": "ユーゴスラビアの運命",
+    "x": 4700,
+    "y": 700,
+    "cost": 70,
+    "effect": "ユーゴスラビア国家は常に偽りの構造物であり、中央当局は崩壊し始めている。我々は秩序回復に介入しなければならない。直面した唯一の問題は、最善の手段が何であるかということだ。",
+    "prerequisites": [
+      "GER_first_ljubljana_award"
+    ]
+  },
+  {
+    "id": "GER_second_ljubljana_award",
+    "title": "第二次リュブリャナ裁定",
+    "x": 4700,
+    "y": 830,
+    "cost": 70,
+    "effect": "南スラヴ問題が解決した今、ギリシャへ関心を向ける時だ。彼の国は連合の手によって不当にその勢力を拡大させている。我らの真の友邦は誰か、見極める時だ。",
+    "prerequisites": [
+      "GER_fate_of_yugoslavia"
+    ]
+  },
+  {
+    "id": "GER_war_with_greece",
+    "title": "ギリシャとの交戦",
+    "x": 5000,
+    "y": 830,
+    "cost": 70,
+    "effect": "ギリシャと既に交戦状態にある今、東地中海に拠点を得る機会を逸する事は、ドイツにとって屈辱となる。",
+    "prerequisites": [
+      "GER_fate_of_yugoslavia"
+    ]
+  },
+  {
+    "id": "GER_fate_of_greece",
+    "title": "ギリシャの運命",
+    "x": 4700,
+    "y": 960,
+    "cost": 70,
+    "effect": "ギリシャはヨーロッパを席巻する新たな軍事力に抗えない事が明らかとなった。ドイツによってのみ可能な保護を彼らに与える時だ。",
+    "prerequisites": [
+      "GER_second_ljubljana_award"
+    ]
+  },
+  {
+    "id": "GER_oppose_hitler",
+    "title": "ヒトラーへの反抗",
+    "x": 7100,
+    "y": 50,
+    "cost": 70,
+    "effect": "ヒトラーによる支配は終わらせなければならない。彼はラインラントを再武装化することで西側諸国を刺激するつもりだが、このことは我々がドイツ国防軍の忠実な部隊の助けを得て権力を掌握する必要があることの口実とすることができるだろう。",
+    "prerequisites": []
+  },
+  {
+    "id": "GER_secure_the_new_state",
+    "title": "新国家を確立",
+    "x": 7100,
+    "y": 310,
+    "cost": 70,
+    "effect": "内戦によって樹立された経緯のために、暫定政権は力を欠いている。政権が容易に転覆されないよう安定化させなければならない。",
+    "prerequisites": [
+      "GER_oppose_hitler"
+    ]
+  },
+  {
+    "id": "GER_revive_the_kaiserreich",
+    "title": "カイザーライヒの復活",
+    "x": 7250,
+    "y": 310,
+    "cost": 70,
+    "effect": "過去10年間の出来事は、民主主義は悪意ある内部勢力を封じ込めておくには脆弱すぎることを示している。カイザーによる強力な指導の下の国家へと回帰する必要があり、その下準備として憲法をカイザーライヒ時代のそれへと戻すべきである。",
+    "prerequisites": [
+      "GER_secure_the_new_state"
+    ]
+  },
+  {
+    "id": "GER_rebuild_the_nation",
+    "title": "国家再建",
+    "x": 7400,
+    "y": 440,
+    "cost": 70,
+    "effect": "内戦によって荒廃した国家の再建を目指す必要がある。民衆に一度個人的な快適さを捨て去り、この目標を達成するために全資源を集中運用させることを希求する。",
+    "prerequisites": [
+      "GER_revive_the_kaiserreich",
+      "GER_reestablish_free_elections"
+    ]
+  },
+  {
+    "id": "GER_fan_the_prussian_militarism",
+    "title": "プロイセン軍国主義の推進",
+    "x": 7250,
+    "y": 570,
+    "cost": 35,
+    "effect": "内戦による損失を埋めるため、プロイセン的軍国主義を奨励し、新兵の補充と訓練を改善しなければならない。我々の軍隊がナチスの独裁制から人々を解放したことは、プロイセンの理想が未だかつてないほどの支持を得ることを確かなものとするだろう。",
+    "prerequisites": [
+      "GER_rebuild_the_nation"
+    ]
+  },
+  {
+    "id": "GER_a_new_and_better_germany",
+    "title": "新生ドイツ",
+    "x": 7550,
+    "y": 570,
+    "cost": 35,
+    "effect": "我が国は再建の途上にあるが、期待される以上の目標に向かって努力し、今建てる国が後世まで残るようにしなければならない。",
+    "prerequisites": [
+      "GER_rebuild_the_nation"
+    ]
+  }
+]

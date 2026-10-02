@@ -1,0 +1,20 @@
+[
+  {
+    "id": "littorio",
+    "title": "ヴィットリオ・ヴェネト級戦艦",
+    "year": 1940,
+    "x": 100,
+    "y": 50,
+    "research_time": 280,
+    "reliability": "就役",
+    "desc": "イタリア新型高速戦艦。38.1cm砲9門搭載。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><path d='M2 16h20l-2 2H4z'/><path d='M6 16V6h12v10'/><path d='M10 6V3h4v3'/></svg>",
+    "effects": [
+      "火力: 75/100",
+      "装甲: 60/100",
+      "速力: 60/100",
+      "対空: 35/100"
+    ],
+    "prerequisites": []
+  }
+]

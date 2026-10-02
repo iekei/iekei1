@@ -612,6 +612,35 @@
       display: flex; align-items: center; gap: 10px; padding: 6px 8px;
       border-bottom: 1px solid var(--border-mil); font-size: 12px;
     }
+    /* --- ポートレート風指導者・将軍カード (政治画面) --- */
+    .portrait-grid {
+      display: flex; flex-wrap: wrap; gap: 12px; padding: 8px 0;
+    }
+    .portrait-card {
+      width: 150px; background: var(--bg-panel); border: 2px solid var(--border-mil);
+      border-radius: 8px; overflow: hidden; transition: all 0.2s; position: relative;
+    }
+    .portrait-card:hover { border-color: var(--text-gold); transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.4); }
+    .portrait-card .pc-img-wrap {
+      width: 100%; height: 180px; background: var(--bg-panel-light);
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+      border-bottom: 2px solid var(--border-mil);
+    }
+    .portrait-card .pc-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .portrait-card .pc-img-wrap .pc-placeholder {
+      font-size: 48px; line-height: 1;
+    }
+    .portrait-card .pc-info { padding: 8px 10px; }
+    .portrait-card .pc-name { font-size: 13px; font-weight: 700; color: var(--text-primary); line-height: 1.3; }
+    .portrait-card .pc-rank { font-size: 11px; font-weight: 700; margin-top: 2px; }
+    .portrait-card .pc-ability { font-size: 10px; color: var(--text-gold); margin-top: 4px; line-height: 1.3; }
+    .portrait-card .pc-ability-desc { font-size: 9px; color: var(--text-secondary); margin-top: 2px; line-height: 1.3; }
+    .portrait-card .pc-badge {
+      position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,0.7);
+      border-radius: 4px; padding: 2px 6px; font-size: 10px; font-weight: 700;
+    }
     .politics-spirit {
       display: inline-block; background: var(--bg-panel); border: 1px solid var(--border-mil);
       border-radius: 6px; padding: 6px 10px; margin: 2px 4px 2px 0; font-size: 11px;
@@ -859,21 +888,22 @@ class DataFetcher {
     WORLD: { script: 'card/WORLD/script.js', imgBase: 'card/WORLD/' }
   };
 
-  // Focus tree data paths
-  static FOCUS_PATHS = {
-    GER: ['ger/data/nf_batch1.json', 'ger/data/nf_batch2.json', 'ger/data/nf_batch3.json',
-          'ger/data/nf_batch4.json', 'ger/data/nf_batch5.json', 'ger/data/nf_batch6.json'],
-    SOV: ['sov/data/nf_batch1.json', 'sov/data/nf_batch2.json', 'sov/data/nf_batch3.json',
-          'sov/data/nf_batch4.json', 'sov/data/nf_batch5.json', 'sov/data/nf_batch6.json']
-  };
+  // Focus tree data paths (country-specific, extracted from hoi4-history/common/national_focus)
+  static FOCUS_DIR = { GER: 'ger', SOV: 'sov', JAP: 'jap', USA: 'usa', ENG: 'eng', FRA: 'fra', ITA: 'ita' };
+  static FOCUS_PATHS = Object.fromEntries(
+    Object.entries(DataFetcher.FOCUS_DIR).map(([tag, dir]) => [
+      tag, Array.from({length: 40}, (_, i) => dir + '/data/nf_batch' + (i + 1) + '.json')
+    ])
+  );
 
-  // Tech data paths
-  static TECH_PATHS = { GER: 'ger/tec/data/', SOV: 'sov/tec/data/' };
+  // Tech data paths (country-specific)
+  static TECH_PATHS = { GER: 'ger/tec/data/', SOV: 'sov/tec/data/', JAP: 'jap/tec/data/', USA: 'usa/tec/data/', ENG: 'eng/tec/data/', FRA: 'fra/tec/data/', ITA: 'ita/tec/data/' };
   static TECH_CATEGORIES = ['infantry', 'armor', 'artillery', 'naval', 'air', 'engineering', 'industry'];
 
-  // Special projects data
-  static SPECIAL_PROJECTS_PATH = 'ger/tec/special/data/science.json';
-  static SPECIAL_PROJECTS_IMG = 'ger/tec/special/data/image/';
+  // Special projects data (country-specific)
+  static SPECIAL_PROJECTS_DIR = { GER: 'ger', SOV: 'sov', JAP: 'jap', USA: 'usa', ENG: 'eng', FRA: 'fra', ITA: 'ita' };
+  static get SPECIAL_PROJECTS_PATH() { return DataFetcher.SPECIAL_PROJECTS_DIR[CoreEngine.gameState.country] + '/tec/special/data/science.json'; }
+  static get SPECIAL_PROJECTS_IMG() { return DataFetcher.SPECIAL_PROJECTS_DIR[CoreEngine.gameState.country] + '/tec/special/data/image/'; }
 
   // Map data (generated from cbrzeczysz/hoi4-history: map/definition.csv + history/states/*.txt)
   static MAP_BMP_URL = 'mapdata/provinces.bmp'; // ローカル同梱 (外部rawが落ちても描画が壊れない)
@@ -1080,7 +1110,14 @@ class CoreEngine {
     CoreEngine.updateSpeedUI();
     CoreEngine.renderStats();
     document.querySelectorAll('.speed-btn[data-speed]').forEach(btn => {
-      btn.addEventListener('click', () => CoreEngine.setSpeed(parseInt(btn.dataset.speed)));
+      btn.addEventListener('click', () => {
+        // マルチプレイ中はホストのみが速度を変更可能
+        if (MultiplayerManager.connected && !MultiplayerManager.isHost) {
+          GameUI.notify('⚠️ マルチプレイ中はホストのみが速度を変更できます。', 'alert');
+          return;
+        }
+        CoreEngine.setSpeed(parseInt(btn.dataset.speed));
+      });
     });
     CoreEngine.setupStatTooltips();
     CoreEngine.registerTickCallback(() => CoreEngine.tickDiplomacy());
@@ -1207,6 +1244,12 @@ class CoreEngine {
   }
 
   static setSpeed(speed) {
+    // マルチプレイ中はホストのみが速度を変更可能
+    if (MultiplayerManager.connected && !MultiplayerManager.isHost) {
+      GameUI.notify('⚠️ マルチプレイ中はホストのみが速度を変更できます。', 'alert');
+      CoreEngine.updateSpeedUI();
+      return;
+    }
     CoreEngine.gameState.speed = speed;
     CoreEngine.gameState.paused = (speed === 0);
     CoreEngine.updateSpeedUI();
@@ -1215,6 +1258,17 @@ class CoreEngine {
       CoreEngine.timer = setInterval(() => CoreEngine.tick(), CoreEngine.speedIntervals[speed]);
     }
     MultiplayerManager.broadcast({ type: 'speed', speed: speed });
+  }
+
+  // 他プレイヤーからの速度変更を強制受信 (ホストが送信)
+  static remoteSetSpeed(speed) {
+    CoreEngine.gameState.speed = speed;
+    CoreEngine.gameState.paused = (speed === 0);
+    CoreEngine.updateSpeedUI();
+    if (CoreEngine.timer) { clearInterval(CoreEngine.timer); CoreEngine.timer = null; }
+    if (speed > 0) {
+      CoreEngine.timer = setInterval(() => CoreEngine.tick(), CoreEngine.speedIntervals[speed]);
+    }
   }
 
   static updateSpeedUI() {
@@ -3834,18 +3888,34 @@ class PoliticsManager {
     const nationName = ({ GER: 'ドイツ', SOV: 'ソ連', JAP: '日本', USA: 'アメリカ', ENG: 'イギリス', FRA: 'フランス', ITA: 'イタリア' })[s.country] || s.country;
 
     let html = '<div class="politics-section"><h3>' + DataFetcher.getCountryFlag(s.country) + ' ' + nationName + ' — 政府</h3>';
-    // 指導者 (雇用したカードから)
+    // 指導者・将軍 (雇用したカードから — ポートレート風配置)
     const leaders = CardSystem.hiredCards || [];
     if (leaders.length === 0) {
       html += '<p style="font-size:12px;color:var(--text-secondary);">配備済みの指導者がいません。「将軍カード」ウィンドウから雇用してください。</p>';
     } else {
+      html += '<div class="portrait-grid">';
       leaders.forEach(c => {
         const ab = CardSystem.ABILITIES[c.id] || CardSystem.DEFAULT_GENERAL_ABILITY;
-        html += '<div class="politics-leader-row"><span style="font-size:18px;">🎖️</span>' +
-          '<b>' + (c.name || c.id) + '</b>' +
-          '<span style="color:var(--text-gold);">' + (c.rarity || '') + '</span>' +
-          '<span style="color:var(--text-secondary);">' + (ab ? ab.name + ' — ' + ab.desc : '') + '</span></div>';
+        const rankClass = 'gc-rank-' + (c.rank || 'R');
+        const rankColor = c.rank === 'SSR' ? '#ff4d4d' : c.rank === 'SR' ? 'var(--accent-orange)' : 'var(--accent-blue)';
+        // カード画像を取得 (allCardsから)
+        const cardData = (CardSystem.allCards[c.country] || []).find(card => card.id === c.id);
+        const imgHtml = cardData && cardData.imgUrl
+          ? '<img src="' + cardData.imgUrl + '" onerror="this.parentElement.innerHTML=\'<div class=\\\'pc-placeholder\\\'>' + DataFetcher.getCountryFlag(c.country) + '</div>\'" alt="' + c.name + '">'
+          : '<div class="pc-placeholder">' + DataFetcher.getCountryFlag(c.country) + '</div>';
+        const abilityBadge = ab && ab.type === 'active' ? '⚡' : ab && ab.type === 'instant' ? '📦' : '🛡️';
+        html += '<div class="portrait-card">' +
+          '<div class="pc-badge" style="color:' + rankColor + ';">' + abilityBadge + ' ' + (c.rank || 'R') + '</div>' +
+          '<div class="pc-img-wrap">' + imgHtml + '</div>' +
+          '<div class="pc-info">' +
+            '<div class="pc-name">' + (c.name || c.id) + '</div>' +
+            '<div class="pc-rank ' + rankClass + '">' + DataFetcher.getCountryFlag(c.country) + ' ' + (c.country || '') + '</div>' +
+            '<div class="pc-ability">' + (ab ? ab.name : '') + '</div>' +
+            '<div class="pc-ability-desc">' + (ab ? ab.desc : '') + '</div>' +
+          '</div>' +
+        '</div>';
       });
+      html += '</div>';
     }
     html += '</div>';
 
@@ -4558,7 +4628,7 @@ class MultiplayerManager {
         CoreEngine.updateCalendar();
         break;
       case 'speed':
-        CoreEngine.setSpeed(data.speed);
+        CoreEngine.remoteSetSpeed(data.speed);
         break;
       case 'focus_select':
         FocusTreeManager.activeFocus = data.focusId;

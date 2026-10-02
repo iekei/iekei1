@@ -1,0 +1,112 @@
+[
+  {
+    "id": "JAP_west_pacific_treaty_organization",
+    "title": "西太平洋条約機構",
+    "x": 3350,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_the_showa_constitution"
+    ]
+  },
+  {
+    "id": "JAP_rekindle_the_old_alliance",
+    "title": "古き同盟の回生",
+    "x": 3650,
+    "y": 570,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_the_showa_constitution"
+    ]
+  },
+  {
+    "id": "JAP_pacific_guardian",
+    "title": "太平洋の守護者",
+    "x": 3500,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_west_pacific_treaty_organization",
+      "JAP_rekindle_the_old_alliance"
+    ]
+  },
+  {
+    "id": "JAP_anti_communist_bulwark",
+    "title": "反共の防波堤",
+    "x": 3350,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_pacific_guardian"
+    ]
+  },
+  {
+    "id": "JAP_anti_communist_volunteers",
+    "title": "反共義勇兵",
+    "x": 3350,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_anti_communist_bulwark"
+    ]
+  },
+  {
+    "id": "JAP_the_korean_question",
+    "title": "朝鮮問題",
+    "x": 3650,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_pacific_guardian"
+    ]
+  },
+  {
+    "id": "JAP_liberate_manchuria",
+    "title": "満州の解放",
+    "x": 3650,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_the_korean_question"
+    ]
+  },
+  {
+    "id": "JAP_ultimate_deterrence",
+    "title": "究極の抑止力",
+    "x": 3350,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_liberate_manchuria",
+      "JAP_anti_communist_volunteers"
+    ]
+  },
+  {
+    "id": "JAP_full_sovereignty_for_the_philippines",
+    "title": "フィリピンへの完全統治権",
+    "x": 3650,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "JAP_liberate_manchuria"
+    ]
+  },
+  {
+    "id": "JAP_the_manchurian_project",
+    "title": "満州計画",
+    "x": 4400,
+    "y": 50,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": []
+  }
+]

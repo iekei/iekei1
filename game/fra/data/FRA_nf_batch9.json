@@ -1,0 +1,113 @@
+[
+  {
+    "id": "FRA_intervention_in_spain",
+    "title": "スペインへの介入",
+    "x": 5000,
+    "y": 310,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "FRA_form_the_popular_front",
+      "FRA_revive_the_national_bloc"
+    ]
+  },
+  {
+    "id": "FRA_support_the_finns",
+    "title": "フィンランド人への支援",
+    "x": 5750,
+    "y": 570,
+    "cost": 35,
+    "effect": "",
+    "prerequisites": [
+      "FRA_review_foreign_policy"
+    ]
+  },
+  {
+    "id": "FRA_confirm_eastern_commitments",
+    "title": "東部約諾の確認",
+    "x": 5150,
+    "y": 700,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_review_foreign_policy"
+    ]
+  },
+  {
+    "id": "FRA_strengthen_the_little_entente",
+    "title": "小協商の強化",
+    "x": 5000,
+    "y": 830,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_confirm_eastern_commitments"
+    ]
+  },
+  {
+    "id": "FRA_invite_yugoslavia",
+    "title": "ユーゴスラビアの勧誘",
+    "x": 4850,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_strengthen_the_little_entente"
+    ]
+  },
+  {
+    "id": "FRA_invite_romania",
+    "title": "ルーマニアの勧誘",
+    "x": 4850,
+    "y": 1090,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_invite_yugoslavia"
+    ]
+  },
+  {
+    "id": "FRA_invest_in_our_weaker_allies",
+    "title": "弱い同盟国への投資",
+    "x": 4850,
+    "y": 1220,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_invite_romania"
+    ]
+  },
+  {
+    "id": "FRA_coordinate_rearmament",
+    "title": "共同再軍備",
+    "x": 4850,
+    "y": 1350,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_invest_in_our_weaker_allies"
+    ]
+  },
+  {
+    "id": "FRA_foreign_guest_workers",
+    "title": "外国人労働者",
+    "x": 5450,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_strengthen_the_little_entente"
+    ]
+  },
+  {
+    "id": "FRA_join_the_ententes",
+    "title": "協商加盟",
+    "x": 5150,
+    "y": 960,
+    "cost": 70,
+    "effect": "",
+    "prerequisites": [
+      "FRA_strengthen_the_little_entente"
+    ]
+  }
+]

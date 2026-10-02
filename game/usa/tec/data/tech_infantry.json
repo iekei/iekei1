@@ -1,0 +1,82 @@
+[
+  {
+    "id": "m1_garand",
+    "title": "M1ガランド",
+    "year": 1936,
+    "x": 100,
+    "y": 50,
+    "research_time": 100,
+    "reliability": "配備（制式採用）",
+    "desc": "ジョン・ガランド設計の半自動小銃。世界初の量産半自動小銃として制式採用。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.8' stroke-linecap='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/></svg>",
+    "effects": [
+      "対人攻撃: 45/100",
+      "対物攻撃: 12/100",
+      "生存力: 10/100",
+      "機動力: 70/100",
+      "信頼度: 90/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "m1_carbine",
+    "title": "M1カービン",
+    "year": 1941,
+    "x": 100,
+    "y": 200,
+    "research_time": 80,
+    "reliability": "配備（制式採用）",
+    "desc": "軽量なカービン銃。後方部隊や空挺部隊に配備された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.8' stroke-linecap='round'><path d='M4 12h16'/><path d='M16 12l2 3h-3z'/></svg>",
+    "effects": [
+      "対人攻撃: 35/100",
+      "対物攻撃: 5/100",
+      "生存力: 8/100",
+      "機動力: 85/100",
+      "信頼度: 85/100"
+    ],
+    "prerequisites": [
+      "m1_garand"
+    ]
+  },
+  {
+    "id": "thompson_smg",
+    "title": "トンプソン短機関銃",
+    "year": 1938,
+    "x": 400,
+    "y": 200,
+    "research_time": 80,
+    "reliability": "配備",
+    "desc": "「トミーガン」として知られる.45口径短機関銃。高火力だが重い。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8b949e' stroke-width='1.8' stroke-linecap='round'><path d='M3 11h14'/><circle cx='11' cy='15' r='3'/></svg>",
+    "effects": [
+      "対人攻撃: 40/100",
+      "対物攻撃: 5/100",
+      "生存力: 8/100",
+      "機動力: 65/100",
+      "信頼度: 75/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "bar_m1918",
+    "title": "BAR M1918A2",
+    "year": 1937,
+    "x": 100,
+    "y": 350,
+    "research_time": 100,
+    "reliability": "配備",
+    "desc": "自動小銃。歩兵の火力支援に使用された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.8' stroke-linecap='round'><path d='M2 12h18'/><path d='M6 12v4'/><path d='M16 12l2 3h-3z'/></svg>",
+    "effects": [
+      "対人攻撃: 42/100",
+      "対物攻撃: 10/100",
+      "生存力: 9/100",
+      "機動力: 60/100",
+      "信頼度: 80/100"
+    ],
+    "prerequisites": [
+      "m1_garand"
+    ]
+  }
+]

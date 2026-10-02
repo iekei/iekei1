@@ -1,0 +1,58 @@
+[
+  {
+    "id": "fuso_battleship",
+    "title": "扶桑型戦艦",
+    "year": 1936,
+    "x": 100,
+    "y": 50,
+    "research_time": 200,
+    "reliability": "就役",
+    "desc": "日本海軍の超弩級戦艦。12門の35.6cm砲を搭載。独特の艦橋構造が特徴。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><path d='M2 16h20l-2 2H4z'/><path d='M8 16V8h8v8'/></svg>",
+    "effects": [
+      "火力: 70/100",
+      "装甲: 65/100",
+      "速力: 40/100",
+      "対空: 20/100"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "yamato_battleship",
+    "title": "大和型戦艦",
+    "year": 1940,
+    "x": 100,
+    "y": 200,
+    "research_time": 300,
+    "reliability": "就役",
+    "desc": "世界最大の戦艦。46cm砲3基9門を搭載。史上最大の主砲を持つ。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><path d='M2 16h20l-2 2H4z'/><path d='M6 16V6h12v10'/><path d='M10 6V3h4v3'/></svg>",
+    "effects": [
+      "火力: 95/100",
+      "装甲: 90/100",
+      "速力: 45/100",
+      "対空: 40/100"
+    ],
+    "prerequisites": [
+      "fuso_battleship"
+    ]
+  },
+  {
+    "id": "akagi_carrier",
+    "title": "赤城型航空母艦",
+    "year": 1936,
+    "x": 400,
+    "y": 50,
+    "research_time": 200,
+    "reliability": "就役",
+    "desc": "大型航空母艦。全通甲板を採用。真珠湾攻撃の旗艦。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><path d='M2 14h20l-1 3H3z'/><path d='M4 14V8h16v6'/></svg>",
+    "effects": [
+      "航空戦力: 80/100",
+      "速力: 55/100",
+      "装甲: 30/100",
+      "対空: 35/100"
+    ],
+    "prerequisites": []
+  }
+]
