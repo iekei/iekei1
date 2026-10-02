@@ -540,17 +540,107 @@
       border-radius: 4px; font-size: 11px; padding: 1px 4px;
     }
 
+    /* --- 17. Start Screen (Scenario / Nation Select) --- */
+    #start-screen {
+      position: fixed; inset: 0; z-index: 3000;
+      background: radial-gradient(ellipse at 50% 30%, #1c2530 0%, #0a0c0f 70%);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .start-inner {
+      width: min(960px, 92vw); max-height: 92vh; overflow-y: auto;
+      background: var(--bg-panel); border: 1px solid var(--border-mil);
+      border-radius: 10px; padding: 28px 32px; text-align: center;
+      box-shadow: 0 24px 60px rgba(0,0,0,.6);
+    }
+    .start-inner h1 { color: var(--text-gold); font-size: 26px; letter-spacing: 2px; margin-bottom: 4px; }
+    .start-sub { color: var(--text-secondary); font-size: 13px; margin-bottom: 20px; }
+    .start-nation-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
+    @media (max-width: 900px) { .start-nation-grid { grid-template-columns: repeat(2, 1fr); } }
+    .start-nation-card {
+      background: var(--bg-panel-light); border: 1px solid var(--border-mil);
+      border-radius: 8px; padding: 14px 10px; cursor: pointer; text-align: left;
+      transition: border-color .15s, transform .15s;
+    }
+    .start-nation-card:hover { border-color: var(--accent-blue); transform: translateY(-2px); }
+    .start-nation-card.active { border-color: var(--text-gold); background: #223018; }
+    .start-nation-card .sn-flag { font-size: 30px; }
+    .start-nation-card .sn-name { color: var(--text-primary); font-weight: 700; margin: 4px 0 2px; }
+    .start-nation-card .sn-desc { color: var(--text-secondary); font-size: 11px; line-height: 1.5; }
+    .start-nation-card .sn-feature { color: var(--text-gold); font-size: 11px; margin-top: 4px; }
+    #start-game-btn {
+      background: var(--text-gold); color: #000; border: none; border-radius: 6px;
+      padding: 10px 42px; font-size: 15px; font-weight: 700; cursor: pointer;
+    }
+    #start-game-btn:disabled { background: #3a4450; color: #7a8590; cursor: not-allowed; }
+
+    /* --- 18. Flag / World Tension / Stat Tooltip / Politics --- */
+    #player-flag {
+      font-size: 24px; line-height: 1; background: transparent; border: 1px solid var(--border-mil);
+      border-radius: 4px; padding: 3px 7px; cursor: pointer; margin-right: 12px;
+    }
+    #player-flag:hover { border-color: var(--text-gold); }
+    #world-tension {
+      background: transparent; border: 1px solid var(--border-mil); border-radius: 4px;
+      padding: 4px 10px; cursor: pointer; font-size: 12px; color: var(--text-secondary);
+    }
+    #world-tension .wt-val { color: var(--text-primary); font-weight: 700; }
+    #world-tension:hover { border-color: var(--accent-orange); }
+    #stat-tooltip {
+      position: fixed; z-index: 4000; pointer-events: none; max-width: 320px;
+      background: var(--bg-panel); border: 1px solid var(--accent-blue);
+      border-radius: 6px; padding: 8px 12px; font-size: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.6);
+    }
+    #stat-tooltip .stt-title { color: var(--text-gold); font-weight: 700; margin-bottom: 4px; }
+    #stat-tooltip .stt-row { color: var(--text-secondary); line-height: 1.6; }
+    #stat-tooltip .stt-row b { color: var(--text-primary); }
+    .politics-section {
+      background: var(--bg-panel-light); border: 1px solid var(--border-mil);
+      border-radius: 8px; padding: 12px 16px; margin-bottom: 12px;
+    }
+    .politics-section h3 { color: var(--text-gold); margin-bottom: 8px; font-size: 14px; }
+    .politics-leader-row {
+      display: flex; align-items: center; gap: 10px; padding: 6px 8px;
+      border-bottom: 1px solid var(--border-mil); font-size: 12px;
+    }
+    .politics-spirit {
+      display: inline-block; background: var(--bg-panel); border: 1px solid var(--border-mil);
+      border-radius: 6px; padding: 6px 10px; margin: 2px 4px 2px 0; font-size: 11px;
+      cursor: help;
+    }
+    .law-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      padding: 6px 8px; border-bottom: 1px solid var(--border-mil); font-size: 12px;
+    }
+    .law-row .law-current { color: var(--text-gold); font-weight: 600; }
+    .law-row button { background: var(--bg-panel); border: 1px solid var(--border-mil); color: var(--text-primary); border-radius: 4px; padding: 4px 10px; cursor: pointer; font-size: 11px; }
+    .law-row button:hover:not(:disabled) { border-color: var(--accent-blue); }
+    .law-row button:disabled { opacity: .4; cursor: not-allowed; }
+
     /* --- Layout Wrapper --- */
     #game-root { display: flex; flex-direction: column; height: 100vh; }
     #operating-screen { flex: 1; overflow: hidden; position: relative; }
   </style>
 </head>
 <body>
+<!-- ==================== START SCREEN (Scenario / Nation Select) ==================== -->
+<div id="start-screen">
+  <div class="start-inner">
+    <h1>⚔️ Hearts of Iron IV × 将軍カードゲーム</h1>
+    <p class="start-sub">シナリオ: 1936年1月1日 — プレイする国家を選択してください</p>
+    <div class="start-nation-grid" id="start-nation-grid"></div>
+    <button id="start-game-btn" onclick="StartScreen.start()" disabled>国家を選択してください</button>
+  </div>
+</div>
+
 <div id="game-root">
   <!-- ==================== TOP BAR ==================== -->
   <header id="top-bar">
     <div class="stats-group" id="stats-group">
-      <!-- Filled dynamically by CoreEngine -->
+      <button id="player-flag" title="政治画面を開く" onclick="WindowManager.open('politics')">🏳️</button>
+      <span id="stats-icons" style="display:flex;gap:16px;align-items:center;">
+        <!-- Filled dynamically by CoreEngine -->
+      </span>
     </div>
     <div class="time-control-group">
       <div id="calendar-display">1936年1月1日</div>
@@ -564,6 +654,7 @@
       </div>
     </div>
     <div class="topbar-nav">
+      <button class="speed-btn" id="world-tension" onclick="GameUI.switchTab('diplomacy')" title="国際緊張度 (World Tension)">🌍 緊張度 <span class="wt-val">0%</span></button>
       <button class="speed-btn" id="mp-indicator" onclick="GameUI.switchTab('multiplayer')">👥 単独</button>
       <button class="speed-btn" id="cheat-toggle" onclick="CheatConsole.toggle()">~</button>
     </div>
@@ -684,10 +775,16 @@
     <div class="window-template pane-scroll" id="tpl-winsave" data-title="💾 セーブ / ロード" data-w="580" data-h="540">
       <div id="winsave-content"></div>
     </div>
+    <div class="window-template pane-scroll" id="tpl-politics" data-title="🏛️ 政治" data-w="760" data-h="600">
+      <div id="politics-content"></div>
+    </div>
   </div>
 </div>
 
 <!-- ==================== DIALOG TEMPLATES ==================== -->
+
+<!-- Stat Tooltip (TopBar) -->
+<div id="stat-tooltip" class="hidden"></div>
 
 <!-- Focus Tooltip -->
 <div id="focus-tooltip" class="hidden">
@@ -928,6 +1025,11 @@ class CoreEngine {
     nuclearReactorLevel: 0,
     nuclearStockpile: 0,
     nuclearTechLevel: 0,
+    worldTension: 0,          // 国際緊張度 (0-100%)
+    justified: {},            // 戦争目標を正当化済みの国タグ -> true
+    justifying: {},           // 正当化進行中: tag -> 残り日数
+    atWar: [],                // 宣戦布告済みの国タグ
+    laws: { conscription: 'volunteer', economy: 'civilian' },
     airSupremacy: 0,
     strategicBombers: 0,
     fuel: 0,
@@ -959,6 +1061,128 @@ class CoreEngine {
     document.querySelectorAll('.speed-btn[data-speed]').forEach(btn => {
       btn.addEventListener('click', () => CoreEngine.setSpeed(parseInt(btn.dataset.speed)));
     });
+    CoreEngine.setupStatTooltips();
+    CoreEngine.registerTickCallback(() => CoreEngine.tickDiplomacy());
+  }
+
+  // ---- TopBar ステータスのツールチップ (内訳・機能説明) ----
+  static STAT_TOOLTIPS = {
+    pp: () => {
+      const s = CoreEngine.gameState;
+      const bonus = s.cardModifiers.politicalPowerGain || 0;
+      return { title: '政治力 (Political Power)',
+        rows: ['現在値: <b>' + Math.floor(s.politicalPower) + '</b>',
+               '基本獲得量: <b>+1.0/日</b>',
+               'カード補正: <b>+' + bonus.toFixed(1) + '/日</b>',
+               '用途: 指導者雇用・法律変更・外交アクション'] };
+    },
+    stab: () => {
+      const s = CoreEngine.gameState;
+      const b = s.cardModifiers.stabilityBonus || 0;
+      return { title: '安定度 (Stability)',
+        rows: ['現在値: <b>' + s.stability + '%</b>',
+               '国家精神/カード補正: <b>+' + b + '%</b>',
+               '低下要因: 戦争・燃料不足・世論',
+               '用途: 生産ボーナス・抵抗運動軽減'] };
+    },
+    ws: () => {
+      const s = CoreEngine.gameState;
+      return { title: '戦争協力度 (War Support)',
+        rows: ['現在値: <b>' + s.warSupport + '%</b>',
+               '宣戦布告や敵の攻撃で上昇',
+               '用途: 徴兵法律の解禁・降伏閾値'] };
+    },
+    mp: () => {
+      const s = CoreEngine.gameState;
+      const law = (typeof PoliticsManager !== 'undefined') ? PoliticsManager.currentLaw('conscription') : null;
+      return { title: '人的資源 (Manpower)',
+        rows: ['現在値: <b>' + Math.floor(s.manpower).toLocaleString() + '</b>',
+               '徴兵法律: <b>' + (law ? law.name : '志願兵制') + '</b>',
+               '用途: 師団の徴兵 (装備と共に消費)'] };
+    },
+    fac: () => {
+      const s = CoreEngine.gameState;
+      return { title: '工場 (Factories)',
+        rows: ['民需工場: <b>' + s.civilianFactories + '</b> (建設・貿易)',
+               '軍需工場: <b>' + s.militaryFactories + '</b> (装備生産)',
+               '造船所: <b>' + s.dockyards + '</b> (艦船生産)'] };
+    },
+    fuel: () => {
+      const s = CoreEngine.gameState;
+      return { title: '燃料 (Fuel)',
+        rows: ['現在値: <b>' + Math.floor(s.fuel) + ' / ' + s.maxFuel + '</b>',
+               '獲得量: 石油資源 × 0.1/日',
+               '用途: 海軍・空軍・機甲部隊の運用'] };
+    },
+    convoy: () => {
+      const s = CoreEngine.gameState;
+      return { title: '輸送船 (Convoys)',
+        rows: ['保有数: <b>' + s.convoys + '</b>',
+               '用途: 資源貿易・レンドリースの海上輸送',
+               '通商破壊で喪失します'] };
+    }
+  };
+
+  static setupStatTooltips() {
+    const group = document.getElementById('stats-group');
+    const tip = document.getElementById('stat-tooltip');
+    if (!group || !tip) return;
+    group.addEventListener('mouseover', (e) => {
+      const item = e.target.closest('.stat-item');
+      if (!item || !item.dataset.tipKey) { tip.classList.add('hidden'); return; }
+      const gen = CoreEngine.STAT_TOOLTIPS[item.dataset.tipKey];
+      if (!gen) return;
+      const t = gen();
+      tip.innerHTML = '<div class="stt-title">' + t.title + '</div>' +
+        t.rows.map(r => '<div class="stt-row">' + r + '</div>').join('');
+      tip.classList.remove('hidden');
+      const r = item.getBoundingClientRect();
+      tip.style.left = Math.min(r.left, window.innerWidth - 340) + 'px';
+      tip.style.top = (r.bottom + 6) + 'px';
+    });
+    group.addEventListener('mouseleave', () => tip.classList.add('hidden'));
+  }
+
+  // ---- 国際緊張度 (World Tension) ----
+  static addWorldTension(delta, reason) {
+    const s = CoreEngine.gameState;
+    const before = Math.round(s.worldTension);
+    s.worldTension = Math.max(0, Math.min(100, s.worldTension + delta));
+    const after = Math.round(s.worldTension);
+    if (reason) CoreEngine.log('国際緊張度 +' + delta.toFixed(0) + '% (' + reason + ')');
+    if (before !== after) CoreEngine.renderWorldTension();
+  }
+
+  static renderWorldTension() {
+    const el = document.getElementById('world-tension');
+    if (!el) return;
+    const t = Math.round(CoreEngine.gameState.worldTension);
+    el.querySelector('.wt-val').textContent = t + '%';
+    el.style.borderColor = t >= 75 ? 'var(--accent-red)' : t >= 40 ? 'var(--accent-orange)' : 'var(--border-mil)';
+  }
+
+  // ---- 正当化の進行 & 緊張度の自然上昇 (歴史的イベント) ----
+  static tickDiplomacy() {
+    const s = CoreEngine.gameState;
+    // 歴史的イベント (スペイン内戦など) による緊張度の自然上昇
+    const d = s.date;
+    if (d.getFullYear() >= 1936 && d.getMonth() >= 6 && s.worldTension < 20) {
+      s.worldTension = Math.min(20, s.worldTension + 0.05);
+      CoreEngine.renderWorldTension();
+    }
+    // 戦争目標正当化の進行
+    Object.entries(s.justifying).forEach(([tag, days]) => {
+      s.justifying[tag] = days - 1;
+      if (s.justifying[tag] <= 0) {
+        delete s.justifying[tag];
+        s.justified[tag] = true;
+        const c = DiplomacyManager.countries.find(c => c.id === tag);
+        GameUI.notify('⚔️ ' + (c ? c.name : tag) + 'への戦争目標の正当化が完了！ 宣戦布告できます', 'success');
+        CoreEngine.log((c ? c.name : tag) + 'への戦争目標を正当化しました。');
+        if (typeof PoliticsManager !== 'undefined') PoliticsManager.render();
+        DiplomacyManager.render();
+      }
+    });
   }
 
   static setSpeed(speed) {
@@ -986,6 +1210,10 @@ class CoreEngine {
     CoreEngine.gameState.politicalPower = Math.min(999, CoreEngine.gameState.politicalPower + ppGain);
     CoreEngine.gameState.fuel = Math.min(CoreEngine.gameState.maxFuel,
       CoreEngine.gameState.fuel + CoreEngine.gameState.resources.oil * 0.1);
+    // 徴兵法律に応じた人的資源の蓄積
+    if (typeof PoliticsManager !== 'undefined') {
+      CoreEngine.gameState.manpower += PoliticsManager.dailyManpowerGain();
+    }
 
     CoreEngine.tickCallbacks.forEach(cb => {
       try { cb(CoreEngine.gameState.date); } catch (e) { console.error('Tick callback error:', e); }
@@ -1005,16 +1233,21 @@ class CoreEngine {
   static renderStats() {
     const s = CoreEngine.gameState;
     const html =
-      '<div class="stat-item">🏛️ <span class="stat-val">' + Math.floor(s.politicalPower) + '</span></div>' +
-      '<div class="stat-item">📊 <span class="stat-val">' + s.stability + '%</span>' +
+      '<div class="stat-item" data-tip-key="pp">🏛️ <span class="stat-val">' + Math.floor(s.politicalPower) + '</span></div>' +
+      '<div class="stat-item" data-tip-key="stab">📊 <span class="stat-val">' + s.stability + '%</span>' +
         '<div class="stat-bar"><div class="stat-bar-fill" style="width:' + s.stability + '%;background:var(--accent-green)"></div></div></div>' +
-      '<div class="stat-item">⚔️ <span class="stat-val">' + s.warSupport + '%</span>' +
+      '<div class="stat-item" data-tip-key="ws">⚔️ <span class="stat-val">' + s.warSupport + '%</span>' +
         '<div class="stat-bar"><div class="stat-bar-fill" style="width:' + s.warSupport + '%;background:var(--accent-orange)"></div></div></div>' +
-      '<div class="stat-item">👥 <span class="stat-val">' + (s.manpower/1000).toFixed(0) + 'K</span></div>' +
-      '<div class="stat-item">🏭 <span class="stat-val">' + s.civilianFactories + 'C / ' + s.militaryFactories + 'M</span></div>' +
-      '<div class="stat-item">⛽ <span class="stat-val">' + Math.floor(s.fuel) + '/' + s.maxFuel + '</span></div>' +
-      '<div class="stat-item">🚢 <span class="stat-val">' + s.convoys + '</span></div>';
-    document.getElementById('stats-group').innerHTML = html;
+      '<div class="stat-item" data-tip-key="mp">👥 <span class="stat-val">' + (s.manpower/1000).toFixed(0) + 'K</span></div>' +
+      '<div class="stat-item" data-tip-key="fac">🏭 <span class="stat-val">' + s.civilianFactories + 'C / ' + s.militaryFactories + 'M</span></div>' +
+      '<div class="stat-item" data-tip-key="fuel">⛽ <span class="stat-val">' + Math.floor(s.fuel) + '/' + s.maxFuel + '</span></div>' +
+      '<div class="stat-item" data-tip-key="convoy">🚢 <span class="stat-val">' + s.convoys + '</span></div>';
+    // 国旗ボタンとステータスアイコン群は別要素なので innerHTML で上書きしない
+    const icons = document.getElementById('stats-icons');
+    if (icons) icons.innerHTML = html;
+    CoreEngine.renderWorldTension();
+    const flag = document.getElementById('player-flag');
+    if (flag) flag.textContent = DataFetcher.getCountryFlag(s.country);
   }
 
   static updateCalendar() {
@@ -2017,12 +2250,14 @@ class MapRenderer {
   static setupInteraction() {
     const c = MapRenderer.canvas;
     let panning = false, moved = 0, sx = 0, sy = 0, lx = 0, ly = 0;
+    let rightMoved = 0, rightDown = false;
 
     c.addEventListener('mousedown', (e) => {
       if (e.button === 0) {
         panning = true; moved = 0;
         sx = lx = e.clientX; sy = ly = e.clientY;
       } else if (e.button === 2) {
+        rightDown = true; rightMoved = 0;
         const wp = MapRenderer.screenToWorld(e.offsetX, e.offsetY);
         if (e.shiftKey) BattlePlanManager.startArrowDrag(wp);
         else BattlePlanManager.startFrontDrag(wp);
@@ -2034,7 +2269,8 @@ class MapRenderer {
         moved += Math.abs(dx) + Math.abs(dy);
         MapRenderer.cam.x += dx; MapRenderer.cam.y += dy;
         lx = e.clientX; ly = e.clientY;
-      } else if (BattlePlanManager.dragMode) {
+      } else if (rightDown && BattlePlanManager.dragMode) {
+        rightMoved += Math.abs(e.movementX || 0) + Math.abs(e.movementY || 0);
         BattlePlanManager.onDragMove(MapRenderer.screenToWorld(e.offsetX, e.offsetY));
       }
     });
@@ -2046,8 +2282,18 @@ class MapRenderer {
           const pid = MapRenderer.provinceAt(wp[0], wp[1]);
           if (pid) MapRenderer.selectProvince(pid);
         }
-      } else if (e.button === 2 && BattlePlanManager.dragMode) {
-        BattlePlanManager.endDrag();
+      } else if (e.button === 2) {
+        const wasDragMode = BattlePlanManager.dragMode;
+        if (wasDragMode) BattlePlanManager.endDrag();
+        // 右クリック (ドラッグなし) で他国の領土なら外交画面を開く
+        if (rightDown && rightMoved < 6) {
+          const wp = MapRenderer.screenToWorld(e.offsetX, e.offsetY);
+          const pid = MapRenderer.provinceAt(wp[0], wp[1]);
+          const owner = pid ? MapRenderer.ownerOf(pid) : null;
+          const player = CoreEngine.gameState.country;
+          if (owner && owner !== player) DiplomacyManager.openFor(owner);
+        }
+        rightDown = false;
       }
     });
     c.addEventListener('mouseleave', () => {
@@ -2817,6 +3063,131 @@ class ResourceManager {
 }
 
 // ==========================================================
+// Module 7b: PoliticsManager — 政治画面 (指導者・国家精神・法律)
+//   左上の国旗クリックで開く。法律は政治力を消費して変更。
+// ==========================================================
+class PoliticsManager {
+  static LAWS = {
+    conscription: [
+      { id: 'volunteer', name: '志願兵制', cost: 0, mpPerDay: 100, wsReq: 0 },
+      { id: 'limited', name: '限定徴兵', cost: 100, mpPerDay: 300, wsReq: 10 },
+      { id: 'extensive', name: '大規模徴兵', cost: 150, mpPerDay: 600, wsReq: 25 },
+      { id: 'service', name: '兵役必須法', cost: 200, mpPerDay: 1000, wsReq: 50 }
+    ],
+    economy: [
+      { id: 'civilian', name: '民間経済', cost: 0, stabPerDay: 0.01, factoryOutput: 0 },
+      { id: 'early', name: '早期動員', cost: 100, stabPerDay: 0, factoryOutput: 0.05 },
+      { id: 'partial', name: '部分動員', cost: 150, stabPerDay: -0.005, factoryOutput: 0.10 },
+      { id: 'total', name: '総動員', cost: 200, stabPerDay: -0.02, factoryOutput: 0.20 }
+    ]
+  };
+
+  static init() {
+    CoreEngine.registerTickCallback(() => PoliticsManager.onTick());
+  }
+
+  static currentLaw(kind) {
+    const id = CoreEngine.gameState.laws[kind];
+    return (PoliticsManager.LAWS[kind] || []).find(l => l.id === id) || (PoliticsManager.LAWS[kind] || [])[0];
+  }
+
+  static dailyManpowerGain() {
+    return PoliticsManager.currentLaw('conscription').mpPerDay;
+  }
+
+  static onTick() {
+    const s = CoreEngine.gameState;
+    const eco = PoliticsManager.currentLaw('economy');
+    s.stability = Math.max(0, Math.min(100, s.stability + eco.stabPerDay));
+  }
+
+  static nextLaw(kind) {
+    const list = PoliticsManager.LAWS[kind];
+    const cur = PoliticsManager.currentLaw(kind);
+    return list[list.indexOf(cur) + 1] || null;
+  }
+
+  static enactLaw(kind) {
+    const next = PoliticsManager.nextLaw(kind);
+    if (!next) { GameUI.notify('既に最高位の法律です。', 'alert'); return; }
+    const s = CoreEngine.gameState;
+    const ws = PoliticsManager.LAWS[kind].indexOf(next) ? s.warSupport : 100;
+    if (kind === 'conscription' && s.warSupport < next.wsReq) {
+      GameUI.notify('戦争協力度が不足しています (' + next.wsReq + '% 必要)。', 'alert'); return;
+    }
+    if (s.politicalPower < next.cost) { GameUI.notify('政治力が不足しています。', 'alert'); return; }
+    s.politicalPower -= next.cost;
+    s.laws[kind] = next.id;
+    CoreEngine.log('法律を「' + next.name + '」に変更しました。');
+    GameUI.notify('📜 法律変更: ' + next.name, 'success');
+    CoreEngine.renderStats();
+    PoliticsManager.render();
+    MultiplayerManager.broadcast({ type: 'law_change', kind: kind, law: next.id });
+  }
+
+  static render() {
+    const container = document.getElementById('politics-content');
+    if (!container) return;
+    const s = CoreEngine.gameState;
+    const nationName = ({ GER: 'ドイツ', SOV: 'ソ連', JAP: '日本', USA: 'アメリカ', ENG: 'イギリス', FRA: 'フランス', ITA: 'イタリア' })[s.country] || s.country;
+
+    let html = '<div class="politics-section"><h3>' + DataFetcher.getCountryFlag(s.country) + ' ' + nationName + ' — 政府</h3>';
+    // 指導者 (雇用したカードから)
+    const leaders = CardSystem.hiredCards || [];
+    if (leaders.length === 0) {
+      html += '<p style="font-size:12px;color:var(--text-secondary);">配備済みの指導者がいません。「将軍カード」ウィンドウから雇用してください。</p>';
+    } else {
+      leaders.forEach(c => {
+        const ab = CardSystem.ABILITIES[c.id] || CardSystem.DEFAULT_GENERAL_ABILITY;
+        html += '<div class="politics-leader-row"><span style="font-size:18px;">🎖️</span>' +
+          '<b>' + (c.name || c.id) + '</b>' +
+          '<span style="color:var(--text-gold);">' + (c.rarity || '') + '</span>' +
+          '<span style="color:var(--text-secondary);">' + (ab ? ab.name + ' — ' + ab.desc : '') + '</span></div>';
+      });
+    }
+    html += '</div>';
+
+    // 国家精神
+    html += '<div class="politics-section"><h3>🌠 国家精神 (National Spirits)</h3>';
+    const spirits = [];
+    if (s.nationSystems) {
+      if (s.nationSystems.mefoIssued) spirits.push({ name: 'MEFO手形 (有効)', desc: '建設コスト -20%・特別研究促進' });
+      if (s.nationSystems.paranoia !== undefined) spirits.push({ name: 'スターリンのパラノイア (' + Math.round(s.nationSystems.paranoia) + ')', desc: '高まると将軍カードが粛清されるリスク' });
+      if (s.nationSystems.armyInfluence !== undefined) spirits.push({ name: '陸海軍の対立 (陸軍 ' + Math.round(s.nationSystems.armyInfluence) + ')', desc: '陸海軍の影響力バランスが補正に影響' });
+      if (s.nationSystems.congressDem !== undefined) spirits.push({ name: '連邦議会 (与党 ' + Math.round(s.nationSystems.congressDem) + '議席)', desc: '議会多数派の安定度ボーナス' });
+      if (s.nationSystems.polarization !== undefined) spirits.push({ name: '政治的二極化 (' + Math.round(s.nationSystems.polarization) + ')', desc: '安定度の変動を増幅' });
+    }
+    if (s.atWar.length > 0) spirits.push({ name: '戦時中 (' + s.atWar.join(', ') + ')', desc: '戦争協力度ボーナス・経済ペナルティ' });
+    if (spirits.length === 0) html += '<span class="politics-spirit">精神的安定 — ペナルティ/ボーナスなし</span>';
+    else spirits.forEach(sp => {
+      html += '<span class="politics-spirit" title="' + sp.desc + '"><b style="color:var(--text-gold);">' + sp.name + '</b><br><span style="color:var(--text-secondary);">' + sp.desc + '</span></span>';
+    });
+    html += '</div>';
+
+    // 法律
+    html += '<div class="politics-section"><h3>📜 法律 (Laws)</h3>';
+    [['conscription', '徴兵法律'], ['economy', '経済法律']].forEach(([kind, label]) => {
+      const cur = PoliticsManager.currentLaw(kind);
+      const next = PoliticsManager.nextLaw(kind);
+      const list = PoliticsManager.LAWS[kind];
+      const idx = list.indexOf(cur);
+      html += '<div class="law-row"><div><span style="color:var(--text-secondary);">' + label + ':</span> <span class="law-current">' + cur.name + '</span>' +
+        '<span style="color:var(--text-secondary);font-size:11px;"> (' + list.map((l, i) => (i === idx ? '▶' : '') + l.name).join(' → ') + ')</span></div>';
+      if (next) {
+        const wsReqNote = kind === 'conscription' && s.warSupport < next.wsReq ? ' (戦争協力度' + next.wsReq + '%必要)' : '';
+        html += '<button onclick="PoliticsManager.enactLaw(\'' + kind + '\')">' + next.name + ' へ変更 (PP' + next.cost + ')' + wsReqNote + '</button>';
+      } else {
+        html += '<span style="color:var(--text-secondary);font-size:11px;">最高位</span>';
+      }
+      html += '</div>';
+    });
+    html += '</div>';
+
+    container.innerHTML = html;
+  }
+}
+
+// ==========================================================
 // Module 8: DiplomacyManager — 陣営・レンドリース・外交
 // ==========================================================
 class DiplomacyManager {
@@ -2833,12 +3204,65 @@ class DiplomacyManager {
 
   static factions = [];
   static lendLeaseContracts = [];
+  static selectedTag = null;   // 地図右クリック等で選択中の国
 
-  static init() { DiplomacyManager.render(); }
+  static init() {
+    CoreEngine.registerTickCallback(() => DiplomacyManager.onTick());
+    DiplomacyManager.render();
+  }
+
+  // 他国の領土を右クリックした際に外交画面を開く
+  static openFor(tag) {
+    DiplomacyManager.selectedTag = tag;
+    WindowManager.open('diplomacy');
+    GameUI.notify('🤝 ' + (DiplomacyManager.countries.find(c => c.id === tag) || { name: tag }).name + 'との外交画面を開きました');
+  }
+
+  static onTick() {
+    const s = CoreEngine.gameState;
+    // 宣戦布告済みの相手との戦争中: 戦争協力度の自然上昇
+    if (s.atWar.length > 0 && s.warSupport < 100) {
+      s.warSupport = Math.min(100, s.warSupport + 0.01);
+    }
+  }
+
+  // ---- 戦争目標の正当化 (バニラルール: 正当化なしに宣戦は不可) ----
+  static justifyWarGoal(tag) {
+    const s = CoreEngine.gameState;
+    if (s.justified[tag] || s.justifying[tag] || s.atWar.includes(tag)) return;
+    if (s.politicalPower < 25) { GameUI.notify('政治力が不足しています (PP25必要)。', 'alert'); return; }
+    s.politicalPower -= 25;
+    s.justifying[tag] = 60;   // 60日で正当化が完了
+    const c = DiplomacyManager.countries.find(c => c.id === tag);
+    CoreEngine.addWorldTension(10, (c ? c.name : tag) + 'への戦争目標の正当化を開始');
+    CoreEngine.log((c ? c.name : tag) + 'への戦争目標の正当化を開始しました (60日)。');
+    GameUI.notify('⚔️ ' + (c ? c.name : tag) + 'への戦争目標を正当化中...', 'success');
+    DiplomacyManager.render();
+    MultiplayerManager.broadcast({ type: 'justify', target: tag });
+  }
+
+  // ---- 宣戦布告 (正当化が完了した国にのみ可能) ----
+  static declareWar(tag) {
+    const s = CoreEngine.gameState;
+    if (!s.justified[tag]) { GameUI.notify('先に戦争目標を正当化してください。', 'alert'); return; }
+    if (s.atWar.includes(tag)) return;
+    s.atWar.push(tag);
+    delete s.justified[tag];
+    s.warSupport = Math.min(100, s.warSupport + 5);
+    const c = DiplomacyManager.countries.find(c => c.id === tag);
+    CoreEngine.addWorldTension(15, (c ? c.name : tag) + 'への宣戦布告');
+    CoreEngine.log('⚔️ ' + (c ? c.name : tag) + 'に宣戦布告しました！');
+    GameUI.notify('⚔️ ' + (c ? c.name : tag) + 'に宣戦布告！', 'alert');
+    CoreEngine.renderStats();
+    DiplomacyManager.render();
+    if (typeof PoliticsManager !== 'undefined') PoliticsManager.render();
+    MultiplayerManager.broadcast({ type: 'declare_war', target: tag });
+  }
 
   static render() {
     const container = document.getElementById('diplomacy-content');
-    const myCountry = CoreEngine.gameState.country;
+    const s = CoreEngine.gameState;
+    const myCountry = s.country;
 
     let html = '<div class="faction-panel"><h3>🏰 陣営 (Faction)</h3>';
     if (DiplomacyManager.factions.length === 0) {
@@ -2864,15 +3288,30 @@ class DiplomacyManager {
     }
     html += '</div>';
 
-    html += '<div class="sp-section"><h3>🌍 外交関係</h3>';
+    html += '<div class="sp-section"><h3>🌍 外交関係 <span style="font-size:11px;color:var(--text-secondary);">— 戦争には必ず「戦争目標の正当化」が必要です</span></h3>';
     DiplomacyManager.countries.forEach(c => {
       if (c.id === myCountry) return;
       const relColor = c.relation > 0 ? 'var(--accent-green)' : c.relation < -30 ? 'var(--accent-red)' : 'var(--text-secondary)';
-      html += '<div class="diplo-country-card"><div class="dc-header"><span class="dc-flag">' + DataFetcher.getCountryFlag(c.id) + '</span>' +
-        '<div><div class="dc-name">' + c.name + '</div><div class="dc-relation" style="color:' + relColor + ';">関係: ' + (c.relation > 0 ? '+' : '') + c.relation + '</div></div></div>' +
+      const selected = DiplomacyManager.selectedTag === c.id;
+      const justified = s.justified[c.id];
+      const justifying = s.justifying[c.id];
+      const atWar = s.atWar.includes(c.id);
+      const borderStyle = selected ? 'border-color:var(--text-gold);background:#223018;' : '';
+      html += '<div class="diplo-country-card" style="' + borderStyle + '"><div class="dc-header"><span class="dc-flag">' + DataFetcher.getCountryFlag(c.id) + '</span>' +
+        '<div><div class="dc-name">' + c.name + (atWar ? ' <span style="color:var(--accent-red);font-size:11px;">⚔️ 交戦中</span>' : '') + '</div><div class="dc-relation" style="color:' + relColor + ';">関係: ' + (c.relation > 0 ? '+' : '') + c.relation + '</div></div></div>' +
         '<button class="diplo-btn" onclick="DiplomacyManager.improveRelation(\'' + c.id + '\')">関係改善 (PP10)</button>' +
         '<button class="diplo-btn" onclick="DiplomacyManager.inviteToFaction(\'' + c.id + '\')" ' + (c.relation < 30 ? 'disabled' : '') + '>陣営に招待</button>' +
-        '<button class="diplo-btn" onclick="DiplomacyManager.lendLease(\'' + c.id + '\')" ' + (c.relation < 0 ? 'disabled' : '') + '>レンドリース</button></div>';
+        '<button class="diplo-btn" onclick="DiplomacyManager.lendLease(\'' + c.id + '\')" ' + (c.relation < 0 ? 'disabled' : '') + '>レンドリース</button>';
+      if (atWar) {
+        html += '<span style="color:var(--accent-red);font-size:12px;font-weight:700;">⚔️ 戦争状態</span>';
+      } else if (justified) {
+        html += '<button class="diplo-btn" style="background:var(--accent-red);color:#fff;" onclick="DiplomacyManager.declareWar(\'' + c.id + '\')">⚔️ 宣戦布告 (緊張度+15%)</button>';
+      } else if (justifying) {
+        html += '<span style="color:var(--text-secondary);font-size:11px;">正当化中... 残り' + Math.round(justifying) + '日</span>';
+      } else {
+        html += '<button class="diplo-btn" onclick="DiplomacyManager.justifyWarGoal(\'' + c.id + '\')">戦争目標の正当化 (PP25・60日・緊張度+10%)</button>';
+      }
+      html += '</div>';
     });
     html += '</div>';
 
@@ -4417,6 +4856,7 @@ class GameUI {
     if (tabName === 'focus') FocusTreeManager.render();
     if (tabName === 'nation') UniqueNationSystems.render();
     if (tabName === 'winsave') SaveLoadManager.render();
+    if (tabName === 'politics') PoliticsManager.render();
   }
 
   static onWindowClosed(tabName) { /* focus管理はWindowManagerが行う */ }
@@ -4446,6 +4886,62 @@ class GameUI {
 }
 
 // ==========================================================
+// START SCREEN — シナリオ選択・国家選択 (最初の起動時に表示)
+// ==========================================================
+class StartScreen {
+  static selected = null;
+  static NATIONS = [
+    { tag: 'GER', name: 'ドイツ', desc: '最強の陸軍。MEFO手形で経済を加速し、カードで得た機甲将軍と電撃戦を展開する。', feature: '陸軍最強・MEFO手形', pp: 120, cf: 22, mf: 18 },
+    { tag: 'SOV', name: 'ソビエト連邦', desc: '大粛清と「スターリンのパラノイア」ゲージ。圧倒的な人的資源と戦略的縦深を活かす。', feature: '人的資源最大・パラノイア', pp: 100, cf: 25, mf: 20, manpower: 1800000 },
+    { tag: 'JAP', name: '大日本帝国', desc: '「陸海軍の対立」ディシジョン。提督カードを配備して太平洋の制海権を握る。', feature: '海軍強国・陸海軍対立', pp: 90, cf: 15, mf: 14, dockyards: 8 },
+    { tag: 'USA', name: 'アメリカ', desc: '「連邦議会」UIで上下院の議席を管理し、大恐慌からの脱出と巨大な工業力を活かす。', feature: '議会UI・工業力最大', pp: 80, cf: 35, mf: 10 },
+    { tag: 'ENG', name: 'イギリス', desc: '帝国会議で自治領を連携させ、強力なRAFとシーレーン防衛でドイツに立ち向かう。', feature: '帝国会議・RAF', pp: 100, cf: 28, mf: 12, dockyards: 7 },
+    { tag: 'FRA', name: 'フランス', desc: '政治の二極化と安定度管理。マジノ線を延長し、国家方針で大恐慌のデバフを解除する。', feature: 'マジノ線・二極化管理', pp: 80, cf: 18, mf: 10 },
+    { tag: 'ITA', name: 'イタリア', desc: '「権力の均衡」UIでムッソリーニと国王の権力バランスを調整し地中海の覇権を狙う。', feature: '権力の均衡UI', pp: 90, cf: 14, mf: 12, dockyards: 5 }
+  ];
+
+  static show() {
+    const grid = document.getElementById('start-nation-grid');
+    grid.innerHTML = '';
+    StartScreen.NATIONS.forEach(n => {
+      const el = document.createElement('div');
+      el.className = 'start-nation-card';
+      el.dataset.tag = n.tag;
+      el.innerHTML = '<div class="sn-flag">' + DataFetcher.getCountryFlag(n.tag) + '</div>' +
+        '<div class="sn-name">' + n.name + ' (' + n.tag + ')</div>' +
+        '<div class="sn-desc">' + n.desc + '</div>' +
+        '<div class="sn-feature">★ ' + n.feature + '</div>';
+      el.addEventListener('click', () => StartScreen.select(n.tag));
+      grid.appendChild(el);
+    });
+    document.getElementById('start-screen').classList.remove('hidden');
+  }
+
+  static select(tag) {
+    StartScreen.selected = tag;
+    document.querySelectorAll('.start-nation-card').forEach(el =>
+      el.classList.toggle('active', el.dataset.tag === tag));
+    const btn = document.getElementById('start-game-btn');
+    btn.disabled = false;
+    btn.textContent = '🇩🇪 ' + StartScreen.NATIONS.find(n => n.tag === tag).name + ' でゲーム開始';
+  }
+
+  static start() {
+    if (!StartScreen.selected) return;
+    const n = StartScreen.NATIONS.find(x => x.tag === StartScreen.selected);
+    const s = CoreEngine.gameState;
+    s.country = n.tag;
+    s.politicalPower = n.pp;
+    s.civilianFactories = n.cf;
+    s.militaryFactories = n.mf;
+    if (n.dockyards) s.dockyards = n.dockyards;
+    if (n.manpower) s.manpower = n.manpower;
+    document.getElementById('start-screen').classList.add('hidden');
+    initGame(n.tag);
+  }
+}
+
+// ==========================================================
 // INITIALIZATION — ゲーム起動
 // ==========================================================
 async function initGame() {
@@ -4461,17 +4957,19 @@ async function initGame() {
   ResourceManager.init();
   DiplomacyManager.init();
   await CardSystem.init();
+  PoliticsManager.init();
+  PoliticsManager.render();
   CheatConsole.init();
   MultiplayerManager.init();
   UniqueNationSystems.init();
   CardSystem.deck.forEach(card => CardSystem.applyModifiers(card.id));
-  // 国家方針ウィンドウを初期表示 (マップ操作画面の上に重ねて表示)
-  WindowManager.open('focus');
-  CoreEngine.log('ゲームを開始しました。速度ボタンで時間を進めてください。');
+  CoreEngine.renderStats();
+  CoreEngine.renderWorldTension();
+  CoreEngine.log(CoreEngine.gameState.country + ' — ゲームを開始しました。速度ボタンで時間を進めてください。');
   GameUI.notify('Hearts of Iron IV × 将軍カードゲーム 開始！', 'success');
 }
 
-window.addEventListener('DOMContentLoaded', initGame);
+window.addEventListener('DOMContentLoaded', () => StartScreen.show());
 </script>
 </body>
 </html>
