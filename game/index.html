@@ -864,7 +864,8 @@ class DataFetcher {
   static SPECIAL_PROJECTS_IMG = 'ger/tec/special/data/image/';
 
   // Map data (generated from cbrzeczysz/hoi4-history: map/definition.csv + history/states/*.txt)
-  static MAP_BMP_URL = DataFetcher.HOI4_REPO_RAW + '/map/provinces.bmp';
+  static MAP_BMP_URL = 'mapdata/provinces.bmp'; // ローカル同梱 (外部rawが落ちても描画が壊れない)
+  static MAP_BMP_URL_FALLBACK = DataFetcher.HOI4_REPO_RAW + '/map/provinces.bmp';
   static MAPDATA_PROVINCES = 'mapdata/provinces.json';
   static MAPDATA_STATES = 'mapdata/states.json';
 
@@ -2014,17 +2015,25 @@ class MapRenderer {
       st.provinces.forEach(pid => MapRenderer.provToState.set(pid, sid));
     });
     Object.entries(provData.p).forEach(([pid, p]) => {
-      MapRenderer.colorToProv.set((255 << 24) | (p[2] << 16) | (p[1] << 8) | p[0], parseInt(pid));
+      // BUG FIX: bit演算は符号付きint32になるため >>> 0 で unsigned に正規化する。
+      // これがないと Uint32Array (常に正の値) のルックアップが一切一致せず、
+      // 全ピクセルが「未認識」扱いになり陸地が描画されない。
+      const key = ((255 << 24) | (p[2] << 16) | (p[1] << 8) | p[0]) >>> 0;
+      MapRenderer.colorToProv.set(key, parseInt(pid));
     });
 
-    // Load the official provinces bitmap from cbrzeczysz/hoi4-history
-    const img = await new Promise((resolve, reject) => {
+    // Load the official provinces bitmap (local first, then cbrzeczysz/hoi4-history raw)
+    const loadBmp = (src, fallback) => new Promise((resolve, reject) => {
       const im = new Image();
       im.crossOrigin = 'anonymous';
       im.onload = () => resolve(im);
-      im.onerror = () => reject(new Error('provinces.bmp の取得に失敗'));
-      im.src = DataFetcher.MAP_BMP_URL;
+      im.onerror = () => {
+        if (fallback && src !== fallback) { im.src = fallback; }
+        else reject(new Error('provinces.bmp の取得に失敗'));
+      };
+      im.src = src;
     });
+    const img = await loadBmp(DataFetcher.MAP_BMP_URL, DataFetcher.MAP_BMP_URL_FALLBACK);
     MapRenderer.mapW = img.width; MapRenderer.mapH = img.height;
     const c = document.createElement('canvas');
     c.width = img.width; c.height = img.height;
@@ -2055,7 +2064,7 @@ class MapRenderer {
     for (let y = 0; y < h; y++) {
       for (let x = 0; x < w; x++) {
         const i = (y * w + x) * 4;
-        const u32 = (255 << 24) | (data[i + 2] << 16) | (data[i + 1] << 8) | data[i];
+        const u32 = ((255 << 24) | (data[i + 2] << 16) | (data[i + 1] << 8) | data[i]) >>> 0;
         const pid = MapRenderer.colorToProv.get(u32);
         if (!pid) continue;
         sumX.set(pid, (sumX.get(pid) || 0) + x);
