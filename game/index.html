@@ -1332,7 +1332,9 @@ class FocusTreeManager {
             const x2 = f.x + 60, y2 = f.y + 35;
             const isDone = FocusTreeManager.completedFocuses.has(prereqId);
             const color = isDone ? '#4ac46a' : '#3a4a5a';
-            svgContent += '<path d="M' + x1 + ',' + y1 + ' C' + x1 + ',' + ((y1+y2)/2) + ' ' + x2 + ',' + ((y1+y2)/2) + ' ' + x2 + ',' + y2 + '" stroke="' + color + '" stroke-width="2" fill="none" opacity="0.5"/>';
+            // 直角接続線 (曲線禁止): 垂直→水平→垂直 のみで結ぶ
+            const midY = (y1 + y2) / 2;
+            svgContent += '<path d="M' + x1 + ',' + y1 + ' L' + x1 + ',' + midY + ' L' + x2 + ',' + midY + ' L' + x2 + ',' + y2 + '" stroke="' + color + '" stroke-width="2" fill="none" opacity="0.5"/>';
           }
         });
       }
@@ -2515,8 +2517,60 @@ class MapRenderer {
 class BattlePlanManager {
   static armies = [];
   static selectedArmyId = null;
-  static dragMode = null;      // 'front' | 'arrow'
+  static dragMode = null;      // 'front' | 'arrow' | 'area'
   static dragPoints = [];
+  // ---- 海軍/空軍オーダー (DLC拡張): 陸軍と同じマップ操作で哨戒・攻撃エリアを設定 ----
+  static activeForce = 'army';   // 'army' | 'navy' | 'air'
+  static navy = [];
+  static air = [];
+  static selectedUnitId = null;
+  static missions = {
+    navy: [{ id: 'patrol', label: '哨戒' }, { id: 'strike', label: '攻撃' }, { id: 'escort', label: '通商護衛' }],
+    air: [{ id: 'air_sup', label: '制空' }, { id: 'ground', label: '対地攻撃' }, { id: 'patrol', label: '哨戒' }]
+  };
+  static activeMission = { navy: 'patrol', air: 'air_sup' };
+
+  static setForce(f) {
+    BattlePlanManager.activeForce = f;
+    if (f === 'army' && !BattlePlanManager.selectedArmyId) BattlePlanManager.selectedArmyId = (BattlePlanManager.armies[0] || {}).id || null;
+    if (f !== 'army') {
+      const units = f === 'navy' ? BattlePlanManager.navy : BattlePlanManager.air;
+      if (!BattlePlanManager.selectedUnitId && units.length) BattlePlanManager.selectedUnitId = units[0].id;
+    }
+    BattlePlanManager.renderPanel();
+  }
+
+  static selectedUnit() {
+    const units = BattlePlanManager.activeForce === 'navy' ? BattlePlanManager.navy : BattlePlanManager.air;
+    return units.find(u => u.id === BattlePlanManager.selectedUnitId) || null;
+  }
+
+  static selectUnit(id) {
+    BattlePlanManager.selectedUnitId = id;
+    BattlePlanManager.renderPanel();
+  }
+
+  static setMission(m) {
+    BattlePlanManager.activeMission[BattlePlanManager.activeForce] = m;
+  }
+
+  static setupNavalAir() {
+    const player = CoreEngine.gameState.country;
+    const centers = Object.values(MapRenderer.states)
+      .filter(st => st.owner === player)
+      .map(st => MapRenderer.stateCenter.get(Object.keys(st.vp || {})[0]))
+      .filter(Boolean);
+    const base = centers[0] || [MapRenderer.mapW / 2, MapRenderer.mapH / 2];
+    // 艦隊 ×2 / 航空集団 ×2
+    BattlePlanManager.navy = [1, 2].map(i => ({
+      id: 'nav' + i, name: '第' + i + '艦隊', type: 'navy', base: [base[0] + i * 40, base[1] + 60],
+      area: null, target: null, mission: 'patrol', executing: false, progress: 0, strength: 100
+    }));
+    BattlePlanManager.air = [1, 2].map(i => ({
+      id: 'air' + i, name: '第' + i + '航空集団', type: 'air', base: [base[0] - i * 40, base[1] - 60],
+      area: null, target: null, mission: 'air_sup', executing: false, progress: 0, strength: 100
+    }));
+  }
 
   static init() {
     BattlePlanManager.renderPanel();
@@ -2544,6 +2598,7 @@ class BattlePlanManager {
       });
     }
     BattlePlanManager.selectedArmyId = 1;
+    BattlePlanManager.setupNavalAir();
     BattlePlanManager.renderPanel();
   }
 
@@ -2556,18 +2611,29 @@ class BattlePlanManager {
     return BattlePlanManager.armies.find(a => a.id === BattlePlanManager.selectedArmyId) || null;
   }
 
-  // ---- 前線描画 (右ドラッグ) ----
+  // ---- 前線描画 (右ドラッグ) / 海軍・空軍: 哨戒・攻撃エリアの描画 ----
   static startFrontDrag(worldPt) {
-    const army = BattlePlanManager.selectedArmy();
-    if (!army) { GameUI.notify('軍集団パネルから軍集団を選択してください。', 'alert'); return; }
-    BattlePlanManager.dragMode = 'front';
+    if (BattlePlanManager.activeForce === 'army') {
+      const army = BattlePlanManager.selectedArmy();
+      if (!army) { GameUI.notify('軍集団パネルから軍集団を選択してください。', 'alert'); return; }
+      BattlePlanManager.dragMode = 'front';
+    } else {
+      const unit = BattlePlanManager.selectedUnit();
+      if (!unit) { GameUI.notify('パネルから部隊を選択してください。', 'alert'); return; }
+      BattlePlanManager.dragMode = 'area';
+    }
     BattlePlanManager.dragPoints = [worldPt];
   }
 
-  // ---- 攻撃矢印 (Shift+右ドラッグ) ----
+  // ---- 攻撃矢印 (Shift+右ドラッグ) / 海軍・空軍: 攻撃目標の指定 ----
   static startArrowDrag(worldPt) {
-    const army = BattlePlanManager.selectedArmy();
-    if (!army) { GameUI.notify('軍集団パネルから軍集団を選択してください。', 'alert'); return; }
+    if (BattlePlanManager.activeForce === 'army') {
+      const army = BattlePlanManager.selectedArmy();
+      if (!army) { GameUI.notify('軍集団パネルから軍集団を選択してください。', 'alert'); return; }
+    } else {
+      const unit = BattlePlanManager.selectedUnit();
+      if (!unit) { GameUI.notify('パネルから部隊を選択してください。', 'alert'); return; }
+    }
     BattlePlanManager.dragMode = 'arrow';
     BattlePlanManager.dragPoints = [worldPt];
   }
@@ -2579,12 +2645,28 @@ class BattlePlanManager {
   }
 
   static endDrag() {
-    const army = BattlePlanManager.selectedArmy();
-    if (!army || BattlePlanManager.dragPoints.length < 2) {
+    const isLand = BattlePlanManager.activeForce === 'army';
+    const unit = isLand ? null : BattlePlanManager.selectedUnit();
+    if ((isLand ? !BattlePlanManager.selectedArmy() : !unit) || BattlePlanManager.dragPoints.length < 2) {
       BattlePlanManager.dragMode = null;
       return;
     }
-    if (BattlePlanManager.dragMode === 'front') {
+    if (BattlePlanManager.dragMode === 'area') {
+      // 海軍/空軍: ドラッグ2点を対角とする矩形エリア (哨戒・制空・攻撃範囲)
+      const a = BattlePlanManager.dragPoints[0], b = BattlePlanManager.dragPoints[BattlePlanManager.dragPoints.length - 1];
+      const anyProv = MapRenderer.provinceAt((a[0] + b[0]) / 2, (a[1] + b[1]) / 2);
+      if (!anyProv) {
+        GameUI.notify('エリアは地図上で描画してください。', 'alert');
+      } else {
+        unit.area = { x1: Math.min(a[0], b[0]), y1: Math.min(a[1], b[1]), x2: Math.max(a[0], b[0]), y2: Math.max(a[1], b[1]) };
+        unit.mission = BattlePlanManager.activeMission[BattlePlanManager.activeForce];
+        unit.progress = 0;
+        const mLabel = (BattlePlanManager.missions[BattlePlanManager.activeForce].find(m => m.id === unit.mission) || {}).label;
+        CoreEngine.log(unit.name + 'に' + mLabel + 'エリアを設定しました。');
+        GameUI.notify('エリア設定完了 (' + mLabel + ') — ▶ ミッション開始で実行');
+        MultiplayerManager.broadcast({ type: 'force_area', force: unit.type, id: unit.id, area: unit.area, mission: unit.mission });
+      }
+    } else if (BattlePlanManager.dragMode === 'front') {
       // ドラッグ経路の陸地プロビンスのみ前線として採用
       const pts = BattlePlanManager.dragPoints.filter(pt => {
         const pid = MapRenderer.provinceAt(pt[0], pt[1]);
@@ -2593,29 +2675,45 @@ class BattlePlanManager {
       if (pts.length < 2) {
         GameUI.notify('前線は陸地プロビンス上で描画してください。', 'alert');
       } else {
+        const army = BattlePlanManager.selectedArmy();
         army.frontline = pts;
         CoreEngine.log(army.name + 'の前線を設定しました。');
         GameUI.notify('前線設定完了 — Shift+右ドラッグで攻撃矢印を描けます');
         MultiplayerManager.broadcast({ type: 'battle_front', army: army.id, points: pts });
       }
     } else if (BattlePlanManager.dragMode === 'arrow') {
-      const from = army.frontline
-        ? army.frontline[Math.floor(army.frontline.length / 2)]
-        : BattlePlanManager.dragPoints[0];
       const to = BattlePlanManager.dragPoints[BattlePlanManager.dragPoints.length - 1];
       const toPid = MapRenderer.provinceAt(to[0], to[1]);
-      const sid = toPid ? MapRenderer.stateOf(toPid) : null;
-      const target = sid ? MapRenderer.states[sid] : null;
-      if (!target) { GameUI.notify('攻撃目標は陸上の州に指定してください。', 'alert'); }
-      else if (target.owner === CoreEngine.gameState.country) {
-        GameUI.notify('自国の州は攻撃目標にできません。', 'alert');
+      if (!isLand) {
+        // 海軍/空軍: 攻撃・爆撃目標 (海域プロビンスも可)
+        if (!toPid) { GameUI.notify('攻撃目標は地図上のプロビンスに指定してください。', 'alert'); }
+        else {
+          unit.target = { pid: toPid, x: to[0], y: to[1] };
+          unit.mission = BattlePlanManager.activeMission[BattlePlanManager.activeForce];
+          unit.progress = 0;
+          const mLabel = (BattlePlanManager.missions[BattlePlanManager.activeForce].find(m => m.id === unit.mission) || {}).label;
+          CoreEngine.log(unit.name + 'の' + mLabel + '目標を設定しました。');
+          GameUI.notify('目標設定完了 (' + mLabel + ')', 'success');
+          MultiplayerManager.broadcast({ type: 'force_target', force: unit.type, id: unit.id, pid: toPid, mission: unit.mission });
+        }
       } else {
-        army.arrow = { from: from, to: to };
-        army.targetState = sid;
-        army.progress = 0;
-        CoreEngine.log(army.name + 'の攻撃作戦を描きました: → ' + target.name);
-        GameUI.notify('攻撃矢印設定: ' + target.name, 'success');
-        MultiplayerManager.broadcast({ type: 'battle_arrow', army: army.id, from: from, to: to, state: sid });
+        const army = BattlePlanManager.selectedArmy();
+        const from = army.frontline
+          ? army.frontline[Math.floor(army.frontline.length / 2)]
+          : BattlePlanManager.dragPoints[0];
+        const sid = toPid ? MapRenderer.stateOf(toPid) : null;
+        const target = sid ? MapRenderer.states[sid] : null;
+        if (!target) { GameUI.notify('攻撃目標は陸上の州に指定してください。', 'alert'); }
+        else if (target.owner === CoreEngine.gameState.country) {
+          GameUI.notify('自国の州は攻撃目標にできません。', 'alert');
+        } else {
+          army.arrow = { from: from, to: to };
+          army.targetState = sid;
+          army.progress = 0;
+          CoreEngine.log(army.name + 'の攻撃作戦を描きました: → ' + target.name);
+          GameUI.notify('攻撃矢印設定: ' + target.name, 'success');
+          MultiplayerManager.broadcast({ type: 'battle_arrow', army: army.id, from: from, to: to, state: sid });
+        }
       }
     }
     BattlePlanManager.dragMode = null;
@@ -2624,6 +2722,14 @@ class BattlePlanManager {
   }
 
   static clearFront(armyId) {
+    // 海軍/空軍ユニットの場合はエリア・目標を解除
+    if (typeof armyId === 'string' && (armyId.startsWith('nav') || armyId.startsWith('air'))) {
+      const unit = [...BattlePlanManager.navy, ...BattlePlanManager.air].find(u => u.id === armyId);
+      if (!unit) return;
+      unit.area = null; unit.target = null; unit.executing = false; unit.progress = 0;
+      BattlePlanManager.renderPanel();
+      return;
+    }
     const army = BattlePlanManager.armies.find(a => a.id === armyId);
     if (!army) return;
     army.frontline = null;
@@ -2634,6 +2740,22 @@ class BattlePlanManager {
   }
 
   static execute(armyId) {
+    // 海軍/空軍: ミッション実行 (哨戒・制空・攻撃)
+    if (typeof armyId === 'string' && (armyId.startsWith('nav') || armyId.startsWith('air'))) {
+      const unit = [...BattlePlanManager.navy, ...BattlePlanManager.air].find(u => u.id === armyId);
+      if (!unit) return;
+      if (!unit.area && !unit.target) {
+        GameUI.notify('先にエリアまたは目標を描いてください (右ドラッグ)。', 'alert');
+        return;
+      }
+      unit.executing = true;
+      unit.progress = 0;
+      CoreEngine.log(unit.name + 'がミッションを開始: ' + unit.mission);
+      GameUI.notify('✈️ ミッション開始！', 'success');
+      MultiplayerManager.broadcast({ type: 'force_execute', force: unit.type, id: unit.id });
+      BattlePlanManager.renderPanel();
+      return;
+    }
     const army = BattlePlanManager.armies.find(a => a.id === armyId);
     if (!army) return;
     if (!army.arrow || !army.targetState) {
@@ -2654,12 +2776,39 @@ class BattlePlanManager {
   }
 
   static abort(armyId) {
+    if (typeof armyId === 'string' && (armyId.startsWith('nav') || armyId.startsWith('air'))) {
+      const unit = [...BattlePlanManager.navy, ...BattlePlanManager.air].find(u => u.id === armyId);
+      if (!unit) return;
+      unit.executing = false;
+      unit.progress = 0;
+      CoreEngine.log(unit.name + 'のミッションを中止しました。');
+      BattlePlanManager.renderPanel();
+      return;
+    }
     const army = BattlePlanManager.armies.find(a => a.id === armyId);
     if (!army) return;
     army.executing = false;
     army.progress = 0;
     CoreEngine.log(army.name + 'の作戦を中止しました。');
     BattlePlanManager.renderPanel();
+  }
+
+  // 海軍/空軍ミッション完了時の効果
+  static completeForceMission(unit) {
+    const gs = CoreEngine.gameState;
+    gs.xp[unit.type === 'navy' ? 'navy' : 'air'] += 15;
+    if (unit.type === 'navy') {
+      if (unit.mission === 'patrol') gs.navalSupremacy = Math.min(100, (gs.navalSupremacy || 0) + 20);
+      if (unit.mission === 'escort') gs.convoys = (gs.convoys || 0) + 30;
+      if (unit.mission === 'strike') gs.warSupport = Math.min(100, gs.warSupport + 2);
+    } else {
+      if (unit.mission === 'air_sup') gs.airSupremacy = Math.min(100, (gs.airSupremacy || 0) + 25);
+      if (unit.mission === 'ground') gs.warSupport = Math.min(100, gs.warSupport + 3);
+      if (unit.mission === 'patrol') gs.airSupremacy = Math.min(100, (gs.airSupremacy || 0) + 10);
+    }
+    CoreEngine.log('🏆 ' + unit.name + 'のミッション完了: ' + unit.mission);
+    GameUI.notify('ミッション完了！ XP+15', 'success');
+    MultiplayerManager.broadcast({ type: 'force_complete', force: unit.type, id: unit.id, mission: unit.mission });
   }
 
   static onTick() {
@@ -2701,6 +2850,19 @@ class BattlePlanManager {
         });
       }
     });
+    // 海軍/空軍ミッションの進行 (DLC拡張)
+    const gs = CoreEngine.gameState;
+    [...BattlePlanManager.navy, ...BattlePlanManager.air].forEach(unit => {
+      if (unit.executing) {
+        unit.progress += 1.2;
+        if (unit.progress >= 100) {
+          unit.executing = false;
+          unit.progress = 0;
+          BattlePlanManager.completeForceMission(unit);
+        }
+      }
+    });
+    if (BattlePlanManager.armies.some(a => a.executing) && gs.xp) gs.xp.army += 0.5;
     BattlePlanManager.renderPanelThrottled();
   }
 
@@ -2718,7 +2880,33 @@ class BattlePlanManager {
       el.innerHTML = '<h4>⚔️ 軍集団</h4><div class="army-info">地図読込後に編成されます</div>';
       return;
     }
-    let html = '<h4>⚔️ 軍集団パネル (作戦指揮)</h4>';
+    // 陸軍/海軍/空軍 切替タブ
+    let html = '<h4>⚔️ 作戦指揮パネル</h4><div style="display:flex;gap:4px;margin-bottom:6px;">' +
+      [['army', '🪖 陸軍'], ['navy', '⚓ 海軍'], ['air', '✈️ 空軍']].map(([f, l]) =>
+        '<button class="army-btn' + (BattlePlanManager.activeForce === f ? '' : '" style="background:var(--bg-panel-light)') + '" onclick="BattlePlanManager.setForce(\'' + f + '\')">' + l + '</button>').join('') +
+      '</div>';
+    // 海軍/空軍ユニット行
+    if (BattlePlanManager.activeForce !== 'army') {
+      const force = BattlePlanManager.activeForce;
+      const units = force === 'navy' ? BattlePlanManager.navy : BattlePlanManager.air;
+      const missionOpts = BattlePlanManager.missions[force].map(m => '<option value="' + m.id + '" ' + (BattlePlanManager.activeMission[force] === m.id ? 'selected' : '') + '>' + m.label + '</option>').join('');
+      units.forEach(unit => {
+        html += '<div class="army-row ' + (unit.id === BattlePlanManager.selectedUnitId ? 'selected' : '') + '" onclick="BattlePlanManager.selectUnit(\'' + unit.id + '\')">' +
+          '<div class="army-name">' + (unit.type === 'navy' ? '⚓ ' : '✈️ ') + unit.name + (unit.id === BattlePlanManager.selectedUnitId ? ' ✅' : '') + '</div>' +
+          '<div class="army-info">' +
+          (unit.type === 'navy' ? '任務: <select style="background:#1a222c;color:#fff;border:1px solid #3a4a5a;font-size:10px;" onclick="event.stopPropagation()" onchange="BattlePlanManager.setMission(this.value)">' + missionOpts + '</select>' : '任務: <select style="background:#1a222c;color:#fff;border:1px solid #3a4a5a;font-size:10px;" onclick="event.stopPropagation()" onchange="BattlePlanManager.setMission(this.value)">' + missionOpts + '</select>') +
+          ' | ' + (unit.area ? 'エリア✅' : 'エリア—') + ' | ' + (unit.target ? '目標✅' : '目標—') + '</div>' +
+          (unit.executing
+            ? '<div class="army-info" style="color:var(--accent-red)">実行中... ' + Math.floor(unit.progress) + '%</div>' +
+              '<button class="army-btn abort" onclick="BattlePlanManager.abort(\'' + unit.id + '\')">⛔ 中止</button>'
+            : '<button class="army-btn" onclick="BattlePlanManager.execute(\'' + unit.id + '\')">▶ ミッション開始</button>') +
+          '<button class="army-btn" style="background:var(--bg-panel-light)" onclick="BattleManager_clearFront(\'' + unit.id + '\')">✕ 解除</button>' +
+          '</div>';
+      });
+      html += '<div style="font-size:10px;color:var(--text-secondary);margin-top:4px;">マップ上で右ドラッグ=エリア(哨戒/制空) / Shift+右ドラッグ=攻撃目標</div>';
+      el.innerHTML = html;
+      return;
+    }
     BattlePlanManager.armies.forEach(army => {
       const org = army.divisions.reduce((s, d) => s + d.org, 0);
       const maxOrg = army.divisions.reduce((s, d) => s + d.maxOrg, 0);
@@ -2813,10 +3001,73 @@ class BattlePlanManager {
       });
     });
 
-    // ドラッグ中のプレビュー
+    // 海軍/空軍オーバーレイ: 哨戒・制空エリア (矩形=直線のみ) と部隊マーカー
+    [...BattlePlanManager.navy, ...BattlePlanManager.air].forEach(unit => {
+      const navy = unit.type === 'navy';
+      const lineColor = navy ? 'rgba(90,160,255,0.95)' : 'rgba(120,200,255,0.95)';
+      if (unit.area) {
+        const a = worldToScreen(unit.area.x1, unit.area.y1);
+        const b = worldToScreen(unit.area.x2, unit.area.y2);
+        ctx.save();
+        ctx.fillStyle = navy ? 'rgba(90,160,255,0.12)' : 'rgba(120,200,255,0.10)';
+        ctx.strokeStyle = lineColor;
+        ctx.lineWidth = 2;
+        if (unit.executing) { ctx.setLineDash([6, 4]); ctx.shadowColor = lineColor; ctx.shadowBlur = 6; }
+        // 水平/垂直の直線のみで矩形を描画
+        ctx.beginPath();
+        ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.lineTo(a[0], b[1]); ctx.closePath();
+        ctx.fill(); ctx.stroke();
+        ctx.restore();
+        if (unit.executing) {
+          const prog = Math.min(1, unit.progress / 100);
+          ctx.strokeStyle = '#d4a843';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.moveTo(b[0] - (b[0] - a[0]) * prog, a[1]);
+          ctx.lineTo(b[0], a[1]);
+          ctx.stroke();
+        }
+      }
+      if (unit.target) {
+        const t = worldToScreen(unit.target.x, unit.target.y);
+        ctx.strokeStyle = 'rgba(255,90,90,0.95)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(t[0], t[1], 10, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(t[0] - 7, t[1] - 7); ctx.lineTo(t[0] + 7, t[1] + 7);
+        ctx.moveTo(t[0] + 7, t[1] - 7); ctx.lineTo(t[0] - 7, t[1] + 7);
+        ctx.stroke();
+      }
+      // 部隊マーカー (⚓/✈️)
+      const bs = worldToScreen(unit.base[0], unit.base[1]);
+      ctx.fillStyle = navy ? 'rgba(90,160,255,0.95)' : 'rgba(120,200,255,0.95)';
+      ctx.fillRect(bs[0] - 7, bs[1] - 5, 14, 10);
+      ctx.strokeStyle = '#0a0c0f';
+      ctx.strokeRect(bs[0] - 7, bs[1] - 5, 14, 10);
+      ctx.fillStyle = '#0a0c0f';
+      ctx.font = '8px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(navy ? 'NAVY' : 'AIR', bs[0], bs[1] + 3);
+    });
+
+    // ドラッグ中のプレビュー (直線のみ)
     if (BattlePlanManager.dragMode && BattlePlanManager.dragPoints.length > 1) {
-      const color = BattlePlanManager.dragMode === 'front' ? 'rgba(125,232,122,0.8)' : 'rgba(255,90,90,0.8)';
-      drawPolyline(BattlePlanManager.dragPoints, color, 2, [8, 4]);
+      const color = BattlePlanManager.dragMode === 'front' ? 'rgba(125,232,122,0.8)' : BattlePlanManager.dragMode === 'area' ? 'rgba(90,160,255,0.8)' : 'rgba(255,90,90,0.8)';
+      if (BattlePlanManager.dragMode === 'area') {
+        const a = BattlePlanManager.dragPoints[0];
+        const b = BattlePlanManager.dragPoints[BattlePlanManager.dragPoints.length - 1];
+        const s1 = worldToScreen(Math.min(a[0], b[0]), Math.min(a[1], b[1]));
+        const s2 = worldToScreen(Math.max(a[0], b[0]), Math.max(a[1], b[1]));
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.setLineDash([6, 4]);
+        ctx.strokeRect(s1[0], s1[1], s2[0] - s1[0], s2[1] - s1[1]);
+        ctx.setLineDash([]);
+      } else {
+        drawPolyline(BattlePlanManager.dragPoints, color, 2, [8, 4]);
+      }
     }
   }
 }
@@ -4331,7 +4582,9 @@ class ResearchManager {
             const x1 = pre.x + 55, y1 = pre.y + 30;
             const x2 = t.x + 55, y2 = t.y + 30;
             const isDone = ResearchManager.researchedTech.has(preId);
-            svgContent += '<path d="M' + x1 + ',' + y1 + ' C' + x1 + ',' + ((y1+y2)/2) + ' ' + x2 + ',' + ((y1+y2)/2) + ' ' + x2 + ',' + y2 + '" stroke="' + (isDone ? '#4ac46a' : '#3a4a5a') + '" stroke-width="2" fill="none" opacity="0.4"/>';
+            // 直角接続線 (曲線禁止): 垂直→水平→垂直 のみで結ぶ
+            const midY = (y1 + y2) / 2;
+            svgContent += '<path d="M' + x1 + ',' + y1 + ' L' + x1 + ',' + midY + ' L' + x2 + ',' + midY + ' L' + x2 + ',' + y2 + '" stroke="' + (isDone ? '#4ac46a' : '#3a4a5a') + '" stroke-width="2" fill="none" opacity="0.4"/>';
           }
         });
       }
@@ -4704,7 +4957,8 @@ class SaveLoadManager {
         total: FocusTreeManager.focusDaysTotal
       },
       deck: CardSystem.deck,
-      hired: CardSystem.hiredCards
+      hired: CardSystem.hiredCards,
+      dlc: (typeof DLC !== 'undefined' ? DLC.collect() : null)   // DLC拡張状態 (XP/設計/諜報/MIO/講和/特性)
     };
   }
 
@@ -4747,6 +5001,7 @@ class SaveLoadManager {
     }
     CardSystem.deck = data.deck || [];
     CardSystem.hiredCards = data.hired || [];
+    if (data.dlc && typeof DLC !== 'undefined') DLC.apply(data.dlc);   // DLC拡張状態を復元
     CardSystem.saveDeck();
     CardSystem.saveHired();
     UniqueNationSystems.ensureDefaults();
@@ -4971,6 +5226,7 @@ async function initGame() {
   CheatConsole.init();
   MultiplayerManager.init();
   UniqueNationSystems.init();
+  if (typeof DLC !== 'undefined') DLC.onGameStart();   // 全DLC拡張 (ドクトリン/兵器設計/諜報/MIO・国際市場/講和会議/将軍特性)
   CardSystem.deck.forEach(card => CardSystem.applyModifiers(card.id));
   CoreEngine.renderStats();
   CoreEngine.renderWorldTension();
@@ -4980,5 +5236,7 @@ async function initGame() {
 
 window.addEventListener('DOMContentLoaded', () => StartScreen.show());
 </script>
+<!-- ==================== DLC拡張モジュール (ドクトリン/兵器設計/諜報/MIO・国際市場/講和会議/将軍特性) ==================== -->
+<script src="dlc.js"></script>
 </body>
 </html>
