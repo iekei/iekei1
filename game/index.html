@@ -889,10 +889,22 @@ class DataFetcher {
   };
 
   // Focus tree data paths (country-specific, extracted from hoi4-history/common/national_focus)
+  // Actual filenames use per-country prefixes with contiguous numbering:
+  //   ger/sov: nnf_batchN.json / jap: JAP_nf_batchN.json + shared nnf_batchN.json / etc.
   static FOCUS_DIR = { GER: 'ger', SOV: 'sov', JAP: 'jap', USA: 'usa', ENG: 'eng', FRA: 'fra', ITA: 'ita' };
+  static FOCUS_BATCHES = {
+    GER: [['nnf_batch', 13]],
+    SOV: [['nnf_batch', 33]],
+    JAP: [['JAP_nf_batch', 11], ['nnf_batch', 11]],
+    USA: [['USA_nf_batch', 14], ['nnf_batch', 14]],
+    ENG: [['ENG_nf_batch', 16], ['nnf_batch', 16]],
+    FRA: [['FRA_nf_batch', 19], ['nnf_batch', 19]],
+    ITA: [['ITA_nf_batch', 32], ['nnf_batch', 32]]
+  };
   static FOCUS_PATHS = Object.fromEntries(
-    Object.entries(DataFetcher.FOCUS_DIR).map(([tag, dir]) => [
-      tag, Array.from({length: 40}, (_, i) => dir + '/data/nf_batch' + (i + 1) + '.json')
+    Object.entries(DataFetcher.FOCUS_BATCHES).map(([tag, batches]) => [
+      tag, batches.flatMap(([prefix, count]) =>
+        Array.from({length: count}, (_, i) => DataFetcher.FOCUS_DIR[tag] + '/data/' + prefix + (i + 1) + '.json'))
     ])
   );
 
