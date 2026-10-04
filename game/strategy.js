@@ -261,6 +261,11 @@ class OffensivePlanner {
       const owned=[b.provId,...(MapRenderer.provNeighbors.get(b.provId)||[])].filter(p=>MapRenderer.ownerOf(p)===b.attacker);
       army.frontline=owned.filter(p=>[...(MapRenderer.provNeighbors.get(p)||[])].some(n=>CoreEngine.gameState.atWar.includes(MapRenderer.ownerOf(n))))
         .map(p=>MapRenderer.provCentroid.get(p)).filter(Boolean);
+      // Recalculate the visual attack chain to reflect the new frontline
+      if (army.targetState) {
+        const newChain = BattlePlanManager.buildAttackChain(army.targetState);
+        if (newChain.length) army.chain = newChain;
+      }
       CoreEngine.log('🏆 '+army.name+'がプロビンス '+b.provId+'を占領。ここを足場に次の地域へ進軍します。');
       if (b.invasion || b.airdrop) { army.executing=false; army.status='橋頭堡を確保・駐留'; army.route=null; }
       else { army.executing=true; OffensivePlanner.next(army); }
