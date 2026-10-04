@@ -151,11 +151,13 @@ class ImageLoader {
       ' alt="' + (alt || '') + '" class="' + cls + '"' + attrStr + ' loading="lazy">';
   }
 
-  // エラー時フォールバック付き <img> タグ
-  static lazyImgWithFallback(src, fallback, alt, cls = '') {
+  // エラー時フォールバック付き <img> タグ (attrs は省略可能な追加属性)
+  static lazyImgWithFallback(src, fallback, alt, cls = '', attrs = {}) {
+    const attrStr = Object.entries(attrs || {})
+      .map(([k, v]) => ' ' + k + '="' + v + '"').join('');
     return '<img src="' + ImageLoader.PLACEHOLDER + '" data-src="' + src + '"' +
       ' onerror="this.onerror=null;this.src=\'' + fallback + '\'"' +
-      ' alt="' + (alt || '') + '" class="' + cls + '" loading="lazy">';
+      ' alt="' + (alt || '') + '" class="' + cls + '" loading="lazy"' + attrStr + '>';
   }
 
   // ── カテゴリ別動的ロードの登録 ──

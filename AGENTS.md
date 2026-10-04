@@ -25,7 +25,15 @@ docker compose -f docker-compose.base44.yml up -d
 - No external credentials or secrets are needed.
 - Health check: `curl http://localhost:3000/` returns 200; `curl http://localhost:3000/api/health` returns `{"ok":true}`.
 
-## Wiki Asset Scraper (game/assets/scraper/)
+## Asset Images — GitHub Upload Mode (scraping discontinued)
+
+- Scraping is retired by user decision: the `scraper` service was removed from `docker-compose.base44.yml`; never re-add it or run the scraper scripts again.
+- All images are user-uploaded to this GitHub repository (`iekei/iekei1`, `main`) under `game/assets/<folder>/` with filenames EXACTLY as the HoI4 database PNGs (no renaming, no extension changes).
+- `game/assets/upload-checklist.json` lists, per category, the exact expected filenames (`files`), already-saved ones (`already_saved`) and still-missing ones (`missing`). Regenerate it only with a user-approved one-off script run from `/tmp` (source: `mappings/*.json` coverage + on-disk diff).
+- `AssetRegistry` (game/assets/asset-registry.js) owns the connection: `categoryFolders` maps category id → folder; `getLocalAssetUrl(id, file)` returns the served relative path, `getGithubAssetUrl(id, file)` the `iekei.github.io/iekei1` fallback, `categoryImg(id, file, …)` renders local → GitHub-fallback lazy `<img>`. The old `getFlagUrl` now returns the local flags path.
+- The leftover `game/assets/scraper/` directory and `.state/` are historical only; mappings `coverage` lists remain the filename source of truth for the checklist.
+
+## Wiki Asset Scraper (game/assets/scraper/) — HISTORICAL, DO NOT RUN
 
 - Start the optional source-mounted Python job with `docker compose -f docker-compose.base44.yml --profile assets up -d scraper`; follow progress with `docker compose -f docker-compose.base44.yml logs -f scraper`. It exits only on verified completion/error by default (`SCRAPER_MAX_PASSES=0`), not a permanently responsive app service, and has no automatic restart. A positive pass limit bounds the job. Re-running the same command resumes checkpoints.
 - `wiki_crawl.py` owns both modes' cycle-safe traversal. Canonical URLs are deduplication keys ONLY; keep the actual request path, query ordering and escaping from the source link (archive lookup may otherwise 404). Follow forward `filefrom`, `subcatfrom` and `pagefrom` URLs as given; they belong to the CURRENT category, including redirected categories. Only `mw-subcategories` supplies children; never fall back to the whole page. There is no descendant depth cutoff.

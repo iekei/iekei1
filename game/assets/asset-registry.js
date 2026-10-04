@@ -14,7 +14,31 @@ const AssetRegistry = {
   // ── Paradox Wiki ベースURL ──
   WIKI_BASE: 'https://hoi4.paradoxwikis.com',
   WIKI_FILE_BASE: 'https://hoi4.paradoxwikis.com/Special:FilePath/',
-  GITHUB_RAW: 'https://raw.githubusercontent.com/cbrzeczysz/hoi4-history/main',
+
+  // ── GitHub 接続 ──
+  // 画像はこのリポジトリ (iekei/iekei1) の game/assets/<folder>/ 配下に
+  // HoI4データベースと完全同名のPNGとしてアップロードされる。
+  // ローカル (同一リポジトリの静的配信) を優先し、未アップロード分はGitHub URLへフォールバック。
+  GITHUB_RAW: 'https://raw.githubusercontent.com/iekei/iekei1/main',
+  GITHUB_PAGES: 'https://iekei.github.io/iekei1',
+
+  // カテゴリID → 保存フォルダ名 (game/assets/<folder>/)
+  categoryFolders: {
+    flags: 'flags',
+    scientist_portraits: 'scientists',
+    equipment_icons: 'equipment',
+    technology_icons: 'technology',
+    operative_portraits: 'operatives',
+    national_focus_icons: 'focus',
+    land_unit_icons: 'land_units',
+    top_menu_icons: 'top_menu',
+    topbar_icons: 'topbar',
+    special_project_icons: 'special_projects',
+    leader_portraits: 'leaders',
+    ace_portraits: 'aces',
+    icons: 'icons',
+    portraits: 'portraits'
+  },
 
   // ── カテゴリ定義 ──
   // 各カテゴリ: { id, label, wikiCategory, wikiUrl, subcategories, localBase, preload }
@@ -270,9 +294,36 @@ const AssetRegistry = {
     return this.WIKI_FILE_BASE + encodeURIComponent(fileName);
   },
 
-  /** GitHub raw URLを生成 (hoi4-historyリポジトリ) */
+  /** GitHub raw URLを生成 (このリポジトリ: iekei/iekei1) */
   getGithubRawUrl(path) {
     return this.GITHUB_RAW + '/' + path;
+  },
+
+  /**
+   * カテゴリ内の画像URLを解決 (HoI4データベース完全同名のPNGを対象)
+   * 返り値: ローカル相対パス game/assets/<folder>/<fileName> | null
+   * 同一リポジトリから静的配信されるため、アップロード済み画像はそのまま表示される
+   */
+  getLocalAssetUrl(categoryId, fileName) {
+    const folder = this.categoryFolders[categoryId];
+    if (!folder) return null;
+    return 'game/assets/' + folder + '/' + fileName;
+  },
+
+  /** 同一ファイルのGitHub URL (mainブランチ) — ローカル未アップロード分のフォールバック */
+  getGithubAssetUrl(categoryId, fileName) {
+    const local = this.getLocalAssetUrl(categoryId, fileName);
+    return local ? this.GITHUB_PAGES + '/' + local : null;
+  },
+
+  /** ローカル → GitHub フォールバック付きの遅延読み込み <img> を生成 */
+  categoryImg(categoryId, fileName, alt, cls = '', attrs = {}) {
+    const local = this.getLocalAssetUrl(categoryId, fileName);
+    const fallback = this.getGithubAssetUrl(categoryId, fileName);
+    if (fallback && typeof ImageLoader !== 'undefined' && ImageLoader.lazyImgWithFallback) {
+      return ImageLoader.lazyImgWithFallback(local, fallback, alt, cls, attrs);
+    }
+    return ImageLoader.lazyImg(local, alt, cls, attrs);
   },
 
   /** フォーカスアイコンURLを解決 (ローカル優先 → GitHubフォールバック) */
@@ -287,9 +338,9 @@ const AssetRegistry = {
     return 'card/GER/data/image/item/' + resource + '.png';
   },
 
-  /** 国旗URL (Paradox Wiki形式: <TAG>.png) */
+  /** 国旗URL (game/assets/flags/<TAG>.png — HoI4データベース完全同名) */
   getFlagUrl(tag) {
-    return this.WIKI_FILE_BASE + encodeURIComponent(tag + '.png');
+    return this.getLocalAssetUrl('flags', tag + '.png');
   }
 };
 

@@ -15,6 +15,16 @@
 | `research-tree.js` / `research-tree.css` | 前提技術のレーン配置・直角接続線・クリック詳細パネル |
 | `research-icons.js` | 研究画面を開いた時にWiki索引を読み込み、兵器カテゴリ別アイコンを解決 |
 
+## GitHub 画像アップロード (スクレイピング廃止後の運用)
+
+画像は GitHub リポジトリ **iekei/iekei1** (このリポジトリ) に直接アップロードする。
+スクレイピングは廃止済み — 追加取得は不要。
+
+- **保存場所**: `game/assets/<folder>/` 配下 (folder 対応は `asset-registry.js` の `categoryFolders`)
+- **ファイル名**: HoI4 データベースの PNG と**完全に同名** (`flags/France.png`、`scientists/Portrait_AST_jack_piddington.png` など)。改名・拡張子の変更は禁止。
+- **必要ファイル一覧**: `upload-checklist.json` — 各カテゴリの `files` (全件) / `already_saved` (ローカル済み) / `missing` (未アップロード) を記録。
+- **参照URL**: ローカルは `game/assets/<folder>/<ファイル名>`、未アップロード分のフォールバックは `https://iekei.github.io/iekei1/game/assets/<folder>/<ファイル名>` (`AssetRegistry.getLocalAssetUrl` / `getGithubAssetUrl`)。
+
 ## アセットカテゴリ (AssetRegistry)
 
 以下の10カテゴリを Paradox Wiki のカテゴリアーカイブに基づいて定義:
