@@ -166,7 +166,7 @@
     "research_time": 200,
     "reliability": "未研究",
     "desc": "",
-    "asset_key": "FRA_strategic_bomber1",
+    "asset_key": "early_bomber",
     "effects": [
       "配備可能: large_plane_airframe_0",
       "配備可能: large_plane_maritime_patrol_plane_airframe_0",

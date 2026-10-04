@@ -46,10 +46,12 @@ async function loadAllTechData() {
   await ResearchIcons.load();
   for (const cat of categories) {
     try {
-      const res = await fetch(`./data/tech_${cat}.json`);
+      const res = await fetch(`./data/tech_${cat}.json?v=4`);
       if (res.ok) techData[cat] = await res.json();
     } catch (e) { console.error(e); }
   }
+  completedTechs = ResearchProgress.restore({ researched: completedTechs }, techData).researched;
+  localStorage.setItem('completedTechs', JSON.stringify(completedTechs));
   renderTree();
 }
 
@@ -216,7 +218,13 @@ function renderTree() {
   if (!container || !svg) return;
   container.innerHTML = ''; svg.innerHTML = '';
   
-  const list = techData[currentCategory] || [];
+  const techs = techData[currentCategory] || [];
+  const layout = ResearchTreeUI.layout(techs);
+  const list = techs.map(tech => ({ ...tech, ...layout.positions.get(tech.id) }));
+  const viewport = document.getElementById('tree-viewport');
+  viewport.style.width = layout.width + 'px';
+  viewport.style.height = layout.height + 'px';
+  document.getElementById('year-sidebar').hidden = true;
   const nodeMap = {};
   list.forEach(item => { nodeMap[item.id] = item; });
 
@@ -226,7 +234,7 @@ function renderTree() {
     node.style.left = `${tech.x}px`; node.style.top = `${tech.y}px`;
     
     node.innerHTML = '<div class="tech-icon-wrapper"></div><div class="tech-title"></div>';
-    node.querySelector('.tech-title').textContent = tech.title;
+    node.querySelector('.tech-title').textContent = `${tech.title} (${tech.year}年)`;
     const icon = document.createElement('img');
     icon.alt = '';
     icon.loading = 'lazy';

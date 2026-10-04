@@ -876,6 +876,7 @@
 <script src="assets/research-icon-catalog.js"></script>
 <script src="assets/research-icons.js"></script>
 <script src="assets/research-tree.js"></script>
+<script src="assets/research-progress.js"></script>
 <script>
 /* ================================================================
    JavaScript Module Architecture
@@ -898,7 +899,7 @@ class DataFetcher {
   static HOI4_REPO_RAW = 'https://raw.githubusercontent.com/cbrzeczysz/hoi4-history/main';
   static cache = new Map();
   // データバージョン: データファイル更新時に上げる (fetchURLのキャッシュバスティング用)
-  static DATA_VERSION = '3';
+  static DATA_VERSION = '4';
 
   // Local card data paths (relative to game/index.html)
   static CARD_PATHS = {
@@ -5767,8 +5768,9 @@ class SaveLoadManager {
       FocusTreeManager.focusDaysTotal = data.focus.total || 0;
     }
     if (data.research && ResearchManager.techData && Object.keys(ResearchManager.techData).length > 0) {
-      ResearchManager.researchedTech = new Set(data.research.researched || []);
-      ResearchManager.researching = data.research.researching || {};
+      const restored = ResearchProgress.restore(data.research, ResearchManager.techData, gs.researchSlots);
+      ResearchManager.researchedTech = new Set(restored.researched);
+      ResearchManager.researching = restored.researching;
       ResearchManager.renderSlots();
       if (GameUI.currentTab === 'research') ResearchManager.render();
     }

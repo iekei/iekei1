@@ -56,7 +56,7 @@ const ResearchTreeUI = {
       }));
       const root = component.filter(item => !(item.prerequisites || []).some(id => byId.has(id)))
         .sort((a, b) => (a.x || 0) - (b.x || 0))[0] || component[0];
-      lanes.push({ x: 54 + column * 190, width: columns * 190 - 36, title: root.title });
+      lanes.push({ x: 54 + column * 190, width: columns * 190 - 36, title: root.branch || root.title });
       column += columns;
     });
     return { positions, lanes, width: Math.max(420, 72 + column * 190),

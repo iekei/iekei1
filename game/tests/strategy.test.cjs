@@ -8,13 +8,14 @@ const root=path.resolve(__dirname,'..');
 function fixture() {
   const nodes=new Map(),storage=new Map();
   const node=id=>{if(!nodes.has(id))nodes.set(id,{innerHTML:'',textContent:'',value:'',style:{},dataset:{},classList:{add(){},remove(){},toggle(){},contains(){return true;}},appendChild(){},addEventListener(){},querySelectorAll(){return[];},querySelector(sel){return node(id+sel);}});return nodes.get(id);};
-  const sandbox={console,Date,Math,crypto:require('node:crypto').webcrypto,setInterval(){return 1;},clearInterval(){},setTimeout(){},requestAnimationFrame(){},
+  const sandbox={TopbarUI:{render(){}},console,Date,Math,crypto:require('node:crypto').webcrypto,setInterval(){return 1;},clearInterval(){},setTimeout(){},requestAnimationFrame(){},
     document:{getElementById:node,querySelectorAll(){return[];},querySelector(){return null;},createElement(){return node(Math.random());},addEventListener(){},head:{appendChild(){}},body:{appendChild(){}}},
     localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v),removeItem:k=>storage.delete(k)}};
   sandbox.structuredClone=structuredClone;sandbox.window=sandbox;sandbox.addEventListener=()=>{};
   const ctx=vm.createContext(sandbox);
   const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
   const inline=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(m=>m[1]).filter(s=>s.trim()).join('\n');
+  vm.runInContext(fs.readFileSync(path.join(root,'assets/research-progress.js'),'utf8'),ctx,{filename:'research-progress.js'});
   vm.runInContext(inline,ctx,{filename:'index.html:inline'});
   for(const name of ['battle','news','ai','training','dlc','strategy'])vm.runInContext(fs.readFileSync(path.join(root,name+'.js'),'utf8'),ctx,{filename:name+'.js'});
   const run=source=>vm.runInContext(source,ctx);
