@@ -1,0 +1,32 @@
+.country-flag { display:inline-block; width:30px; height:20px; object-fit:contain; vertical-align:middle; flex-shrink:0; }
+.sn-flag .country-flag { width:76px; height:50px; }
+#player-flag .country-flag { width:44px; height:30px; }
+.country-flag-missing { font-size:11px; color:var(--text-secondary); }
+.person-portrait { width:64px; height:82px; object-fit:contain; background:#1b1f18; border:1px solid #79715b; flex-shrink:0; }
+.operative-card { display:flex; align-items:center; flex-wrap:wrap; gap:12px; padding:10px; margin:8px 0; border:1px solid #655f4a; background:linear-gradient(#33382d,#24271f); }
+.operative-card .operative-info { flex:1; min-width:170px; }
+.operative-card .operative-info p { margin:5px 0; }
+.operative-card select { max-width:100%; }
+.scientist-placeholder-label { display:block; font-size:10px; color:var(--text-secondary); }
+.sp-facility-card .sp-header .person-portrait { width:64px; height:82px; object-fit:contain; }
+.project-blueprint { margin:8px 0; padding:8px; background:#152629; border:1px solid #536667; }
+figure.project-blueprint img { display:block; width:100%; max-width:100%; height:120px; margin:auto; object-fit:contain; }
+.project-blueprint figcaption { margin-top:5px; color:#b5c9c6; font-size:10px; text-align:center; }
+.land-unit-icon { position:relative; display:inline-block; width:76px; height:42px; overflow:hidden; flex:0 0 76px; vertical-align:middle; }
+.land-unit-icon img { position:absolute; top:50%; transform:translateY(-50%); height:auto; max-width:none; }
+.division-grid { grid-template-columns:repeat(5,80px); }
+.division-cell { width:80px; height:50px; overflow:hidden; }
+.division-battalion-list { width:270px; }
+.battalion-option { display:flex; align-items:center; gap:6px; }
+/* Keep the 76px sprites intact without squeezing neighboring text columns. */
+.division-grid-container { display:flex; flex-wrap:wrap; align-items:flex-start; gap:14px; }
+.division-grid-container > div:first-child { flex:0 0 auto; order:0; }
+.division-grid-container > div:nth-child(2) { flex:1 0 190px; order:3; }
+.division-grid-container .division-battalion-list { flex:0 0 270px; order:1; }
+.division-grid-container .division-stats { flex:1 0 190px; order:2; }
+.division-grid-container > div:last-child { flex:1 0 240px; order:4; }
+.battalion-option .land-unit-icon { pointer-events:none; }
+.map-legend .country-flag { width:24px; height:16px; }
+@media (max-width:480px) {
+  .division-grid-container { min-width:420px; }
+}

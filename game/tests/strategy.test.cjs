@@ -7,14 +7,15 @@ const path=require('node:path');
 const root=path.resolve(__dirname,'..');
 function fixture() {
   const nodes=new Map(),storage=new Map();
-  const node=id=>{if(!nodes.has(id))nodes.set(id,{innerHTML:'',textContent:'',value:'',style:{},dataset:{},classList:{add(){},remove(){},toggle(){},contains(){return true;}},appendChild(){},addEventListener(){},querySelectorAll(){return[];},querySelector(sel){return node(id+sel);}});return nodes.get(id);};
-  const sandbox={console,Date,Math,crypto:require('node:crypto').webcrypto,setInterval(){return 1;},clearInterval(){},setTimeout(){},requestAnimationFrame(){},
-    document:{getElementById:node,querySelectorAll(){return[];},querySelector(){return null;},createElement(){return node(Math.random());},addEventListener(){},head:{appendChild(){}},body:{appendChild(){}}},
+  const node=id=>{if(!nodes.has(id))nodes.set(id,{innerHTML:'',textContent:'',value:'',style:{},dataset:{},classList:{add(){},remove(){},toggle(){},contains(){return true;}},appendChild(){},replaceChildren(){},addEventListener(){},querySelectorAll(){return[];},querySelector(sel){return node(id+sel);}});return nodes.get(id);};
+  const sandbox={TopbarUI:{render(){}},console,Date,Math,crypto:require('node:crypto').webcrypto,setInterval(){return 1;},clearInterval(){},setTimeout(){},requestAnimationFrame(){},
+    document:{createTextNode:text=>({textContent:text}),getElementById:node,querySelectorAll(){return[];},querySelector(){return null;},createElement(){return node(Math.random());},addEventListener(){},head:{appendChild(){}},body:{appendChild(){}}},
     localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v),removeItem:k=>storage.delete(k)}};
   sandbox.structuredClone=structuredClone;sandbox.window=sandbox;sandbox.addEventListener=()=>{};
   const ctx=vm.createContext(sandbox);
   const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
   const inline=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(m=>m[1]).filter(s=>s.trim()).join('\n');
+  for (const file of ['asset-registry','game-asset-data','game-visuals']) vm.runInContext(fs.readFileSync(path.join(root,'assets',file+'.js'),'utf8'),ctx,{filename:file+'.js'});
   vm.runInContext(inline,ctx,{filename:'index.html:inline'});
   for(const name of ['battle','news','ai','training','dlc','strategy'])vm.runInContext(fs.readFileSync(path.join(root,name+'.js'),'utf8'),ctx,{filename:name+'.js'});
   const run=source=>vm.runInContext(source,ctx);
@@ -155,4 +156,24 @@ test('two country sessions authenticate, settle consecutive listings and purchas
   assert.equal(host.run(`ProductionManager.account('FRA').stock.infantry`),2300);assert.equal(client.run(`ProductionManager.account('FRA').stock.infantry`),2300);assert.equal(host.run('CoreEngine.gameState.strategy.offers.length'),2);
   const before=host.run(`ProductionManager.account('GER').stock.infantry`);host.run(`MarketManager.request('buy',{id:1,quantity:100})`);flush();
   assert.equal(host.run(`ProductionManager.account('GER').stock.infantry`),before+100);assert.equal(client.run(`FactoryBudget.availableCivilian()`),21);assert.equal(client.run(`CoreEngine.gameState.strategy.offers[0].remaining`),0);
+});
+
+test('named operatives retain identities through recruitment, assignment and save/load',()=>{
+  const {run}=fixture();
+  run('CoreEngine.gameState.intel={agency:"Test",level:3,spies:0,assignments:[],recruiting:[]};CoreEngine.gameState.politicalPower=1000;globalThis.person=GameVisuals.operativeChoices("GER")[0].id');
+  assert.equal(run('IntelOperations.hireSpy(person)'),true);
+  assert.equal(run('IntelOperations.hireSpy(person)'),false);
+  assert.equal(run('CoreEngine.gameState.intel.recruiting[0].operativeId'),run('person'));
+  run('for(let i=0;i<30;i++)IntelOperations.tick()');
+  assert.equal(run('CoreEngine.gameState.intel.roster[0]'),run('person'));
+  run('IntelOperations.assign(0,"counter");globalThis.saved=JSON.parse(JSON.stringify(SaveLoadManager.collect()));CoreEngine.gameState.intel.roster=[];SaveLoadManager.apply(saved)');
+  assert.equal(run('CoreEngine.gameState.intel.roster[0]'),run('person'));
+  assert.equal(run('CoreEngine.gameState.intel.assignments[0].kind'),'counter');
+});
+
+test('legacy anonymous spies and queued recruits receive distinct persistent identities',()=>{
+  const {run}=fixture();
+  run('CoreEngine.gameState.intel={agency:"Test",level:3,spies:2,assignments:[],recruiting:[{days:10}]};IntelOperations.ensure();globalThis.ids=JSON.stringify(CoreEngine.gameState.intel.roster);IntelOperations.ensure()');
+  assert.equal(run('JSON.stringify(CoreEngine.gameState.intel.roster)'),run('ids'));
+  assert.equal(run('new Set([...CoreEngine.gameState.intel.roster,CoreEngine.gameState.intel.recruiting[0].operativeId]).size'),3);
 });

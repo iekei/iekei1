@@ -297,8 +297,8 @@ class BattleManager {
       const color = BattleManager.colorOf(b);
       tip.innerHTML =
         '<div class="bt-title" style="color:' + color + '">' + (b.invasion ? '🌊 強襲上陸: ' : '⚔️ 戦闘: ') + name + '</div>' +
-        '<div class="bt-line">' + DataFetcher.getCountryFlag(b.attacker) + ' ' + b.attacker + ' vs ' +
-        DataFetcher.getCountryFlag(b.defender) + ' ' + b.defender + '</div>' +
+        '<div class="bt-line">' + DataFetcher.getCountryFlagImage(b.attacker) + ' ' + b.attacker + ' vs ' +
+        DataFetcher.getCountryFlagImage(b.defender) + ' ' + b.defender + '</div>' +
         '<div class="bt-line">戦況: <span style="color:' + color + ';font-weight:bold;">' +
         BattleManager.statusLabel(b) + '</span> (' + Math.round(Math.abs(b.advantage) * 100) + '%)</div>' +
         '<div class="bt-line">残り約 <span style="color:var(--text-gold);font-weight:bold;">' + BattleManager.daysLeft(b) + '</span> 日で決着予定</div>' +

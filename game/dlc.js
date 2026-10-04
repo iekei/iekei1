@@ -817,7 +817,7 @@ class IntelligenceManager {
   static ensure() { IntelOperations.ensure(); }
   static createAgency() { return IntelOperations.createAgency(); }
   static upgrade() { return IntelOperations.upgrade(); }
-  static hireSpy() { return IntelOperations.hireSpy(); }
+  static hireSpy(operativeId) { return IntelOperations.hireSpy(operativeId); }
   static startOp(id) { return IntelOperations.startOp(id); }
   static cancelOp() { IntelOperations.cancelOp(); }
   static onTick() { IntelOperations.tick(); }

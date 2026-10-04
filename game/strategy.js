@@ -701,6 +701,14 @@ class IntelOperations {
     s.intel.targets ||= {};
     s.strategy.worldForces ||= {};
     s.intel.recruiting ||= [];
+    s.intel.roster ||= [];
+    const used = () => [...s.intel.roster, ...s.intel.recruiting.map(recruit => recruit.operativeId)].filter(Boolean);
+    for (let slot=0; slot<s.intel.spies; slot++) {
+      if (!GameVisuals.operative(s.intel.roster[slot])) s.intel.roster[slot] = GameVisuals.operativeChoices(s.country, used())[0]?.id;
+    }
+    for (const recruit of s.intel.recruiting) {
+      if (!GameVisuals.operative(recruit.operativeId)) recruit.operativeId = GameVisuals.operativeChoices(s.country, used())[0]?.id;
+    }
   }
   static target(tag) {IntelOperations.ensure();return CoreEngine.gameState.intel.targets[tag] ||= {network:0,decrypt:0,decoded:false,revealUntil:0};}
   static selectTarget(tag) {CoreEngine.gameState.intel.selected=tag;IntelOperations.render();}
@@ -715,10 +723,20 @@ class IntelOperations {
     if(!s.intel.agency||s.intel.building||s.intel.level>=5||ProductionManager.freeCivilian()<2||s.politicalPower<100*s.intel.level)return false;
     s.politicalPower-=100*s.intel.level;s.intel.building={days:60,kind:'upgrade'};IntelOperations.render();return true;
   }
-  static hireSpy() {
+  static hireSpy(operativeId) {
+    IntelOperations.ensure();
     const s=CoreEngine.gameState;
     if(!s.intel.agency||s.intel.spies+s.intel.recruiting.length>=s.intel.level*2||s.politicalPower<75)return false;
-    s.politicalPower-=75;s.intel.recruiting.push({days:30});IntelOperations.render();return true;
+    const choices = GameVisuals.operativeChoices(s.country, [...s.intel.roster, ...s.intel.recruiting.map(recruit => recruit.operativeId)]);
+    const person = operativeId ? choices.find(person => person.id === operativeId) : choices[0];
+    if (!person) return false;
+    s.politicalPower-=75;s.intel.recruiting.push({days:30,operativeId:person.id});IntelOperations.render();return true;
+  }
+  static selectCandidate(id) {
+    const person = GameVisuals.operative(id);
+    if (!person) return;
+    CoreEngine.gameState.intel.candidate = id;
+    document.getElementById('operative-candidate-preview').innerHTML = GameVisuals.person(person);
   }
   static assign(slot,kind,tag) {
     const intel=CoreEngine.gameState.intel;
@@ -745,7 +763,7 @@ class IntelOperations {
       if(intel.building.days<=0){if(intel.building.kind==='create'){intel.agency=s.country+'諜報総局';intel.level=1;}else intel.level++;intel.building=null;}
     }
     intel.recruiting.forEach(r=>r.days--);
-    intel.recruiting.filter(r=>r.days<=0).forEach(()=>{intel.assignments[intel.spies++]={kind:'idle',preparation:0};});
+    intel.recruiting.filter(r=>r.days<=0).forEach(r=>{intel.roster[intel.spies]=r.operativeId;intel.assignments[intel.spies++]={kind:'idle',preparation:0};});
     intel.recruiting=intel.recruiting.filter(r=>r.days>0);
     intel.assignments.forEach((a,i)=>{
       if(intel.op?.slots.includes(i)||a.kind==='idle')return;
@@ -836,7 +854,10 @@ class IntelOperations {
     const s=CoreEngine.gameState,i=s.intel;
     let html='<h3>諜報機関</h3><p>機関設立30日、諜報員の養成30日、任務配置30日。情報網の構築と暗号解読には長い準備が必要です。</p>';
     if(!i.agency){el.innerHTML=html+(i.building?'<p>機関設立まで '+i.building.days+'日</p>':GameTools.button('設立（政治力50）','IntelligenceManager.createAgency()'));return;}
-    html+='<p>'+i.agency+' Lv'+i.level+' / 諜報員 '+i.spies+'名 / 養成中 '+i.recruiting.map(r=>r.days+'日').join(', ')+'</p>'+GameTools.button('拡張（政治力'+(i.level*100)+'・60日）','IntelligenceManager.upgrade()',!!i.building||i.level>=5)+GameTools.button('諜報員養成（政治力75・30日）','IntelligenceManager.hireSpy()');
+    html+='<p>'+i.agency+' Lv'+i.level+' / 諜報員 '+i.spies+'名 / 養成中 '+i.recruiting.map(r=>GameTools.escape(GameVisuals.operative(r.operativeId)?.name || '諜報員')+' '+r.days+'日').join(', ')+'</p>'+GameTools.button('拡張（政治力'+(i.level*100)+'・60日）','IntelligenceManager.upgrade()',!!i.building||i.level>=5);
+    const candidates = GameVisuals.operativeChoices(s.country, [...i.roster, ...i.recruiting.map(recruit=>recruit.operativeId)]);
+    const candidate = candidates.find(person=>person.id===i.candidate) || candidates[0];
+    if (candidate) html+='<div class="operative-card"><span id="operative-candidate-preview">'+GameVisuals.person(candidate)+'</span><div class="operative-info"><label>養成する諜報員 <select id="operative-candidate" onchange="IntelOperations.selectCandidate(this.value)">'+candidates.map(person=>'<option value="'+person.id+'"'+(person.id===candidate.id?' selected':'')+'>'+GameTools.escape(person.name)+' ('+person.country+')</option>').join('')+'</select></label>'+GameTools.button('養成（政治力75・30日）',"IntelligenceManager.hireSpy(document.getElementById('operative-candidate').value)",i.spies+i.recruiting.length>=i.level*2||s.politicalPower<75)+'</div></div>';
     if(i.building)html+='<p>拡張まで '+i.building.days+'日</p>';
     const tag=i.selected||DiplomacyManager.countries[0]?.id;if(tag)i.selected=tag;
     html+='<label>対象国 <select onchange="IntelligenceManager.selectTarget(this.value)">'+DiplomacyManager.countries.map(c=>'<option value="'+c.id+'"'+(c.id===tag?' selected':'')+'>'+c.name+'</option>').join('')+'</select></label>';
@@ -844,7 +865,8 @@ class IntelOperations {
       if(t.revealUntil>GameTools.day()){const f=IntelOperations.forces(tag);html+='<p>傍受情報: 師団 '+f.divisions.filter(d=>!d.defeated).length+' / 艦隊 '+f.navy.length+'。地図上で位置と任務を確認できます。</p>';}}
     for(let slot=0;slot<i.spies;slot++){
       const a=i.assignments[slot]||{kind:'idle',preparation:0};
-      html+='<div class="dlc-row">諜報員 '+(slot+1)+' — '+GameTools.escape(a.kind)+(a.target?' / '+a.target:'')+(a.preparation>0?' 準備 '+a.preparation+'日':'')+'<select onchange="IntelligenceManager.assign('+slot+',this.value,\''+(tag||'')+'\')"'+(i.op?.slots.includes(slot)?' disabled':'')+'>'+[['idle','待機'],['counter','防諜'],['network','情報網構築'],['decrypt','暗号解読']].map(([v,n])=>'<option value="'+v+'"'+(a.kind===v?' selected':'')+'>'+n+'</option>').join('')+'</select></div>';
+      const person = GameVisuals.operative(i.roster[slot]);
+      html+='<div class="operative-card">'+GameVisuals.person(person)+'<div class="operative-info"><strong>'+GameTools.escape(person?.name || '諜報員 '+(slot+1))+'</strong><p>'+GameTools.escape(({idle:'待機',counter:'防諜',network:'情報網構築',decrypt:'暗号解読'})[a.kind] || a.kind)+(a.target?' / '+a.target:'')+(a.preparation>0?' 準備 '+a.preparation+'日':'')+'</p></div><select aria-label="諜報員の任務" onchange="IntelligenceManager.assign('+slot+',this.value,\''+(tag||'')+'\')"'+(i.op?.slots.includes(slot)?' disabled':'')+'>'+[['idle','待機'],['counter','防諜'],['network','情報網構築'],['decrypt','暗号解読']].map(([v,n])=>'<option value="'+v+'"'+(a.kind===v?' selected':'')+'>'+n+'</option>').join('')+'</select></div>';
     }
     html+='<h4>潜入オペレーション</h4><p>情報網50%以上・待機諜報員2名・政治力50。準備45日＋実行90日。</p>';
     if(i.op)html+='<p>'+i.op.target+' / '+i.op.id+' 準備残り'+i.op.preparation+'日 実行 '+i.op.progress+'/'+i.op.dur+'日</p>'+GameTools.button('中止','IntelligenceManager.cancelOp()');
