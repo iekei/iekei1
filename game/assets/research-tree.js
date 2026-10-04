@@ -80,7 +80,16 @@ const ResearchTreeUI = {
     image.dataset.assetCategory = asset.source;
     image.dataset.weaponCategory = category;
     image.decoding = 'async';
-    image.addEventListener('error', () => { image.src = ResearchIcons.fallback(category); }, { once: true });
+    // 失敗時: ローカル未収録ならGitHub URLにリトライ → それでも無駄ならカテゴリ描画へ
+    let githubTried = false;
+    image.addEventListener('error', () => {
+      if (asset.github && !githubTried) {
+        githubTried = true;
+        image.src = asset.github;
+      } else {
+        image.src = ResearchIcons.fallback(category);
+      }
+    });
     if (asset.src.startsWith('data:')) image.src = asset.src;
     else {
       image.dataset.src = asset.src;

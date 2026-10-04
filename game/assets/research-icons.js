@@ -26,7 +26,10 @@ const ResearchIcons = {
     for (const key of keys) {
       for (const mapping of ['technology_icons', 'equipment_icons']) {
         const local = AssetRegistry.getLocal(mapping, key);
-        if (local) return { src: local, key, source: mapping };
+        if (local) return { src: local, key, source: mapping, github: AssetRegistry.getGithubFromMapping(mapping, key) };
+        // ローカル未保存でもGitHubアップロード済みなら game/assets/<folder>/<完全同名>.png を参照
+        const github = AssetRegistry.getGithubFromMapping(mapping, key);
+        if (github) return { src: github, key, source: mapping, github: null };
       }
     }
     return { src: this.fallback(category), key: category, source: 'category-drawing' };

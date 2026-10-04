@@ -252,11 +252,14 @@ const AssetRegistry = {
       if (!res.ok) return null;
       const mapping = await res.json();
       // key → ローカル相対パス の辞書に整形 (ローカル未保存分は除く)
+      // names: key → HoI4データベース完全同名 (未保存分のGitHubフォールバック用)
       const locals = {};
+      const names = {};
       (mapping.images || []).forEach(img => {
+        names[img.key] = img.name;
         if (img.local) locals[img.key] = img.local;
       });
-      this.scrapedMappings[categoryId] = { mapping, locals };
+      this.scrapedMappings[categoryId] = { mapping, locals, names };
       return this.scrapedMappings[categoryId];
     } catch (e) {
       console.warn('[AssetRegistry] ' + categoryId + ' マッピング読み込み失敗', e);
@@ -273,6 +276,18 @@ const AssetRegistry = {
     if (!m) return null;
     const key = String(nameOrKey).replace(/\.[^.]+$/, '').toLowerCase().replace(/[\s]+/g, '_');
     return m.locals[key] || null;
+  },
+
+  /**
+   * マッピング内の key に対応する GitHub URL を解決する (同期的 — 事前に loadCategoryMapping 済みのこと)
+   * ローカル未保存でも Wiki で発見済みのファイル名があれば game/assets/<folder>/<name>.png を参照
+   */
+  getGithubFromMapping(categoryId, nameOrKey) {
+    const m = this.scrapedMappings[categoryId];
+    if (!m || !m.names) return null;
+    const key = String(nameOrKey).replace(/\.[^.]+$/, '').toLowerCase().replace(/[\s]+/g, '_');
+    const name = m.names[key];
+    return name ? this.getGithubAssetUrl(categoryId, name) : null;
   },
 
   // ── 補助メソッド ──
