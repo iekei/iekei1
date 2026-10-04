@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-04T07:36:54+0000",
+ "generated_at": "2026-10-04T07:47:35+0000",
  "source": "https://hoi4.paradoxwikis.com",
  "note": "game/index.html からの相対パス。AssetRegistry.loadScrapedMapping() で読み込む。",
  "categories": {
@@ -22,15 +22,15 @@
   "flags": {
    "label": "国旗",
    "local_base": "assets/flags/",
-   "count": 58,
-   "count_names": 606,
+   "count": 59,
+   "count_names": 739,
    "complete": false,
    "mapping_file": "assets/mappings/flags.json"
   },
   "technology_icons": {
    "label": "テクノロジーアイコン",
    "local_base": "assets/technology/",
-   "count": 10,
+   "count": 20,
    "count_names": 200,
    "complete": false,
    "mapping_file": "assets/mappings/technology_icons.json"
@@ -38,15 +38,15 @@
   "equipment_icons": {
    "label": "兵器設計・モジュール",
    "local_base": "assets/equipment/",
-   "count": 0,
-   "count_names": 0,
+   "count": 10,
+   "count_names": 353,
    "complete": false,
    "mapping_file": "assets/mappings/equipment_icons.json"
   },
   "national_focus_icons": {
    "label": "国家方針アイコン",
    "local_base": "assets/focus/",
-   "count": 10,
+   "count": 13,
    "count_names": 200,
    "complete": false,
    "mapping_file": "assets/mappings/national_focus_icons.json"
@@ -70,8 +70,8 @@
   "scientist_portraits": {
    "label": "科学者ポートレート",
    "local_base": "assets/scientists/",
-   "count": 0,
-   "count_names": 0,
+   "count": 10,
+   "count_names": 105,
    "complete": false,
    "mapping_file": "assets/mappings/scientist_portraits.json"
   },

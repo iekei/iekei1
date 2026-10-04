@@ -3,9 +3,9 @@
  "label": "国家方針アイコン",
  "source": "https://hoi4.paradoxwikis.com/Category:National_focus_icons",
  "mode": "wayback",
- "scraped_at": "2026-10-04T07:27:50+0000",
+ "scraped_at": "2026-10-04T07:41:30+0000",
  "local_base": "assets/focus/",
- "count": 10,
+ "count": 13,
  "count_names": 200,
  "images": [
   {
@@ -111,7 +111,7 @@
   {
    "name": "Focus_ARG_argentina_first.png",
    "key": "focus_arg_argentina_first",
-   "local": null,
+   "local": "assets/focus/Focus_ARG_argentina_first.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Focus_ARG_argentina_first.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Focus_ARG_argentina_first.png",
    "subcategory": null,
@@ -121,7 +121,7 @@
   {
    "name": "Focus_ARG_argentina_for_all.png",
    "key": "focus_arg_argentina_for_all",
-   "local": null,
+   "local": "assets/focus/Focus_ARG_argentina_for_all.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Focus_ARG_argentina_for_all.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Focus_ARG_argentina_for_all.png",
    "subcategory": null,
@@ -131,7 +131,7 @@
   {
    "name": "Focus_ARG_argentine_island_sovereignty.png",
    "key": "focus_arg_argentine_island_sovereignty",
-   "local": null,
+   "local": "assets/focus/Focus_ARG_argentine_island_sovereignty.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Focus_ARG_argentine_island_sovereignty.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Focus_ARG_argentine_island_sovereignty.png",
    "subcategory": null,
@@ -2009,7 +2009,7 @@
    "snapshot_ts": "20240927195833"
   }
  ],
- "crawler_version": 4,
+ "crawler_version": 5,
  "complete": false,
  "traversal_complete": false,
  "pages_visited": 1,
@@ -2240,9 +2240,6 @@
   }
  },
  "pending_downloads": [
-  "Focus_ARG_argentina_first.png",
-  "Focus_ARG_argentina_for_all.png",
-  "Focus_ARG_argentine_island_sovereignty.png",
   "Focus_ARG_argentine_nationalism.png",
   "Focus_ARG_army.png",
   "Focus_ARG_balancing_act.png",

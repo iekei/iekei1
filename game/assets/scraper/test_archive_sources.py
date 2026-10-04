@@ -50,7 +50,9 @@ class ArchiveSourceTests(unittest.TestCase):
         self.assertIn("%26", original_image_url("A&B.png"))
         self.assertEqual(list(original_image_candidates("/images/thumb/a/ab/Foo.svg/120px-Foo.svg.png"))[0],
                          "https://hoi4.paradoxwikis.com/images/a/ab/Foo.svg")
-        self.assertEqual(list(original_image_candidates("/thumb.php?f=Foo.png&width=100")), [])
+        self.assertEqual(list(original_image_candidates("/thumb.php?f=Foo.png&width=100")),
+                         [original_image_url("Foo.png")])
+        self.assertEqual(list(original_image_candidates("/thumb.php?width=100")), [])
 
 
 if __name__ == "__main__":

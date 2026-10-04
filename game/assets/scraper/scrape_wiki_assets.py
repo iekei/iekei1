@@ -144,9 +144,9 @@ class WikiScraper:
         self.next_requests = {}
         self.context = None
 
-    def _get(self, url, image=False, timestamp=None, live=False):
+    def _get(self, url, image=False, timestamp=None, live=False, headers=None):
         url = original_url(url)
-        if self.mode == "wayback" and not live:
+        if self.mode in ("wayback", "reader") and not live:
             modifier = "im_" if image else "id_"
             url = f"{WAYBACK_BASE}/web/{timestamp or self.timestamp}{modifier}/{url}"
         host = urlsplit(url).hostname
@@ -154,7 +154,7 @@ class WikiScraper:
         for attempt in range(MAX_RETRIES):
             time.sleep(max(0, self.next_requests.get(host, 0) - time.monotonic()))
             try:
-                response = self.session.get(url, timeout=HTTP_TIMEOUT)
+                response = self.session.get(url, timeout=HTTP_TIMEOUT, headers=headers)
                 self.next_requests[host] = time.monotonic() + (DL_DELAY if image else PAGE_DELAY)
                 if response.status_code == 429:
                     raise RateLimited(f"HTTP 429: {url}", retry_after_seconds(response.headers.get("Retry-After")))
@@ -171,6 +171,11 @@ class WikiScraper:
 
     def fetch_category_page(self, url):
         url = original_url(url)
+        if self.mode == "reader":
+            response = self._get("https://r.jina.ai/" + url, live=True,
+                                 headers={"X-Return-Format": "html"})
+            parse_category_page(response.text, url)
+            return response.text, url
         if self.context is None:
             candidates = category_candidates(url, self.timestamp) if self.mode == "wayback" else [(url, None)]
             errors = []
@@ -244,7 +249,7 @@ class WikiScraper:
         result = try_image(original_image_url(record["name"]), live=True)
         if result:
             return result
-        if self.mode == "wayback" and record.get("image_url"):
+        if self.mode in ("wayback", "reader") and record.get("image_url"):
             result = try_image(record["image_url"])
             if result:
                 return result
@@ -371,7 +376,7 @@ def scrape_category(scraper, cat, limit=None, dry_run=False, page_budget=None, d
 
 def main():
     parser = argparse.ArgumentParser(description="HoI4 Paradox Wiki asset scraper")
-    parser.add_argument("--mode", choices=["wayback", "live"], default="wayback")
+    parser.add_argument("--mode", choices=["wayback", "live", "reader"], default="wayback")
     targets_arg = parser.add_mutually_exclusive_group(required=True)
     targets_arg.add_argument("--all", action="store_true")
     targets_arg.add_argument("--only", help="カテゴリidのカンマ区切り")
@@ -389,11 +394,12 @@ def main():
         parser.error("--json には --status が必要です")
     if args.limit is not None and args.limit < 1:
         parser.error("--limit は1以上にしてください")
-    ids = {value.strip() for value in args.only.split(",")} if args.only else {cat["id"] for cat in CATEGORIES}
-    unknown = ids - {cat["id"] for cat in CATEGORIES}
+    categories = {cat["id"]: cat for cat in CATEGORIES}
+    ids = list(dict.fromkeys(value.strip() for value in args.only.split(","))) if args.only else list(categories)
+    unknown = set(ids) - categories.keys()
     if unknown:
         parser.error(f"未知のカテゴリid: {sorted(unknown)}")
-    targets = [cat for cat in CATEGORIES if cat["id"] in ids]
+    targets = [categories[identifier] for identifier in ids]
     if args.status:
         reports = []
         for cat in targets:

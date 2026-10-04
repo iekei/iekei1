@@ -44,6 +44,8 @@ services:
       PYTHONUNBUFFERED: "1"
       PYTHONDONTWRITEBYTECODE: "1"
       SCRAPER_MAX_PASSES: "0"
+      SCRAPER_MODE: "reader"
+      SCRAPER_ONLY: "scientist_portraits,equipment_icons,flags"
     command: ["sh", "-ec", "pip install --disable-pip-version-check -q -r game/assets/scraper/requirements.txt && exec sh game/assets/scraper/scrape_loop.sh"]
 
 volumes:

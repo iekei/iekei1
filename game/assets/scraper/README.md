@@ -1,9 +1,12 @@
 # HoI4 Wiki アセット収集
 
-元の10カテゴリに加え、`Icons`・`Portraits` の親カテゴリと
-`Leader_portraits`・`Ace_portraits` を対象にします。親カテゴリからすべての
-子・孫カテゴリを深さ制限なしで発見し、フラグ・アイコン・指導者・エース・
-諜報員・科学者のポートレートを収集します。
+Composeでは依頼対象の `Scientist_portraits`・`Equipment_icons`・`Flags` を優先収集します。
+`Equipment_icons` の `Module_slot_icons`・`Plane_module_icons`・`Ship_module_icons`・
+`Tank_module_icons` も、親カテゴリのリンクから発見して収集します。
+
+CLIは従来の全14カテゴリにも対応します。親カテゴリからすべての子・孫カテゴリを
+深さ制限なしで発見し、フラグ・アイコン・指導者・エース・諜報員・科学者の
+ポートレートを収集します。
 
 画像・サブカテゴリ・通常ページの `filefrom` / `subcatfrom` / `pagefrom` を
 最後まで辿ります。正規化URLは重複・循環判定だけに使い、実際の取得では
@@ -15,15 +18,29 @@
 docker compose -f docker-compose.base44.yml --profile assets up -d scraper
 docker compose -f docker-compose.base44.yml logs -f scraper
 # 通信せずに完了状況・保留数を確認（未完了なら終了コード1）
-docker compose -f docker-compose.base44.yml exec -T scraper python3 game/assets/scraper/scrape_wiki_assets.py --all --status
+docker compose -f docker-compose.base44.yml exec -T scraper python3 game/assets/scraper/scrape_wiki_assets.py --mode reader --only scientist_portraits,equipment_icons,flags --status
 # 機械可読の、カテゴリ別保留URL・画像名・エラーを含むレポート
-docker compose -f docker-compose.base44.yml exec -T scraper python3 game/assets/scraper/scrape_wiki_assets.py --all --status --json
+docker compose -f docker-compose.base44.yml exec -T scraper python3 game/assets/scraper/scrape_wiki_assets.py --mode reader --only scientist_portraits,equipment_icons,flags --status --json
 # コンテナ終了後もチェックポイントから再開
 docker compose -f docker-compose.base44.yml --profile assets up -d scraper
 ```
 
 Composeは起動時に `requirements.txt` の固定バージョンをインストールします。
 バックグラウンドジョブはサンドボックスが稼働している間だけ動きます。
+
+既定のComposeジョブは `SCRAPER_MODE=reader` と
+`SCRAPER_ONLY=scientist_portraits,equipment_icons,flags` で動きます。
+公開のJina Readerから `X-Return-Format: html` で完全なカテゴリHTMLを取得し、
+元のWiki URLを基準に解析します。チャレンジ画面を成功扱いにせず、429時は停止します。
+画像本体はWikiの原画像を優先し、失敗時はWaybackを照会します。
+`thumb.php?f=...` の画像も、ファイル名から原画像のURLを解決して照会します。
+`reader` と `wayback` の巡回状態・冷却時刻は別々です。
+
+収集先は `assets/scientists/`・`assets/equipment/`・`assets/flags/`、索引はそれぞれ
+`assets/mappings/scientist_portraits.json`・`equipment_icons.json`・`flags.json` です。
+国旗の既存索引にしかない古い画像名も維持するため、索引の発見件数が現行カテゴリの
+公表件数を上回ることがあります。発見件数とローカル保存件数は区別してください。
+同じ索引を書き換える複数の収集プロセスを同時に走らせないでください。
 
 ### 公平な再開・アクセス制限
 
@@ -74,8 +91,10 @@ URLエンコード済み相対パスです。ゲームは既存の `AssetRegistr
 **アーカイブ完了は収録された時点のカテゴリについての完了であり、現行Wikiの全画像を
 保証するものではありません。** アーカイブに収録されていないページ・画像やWikiの
 アクセス制限は、再試行を増やしても解消できません。レポートに未完了として残します。
-現行Wikiの完全な収集には、アクセスが許可される環境での live モード実行、または
-Wiki管理者からのカテゴリ／メディアのエクスポートが必要です。
+reader モードで取得できたカテゴリについては、ページの公表件数と巡回件数を照合します。
+ただし画像本体の取得可否は別問題です。原画像もアーカイブも取得できない場合は、
+アクセスが許可される環境での live モード実行、またはWiki管理者からのメディアの
+エクスポートが必要です。
 
 ## 部分実行・テスト
 

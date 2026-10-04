@@ -3,9 +3,9 @@
  "label": "テクノロジーアイコン",
  "source": "https://hoi4.paradoxwikis.com/Category:Technology_icons",
  "mode": "wayback",
- "scraped_at": "2026-10-04T07:26:18+0000",
+ "scraped_at": "2026-10-04T07:40:22+0000",
  "local_base": "assets/technology/",
- "count": 10,
+ "count": 20,
  "count_names": 200,
  "images": [
   {
@@ -111,7 +111,7 @@
   {
    "name": "Advanced_rocket_engines.png",
    "key": "advanced_rocket_engines",
-   "local": null,
+   "local": "assets/technology/Advanced_rocket_engines.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Advanced_rocket_engines.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Advanced_rocket_engines.png",
    "subcategory": null,
@@ -121,7 +121,7 @@
   {
    "name": "Advanced_Special_Forces_Training.png",
    "key": "advanced_special_forces_training",
-   "local": null,
+   "local": "assets/technology/Advanced_Special_Forces_Training.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Advanced_Special_Forces_Training.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Advanced_Special_Forces_Training.png",
    "subcategory": null,
@@ -131,7 +131,7 @@
   {
    "name": "Advanced_torpedo_launcher.png",
    "key": "advanced_torpedo_launcher",
-   "local": null,
+   "local": "assets/technology/Advanced_torpedo_launcher.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Advanced_torpedo_launcher.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Advanced_torpedo_launcher.png",
    "subcategory": null,
@@ -141,7 +141,7 @@
   {
    "name": "Airdrop_mines.png",
    "key": "airdrop_mines",
-   "local": null,
+   "local": "assets/technology/Airdrop_mines.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Airdrop_mines.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Airdrop_mines.png",
    "subcategory": null,
@@ -151,7 +151,7 @@
   {
    "name": "Airsweep_mines.png",
    "key": "airsweep_mines",
-   "local": null,
+   "local": "assets/technology/Airsweep_mines.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Airsweep_mines.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Airsweep_mines.png",
    "subcategory": null,
@@ -161,7 +161,7 @@
   {
    "name": "Antiair1.png",
    "key": "antiair1",
-   "local": null,
+   "local": "assets/technology/Antiair1.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Antiair1.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Antiair1.png",
    "subcategory": null,
@@ -171,7 +171,7 @@
   {
    "name": "Antiair2.png",
    "key": "antiair2",
-   "local": null,
+   "local": "assets/technology/Antiair2.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Antiair2.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Antiair2.png",
    "subcategory": null,
@@ -181,7 +181,7 @@
   {
    "name": "Antiair3.png",
    "key": "antiair3",
-   "local": null,
+   "local": "assets/technology/Antiair3.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Antiair3.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Antiair3.png",
    "subcategory": null,
@@ -191,7 +191,7 @@
   {
    "name": "Antitank2.png",
    "key": "antitank2",
-   "local": null,
+   "local": "assets/technology/Antitank2.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Antitank2.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Antitank2.png",
    "subcategory": null,
@@ -201,7 +201,7 @@
   {
    "name": "Antitank3.png",
    "key": "antitank3",
-   "local": null,
+   "local": "assets/technology/Antitank3.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Antitank3.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Antitank3.png",
    "subcategory": null,
@@ -2009,7 +2009,7 @@
    "snapshot_ts": "20240927195523"
   }
  ],
- "crawler_version": 4,
+ "crawler_version": 5,
  "complete": false,
  "traversal_complete": false,
  "pages_visited": 1,
@@ -2242,16 +2242,6 @@
   }
  },
  "pending_downloads": [
-  "Advanced_rocket_engines.png",
-  "Advanced_Special_Forces_Training.png",
-  "Advanced_torpedo_launcher.png",
-  "Airdrop_mines.png",
-  "Airsweep_mines.png",
-  "Antiair1.png",
-  "Antiair2.png",
-  "Antiair3.png",
-  "Antitank2.png",
-  "Antitank3.png",
   "Antitank4.png",
   "Armored_car_equipment_1.png",
   "Armored_car_equipment_2.png",

@@ -5,17 +5,22 @@ SCRIPT="game/assets/scraper/scrape_wiki_assets.py"
 MODE="${SCRAPER_MODE:-wayback}"
 # Zero means keep resuming until verified complete (or an execution error).
 MAX_PASSES="${SCRAPER_MAX_PASSES:-0}"
+if [ -n "${SCRAPER_ONLY:-}" ]; then
+  set -- --only "$SCRAPER_ONLY"
+else
+  set -- --all
+fi
 pass=0
 while [ "$MAX_PASSES" -eq 0 ] || [ "$pass" -lt "$MAX_PASSES" ]; do
   pass=$((pass + 1))
   echo "=== scraper pass ${pass}/${MAX_PASSES} ==="
   code=0
-  python3 "$SCRIPT" --mode "$MODE" --all --skip-done || code=$?
+  python3 "$SCRIPT" --mode "$MODE" "$@" --skip-done || code=$?
   if [ "$code" -gt 1 ]; then
     echo "実行エラー（終了コード ${code}）。進捗を保持して停止します。"
     exit "$code"
   fi
-  if python3 "$SCRIPT" --mode "$MODE" --all --status; then
+  if python3 "$SCRIPT" --mode "$MODE" "$@" --status; then
     echo "=== 全カテゴリの巡回・画像保存が完了 ==="
     exit 0
   fi

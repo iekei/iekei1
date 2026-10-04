@@ -45,6 +45,10 @@ def original_image_candidates(url):
     if "/images/thumb/" in parsed.path:
         prefix, thumbnail = parsed.path.split("/thumb/", 1)
         yield urlunsplit(parsed._replace(path=prefix + "/" + thumbnail.rsplit("/", 1)[0]))
-    # thumb.php URLs only identify a rendition, not an original file.
-    if "/thumb.php" not in parsed.path:
+    # Resolve thumb.php's filename to the original, never save its rendition.
+    if parsed.path.endswith("/thumb.php"):
+        filename = dict(parse_qsl(parsed.query)).get("f")
+        if filename:
+            yield original_image_url(filename)
+    else:
         yield url
