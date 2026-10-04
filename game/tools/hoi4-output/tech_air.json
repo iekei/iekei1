@@ -1,0 +1,534 @@
+[
+  {
+    "id": "CAS1",
+    "title": "CAS 1",
+    "year": 1936,
+    "x": -400,
+    "y": 200,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "CAS1",
+    "effects": [
+      "配備可能: CAS_equipment_1",
+      "カテゴリ: light_air, cas_bomber, air_equipment, mio_cat_all_cas_and_modules, mio_cat_all_light_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "early_fighter"
+    ]
+  },
+  {
+    "id": "CAS2",
+    "title": "CAS 2",
+    "year": 1940,
+    "x": -400,
+    "y": 300,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "CAS2",
+    "effects": [
+      "配備可能: CAS_equipment_2",
+      "カテゴリ: light_air, cas_bomber, air_equipment, mio_cat_all_cas_and_modules, mio_cat_all_light_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "CAS1"
+    ]
+  },
+  {
+    "id": "CAS3",
+    "title": "CAS 3",
+    "year": 1944,
+    "x": -400,
+    "y": 400,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "CAS3",
+    "effects": [
+      "配備可能: CAS_equipment_3",
+      "カテゴリ: light_air, cas_bomber, air_equipment, mio_cat_all_cas_and_modules, mio_cat_all_light_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "CAS2"
+    ]
+  },
+  {
+    "id": "heavy_fighter1",
+    "title": "Heavy Fighter 1",
+    "year": 1936,
+    "x": -200,
+    "y": 200,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "heavy_fighter1",
+    "effects": [
+      "配備可能: heavy_fighter_equipment_1",
+      "カテゴリ: medium_air, air_equipment, cat_heavy_fighter, mio_cat_all_medium_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "early_bomber"
+    ]
+  },
+  {
+    "id": "heavy_fighter2",
+    "title": "Heavy Fighter 2",
+    "year": 1940,
+    "x": -200,
+    "y": 300,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "heavy_fighter2",
+    "effects": [
+      "配備可能: heavy_fighter_equipment_2",
+      "カテゴリ: medium_air, air_equipment, cat_heavy_fighter, mio_cat_all_medium_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "heavy_fighter1"
+    ]
+  },
+  {
+    "id": "heavy_fighter3",
+    "title": "Heavy Fighter 3",
+    "year": 1944,
+    "x": -200,
+    "y": 400,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "heavy_fighter3",
+    "effects": [
+      "配備可能: heavy_fighter_equipment_3",
+      "カテゴリ: medium_air, air_equipment, cat_heavy_fighter, mio_cat_all_medium_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "heavy_fighter2"
+    ]
+  },
+  {
+    "id": "early_fighter",
+    "title": "Early Fighter",
+    "year": 1933,
+    "x": 0,
+    "y": 100,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "early_fighter",
+    "effects": [
+      "配備可能: fighter_equipment_0",
+      "カテゴリ: light_air, light_fighter, air_equipment, mio_cat_all_light_fighter_and_modules, mio_cat_all_light_aircraft_and_modules"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "fighter1",
+    "title": "Fighter 1",
+    "year": 1936,
+    "x": 0,
+    "y": 200,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "fighter1",
+    "effects": [
+      "配備可能: fighter_equipment_1",
+      "カテゴリ: light_air, light_fighter, air_equipment, mio_cat_all_light_fighter_and_modules, mio_cat_all_light_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "early_fighter"
+    ]
+  },
+  {
+    "id": "strategic_bomber1",
+    "title": "Strategic Bomber 1",
+    "year": 1936,
+    "x": 0,
+    "y": 200,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "strategic_bomber1",
+    "effects": [
+      "配備可能: strat_bomber_equipment_1",
+      "カテゴリ: heavy_air, air_equipment, cat_strategic_bomber, mio_cat_all_heavy_aircraft_and_modules"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "fighter2",
+    "title": "Fighter 2",
+    "year": 1940,
+    "x": 0,
+    "y": 300,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "fighter2",
+    "effects": [
+      "配備可能: fighter_equipment_2",
+      "カテゴリ: light_air, light_fighter, air_equipment, mio_cat_all_light_fighter_and_modules, mio_cat_all_light_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "fighter1"
+    ]
+  },
+  {
+    "id": "strategic_bomber2",
+    "title": "Strategic Bomber 2",
+    "year": 1940,
+    "x": 0,
+    "y": 300,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "strategic_bomber2",
+    "effects": [
+      "配備可能: strat_bomber_equipment_2",
+      "カテゴリ: heavy_air, air_equipment, cat_strategic_bomber, mio_cat_all_heavy_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "strategic_bomber1"
+    ]
+  },
+  {
+    "id": "fighter3",
+    "title": "Fighter 3",
+    "year": 1944,
+    "x": 0,
+    "y": 400,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "fighter3",
+    "effects": [
+      "配備可能: fighter_equipment_3",
+      "カテゴリ: light_air, light_fighter, air_equipment, mio_cat_all_light_fighter_and_modules, mio_cat_all_light_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "fighter2"
+    ]
+  },
+  {
+    "id": "strategic_bomber3",
+    "title": "Strategic Bomber 3",
+    "year": 1944,
+    "x": 0,
+    "y": 400,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "strategic_bomber3",
+    "effects": [
+      "配備可能: strat_bomber_equipment_3",
+      "カテゴリ: heavy_air, air_equipment, cat_strategic_bomber, mio_cat_all_heavy_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "strategic_bomber2"
+    ]
+  },
+  {
+    "id": "jet_fighter1",
+    "title": "Jet Fighter 1",
+    "year": 1945,
+    "x": 0,
+    "y": 600,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "jet_fighter1",
+    "effects": [
+      "配備可能: jet_fighter_equipment_1",
+      "カテゴリ: light_air, jet_technology, mio_cat_all_light_fighter_and_modules, mio_cat_all_light_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "fighter3",
+      "CAS3",
+      "naval_bomber3"
+    ]
+  },
+  {
+    "id": "jet_fighter2",
+    "title": "Jet Fighter 2",
+    "year": 1950,
+    "x": 0,
+    "y": 700,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "jet_fighter2",
+    "effects": [
+      "配備可能: jet_fighter_equipment_2",
+      "カテゴリ: light_air, jet_technology, mio_cat_all_light_fighter_and_modules, mio_cat_all_light_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "jet_fighter1"
+    ]
+  },
+  {
+    "id": "jet_strategic_bomber1",
+    "title": "Jet Strategic Bomber 1",
+    "year": 1950,
+    "x": 0,
+    "y": 700,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "jet_strategic_bomber1",
+    "effects": [
+      "配備可能: jet_strat_bomber_equipment_1",
+      "カテゴリ: heavy_air, jet_technology, cat_strategic_bomber, mio_cat_all_heavy_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "strategic_bomber3"
+    ]
+  },
+  {
+    "id": "early_transport_plane",
+    "title": "Early Transport Plane",
+    "year": 1933,
+    "x": 100,
+    "y": 100,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_transport_plane_equipment_1",
+    "effects": [
+      "配備可能: transport_plane_equipment_1",
+      "カテゴリ: air_equipment, transport_planes_cat"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "improved_transport_plane",
+    "title": "Improved Transport Plane",
+    "year": 1940,
+    "x": 100,
+    "y": 300,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_transport_plane_equipment_2",
+    "effects": [
+      "配備可能: transport_plane_equipment_2",
+      "カテゴリ: air_equipment, transport_planes_cat"
+    ],
+    "prerequisites": [
+      "early_transport_plane"
+    ]
+  },
+  {
+    "id": "strategic_airlifter",
+    "title": "Strategic Airlifter",
+    "year": 1945,
+    "x": 100,
+    "y": 600,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_transport_plane_equipment_3",
+    "effects": [
+      "配備可能: transport_plane_equipment_3",
+      "カテゴリ: air_equipment, transport_planes_cat"
+    ],
+    "prerequisites": [
+      "improved_transport_plane"
+    ]
+  },
+  {
+    "id": "early_bomber",
+    "title": "Early Bomber",
+    "year": 1933,
+    "x": 200,
+    "y": 100,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "early_bomber",
+    "effects": [
+      "配備可能: tac_bomber_equipment_0",
+      "カテゴリ: medium_air, tactical_bomber, air_equipment, mio_cat_all_medium_aircraft_and_modules"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "tactical_bomber1",
+    "title": "Tactical Bomber 1",
+    "year": 1936,
+    "x": 200,
+    "y": 200,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tactical_bomber1",
+    "effects": [
+      "配備可能: tac_bomber_equipment_1",
+      "カテゴリ: medium_air, tactical_bomber, air_equipment, mio_cat_all_medium_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "early_bomber"
+    ]
+  },
+  {
+    "id": "tactical_bomber2",
+    "title": "Tactical Bomber 2",
+    "year": 1940,
+    "x": 200,
+    "y": 300,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tactical_bomber2",
+    "effects": [
+      "配備可能: tac_bomber_equipment_2",
+      "カテゴリ: medium_air, tactical_bomber, air_equipment, mio_cat_all_medium_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "tactical_bomber1"
+    ]
+  },
+  {
+    "id": "tactical_bomber3",
+    "title": "Tactical Bomber 3",
+    "year": 1944,
+    "x": 200,
+    "y": 400,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tactical_bomber3",
+    "effects": [
+      "配備可能: tac_bomber_equipment_3",
+      "カテゴリ: medium_air, tactical_bomber, air_equipment, mio_cat_all_medium_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "tactical_bomber2"
+    ]
+  },
+  {
+    "id": "jet_tactical_bomber1",
+    "title": "Jet Tactical Bomber 1",
+    "year": 1945,
+    "x": 200,
+    "y": 600,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "jet_tactical_bomber1",
+    "effects": [
+      "配備可能: jet_tac_bomber_equipment_1",
+      "カテゴリ: medium_air, jet_technology, tactical_bomber, mio_cat_all_medium_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "tactical_bomber3"
+    ]
+  },
+  {
+    "id": "jet_tactical_bomber2",
+    "title": "Jet Tactical Bomber 2",
+    "year": 1950,
+    "x": 200,
+    "y": 700,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "jet_tactical_bomber2",
+    "effects": [
+      "配備可能: jet_tac_bomber_equipment_2",
+      "カテゴリ: medium_air, jet_technology, tactical_bomber, mio_cat_all_medium_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "jet_tactical_bomber1"
+    ]
+  },
+  {
+    "id": "naval_bomber1",
+    "title": "Naval Bomber 1",
+    "year": 1936,
+    "x": 400,
+    "y": 200,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "naval_bomber1",
+    "effects": [
+      "配備可能: nav_bomber_equipment_1",
+      "カテゴリ: naval_air, naval_bomber, air_equipment, mio_cat_all_naval_bomber_and_modules, mio_cat_all_light_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "early_fighter"
+    ]
+  },
+  {
+    "id": "naval_bomber2",
+    "title": "Naval Bomber 2",
+    "year": 1940,
+    "x": 400,
+    "y": 300,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "naval_bomber2",
+    "effects": [
+      "配備可能: nav_bomber_equipment_2",
+      "カテゴリ: naval_air, air_equipment, naval_bomber, mio_cat_all_naval_bomber_and_modules, mio_cat_all_light_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "naval_bomber1"
+    ]
+  },
+  {
+    "id": "naval_bomber3",
+    "title": "Naval Bomber 3",
+    "year": 1944,
+    "x": 400,
+    "y": 400,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "naval_bomber3",
+    "effects": [
+      "配備可能: nav_bomber_equipment_3",
+      "カテゴリ: naval_air, naval_bomber, air_equipment, mio_cat_all_naval_bomber_and_modules, mio_cat_all_light_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "naval_bomber2"
+    ]
+  },
+  {
+    "id": "scout_plane1",
+    "title": "Scout Plane 1",
+    "year": 1936,
+    "x": 1000,
+    "y": 200,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_scout_plane_1_1",
+    "effects": [
+      "配備可能: scout_plane_equipment_1",
+      "カテゴリ: medium_air, air_equipment, cat_scout_plane, mio_cat_all_medium_aircraft_and_modules"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "scout_plane2",
+    "title": "Scout Plane 2",
+    "year": 1940,
+    "x": 1000,
+    "y": 300,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_scout_plane_2_2",
+    "effects": [
+      "配備可能: scout_plane_equipment_2",
+      "カテゴリ: medium_air, air_equipment, cat_scout_plane, mio_cat_all_medium_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "scout_plane1"
+    ]
+  }
+]
