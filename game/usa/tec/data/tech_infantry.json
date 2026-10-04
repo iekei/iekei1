@@ -1,227 +1,730 @@
 [
   {
-    "id": "m2_browning",
-    "title": "M2重機関銃 (12.7mm)",
-    "year": 1933,
-    "x": 100,
-    "y": 50,
-    "research_time": 89,
-    "reliability": "配備（制式採用）",
-    "desc": "「マ・デュース」と呼ばれる12.7mm重機関銃。航空・対空・対地あらゆる場面で活躍した。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "id": "infantry_weapons",
+    "title": "Infantry Weapons",
+    "year": 1918,
+    "x": 0,
+    "y": -50,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "infantry_equipment_0",
     "effects": [
-      "対人攻撃: 36/100",
-      "対物攻撃: 11/100",
-      "生存力: 8/100",
-      "機動力: 62/100",
-      "信頼度: 74/100"
+      "配備可能: infantry_equipment_0",
+      "カテゴリ: infantry_weapons"
     ],
     "prerequisites": []
   },
   {
-    "id": "m1903_springfield",
-    "title": "M1903スプリングフィールド小銃",
+    "id": "tech_trucks",
+    "title": "Tech Trucks",
     "year": 1936,
-    "x": 100,
-    "y": 200,
-    "research_time": 95,
-    "reliability": "配備（制式採用）",
-    "desc": "ボルトアクション小銃。M1ガーランドと並んで大戦初期の主力小銃で、狙撃銃としても生き残った。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "x": 0,
+    "y": -50,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "motorized_equipment_0",
     "effects": [
-      "対人攻撃: 39/100",
-      "対物攻撃: 12/100",
-      "生存力: 8/100",
-      "機動力: 62/100",
-      "信頼度: 77/100"
+      "配備可能: motorized_equipment_0",
+      "カテゴリ: motorized_equipment, mio_cat_tech_all_motorized_mechanized, infantry_tech"
     ],
-    "prerequisites": [
-      "m2_browning"
-    ]
+    "prerequisites": []
   },
   {
-    "id": "m1919_browning",
-    "title": "M1919ブローニング機関銃",
+    "id": "infantry_weapons1",
+    "title": "Infantry Weapons 1",
     "year": 1936,
-    "x": 100,
-    "y": 350,
-    "research_time": 95,
-    "reliability": "配備（制式採用）",
-    "desc": "分隊・車載用の中機関銃。大戦を通じてあらゆる場面で使用された。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "x": 0,
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "infantry1",
     "effects": [
-      "対人攻撃: 39/100",
-      "対物攻撃: 12/100",
-      "生存力: 8/100",
-      "機動力: 62/100",
-      "信頼度: 77/100"
+      "配備可能: infantry_equipment_1",
+      "カテゴリ: infantry_weapons"
     ],
     "prerequisites": [
-      "m1903_springfield"
+      "infantry_weapons"
     ]
   },
   {
-    "id": "m1_garand",
-    "title": "M1ガランド",
-    "year": 1936,
-    "x": 100,
-    "y": 500,
-    "research_time": 100,
-    "reliability": "配備（制式採用）",
-    "desc": "ジョン・ガランド設計の半自動小銃。世界初の量産半自動小銃として制式採用。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.8' stroke-linecap='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/></svg>",
-    "effects": [
-      "対人攻撃: 45/100",
-      "対物攻撃: 12/100",
-      "生存力: 10/100",
-      "機動力: 70/100",
-      "信頼度: 90/100"
-    ],
-    "prerequisites": [
-      "m1919_browning"
-    ]
-  },
-  {
-    "id": "bar_m1918",
-    "title": "BAR M1918A2",
-    "year": 1937,
-    "x": 100,
-    "y": 650,
-    "research_time": 100,
-    "reliability": "配備",
-    "desc": "自動小銃。歩兵の火力支援に使用された。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.8' stroke-linecap='round'><path d='M2 12h18'/><path d='M6 12v4'/><path d='M16 12l2 3h-3z'/></svg>",
-    "effects": [
-      "対人攻撃: 42/100",
-      "対物攻撃: 10/100",
-      "生存力: 9/100",
-      "機動力: 60/100",
-      "信頼度: 80/100"
-    ],
-    "prerequisites": [
-      "m1_garand"
-    ]
-  },
-  {
-    "id": "m1_carbine",
-    "title": "M1カービン",
-    "year": 1941,
-    "x": 100,
-    "y": 800,
-    "research_time": 80,
-    "reliability": "配備（制式採用）",
-    "desc": "軽量なカービン銃。後方部隊や空挺部隊に配備された。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.8' stroke-linecap='round'><path d='M4 12h16'/><path d='M16 12l2 3h-3z'/></svg>",
-    "effects": [
-      "対人攻撃: 35/100",
-      "対物攻撃: 5/100",
-      "生存力: 8/100",
-      "機動力: 85/100",
-      "信頼度: 85/100"
-    ],
-    "prerequisites": [
-      "bar_m1918"
-    ]
-  },
-  {
-    "id": "thompson_smg",
-    "title": "トンプソン短機関銃",
+    "id": "infantry_weapons2",
+    "title": "Infantry Weapons 2",
     "year": 1938,
-    "x": 400,
-    "y": 50,
-    "research_time": 80,
-    "reliability": "配備",
-    "desc": "「トミーガン」として知られる.45口径短機関銃。高火力だが重い。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8b949e' stroke-width='1.8' stroke-linecap='round'><path d='M3 11h14'/><circle cx='11' cy='15' r='3'/></svg>",
+    "x": 0,
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "infantry_weapons",
     "effects": [
-      "対人攻撃: 40/100",
-      "対物攻撃: 5/100",
-      "生存力: 8/100",
-      "機動力: 65/100",
-      "信頼度: 75/100"
+      "カテゴリ: infantry_weapons"
+    ],
+    "prerequisites": [
+      "infantry_weapons1"
+    ]
+  },
+  {
+    "id": "improved_infantry_weapons",
+    "title": "Improved Infantry Weapons",
+    "year": 1939,
+    "x": 0,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "infantry2",
+    "effects": [
+      "配備可能: infantry_equipment_2",
+      "カテゴリ: infantry_weapons"
+    ],
+    "prerequisites": [
+      "infantry_weapons2"
+    ]
+  },
+  {
+    "id": "improved_infantry_weapons_2",
+    "title": "Improved Infantry Weapons 2",
+    "year": 1940,
+    "x": 0,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "infantry_weapons2",
+    "effects": [
+      "カテゴリ: infantry_weapons"
+    ],
+    "prerequisites": [
+      "improved_infantry_weapons"
+    ]
+  },
+  {
+    "id": "advanced_infantry_weapons",
+    "title": "Advanced Infantry Weapons",
+    "year": 1942,
+    "x": 0,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "infantry3",
+    "effects": [
+      "配備可能: infantry_equipment_3",
+      "カテゴリ: infantry_weapons"
+    ],
+    "prerequisites": [
+      "improved_infantry_weapons_2"
+    ]
+  },
+  {
+    "id": "advanced_infantry_weapons2",
+    "title": "Advanced Infantry Weapons 2",
+    "year": 1944,
+    "x": 0,
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "infantry_weapons3",
+    "effects": [
+      "カテゴリ: infantry_weapons"
+    ],
+    "prerequisites": [
+      "advanced_infantry_weapons"
+    ]
+  },
+  {
+    "id": "night_vision",
+    "title": "Night Vision",
+    "year": 1943,
+    "x": 0,
+    "y": 0,
+    "research_time": 250,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "night_vision",
+    "effects": [
+      "カテゴリ: night_vision"
     ],
     "prerequisites": []
   },
   {
-    "id": "m3_grease_gun",
-    "title": "M3グリースガン",
-    "year": 1942,
-    "x": 400,
-    "y": 200,
-    "research_time": 107,
-    "reliability": "配備（制式採用）",
-    "desc": "プレス加工で量産された短機関銃。トンプソンより安価で、車両兵・下士官に配備された。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 11h14'/><circle cx='11' cy='15' r='3'/><path d='M5 11v4'/></svg>",
+    "id": "night_vision2",
+    "title": "Night Vision 2",
+    "year": 1946,
+    "x": 0,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "night_vision2",
     "effects": [
-      "対人攻撃: 40/100",
-      "対物攻撃: 6/100",
-      "生存力: 8/100",
-      "機動力: 78/100",
-      "信頼度: 66/100"
+      "カテゴリ: night_vision"
     ],
     "prerequisites": [
-      "thompson_smg"
+      "night_vision"
     ]
   },
   {
-    "id": "m2_carbine",
-    "title": "M2カービン",
-    "year": 1944,
-    "x": 400,
-    "y": 350,
-    "research_time": 111,
-    "reliability": "配備（制式採用）",
-    "desc": "M1カービンの全自動改良型。下士官・車両兵用の近接火力として用いられた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 11h14'/><circle cx='11' cy='15' r='3'/><path d='M5 11v4'/></svg>",
+    "id": "support_weapons",
+    "title": "Support Weapons",
+    "year": 1918,
+    "x": 0,
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "support_weapons",
     "effects": [
-      "対人攻撃: 41/100",
-      "対物攻撃: 6/100",
-      "生存力: 8/100",
-      "機動力: 78/100",
-      "信頼度: 67/100"
-    ],
-    "prerequisites": [
-      "m3_grease_gun"
-    ]
-  },
-  {
-    "id": "m1_bazooka",
-    "title": "M1バズーカ",
-    "year": 1942,
-    "x": 700,
-    "y": 50,
-    "research_time": 107,
-    "reliability": "配備（制式採用）",
-    "desc": "世界初の実用成型炸薬ロケットランチャー。歩兵の対戦車能力を根本から変えた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
-    "effects": [
-      "対人攻撃: 18/100",
-      "対物攻撃: 42/100",
-      "生存力: 8/100",
-      "機動力: 56/100",
-      "信頼度: 63/100"
+      "カテゴリ: infantry_weapons"
     ],
     "prerequisites": []
   },
   {
-    "id": "m9_bazooka",
-    "title": "M9バズーカ",
-    "year": 1944,
-    "x": 700,
-    "y": 200,
-    "research_time": 111,
-    "reliability": "配備（制式採用）",
-    "desc": "分解可能・軽量化した改良型バズーカ。空挺部隊にも携行された。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "id": "support_weapons2",
+    "title": "Support Weapons 2",
+    "year": 1938,
+    "x": 0,
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "support_weapons2",
     "effects": [
-      "対人攻撃: 18/100",
-      "対物攻撃: 45/100",
-      "生存力: 8/100",
-      "機動力: 56/100",
-      "信頼度: 64/100"
+      "カテゴリ: infantry_weapons"
     ],
     "prerequisites": [
-      "m1_bazooka"
+      "support_weapons"
+    ]
+  },
+  {
+    "id": "support_weapons3",
+    "title": "Support Weapons 3",
+    "year": 1940,
+    "x": 0,
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "support_weapons3",
+    "effects": [
+      "カテゴリ: infantry_weapons"
+    ],
+    "prerequisites": [
+      "support_weapons2"
+    ]
+  },
+  {
+    "id": "support_weapons4",
+    "title": "Support Weapons 4",
+    "year": 1942,
+    "x": 0,
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "support_weapons4",
+    "effects": [
+      "カテゴリ: infantry_weapons"
+    ],
+    "prerequisites": [
+      "support_weapons3"
+    ]
+  },
+  {
+    "id": "motorised_infantry",
+    "title": "Motorised Infantry",
+    "year": 1936,
+    "x": 0,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "motorized_equipment_1",
+    "effects": [
+      "配備可能: motorized_equipment_1",
+      "カテゴリ: motorized_equipment, mio_cat_tech_all_motorized_mechanized, infantry_tech"
+    ],
+    "prerequisites": [
+      "tech_trucks"
+    ]
+  },
+  {
+    "id": "mechanised_infantry",
+    "title": "Mechanised Infantry",
+    "year": 1940,
+    "x": 0,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "mechanized_equipment_1",
+    "effects": [
+      "配備可能: mechanized_equipment_1",
+      "カテゴリ: motorized_equipment, mio_cat_tech_all_motorized_mechanized, infantry_tech, cat_mechanized_equipment"
+    ],
+    "prerequisites": [
+      "motorised_infantry"
+    ]
+  },
+  {
+    "id": "mechanised_infantry2",
+    "title": "Mechanised Infantry 2",
+    "year": 1942,
+    "x": 0,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "mechanized_equipment_2",
+    "effects": [
+      "配備可能: mechanized_equipment_2",
+      "カテゴリ: motorized_equipment, mio_cat_tech_all_motorized_mechanized, infantry_tech, cat_mechanized_equipment"
+    ],
+    "prerequisites": [
+      "mechanised_infantry"
+    ]
+  },
+  {
+    "id": "mechanised_infantry3",
+    "title": "Mechanised Infantry 3",
+    "year": 1944,
+    "x": 0,
+    "y": 0,
+    "research_time": 300,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "mechanized_equipment_3",
+    "effects": [
+      "配備可能: mechanized_equipment_3",
+      "カテゴリ: motorized_equipment, mio_cat_tech_all_motorized_mechanized, infantry_tech, cat_mechanized_equipment"
+    ],
+    "prerequisites": [
+      "mechanised_infantry2"
+    ]
+  },
+  {
+    "id": "infantry_at",
+    "title": "Infantry At",
+    "year": 1942,
+    "x": 200,
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "infantry_at",
+    "effects": [
+      "カテゴリ: infantry_weapons"
+    ],
+    "prerequisites": [
+      "improved_infantry_weapons"
+    ]
+  },
+  {
+    "id": "infantry_at2",
+    "title": "Infantry At 2",
+    "year": 1943,
+    "x": 200,
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "infantry_at2",
+    "effects": [
+      "カテゴリ: infantry_weapons"
+    ],
+    "prerequisites": [
+      "infantry_at"
+    ]
+  },
+  {
+    "id": "amphibious_mechanized_infantry",
+    "title": "Amphibious Mechanized Infantry",
+    "year": 1941,
+    "x": 200,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_amphibious_mech_1",
+    "effects": [
+      "配備可能: amphibious_mechanized_equipment_1",
+      "カテゴリ: motorized_equipment, mio_cat_tech_all_motorized_mechanized, infantry_tech, cat_mechanized_equipment, tp_tech"
+    ],
+    "prerequisites": [
+      "mechanised_infantry"
+    ]
+  },
+  {
+    "id": "amphibious_mechanized_infantry_2",
+    "title": "Amphibious Mechanized Infantry 2",
+    "year": 1943,
+    "x": 200,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_amphibious_mech_2",
+    "effects": [
+      "配備可能: amphibious_mechanized_equipment_2",
+      "カテゴリ: motorized_equipment, mio_cat_tech_all_motorized_mechanized, infantry_tech, cat_mechanized_equipment, tp_tech"
+    ],
+    "prerequisites": [
+      "amphibious_mechanized_infantry"
+    ]
+  },
+  {
+    "id": "paratroopers",
+    "title": "Paratroopers",
+    "year": 1936,
+    "x": 300,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "paratroopers",
+    "effects": [
+      "カテゴリ: para_tech, cat_special_forces_generic"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "paratroopers2",
+    "title": "Paratroopers 2",
+    "year": 1939,
+    "x": 300,
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "paratroopers2",
+    "effects": [
+      "カテゴリ: para_tech, cat_special_forces_generic"
+    ],
+    "prerequisites": [
+      "paratroopers"
+    ]
+  },
+  {
+    "id": "paratroopers3",
+    "title": "Paratroopers 3",
+    "year": 1943,
+    "x": 300,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "paratroopers3",
+    "effects": [
+      "カテゴリ: para_tech, cat_special_forces_generic"
+    ],
+    "prerequisites": [
+      "paratroopers2"
+    ]
+  },
+  {
+    "id": "marines",
+    "title": "Marines",
+    "year": 1936,
+    "x": 300,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "marines",
+    "effects": [
+      "カテゴリ: marine_tech, cat_special_forces_generic"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "marines2",
+    "title": "Marines 2",
+    "year": 1939,
+    "x": 300,
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "marines2",
+    "effects": [
+      "カテゴリ: marine_tech, cat_special_forces_generic"
+    ],
+    "prerequisites": [
+      "marines"
+    ]
+  },
+  {
+    "id": "marines3",
+    "title": "Marines 3",
+    "year": 1943,
+    "x": 300,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "marines3",
+    "effects": [
+      "カテゴリ: marine_tech, cat_special_forces_generic"
+    ],
+    "prerequisites": [
+      "marines2"
+    ]
+  },
+  {
+    "id": "tech_mountaineers",
+    "title": "Tech Mountaineers",
+    "year": 1936,
+    "x": 300,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "mountain",
+    "effects": [
+      "カテゴリ: infantry_tech, mountaineers_tech, cat_special_forces_generic"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "tech_mountaineers2",
+    "title": "Tech Mountaineers 2",
+    "year": 1939,
+    "x": 300,
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "mountain2",
+    "effects": [
+      "カテゴリ: infantry_tech, mountaineers_tech, cat_special_forces_generic"
+    ],
+    "prerequisites": [
+      "tech_mountaineers"
+    ]
+  },
+  {
+    "id": "tech_mountaineers3",
+    "title": "Tech Mountaineers 3",
+    "year": 1943,
+    "x": 300,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "mountain3",
+    "effects": [
+      "カテゴリ: infantry_tech, mountaineers_tech, cat_special_forces_generic"
+    ],
+    "prerequisites": [
+      "tech_mountaineers2"
+    ]
+  },
+  {
+    "id": "rangers_tech",
+    "title": "Rangers Tech",
+    "year": 1936,
+    "x": 300,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "rangers_tech1",
+    "effects": [
+      "カテゴリ: infantry_tech, rangers_tech_cat, cat_special_forces_generic"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "rangers_tech2",
+    "title": "Rangers Tech 2",
+    "year": 1939,
+    "x": 300,
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "rangers_tech2",
+    "effects": [
+      "カテゴリ: infantry_tech, rangers_tech_cat, cat_special_forces_generic"
+    ],
+    "prerequisites": [
+      "rangers_tech"
+    ]
+  },
+  {
+    "id": "rangers_tech3",
+    "title": "Rangers Tech 3",
+    "year": 1943,
+    "x": 300,
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "rangers_tech3",
+    "effects": [
+      "カテゴリ: infantry_tech, rangers_tech_cat, cat_special_forces_generic"
+    ],
+    "prerequisites": [
+      "rangers_tech2"
+    ]
+  },
+  {
+    "id": "armored_car1",
+    "title": "Armored Car 1",
+    "year": 1914,
+    "x": 400,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "ger_armored_car_equipment_1",
+    "effects": [
+      "配備可能: gw_armored_car_equipment",
+      "カテゴリ: motorized_equipment, armor, cat_armored_cars"
+    ],
+    "prerequisites": [
+      "tech_trucks"
+    ]
+  },
+  {
+    "id": "armored_car2",
+    "title": "Armored Car 2",
+    "year": 1940,
+    "x": 400,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "ger_armored_car_equipment_2",
+    "effects": [
+      "配備可能: armored_car_equipment_1",
+      "カテゴリ: motorized_equipment, armor, cat_armored_cars"
+    ],
+    "prerequisites": [
+      "armored_car1"
+    ]
+  },
+  {
+    "id": "armored_car3",
+    "title": "Armored Car 3",
+    "year": 1942,
+    "x": 400,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "ger_armored_car_equipment_3",
+    "effects": [
+      "配備可能: armored_car_equipment_2",
+      "カテゴリ: motorized_equipment, armor, cat_armored_cars"
+    ],
+    "prerequisites": [
+      "armored_car2"
+    ]
+  },
+  {
+    "id": "advanced_special_forces",
+    "title": "Advanced Special Forces",
+    "year": 1940,
+    "x": 500,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tech_advanced_special_forces_training",
+    "effects": [
+      "カテゴリ: mountaineers_tech, marine_tech, para_tech, cat_special_forces_generic"
+    ],
+    "prerequisites": [
+      "tech_special_forces"
+    ]
+  },
+  {
+    "id": "extreme_environment_training",
+    "title": "Extreme Environment Training",
+    "year": 1942,
+    "x": 500,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tech_extreme_environment_training",
+    "effects": [
+      "カテゴリ: mountaineers_tech, marine_tech, para_tech, cat_special_forces_generic"
+    ],
+    "prerequisites": [
+      "advanced_special_forces"
+    ]
+  },
+  {
+    "id": "tech_special_forces",
+    "title": "Tech Special Forces",
+    "year": 1938,
+    "x": 600,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tech_special_forces",
+    "effects": [
+      "カテゴリ: mountaineers_tech, marine_tech, para_tech, cat_special_forces_generic"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "elite_forces",
+    "title": "Elite Forces",
+    "year": 1944,
+    "x": 600,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tech_elite_forces",
+    "effects": [
+      "カテゴリ: mountaineers_tech, marine_tech, para_tech, cat_special_forces_generic"
+    ],
+    "prerequisites": [
+      "extreme_environment_training",
+      "survival_training"
+    ]
+  },
+  {
+    "id": "improved_special_forces",
+    "title": "Improved Special Forces",
+    "year": 1940,
+    "x": 700,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tech_improved_special_forces",
+    "effects": [
+      "カテゴリ: mountaineers_tech, marine_tech, para_tech, cat_special_forces_generic"
+    ],
+    "prerequisites": [
+      "tech_special_forces"
+    ]
+  },
+  {
+    "id": "survival_training",
+    "title": "Survival Training",
+    "year": 1942,
+    "x": 700,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tech_survival_training",
+    "effects": [
+      "カテゴリ: mountaineers_tech, marine_tech, para_tech, cat_special_forces_generic"
+    ],
+    "prerequisites": [
+      "improved_special_forces"
     ]
   }
 ]

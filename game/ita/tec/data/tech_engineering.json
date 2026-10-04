@@ -1,70 +1,558 @@
 [
   {
-    "id": "ita_engineering_1",
-    "title": "工兵装備改善",
+    "id": "sp_rockets_dual_chamber_rocket_engine_1",
+    "title": "Sp Rockets Dual Chamber Rocket Engine 1",
+    "year": 1944,
+    "x": -200,
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "improved_rocket_engines",
+    "effects": [
+      "配備可能: rocket_interceptor_equipment_2",
+      "カテゴリ: rocketry"
+    ],
+    "prerequisites": [
+      "experimental_rockets"
+    ]
+  },
+  {
+    "id": "sp_rockets_dual_chamber_rocket_engine_2",
+    "title": "Sp Rockets Dual Chamber Rocket Engine 2",
+    "year": 1946,
+    "x": -200,
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "advanced_rocket_engines",
+    "effects": [
+      "配備可能: rocket_interceptor_equipment_3",
+      "カテゴリ: rocketry"
+    ],
+    "prerequisites": [
+      "sp_rockets_dual_chamber_rocket_engine_1"
+    ]
+  },
+  {
+    "id": "electronic_mechanical_engineering",
+    "title": "Electronic Mechanical Engineering",
+    "year": 1936,
+    "x": -100,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "electronic_mechanical_engineering",
+    "effects": [
+      "カテゴリ: electronics"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "radio",
+    "title": "Radio",
+    "year": 1936,
+    "x": 0,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "radio",
+    "effects": [
+      "カテゴリ: electronics"
+    ],
+    "prerequisites": [
+      "electronic_mechanical_engineering"
+    ]
+  },
+  {
+    "id": "experimental_rockets",
+    "title": "Experimental Rockets",
+    "year": 1942,
+    "x": 0,
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "experimental_rockets",
+    "effects": [
+      "カテゴリ: rocketry"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "sp_rockets_improved_guidance",
+    "title": "Sp Rockets Improved Guidance",
+    "year": 1943,
+    "x": 0,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_rockets_improved_guidance",
+    "effects": [
+      "カテゴリ: rocketry"
+    ],
+    "prerequisites": [
+      "experimental_rockets"
+    ]
+  },
+  {
+    "id": "atomic_research",
+    "title": "Atomic Research",
+    "year": 1940,
+    "x": 0,
+    "y": 0,
+    "research_time": 500,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "atomic_research",
+    "effects": [
+      "カテゴリ: nuclear"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "basic_fire_control_system",
+    "title": "Basic Fire Control System",
+    "year": 1936,
+    "x": 0,
+    "y": 200,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "basic_fire_control_system",
+    "effects": [
+      "カテゴリ: electronics, computing_tech, naval_equipment"
+    ],
+    "prerequisites": [
+      "mechanical_computing"
+    ]
+  },
+  {
+    "id": "improved_radio",
+    "title": "Improved Radio",
+    "year": 1938,
+    "x": 0,
+    "y": 300,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "radio",
+    "effects": [
+      "カテゴリ: electronics"
+    ],
+    "prerequisites": [
+      "radio"
+    ]
+  },
+  {
+    "id": "cavity_magnatron",
+    "title": "Cavity Magnatron",
+    "year": 1938,
+    "x": 0,
+    "y": 300,
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "decimetric_radar",
+    "effects": [
+      "カテゴリ: electronics, radar_tech"
+    ],
+    "prerequisites": [
+      "electronic_mechanical_engineering",
+      "radio_detection"
+    ]
+  },
+  {
+    "id": "computing_machine",
+    "title": "Computing Machine",
+    "year": 1938,
+    "x": 0,
+    "y": 300,
+    "research_time": 250,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "computing_machine",
+    "effects": [
+      "カテゴリ: electronics, encryption_tech, decryption_tech, computing_tech"
+    ],
+    "prerequisites": [
+      "mechanical_computing"
+    ]
+  },
+  {
+    "id": "basic_encryption",
+    "title": "Basic Encryption",
+    "year": 1938,
+    "x": 0,
+    "y": 300,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "basic_encryption",
+    "effects": [
+      "カテゴリ: electronics, encryption_tech"
+    ],
+    "prerequisites": [
+      "computing_machine"
+    ]
+  },
+  {
+    "id": "basic_decryption",
+    "title": "Basic Decryption",
+    "year": 1938,
+    "x": 0,
+    "y": 300,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "basic_decryption",
+    "effects": [
+      "カテゴリ: electronics, decryption_tech"
+    ],
+    "prerequisites": [
+      "computing_machine"
+    ]
+  },
+  {
+    "id": "land_fort_tech_1",
+    "title": "Land Fort Tech 1",
+    "year": 1938,
+    "x": 0,
+    "y": 300,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "fort_1",
+    "effects": [
+      "カテゴリ: cat_fortification"
+    ],
+    "prerequisites": [
+      "basic_fortification_tech"
+    ]
+  },
+  {
+    "id": "improved_fire_control_system",
+    "title": "Improved Fire Control System",
+    "year": 1936,
+    "x": 0,
+    "y": 400,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "improved_fire_control_system",
+    "effects": [
+      "カテゴリ: electronics, computing_tech, naval_equipment"
+    ],
+    "prerequisites": [
+      "computing_machine"
+    ]
+  },
+  {
+    "id": "centimetric_radar",
+    "title": "Centimetric Radar",
+    "year": 1940,
+    "x": 0,
+    "y": 500,
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "centimetric_radar",
+    "effects": [
+      "カテゴリ: electronics, radar_tech"
+    ],
+    "prerequisites": [
+      "cavity_magnatron"
+    ]
+  },
+  {
+    "id": "improved_computing_machine",
+    "title": "Improved Computing Machine",
+    "year": 1940,
+    "x": 0,
+    "y": 500,
+    "research_time": 250,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "improved_computing_machine",
+    "effects": [
+      "カテゴリ: electronics, encryption_tech, decryption_tech, computing_tech"
+    ],
+    "prerequisites": [
+      "computing_machine"
+    ]
+  },
+  {
+    "id": "improved_encryption",
+    "title": "Improved Encryption",
+    "year": 1940,
+    "x": 0,
+    "y": 500,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "improved_encryption",
+    "effects": [
+      "カテゴリ: electronics, encryption_tech"
+    ],
+    "prerequisites": [
+      "improved_computing_machine"
+    ]
+  },
+  {
+    "id": "improved_decryption",
+    "title": "Improved Decryption",
+    "year": 1940,
+    "x": 0,
+    "y": 500,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "improved_decryption",
+    "effects": [
+      "カテゴリ: electronics, decryption_tech"
+    ],
+    "prerequisites": [
+      "improved_computing_machine"
+    ]
+  },
+  {
+    "id": "land_fort_tech_2",
+    "title": "Land Fort Tech 2",
+    "year": 1940,
+    "x": 0,
+    "y": 500,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "fort_2",
+    "effects": [
+      "カテゴリ: cat_fortification"
+    ],
+    "prerequisites": [
+      "land_fort_tech_1"
+    ]
+  },
+  {
+    "id": "advanced_radio",
+    "title": "Advanced Radio",
+    "year": 1941,
+    "x": 0,
+    "y": 600,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "radio",
+    "effects": [
+      "カテゴリ: electronics"
+    ],
+    "prerequisites": [
+      "improved_radio"
+    ]
+  },
+  {
+    "id": "phased_array",
+    "title": "Phased Array",
+    "year": 1941,
+    "x": 0,
+    "y": 600,
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "improved_centimetric_radar",
+    "effects": [
+      "カテゴリ: electronics, radar_tech"
+    ],
+    "prerequisites": [
+      "centimetric_radar"
+    ]
+  },
+  {
+    "id": "advanced_fire_control_system",
+    "title": "Advanced Fire Control System",
+    "year": 1936,
+    "x": 0,
+    "y": 600,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "advanced_fire_control_system",
+    "effects": [
+      "カテゴリ: electronics, computing_tech, naval_equipment"
+    ],
+    "prerequisites": [
+      "improved_computing_machine"
+    ]
+  },
+  {
+    "id": "monopulse_radar",
+    "title": "Monopulse Radar",
+    "year": 1942,
+    "x": 0,
+    "y": 700,
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "advanced_centimetric_radar",
+    "effects": [
+      "カテゴリ: electronics, radar_tech"
+    ],
+    "prerequisites": [
+      "phased_array"
+    ]
+  },
+  {
+    "id": "advanced_computing_machine",
+    "title": "Advanced Computing Machine",
+    "year": 1942,
+    "x": 0,
+    "y": 700,
+    "research_time": 250,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "advanced_computing_machine",
+    "effects": [
+      "カテゴリ: electronics, encryption_tech, decryption_tech, computing_tech"
+    ],
+    "prerequisites": [
+      "improved_computing_machine"
+    ]
+  },
+  {
+    "id": "advanced_encryption",
+    "title": "Advanced Encryption",
+    "year": 1942,
+    "x": 0,
+    "y": 700,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "advanced_encryption",
+    "effects": [
+      "カテゴリ: electronics, encryption_tech"
+    ],
+    "prerequisites": [
+      "advanced_computing_machine"
+    ]
+  },
+  {
+    "id": "advanced_decryption",
+    "title": "Advanced Decryption",
+    "year": 1942,
+    "x": 0,
+    "y": 700,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "advanced_decryption",
+    "effects": [
+      "カテゴリ: electronics, decryption_tech"
+    ],
+    "prerequisites": [
+      "advanced_computing_machine"
+    ]
+  },
+  {
+    "id": "basic_fortification_tech",
+    "title": "Basic Fortification Tech",
     "year": 1936,
     "x": 100,
-    "y": 50,
-    "research_time": 80,
-    "reliability": "配備",
-    "desc": "工兵部隊の装備と訓練を改善する。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4ac46a' stroke-width='1.5'><path d='M3 18l6-6 4 4 8-8'/><path d='M14 8h6v6'/></svg>",
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "fort",
     "effects": [
-      "工兵効率: +12%",
-      "要塞建設速度: +8%"
+      "カテゴリ: cat_fortification"
     ],
     "prerequisites": []
   },
   {
-    "id": "submarine_snorkel",
-    "title": "潜水艦通気管装置",
+    "id": "sp_rockets_rocket_bomber",
+    "title": "Sp Rockets Rocket Bomber",
+    "year": 1944,
+    "x": 200,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_rockets_rocket_bomber",
+    "effects": [
+      "カテゴリ: rocketry"
+    ],
+    "prerequisites": [
+      "experimental_rockets"
+    ]
+  },
+  {
+    "id": "sp_rockets_improved_rocket_bomber",
+    "title": "Sp Rockets Improved Rocket Bomber",
+    "year": 1945,
+    "x": 200,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_rockets_improved_rocket_bomber",
+    "effects": [
+      "カテゴリ: rocketry"
+    ],
+    "prerequisites": [
+      "sp_rockets_rocket_bomber"
+    ]
+  },
+  {
+    "id": "coastal_fort_tech_1",
+    "title": "Coastal Fort Tech 1",
+    "year": 1936,
+    "x": 200,
+    "y": 100,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "coastal_fort_1",
+    "effects": [
+      "カテゴリ: cat_fortification"
+    ],
+    "prerequisites": [
+      "basic_fortification_tech"
+    ]
+  },
+  {
+    "id": "coastal_fort_tech_2",
+    "title": "Coastal Fort Tech 2",
     "year": 1940,
-    "x": 100,
-    "y": 200,
-    "research_time": 83,
-    "reliability": "配備（制式採用）",
-    "desc": "イタリアが開発をリードした水中通気装置。独軍にも提供された。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='10' width='16' height='9' rx='1'/><path d='M7 10V5h4v5'/><path d='M15 13v3M18 13v3'/></svg>",
+    "x": 200,
+    "y": 500,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "coastal_fort_2",
     "effects": [
-      "研究速度: +7.0%",
-      "装備効率: +7.0%"
+      "カテゴリ: cat_fortification"
     ],
     "prerequisites": [
-      "ita_engineering_1"
+      "coastal_fort_tech_1"
     ]
   },
   {
-    "id": "gufo_radar",
-    "title": "グーフォ (フクロウ) レーダー",
-    "year": 1941,
-    "x": 100,
-    "y": 350,
-    "research_time": 85,
-    "reliability": "配備（制式採用）",
-    "desc": "イタリア海軍初の実用艦載レーダー。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='10' width='16' height='9' rx='1'/><path d='M7 10V5h4v5'/><path d='M15 13v3M18 13v3'/></svg>",
+    "id": "mechanical_computing",
+    "title": "Mechanical Computing",
+    "year": 1936,
+    "x": 300,
+    "y": 100,
+    "research_time": 250,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "mechanical_computing",
     "effects": [
-      "研究速度: +7.2%",
-      "装備効率: +7.2%"
+      "カテゴリ: electronics, computing_tech"
     ],
     "prerequisites": [
-      "submarine_snorkel"
+      "electronic_mechanical_engineering"
     ]
-  },
-  {
-    "id": "caproni_research",
-    "title": "カプロニ航空研究所",
-    "year": 1937,
-    "x": 400,
-    "y": 50,
-    "research_time": 77,
-    "reliability": "配備（制式採用）",
-    "desc": "大型爆撃機・先端航空機を研究する民間研究所。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#90c090' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='10' width='16' height='9' rx='1'/><path d='M7 10V5h4v5'/><path d='M15 13v3M18 13v3'/></svg>",
-    "effects": [
-      "研究速度: +6.4%",
-      "装備効率: +6.4%"
-    ],
-    "prerequisites": []
   }
 ]

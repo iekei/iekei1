@@ -5344,7 +5344,9 @@ class ResearchManager {
       if (locked) label += '🔒';
       else if (research) {
         const tech = ResearchManager.findTech(research.techId);
-        label += tech ? tech.title + ' (' + Math.floor(research.progress/research.total*100) + '%)' : '研究中';
+        const pct = Math.floor(research.progress/research.total*100);
+        const penaltyTag = research.penaltyPercent > 0 ? ' ⚡+' + research.penaltyPercent + '%' : '';
+        label += tech ? tech.title + ' (' + pct + '%' + penaltyTag + ')' : '研究中';
       } else label += '空き';
       html += '<div class="research-slot ' + (locked ? 'locked' : '') + ' ' + (research ? 'active' : '') + '">' + label + '</div>';
     }
@@ -5372,17 +5374,38 @@ class ResearchManager {
     ResearchTreeUI.render();
   }
 
+  // 現在のゲーム内日付を小数点年で取得 (例: 1936年7月2日 → 1936.504)
+  static decimalYear() {
+    const d = CoreEngine.gameState.date;
+    return d.getFullYear() + (d.getMonth() / 12) + ((d.getDate() - 1) / 365);
+  }
+
+  // 先取り研究ペナルティを計算 (1年先取り = +100%, 0.1年 = +10%)
+  static researchPenalty(tech) {
+    const techYear = tech.year || 1936;
+    const yearsAhead = techYear - ResearchManager.decimalYear();
+    if (yearsAhead <= 0) return { yearsAhead: 0, percent: 0, multiplier: 1 };
+    const percent = Math.round(yearsAhead * 1000) / 10;
+    return { yearsAhead: Math.round(yearsAhead * 10) / 10, percent, multiplier: 1 + yearsAhead };
+  }
+
   static selectTech(tech) {
     if (ResearchManager.researchedTech.has(tech.id)) { GameUI.notify('既に研究済みです。'); return; }
     if (tech.prerequisites && !tech.prerequisites.every(p => ResearchManager.researchedTech.has(p))) {
       GameUI.notify('前提技術が不足しています。', 'alert'); return;
     }
     const s = CoreEngine.gameState;
+    const penalty = ResearchManager.researchPenalty(tech);
+    const baseTime = tech.research_time || 100;
+    const totalTime = Math.round(baseTime * penalty.multiplier);
     for (let i = 1; i <= s.researchSlots; i++) {
       if (!ResearchManager.researching[i]) {
-        ResearchManager.researching[i] = { techId: tech.id, progress: 0, total: tech.research_time || 100 };
-        CoreEngine.log('研究開始: ' + tech.title);
-        GameUI.notify('研究開始: ' + tech.title, 'success');
+        ResearchManager.researching[i] = { techId: tech.id, progress: 0, total: totalTime, baseTime, penaltyPercent: penalty.percent };
+        const msg = penalty.percent > 0
+          ? '研究開始: ' + tech.title + ' (先取りペナルティ +' + penalty.percent + '% → ' + totalTime + '日)'
+          : '研究開始: ' + tech.title;
+        CoreEngine.log(msg);
+        GameUI.notify(msg, 'success');
         MultiplayerManager.broadcast({ type: 'research_start', slot: i, techId: tech.id });
         ResearchManager.renderSlots();
         ResearchManager.render();

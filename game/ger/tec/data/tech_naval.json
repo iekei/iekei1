@@ -1,264 +1,532 @@
 [
   {
-    "id": "deutschland_class",
-    "title": "ドイッチュラント級装甲艦",
-    "year": 1936,
-    "x": 100,
+    "id": "early_light_cruiser",
+    "title": "Early Light Cruiser",
+    "year": 1922,
+    "x": -100,
     "y": 50,
-    "research_time": 180,
-    "reliability": "就役",
-    "desc": "「ポケット戦艦」。航続力と28cm砲を備え、通商破壊戦に投入された。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "early_light_cruiser",
     "effects": [
-      "火力: 50/100",
-      "装甲: 45/100",
-      "速力: 50/100",
-      "航続: 80/100"
+      "配備可能: light_cruiser_1",
+      "カテゴリ: naval_artillery, naval_equipment, ca_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_cruiser_and_modules"
     ],
     "prerequisites": []
   },
   {
-    "id": "graf_zeppelin",
-    "title": "グラーフ・ゼペリン空母",
-    "year": 1938,
-    "x": 100,
-    "y": 200,
-    "research_time": 139,
-    "reliability": "低（試作止まり）",
-    "desc": "独海軍唯一の正規空母。計画変更を重ねて未完成のまま終戦、ソ連に引き取られた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 16l2-6h16l2 6H2z'/><path d='M12 10V4'/><path d='M12 4l4 4-4 2'/></svg>",
+    "id": "early_battlecruiser",
+    "title": "Early Battlecruiser",
+    "year": 1922,
+    "x": -100,
+    "y": 50,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "early_battlecruiser",
     "effects": [
-      "対人攻撃: 26/100",
-      "対物攻撃: 56/100",
-      "生存力: 47/100",
-      "機動力: 52/100",
-      "信頼度: 68/100"
+      "配備可能: battle_cruiser_1",
+      "カテゴリ: naval_artillery, naval_equipment, bc_tech, mio_cat_tech_all_capital_ship_and_modules"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "basic_light_cruiser",
+    "title": "Basic Light Cruiser",
+    "year": 1936,
+    "x": -100,
+    "y": 350,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "basic_light_cruiser",
+    "effects": [
+      "配備可能: light_cruiser_2",
+      "カテゴリ: naval_artillery, naval_equipment, ca_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_cruiser_and_modules"
     ],
     "prerequisites": [
-      "deutschland_class"
+      "early_light_cruiser",
+      "basic_heavy_cruiser"
     ]
   },
   {
-    "id": "scharnhorst",
-    "title": "シャルンホルスト級巡洋戦艦",
-    "year": 1938,
+    "id": "improved_light_cruiser",
+    "title": "Improved Light Cruiser",
+    "year": 1940,
+    "x": -100,
+    "y": 650,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "improved_light_cruiser",
+    "effects": [
+      "配備可能: light_cruiser_3",
+      "カテゴリ: naval_artillery, naval_equipment, ca_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_cruiser_and_modules"
+    ],
+    "prerequisites": [
+      "basic_light_cruiser",
+      "improved_heavy_cruiser"
+    ]
+  },
+  {
+    "id": "basic_battlecruiser",
+    "title": "Basic Battlecruiser",
+    "year": 1940,
+    "x": -100,
+    "y": 650,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "basic_battlecruiser",
+    "effects": [
+      "配備可能: battle_cruiser_2",
+      "カテゴリ: naval_artillery, naval_equipment, bc_tech, mio_cat_tech_all_capital_ship_and_modules"
+    ],
+    "prerequisites": [
+      "early_battlecruiser",
+      "improved_battleship"
+    ]
+  },
+  {
+    "id": "advanced_light_cruiser",
+    "title": "Advanced Light Cruiser",
+    "year": 1944,
+    "x": -100,
+    "y": 950,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "advanced_light_cruiser",
+    "effects": [
+      "配備可能: light_cruiser_4",
+      "カテゴリ: naval_artillery, naval_equipment, ca_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_cruiser_and_modules"
+    ],
+    "prerequisites": [
+      "improved_light_cruiser",
+      "advanced_heavy_cruiser"
+    ]
+  },
+  {
+    "id": "early_destroyer",
+    "title": "Early Destroyer",
+    "year": 1922,
+    "x": 0,
+    "y": 50,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "early_destroyer",
+    "effects": [
+      "配備可能: destroyer_1",
+      "カテゴリ: naval_equipment, dd_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_destroyer_and_modules"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "transport",
+    "title": "Transport",
+    "year": 1922,
+    "x": 0,
+    "y": 50,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "transport",
+    "effects": [
+      "カテゴリ: naval_equipment, tp_tech"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "early_carrier",
+    "title": "Early Carrier",
+    "year": 1922,
+    "x": 0,
+    "y": 50,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "early_carrier",
+    "effects": [
+      "配備可能: carrier_1",
+      "カテゴリ: naval_equipment, cv_tech, mio_cat_tech_all_carrier_and_modules"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "early_submarine",
+    "title": "Early Submarine",
+    "year": 1922,
+    "x": 0,
+    "y": 50,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "early_submarine",
+    "effects": [
+      "配備可能: submarine_1",
+      "カテゴリ: naval_equipment, ss_tech, mio_cat_tech_all_submarine_and_modules"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "basic_destroyer",
+    "title": "Basic Destroyer",
+    "year": 1936,
+    "x": 0,
+    "y": 350,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "basic_destroyer",
+    "effects": [
+      "配備可能: destroyer_2",
+      "カテゴリ: naval_equipment, dd_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_destroyer_and_modules"
+    ],
+    "prerequisites": [
+      "early_destroyer"
+    ]
+  },
+  {
+    "id": "basic_carrier",
+    "title": "Basic Carrier",
+    "year": 1936,
+    "x": 0,
+    "y": 350,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "basic_carrier",
+    "effects": [
+      "配備可能: carrier_2",
+      "カテゴリ: naval_equipment, cv_tech, mio_cat_tech_all_carrier_and_modules"
+    ],
+    "prerequisites": [
+      "early_carrier"
+    ]
+  },
+  {
+    "id": "basic_submarine",
+    "title": "Basic Submarine",
+    "year": 1936,
+    "x": 0,
+    "y": 350,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "basic_submarine",
+    "effects": [
+      "配備可能: submarine_2",
+      "カテゴリ: naval_equipment, ss_tech, mio_cat_tech_all_submarine_and_modules"
+    ],
+    "prerequisites": [
+      "early_submarine"
+    ]
+  },
+  {
+    "id": "improved_destroyer",
+    "title": "Improved Destroyer",
+    "year": 1940,
+    "x": 0,
+    "y": 650,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "improved_destroyer",
+    "effects": [
+      "配備可能: destroyer_3",
+      "カテゴリ: naval_equipment, dd_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_destroyer_and_modules"
+    ],
+    "prerequisites": [
+      "basic_destroyer"
+    ]
+  },
+  {
+    "id": "landing_craft",
+    "title": "Landing Craft",
+    "year": 1940,
+    "x": 0,
+    "y": 650,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "landing_craft",
+    "effects": [
+      "配備可能: floating_harbor_equipment_1",
+      "カテゴリ: naval_equipment, tp_tech"
+    ],
+    "prerequisites": [
+      "transport"
+    ]
+  },
+  {
+    "id": "improved_carrier",
+    "title": "Improved Carrier",
+    "year": 1940,
+    "x": 0,
+    "y": 650,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "improved_carrier",
+    "effects": [
+      "配備可能: carrier_3",
+      "カテゴリ: naval_equipment, cv_tech, mio_cat_tech_all_carrier_and_modules"
+    ],
+    "prerequisites": [
+      "basic_carrier"
+    ]
+  },
+  {
+    "id": "improved_submarine",
+    "title": "Improved Submarine",
+    "year": 1940,
+    "x": 0,
+    "y": 650,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "improved_submarine",
+    "effects": [
+      "配備可能: submarine_3",
+      "カテゴリ: naval_equipment, ss_tech, mio_cat_tech_all_submarine_and_modules"
+    ],
+    "prerequisites": [
+      "basic_submarine"
+    ]
+  },
+  {
+    "id": "advanced_destroyer",
+    "title": "Advanced Destroyer",
+    "year": 1944,
+    "x": 0,
+    "y": 950,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "advanced_destroyer",
+    "effects": [
+      "配備可能: destroyer_4",
+      "カテゴリ: naval_equipment, dd_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_destroyer_and_modules"
+    ],
+    "prerequisites": [
+      "improved_destroyer"
+    ]
+  },
+  {
+    "id": "tank_landing_craft",
+    "title": "Tank Landing Craft",
+    "year": 1944,
+    "x": 0,
+    "y": 950,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tank_landing_craft",
+    "effects": [
+      "カテゴリ: naval_equipment, tp_tech"
+    ],
+    "prerequisites": [
+      "landing_craft"
+    ]
+  },
+  {
+    "id": "advanced_carrier",
+    "title": "Advanced Carrier",
+    "year": 1944,
+    "x": 0,
+    "y": 950,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "advanced_carrier",
+    "effects": [
+      "配備可能: carrier_4",
+      "カテゴリ: naval_equipment, cv_tech, mio_cat_tech_all_carrier_and_modules"
+    ],
+    "prerequisites": [
+      "improved_carrier"
+    ]
+  },
+  {
+    "id": "advanced_submarine",
+    "title": "Advanced Submarine",
+    "year": 1944,
+    "x": 0,
+    "y": 950,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "advanced_submarine",
+    "effects": [
+      "配備可能: submarine_4",
+      "カテゴリ: naval_equipment, ss_tech, mio_cat_tech_all_submarine_and_modules"
+    ],
+    "prerequisites": [
+      "improved_submarine"
+    ]
+  },
+  {
+    "id": "early_heavy_cruiser",
+    "title": "Early Heavy Cruiser",
+    "year": 1922,
+    "x": 100,
+    "y": 50,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "early_heavy_cruiser",
+    "effects": [
+      "配備可能: heavy_cruiser_1",
+      "カテゴリ: naval_artillery, naval_equipment, ca_tech, mio_cat_tech_all_capital_ship_and_modules, mio_cat_tech_all_cruiser_and_modules"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "early_battleship",
+    "title": "Early Battleship",
+    "year": 1922,
+    "x": 100,
+    "y": 50,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "early_battleship",
+    "effects": [
+      "配備可能: battleship_1",
+      "カテゴリ: naval_artillery, naval_equipment, bb_tech, mio_cat_tech_all_capital_ship_and_modules"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "basic_heavy_cruiser",
+    "title": "Basic Heavy Cruiser",
+    "year": 1936,
     "x": 100,
     "y": 350,
-    "research_time": 139,
-    "reliability": "配備（制式採用）",
-    "desc": "28cm砲9門を備える高速巡洋戦艦。ノルウェー戦線・通商破壊で活躍し、北岬沖海戦で沈没した。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 16l2-6h16l2 6H2z'/><path d='M12 10V4'/><path d='M12 4l4 4-4 2'/></svg>",
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "basic_heavy_cruiser",
     "effects": [
-      "対人攻撃: 26/100",
-      "対物攻撃: 56/100",
-      "生存力: 47/100",
-      "機動力: 52/100",
-      "信頼度: 68/100"
+      "配備可能: heavy_cruiser_2",
+      "カテゴリ: naval_artillery, naval_equipment, ca_tech, mio_cat_tech_all_capital_ship_and_modules, mio_cat_tech_all_cruiser_and_modules"
     ],
     "prerequisites": [
-      "graf_zeppelin"
+      "basic_light_cruiser",
+      "early_heavy_cruiser"
     ]
   },
   {
-    "id": "hipper",
-    "title": "アドミラル・ヒッパー級重巡",
-    "year": 1939,
+    "id": "basic_battleship",
+    "title": "Basic Battleship",
+    "year": 1936,
     "x": 100,
-    "y": 500,
-    "research_time": 141,
-    "reliability": "配備（制式採用）",
-    "desc": "独海軍の本格的な20.3cm砲重巡。バレンツ海海戦など北極海で作戦に従事した。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 16l2-6h16l2 6H2z'/><path d='M12 10V4'/><path d='M12 4l4 4-4 2'/></svg>",
+    "y": 350,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "basic_battleship",
     "effects": [
-      "対人攻撃: 26/100",
-      "対物攻撃: 58/100",
-      "生存力: 48/100",
-      "機動力: 52/100",
-      "信頼度: 69/100"
+      "配備可能: battleship_2",
+      "カテゴリ: naval_artillery, naval_equipment, bb_tech, mio_cat_tech_all_capital_ship_and_modules"
     ],
     "prerequisites": [
-      "scharnhorst"
+      "early_battleship"
     ]
   },
   {
-    "id": "type_viic",
-    "title": "VII型Uボート (U-47)",
-    "year": 1939,
+    "id": "improved_heavy_cruiser",
+    "title": "Improved Heavy Cruiser",
+    "year": 1940,
     "x": 100,
     "y": 650,
-    "research_time": 150,
-    "reliability": "就役（大量建造）",
-    "desc": "大西洋の狼群を構成した主力潜水艦。ギュンター・プリンのU-47はスカパ・フローを奇襲した。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M3 14c0-2 2-4 5-4h8c3 0 5 2 5 4s-2 4-5 4H8c-3 0-5-2-5-4z'/><path d='M14 10V6h4'/></svg>",
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "improved_heavy_cruiser",
     "effects": [
-      "雷撃: 68/100",
-      "潜航: 65/100",
-      "航続: 70/100",
-      "速力: 30/100"
+      "配備可能: heavy_cruiser_3",
+      "カテゴリ: naval_artillery, naval_equipment, ca_tech, mio_cat_tech_all_capital_ship_and_modules, mio_cat_tech_all_cruiser_and_modules"
     ],
     "prerequisites": [
-      "hipper"
+      "improved_light_cruiser",
+      "basic_heavy_cruiser"
     ]
   },
   {
-    "id": "bismarck",
-    "title": "ビスマルク級戦艦",
+    "id": "improved_battleship",
+    "title": "Improved Battleship",
     "year": 1940,
     "x": 100,
-    "y": 800,
-    "research_time": 250,
-    "reliability": "就役",
-    "desc": "41,700トンの新鋭戦艦。38cm砲8門を備え、フッドを撃沈したが追討された。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "y": 650,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "improved_battleship",
     "effects": [
-      "火力: 82/100",
-      "装甲: 75/100",
-      "速力: 55/100",
-      "対空: 35/100"
+      "配備可能: battleship_3",
+      "カテゴリ: naval_artillery, naval_equipment, bb_tech, mio_cat_tech_all_capital_ship_and_modules"
     ],
     "prerequisites": [
-      "type_viic"
+      "basic_battlecruiser",
+      "basic_battleship"
     ]
   },
   {
-    "id": "tirpitz",
-    "title": "ティルピッツ",
-    "year": 1941,
+    "id": "advanced_heavy_cruiser",
+    "title": "Advanced Heavy Cruiser",
+    "year": 1944,
     "x": 100,
     "y": 950,
-    "research_time": 260,
-    "reliability": "就役",
-    "desc": "ビスマルクの姉妹艦。ノルウェーに配備され「北の孤独な女王」として連合軍を威嚇した。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "advanced_heavy_cruiser",
     "effects": [
-      "火力: 84/100",
-      "装甲: 78/100",
-      "速力: 52/100",
-      "対空: 45/100"
+      "配備可能: heavy_cruiser_4",
+      "カテゴリ: naval_artillery, naval_equipment, ca_tech, mio_cat_tech_all_capital_ship_and_modules, mio_cat_tech_all_cruiser_and_modules"
     ],
     "prerequisites": [
-      "bismarck"
+      "advanced_light_cruiser",
+      "improved_heavy_cruiser"
     ]
   },
   {
-    "id": "zerstorer36",
-    "title": "Z-17級駆逐艦",
-    "year": 1937,
-    "x": 400,
-    "y": 50,
-    "research_time": 137,
-    "reliability": "配備（制式採用）",
-    "desc": "高角砲を備えた独駆逐艦。荒天時の復原性に課題があり、ノルウェー戦線で多数喪失した。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 16l2-6h16l2 6H2z'/><path d='M12 10V4'/><path d='M12 4l4 4-4 2'/></svg>",
-    "effects": [
-      "対人攻撃: 22/100",
-      "対物攻撃: 37/100",
-      "生存力: 28/100",
-      "機動力: 80/100",
-      "信頼度: 72/100"
-    ],
-    "prerequisites": []
-  },
-  {
-    "id": "type_ix",
-    "title": "IX型潜水艦",
-    "year": 1939,
-    "x": 400,
-    "y": 200,
-    "research_time": 141,
-    "reliability": "配備（制式採用）",
-    "desc": "長航程の遠洋潜水艦。大西洋の通商破壊戦の主力で、米沿岸にも展開した。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 16l2-6h16l2 6H2z'/><path d='M12 10V4'/><path d='M12 4l4 4-4 2'/></svg>",
-    "effects": [
-      "対人攻撃: 22/100",
-      "対物攻撃: 38/100",
-      "生存力: 29/100",
-      "機動力: 80/100",
-      "信頼度: 73/100"
-    ],
-    "prerequisites": [
-      "zerstorer36"
-    ]
-  },
-  {
-    "id": "type_xxi",
-    "title": "XXI型Uボート",
+    "id": "advanced_battleship",
+    "title": "Advanced Battleship",
     "year": 1944,
-    "x": 400,
-    "y": 350,
-    "research_time": 220,
-    "reliability": "少数配備",
-    "desc": "水中高速を可能にした革命的潜水艦。シュノーケル装備で、現代潜水艦の祖型となった。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M3 14c0-2 2-4 5-4h8c3 0 5 2 5 4s-2 4-5 4H8c-3 0-5-2-5-4z'/><path d='M14 10V6h4'/></svg>",
+    "x": 100,
+    "y": 950,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "advanced_battleship",
     "effects": [
-      "雷撃: 78/100",
-      "潜航: 90/100",
-      "速力: 65/100",
-      "航続: 65/100"
+      "配備可能: battleship_4",
+      "カテゴリ: naval_artillery, naval_equipment, bb_tech, mio_cat_tech_all_capital_ship_and_modules"
     ],
     "prerequisites": [
-      "type_ix"
+      "improved_battleship"
     ]
   },
   {
-    "id": "type_xxiii",
-    "title": "XXIII型潜水艦",
+    "id": "heavy_battleship2",
+    "title": "Heavy Battleship 2",
     "year": 1944,
-    "x": 400,
-    "y": 500,
-    "research_time": 151,
-    "reliability": "配備（制式採用）",
-    "desc": "近海用の小型電動潜水艦。静粛性に優れた終戦直前の量産型Uボート。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 16l2-6h16l2 6H2z'/><path d='M12 10V4'/><path d='M12 4l4 4-4 2'/></svg>",
+    "x": 300,
+    "y": 950,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "heavy_battleship2",
     "effects": [
-      "対人攻撃: 22/100",
-      "対物攻撃: 43/100",
-      "生存力: 31/100",
-      "機動力: 80/100",
-      "信頼度: 77/100"
+      "配備可能: SH_battleship_2",
+      "カテゴリ: naval_equipment, shbb_tech, mio_cat_tech_all_capital_ship_and_modules"
     ],
     "prerequisites": [
-      "type_xxi"
-    ]
-  },
-  {
-    "id": "sboot",
-    "title": "Sボート高速魚雷艇",
-    "year": 1936,
-    "x": 700,
-    "y": 50,
-    "research_time": 135,
-    "reliability": "配備（制式採用）",
-    "desc": "イギリス軍に「Eボート」と恐れられた高速魚雷艇。夜間の沿岸通商破壊に威力を発揮した。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><ellipse cx='12' cy='14' rx='9' ry='4'/><path d='M12 10V6h5'/><path d='M4 14h16'/></svg>",
-    "effects": [
-      "対人攻撃: 10/100",
-      "対物攻撃: 42/100",
-      "生存力: 24/100",
-      "機動力: 60/100",
-      "信頼度: 63/100"
-    ],
-    "prerequisites": []
-  },
-  {
-    "id": "prinz_eugen",
-    "title": "プリンツ・オイゲン重巡",
-    "year": 1940,
-    "x": 700,
-    "y": 200,
-    "research_time": 143,
-    "reliability": "配備（制式採用）",
-    "desc": "ヒッパー級の改良型。ビスマルク作戦に随行し、終戦まで生き延びて米軍に引き取られた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><ellipse cx='12' cy='14' rx='9' ry='4'/><path d='M12 10V6h5'/><path d='M4 14h16'/></svg>",
-    "effects": [
-      "対人攻撃: 10/100",
-      "対物攻撃: 47/100",
-      "生存力: 27/100",
-      "機動力: 60/100",
-      "信頼度: 66/100"
-    ],
-    "prerequisites": [
-      "sboot"
+      "basic_battleship"
     ]
   }
 ]

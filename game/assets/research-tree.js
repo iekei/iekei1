@@ -68,7 +68,10 @@ const ResearchTreeUI = {
     const active = Object.values(ResearchManager.researching).find(entry => entry.techId === tech.id);
     if (active) return { className: 'researching', text: '研究中 ' + Math.floor(active.progress / active.total * 100) + '%' };
     const available = (tech.prerequisites || []).every(id => ResearchManager.researchedTech.has(id));
-    return { className: available ? 'available' : 'locked', text: available ? '研究可能' : '前提技術が必要' };
+    const penalty = ResearchManager.researchPenalty(tech);
+    let text = available ? '研究可能' : '前提技術が必要';
+    if (available && penalty.percent > 0) text += ' (先取り+' + penalty.percent + '%)';
+    return { className: available ? 'available' : 'locked', text, penalty };
   },
 
   image(tech, category) {
@@ -162,7 +165,10 @@ const ResearchTreeUI = {
       title.textContent = tech.title;
       const meta = document.createElement('span');
       meta.className = 'tn-meta';
-      meta.textContent = (tech.year || '—') + '年 · ' + (tech.research_time || 100) + '日';
+      const penalty = state.penalty;
+      let metaText = (tech.year || '—') + '年 · ' + (tech.research_time || 100) + '日';
+      if (penalty && penalty.percent > 0) metaText += ' · 先取り+' + penalty.percent + '%';
+      meta.textContent = metaText;
       const status = document.createElement('span');
       status.className = 'tn-status';
       status.textContent = state.text;
@@ -220,8 +226,10 @@ const ResearchTreeUI = {
     const imageContainer = detail.querySelector('.tech-detail-image');
     imageContainer.querySelectorAll('img').forEach(image => ImageLoader.observer?.unobserve(image));
     imageContainer.replaceChildren(this.image(tech, category));
-    detail.querySelector('.tech-detail-subtitle').textContent = ResearchIcons.categories[category].label + ' / ' +
-      (tech.year || '—') + '年 / 研究 ' + (tech.research_time || 100) + '日';
+    const penalty = ResearchManager.researchPenalty(tech);
+    let subtitle = ResearchIcons.categories[category].label + ' / ' + (tech.year || '—') + '年 / 研究 ' + (tech.research_time || 100) + '日';
+    if (penalty.percent > 0) subtitle += ' / 先取りペナルティ +' + penalty.percent + '% (' + Math.round((tech.research_time || 100) * penalty.multiplier) + '日)';
+    detail.querySelector('.tech-detail-subtitle').textContent = subtitle;
     detail.querySelector('.tech-detail-desc').textContent = tech.desc || '説明はまだ登録されていません。';
     const effects = detail.querySelector('.tech-detail-effects');
     effects.replaceChildren();
@@ -230,6 +238,17 @@ const ResearchTreeUI = {
       item.textContent = effect;
       effects.appendChild(item);
     });
+    if (penalty.percent > 0) {
+      const item = document.createElement('li');
+      item.style.color = 'var(--accent-orange, #e8923c)';
+      item.textContent = '先取り研究ペナルティ: +' + penalty.percent + '% (研究時間 ' + Math.round((tech.research_time || 100) * penalty.multiplier) + '日)';
+      effects.appendChild(item);
+    } else if (tech.year) {
+      const item = document.createElement('li');
+      item.style.color = 'var(--text-green, #6a9c5a)';
+      item.textContent = '先取り研究ペナルティ: なし (適正年度)';
+      effects.appendChild(item);
+    }
     const prerequisites = detail.querySelector('.tech-detail-prerequisites');
     prerequisites.replaceChildren();
     if (!(tech.prerequisites || []).length) prerequisites.textContent = 'なし';

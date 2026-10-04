@@ -1,5 +1,25 @@
-/** Technology presentation assets: local Wiki mappings first, category drawings otherwise. */
+/** Technology presentation assets: local file index first, Wiki mappings next, category drawings otherwise. */
 const ResearchIcons = {
+  // Case-insensitive index of technology image files (built from GameAssetData.technology)
+  techFileIndex: null,
+
+  buildTechIndex() {
+    if (this.techFileIndex) return this.techFileIndex;
+    this.techFileIndex = new Map();
+    const files = (typeof GameAssetData !== 'undefined' && GameAssetData.technology) || [];
+    for (const file of files) {
+      const key = file.replace(/\.png$/i, '').toLowerCase();
+      this.techFileIndex.set(key, file);
+    }
+    return this.techFileIndex;
+  },
+
+  // Resolve a tech asset_key to an actual file name in game/assets/technology/
+  resolveTechFile(key) {
+    const index = this.buildTechIndex();
+    return index.get(String(key).toLowerCase()) || null;
+  },
+
   categories: {
     infantry: { label: '歩兵', keys: ['infantry_weapons1', 'infantry_weapons', 'infantry_equipment_1'], drawing: '<path d="M5 34L56 13M9 38l8-3-4-7-8 5M37 21l8 10M47 17l-4-6"/>' },
     armor: { label: '装甲', keys: ['armor', 'basic_light_tank_chassis', 'light_tank_equipment_1'], drawing: '<rect x="7" y="30" width="50" height="15" rx="7"/><path d="M15 30l5-12h19l6 12M38 22h21"/><circle cx="19" cy="38" r="3"/><circle cx="32" cy="38" r="3"/><circle cx="45" cy="38" r="3"/>' },
@@ -24,10 +44,17 @@ const ResearchIcons = {
     const definition = this.categories[category] || this.categories.infantry;
     const keys = [tech.asset_key, tech.icon_key, tech.id, ...definition.keys].filter(Boolean);
     for (const key of keys) {
+      // 1. Direct file lookup (case-insensitive) — the asset_key usually matches a PNG in game/assets/technology/
+      const file = this.resolveTechFile(key);
+      if (file) {
+        const src = AssetRegistry.getLocalAssetUrl('technology_icons', file);
+        const github = AssetRegistry.getGithubAssetUrl('technology_icons', file);
+        return { src, key, source: 'technology_icons', github };
+      }
+      // 2. Wiki mapping lookup
       for (const mapping of ['technology_icons', 'equipment_icons']) {
         const local = AssetRegistry.getLocal(mapping, key);
         if (local) return { src: local, key, source: mapping, github: AssetRegistry.getGithubFromMapping(mapping, key) };
-        // ローカル未保存でもGitHubアップロード済みなら game/assets/<folder>/<完全同名>.png を参照
         const github = AssetRegistry.getGithubFromMapping(mapping, key);
         if (github) return { src: github, key, source: mapping, github: null };
       }
