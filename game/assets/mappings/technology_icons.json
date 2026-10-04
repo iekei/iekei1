@@ -699,9 +699,9 @@
    "snapshot_ts": "20240927195523"
   },
   {
-   "name": "Electric_torpedo.png",
+   "name": "electric_torpedo.png",
    "key": "electric_torpedo",
-   "local": null,
+   "local": "assets/technology/electric_torpedo.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Electric_torpedo.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Electric_torpedo.png",
    "subcategory": "Naval_support_technology_icons",
@@ -2239,9 +2239,9 @@
    "snapshot_ts": null
   },
   {
-   "name": "Heavy_plane_1.png",
+   "name": "heavy_plane_1.png",
    "key": "heavy_plane_1",
-   "local": null,
+   "local": "assets/technology/heavy_plane_1.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Heavy_plane_1.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Heavy_plane_1.png",
    "subcategory": "Air_technology_icons",
@@ -2249,9 +2249,9 @@
    "snapshot_ts": null
   },
   {
-   "name": "Heavy_plane_2.png",
+   "name": "heavy_plane_2.png",
    "key": "heavy_plane_2",
-   "local": null,
+   "local": "assets/technology/heavy_plane_2.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Heavy_plane_2.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Heavy_plane_2.png",
    "subcategory": "Air_technology_icons",
@@ -2259,9 +2259,9 @@
    "snapshot_ts": null
   },
   {
-   "name": "Heavy_plane_3.png",
+   "name": "heavy_plane_3.png",
    "key": "heavy_plane_3",
-   "local": null,
+   "local": "assets/technology/heavy_plane_3.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Heavy_plane_3.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Heavy_plane_3.png",
    "subcategory": "Air_technology_icons",
@@ -2269,9 +2269,9 @@
    "snapshot_ts": null
   },
   {
-   "name": "Heavy_plane_4.png",
+   "name": "heavy_plane_4.png",
    "key": "heavy_plane_4",
-   "local": null,
+   "local": "assets/technology/heavy_plane_4.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Heavy_plane_4.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Heavy_plane_4.png",
    "subcategory": "Air_technology_icons",
@@ -2299,9 +2299,9 @@
    "snapshot_ts": null
   },
   {
-   "name": "Jet_plane_1.png",
+   "name": "jet_plane_1.png",
    "key": "jet_plane_1",
-   "local": null,
+   "local": "assets/technology/jet_plane_1.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Jet_plane_1.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Jet_plane_1.png",
    "subcategory": "Air_technology_icons",
@@ -2309,9 +2309,9 @@
    "snapshot_ts": null
   },
   {
-   "name": "Light_plane_1.png",
+   "name": "light_plane_1.png",
    "key": "light_plane_1",
-   "local": null,
+   "local": "assets/technology/light_plane_1.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Light_plane_1.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Light_plane_1.png",
    "subcategory": "Air_technology_icons",
@@ -2319,9 +2319,9 @@
    "snapshot_ts": null
   },
   {
-   "name": "Light_plane_2.png",
+   "name": "light_plane_2.png",
    "key": "light_plane_2",
-   "local": null,
+   "local": "assets/technology/light_plane_2.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Light_plane_2.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Light_plane_2.png",
    "subcategory": "Air_technology_icons",
@@ -2329,9 +2329,9 @@
    "snapshot_ts": null
   },
   {
-   "name": "Light_plane_3.png",
+   "name": "light_plane_3.png",
    "key": "light_plane_3",
-   "local": null,
+   "local": "assets/technology/light_plane_3.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Light_plane_3.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Light_plane_3.png",
    "subcategory": "Air_technology_icons",
@@ -2339,9 +2339,9 @@
    "snapshot_ts": null
   },
   {
-   "name": "Light_plane_4.png",
+   "name": "light_plane_4.png",
    "key": "light_plane_4",
-   "local": null,
+   "local": "assets/technology/light_plane_4.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Light_plane_4.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Light_plane_4.png",
    "subcategory": "Air_technology_icons",
@@ -2349,9 +2349,9 @@
    "snapshot_ts": null
   },
   {
-   "name": "Medium_plane_1.png",
+   "name": "medium_plane_1.png",
    "key": "medium_plane_1",
-   "local": null,
+   "local": "assets/technology/medium_plane_1.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Medium_plane_1.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Medium_plane_1.png",
    "subcategory": "Air_technology_icons",
@@ -2359,9 +2359,9 @@
    "snapshot_ts": null
   },
   {
-   "name": "Medium_plane_2.png",
+   "name": "medium_plane_2.png",
    "key": "medium_plane_2",
-   "local": null,
+   "local": "assets/technology/medium_plane_2.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Medium_plane_2.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Medium_plane_2.png",
    "subcategory": "Air_technology_icons",
@@ -2369,9 +2369,9 @@
    "snapshot_ts": null
   },
   {
-   "name": "Medium_plane_3.png",
+   "name": "medium_plane_3.png",
    "key": "medium_plane_3",
-   "local": null,
+   "local": "assets/technology/medium_plane_3.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Medium_plane_3.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Medium_plane_3.png",
    "subcategory": "Air_technology_icons",
@@ -2379,9 +2379,9 @@
    "snapshot_ts": null
   },
   {
-   "name": "Medium_plane_4.png",
+   "name": "medium_plane_4.png",
    "key": "medium_plane_4",
-   "local": null,
+   "local": "assets/technology/medium_plane_4.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Medium_plane_4.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Medium_plane_4.png",
    "subcategory": "Air_technology_icons",
@@ -2389,9 +2389,9 @@
    "snapshot_ts": null
   },
   {
-   "name": "Medium_plane_5.png",
+   "name": "medium_plane_5.png",
    "key": "medium_plane_5",
-   "local": null,
+   "local": "assets/technology/medium_plane_5.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Medium_plane_5.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Medium_plane_5.png",
    "subcategory": "Air_technology_icons",
@@ -2409,9 +2409,9 @@
    "snapshot_ts": null
   },
   {
-   "name": "Sp_aircraft_aerial_hangars.png",
+   "name": "sp_aircraft_aerial_hangars.png",
    "key": "sp_aircraft_aerial_hangars",
-   "local": null,
+   "local": "assets/technology/sp_aircraft_aerial_hangars.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Sp_aircraft_aerial_hangars.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Sp_aircraft_aerial_hangars.png",
    "subcategory": "Air_technology_icons",
@@ -2419,9 +2419,9 @@
    "snapshot_ts": null
   },
   {
-   "name": "Sp_aircraft_centrifugal_jet.png",
+   "name": "sp_aircraft_centrifugal_jet.png",
    "key": "sp_aircraft_centrifugal_jet",
-   "local": null,
+   "local": "assets/technology/sp_aircraft_centrifugal_jet.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Sp_aircraft_centrifugal_jet.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Sp_aircraft_centrifugal_jet.png",
    "subcategory": "Air_technology_icons",
@@ -2429,9 +2429,9 @@
    "snapshot_ts": null
   },
   {
-   "name": "Sp_aircraft_miniature_fighters.png",
+   "name": "sp_aircraft_miniature_fighters.png",
    "key": "sp_aircraft_miniature_fighters",
-   "local": null,
+   "local": "assets/technology/sp_aircraft_miniature_fighters.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Sp_aircraft_miniature_fighters.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Sp_aircraft_miniature_fighters.png",
    "subcategory": "Air_technology_icons",
@@ -2439,9 +2439,9 @@
    "snapshot_ts": null
   },
   {
-   "name": "Sp_aircraft_reinforced_wings.png",
+   "name": "sp_aircraft_reinforced_wings.png",
    "key": "sp_aircraft_reinforced_wings",
-   "local": null,
+   "local": "assets/technology/sp_aircraft_reinforced_wings.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Sp_aircraft_reinforced_wings.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Sp_aircraft_reinforced_wings.png",
    "subcategory": "Air_technology_icons",
@@ -4836,6 +4836,46 @@
    "source_page": "https://hoi4.paradoxwikis.com/File:Techtree_tank_tab.png",
    "subcategory": "Technology_tree_icons",
    "image_url": "https://hoi4.paradoxwikis.com/images/a/af/Techtree_tank_tab.png",
+   "snapshot_ts": null
+  },
+  {
+   "name": "generic_transport_plane_equipment_1.png",
+   "key": "generic_transport_plane_equipment_1",
+   "local": "assets/technology/generic_transport_plane_equipment_1.png",
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/generic_transport_plane_equipment_1.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:generic_transport_plane_equipment_1.png",
+   "subcategory": "Air_technology_icons",
+   "image_url": "",
+   "snapshot_ts": null
+  },
+  {
+   "name": "FRA_strategic_bomber1.png",
+   "key": "FRA_strategic_bomber1",
+   "local": "assets/technology/FRA_strategic_bomber1.png",
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/FRA_strategic_bomber1.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:FRA_strategic_bomber1.png",
+   "subcategory": "Air_technology_icons",
+   "image_url": "",
+   "snapshot_ts": null
+  },
+  {
+   "name": "generic_transport_plane_equipment_2.png",
+   "key": "generic_transport_plane_equipment_2",
+   "local": "assets/technology/generic_transport_plane_equipment_2.png",
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/generic_transport_plane_equipment_2.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:generic_transport_plane_equipment_2.png",
+   "subcategory": "Air_technology_icons",
+   "image_url": "",
+   "snapshot_ts": null
+  },
+  {
+   "name": "generic_transport_plane_equipment_3.png",
+   "key": "generic_transport_plane_equipment_3",
+   "local": "assets/technology/generic_transport_plane_equipment_3.png",
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/generic_transport_plane_equipment_3.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:generic_transport_plane_equipment_3.png",
+   "subcategory": "Air_technology_icons",
+   "image_url": "",
    "snapshot_ts": null
   }
  ],
