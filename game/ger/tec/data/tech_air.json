@@ -1,296 +1,534 @@
 [
   {
-    "id": "bf109",
-    "title": "Bf109",
+    "id": "CAS1",
+    "title": "CAS 1",
     "year": 1936,
-    "x": 100,
-    "y": 50,
-    "research_time": 110,
-    "reliability": "配備（主力）",
-    "desc": "メッサーシュミットの単座戦闘機。史実上最も多く生産された戦闘機で、エースたちの愛機。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
-    "effects": [
-      "空戦: 65/100",
-      "速力: 70/100",
-      "航続: 45/100",
-      "装甲: 15/100"
-    ],
-    "prerequisites": []
-  },
-  {
-    "id": "bf110",
-    "title": "Bf 110双発重戦闘機",
-    "year": 1936,
-    "x": 100,
+    "x": -400,
     "y": 200,
-    "research_time": 115,
-    "reliability": "配備（制式採用）",
-    "desc": "長航程の双発重戦闘機。護衛戦闘機としては不適だったが夜間戦闘機・駆逐機として活躍した。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='12' cy='14' r='2'/></svg>",
-    "effects": [
-      "攻撃力: 42/100",
-      "生存力: 30/100",
-      "機動力: 69/100",
-      "信頼度: 68/100"
-    ],
-    "prerequisites": [
-      "bf109"
-    ]
-  },
-  {
-    "id": "fw190",
-    "title": "Fw190",
-    "year": 1941,
-    "x": 100,
-    "y": 350,
-    "research_time": 130,
-    "reliability": "配備（主力）",
-    "desc": "クルト・タンク設計の「ブッチャー鳥」。Bf109を超える高出力と重武装を持つ多用途戦闘機。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
-    "effects": [
-      "空戦: 78/100",
-      "速力: 78/100",
-      "航続: 40/100",
-      "装甲: 20/100"
-    ],
-    "prerequisites": [
-      "bf110"
-    ]
-  },
-  {
-    "id": "me163",
-    "title": "Me 163コメート",
-    "year": 1944,
-    "x": 100,
-    "y": 500,
-    "research_time": 131,
-    "reliability": "低（試作止まり）",
-    "desc": "ロケット発動機の要撃戦闘機。圧倒的上昇力で爆撃機編隊を切り裂いたが、航続時間は僅か数分。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v20M2 11h20M5 18h14'/><circle cx='12' cy='14' r='2'/></svg>",
-    "effects": [
-      "攻撃力: 56/100",
-      "生存力: 37/100",
-      "機動力: 79/100",
-      "信頼度: 77/100"
-    ],
-    "prerequisites": [
-      "fw190"
-    ]
-  },
-  {
-    "id": "me262",
-    "title": "Me262シュヴァルベ",
-    "year": 1944,
-    "x": 100,
-    "y": 650,
     "research_time": 200,
-    "reliability": "少数配備（ジェット）",
-    "desc": "世界初の実用ジェット戦闘機。連合軍のどのプロペラ機よりも速かったが、配備は遅れた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v9'/><path d='M2 11h20'/><path d='M6 11l-3 9'/><path d='M18 11l3 9'/><path d='M10 13v6'/></svg>",
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "CAS1",
     "effects": [
-      "空戦: 90/100",
-      "速力: 95/100",
-      "航続: 25/100",
-      "装甲: 15/100"
+      "配備可能: CAS_equipment_1",
+      "カテゴリ: light_air, cas_bomber, air_equipment, mio_cat_all_cas_and_modules, mio_cat_all_light_aircraft_and_modules"
     ],
     "prerequisites": [
-      "me163"
+      "early_fighter"
     ]
   },
   {
-    "id": "ju87",
-    "title": "Ju87 スツーカ",
-    "year": 1936,
-    "x": 400,
-    "y": 50,
-    "research_time": 110,
-    "reliability": "配備（急降下爆撃）",
-    "desc": "逆ガル翼の急降下爆撃機。サイレン付き急降下で歩兵に恐怖を与え、電撃戦の先兵となった。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "id": "CAS2",
+    "title": "CAS 2",
+    "year": 1940,
+    "x": -400,
+    "y": 300,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "CAS2",
     "effects": [
-      "対地攻撃: 62/100",
-      "精度: 75/100",
-      "航続: 55/100",
-      "装甲: 12/100"
+      "配備可能: CAS_equipment_2",
+      "カテゴリ: light_air, cas_bomber, air_equipment, mio_cat_all_cas_and_modules, mio_cat_all_light_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "CAS1"
+    ]
+  },
+  {
+    "id": "CAS3",
+    "title": "CAS 3",
+    "year": 1944,
+    "x": -400,
+    "y": 400,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "CAS3",
+    "effects": [
+      "配備可能: CAS_equipment_3",
+      "カテゴリ: light_air, cas_bomber, air_equipment, mio_cat_all_cas_and_modules, mio_cat_all_light_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "CAS2"
+    ]
+  },
+  {
+    "id": "heavy_fighter1",
+    "title": "Heavy Fighter 1",
+    "year": 1936,
+    "x": -200,
+    "y": 200,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "heavy_fighter1",
+    "effects": [
+      "配備可能: heavy_fighter_equipment_1",
+      "カテゴリ: medium_air, air_equipment, cat_heavy_fighter, mio_cat_all_medium_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "early_bomber"
+    ]
+  },
+  {
+    "id": "heavy_fighter2",
+    "title": "Heavy Fighter 2",
+    "year": 1940,
+    "x": -200,
+    "y": 300,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "heavy_fighter2",
+    "effects": [
+      "配備可能: heavy_fighter_equipment_2",
+      "カテゴリ: medium_air, air_equipment, cat_heavy_fighter, mio_cat_all_medium_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "heavy_fighter1"
+    ]
+  },
+  {
+    "id": "heavy_fighter3",
+    "title": "Heavy Fighter 3",
+    "year": 1944,
+    "x": -200,
+    "y": 400,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "heavy_fighter3",
+    "effects": [
+      "配備可能: heavy_fighter_equipment_3",
+      "カテゴリ: medium_air, air_equipment, cat_heavy_fighter, mio_cat_all_medium_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "heavy_fighter2"
+    ]
+  },
+  {
+    "id": "early_fighter",
+    "title": "Early Fighter",
+    "year": 1933,
+    "x": 0,
+    "y": 100,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "early_fighter",
+    "effects": [
+      "配備可能: fighter_equipment_0",
+      "カテゴリ: light_air, light_fighter, air_equipment, mio_cat_all_light_fighter_and_modules, mio_cat_all_light_aircraft_and_modules"
     ],
     "prerequisites": []
   },
   {
-    "id": "do17",
-    "title": "Do 17双発爆撃機",
-    "year": 1937,
-    "x": 400,
-    "y": 200,
-    "research_time": 117,
-    "reliability": "配備（制式採用）",
-    "desc": "「飛行鉛筆」と呼ばれた細長い胴体の双発爆撃機。初期の電撃戦で活躍した中型爆撃機。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
-    "effects": [
-      "攻撃力: 48/100",
-      "生存力: 33/100",
-      "機動力: 38/100",
-      "信頼度: 69/100"
-    ],
-    "prerequisites": [
-      "ju87"
-    ]
-  },
-  {
-    "id": "ju88",
-    "title": "Ju 88多用途爆撃機",
-    "year": 1939,
-    "x": 400,
-    "y": 350,
-    "research_time": 121,
-    "reliability": "配備（制式採用）",
-    "desc": "爆撃・夜戦・対艦攻撃までこなした万能機。独空軍の量産双発機として最大数を誇った。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
-    "effects": [
-      "攻撃力: 52/100",
-      "生存力: 36/100",
-      "機動力: 38/100",
-      "信頼度: 72/100"
-    ],
-    "prerequisites": [
-      "do17"
-    ]
-  },
-  {
-    "id": "ju188",
-    "title": "Ju 188爆撃機",
-    "year": 1943,
-    "x": 400,
-    "y": 500,
-    "research_time": 129,
-    "reliability": "配備（制式採用）",
-    "desc": "Ju 88のエンジン換装・翼形改良型。爆撃照準と防御火器を改善した改良中型爆撃機。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
-    "effects": [
-      "攻撃力: 59/100",
-      "生存力: 40/100",
-      "機動力: 38/100",
-      "信頼度: 76/100"
-    ],
-    "prerequisites": [
-      "ju88"
-    ]
-  },
-  {
-    "id": "ar234",
-    "title": "Ar234ブリッツ",
-    "year": 1944,
-    "x": 400,
-    "y": 650,
-    "research_time": 190,
-    "reliability": "少数配備（ジェット）",
-    "desc": "世界初のジェット爆撃機。高速偵察・爆撃に用いられた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2v9'/><path d='M2 11h20'/><path d='M6 11l-3 9'/><path d='M18 11l3 9'/><path d='M10 13v6'/></svg>",
-    "effects": [
-      "爆撃: 55/100",
-      "速力: 88/100",
-      "航続: 50/100",
-      "装甲: 10/100"
-    ],
-    "prerequisites": [
-      "ju188"
-    ]
-  },
-  {
-    "id": "do335",
-    "title": "Do 335プファイル",
-    "year": 1944,
-    "x": 400,
-    "y": 800,
-    "research_time": 131,
-    "reliability": "低（試作止まり）",
-    "desc": "前後に発動機を置く異例の双発戦闘機。速度性能は優秀だったが実戦に間に合わなかった。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
-    "effects": [
-      "攻撃力: 60/100",
-      "生存力: 41/100",
-      "機動力: 38/100",
-      "信頼度: 77/100"
-    ],
-    "prerequisites": [
-      "ar234"
-    ]
-  },
-  {
-    "id": "he111",
-    "title": "He111爆撃機",
+    "id": "fighter1",
+    "title": "Fighter 1",
     "year": 1936,
-    "x": 700,
-    "y": 50,
-    "research_time": 120,
-    "reliability": "配備（主力）",
-    "desc": "双発中型爆撃機。バトル・オブ・ブリテンでロンドン爆撃に投入された主力量産爆撃機。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "x": 0,
+    "y": 200,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "fighter1",
     "effects": [
-      "爆撃: 60/100",
-      "航続: 65/100",
-      "速力: 40/100",
-      "装甲: 25/100"
+      "配備可能: fighter_equipment_1",
+      "カテゴリ: light_air, light_fighter, air_equipment, mio_cat_all_light_fighter_and_modules, mio_cat_all_light_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "early_fighter"
+    ]
+  },
+  {
+    "id": "strategic_bomber1",
+    "title": "Strategic Bomber 1",
+    "year": 1936,
+    "x": 0,
+    "y": 200,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "strategic_bomber1",
+    "effects": [
+      "配備可能: strat_bomber_equipment_1",
+      "カテゴリ: heavy_air, air_equipment, cat_strategic_bomber, mio_cat_all_heavy_aircraft_and_modules"
     ],
     "prerequisites": []
   },
   {
-    "id": "fw200",
-    "title": "Fw 200コンドル",
-    "year": 1939,
-    "x": 700,
-    "y": 200,
-    "research_time": 121,
-    "reliability": "配備（制式採用）",
-    "desc": "旅客機を改造した長距離哨戒爆撃機。大西洋で連合軍船団に脅威を与えた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "id": "fighter2",
+    "title": "Fighter 2",
+    "year": 1940,
+    "x": 0,
+    "y": 300,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "fighter2",
     "effects": [
-      "攻撃力: 52/100",
-      "生存力: 36/100",
-      "機動力: 38/100",
-      "信頼度: 72/100"
+      "配備可能: fighter_equipment_2",
+      "カテゴリ: light_air, light_fighter, air_equipment, mio_cat_all_light_fighter_and_modules, mio_cat_all_light_aircraft_and_modules"
     ],
     "prerequisites": [
-      "he111"
+      "fighter1"
     ]
   },
   {
-    "id": "he177",
-    "title": "He 177グライフ",
-    "year": 1942,
-    "x": 700,
-    "y": 350,
-    "research_time": 127,
-    "reliability": "配備（制式採用）",
-    "desc": "4発を2基の連結発動機にまとめた独唯一の重爆撃機。発動機火災に終始悩まされた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "id": "strategic_bomber2",
+    "title": "Strategic Bomber 2",
+    "year": 1940,
+    "x": 0,
+    "y": 300,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "strategic_bomber2",
     "effects": [
-      "攻撃力: 57/100",
-      "生存力: 39/100",
-      "機動力: 38/100",
-      "信頼度: 75/100"
+      "配備可能: strat_bomber_equipment_2",
+      "カテゴリ: heavy_air, air_equipment, cat_strategic_bomber, mio_cat_all_heavy_aircraft_and_modules"
     ],
     "prerequisites": [
-      "fw200"
+      "strategic_bomber1"
     ]
   },
   {
-    "id": "he162",
-    "title": "He 162フィアーター・サラマンダー",
+    "id": "fighter3",
+    "title": "Fighter 3",
+    "year": 1944,
+    "x": 0,
+    "y": 400,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "fighter3",
+    "effects": [
+      "配備可能: fighter_equipment_3",
+      "カテゴリ: light_air, light_fighter, air_equipment, mio_cat_all_light_fighter_and_modules, mio_cat_all_light_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "fighter2"
+    ]
+  },
+  {
+    "id": "strategic_bomber3",
+    "title": "Strategic Bomber 3",
+    "year": 1944,
+    "x": 0,
+    "y": 400,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "strategic_bomber3",
+    "effects": [
+      "配備可能: strat_bomber_equipment_3",
+      "カテゴリ: heavy_air, air_equipment, cat_strategic_bomber, mio_cat_all_heavy_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "strategic_bomber2"
+    ]
+  },
+  {
+    "id": "jet_fighter1",
+    "title": "Jet Fighter 1",
     "year": 1945,
-    "x": 700,
-    "y": 500,
-    "research_time": 133,
-    "reliability": "低（試作止まり）",
-    "desc": "国民戦闘機として急遽設計されたジェット要撃機。素人の操縦には過酷だった。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12h18'/><path d='M7 12V9h4v3'/><path d='M13 12V9h4v3'/><path d='M5 12l2 4h10l2-4'/></svg>",
+    "x": 0,
+    "y": 600,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "jet_fighter1",
     "effects": [
-      "攻撃力: 62/100",
-      "生存力: 42/100",
-      "機動力: 38/100",
-      "信頼度: 78/100"
+      "配備可能: jet_fighter_equipment_1",
+      "カテゴリ: light_air, jet_technology, mio_cat_all_light_fighter_and_modules, mio_cat_all_light_aircraft_and_modules"
     ],
     "prerequisites": [
-      "he177"
+      "fighter3",
+      "CAS3",
+      "naval_bomber3"
+    ]
+  },
+  {
+    "id": "jet_fighter2",
+    "title": "Jet Fighter 2",
+    "year": 1950,
+    "x": 0,
+    "y": 700,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "jet_fighter2",
+    "effects": [
+      "配備可能: jet_fighter_equipment_2",
+      "カテゴリ: light_air, jet_technology, mio_cat_all_light_fighter_and_modules, mio_cat_all_light_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "jet_fighter1"
+    ]
+  },
+  {
+    "id": "jet_strategic_bomber1",
+    "title": "Jet Strategic Bomber 1",
+    "year": 1950,
+    "x": 0,
+    "y": 700,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "jet_strategic_bomber1",
+    "effects": [
+      "配備可能: jet_strat_bomber_equipment_1",
+      "カテゴリ: heavy_air, jet_technology, cat_strategic_bomber, mio_cat_all_heavy_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "strategic_bomber3"
+    ]
+  },
+  {
+    "id": "early_transport_plane",
+    "title": "Early Transport Plane",
+    "year": 1933,
+    "x": 100,
+    "y": 100,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_transport_plane_equipment_1",
+    "effects": [
+      "配備可能: transport_plane_equipment_1",
+      "カテゴリ: air_equipment, transport_planes_cat"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "improved_transport_plane",
+    "title": "Improved Transport Plane",
+    "year": 1940,
+    "x": 100,
+    "y": 300,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_transport_plane_equipment_2",
+    "effects": [
+      "配備可能: transport_plane_equipment_2",
+      "カテゴリ: air_equipment, transport_planes_cat"
+    ],
+    "prerequisites": [
+      "early_transport_plane"
+    ]
+  },
+  {
+    "id": "strategic_airlifter",
+    "title": "Strategic Airlifter",
+    "year": 1945,
+    "x": 100,
+    "y": 600,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_transport_plane_equipment_3",
+    "effects": [
+      "配備可能: transport_plane_equipment_3",
+      "カテゴリ: air_equipment, transport_planes_cat"
+    ],
+    "prerequisites": [
+      "improved_transport_plane"
+    ]
+  },
+  {
+    "id": "early_bomber",
+    "title": "Early Bomber",
+    "year": 1933,
+    "x": 200,
+    "y": 100,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "early_bomber",
+    "effects": [
+      "配備可能: tac_bomber_equipment_0",
+      "カテゴリ: medium_air, tactical_bomber, air_equipment, mio_cat_all_medium_aircraft_and_modules"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "tactical_bomber1",
+    "title": "Tactical Bomber 1",
+    "year": 1936,
+    "x": 200,
+    "y": 200,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tactical_bomber1",
+    "effects": [
+      "配備可能: tac_bomber_equipment_1",
+      "カテゴリ: medium_air, tactical_bomber, air_equipment, mio_cat_all_medium_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "early_bomber"
+    ]
+  },
+  {
+    "id": "tactical_bomber2",
+    "title": "Tactical Bomber 2",
+    "year": 1940,
+    "x": 200,
+    "y": 300,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tactical_bomber2",
+    "effects": [
+      "配備可能: tac_bomber_equipment_2",
+      "カテゴリ: medium_air, tactical_bomber, air_equipment, mio_cat_all_medium_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "tactical_bomber1"
+    ]
+  },
+  {
+    "id": "tactical_bomber3",
+    "title": "Tactical Bomber 3",
+    "year": 1944,
+    "x": 200,
+    "y": 400,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tactical_bomber3",
+    "effects": [
+      "配備可能: tac_bomber_equipment_3",
+      "カテゴリ: medium_air, tactical_bomber, air_equipment, mio_cat_all_medium_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "tactical_bomber2"
+    ]
+  },
+  {
+    "id": "jet_tactical_bomber1",
+    "title": "Jet Tactical Bomber 1",
+    "year": 1945,
+    "x": 200,
+    "y": 600,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "jet_tactical_bomber1",
+    "effects": [
+      "配備可能: jet_tac_bomber_equipment_1",
+      "カテゴリ: medium_air, jet_technology, tactical_bomber, mio_cat_all_medium_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "tactical_bomber3"
+    ]
+  },
+  {
+    "id": "jet_tactical_bomber2",
+    "title": "Jet Tactical Bomber 2",
+    "year": 1950,
+    "x": 200,
+    "y": 700,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "jet_tactical_bomber2",
+    "effects": [
+      "配備可能: jet_tac_bomber_equipment_2",
+      "カテゴリ: medium_air, jet_technology, tactical_bomber, mio_cat_all_medium_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "jet_tactical_bomber1"
+    ]
+  },
+  {
+    "id": "naval_bomber1",
+    "title": "Naval Bomber 1",
+    "year": 1936,
+    "x": 400,
+    "y": 200,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "naval_bomber1",
+    "effects": [
+      "配備可能: nav_bomber_equipment_1",
+      "カテゴリ: naval_air, naval_bomber, air_equipment, mio_cat_all_naval_bomber_and_modules, mio_cat_all_light_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "early_fighter"
+    ]
+  },
+  {
+    "id": "naval_bomber2",
+    "title": "Naval Bomber 2",
+    "year": 1940,
+    "x": 400,
+    "y": 300,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "naval_bomber2",
+    "effects": [
+      "配備可能: nav_bomber_equipment_2",
+      "カテゴリ: naval_air, air_equipment, naval_bomber, mio_cat_all_naval_bomber_and_modules, mio_cat_all_light_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "naval_bomber1"
+    ]
+  },
+  {
+    "id": "naval_bomber3",
+    "title": "Naval Bomber 3",
+    "year": 1944,
+    "x": 400,
+    "y": 400,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "naval_bomber3",
+    "effects": [
+      "配備可能: nav_bomber_equipment_3",
+      "カテゴリ: naval_air, naval_bomber, air_equipment, mio_cat_all_naval_bomber_and_modules, mio_cat_all_light_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "naval_bomber2"
+    ]
+  },
+  {
+    "id": "scout_plane1",
+    "title": "Scout Plane 1",
+    "year": 1936,
+    "x": 1000,
+    "y": 200,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_scout_plane_1_1",
+    "effects": [
+      "配備可能: scout_plane_equipment_1",
+      "カテゴリ: medium_air, air_equipment, cat_scout_plane, mio_cat_all_medium_aircraft_and_modules"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "scout_plane2",
+    "title": "Scout Plane 2",
+    "year": 1940,
+    "x": 1000,
+    "y": 300,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_scout_plane_2_2",
+    "effects": [
+      "配備可能: scout_plane_equipment_2",
+      "カテゴリ: medium_air, air_equipment, cat_scout_plane, mio_cat_all_medium_aircraft_and_modules"
+    ],
+    "prerequisites": [
+      "scout_plane1"
     ]
   }
 ]
