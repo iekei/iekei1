@@ -29,9 +29,10 @@
  *     --category air --check-images
  */
 
-import { readFileSync, writeFileSync, existsSync, readdirSync, mkdirSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { resolve, basename, extname, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import ResearchIconCatalog from '../assets/research-icon-catalog.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const GAME_ROOT = resolve(__dirname, '..');
@@ -176,7 +177,7 @@ class ParadoxParser {
  * 例: "GFX_fighter1_medium" → "fighter1"
  *     "GFX_interwar_antitank_medium" → "AT_1_allies"
  */
-function buildSpriteMap(spriteFilePath) {
+export function buildSpriteMap(spriteFilePath) {
   const text = readFileSync(spriteFilePath, 'utf-8');
   const parsed = new ParadoxParser(text).parse();
 
@@ -206,7 +207,7 @@ function buildSpriteMap(spriteFilePath) {
  * air_techs.txt などの技術ファイルをパースし、
  * ゲーム用 JSON 配列に変換する。
  */
-function convertTechFile(techFilePath, spriteMap, category) {
+export function convertTechFile(techFilePath, spriteMap, category, catalog = loadIconCatalog()) {
   const text = readFileSync(techFilePath, 'utf-8');
   const parsed = new ParadoxParser(text).parse();
 
@@ -248,7 +249,9 @@ function convertTechFile(techFilePath, spriteMap, category) {
     const hoi4Y = typeof pos.y === 'number' ? pos.y : 0;
 
     // スプライトから画像キーを解決
-    const assetKey = resolveAssetKey(techId, spriteMap);
+    const spriteKey = resolveAssetKey(techId, spriteMap);
+    const image = catalog.resolve([spriteKey, techId]);
+    const assetKey = image?.key || spriteKey;
 
     // enable_equipments を取得
     const enableEquipments = techData?.enable_equipments?.__items__ || [];
@@ -340,37 +343,20 @@ function humanize(name) {
  * 変換結果の各技術の asset_key に対応する PNG が
  * assets/technology/ に存在するか確認し、レポートを出力する。
  */
-function checkImages(techs) {
-  const techDir = resolve(GAME_ROOT, 'assets/technology');
-  if (!existsSync(techDir)) {
-    console.log('\n📷 assets/technology/ ディレクトリが見つかりません');
-    return { found: 0, missing: techs.length, missingList: [] };
-  }
-  const available = new Set(readdirSync(techDir).filter(f => f.endsWith('.png')));
+export function loadIconCatalog() {
+  return ResearchIconCatalog.create(['technology_icons', 'equipment_icons'].map(id =>
+    JSON.parse(readFileSync(resolve(GAME_ROOT, `assets/mappings/${id}.json`), 'utf8'))));
+}
 
-  let found = 0, missing = 0;
-  const missingList = [];
-
-  for (const tech of techs) {
-    const fileName = tech.asset_key + '.png';
-    if (available.has(fileName)) {
-      found++;
-    } else {
-      missing++;
-      missingList.push({ id: tech.id, asset_key: tech.asset_key, file: fileName });
-    }
-  }
-
-  console.log(`\n📷 画像チェック結果 (assets/technology/):`);
-  console.log(`  ✅ 存在: ${found} 件`);
-  console.log(`  ❌ 不足: ${missing} 件`);
-  if (missingList.length) {
-    console.log(`  不足一覧:`);
-    for (const m of missingList) {
-      console.log(`    ${m.id} → ${m.file}`);
-    }
-  }
-  return { found, missing, missingList };
+export function checkImages(techs, catalog = loadIconCatalog()) {
+  const missingList = techs.filter(tech => {
+    const image = catalog.resolve([tech.asset_key, tech.icon_key, tech.id]);
+    return !image || !existsSync(resolve(GAME_ROOT, image.local));
+  }).map(tech => ({ id: tech.id, asset_key: tech.asset_key }));
+  const found = techs.length - missingList.length;
+  console.log(`\n📷 共通マッピング画像チェック: 存在 ${found} 件 / 不足 ${missingList.length} 件`);
+  for (const tech of missingList) console.error(`  ${tech.id} → ${tech.asset_key}`);
+  return { found, missing: missingList.length, missingList };
 }
 
 // ============================================================================
@@ -423,8 +409,11 @@ function main() {
   console.log(`  ${techs.length} 個の技術を変換`);
 
   // 画像チェック
-  if (args['check-images'] || args.deploy || args.output) {
-    checkImages(techs);
+  const report = checkImages(techs);
+  if (report.missing) {
+    console.error('画像が不足しています。PNGと共通マッピングを追加してから再実行してください。');
+    process.exitCode = 1;
+    return;
   }
 
   // --check-images のみなら終了
@@ -463,4 +452,4 @@ function main() {
   console.log(`\n✅ 出力: ${outputPath} (${techs.length} 技術)`);
 }
 
-main();
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();

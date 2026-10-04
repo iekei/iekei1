@@ -86,7 +86,7 @@ const ResearchTreeUI = {
       if (asset.github && !githubTried) {
         githubTried = true;
         image.src = asset.github;
-      } else {
+      } else if (image.src !== ResearchIcons.fallback(category)) {
         image.src = ResearchIcons.fallback(category);
       }
     });
@@ -180,10 +180,10 @@ const ResearchTreeUI = {
     // Load secondary mappings only when the research window is actually opened.
     if (viewport.closest('.os-window') && !this.assetsLoaded && !this.loadingAssets) {
       this.loadingAssets = true;
-      ResearchIcons.load().then(() => {
-        this.assetsLoaded = true;
+      ResearchIcons.load().then(loaded => {
+        this.assetsLoaded = loaded;
         this.loadingAssets = false;
-        if (viewport.closest('.os-window')) this.render();
+        if (loaded && viewport.closest('.os-window')) this.render();
       });
     }
   },

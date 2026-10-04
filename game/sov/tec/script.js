@@ -148,6 +148,7 @@ function formatDaysToYMD(totalDays) {
 }
 
 async function loadAllTechData() {
+  await ResearchIcons.load();
   for (const cat of categories) {
     try {
       const res = await fetch(`./data/tech_${cat}.json`);
@@ -356,8 +357,14 @@ function renderTree() {
     node.className = `tech-node ${completedTechs.includes(tech.id) ? 'completed' : ''}`;
     node.style.left = `${tech.x}px`; node.style.top = `${tech.y}px`;
     
-    const svgContent = tech.svg || `<svg viewBox="0 0 24 24" fill="none" stroke="#58a6ff" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>`;
-    node.innerHTML = `<div class="tech-icon-wrapper">${svgContent}</div><div class="tech-title">${tech.title}</div>`;
+    node.innerHTML = '<div class="tech-icon-wrapper"></div><div class="tech-title"></div>';
+    node.querySelector('.tech-title').textContent = tech.title;
+    const icon = document.createElement('img');
+    icon.alt = '';
+    icon.loading = 'lazy';
+    icon.src = ResearchIcons.resolve(tech, currentCategory).src;
+    icon.onerror = () => { icon.onerror = null; icon.src = ResearchIcons.fallback(currentCategory); };
+    node.querySelector('.tech-icon-wrapper').appendChild(icon);
     
     node.addEventListener('click', () => startResearch(tech));
     node.addEventListener('mouseenter', (e) => showTooltip(e, tech));
