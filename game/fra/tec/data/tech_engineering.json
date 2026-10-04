@@ -1,489 +1,70 @@
 [
   {
-    "id": "electronic_mechanical_engineering",
-    "title": "電子機械工学",
+    "id": "fra_engineering_1",
+    "title": "マジノ線強化",
     "year": 1936,
-    "x": 200,
-    "y": 900,
-    "branch": "電子工学",
+    "x": 100,
+    "y": 50,
     "research_time": 100,
-    "reliability": "未研究",
-    "desc": "計測・計算のための電子装置を研究する。",
-    "asset_key": "electronic_mechanical_engineering",
+    "reliability": "配備",
+    "desc": "要塞線の防備をさらに強化する。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4ac46a' stroke-width='1.5'><rect x='3' y='8' width='18' height='8'/><path d='M3 12h18'/></svg>",
     "effects": [
-      "電子機械工学の研究"
+      "要塞防御: +20%",
+      "工兵効率: +10%"
     ],
-    "prerequisites": [],
-    "legacy_ids": [
-      "asdic",
-      "c47_skytrain",
-      "caproni_research",
-      "eng_engineering_1",
-      "fra_engineering_1",
-      "ita_engineering_1",
-      "jap_engineering_1",
-      "kure_naval_arsenal",
-      "mechanized_research",
-      "usa_engineering_1"
+    "prerequisites": []
+  },
+  {
+    "id": "maginot_comms",
+    "title": "マジノ線通信網",
+    "year": 1936,
+    "x": 100,
+    "y": 200,
+    "research_time": 75,
+    "reliability": "配備（制式採用）",
+    "desc": "要塞群を結ぶ有線・無線統制通信網。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='10' width='16' height='9' rx='1'/><path d='M7 10V5h4v5'/><path d='M15 13v3M18 13v3'/></svg>",
+    "effects": [
+      "研究速度: +6.2%",
+      "装備効率: +6.2%"
+    ],
+    "prerequisites": [
+      "fra_engineering_1"
     ]
   },
   {
-    "id": "computing_machine",
-    "title": "計算機",
+    "id": "mechanized_research",
+    "title": "陸軍機械化研究所",
+    "year": 1936,
+    "x": 100,
+    "y": 350,
+    "research_time": 75,
+    "reliability": "配備（制式採用）",
+    "desc": "機甲戦力・軍用車両を研究する国営研究所。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='10' width='16' height='9' rx='1'/><path d='M7 10V5h4v5'/><path d='M15 13v3M18 13v3'/></svg>",
+    "effects": [
+      "研究速度: +6.2%",
+      "装備効率: +6.2%"
+    ],
+    "prerequisites": [
+      "maginot_comms"
+    ]
+  },
+  {
+    "id": "dca_network",
+    "title": "DCA高射統制網",
     "year": 1938,
-    "x": 200,
-    "y": 1000,
-    "branch": "電子工学",
-    "research_time": 125,
-    "reliability": "未研究",
-    "desc": "計測・計算のための電子装置を研究する。",
-    "asset_key": "computing_machine",
-    "effects": [
-      "計算機の研究"
-    ],
-    "prerequisites": [
-      "electronic_mechanical_engineering"
-    ],
-    "legacy_ids": [
-      "dca_network",
-      "eng_engineering_2",
-      "jap_engineering_2",
-      "usa_engineering_2"
-    ]
-  },
-  {
-    "id": "improved_computing_machine",
-    "title": "改良型計算機",
-    "year": 1940,
-    "x": 200,
-    "y": 1100,
-    "branch": "電子工学",
-    "research_time": 150,
-    "reliability": "未研究",
-    "desc": "計測・計算のための電子装置を研究する。",
-    "asset_key": "improved_computing_machine",
-    "effects": [
-      "改良型計算機の研究"
-    ],
-    "prerequisites": [
-      "computing_machine"
-    ],
-    "legacy_ids": [
-      "submarine_snorkel"
-    ]
-  },
-  {
-    "id": "advanced_computing_machine",
-    "title": "発展型計算機",
-    "year": 1942,
-    "x": 200,
-    "y": 1200,
-    "branch": "電子工学",
-    "research_time": 175,
-    "reliability": "未研究",
-    "desc": "計測・計算のための電子装置を研究する。",
-    "asset_key": "advanced_computing_machine",
-    "effects": [
-      "発展型計算機の研究"
-    ],
-    "prerequisites": [
-      "improved_computing_machine"
-    ],
-    "legacy_ids": [
-      "colossus"
-    ]
-  },
-  {
-    "id": "radio",
-    "title": "無線",
-    "year": 1936,
     "x": 400,
-    "y": 900,
-    "branch": "無線とレーダー",
-    "research_time": 100,
-    "reliability": "未研究",
-    "desc": "無線通信から高精度の電波探知へ発展する。",
-    "asset_key": "radio",
+    "y": 50,
+    "research_time": 79,
+    "reliability": "配備（制式採用）",
+    "desc": "高射砲・聴音機を統合する防空統制網。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='4' y='10' width='16' height='9' rx='1'/><path d='M7 10V5h4v5'/><path d='M15 13v3M18 13v3'/></svg>",
     "effects": [
-      "無線の研究"
-    ],
-    "prerequisites": [],
-    "legacy_ids": [
-      "advanced_radio_1950s",
-      "early_radio_1938",
-      "improved_radio_1944",
-      "maginot_comms",
-      "mass_radio_1941",
-      "prototype_radio_1936"
-    ]
-  },
-  {
-    "id": "radio_detection",
-    "title": "電波探知",
-    "year": 1937,
-    "x": 400,
-    "y": 950,
-    "branch": "無線とレーダー",
-    "research_time": 125,
-    "reliability": "未研究",
-    "desc": "無線通信から高精度の電波探知へ発展する。",
-    "asset_key": "radio_detection",
-    "effects": [
-      "電波探知の研究"
-    ],
-    "prerequisites": [
-      "radio"
-    ],
-    "legacy_ids": [
-      "chain_home",
-      "freya_radar",
-      "prototype_radar_1936",
-      "type93_hydrophone"
-    ]
-  },
-  {
-    "id": "decimetric_radar",
-    "title": "デシメートル波レーダー",
-    "year": 1939,
-    "x": 400,
-    "y": 1050,
-    "branch": "無線とレーダー",
-    "research_time": 150,
-    "reliability": "未研究",
-    "desc": "無線通信から高精度の電波探知へ発展する。",
-    "asset_key": "decimetric_radar",
-    "effects": [
-      "デシメートル波レーダーの研究"
-    ],
-    "prerequisites": [
-      "radio_detection"
-    ],
-    "legacy_ids": [
-      "early_radar_1939",
-      "gufo_radar",
-      "mass_radar_1941",
-      "scr270_radar",
-      "type21_radar",
-      "wurzburg_radar"
-    ]
-  },
-  {
-    "id": "improved_decimetric_radar",
-    "title": "改良型デシメートル波レーダー",
-    "year": 1940,
-    "x": 400,
-    "y": 1100,
-    "branch": "無線とレーダー",
-    "research_time": 175,
-    "reliability": "未研究",
-    "desc": "無線通信から高精度の電波探知へ発展する。",
-    "asset_key": "improved_decimetric_radar",
-    "effects": [
-      "改良型デシメートル波レーダーの研究"
-    ],
-    "prerequisites": [
-      "decimetric_radar"
-    ]
-  },
-  {
-    "id": "centimetric_radar",
-    "title": "センチメートル波レーダー",
-    "year": 1941,
-    "x": 400,
-    "y": 1150,
-    "branch": "無線とレーダー",
-    "research_time": 200,
-    "reliability": "未研究",
-    "desc": "無線通信から高精度の電波探知へ発展する。",
-    "asset_key": "centimetric_radar",
-    "effects": [
-      "センチメートル波レーダーの研究"
-    ],
-    "prerequisites": [
-      "improved_decimetric_radar"
-    ],
-    "legacy_ids": [
-      "advanced_radar_1950s",
-      "improved_radar_1945",
-      "jagdschloss",
-      "type13_radar"
-    ]
-  },
-  {
-    "id": "improved_centimetric_radar",
-    "title": "改良型センチメートル波レーダー",
-    "year": 1943,
-    "x": 400,
-    "y": 1250,
-    "branch": "無線とレーダー",
-    "research_time": 225,
-    "reliability": "未研究",
-    "desc": "無線通信から高精度の電波探知へ発展する。",
-    "asset_key": "improved_centimetric_radar",
-    "effects": [
-      "改良型センチメートル波レーダーの研究"
-    ],
-    "prerequisites": [
-      "centimetric_radar"
-    ],
-    "legacy_ids": [
-      "vt_fuze"
-    ]
-  },
-  {
-    "id": "advanced_centimetric_radar",
-    "title": "発展型センチメートル波レーダー",
-    "year": 1944,
-    "x": 400,
-    "y": 1300,
-    "branch": "無線とレーダー",
-    "research_time": 250,
-    "reliability": "未研究",
-    "desc": "無線通信から高精度の電波探知へ発展する。",
-    "asset_key": "advanced_centimetric_radar",
-    "effects": [
-      "発展型センチメートル波レーダーの研究"
-    ],
-    "prerequisites": [
-      "improved_centimetric_radar"
-    ]
-  },
-  {
-    "id": "basic_encryption",
-    "title": "暗号化 I",
-    "year": 1936,
-    "x": 600,
-    "y": 900,
-    "branch": "暗号化",
-    "research_time": 100,
-    "reliability": "未研究",
-    "desc": "暗号化の装置と手法を研究する。",
-    "asset_key": "basic_encryption",
-    "effects": [
-      "暗号化 Iの研究"
+      "研究速度: +6.6%",
+      "装備効率: +6.6%"
     ],
     "prerequisites": []
-  },
-  {
-    "id": "improved_encryption",
-    "title": "暗号化 II",
-    "year": 1939,
-    "x": 600,
-    "y": 1050,
-    "branch": "暗号化",
-    "research_time": 125,
-    "reliability": "未研究",
-    "desc": "暗号化の装置と手法を研究する。",
-    "asset_key": "improved_encryption",
-    "effects": [
-      "暗号化 IIの研究"
-    ],
-    "prerequisites": [
-      "basic_encryption"
-    ]
-  },
-  {
-    "id": "advanced_encryption",
-    "title": "暗号化 III",
-    "year": 1942,
-    "x": 600,
-    "y": 1200,
-    "branch": "暗号化",
-    "research_time": 150,
-    "reliability": "未研究",
-    "desc": "暗号化の装置と手法を研究する。",
-    "asset_key": "advanced_encryption",
-    "effects": [
-      "暗号化 IIIの研究"
-    ],
-    "prerequisites": [
-      "improved_encryption"
-    ]
-  },
-  {
-    "id": "basic_decryption",
-    "title": "暗号解読 I",
-    "year": 1936,
-    "x": 800,
-    "y": 900,
-    "branch": "暗号解読",
-    "research_time": 100,
-    "reliability": "未研究",
-    "desc": "暗号解読の装置と手法を研究する。",
-    "asset_key": "basic_decryption",
-    "effects": [
-      "暗号解読 Iの研究"
-    ],
-    "prerequisites": [],
-    "legacy_ids": [
-      "enigma",
-      "prototype_cipher_1938"
-    ]
-  },
-  {
-    "id": "improved_decryption",
-    "title": "暗号解読 II",
-    "year": 1939,
-    "x": 800,
-    "y": 1050,
-    "branch": "暗号解読",
-    "research_time": 125,
-    "reliability": "未研究",
-    "desc": "暗号解読の装置と手法を研究する。",
-    "asset_key": "improved_decryption",
-    "effects": [
-      "暗号解読 IIの研究"
-    ],
-    "prerequisites": [
-      "basic_decryption"
-    ],
-    "legacy_ids": [
-      "early_cipher_1941",
-      "kryptografie"
-    ]
-  },
-  {
-    "id": "advanced_decryption",
-    "title": "暗号解読 III",
-    "year": 1942,
-    "x": 800,
-    "y": 1200,
-    "branch": "暗号解読",
-    "research_time": 150,
-    "reliability": "未研究",
-    "desc": "暗号解読の装置と手法を研究する。",
-    "asset_key": "advanced_decryption",
-    "effects": [
-      "暗号解読 IIIの研究"
-    ],
-    "prerequisites": [
-      "improved_decryption"
-    ],
-    "legacy_ids": [
-      "advanced_cipher_1950s",
-      "improved_cipher_1948",
-      "mass_cipher_1943"
-    ]
-  },
-  {
-    "id": "rocket_engines",
-    "title": "ロケットエンジン",
-    "year": 1940,
-    "x": 1000,
-    "y": 1100,
-    "branch": "ロケット工学",
-    "research_time": 100,
-    "reliability": "未研究",
-    "desc": "ロケット推進と誘導の基礎技術を研究する。",
-    "asset_key": "rocket_engines",
-    "effects": [
-      "ロケットエンジンの研究"
-    ],
-    "prerequisites": []
-  },
-  {
-    "id": "improved_rocket_engines",
-    "title": "改良型ロケットエンジン",
-    "year": 1943,
-    "x": 1000,
-    "y": 1250,
-    "branch": "ロケット工学",
-    "research_time": 125,
-    "reliability": "未研究",
-    "desc": "ロケット推進と誘導の基礎技術を研究する。",
-    "asset_key": "improved_rocket_engines",
-    "effects": [
-      "改良型ロケットエンジンの研究"
-    ],
-    "prerequisites": [
-      "rocket_engines"
-    ],
-    "legacy_ids": [
-      "peenemunde",
-      "proto_missile_1942"
-    ]
-  },
-  {
-    "id": "advanced_rocket_engines",
-    "title": "発展型ロケットエンジン",
-    "year": 1945,
-    "x": 1000,
-    "y": 1350,
-    "branch": "ロケット工学",
-    "research_time": 150,
-    "reliability": "未研究",
-    "desc": "ロケット推進と誘導の基礎技術を研究する。",
-    "asset_key": "advanced_rocket_engines",
-    "effects": [
-      "発展型ロケットエンジンの研究"
-    ],
-    "prerequisites": [
-      "improved_rocket_engines"
-    ],
-    "legacy_ids": [
-      "icbm_tech_1950s",
-      "improved_missile_1946",
-      "mass_missile_1944",
-      "v1",
-      "v2",
-      "v3"
-    ]
-  },
-  {
-    "id": "atomic_research",
-    "title": "原子核研究",
-    "year": 1940,
-    "x": 1200,
-    "y": 1100,
-    "branch": "原子力",
-    "research_time": 100,
-    "reliability": "未研究",
-    "desc": "核反応の研究から原子炉と核兵器へ進む。",
-    "asset_key": "atomic_research",
-    "effects": [
-      "原子核研究の研究"
-    ],
-    "prerequisites": [],
-    "legacy_ids": [
-      "manhattan_project",
-      "nuclear_project_1940",
-      "tube_alloys"
-    ]
-  },
-  {
-    "id": "nuclear_reactor",
-    "title": "原子炉",
-    "year": 1943,
-    "x": 1200,
-    "y": 1250,
-    "branch": "原子力",
-    "research_time": 125,
-    "reliability": "未研究",
-    "desc": "核反応の研究から原子炉と核兵器へ進む。",
-    "asset_key": "nuclear_reactor",
-    "effects": [
-      "原子炉の研究"
-    ],
-    "prerequisites": [
-      "atomic_research"
-    ]
-  },
-  {
-    "id": "nukes",
-    "title": "核兵器",
-    "year": 1945,
-    "x": 1200,
-    "y": 1350,
-    "branch": "原子力",
-    "research_time": 150,
-    "reliability": "未研究",
-    "desc": "核反応の研究から原子炉と核兵器へ進む。",
-    "asset_key": "nukes",
-    "effects": [
-      "核兵器の研究"
-    ],
-    "prerequisites": [
-      "nuclear_reactor"
-    ]
   }
 ]

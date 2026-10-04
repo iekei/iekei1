@@ -154,7 +154,7 @@ function renderScienceList() {
 
     group.items.forEach(sci => {
       const isHired = hiredScientists[catKey] === sci.id;
-      let projIconPath = sci.project_icon || 'image/tech_default.png';
+      const portrait = GameVisuals.scientist(sci);
 
       let progressHtml = '';
       if (isHired) {
@@ -184,10 +184,11 @@ function renderScienceList() {
         <div class="science-card ${isHired ? 'hired' : ''}">
           <div class="science-card-header">
             <!-- 科学者肖像画 -->
-            <img src="${sci.icon}" alt="${sci.name}" class="science-icon" onerror="this.onerror=null; this.src='image/tech_default.png';">
+            ${GameVisuals.person(portrait, 'scientist_portraits', 'science-icon')}
             
             <div class="science-name-group">
-              <div class="science-name">${sci.name}</div>
+              <div class="science-name">${GameVisuals.escape(portrait.name)}</div>
+              ${portrait.generic ? '<small>本人画像未収録・汎用肖像</small>' : ''}
               <div class="science-name-en">${sci.name_en}</div>
             </div>
 
@@ -197,7 +198,7 @@ function renderScienceList() {
 
           <!-- 大きく表示する特別研究アイコン用のコンテナ -->
           <div class="science-project-icon-container">
-            <img src="${projIconPath}" alt="Project Icon" class="science-project-icon" onerror="this.onerror=null; this.src='image/tech_default.png';">
+            ${GameVisuals.blueprint(sci)}
           </div>
 
           <div class="science-desc">

@@ -56,7 +56,7 @@ const ResearchTreeUI = {
       }));
       const root = component.filter(item => !(item.prerequisites || []).some(id => byId.has(id)))
         .sort((a, b) => (a.x || 0) - (b.x || 0))[0] || component[0];
-      lanes.push({ x: 54 + column * 190, width: columns * 190 - 36, title: root.branch || root.title });
+      lanes.push({ x: 54 + column * 190, width: columns * 190 - 36, title: root.title });
       column += columns;
     });
     return { positions, lanes, width: Math.max(420, 72 + column * 190),
@@ -86,7 +86,7 @@ const ResearchTreeUI = {
       if (asset.github && !githubTried) {
         githubTried = true;
         image.src = asset.github;
-      } else if (image.src !== ResearchIcons.fallback(category)) {
+      } else {
         image.src = ResearchIcons.fallback(category);
       }
     });
@@ -180,10 +180,10 @@ const ResearchTreeUI = {
     // Load secondary mappings only when the research window is actually opened.
     if (viewport.closest('.os-window') && !this.assetsLoaded && !this.loadingAssets) {
       this.loadingAssets = true;
-      ResearchIcons.load().then(loaded => {
-        this.assetsLoaded = loaded;
+      ResearchIcons.load().then(() => {
+        this.assetsLoaded = true;
         this.loadingAssets = false;
-        if (loaded && viewport.closest('.os-window')) this.render();
+        if (viewport.closest('.os-window')) this.render();
       });
     }
   },

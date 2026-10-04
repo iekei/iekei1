@@ -662,6 +662,7 @@
   </style>
   <link rel="stylesheet" href="military-theme.css">
   <link rel="stylesheet" href="strategy.css">
+  <link rel="stylesheet" href="assets/game-visuals.css?v=artwork-3">
   <link rel="stylesheet" href="assets/topbar.css">
   <link rel="stylesheet" href="assets/research-tree.css">
 </head>
@@ -869,14 +870,14 @@
   <input type="text" id="cheat-console-input" placeholder="コマンドを入力... (nuke 10, pp 500, focus.autocomplete...)" onkeydown="CheatConsole.handleInput(event)">
 </div>
 
-<script src="assets/asset-registry.js"></script>
+<script src="assets/asset-registry.js?v=artwork-2"></script>
+<script src="assets/game-asset-data.js?v=artwork-2"></script>
+<script src="assets/game-visuals.js?v=artwork-2"></script>
 <script src="assets/image-loader.js"></script>
 <script src="assets/topbar-icons.js"></script>
 <script src="assets/topbar-ui.js"></script>
-<script src="assets/research-icon-catalog.js"></script>
 <script src="assets/research-icons.js"></script>
 <script src="assets/research-tree.js"></script>
-<script src="assets/research-progress.js"></script>
 <script>
 /* ================================================================
    JavaScript Module Architecture
@@ -899,7 +900,7 @@ class DataFetcher {
   static HOI4_REPO_RAW = 'https://raw.githubusercontent.com/cbrzeczysz/hoi4-history/main';
   static cache = new Map();
   // データバージョン: データファイル更新時に上げる (fetchURLのキャッシュバスティング用)
-  static DATA_VERSION = '4';
+  static DATA_VERSION = '3';
 
   // Local card data paths (relative to game/index.html)
   static CARD_PATHS = {
@@ -1077,10 +1078,12 @@ class DataFetcher {
   }
 
   static getCountryFlag(country) {
-    const flags = {
-      GER: '🇩🇪', SOV: '🇷🇺', JAP: '🇯🇵', USA: '🇺🇸', ENG: '🇬🇧', FRA: '🇫🇷', ITA: '🇮🇹', POL: '🇵🇱'
-    };
-    return flags[country] || '🏳️';
+    return GameVisuals.flagFile(country) ? '[' + country + ']' : '🏳️';
+  }
+
+  static getCountryFlagImage(country) {
+    const ideology = country === CoreEngine.gameState.country ? CoreEngine.gameState.ideology : null;
+    return GameVisuals.flag(country, ideology || WarGoals.IDEOLOGY[country]);
   }
 }
 
@@ -1353,7 +1356,7 @@ class CoreEngine {
     TopbarUI.render(s);
     CoreEngine.renderWorldTension();
     const flag = document.getElementById('player-flag');
-    if (flag) flag.textContent = DataFetcher.getCountryFlag(s.country);
+    if (flag) flag.innerHTML = DataFetcher.getCountryFlagImage(s.country);
   }
 
   static updateCalendar() {
@@ -1364,8 +1367,8 @@ class CoreEngine {
 
   static log(message) {
     const d = CoreEngine.gameState.date;
-    document.getElementById('log-text').textContent =
-      d.getFullYear() + '/' + (d.getMonth()+1) + '/' + d.getDate() + ' — ' + message;
+    GameVisuals.countryText(document.getElementById('log-text'),
+      d.getFullYear() + '/' + (d.getMonth()+1) + '/' + d.getDate() + ' — ' + message);
   }
 
   static getSyncState() {
@@ -1610,12 +1613,12 @@ class SpecialProjectManager {
       const phaseIdx = isHired ? SpecialProjectManager.PHASES.indexOf(proj.phase) : -1;
       const costReduction = CoreEngine.gameState.cardModifiers.facilityCostReduction || 0;
       const facilityCost = Math.ceil(50 * (1 - costReduction));
-      const imgFile = sci.icon ? sci.icon.split('/').pop() : '';
-      const projImgFile = sci.project_icon ? sci.project_icon.split('/').pop() : '';
-
+      const portrait = GameVisuals.scientist(sci);
       html += '<div class="sp-facility-card"><div class="sp-header">' +
-        '<img src="' + DataFetcher.SPECIAL_PROJECTS_IMG + imgFile + '" onerror="this.src=\'' + DataFetcher.SPECIAL_PROJECTS_IMG + projImgFile + '\'" alt="' + sci.name + '">' +
-        '<div><div class="sp-name">' + sci.name + '</div><div class="sp-cat">' + sci.category_name + '</div></div></div>' +
+        GameVisuals.person(portrait, 'scientist_portraits') +
+        '<div><div class="sp-name">' + GameVisuals.escape(portrait.name) + '</div><div class="sp-cat">' + sci.category_name + '</div>' +
+        (portrait.generic ? '<small class="scientist-placeholder-label">本人画像未収録・汎用肖像</small>' : '') + '</div></div>' +
+        GameVisuals.blueprint(sci) +
         '<div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;">' + sci.overview + '</div>' +
         '<div style="font-size:11px;color:var(--text-gold);margin-bottom:6px;">兵器: ' + sci.weapons + '</div>';
 
@@ -1804,7 +1807,7 @@ class NuclearManager {
     ];
     return targets.map(t =>
       '<div style="display:inline-block;background:var(--bg-panel-light);border:1px solid var(--border-mil);border-radius:6px;padding:8px 12px;margin:4px;cursor:pointer;font-size:12px;" onclick="NuclearManager.selectTarget(\'' + t.id + '\',\'' + t.name + '\')">' +
-      DataFetcher.getCountryFlag(t.country) + ' ' + t.name + ' (被害予測: ' + t.damage + ')</div>'
+      DataFetcher.getCountryFlagImage(t.country) + ' ' + t.name + ' (被害予測: ' + t.damage + ')</div>'
     ).join('');
   }
 
@@ -2638,7 +2641,7 @@ class MapRenderer {
       const owner = st.owner || '無所属';
       const b = st.b || {};
       overlay.innerHTML =
-        '<strong>' + DataFetcher.getCountryFlag(owner) + ' ' + st.name + '</strong><br>' +
+        '<strong>' + DataFetcher.getCountryFlagImage(owner) + ' ' + st.name + '</strong><br>' +
         '<span style="color:var(--text-secondary);font-size:11px;">所有国: ' + owner + ' | 州ID: ' + sid + '</span><br>' +
         '<span style="color:var(--text-secondary);font-size:11px;">地形: ' + terr + ' (' + coastal + ') | 補給: ' + (st.supply || 0) + '</span><br>' +
         '<span style="color:var(--text-gold);font-size:11px;">🏭民需' + (b.industrial_complex || 0) +
@@ -2785,7 +2788,7 @@ class MapRenderer {
 
   static renderLegend() {
     const legends = {
-      political: [...['GER','SOV','JAP','ENG','FRA','ITA','USA'].map(tag=>['rgb('+DataFetcher.countryColor(tag).join(',')+')',DiplomacyManager.nameOf(tag)+(tag===CoreEngine.gameState.country?' (自国)':'')]),['#1e3a52','海']],
+      political: [...['GER','SOV','JAP','ENG','FRA','ITA','USA'].map(tag=>['rgb('+DataFetcher.countryColor(tag).join(',')+')',DataFetcher.getCountryFlagImage(tag)+' '+DiplomacyManager.nameOf(tag)+(tag===CoreEngine.gameState.country?' (自国)':'')]),['#1e3a52','海']],
       terrain: [['#96a064','平原'],['#5f784b','森林'],['#8c7a58','丘陵'],['#7a6454','山岳'],['#647660','湿地'],['#c4ac6e','砂漠']],
       construction: [['#96a064','自国 (建設可能)'],['#404040','他国'],['#4ac46a','建設中の州']],
       supply: [['#a03c3c','補給不足'],['#7c9040','普通'],['#3cc464','補給良好']],
@@ -2917,7 +2920,7 @@ class BattlePlanManager {
     const assigned = BattlePlanManager.armies.map(a => a.general && a.general.id).filter(Boolean);
     const pool = (CardSystem.hiredCards || []).filter(c => c.country === player && !assigned.includes(c.id));
     let html = '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">' +
-      '雇用済みの将軍カード (' + DataFetcher.getCountryFlag(player) + ' 自国のみ) をこの軍集団に割り当てます。<br>' +
+      '雇用済みの将軍カード (' + DataFetcher.getCountryFlagImage(player) + ' 自国のみ) をこの軍集団に割り当てます。<br>' +
       '階級ボーナス: SSR +12% / SR +7% / R +3% (攻勢・防衛の戦況に影響)</p>';
     if (army.general) {
       html += '<div class="army-row"><div class="army-name">🎖️ 現在: ' + army.general.name + ' (' + army.general.rank + ')</div>' +
@@ -2929,7 +2932,7 @@ class BattlePlanManager {
       pool.forEach(c => {
         const bonus = (BattleManager.GENERAL_BONUS[c.rank] || 0) * 100;
         html += '<div class="army-row" style="cursor:pointer;" onclick="BattlePlanManager.pickGeneral(' + armyId + ',\'' + c.id + '\')">' +
-          '<div class="army-name">' + DataFetcher.getCountryFlag(c.country) + ' ' + c.name +
+          '<div class="army-name">' + DataFetcher.getCountryFlagImage(c.country) + ' ' + c.name +
           ' <span style="color:var(--accent-orange);">(' + c.rank + ')</span></div>' +
           '<div class="army-info">攻勢ボーナス +' + bonus + '%</div></div>';
       });
@@ -3734,7 +3737,7 @@ class ConstructionManager {
       html += '<div class="con-state-card"><h4>州未選択</h4><div class="con-state-info">マップ上で自国の州をクリックしてください。</div></div>';
     } else {
       const isOwn = st.owner === player;
-      html += '<div class="con-state-card"><h4>' + DataFetcher.getCountryFlag(st.owner || '???') + ' ' + st.name + '</h4>' +
+      html += '<div class="con-state-card"><h4>' + DataFetcher.getCountryFlagImage(st.owner || '???') + ' ' + st.name + '</h4>' +
         '<div class="con-state-info">所有国: ' + (st.owner || '無所属') + ' | 分類: ' + (st.category || '-') +
         ' | 人的資源: ' + (st.manpower || 0).toLocaleString() + ' | 補給: ' + (st.supply || 0) + '</div>';
       if (!isOwn) {
@@ -3951,7 +3954,7 @@ class PoliticsManager {
     const s = CoreEngine.gameState;
     const nationName = ({ GER: 'ドイツ', SOV: 'ソ連', JAP: '日本', USA: 'アメリカ', ENG: 'イギリス', FRA: 'フランス', ITA: 'イタリア' })[s.country] || s.country;
 
-    let html = '<div class="politics-section"><h3>' + DataFetcher.getCountryFlag(s.country) + ' ' + nationName + ' — 政府</h3>';
+    let html = '<div class="politics-section"><h3>' + DataFetcher.getCountryFlagImage(s.country) + ' ' + nationName + ' — 政府</h3>';
     // 指導者・将軍 (雇用したカードから — ポートレート風配置)
     const leaders = CardSystem.hiredCards || [];
     if (leaders.length === 0) {
@@ -3965,15 +3968,15 @@ class PoliticsManager {
         // カード画像を取得 (allCardsから)
         const cardData = (CardSystem.allCards[c.country] || []).find(card => card.id === c.id);
         const imgHtml = cardData && cardData.imgUrl
-          ? '<img src="' + cardData.imgUrl + '" onerror="this.parentElement.innerHTML=\'<div class=\\\'pc-placeholder\\\'>' + DataFetcher.getCountryFlag(c.country) + '</div>\'" alt="' + c.name + '">'
-          : '<div class="pc-placeholder">' + DataFetcher.getCountryFlag(c.country) + '</div>';
+          ? '<img src="' + cardData.imgUrl + '" onerror="this.hidden=true" alt="' + c.name + '">'
+          : '<div class="pc-placeholder">' + DataFetcher.getCountryFlagImage(c.country) + '</div>';
         const abilityBadge = ab && ab.type === 'active' ? '⚡' : ab && ab.type === 'instant' ? '📦' : '🛡️';
         html += '<div class="portrait-card">' +
           '<div class="pc-badge" style="color:' + rankColor + ';">' + abilityBadge + ' ' + (c.rank || 'R') + '</div>' +
           '<div class="pc-img-wrap">' + imgHtml + '</div>' +
           '<div class="pc-info">' +
             '<div class="pc-name">' + (c.name || c.id) + '</div>' +
-            '<div class="pc-rank ' + rankClass + '">' + DataFetcher.getCountryFlag(c.country) + ' ' + (c.country || '') + '</div>' +
+            '<div class="pc-rank ' + rankClass + '">' + DataFetcher.getCountryFlagImage(c.country) + ' ' + (c.country || '') + '</div>' +
             '<div class="pc-ability">' + (ab ? ab.name : '') + '</div>' +
             '<div class="pc-ability-desc">' + (ab ? ab.desc : '') + '</div>' +
           '</div>' +
@@ -4141,8 +4144,8 @@ class DiplomacyManager {
         '<button class="diplo-btn" onclick="DiplomacyManager.createFaction()" style="background:var(--text-gold);color:#000;">陣営を設立 (PP25)</button>';
     } else {
       DiplomacyManager.factions.forEach(f => {
-        html += '<div style="margin-bottom:8px;"><strong style="color:var(--text-gold);">' + f.name + '</strong> (盟主: ' + DataFetcher.getCountryFlag(f.leader) + ' ' + f.leader + ')<br><div>';
-        f.members.forEach(m => { html += '<span class="faction-member">' + DataFetcher.getCountryFlag(m) + ' ' + m + '</span>'; });
+        html += '<div style="margin-bottom:8px;"><strong style="color:var(--text-gold);">' + f.name + '</strong> (盟主: ' + DataFetcher.getCountryFlagImage(f.leader) + ' ' + f.leader + ')<br><div>';
+        f.members.forEach(m => { html += '<span class="faction-member">' + DataFetcher.getCountryFlagImage(m) + ' ' + m + '</span>'; });
         html += '</div></div>';
       });
     }
@@ -4152,7 +4155,7 @@ class DiplomacyManager {
       '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">同盟国に余剰装備を送付できます。</p>';
     if (DiplomacyManager.lendLeaseContracts.length > 0) {
       DiplomacyManager.lendLeaseContracts.forEach(ll => {
-        html += '<div class="lend-lease-row"><span>' + DataFetcher.getCountryFlag(ll.from) + ' → ' + DataFetcher.getCountryFlag(ll.to) + '</span><span>' + ll.equipment + ' x' + ll.amount + '</span></div>';
+        html += '<div class="lend-lease-row"><span>' + DataFetcher.getCountryFlagImage(ll.from) + ' → ' + DataFetcher.getCountryFlagImage(ll.to) + '</span><span>' + ll.equipment + ' x' + ll.amount + '</span></div>';
       });
     } else {
       html += '<p style="font-size:12px;color:var(--text-secondary);">レンドリース契約なし</p>';
@@ -4192,7 +4195,7 @@ class DiplomacyManager {
       const justifying = s.justifying[c.id];
       const atWar = s.atWar.includes(c.id);
       const borderStyle = selected ? 'border-color:var(--text-gold);background:#223018;' : '';
-      html += '<div class="diplo-country-card" style="' + borderStyle + '"><div class="dc-header"><span class="dc-flag">' + DataFetcher.getCountryFlag(c.id) + '</span>' +
+      html += '<div class="diplo-country-card" style="' + borderStyle + '"><div class="dc-header"><span class="dc-flag">' + DataFetcher.getCountryFlagImage(c.id) + '</span>' +
         '<div><div class="dc-name">' + c.name + (atWar ? ' <span style="color:var(--accent-red);font-size:11px;">⚔️ 交戦中</span>' : '') + '</div><div class="dc-relation" style="color:' + relColor + ';">関係: ' + (c.relation > 0 ? '+' : '') + c.relation + '</div></div></div>' +
         '<button class="diplo-btn" onclick="DiplomacyManager.improveRelation(\'' + c.id + '\')">関係改善 (PP10)</button>' +
         '<button class="diplo-btn" onclick="DiplomacyManager.inviteToFaction(\'' + c.id + '\')" ' + (c.relation < 30 ? 'disabled' : '') + '>陣営に招待</button>' +
@@ -4383,7 +4386,7 @@ class DivisionDesigner {
       for (let x = 0; x < 5; x++) {
         const cell = DivisionDesigner.grid[y][x];
         const cls = cell ? 'division-cell filled' : 'division-cell';
-        const icon = cell ? cell.icon : '';
+        const icon = cell ? GameVisuals.unit(cell) : '';
         html += '<div class="' + cls + '" onclick="DivisionDesigner.toggleCell(' + x + ',' + y + ')">' + icon + '</div>';
       }
     }
@@ -4406,7 +4409,7 @@ class DivisionDesigner {
     allBatts.forEach(b => {
       const isSpecial = DivisionDesigner.specialBattalions.find(sb => sb.id === b.id);
       html += '<div class="battalion-option" onclick="DivisionDesigner.selectBattalion(\'' + b.id + '\')">' +
-        b.icon + ' ' + b.name + (isSpecial ? ' <span style="color:var(--accent-green);">★</span>' : '') + '</div>';
+        GameVisuals.unit(b) + ' ' + b.name + (isSpecial ? ' <span style="color:var(--accent-green);">★</span>' : '') + '</div>';
     });
     html += '</div>';
 
@@ -5135,8 +5138,8 @@ class CardSystem {
       '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">カードをクリックしてデッキに編成します。編成したカードの固有能力がゲームに適用されます。' +
       ' ガチャで引き当てたカードは政治力を消費して「雇用・配備」できます。' +
       (gachaLink
-        ? '<a href="' + gachaLink + '" target="_blank" style="color:var(--text-gold);margin-left:8px;">🎴 ' + DataFetcher.getCountryFlag(myPack) + ' ' + myPack + ' ガチャを開く (10連で11連目SSR確定)</a>'
-        : '<span style="color:var(--text-secondary);margin-left:8px;">※ ' + DataFetcher.getCountryFlag(myCountry) + ' ' + myCountry + 'には専用カードパックがありません (GER/SOV/JAPのみ)</span>') +
+        ? '<a href="' + gachaLink + '" target="_blank" style="color:var(--text-gold);margin-left:8px;">🎴 ' + DataFetcher.getCountryFlagImage(myPack) + ' ' + myPack + ' ガチャを開く (10連で11連目SSR確定)</a>'
+        : '<span style="color:var(--text-secondary);margin-left:8px;">※ ' + DataFetcher.getCountryFlagImage(myCountry) + ' ' + myCountry + 'には専用カードパックがありません (GER/SOV/JAPのみ)</span>') +
       '<span style="display:block;font-size:11px;color:var(--text-secondary);margin-top:2px;">🔒 雇用できるのは自国のカードパックのみです (WORLDパックはこのゲームと無関係)</span></p>';
 
     html += '<div style="background:var(--bg-panel);border:1px solid var(--text-gold);border-radius:8px;padding:10px;margin-bottom:12px;">' +
@@ -5159,7 +5162,7 @@ class CardSystem {
         '<strong style="color:var(--accent-green);">🎖️ 雇用・配備済み (' + CardSystem.hiredCards.length + '人)</strong>' +
         '<div style="margin-top:6px;">' +
         CardSystem.hiredCards.map(hc =>
-          '<span class="mp-player-item" style="border-color:var(--accent-green);">' + DataFetcher.getCountryFlag(hc.country) + ' ' + hc.name +
+          '<span class="mp-player-item" style="border-color:var(--accent-green);">' + DataFetcher.getCountryFlagImage(hc.country) + ' ' + hc.name +
           ' <span style="color:var(--accent-orange);">(' + hc.rank + ')</span> ' +
           '<button class="diplo-btn" style="background:var(--accent-red);" onclick="CardSystem.fireCard(\'' + hc.id + '\')">解雇</button></span>'
         ).join('') + '</div></div>';
@@ -5169,7 +5172,7 @@ class CardSystem {
       const country = entry[0], cards = entry[1];
       // 国家制限: 自国のカードパックのみ表示 (WORLDパックは無関係)
       if (cards.length === 0 || country === 'WORLD' || country !== myCountry) return;
-      html += '<div style="margin-bottom:16px;"><h4 style="color:var(--text-secondary);margin-bottom:6px;">' + DataFetcher.getCountryFlag(country) + ' ' + country + ' パック</h4><div class="card-grid">';
+      html += '<div style="margin-bottom:16px;"><h4 style="color:var(--text-secondary);margin-bottom:6px;">' + DataFetcher.getCountryFlagImage(country) + ' ' + country + ' パック</h4><div class="card-grid">';
       cards.forEach(card => {
         const inDeck = CardSystem.deck.find(c => c.id === card.id && c.country === card.country);
         const ability = CardSystem.getAbility(card);
@@ -5201,7 +5204,7 @@ class CardSystem {
           const cost = CardSystem.HIRE_COST[card.rank] || CardSystem.HIRE_COST.default;
           html += '<button class="instant-card-btn" onclick="CardSystem.hireCard(\'' + card.id + '\',\'' + card.country + '\')">🎖️ 雇用・配備 (政治力 ' + cost + ')</button>';
         } else {
-          html += '<p style="font-size:12px;color:var(--text-secondary);">🔒 ' + DataFetcher.getCountryFlag(card.country) + ' ガチャでこのカードを引き当てると雇用できます</p>';
+          html += '<p style="font-size:12px;color:var(--text-secondary);">🔒 ' + DataFetcher.getCountryFlagImage(card.country) + ' ガチャでこのカードを引き当てると雇用できます</p>';
         }
       }
       html += '</div>';
@@ -5214,7 +5217,7 @@ class CardSystem {
     const rankClass = 'gc-rank-' + (card.rank || 'R');
     const imgHtml = card.imgUrl
       ? '<img src="' + card.imgUrl + '" onerror="this.style.display=\'none\'" alt="' + card.name + '">'
-      : '<div style="width:100%;height:120px;background:var(--bg-panel);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:40px;">' + DataFetcher.getCountryFlag(card.country) + '</div>';
+      : '<div style="width:100%;height:120px;background:var(--bg-panel);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:40px;">' + DataFetcher.getCountryFlagImage(card.country) + '</div>';
     const abilityBadge = ability && ability.type === 'active' ? '⚡' : ability && ability.type === 'instant' ? '📦' : '🛡️';
     return '<div class="game-card ' + (inDeck ? 'selected' : '') + '" onclick="CardSystem.selectCard(\'' + card.id + '\',\'' + card.country + '\')">' +
       imgHtml + '<div class="gc-name">' + card.name + '</div>' +
@@ -5499,7 +5502,7 @@ class UniqueNationSystems {
     };
     const fn = renderers[s.country];
     container.innerHTML =
-      '<div class="sp-section"><h3>🏛️ ' + DataFetcher.getCountryFlag(s.country) + ' ' + (names[s.country] || s.country) + ' 固有システム</h3></div>' +
+      '<div class="sp-section"><h3>🏛️ ' + DataFetcher.getCountryFlagImage(s.country) + ' ' + (names[s.country] || s.country) + ' 固有システム</h3></div>' +
       (fn ? fn(st) : '<p style="color:var(--text-secondary);">この国には固有システムがありません。</p>');
   }
 
@@ -5768,9 +5771,8 @@ class SaveLoadManager {
       FocusTreeManager.focusDaysTotal = data.focus.total || 0;
     }
     if (data.research && ResearchManager.techData && Object.keys(ResearchManager.techData).length > 0) {
-      const restored = ResearchProgress.restore(data.research, ResearchManager.techData, gs.researchSlots);
-      ResearchManager.researchedTech = new Set(restored.researched);
-      ResearchManager.researching = restored.researching;
+      ResearchManager.researchedTech = new Set(data.research.researched || []);
+      ResearchManager.researching = data.research.researching || {};
       ResearchManager.renderSlots();
       if (GameUI.currentTab === 'research') ResearchManager.render();
     }
@@ -5855,7 +5857,7 @@ class SaveLoadManager {
         '<button class="diplo-btn" style="background:var(--accent-red);" onclick="SaveLoadManager.deleteSlot(' + slot + ')" ' + (meta ? '' : 'disabled') + '>削除</button>' +
         '</span></div>' +
         (meta
-          ? '<div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">📅 ' + meta.date + ' | ' + DataFetcher.getCountryFlag(meta.country) + ' ' + meta.country +
+          ? '<div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">📅 ' + meta.date + ' | ' + DataFetcher.getCountryFlagImage(meta.country) + ' ' + meta.country +
             ' | 🃏 デッキ' + meta.deck + '枚 / 🎖️ 雇用' + meta.hired + '人 | 保存: ' + meta.savedAt + '</div>'
           : '<div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">空きスロット</div>') +
         '</div>';
@@ -5911,7 +5913,7 @@ class GameUI {
     const container = document.getElementById('notification-container');
     const notif = document.createElement('div');
     notif.className = 'notification ' + (type === 'alert' ? 'alert' : type === 'success' ? 'success' : '');
-    notif.textContent = message;
+    GameVisuals.countryText(notif, message);
     container.appendChild(notif);
     setTimeout(() => {
       notif.style.opacity = '0';
@@ -5954,7 +5956,7 @@ class StartScreen {
       const el = document.createElement('div');
       el.className = 'start-nation-card';
       el.dataset.tag = n.tag;
-      el.innerHTML = '<div class="sn-flag">' + DataFetcher.getCountryFlag(n.tag) + '</div>' +
+      el.innerHTML = '<div class="sn-flag">' + DataFetcher.getCountryFlagImage(n.tag) + '</div>' +
         '<div class="sn-name">' + n.name + ' (' + n.tag + ')</div>' +
         '<div class="sn-desc">' + n.desc + '</div>' +
         '<div class="sn-feature">★ ' + n.feature + '</div>';
@@ -5970,7 +5972,7 @@ class StartScreen {
       el.classList.toggle('active', el.dataset.tag === tag));
     const btn = document.getElementById('start-game-btn');
     btn.disabled = false;
-    btn.textContent = '🇩🇪 ' + StartScreen.NATIONS.find(n => n.tag === tag).name + ' でゲーム開始';
+    btn.innerHTML = DataFetcher.getCountryFlagImage(tag) + ' ' + StartScreen.NATIONS.find(n => n.tag === tag).name + ' でゲーム開始';
   }
 
   static start() {
@@ -6041,7 +6043,7 @@ async function initGame() {
 window.addEventListener('DOMContentLoaded', () => StartScreen.show());
 </script>
 <!-- ==================== 戦闘シミュレーション (戦闘マーカー・占領ロジック) ==================== -->
-<script src="battle.js"></script>
+<script src="battle.js?v=artwork-2"></script>
 <!-- ==================== ニュースイベント (世界の出来事を報道するポップアップ) ==================== -->
 <script src="news.js"></script>
 <!-- ==================== AI自動操作 (非プレイヤー国の史実準拠AI) ==================== -->
@@ -6049,7 +6051,7 @@ window.addEventListener('DOMContentLoaded', () => StartScreen.show());
 <!-- ==================== 徴兵・訓練システム (師団は徴兵→訓練でのみ増える) ==================== -->
 <script src="training.js"></script>
 <!-- ==================== DLC拡張モジュール (ドクトリン/兵器設計/諜報/MIO・国際市場/講和会議/将軍特性) ==================== -->
-<script src="dlc.js"></script>
-<script src="strategy.js"></script>
+<script src="dlc.js?v=artwork-2"></script>
+<script src="strategy.js?v=artwork-2"></script>
 </body>
 </html>

@@ -1,669 +1,106 @@
 [
   {
-    "id": "basic_machine_tools",
-    "title": "基本工作機械",
+    "id": "usa_industry_1",
+    "title": "大量生産方式",
     "year": 1936,
-    "x": 200,
-    "y": 900,
-    "branch": "工作機械",
+    "x": 100,
+    "y": 50,
     "research_time": 100,
-    "reliability": "未研究",
-    "desc": "工場の工作機械を更新する。",
-    "asset_key": "basic_machine_tools",
+    "reliability": "配備",
+    "desc": "フォード式流れ作業を軍需生産に応用。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#d4843a' stroke-width='1.5'><path d='M4 20V10l4 4V10l4 4V10l4 4V10l4 10z'/></svg>",
     "effects": [
-      "基本工作機械の研究"
+      "工場出力: +15%",
+      "建設速度: +10%"
     ],
-    "prerequisites": [],
-    "legacy_ids": [
-      "eng_industry_1",
-      "fiat_military",
-      "four_year_plan_ind",
-      "fra_industry_1",
-      "hermann_goring_works",
-      "ita_industry_1",
-      "jap_industry_1",
-      "libya_supply",
-      "nationalized_factories"
-    ]
+    "prerequisites": []
   },
   {
-    "id": "improved_machine_tools",
-    "title": "改良型工作機械",
-    "year": 1937,
-    "x": 200,
-    "y": 950,
-    "branch": "工作機械",
-    "research_time": 125,
-    "reliability": "未研究",
-    "desc": "工場の工作機械を更新する。",
-    "asset_key": "improved_machine_tools",
+    "id": "detroit_tank_arsenal",
+    "title": "デトロイト戦車工廠",
+    "year": 1940,
+    "x": 100,
+    "y": 200,
+    "research_time": 133,
+    "reliability": "配備（制式採用）",
+    "desc": "クライスラー工場を転用した戦車専用工廠。戦車生産の中心地。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
     "effects": [
-      "改良型工作機械の研究"
+      "生産効率上限: +10.7%",
+      "生産効率保持率: +10.7%"
     ],
     "prerequisites": [
-      "basic_machine_tools"
-    ],
-    "legacy_ids": [
-      "beaverbrook_ministry",
-      "detroit_tank_arsenal",
-      "forced_labor",
-      "kaiser_shipyard",
-      "willow_run"
+      "usa_industry_1"
     ]
   },
   {
-    "id": "advanced_machine_tools",
-    "title": "発展型工作機械",
-    "year": 1939,
-    "x": 200,
-    "y": 1050,
-    "branch": "工作機械",
-    "research_time": 150,
-    "reliability": "未研究",
-    "desc": "工場の工作機械を更新する。",
-    "asset_key": "advanced_machine_tools",
+    "id": "usa_industry_2",
+    "title": "戦時生産局",
+    "year": 1942,
+    "x": 100,
+    "y": 350,
+    "research_time": 120,
+    "reliability": "配備",
+    "desc": "国家総力戦体制を確立し、工業生産を最大化する。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#d4843a' stroke-width='1.5'><rect x='4' y='10' width='16' height='10'/><path d='M8 10V6h8v4'/></svg>",
     "effects": [
-      "発展型工作機械の研究"
+      "工場出力: +25%",
+      "生産効率: +15%"
     ],
     "prerequisites": [
-      "improved_machine_tools"
+      "detroit_tank_arsenal"
     ]
   },
   {
-    "id": "basic_construction",
-    "title": "建設 I",
-    "year": 1936,
-    "x": 400,
-    "y": 900,
-    "branch": "建設",
-    "research_time": 100,
-    "reliability": "未研究",
-    "desc": "建築技術と工程管理を改善する。",
-    "asset_key": "basic_construction",
+    "id": "war_production_board",
+    "title": "戦時生産局 (WPB)",
+    "year": 1942,
+    "x": 100,
+    "y": 500,
+    "research_time": 137,
+    "reliability": "配備（制式採用）",
+    "desc": "民需から軍需への転換を統括する国家生産統制機関。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
     "effects": [
-      "建設 Iの研究"
-    ],
-    "prerequisites": [],
-    "legacy_ids": [
-      "autobahn",
-      "genoa_shipyard",
-      "krupp_expansion",
-      "maginot_line",
-      "manchuria_industry",
-      "organisation_todt",
-      "rheinmetall",
-      "shipbuilding_expansion"
-    ]
-  },
-  {
-    "id": "improved_construction",
-    "title": "建設 II",
-    "year": 1939,
-    "x": 400,
-    "y": 1050,
-    "branch": "建設",
-    "research_time": 125,
-    "reliability": "未研究",
-    "desc": "建築技術と工程管理を改善する。",
-    "asset_key": "improved_construction",
-    "effects": [
-      "建設 IIの研究"
+      "生産効率上限: +11.2%",
+      "生産効率保持率: +11.2%"
     ],
     "prerequisites": [
-      "basic_construction"
-    ],
-    "legacy_ids": [
-      "kawasaki_expansion",
-      "merseyside_expansion"
+      "usa_industry_2"
     ]
   },
   {
-    "id": "advanced_construction",
-    "title": "建設 III",
+    "id": "kaiser_shipyard",
+    "title": "カイザー造船所",
     "year": 1942,
     "x": 400,
-    "y": 1200,
-    "branch": "建設",
-    "research_time": 150,
-    "reliability": "未研究",
-    "desc": "建築技術と工程管理を改善する。",
-    "asset_key": "advanced_construction",
+    "y": 50,
+    "research_time": 137,
+    "reliability": "配備（制式採用）",
+    "desc": "リバティ船を最短10日で建造した量産造船所。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
     "effects": [
-      "建設 IIIの研究"
-    ],
-    "prerequisites": [
-      "improved_construction"
-    ]
-  },
-  {
-    "id": "concentrated_industry",
-    "title": "集中工業 I",
-    "year": 1936,
-    "x": 600,
-    "y": 900,
-    "branch": "集中工業",
-    "research_time": 100,
-    "reliability": "未研究",
-    "desc": "集中工業の工場配置と生産管理を研究する。",
-    "asset_key": "concentrated_industry",
-    "effects": [
-      "集中工業 Iの研究"
-    ],
-    "prerequisites": [],
-    "legacy_ids": [
-      "aircraft_expansion",
-      "jap_industry_2",
-      "renault_expansion",
-      "usa_industry_1",
-      "usa_industry_2",
-      "war_cabinet_production",
-      "war_production_board",
-      "wartime_control"
-    ]
-  },
-  {
-    "id": "concentrated_industry2",
-    "title": "集中工業 II",
-    "year": 1937,
-    "x": 600,
-    "y": 950,
-    "branch": "集中工業",
-    "research_time": 125,
-    "reliability": "未研究",
-    "desc": "集中工業の工場配置と生産管理を研究する。",
-    "asset_key": "concentrated_industry2",
-    "effects": [
-      "集中工業 IIの研究"
-    ],
-    "prerequisites": [
-      "concentrated_industry"
-    ]
-  },
-  {
-    "id": "concentrated_industry3",
-    "title": "集中工業 III",
-    "year": 1939,
-    "x": 600,
-    "y": 1050,
-    "branch": "集中工業",
-    "research_time": 150,
-    "reliability": "未研究",
-    "desc": "集中工業の工場配置と生産管理を研究する。",
-    "asset_key": "concentrated_industry3",
-    "effects": [
-      "集中工業 IIIの研究"
-    ],
-    "prerequisites": [
-      "concentrated_industry2"
-    ]
-  },
-  {
-    "id": "concentrated_industry4",
-    "title": "集中工業 IV",
-    "year": 1941,
-    "x": 600,
-    "y": 1150,
-    "branch": "集中工業",
-    "research_time": 175,
-    "reliability": "未研究",
-    "desc": "集中工業の工場配置と生産管理を研究する。",
-    "asset_key": "concentrated_industry4",
-    "effects": [
-      "集中工業 IVの研究"
-    ],
-    "prerequisites": [
-      "concentrated_industry3"
-    ]
-  },
-  {
-    "id": "concentrated_industry5",
-    "title": "集中工業 V",
-    "year": 1943,
-    "x": 600,
-    "y": 1250,
-    "branch": "集中工業",
-    "research_time": 200,
-    "reliability": "未研究",
-    "desc": "集中工業の工場配置と生産管理を研究する。",
-    "asset_key": "concentrated_industry5",
-    "effects": [
-      "集中工業 Vの研究"
-    ],
-    "prerequisites": [
-      "concentrated_industry4"
-    ]
-  },
-  {
-    "id": "dispersed_industry",
-    "title": "分散工業 I",
-    "year": 1936,
-    "x": 800,
-    "y": 900,
-    "branch": "分散工業",
-    "research_time": 100,
-    "reliability": "未研究",
-    "desc": "分散工業の工場配置と生産管理を研究する。",
-    "asset_key": "dispersed_industry",
-    "effects": [
-      "分散工業 Iの研究"
-    ],
-    "prerequisites": [],
-    "legacy_ids": [
-      "eng_industry_2",
-      "shadow_factories"
-    ]
-  },
-  {
-    "id": "dispersed_industry2",
-    "title": "分散工業 II",
-    "year": 1937,
-    "x": 800,
-    "y": 950,
-    "branch": "分散工業",
-    "research_time": 125,
-    "reliability": "未研究",
-    "desc": "分散工業の工場配置と生産管理を研究する。",
-    "asset_key": "dispersed_industry2",
-    "effects": [
-      "分散工業 IIの研究"
-    ],
-    "prerequisites": [
-      "dispersed_industry"
-    ]
-  },
-  {
-    "id": "dispersed_industry3",
-    "title": "分散工業 III",
-    "year": 1939,
-    "x": 800,
-    "y": 1050,
-    "branch": "分散工業",
-    "research_time": 150,
-    "reliability": "未研究",
-    "desc": "分散工業の工場配置と生産管理を研究する。",
-    "asset_key": "dispersed_industry3",
-    "effects": [
-      "分散工業 IIIの研究"
-    ],
-    "prerequisites": [
-      "dispersed_industry2"
-    ]
-  },
-  {
-    "id": "dispersed_industry4",
-    "title": "分散工業 IV",
-    "year": 1941,
-    "x": 800,
-    "y": 1150,
-    "branch": "分散工業",
-    "research_time": 175,
-    "reliability": "未研究",
-    "desc": "分散工業の工場配置と生産管理を研究する。",
-    "asset_key": "dispersed_industry4",
-    "effects": [
-      "分散工業 IVの研究"
-    ],
-    "prerequisites": [
-      "dispersed_industry3"
-    ]
-  },
-  {
-    "id": "dispersed_industry5",
-    "title": "分散工業 V",
-    "year": 1943,
-    "x": 800,
-    "y": 1250,
-    "branch": "分散工業",
-    "research_time": 200,
-    "reliability": "未研究",
-    "desc": "分散工業の工場配置と生産管理を研究する。",
-    "asset_key": "dispersed_industry5",
-    "effects": [
-      "分散工業 Vの研究"
-    ],
-    "prerequisites": [
-      "dispersed_industry4"
-    ]
-  },
-  {
-    "id": "excavation1",
-    "title": "資源採掘 I",
-    "year": 1936,
-    "x": 1000,
-    "y": 900,
-    "branch": "資源採掘",
-    "research_time": 100,
-    "reliability": "未研究",
-    "desc": "採掘・選鉱技術を改善する。",
-    "asset_key": "excavation1",
-    "effects": [
-      "資源採掘 Iの研究"
+      "生産効率上限: +11.2%",
+      "生産効率保持率: +11.2%"
     ],
     "prerequisites": []
   },
   {
-    "id": "excavation2",
-    "title": "資源採掘 II",
-    "year": 1937,
-    "x": 1000,
-    "y": 950,
-    "branch": "資源採掘",
-    "research_time": 125,
-    "reliability": "未研究",
-    "desc": "採掘・選鉱技術を改善する。",
-    "asset_key": "excavation2",
+    "id": "willow_run",
+    "title": "ウィロー・ラン工場",
+    "year": 1942,
+    "x": 400,
+    "y": 200,
+    "research_time": 137,
+    "reliability": "配備（制式採用）",
+    "desc": "フォード社の爆撃機量産工場。1時間に1機のB-24生産を実現した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
     "effects": [
-      "資源採掘 IIの研究"
+      "生産効率上限: +11.2%",
+      "生産効率保持率: +11.2%"
     ],
     "prerequisites": [
-      "excavation1"
-    ]
-  },
-  {
-    "id": "excavation3",
-    "title": "資源採掘 III",
-    "year": 1939,
-    "x": 1000,
-    "y": 1050,
-    "branch": "資源採掘",
-    "research_time": 150,
-    "reliability": "未研究",
-    "desc": "採掘・選鉱技術を改善する。",
-    "asset_key": "excavation3",
-    "effects": [
-      "資源採掘 IIIの研究"
-    ],
-    "prerequisites": [
-      "excavation2"
-    ]
-  },
-  {
-    "id": "excavation4",
-    "title": "資源採掘 IV",
-    "year": 1941,
-    "x": 1000,
-    "y": 1150,
-    "branch": "資源採掘",
-    "research_time": 175,
-    "reliability": "未研究",
-    "desc": "採掘・選鉱技術を改善する。",
-    "asset_key": "excavation4",
-    "effects": [
-      "資源採掘 IVの研究"
-    ],
-    "prerequisites": [
-      "excavation3"
-    ]
-  },
-  {
-    "id": "excavation5",
-    "title": "資源採掘 V",
-    "year": 1943,
-    "x": 1000,
-    "y": 1250,
-    "branch": "資源採掘",
-    "research_time": 200,
-    "reliability": "未研究",
-    "desc": "採掘・選鉱技術を改善する。",
-    "asset_key": "excavation5",
-    "effects": [
-      "資源採掘 Vの研究"
-    ],
-    "prerequisites": [
-      "excavation4"
-    ]
-  },
-  {
-    "id": "synth_oil_experiments",
-    "title": "合成石油実験",
-    "year": 1936,
-    "x": 1200,
-    "y": 900,
-    "branch": "合成燃料",
-    "research_time": 100,
-    "reliability": "未研究",
-    "desc": "合成石油の精製工程を研究する。",
-    "asset_key": "synth_oil_experiments",
-    "effects": [
-      "合成石油実験の研究"
-    ],
-    "prerequisites": [],
-    "legacy_ids": [
-      "ig_farben",
-      "synthetic_fuel"
-    ]
-  },
-  {
-    "id": "oil_processing",
-    "title": "石油加工 I",
-    "year": 1937,
-    "x": 1200,
-    "y": 950,
-    "branch": "合成燃料",
-    "research_time": 125,
-    "reliability": "未研究",
-    "desc": "合成石油の精製工程を研究する。",
-    "asset_key": "oil_processing",
-    "effects": [
-      "石油加工 Iの研究"
-    ],
-    "prerequisites": [
-      "synth_oil_experiments"
-    ]
-  },
-  {
-    "id": "improved_oil_processing",
-    "title": "石油加工 II",
-    "year": 1939,
-    "x": 1200,
-    "y": 1050,
-    "branch": "合成燃料",
-    "research_time": 150,
-    "reliability": "未研究",
-    "desc": "合成石油の精製工程を研究する。",
-    "asset_key": "improved_oil_processing",
-    "effects": [
-      "石油加工 IIの研究"
-    ],
-    "prerequisites": [
-      "oil_processing"
-    ]
-  },
-  {
-    "id": "advanced_oil_processing",
-    "title": "石油加工 III",
-    "year": 1941,
-    "x": 1200,
-    "y": 1150,
-    "branch": "合成燃料",
-    "research_time": 175,
-    "reliability": "未研究",
-    "desc": "合成石油の精製工程を研究する。",
-    "asset_key": "advanced_oil_processing",
-    "effects": [
-      "石油加工 IIIの研究"
-    ],
-    "prerequisites": [
-      "improved_oil_processing"
-    ]
-  },
-  {
-    "id": "modern_oil_processing",
-    "title": "石油加工 IV",
-    "year": 1943,
-    "x": 1200,
-    "y": 1250,
-    "branch": "合成燃料",
-    "research_time": 200,
-    "reliability": "未研究",
-    "desc": "合成石油の精製工程を研究する。",
-    "asset_key": "modern_oil_processing",
-    "effects": [
-      "石油加工 IVの研究"
-    ],
-    "prerequisites": [
-      "advanced_oil_processing"
-    ]
-  },
-  {
-    "id": "rubber_processing",
-    "title": "ゴム加工 I",
-    "year": 1937,
-    "x": 1400,
-    "y": 950,
-    "branch": "合成ゴム",
-    "research_time": 100,
-    "reliability": "未研究",
-    "desc": "合成ゴムの製造工程を研究する。",
-    "asset_key": "rubber_processing",
-    "effects": [
-      "ゴム加工 Iの研究"
-    ],
-    "prerequisites": [],
-    "legacy_ids": [
-      "synthetic_rubber"
-    ]
-  },
-  {
-    "id": "improved_rubber_processing",
-    "title": "ゴム加工 II",
-    "year": 1939,
-    "x": 1400,
-    "y": 1050,
-    "branch": "合成ゴム",
-    "research_time": 125,
-    "reliability": "未研究",
-    "desc": "合成ゴムの製造工程を研究する。",
-    "asset_key": "improved_rubber_processing",
-    "effects": [
-      "ゴム加工 IIの研究"
-    ],
-    "prerequisites": [
-      "rubber_processing"
-    ]
-  },
-  {
-    "id": "advanced_rubber_processing",
-    "title": "ゴム加工 III",
-    "year": 1941,
-    "x": 1400,
-    "y": 1150,
-    "branch": "合成ゴム",
-    "research_time": 150,
-    "reliability": "未研究",
-    "desc": "合成ゴムの製造工程を研究する。",
-    "asset_key": "advanced_rubber_processing",
-    "effects": [
-      "ゴム加工 IIIの研究"
-    ],
-    "prerequisites": [
-      "improved_rubber_processing"
-    ]
-  },
-  {
-    "id": "modern_rubber_processing",
-    "title": "ゴム加工 IV",
-    "year": 1943,
-    "x": 1400,
-    "y": 1250,
-    "branch": "合成ゴム",
-    "research_time": 175,
-    "reliability": "未研究",
-    "desc": "合成ゴムの製造工程を研究する。",
-    "asset_key": "modern_rubber_processing",
-    "effects": [
-      "ゴム加工 IVの研究"
-    ],
-    "prerequisites": [
-      "advanced_rubber_processing"
-    ]
-  },
-  {
-    "id": "fuel_refining1",
-    "title": "燃料精製 I",
-    "year": 1936,
-    "x": 1600,
-    "y": 900,
-    "branch": "燃料精製",
-    "research_time": 100,
-    "reliability": "未研究",
-    "desc": "石油から利用可能な燃料を取り出す技術を研究する。",
-    "asset_key": "fuel_refining1",
-    "effects": [
-      "燃料精製 Iの研究"
-    ],
-    "prerequisites": []
-  },
-  {
-    "id": "fuel_refining2",
-    "title": "燃料精製 II",
-    "year": 1937,
-    "x": 1600,
-    "y": 950,
-    "branch": "燃料精製",
-    "research_time": 125,
-    "reliability": "未研究",
-    "desc": "石油から利用可能な燃料を取り出す技術を研究する。",
-    "asset_key": "fuel_refining2",
-    "effects": [
-      "燃料精製 IIの研究"
-    ],
-    "prerequisites": [
-      "fuel_refining1"
-    ]
-  },
-  {
-    "id": "fuel_refining3",
-    "title": "燃料精製 III",
-    "year": 1939,
-    "x": 1600,
-    "y": 1050,
-    "branch": "燃料精製",
-    "research_time": 150,
-    "reliability": "未研究",
-    "desc": "石油から利用可能な燃料を取り出す技術を研究する。",
-    "asset_key": "fuel_refining3",
-    "effects": [
-      "燃料精製 IIIの研究"
-    ],
-    "prerequisites": [
-      "fuel_refining2"
-    ]
-  },
-  {
-    "id": "fuel_refining4",
-    "title": "燃料精製 IV",
-    "year": 1941,
-    "x": 1600,
-    "y": 1150,
-    "branch": "燃料精製",
-    "research_time": 175,
-    "reliability": "未研究",
-    "desc": "石油から利用可能な燃料を取り出す技術を研究する。",
-    "asset_key": "fuel_refining4",
-    "effects": [
-      "燃料精製 IVの研究"
-    ],
-    "prerequisites": [
-      "fuel_refining3"
-    ]
-  },
-  {
-    "id": "fuel_refining5",
-    "title": "燃料精製 V",
-    "year": 1943,
-    "x": 1600,
-    "y": 1250,
-    "branch": "燃料精製",
-    "research_time": 200,
-    "reliability": "未研究",
-    "desc": "石油から利用可能な燃料を取り出す技術を研究する。",
-    "asset_key": "fuel_refining5",
-    "effects": [
-      "燃料精製 Vの研究"
-    ],
-    "prerequisites": [
-      "fuel_refining4"
+      "kaiser_shipyard"
     ]
   }
 ]

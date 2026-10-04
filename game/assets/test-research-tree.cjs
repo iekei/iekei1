@@ -5,7 +5,7 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const path = require('node:path');
 const assets = __dirname;
-const context = vm.createContext({ window: {}, AssetRegistry: { getGithubAssetUrl: () => null } });
+const context = vm.createContext({ window: {}, AssetRegistry: { getLocal: () => null, getGithubFromMapping: () => null } });
 vm.runInContext(fs.readFileSync(path.join(assets, 'research-icons.js'), 'utf8'), context);
 vm.runInContext(fs.readFileSync(path.join(assets, 'research-tree.js'), 'utf8'), context);
 const tree = context.window.ResearchTreeUI;
@@ -50,14 +50,16 @@ test('missing references and cycles never recurse indefinitely', () => {
   assert.ok([...positions.values()].every(position => Number.isFinite(position.y)));
 });
 
-test('seven category fallbacks are distinct and explicit asset keys take precedence', () => {
+test('seven category fallbacks are distinct and local asset keys take precedence', () => {
   assert.equal(new Set(Object.keys(icons.categories).map(category => icons.resolve({ id: 'unknown' }, category).src)).size, 7);
-  const Catalog = require('./research-icon-catalog.js');
-  icons.catalog = Catalog.create([{ id: 'technology_icons', images: [
-    { key: 'rifle', name: 'Rifle.png', local: 'assets/technology/Rifle.png' },
-    { key: 'tank', name: 'Tank.png', local: 'assets/technology/Tank.png' }
-  ], aliases: { kar98k: 'rifle' } }]);
-  assert.equal(icons.resolve({ id: 'kar98k' }, 'infantry').src, 'assets/technology/Rifle.png');
-  assert.equal(icons.resolve({ id: 'kar98k', asset_key: 'Tank.dds' }, 'infantry').src, 'assets/technology/Tank.png');
-  icons.catalog = null;
+  context.AssetRegistry.getLocal = (category, key) => category === 'technology_icons' && key === 'kar98k' ? 'assets/technology/Kar98k.png' : null;
+  assert.equal(icons.resolve({ id: 'kar98k' }, 'infantry').src, 'assets/technology/Kar98k.png');
+  assert.equal(icons.resolve({ id: 'kar98k' }, 'infantry').github, null);
+  // ローカル未保存でもGitHub上の同パスへフォールバックする
+  context.AssetRegistry.getLocal = () => null;
+  context.AssetRegistry.getGithubFromMapping = (category, key) =>
+    key === 'kar98k' ? 'https://iekei.github.io/iekei1/game/assets/technology/Kar98k.png' : null;
+  const github = icons.resolve({ id: 'kar98k' }, 'infantry');
+  assert.equal(github.src, 'https://iekei.github.io/iekei1/game/assets/technology/Kar98k.png');
+  assert.equal(github.github, null);
 });

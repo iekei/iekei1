@@ -1,383 +1,121 @@
 [
   {
-    "id": "interwar_artillery",
-    "title": "戦間期野戦砲",
-    "year": 1918,
-    "x": 200,
-    "y": 0,
-    "branch": "野戦砲",
-    "research_time": 100,
-    "reliability": "未研究",
-    "desc": "榴弾砲と野砲による間接射撃を研究する。",
-    "asset_key": "artillery1",
+    "id": "canon105_court",
+    "title": "105mm野砲 mle 1934",
+    "year": 1934,
+    "x": 100,
+    "y": 50,
+    "research_time": 91,
+    "reliability": "配備（制式採用）",
+    "desc": "シュナイダー製の105mm軽榴弾砲。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
     "effects": [
-      "戦間期野戦砲の研究"
-    ],
-    "prerequisites": [],
-    "legacy_ids": [
-      "type41_mountain"
-    ]
-  },
-  {
-    "id": "artillery1",
-    "title": "基本野戦砲",
-    "year": 1936,
-    "x": 200,
-    "y": 900,
-    "branch": "野戦砲",
-    "research_time": 125,
-    "reliability": "未研究",
-    "desc": "榴弾砲と野砲による間接射撃を研究する。",
-    "asset_key": "art_2_comintern",
-    "effects": [
-      "基本野戦砲の研究"
-    ],
-    "prerequisites": [
-      "interwar_artillery"
-    ],
-    "legacy_ids": [
-      "45k",
-      "ansaldo_210",
-      "cannone_149_40",
-      "canon105_court",
-      "eng_25pdr",
-      "f_22",
-      "flak36",
-      "flak37",
-      "fra_75mm",
-      "gpf_155",
-      "ita_100mm",
-      "lefh18",
-      "m2_105mm",
-      "ml_20",
-      "mortai_81_14",
-      "obice_100_17",
-      "schneider_280",
-      "sfh18",
-      "sig33",
-      "type90_field_gun",
-      "type91_105",
-      "type92_100mm",
-      "type96_150",
-      "type96_howitzer"
-    ]
-  },
-  {
-    "id": "artillery2",
-    "title": "改良型野戦砲",
-    "year": 1939,
-    "x": 200,
-    "y": 1050,
-    "branch": "野戦砲",
-    "research_time": 150,
-    "reliability": "未研究",
-    "desc": "榴弾砲と野砲による間接射撃を研究する。",
-    "asset_key": "artillery2",
-    "effects": [
-      "改良型野戦砲の研究"
-    ],
-    "prerequisites": [
-      "artillery1"
-    ],
-    "legacy_ids": [
-      "37inch_aa",
-      "m_10",
-      "m_30",
-      "mrs18",
-      "type99_105",
-      "usv_76"
-    ]
-  },
-  {
-    "id": "artillery3",
-    "title": "発展型野戦砲",
-    "year": 1942,
-    "x": 200,
-    "y": 1200,
-    "branch": "野戦砲",
-    "research_time": 175,
-    "reliability": "未研究",
-    "desc": "榴弾砲と野砲による間接射撃を研究する。",
-    "asset_key": "artillery3",
-    "effects": [
-      "発展型野戦砲の研究"
-    ],
-    "prerequisites": [
-      "artillery2"
-    ],
-    "legacy_ids": [
-      "lefh18_40",
-      "m1_8inch",
-      "m7_priest"
-    ]
-  },
-  {
-    "id": "artillery5",
-    "title": "最新型野戦砲",
-    "year": 1945,
-    "x": 200,
-    "y": 1350,
-    "branch": "野戦砲",
-    "research_time": 200,
-    "reliability": "未研究",
-    "desc": "榴弾砲と野砲による間接射撃を研究する。",
-    "asset_key": "artillery5",
-    "effects": [
-      "最新型野戦砲の研究"
-    ],
-    "prerequisites": [
-      "artillery3"
-    ],
-    "legacy_ids": [
-      "b_10",
-      "b_11",
-      "d_30",
-      "d_74",
-      "m_46",
-      "s_60",
-      "t_12",
-      "taran_2a3",
-      "zu_23_2"
-    ]
-  },
-  {
-    "id": "interwar_antitank",
-    "title": "対戦車砲 I",
-    "year": 1936,
-    "x": 400,
-    "y": 900,
-    "branch": "対戦車砲",
-    "research_time": 100,
-    "reliability": "未研究",
-    "desc": "牽引式対戦車砲を研究する。",
-    "asset_key": "at_1_allies",
-    "effects": [
-      "対戦車砲 Iの研究"
-    ],
-    "prerequisites": [],
-    "legacy_ids": [
-      "53_k",
-      "cannone_47_32",
-      "qf2_pounder",
-      "sa34_25mm",
-      "sa37"
-    ]
-  },
-  {
-    "id": "antitank2",
-    "title": "対戦車砲 II",
-    "year": 1939,
-    "x": 400,
-    "y": 1050,
-    "branch": "対戦車砲",
-    "research_time": 125,
-    "reliability": "未研究",
-    "desc": "牽引式対戦車砲を研究する。",
-    "asset_key": "at_2_allies",
-    "effects": [
-      "対戦車砲 IIの研究"
-    ],
-    "prerequisites": [
-      "interwar_antitank"
-    ],
-    "legacy_ids": [
-      "m_42",
-      "pak38",
-      "qf6_pounder",
-      "zis_2"
-    ]
-  },
-  {
-    "id": "antitank3",
-    "title": "対戦車砲 III",
-    "year": 1942,
-    "x": 400,
-    "y": 1200,
-    "branch": "対戦車砲",
-    "research_time": 150,
-    "reliability": "未研究",
-    "desc": "牽引式対戦車砲を研究する。",
-    "asset_key": "antitank3",
-    "effects": [
-      "対戦車砲 IIIの研究"
-    ],
-    "prerequisites": [
-      "antitank2"
-    ]
-  },
-  {
-    "id": "antitank4",
-    "title": "対戦車砲 IV",
-    "year": 1945,
-    "x": 400,
-    "y": 1350,
-    "branch": "対戦車砲",
-    "research_time": 175,
-    "reliability": "未研究",
-    "desc": "牽引式対戦車砲を研究する。",
-    "asset_key": "antitank5",
-    "effects": [
-      "対戦車砲 IVの研究"
-    ],
-    "prerequisites": [
-      "antitank3"
-    ]
-  },
-  {
-    "id": "antiair1",
-    "title": "対空砲 I",
-    "year": 1936,
-    "x": 600,
-    "y": 900,
-    "branch": "対空砲",
-    "research_time": 100,
-    "reliability": "未研究",
-    "desc": "地上部隊と拠点を守る対空砲を研究する。",
-    "asset_key": "antiair1",
-    "effects": [
-      "対空砲 Iの研究"
+      "対人攻撃: 37/100",
+      "対物攻撃: 36/100",
+      "生存力: 15/100",
+      "機動力: 48/100",
+      "信頼度: 70/100"
     ],
     "prerequisites": []
   },
   {
-    "id": "antiair2",
-    "title": "対空砲 II",
-    "year": 1940,
-    "x": 600,
-    "y": 1100,
-    "branch": "対空砲",
-    "research_time": 125,
-    "reliability": "未研究",
-    "desc": "地上部隊と拠点を守る対空砲を研究する。",
-    "asset_key": "aa_2_allies",
+    "id": "fra_75mm",
+    "title": "75mm野砲 M1897",
+    "year": 1936,
+    "x": 100,
+    "y": 200,
+    "research_time": 80,
+    "reliability": "配備",
+    "desc": "第一次大戦の名砲。まだ現役で使用されていた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><path d='M4 18h16'/><path d='M8 18l4-8h4l4 8'/></svg>",
     "effects": [
-      "対空砲 IIの研究"
+      "攻撃: 40/100",
+      "射程: 50/100",
+      "機動力: 65/100",
+      "信頼度: 80/100"
     ],
     "prerequisites": [
-      "antiair1"
-    ],
-    "legacy_ids": [
-      "52_k",
-      "61_k",
-      "bl72_howitzer",
-      "cannone_90_53",
-      "k5",
-      "karl",
-      "m1940_128",
-      "m1_90mm_aa"
+      "canon105_court"
     ]
   },
   {
-    "id": "antiair3",
-    "title": "対空砲 III",
-    "year": 1943,
-    "x": 600,
-    "y": 1250,
-    "branch": "対空砲",
-    "research_time": 150,
-    "reliability": "未研究",
-    "desc": "地上部隊と拠点を守る対空砲を研究する。",
-    "asset_key": "antiair2",
+    "id": "gpf_155",
+    "title": "Canon de 155mm GPF",
+    "year": 1936,
+    "x": 100,
+    "y": 350,
+    "research_time": 95,
+    "reliability": "配備（制式採用）",
+    "desc": "「グラン・プシュ・フィイユ」の155mm重砲。米軍にもコピーされた。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
     "effects": [
-      "対空砲 IIIの研究"
+      "対人攻撃: 38/100",
+      "対物攻撃: 39/100",
+      "生存力: 15/100",
+      "機動力: 48/100",
+      "信頼度: 72/100"
     ],
     "prerequisites": [
-      "antiair2"
-    ],
-    "legacy_ids": [
-      "bl_14",
-      "bs_3",
-      "d_1",
-      "d_44",
-      "m1_57mm_at",
-      "m2_4.2_mortar",
-      "pak43",
-      "qf17_pounder",
-      "sexton",
-      "type4_ho-ro",
-      "type7_75mm_at",
-      "zis_1"
+      "fra_75mm"
     ]
   },
   {
-    "id": "rocket_artillery2",
-    "title": "ロケット砲 I",
-    "year": 1940,
-    "x": 800,
-    "y": 1100,
-    "branch": "ロケット砲",
-    "research_time": 100,
-    "reliability": "未研究",
-    "desc": "多数のロケット弾による面制圧を研究する。",
-    "asset_key": "rocket_artillery2",
+    "id": "sa34_25mm",
+    "title": "Canon de 25mm SA34",
+    "year": 1934,
+    "x": 400,
+    "y": 50,
+    "research_time": 91,
+    "reliability": "配備（制式採用）",
+    "desc": "軽量な25mm対戦車砲。歩兵に配備された初期対戦車手段。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
     "effects": [
-      "ロケット砲 Iの研究"
+      "対人攻撃: 14/100",
+      "対物攻撃: 46/100",
+      "生存力: 14/100",
+      "機動力: 44/100",
+      "信頼度: 64/100"
     ],
     "prerequisites": []
   },
   {
-    "id": "rocket_artillery3",
-    "title": "ロケット砲 II",
-    "year": 1943,
-    "x": 800,
-    "y": 1250,
-    "branch": "ロケット砲",
-    "research_time": 125,
-    "reliability": "未研究",
-    "desc": "多数のロケット弾による面制圧を研究する。",
-    "asset_key": "rocket_artillery3",
+    "id": "sa37",
+    "title": "Canon de 47mm SA37",
+    "year": 1937,
+    "x": 400,
+    "y": 200,
+    "research_time": 97,
+    "reliability": "配備（制式採用）",
+    "desc": "独戦車を貫通できる強力な47mm対戦車砲。フランス降伏後も独軍が使用した。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
     "effects": [
-      "ロケット砲 IIの研究"
+      "対人攻撃: 14/100",
+      "対物攻撃: 51/100",
+      "生存力: 14/100",
+      "機動力: 44/100",
+      "信頼度: 67/100"
     ],
     "prerequisites": [
-      "rocket_artillery2"
+      "sa34_25mm"
     ]
   },
   {
-    "id": "rocket_artillery4",
-    "title": "ロケット砲 III",
-    "year": 1945,
-    "x": 800,
-    "y": 1350,
-    "branch": "ロケット砲",
-    "research_time": 150,
-    "reliability": "未研究",
-    "desc": "多数のロケット弾による面制圧を研究する。",
-    "asset_key": "rocket_art_2_allies",
+    "id": "schneider_280",
+    "title": "280mmシュナイダー重榴弾砲",
+    "year": 1936,
+    "x": 700,
+    "y": 50,
+    "research_time": 95,
+    "reliability": "配備（制式採用）",
+    "desc": "第一次大戦由来の重砲。要塞攻撃用に保存された。",
+    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7090c0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
     "effects": [
-      "ロケット砲 IIIの研究"
+      "対人攻撃: 38/100",
+      "対物攻撃: 39/100",
+      "生存力: 15/100",
+      "機動力: 48/100",
+      "信頼度: 72/100"
     ],
-    "prerequisites": [
-      "rocket_artillery3"
-    ],
-    "legacy_ids": [
-      "nebelwerfer",
-      "wurfgerat"
-    ]
-  },
-  {
-    "id": "motorized_rocket_unit",
-    "title": "自走ロケット砲",
-    "year": 1941,
-    "x": 1000,
-    "y": 1150,
-    "branch": "自走ロケット砲",
-    "research_time": 100,
-    "reliability": "未研究",
-    "desc": "車載ロケット発射機を研究する。",
-    "asset_key": "motorized_rocket_unit",
-    "effects": [
-      "自走ロケット砲の研究"
-    ],
-    "prerequisites": [
-      "rocket_artillery2"
-    ],
-    "legacy_ids": [
-      "bl55_gun",
-      "m1_155mm",
-      "m1a1_long_tom",
-      "m1a1_pack_howitzer",
-      "zis_3"
-    ]
+    "prerequisites": []
   }
 ]

@@ -354,8 +354,9 @@ const AssetRegistry = {
   },
 
   /** 国旗URL (game/assets/flags/<TAG>.png — HoI4データベース完全同名) */
-  getFlagUrl(tag) {
-    return this.getLocalAssetUrl('flags', tag + '.png');
+  getFlagUrl(tag, ideology) {
+    const file = typeof GameVisuals !== 'undefined' ? GameVisuals.flagFile(tag, ideology) : tag + '.png';
+    return file ? this.getLocalAssetUrl('flags', file) : null;
   }
 };
 
