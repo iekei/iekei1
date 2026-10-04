@@ -85,15 +85,33 @@ class BattleManager {
   }
 
   static calcOffensiveAdvantage(army, st) {
-    // 攻撃側: 平均組織力 / 防御側: 基礎戦力 + 要塞 + 補給ボーナス
+    // 攻撃側: 平均組織力 + 研究済み技術の火力 / 防御側: 基礎戦力 + 要塞 + 補給ボーナス
     const org = army.divisions.reduce((s, d) => s + d.org, 0) / Math.max(1, army.divisions.length);
+    // 研究済み技術の合計火力を攻勢ボーナスに反映
+    const firepowerBonus = BattleManager.totalFirepower() / 200;
     const defense = 50 + (st && st.b ? (st.b.fort || 0) * 8 : 0) + (st && st.supply ? st.supply : 0) * 1.5;
-    let adv = (org + Math.min(25, army.divisions.length * 1.2) - defense) / 100;
+    let adv = (org + firepowerBonus + Math.min(25, army.divisions.length * 1.2) - defense) / 100;
     // 将軍カードの攻勢ボーナス (軍集団に割り当てられた将軍の階級で決まる)
     if (army.general && army.general.rank) adv += (BattleManager.GENERAL_BONUS[army.general.rank] || 0);
     // 海軍/空軍の行動支援: 周辺で任務実行中の部隊が戦闘を支援する
     adv += BattleManager.supportBonus(st);
     return Math.max(-1, Math.min(1, adv));
+  }
+
+  // ---- 研究済み技術の合計火力を計算 (戦闘の優劣に影響) ----
+  static totalFirepower() {
+    if (typeof ResearchManager === 'undefined' || !ResearchManager.researchedTech) return 0;
+    let total = 0;
+    if (typeof ResearchI18n !== 'undefined' && ResearchManager.techData) {
+      for (const [cat, techs] of Object.entries(ResearchManager.techData)) {
+        techs.forEach(tech => {
+          if (ResearchManager.researchedTech.has(tech.id) && tech.firepower) {
+            total += tech.firepower;
+          }
+        });
+      }
+    }
+    return total;
   }
 
   // ---- 海軍/空軍の戦闘支援ボーナス (行動が陸戦に影響する) ----

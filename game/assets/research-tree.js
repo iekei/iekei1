@@ -167,6 +167,7 @@ const ResearchTreeUI = {
       meta.className = 'tn-meta';
       const penalty = state.penalty;
       let metaText = (tech.year || '—') + '年 · ' + (tech.research_time || 100) + '日';
+      if (tech.firepower && tech.firepower > 0) metaText += ' · 火力' + tech.firepower;
       if (penalty && penalty.percent > 0) metaText += ' · 先取り+' + penalty.percent + '%';
       meta.textContent = metaText;
       const status = document.createElement('span');
@@ -238,6 +239,13 @@ const ResearchTreeUI = {
       item.textContent = effect;
       effects.appendChild(item);
     });
+    // 火力表示 (戦闘の優劣に影響)
+    if (tech.firepower && tech.firepower > 0) {
+      const fpItem = document.createElement('li');
+      fpItem.style.color = 'var(--accent-red, #c44a4a)';
+      fpItem.textContent = '火力: ' + tech.firepower + ' (高いほどプロヴィンス戦闘で優勢)';
+      effects.appendChild(fpItem);
+    }
     if (penalty.percent > 0) {
       const item = document.createElement('li');
       item.style.color = 'var(--accent-orange, #e8923c)';

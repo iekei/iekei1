@@ -877,6 +877,7 @@
 <script src="assets/topbar-icons.js"></script>
 <script src="assets/topbar-ui.js"></script>
 <script src="assets/research-icons.js"></script>
+<script src="assets/research-i18n.js"></script>
 <script src="assets/research-tree.js"></script>
 <script>
 /* ================================================================
@@ -4421,7 +4422,7 @@ class DivisionDesigner {
       '<div class="division-stat-row"><span>大隊数</span><span>' + stats.count + '</span></div>' +
       '<div class="division-stat-row"><span>機甲速度ボーナス</span><span>' + (CoreEngine.gameState.cardModifiers.armorSpeed > 0 ? '+' : '') + (CoreEngine.gameState.cardModifiers.armorSpeed * 100) + '%</span></div>' +
       '<div class="division-stat-row"><span>歩兵防御ボーナス</span><span>' + (CoreEngine.gameState.cardModifiers.infantryDefense > 0 ? '+' : '') + (CoreEngine.gameState.cardModifiers.infantryDefense * 100) + '%</span></div>' +
-      '<div class="division-stat-row"><span>訓練期間</span><span style="color:var(--accent-blue);">' + (TrainingManager.requirements() ? TrainingManager.requirements().trainDays + '日 (約' + Math.round(TrainingManager.requirements().trainDays / 30) + 'ヶ月)' : '編成してください') + '</span></div>' +
+      '<div class="division-stat-row"><span>訓練期間</span><span style="color:var(--accent-blue);">' + ((typeof TrainingManager !== 'undefined' && TrainingManager.requirements()) ? TrainingManager.requirements().trainDays + '日 (約' + Math.round(TrainingManager.requirements().trainDays / 30) + 'ヶ月)' : '編成してください') + '</span></div>' +
       '</div>' +
       '<div style="margin-top:10px;">' +
       '<label style="font-size:12px;color:var(--text-secondary);margin-right:6px;">配備先軍集団:</label>' +
@@ -5315,11 +5316,16 @@ class ResearchManager {
   static currentCategory = 'infantry';
 
   static async init(country) {
-    ResearchManager.techData = await DataFetcher.fetchAllTech(country);
-    // 新規ゲーム開始・国変更時に進行状態をその国用にリセット
-    ResearchManager.researchedTech = new Set();
+    const rawTechData = await DataFetcher.fetchAllTech(country);
+    // 日本語化・火力付与・年代順ソート & 1936年以前の技術を研究済みに
+    const processed = ResearchI18n.processAll(rawTechData, country);
+    ResearchManager.techData = processed.techData;
+    ResearchManager.researchedTech = new Set(processed.preWarTechs);
     ResearchManager.researching = {};
     ResearchManager.currentCategory = 'infantry';
+    if (processed.preWarTechs.size > 0) {
+      CoreEngine.log('📚 1936年以前の技術 (' + processed.preWarTechs.size + '件) は研究済みです。');
+    }
     ResearchManager.renderTabs();
     ResearchManager.renderSlots();
     ResearchManager.render();
