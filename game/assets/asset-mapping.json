@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-04T04:51:56+0000",
+ "generated_at": "2026-10-04T07:06:19+0000",
  "source": "https://hoi4.paradoxwikis.com",
  "note": "game/index.html からの相対パス。AssetRegistry.loadScrapedMapping() で読み込む。",
  "categories": {
@@ -9,6 +9,22 @@
    "local_base": "assets/topbar/",
    "count": 3,
    "count_names": 15
+  },
+  "operative_portraits": {
+   "label": "諜報機関ポートレート",
+   "local_base": "assets/operatives/",
+   "count": 0,
+   "count_names": 0,
+   "complete": false,
+   "mapping_file": "assets/mappings/operative_portraits.json"
+  },
+  "flags": {
+   "label": "国旗",
+   "local_base": "assets/flags/",
+   "count": 16,
+   "count_names": 200,
+   "complete": false,
+   "mapping_file": "assets/mappings/flags.json"
   }
  }
 }
