@@ -1,0 +1,590 @@
+[
+  {
+    "id": "basic_light_tank",
+    "title": "軽戦車 I",
+    "year": 1934,
+    "x": 200,
+    "y": 800,
+    "branch": "軽戦車",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "軽戦車の車体・火力・防御を更新する。",
+    "asset_key": "basic_light_tank",
+    "effects": [
+      "軽戦車 Iの研究"
+    ],
+    "prerequisites": [],
+    "legacy_ids": [
+      "amc35",
+      "amr33",
+      "bt_7",
+      "hotchkiss_h35",
+      "l3_35",
+      "light_tank_vi",
+      "m2_light",
+      "panzer_i",
+      "panzer_ii",
+      "renault_r35",
+      "type95_hago"
+    ]
+  },
+  {
+    "id": "improved_light_tank",
+    "title": "軽戦車 II",
+    "year": 1936,
+    "x": 200,
+    "y": 900,
+    "branch": "軽戦車",
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "軽戦車の車体・火力・防御を更新する。",
+    "asset_key": "improved_light_tank",
+    "effects": [
+      "軽戦車 IIの研究"
+    ],
+    "prerequisites": [
+      "basic_light_tank"
+    ],
+    "legacy_ids": [
+      "l6_40",
+      "m3_stuart",
+      "panzer_38t",
+      "t_40",
+      "t_60",
+      "t_70",
+      "valentine"
+    ]
+  },
+  {
+    "id": "advanced_light_tank",
+    "title": "軽戦車 III",
+    "year": 1941,
+    "x": 200,
+    "y": 1150,
+    "branch": "軽戦車",
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "軽戦車の車体・火力・防御を更新する。",
+    "asset_key": "advanced_light_tank",
+    "effects": [
+      "軽戦車 IIIの研究"
+    ],
+    "prerequisites": [
+      "improved_light_tank"
+    ],
+    "legacy_ids": [
+      "m24_chaffee"
+    ]
+  },
+  {
+    "id": "basic_medium_tank",
+    "title": "中戦車 I",
+    "year": 1939,
+    "x": 400,
+    "y": 1050,
+    "branch": "中戦車",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "中戦車の車体・火力・防御を更新する。",
+    "asset_key": "basic_medium_tank",
+    "effects": [
+      "中戦車 Iの研究"
+    ],
+    "prerequisites": [],
+    "legacy_ids": [
+      "cruiser_mk_iv",
+      "neubaufahrzeug",
+      "panzer_iii",
+      "panzer_iv",
+      "renault_d2",
+      "somua_s35",
+      "type89_tank",
+      "type97_tank"
+    ]
+  },
+  {
+    "id": "improved_medium_tank",
+    "title": "中戦車 II",
+    "year": 1941,
+    "x": 400,
+    "y": 1150,
+    "branch": "中戦車",
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "中戦車の車体・火力・防御を更新する。",
+    "asset_key": "improved_medium_tank",
+    "effects": [
+      "中戦車 IIの研究"
+    ],
+    "prerequisites": [
+      "basic_medium_tank"
+    ],
+    "legacy_ids": [
+      "crusader",
+      "m11_39",
+      "m13_40",
+      "m15_42",
+      "m3_lee",
+      "m4_sherman",
+      "matilda_2",
+      "t_34_76",
+      "t_43",
+      "type1_chihe",
+      "type2_ka-mi"
+    ]
+  },
+  {
+    "id": "advanced_medium_tank",
+    "title": "中戦車 III",
+    "year": 1943,
+    "x": 400,
+    "y": 1250,
+    "branch": "中戦車",
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "中戦車の車体・火力・防御を更新する。",
+    "asset_key": "advanced_medium_tank",
+    "effects": [
+      "中戦車 IIIの研究"
+    ],
+    "prerequisites": [
+      "improved_medium_tank"
+    ],
+    "legacy_ids": [
+      "cromwell",
+      "m22_locust",
+      "p43",
+      "panther",
+      "pt_76",
+      "sherman_firefly",
+      "t_34_85",
+      "t_44",
+      "type2_chiho",
+      "type3_chinu",
+      "type4_chito",
+      "type5_chiri"
+    ]
+  },
+  {
+    "id": "basic_heavy_tank",
+    "title": "重戦車 I",
+    "year": 1934,
+    "x": 600,
+    "y": 800,
+    "branch": "重戦車",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "重戦車の車体・火力・防御を更新する。",
+    "asset_key": "basic_heavy_tank",
+    "effects": [
+      "重戦車 Iの研究"
+    ],
+    "prerequisites": [],
+    "legacy_ids": [
+      "char_b1",
+      "t_100",
+      "t_35"
+    ]
+  },
+  {
+    "id": "improved_heavy_tank",
+    "title": "重戦車 II",
+    "year": 1936,
+    "x": 600,
+    "y": 900,
+    "branch": "重戦車",
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "重戦車の車体・火力・防御を更新する。",
+    "asset_key": "improved_heavy_tank",
+    "effects": [
+      "重戦車 IIの研究"
+    ],
+    "prerequisites": [
+      "basic_heavy_tank"
+    ],
+    "legacy_ids": [
+      "churchill",
+      "kv_1",
+      "kv_2",
+      "p26_40",
+      "smk",
+      "tiger"
+    ]
+  },
+  {
+    "id": "advanced_heavy_tank",
+    "title": "重戦車 III",
+    "year": 1941,
+    "x": 600,
+    "y": 1150,
+    "branch": "重戦車",
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "重戦車の車体・火力・防御を更新する。",
+    "asset_key": "advanced_heavy_tank",
+    "effects": [
+      "重戦車 IIIの研究"
+    ],
+    "prerequisites": [
+      "improved_heavy_tank"
+    ],
+    "legacy_ids": [
+      "arl44",
+      "is_2",
+      "is_3",
+      "is_7",
+      "m26_pershing",
+      "obj_279",
+      "t29",
+      "t_10",
+      "tiger_ii"
+    ]
+  },
+  {
+    "id": "generic_modern_tank",
+    "title": "現代型主力戦車",
+    "year": 1945,
+    "x": 800,
+    "y": 1350,
+    "branch": "主力戦車",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "機動力と防御を両立する戦後型戦車を研究する。",
+    "asset_key": "generic_modern_tank",
+    "effects": [
+      "現代型主力戦車の研究"
+    ],
+    "prerequisites": [
+      "advanced_medium_tank"
+    ],
+    "legacy_ids": [
+      "centurion",
+      "t_54",
+      "t_55"
+    ]
+  },
+  {
+    "id": "super_heavy_tank",
+    "title": "超重戦車",
+    "year": 1943,
+    "x": 1000,
+    "y": 1250,
+    "branch": "超重戦車",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "重装甲の突破用戦車を研究する。",
+    "asset_key": "super_heavy_tank",
+    "effects": [
+      "超重戦車の研究"
+    ],
+    "prerequisites": [
+      "improved_heavy_tank"
+    ],
+    "legacy_ids": [
+      "e100",
+      "fcm_f1",
+      "maus",
+      "oi_tank",
+      "t28",
+      "tortoise"
+    ]
+  },
+  {
+    "id": "armored_car_equipment_1",
+    "title": "装輪装甲車 I",
+    "year": 1936,
+    "x": 1200,
+    "y": 900,
+    "branch": "装輪装甲車",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "偵察と警備のための装輪装甲車を研究する。",
+    "asset_key": "ger_armored_car_equipment_1",
+    "effects": [
+      "装輪装甲車 Iの研究"
+    ],
+    "prerequisites": [],
+    "legacy_ids": [
+      "ba_10",
+      "btr_50",
+      "btr_60",
+      "panhard_ebr",
+      "type94_tk"
+    ]
+  },
+  {
+    "id": "armored_car_equipment_2",
+    "title": "装輪装甲車 II",
+    "year": 1940,
+    "x": 1200,
+    "y": 1100,
+    "branch": "装輪装甲車",
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "偵察と警備のための装輪装甲車を研究する。",
+    "asset_key": "ger_armored_car_equipment_2",
+    "effects": [
+      "装輪装甲車 IIの研究"
+    ],
+    "prerequisites": [
+      "armored_car_equipment_1"
+    ]
+  },
+  {
+    "id": "armored_car_equipment_3",
+    "title": "装輪装甲車 III",
+    "year": 1942,
+    "x": 1200,
+    "y": 1200,
+    "branch": "装輪装甲車",
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "偵察と警備のための装輪装甲車を研究する。",
+    "asset_key": "ger_armored_car_equipment_3",
+    "effects": [
+      "装輪装甲車 IIIの研究"
+    ],
+    "prerequisites": [
+      "armored_car_equipment_2"
+    ]
+  },
+  {
+    "id": "nsb_armor_tech_1",
+    "title": "装甲技術 I",
+    "year": 1936,
+    "x": 1400,
+    "y": 900,
+    "branch": "装甲技術",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "装甲板と車体構造の改良を研究する。",
+    "asset_key": "nsb_armor_tech_1",
+    "effects": [
+      "装甲技術 Iの研究"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "nsb_armor_tech_2",
+    "title": "装甲技術 II",
+    "year": 1939,
+    "x": 1400,
+    "y": 1050,
+    "branch": "装甲技術",
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "装甲板と車体構造の改良を研究する。",
+    "asset_key": "nsb_armor_tech_2",
+    "effects": [
+      "装甲技術 IIの研究"
+    ],
+    "prerequisites": [
+      "nsb_armor_tech_1"
+    ]
+  },
+  {
+    "id": "nsb_armor_tech_3",
+    "title": "装甲技術 III",
+    "year": 1942,
+    "x": 1400,
+    "y": 1200,
+    "branch": "装甲技術",
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "装甲板と車体構造の改良を研究する。",
+    "asset_key": "nsb_armor_tech_3",
+    "effects": [
+      "装甲技術 IIIの研究"
+    ],
+    "prerequisites": [
+      "nsb_armor_tech_2"
+    ]
+  },
+  {
+    "id": "nsb_armor_tech_4",
+    "title": "装甲技術 IV",
+    "year": 1945,
+    "x": 1400,
+    "y": 1350,
+    "branch": "装甲技術",
+    "research_time": 175,
+    "reliability": "未研究",
+    "desc": "装甲板と車体構造の改良を研究する。",
+    "asset_key": "nsb_armor_tech_4",
+    "effects": [
+      "装甲技術 IVの研究"
+    ],
+    "prerequisites": [
+      "nsb_armor_tech_3"
+    ]
+  },
+  {
+    "id": "nsb_engine_tech_1",
+    "title": "戦車エンジン I",
+    "year": 1936,
+    "x": 1600,
+    "y": 900,
+    "branch": "戦車エンジン",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "戦車用機関と駆動系を研究する。",
+    "asset_key": "nsb_engine_tech_1",
+    "effects": [
+      "戦車エンジン Iの研究"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "nsb_engine_tech_2",
+    "title": "戦車エンジン II",
+    "year": 1939,
+    "x": 1600,
+    "y": 1050,
+    "branch": "戦車エンジン",
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "戦車用機関と駆動系を研究する。",
+    "asset_key": "nsb_engine_tech_2",
+    "effects": [
+      "戦車エンジン IIの研究"
+    ],
+    "prerequisites": [
+      "nsb_engine_tech_1"
+    ]
+  },
+  {
+    "id": "nsb_engine_tech_3",
+    "title": "戦車エンジン III",
+    "year": 1942,
+    "x": 1600,
+    "y": 1200,
+    "branch": "戦車エンジン",
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "戦車用機関と駆動系を研究する。",
+    "asset_key": "nsb_engine_tech_3",
+    "effects": [
+      "戦車エンジン IIIの研究"
+    ],
+    "prerequisites": [
+      "nsb_engine_tech_2"
+    ]
+  },
+  {
+    "id": "nsb_engine_tech_4",
+    "title": "戦車エンジン IV",
+    "year": 1945,
+    "x": 1600,
+    "y": 1350,
+    "branch": "戦車エンジン",
+    "research_time": 175,
+    "reliability": "未研究",
+    "desc": "戦車用機関と駆動系を研究する。",
+    "asset_key": "nsb_engine_tech_4",
+    "effects": [
+      "戦車エンジン IVの研究"
+    ],
+    "prerequisites": [
+      "nsb_engine_tech_3"
+    ]
+  },
+  {
+    "id": "subtech_td",
+    "title": "駆逐戦車",
+    "year": 1940,
+    "x": 1800,
+    "y": 1100,
+    "branch": "駆逐戦車",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "駆逐戦車への車体転用を研究する。",
+    "asset_key": "subtech_td",
+    "effects": [
+      "駆逐戦車の研究"
+    ],
+    "prerequisites": [
+      "basic_medium_tank"
+    ],
+    "legacy_ids": [
+      "archer",
+      "elefant",
+      "hetzer",
+      "isu_152",
+      "jagdpanther",
+      "jagdtiger",
+      "m10_wolverine",
+      "m18_hellcat",
+      "m36_jackson",
+      "semovente_105_25",
+      "semovente_75_18",
+      "semovente_90_53",
+      "stug_iii",
+      "su_100",
+      "su_122",
+      "su_122_54",
+      "su_152",
+      "su_85",
+      "su_85a",
+      "type1_ho-ni",
+      "type5_ho-ri"
+    ]
+  },
+  {
+    "id": "subtech_art",
+    "title": "自走砲",
+    "year": 1940,
+    "x": 2000,
+    "y": 1100,
+    "branch": "自走砲",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "自走砲への車体転用を研究する。",
+    "asset_key": "subtech_art",
+    "effects": [
+      "自走砲の研究"
+    ],
+    "prerequisites": [
+      "basic_medium_tank"
+    ]
+  },
+  {
+    "id": "subtech_aa",
+    "title": "対空戦車",
+    "year": 1940,
+    "x": 2200,
+    "y": 1100,
+    "branch": "対空戦車",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "対空戦車への車体転用を研究する。",
+    "asset_key": "subtech_aa",
+    "effects": [
+      "対空戦車の研究"
+    ],
+    "prerequisites": [
+      "basic_light_tank"
+    ],
+    "legacy_ids": [
+      "wirbelwind"
+    ]
+  },
+  {
+    "id": "nsb_amphibious_drive_tech",
+    "title": "水陸両用駆動装置",
+    "year": 1940,
+    "x": 2400,
+    "y": 1100,
+    "branch": "水陸両用駆動装置",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "水陸両用駆動装置への車体転用を研究する。",
+    "asset_key": "nsb_amphibious_drive_tech",
+    "effects": [
+      "水陸両用駆動装置の研究"
+    ],
+    "prerequisites": [
+      "improved_light_tank"
+    ]
+  }
+]

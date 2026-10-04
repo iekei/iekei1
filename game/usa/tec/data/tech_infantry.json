@@ -1,227 +1,1079 @@
 [
   {
-    "id": "m2_browning",
-    "title": "M2重機関銃 (12.7mm)",
-    "year": 1933,
-    "x": 100,
-    "y": 50,
-    "research_time": 89,
-    "reliability": "配備（制式採用）",
-    "desc": "「マ・デュース」と呼ばれる12.7mm重機関銃。航空・対空・対地あらゆる場面で活躍した。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "id": "infantry_equipment_0",
+    "title": "基本歩兵装備",
+    "year": 1918,
+    "x": 200,
+    "y": 0,
+    "branch": "歩兵火器",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "小銃から自動火器へ、歩兵の標準装備を更新する。",
+    "asset_key": "infantry_equipment_0",
     "effects": [
-      "対人攻撃: 36/100",
-      "対物攻撃: 11/100",
-      "生存力: 8/100",
-      "機動力: 62/100",
-      "信頼度: 74/100"
+      "基本歩兵装備の研究"
     ],
     "prerequisites": []
   },
   {
-    "id": "m1903_springfield",
-    "title": "M1903スプリングフィールド小銃",
+    "id": "infantry_weapons",
+    "title": "歩兵装備 I",
     "year": 1936,
-    "x": 100,
-    "y": 200,
-    "research_time": 95,
-    "reliability": "配備（制式採用）",
-    "desc": "ボルトアクション小銃。M1ガーランドと並んで大戦初期の主力小銃で、狙撃銃としても生き残った。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "x": 200,
+    "y": 900,
+    "branch": "歩兵火器",
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "小銃から自動火器へ、歩兵の標準装備を更新する。",
+    "asset_key": "infantry_equipment_0",
     "effects": [
-      "対人攻撃: 39/100",
-      "対物攻撃: 12/100",
-      "生存力: 8/100",
-      "機動力: 62/100",
-      "信頼度: 77/100"
+      "歩兵装備 Iの研究"
     ],
     "prerequisites": [
-      "m2_browning"
+      "infantry_equipment_0"
     ]
   },
   {
-    "id": "m1919_browning",
-    "title": "M1919ブローニング機関銃",
-    "year": 1936,
-    "x": 100,
-    "y": 350,
-    "research_time": 95,
-    "reliability": "配備（制式採用）",
-    "desc": "分隊・車載用の中機関銃。大戦を通じてあらゆる場面で使用された。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "id": "infantry_weapons2",
+    "title": "歩兵装備 II",
+    "year": 1939,
+    "x": 200,
+    "y": 1050,
+    "branch": "歩兵火器",
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "小銃から自動火器へ、歩兵の標準装備を更新する。",
+    "asset_key": "infantry_weapons",
     "effects": [
-      "対人攻撃: 39/100",
-      "対物攻撃: 12/100",
-      "生存力: 8/100",
-      "機動力: 62/100",
-      "信頼度: 77/100"
+      "歩兵装備 IIの研究"
     ],
     "prerequisites": [
-      "m1903_springfield"
+      "infantry_weapons"
+    ],
+    "legacy_ids": [
+      "avs_36",
+      "beretta_m1934",
+      "berthier_m34",
+      "carcano",
+      "carcano_m38",
+      "kar98k",
+      "lee_enfield",
+      "m1903_springfield",
+      "m1_garand",
+      "mas36",
+      "mp38",
+      "mp40",
+      "ppsh_39",
+      "svt_38",
+      "type38_rifle",
+      "type97_sniper",
+      "type99_rifle"
     ]
   },
   {
-    "id": "m1_garand",
-    "title": "M1ガランド",
-    "year": 1936,
-    "x": 100,
-    "y": 500,
-    "research_time": 100,
-    "reliability": "配備（制式採用）",
-    "desc": "ジョン・ガランド設計の半自動小銃。世界初の量産半自動小銃として制式採用。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.8' stroke-linecap='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/></svg>",
+    "id": "infantry_weapons3",
+    "title": "歩兵装備 III",
+    "year": 1942,
+    "x": 200,
+    "y": 1200,
+    "branch": "歩兵火器",
+    "research_time": 175,
+    "reliability": "未研究",
+    "desc": "小銃から自動火器へ、歩兵の標準装備を更新する。",
+    "asset_key": "infantry_weapons3",
     "effects": [
-      "対人攻撃: 45/100",
-      "対物攻撃: 12/100",
-      "生存力: 10/100",
-      "機動力: 70/100",
-      "信頼度: 90/100"
+      "歩兵装備 IIIの研究"
     ],
     "prerequisites": [
-      "m1919_browning"
+      "infantry_weapons2"
+    ],
+    "legacy_ids": [
+      "ak_46",
+      "ak_47",
+      "akm",
+      "aps",
+      "as_44",
+      "avt_40",
+      "delisle_carbine",
+      "fg42",
+      "m1944_carbine",
+      "m2_carbine",
+      "m3_grease_gun",
+      "pm",
+      "pps_42",
+      "pps_43",
+      "sks_45",
+      "stg44",
+      "stg45",
+      "tkb_408",
+      "tkb_517",
+      "type100_smg_kai",
+      "type2_smg"
     ]
   },
   {
-    "id": "bar_m1918",
-    "title": "BAR M1918A2",
-    "year": 1937,
-    "x": 100,
-    "y": 650,
-    "research_time": 100,
-    "reliability": "配備",
-    "desc": "自動小銃。歩兵の火力支援に使用された。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.8' stroke-linecap='round'><path d='M2 12h18'/><path d='M6 12v4'/><path d='M16 12l2 3h-3z'/></svg>",
-    "effects": [
-      "対人攻撃: 42/100",
-      "対物攻撃: 10/100",
-      "生存力: 9/100",
-      "機動力: 60/100",
-      "信頼度: 80/100"
-    ],
-    "prerequisites": [
-      "m1_garand"
-    ]
-  },
-  {
-    "id": "m1_carbine",
-    "title": "M1カービン",
-    "year": 1941,
-    "x": 100,
-    "y": 800,
-    "research_time": 80,
-    "reliability": "配備（制式採用）",
-    "desc": "軽量なカービン銃。後方部隊や空挺部隊に配備された。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.8' stroke-linecap='round'><path d='M4 12h16'/><path d='M16 12l2 3h-3z'/></svg>",
-    "effects": [
-      "対人攻撃: 35/100",
-      "対物攻撃: 5/100",
-      "生存力: 8/100",
-      "機動力: 85/100",
-      "信頼度: 85/100"
-    ],
-    "prerequisites": [
-      "bar_m1918"
-    ]
-  },
-  {
-    "id": "thompson_smg",
-    "title": "トンプソン短機関銃",
-    "year": 1938,
+    "id": "support_weapons",
+    "title": "支援火器 I",
+    "year": 1918,
     "x": 400,
-    "y": 50,
-    "research_time": 80,
-    "reliability": "配備",
-    "desc": "「トミーガン」として知られる.45口径短機関銃。高火力だが重い。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8b949e' stroke-width='1.8' stroke-linecap='round'><path d='M3 11h14'/><circle cx='11' cy='15' r='3'/></svg>",
+    "y": 0,
+    "branch": "支援火器",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "機関銃と迫撃砲による歩兵の支援火力を研究する。",
+    "asset_key": "support_weapons",
     "effects": [
-      "対人攻撃: 40/100",
-      "対物攻撃: 5/100",
-      "生存力: 8/100",
-      "機動力: 65/100",
-      "信頼度: 75/100"
+      "支援火器 Iの研究"
     ],
-    "prerequisites": []
+    "prerequisites": [],
+    "legacy_ids": [
+      "bar_m1918",
+      "beretta_m38",
+      "breda_30",
+      "breda_m37",
+      "bren_lmg",
+      "chatellerault",
+      "fmg_24_29",
+      "m1919_browning",
+      "m2_browning",
+      "mas38_smg",
+      "mg13",
+      "mg34",
+      "thompson_smg",
+      "type11_lmg",
+      "type92_hmg",
+      "type96_lmg",
+      "vickers_mg"
+    ]
   },
   {
-    "id": "m3_grease_gun",
-    "title": "M3グリースガン",
+    "id": "support_weapons2",
+    "title": "支援火器 II",
+    "year": 1936,
+    "x": 400,
+    "y": 900,
+    "branch": "支援火器",
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "機関銃と迫撃砲による歩兵の支援火力を研究する。",
+    "asset_key": "support_weapons2",
+    "effects": [
+      "支援火器 IIの研究"
+    ],
+    "prerequisites": [
+      "support_weapons"
+    ],
+    "legacy_ids": [
+      "sten_mk2",
+      "sten_smg",
+      "type99_lmg"
+    ]
+  },
+  {
+    "id": "support_weapons3",
+    "title": "支援火器 III",
+    "year": 1939,
+    "x": 400,
+    "y": 1050,
+    "branch": "支援火器",
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "機関銃と迫撃砲による歩兵の支援火力を研究する。",
+    "asset_key": "support_weapons3",
+    "effects": [
+      "支援火器 IIIの研究"
+    ],
+    "prerequisites": [
+      "support_weapons2"
+    ],
+    "legacy_ids": [
+      "mg42",
+      "rp46",
+      "rpd"
+    ]
+  },
+  {
+    "id": "support_weapons4",
+    "title": "支援火器 IV",
     "year": 1942,
     "x": 400,
-    "y": 200,
-    "research_time": 107,
-    "reliability": "配備（制式採用）",
-    "desc": "プレス加工で量産された短機関銃。トンプソンより安価で、車両兵・下士官に配備された。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 11h14'/><circle cx='11' cy='15' r='3'/><path d='M5 11v4'/></svg>",
+    "y": 1200,
+    "branch": "支援火器",
+    "research_time": 175,
+    "reliability": "未研究",
+    "desc": "機関銃と迫撃砲による歩兵の支援火力を研究する。",
+    "asset_key": "support_weapons4",
     "effects": [
-      "対人攻撃: 40/100",
-      "対物攻撃: 6/100",
-      "生存力: 8/100",
-      "機動力: 78/100",
-      "信頼度: 66/100"
+      "支援火器 IVの研究"
     ],
     "prerequisites": [
-      "thompson_smg"
+      "support_weapons3"
     ]
   },
   {
-    "id": "m2_carbine",
-    "title": "M2カービン",
-    "year": 1944,
-    "x": 400,
-    "y": 350,
-    "research_time": 111,
-    "reliability": "配備（制式採用）",
-    "desc": "M1カービンの全自動改良型。下士官・車両兵用の近接火力として用いられた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M3 11h14'/><circle cx='11' cy='15' r='3'/><path d='M5 11v4'/></svg>",
-    "effects": [
-      "対人攻撃: 41/100",
-      "対物攻撃: 6/100",
-      "生存力: 8/100",
-      "機動力: 78/100",
-      "信頼度: 67/100"
-    ],
-    "prerequisites": [
-      "m3_grease_gun"
-    ]
-  },
-  {
-    "id": "m1_bazooka",
-    "title": "M1バズーカ",
+    "id": "infantry_at",
+    "title": "歩兵対戦車装備 I",
     "year": 1942,
-    "x": 700,
-    "y": 50,
-    "research_time": 107,
-    "reliability": "配備（制式採用）",
-    "desc": "世界初の実用成型炸薬ロケットランチャー。歩兵の対戦車能力を根本から変えた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "x": 600,
+    "y": 1200,
+    "branch": "歩兵対戦車装備",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "歩兵が携行する対戦車火器を研究する。",
+    "asset_key": "infantry_at",
     "effects": [
-      "対人攻撃: 18/100",
-      "対物攻撃: 42/100",
-      "生存力: 8/100",
-      "機動力: 56/100",
-      "信頼度: 63/100"
+      "歩兵対戦車装備 Iの研究"
+    ],
+    "prerequisites": [
+      "infantry_weapons2"
+    ],
+    "legacy_ids": [
+      "boys_atr",
+      "m1_bazooka",
+      "ptrd_41",
+      "ptrd_fra",
+      "ptrs_41",
+      "pzb_39",
+      "solothurn_atr",
+      "t_gewehr",
+      "type97_atr"
+    ]
+  },
+  {
+    "id": "infantry_at2",
+    "title": "歩兵対戦車装備 II",
+    "year": 1943,
+    "x": 600,
+    "y": 1250,
+    "branch": "歩兵対戦車装備",
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "歩兵が携行する対戦車火器を研究する。",
+    "asset_key": "infantry_at2",
+    "effects": [
+      "歩兵対戦車装備 IIの研究"
+    ],
+    "prerequisites": [
+      "infantry_at"
+    ],
+    "legacy_ids": [
+      "m9_bazooka",
+      "ofenrohr",
+      "panzerfaust",
+      "panzerschreck",
+      "piat",
+      "type4_atr"
+    ]
+  },
+  {
+    "id": "motorised_infantry",
+    "title": "自動車化歩兵",
+    "year": 1936,
+    "x": 800,
+    "y": 900,
+    "branch": "自動車化",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "トラックと装甲輸送車による歩兵輸送を研究する。",
+    "asset_key": "motorized_equipment_1",
+    "effects": [
+      "自動車化歩兵の研究"
     ],
     "prerequisites": []
   },
   {
-    "id": "m9_bazooka",
-    "title": "M9バズーカ",
-    "year": 1944,
-    "x": 700,
-    "y": 200,
-    "research_time": 111,
-    "reliability": "配備（制式採用）",
-    "desc": "分解可能・軽量化した改良型バズーカ。空挺部隊にも携行された。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#7aa0d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "id": "mechanised_infantry",
+    "title": "機械化歩兵 I",
+    "year": 1940,
+    "x": 800,
+    "y": 1100,
+    "branch": "自動車化",
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "トラックと装甲輸送車による歩兵輸送を研究する。",
+    "asset_key": "fin_mechanised_infantry",
     "effects": [
-      "対人攻撃: 18/100",
-      "対物攻撃: 45/100",
-      "生存力: 8/100",
-      "機動力: 56/100",
-      "信頼度: 64/100"
+      "機械化歩兵 Iの研究"
     ],
     "prerequisites": [
-      "m1_bazooka"
+      "motorised_infantry"
+    ],
+    "legacy_ids": [
+      "gewehr_41",
+      "m1_carbine",
+      "no4_rifle",
+      "ppsh_41",
+      "sks_31",
+      "svt_40",
+      "type100_smg"
+    ]
+  },
+  {
+    "id": "mechanised_infantry2",
+    "title": "機械化歩兵 II",
+    "year": 1942,
+    "x": 800,
+    "y": 1200,
+    "branch": "自動車化",
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "トラックと装甲輸送車による歩兵輸送を研究する。",
+    "asset_key": "fin_mechanised_infantry2",
+    "effects": [
+      "機械化歩兵 IIの研究"
+    ],
+    "prerequisites": [
+      "mechanised_infantry"
+    ]
+  },
+  {
+    "id": "mechanised_infantry3",
+    "title": "機械化歩兵 III",
+    "year": 1944,
+    "x": 800,
+    "y": 1300,
+    "branch": "自動車化",
+    "research_time": 175,
+    "reliability": "未研究",
+    "desc": "トラックと装甲輸送車による歩兵輸送を研究する。",
+    "asset_key": "fin_mechanised_infantry3",
+    "effects": [
+      "機械化歩兵 IIIの研究"
+    ],
+    "prerequisites": [
+      "mechanised_infantry2"
+    ]
+  },
+  {
+    "id": "engineers",
+    "title": "工兵中隊 I",
+    "year": 1936,
+    "x": 1000,
+    "y": 900,
+    "branch": "工兵中隊",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "工兵中隊の装備と運用を段階的に改善する。",
+    "asset_key": "engineers",
+    "effects": [
+      "工兵中隊 Iの研究"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "engineers2",
+    "title": "工兵中隊 II",
+    "year": 1939,
+    "x": 1000,
+    "y": 1050,
+    "branch": "工兵中隊",
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "工兵中隊の装備と運用を段階的に改善する。",
+    "asset_key": "engineers2",
+    "effects": [
+      "工兵中隊 IIの研究"
+    ],
+    "prerequisites": [
+      "engineers"
+    ]
+  },
+  {
+    "id": "engineers3",
+    "title": "工兵中隊 III",
+    "year": 1942,
+    "x": 1000,
+    "y": 1200,
+    "branch": "工兵中隊",
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "工兵中隊の装備と運用を段階的に改善する。",
+    "asset_key": "engineers3",
+    "effects": [
+      "工兵中隊 IIIの研究"
+    ],
+    "prerequisites": [
+      "engineers2"
+    ]
+  },
+  {
+    "id": "engineers4",
+    "title": "工兵中隊 IV",
+    "year": 1945,
+    "x": 1000,
+    "y": 1350,
+    "branch": "工兵中隊",
+    "research_time": 175,
+    "reliability": "未研究",
+    "desc": "工兵中隊の装備と運用を段階的に改善する。",
+    "asset_key": "engineers4",
+    "effects": [
+      "工兵中隊 IVの研究"
+    ],
+    "prerequisites": [
+      "engineers3"
+    ]
+  },
+  {
+    "id": "recon",
+    "title": "偵察中隊 I",
+    "year": 1936,
+    "x": 1200,
+    "y": 900,
+    "branch": "偵察中隊",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "偵察中隊の装備と運用を段階的に改善する。",
+    "asset_key": "recon",
+    "effects": [
+      "偵察中隊 Iの研究"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "recon2",
+    "title": "偵察中隊 II",
+    "year": 1939,
+    "x": 1200,
+    "y": 1050,
+    "branch": "偵察中隊",
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "偵察中隊の装備と運用を段階的に改善する。",
+    "asset_key": "recon2",
+    "effects": [
+      "偵察中隊 IIの研究"
+    ],
+    "prerequisites": [
+      "recon"
+    ]
+  },
+  {
+    "id": "recon3",
+    "title": "偵察中隊 III",
+    "year": 1942,
+    "x": 1200,
+    "y": 1200,
+    "branch": "偵察中隊",
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "偵察中隊の装備と運用を段階的に改善する。",
+    "asset_key": "recon3",
+    "effects": [
+      "偵察中隊 IIIの研究"
+    ],
+    "prerequisites": [
+      "recon2"
+    ]
+  },
+  {
+    "id": "recon4",
+    "title": "偵察中隊 IV",
+    "year": 1945,
+    "x": 1200,
+    "y": 1350,
+    "branch": "偵察中隊",
+    "research_time": 175,
+    "reliability": "未研究",
+    "desc": "偵察中隊の装備と運用を段階的に改善する。",
+    "asset_key": "recon4",
+    "effects": [
+      "偵察中隊 IVの研究"
+    ],
+    "prerequisites": [
+      "recon3"
+    ]
+  },
+  {
+    "id": "tech_logistics_company",
+    "title": "補給中隊 I",
+    "year": 1936,
+    "x": 1400,
+    "y": 900,
+    "branch": "補給中隊",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "補給中隊の装備と運用を段階的に改善する。",
+    "asset_key": "tech_logistics_company",
+    "effects": [
+      "補給中隊 Iの研究"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "tech_logistics_company2",
+    "title": "補給中隊 II",
+    "year": 1939,
+    "x": 1400,
+    "y": 1050,
+    "branch": "補給中隊",
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "補給中隊の装備と運用を段階的に改善する。",
+    "asset_key": "tech_logistics_company2",
+    "effects": [
+      "補給中隊 IIの研究"
+    ],
+    "prerequisites": [
+      "tech_logistics_company"
+    ]
+  },
+  {
+    "id": "tech_logistics_company3",
+    "title": "補給中隊 III",
+    "year": 1942,
+    "x": 1400,
+    "y": 1200,
+    "branch": "補給中隊",
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "補給中隊の装備と運用を段階的に改善する。",
+    "asset_key": "tech_logistics_company3",
+    "effects": [
+      "補給中隊 IIIの研究"
+    ],
+    "prerequisites": [
+      "tech_logistics_company2"
+    ]
+  },
+  {
+    "id": "tech_logistics_company4",
+    "title": "補給中隊 IV",
+    "year": 1945,
+    "x": 1400,
+    "y": 1350,
+    "branch": "補給中隊",
+    "research_time": 175,
+    "reliability": "未研究",
+    "desc": "補給中隊の装備と運用を段階的に改善する。",
+    "asset_key": "tech_logistics_company4",
+    "effects": [
+      "補給中隊 IVの研究"
+    ],
+    "prerequisites": [
+      "tech_logistics_company3"
+    ]
+  },
+  {
+    "id": "tech_maintenance_company",
+    "title": "整備中隊 I",
+    "year": 1936,
+    "x": 1600,
+    "y": 900,
+    "branch": "整備中隊",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "整備中隊の装備と運用を段階的に改善する。",
+    "asset_key": "tech_maintenance_company",
+    "effects": [
+      "整備中隊 Iの研究"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "tech_maintenance_company2",
+    "title": "整備中隊 II",
+    "year": 1939,
+    "x": 1600,
+    "y": 1050,
+    "branch": "整備中隊",
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "整備中隊の装備と運用を段階的に改善する。",
+    "asset_key": "tech_maintenance_company2",
+    "effects": [
+      "整備中隊 IIの研究"
+    ],
+    "prerequisites": [
+      "tech_maintenance_company"
+    ]
+  },
+  {
+    "id": "tech_maintenance_company3",
+    "title": "整備中隊 III",
+    "year": 1942,
+    "x": 1600,
+    "y": 1200,
+    "branch": "整備中隊",
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "整備中隊の装備と運用を段階的に改善する。",
+    "asset_key": "tech_maintenance_company3",
+    "effects": [
+      "整備中隊 IIIの研究"
+    ],
+    "prerequisites": [
+      "tech_maintenance_company2"
+    ]
+  },
+  {
+    "id": "tech_maintenance_company4",
+    "title": "整備中隊 IV",
+    "year": 1945,
+    "x": 1600,
+    "y": 1350,
+    "branch": "整備中隊",
+    "research_time": 175,
+    "reliability": "未研究",
+    "desc": "整備中隊の装備と運用を段階的に改善する。",
+    "asset_key": "tech_maintenance_company4",
+    "effects": [
+      "整備中隊 IVの研究"
+    ],
+    "prerequisites": [
+      "tech_maintenance_company3"
+    ]
+  },
+  {
+    "id": "tech_field_hospital",
+    "title": "野戦病院 I",
+    "year": 1936,
+    "x": 1800,
+    "y": 900,
+    "branch": "野戦病院",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "野戦病院の装備と運用を段階的に改善する。",
+    "asset_key": "tech_field_hospital",
+    "effects": [
+      "野戦病院 Iの研究"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "tech_field_hospital2",
+    "title": "野戦病院 II",
+    "year": 1939,
+    "x": 1800,
+    "y": 1050,
+    "branch": "野戦病院",
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "野戦病院の装備と運用を段階的に改善する。",
+    "asset_key": "tech_field_hospital2",
+    "effects": [
+      "野戦病院 IIの研究"
+    ],
+    "prerequisites": [
+      "tech_field_hospital"
+    ]
+  },
+  {
+    "id": "tech_field_hospital3",
+    "title": "野戦病院 III",
+    "year": 1942,
+    "x": 1800,
+    "y": 1200,
+    "branch": "野戦病院",
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "野戦病院の装備と運用を段階的に改善する。",
+    "asset_key": "tech_field_hospital3",
+    "effects": [
+      "野戦病院 IIIの研究"
+    ],
+    "prerequisites": [
+      "tech_field_hospital2"
+    ]
+  },
+  {
+    "id": "tech_field_hospital4",
+    "title": "野戦病院 IV",
+    "year": 1945,
+    "x": 1800,
+    "y": 1350,
+    "branch": "野戦病院",
+    "research_time": 175,
+    "reliability": "未研究",
+    "desc": "野戦病院の装備と運用を段階的に改善する。",
+    "asset_key": "tech_field_hospital4",
+    "effects": [
+      "野戦病院 IVの研究"
+    ],
+    "prerequisites": [
+      "tech_field_hospital3"
+    ]
+  },
+  {
+    "id": "tech_signal_company",
+    "title": "通信中隊 I",
+    "year": 1936,
+    "x": 2000,
+    "y": 900,
+    "branch": "通信中隊",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "通信中隊の装備と運用を段階的に改善する。",
+    "asset_key": "tech_signal_company",
+    "effects": [
+      "通信中隊 Iの研究"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "tech_signal_company2",
+    "title": "通信中隊 II",
+    "year": 1939,
+    "x": 2000,
+    "y": 1050,
+    "branch": "通信中隊",
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "通信中隊の装備と運用を段階的に改善する。",
+    "asset_key": "tech_signal_company2",
+    "effects": [
+      "通信中隊 IIの研究"
+    ],
+    "prerequisites": [
+      "tech_signal_company"
+    ]
+  },
+  {
+    "id": "tech_signal_company3",
+    "title": "通信中隊 III",
+    "year": 1942,
+    "x": 2000,
+    "y": 1200,
+    "branch": "通信中隊",
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "通信中隊の装備と運用を段階的に改善する。",
+    "asset_key": "tech_signal_company3",
+    "effects": [
+      "通信中隊 IIIの研究"
+    ],
+    "prerequisites": [
+      "tech_signal_company2"
+    ]
+  },
+  {
+    "id": "tech_signal_company4",
+    "title": "通信中隊 IV",
+    "year": 1945,
+    "x": 2000,
+    "y": 1350,
+    "branch": "通信中隊",
+    "research_time": 175,
+    "reliability": "未研究",
+    "desc": "通信中隊の装備と運用を段階的に改善する。",
+    "asset_key": "tech_signal_company4",
+    "effects": [
+      "通信中隊 IVの研究"
+    ],
+    "prerequisites": [
+      "tech_signal_company3"
+    ]
+  },
+  {
+    "id": "tech_military_police",
+    "title": "憲兵中隊 I",
+    "year": 1936,
+    "x": 2200,
+    "y": 900,
+    "branch": "憲兵中隊",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "憲兵中隊の装備と運用を段階的に改善する。",
+    "asset_key": "tech_military_police",
+    "effects": [
+      "憲兵中隊 Iの研究"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "tech_military_police2",
+    "title": "憲兵中隊 II",
+    "year": 1939,
+    "x": 2200,
+    "y": 1050,
+    "branch": "憲兵中隊",
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "憲兵中隊の装備と運用を段階的に改善する。",
+    "asset_key": "tech_military_police2",
+    "effects": [
+      "憲兵中隊 IIの研究"
+    ],
+    "prerequisites": [
+      "tech_military_police"
+    ]
+  },
+  {
+    "id": "tech_military_police3",
+    "title": "憲兵中隊 III",
+    "year": 1942,
+    "x": 2200,
+    "y": 1200,
+    "branch": "憲兵中隊",
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "憲兵中隊の装備と運用を段階的に改善する。",
+    "asset_key": "tech_military_police3",
+    "effects": [
+      "憲兵中隊 IIIの研究"
+    ],
+    "prerequisites": [
+      "tech_military_police2"
+    ]
+  },
+  {
+    "id": "tech_military_police4",
+    "title": "憲兵中隊 IV",
+    "year": 1945,
+    "x": 2200,
+    "y": 1350,
+    "branch": "憲兵中隊",
+    "research_time": 175,
+    "reliability": "未研究",
+    "desc": "憲兵中隊の装備と運用を段階的に改善する。",
+    "asset_key": "tech_military_police4",
+    "effects": [
+      "憲兵中隊 IVの研究"
+    ],
+    "prerequisites": [
+      "tech_military_police3"
+    ]
+  },
+  {
+    "id": "marines",
+    "title": "海兵隊 I",
+    "year": 1936,
+    "x": 2400,
+    "y": 900,
+    "branch": "海兵隊",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "海兵隊の訓練と専用装備を研究する。",
+    "asset_key": "marines",
+    "effects": [
+      "海兵隊 Iの研究"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "marines2",
+    "title": "海兵隊 II",
+    "year": 1939,
+    "x": 2400,
+    "y": 1050,
+    "branch": "海兵隊",
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "海兵隊の訓練と専用装備を研究する。",
+    "asset_key": "marines2",
+    "effects": [
+      "海兵隊 IIの研究"
+    ],
+    "prerequisites": [
+      "marines"
+    ]
+  },
+  {
+    "id": "marines3",
+    "title": "海兵隊 III",
+    "year": 1942,
+    "x": 2400,
+    "y": 1200,
+    "branch": "海兵隊",
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "海兵隊の訓練と専用装備を研究する。",
+    "asset_key": "marines3",
+    "effects": [
+      "海兵隊 IIIの研究"
+    ],
+    "prerequisites": [
+      "marines2"
+    ]
+  },
+  {
+    "id": "mountain",
+    "title": "山岳兵 I",
+    "year": 1936,
+    "x": 2600,
+    "y": 900,
+    "branch": "山岳兵",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "山岳兵の訓練と専用装備を研究する。",
+    "asset_key": "mountain",
+    "effects": [
+      "山岳兵 Iの研究"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "mountain2",
+    "title": "山岳兵 II",
+    "year": 1939,
+    "x": 2600,
+    "y": 1050,
+    "branch": "山岳兵",
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "山岳兵の訓練と専用装備を研究する。",
+    "asset_key": "mountain2",
+    "effects": [
+      "山岳兵 IIの研究"
+    ],
+    "prerequisites": [
+      "mountain"
+    ]
+  },
+  {
+    "id": "mountain3",
+    "title": "山岳兵 III",
+    "year": 1942,
+    "x": 2600,
+    "y": 1200,
+    "branch": "山岳兵",
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "山岳兵の訓練と専用装備を研究する。",
+    "asset_key": "mountain3",
+    "effects": [
+      "山岳兵 IIIの研究"
+    ],
+    "prerequisites": [
+      "mountain2"
+    ]
+  },
+  {
+    "id": "paratroopers",
+    "title": "空挺兵 I",
+    "year": 1936,
+    "x": 2800,
+    "y": 900,
+    "branch": "空挺兵",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "空挺兵の訓練と専用装備を研究する。",
+    "asset_key": "paratroopers",
+    "effects": [
+      "空挺兵 Iの研究"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "paratroopers2",
+    "title": "空挺兵 II",
+    "year": 1939,
+    "x": 2800,
+    "y": 1050,
+    "branch": "空挺兵",
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "空挺兵の訓練と専用装備を研究する。",
+    "asset_key": "paratroopers2",
+    "effects": [
+      "空挺兵 IIの研究"
+    ],
+    "prerequisites": [
+      "paratroopers"
+    ]
+  },
+  {
+    "id": "paratroopers3",
+    "title": "空挺兵 III",
+    "year": 1942,
+    "x": 2800,
+    "y": 1200,
+    "branch": "空挺兵",
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "空挺兵の訓練と専用装備を研究する。",
+    "asset_key": "paratroopers3",
+    "effects": [
+      "空挺兵 IIIの研究"
+    ],
+    "prerequisites": [
+      "paratroopers2"
+    ]
+  },
+  {
+    "id": "rangers_tech1",
+    "title": "レンジャー I",
+    "year": 1936,
+    "x": 3000,
+    "y": 900,
+    "branch": "レンジャー",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "レンジャーの訓練と専用装備を研究する。",
+    "asset_key": "rangers_tech1",
+    "effects": [
+      "レンジャー Iの研究"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "rangers_tech2",
+    "title": "レンジャー II",
+    "year": 1939,
+    "x": 3000,
+    "y": 1050,
+    "branch": "レンジャー",
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "レンジャーの訓練と専用装備を研究する。",
+    "asset_key": "rangers_tech2",
+    "effects": [
+      "レンジャー IIの研究"
+    ],
+    "prerequisites": [
+      "rangers_tech1"
+    ]
+  },
+  {
+    "id": "rangers_tech3",
+    "title": "レンジャー III",
+    "year": 1942,
+    "x": 3000,
+    "y": 1200,
+    "branch": "レンジャー",
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "レンジャーの訓練と専用装備を研究する。",
+    "asset_key": "rangers_tech3",
+    "effects": [
+      "レンジャー IIIの研究"
+    ],
+    "prerequisites": [
+      "rangers_tech2"
+    ]
+  },
+  {
+    "id": "night_vision",
+    "title": "暗視装置 I",
+    "year": 1943,
+    "x": 3200,
+    "y": 1250,
+    "branch": "夜間戦闘",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "夜間に目標を観測する装備を研究する。",
+    "asset_key": "night_vision",
+    "effects": [
+      "暗視装置 Iの研究"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "night_vision2",
+    "title": "暗視装置 II",
+    "year": 1945,
+    "x": 3200,
+    "y": 1350,
+    "branch": "夜間戦闘",
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "夜間に目標を観測する装備を研究する。",
+    "asset_key": "night_vision2",
+    "effects": [
+      "暗視装置 IIの研究"
+    ],
+    "prerequisites": [
+      "night_vision"
     ]
   }
 ]

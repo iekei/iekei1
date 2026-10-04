@@ -1,353 +1,590 @@
 [
   {
-    "id": "neubaufahrzeug",
-    "title": "Nb.Fz.多砲塔戦車",
-    "year": 1936,
-    "x": 100,
-    "y": 50,
-    "research_time": 115,
-    "reliability": "配備（制式採用）",
-    "desc": "ライラインメタル製の試作多砲塔重戦車。実戦価は低かったが、ノルウェー戦線で威嚇用として用いられた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
-    "effects": [
-      "対人攻撃: 25/100",
-      "対物攻撃: 33/100",
-      "生存力: 28/100",
-      "機動力: 56/100",
-      "信頼度: 70/100"
-    ],
-    "prerequisites": []
-  },
-  {
-    "id": "panzer_i",
-    "title": "I号戦車",
-    "year": 1936,
-    "x": 100,
-    "y": 200,
-    "research_time": 100,
-    "reliability": "配備（訓練用）",
-    "desc": "軽戦車。機甲戦術の訓練と発展に用いられ、スペイン内戦で実戦試験された。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
-    "effects": [
-      "装甲: 8/100",
-      "攻撃: 8/100",
-      "突破: 6/100",
-      "機動力: 72/100",
-      "信頼度: 75/100"
-    ],
-    "prerequisites": [
-      "neubaufahrzeug"
-    ]
-  },
-  {
-    "id": "panzer_ii",
-    "title": "II号戦車",
-    "year": 1936,
-    "x": 100,
-    "y": 350,
-    "research_time": 115,
-    "reliability": "配備（制式採用）",
-    "desc": "20mm機関砲を主砲とする軽戦車。ポーランド電撃戦の主力で、のちに偵察・教導役へ移った。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
-    "effects": [
-      "対人攻撃: 25/100",
-      "対物攻撃: 33/100",
-      "生存力: 28/100",
-      "機動力: 56/100",
-      "信頼度: 70/100"
-    ],
-    "prerequisites": [
-      "panzer_i"
-    ]
-  },
-  {
-    "id": "panzer_iii",
-    "title": "III号戦車",
-    "year": 1938,
-    "x": 100,
-    "y": 500,
-    "research_time": 130,
-    "reliability": "配備（主力）",
-    "desc": "37mm→50mm砲を搭載した主力中戦車。ポーランド・フランス戦役の機甲部隊の中核。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
-    "effects": [
-      "装甲: 30/100",
-      "攻撃: 38/100",
-      "突破: 25/100",
-      "機動力: 55/100",
-      "信頼度: 68/100"
-    ],
-    "prerequisites": [
-      "panzer_ii"
-    ]
-  },
-  {
-    "id": "panzer_iv",
-    "title": "IV号戦車",
-    "year": 1938,
-    "x": 100,
-    "y": 650,
-    "research_time": 140,
-    "reliability": "配備（主力）",
-    "desc": "75mm砲を搭載した支援戦車。後に長砲身化され、戦争を通じて主力として生産が続いた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
-    "effects": [
-      "装甲: 38/100",
-      "攻撃: 52/100",
-      "突破: 30/100",
-      "機動力: 48/100",
-      "信頼度: 70/100"
-    ],
-    "prerequisites": [
-      "panzer_iii"
-    ]
-  },
-  {
-    "id": "panzer_38t",
-    "title": "38(t)戦車",
-    "year": 1939,
-    "x": 100,
+    "id": "basic_light_tank",
+    "title": "軽戦車 I",
+    "year": 1934,
+    "x": 200,
     "y": 800,
-    "research_time": 121,
-    "reliability": "配備（制式採用）",
-    "desc": "チェコŠkoda LT vz.38を接収・運用した軽戦車。信頼性が高く、バルバロッサ作戦の機甲師団を支えた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "branch": "軽戦車",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "軽戦車の車体・火力・防御を更新する。",
+    "asset_key": "basic_light_tank",
     "effects": [
-      "対人攻撃: 27/100",
-      "対物攻撃: 37/100",
-      "生存力: 30/100",
-      "機動力: 56/100",
-      "信頼度: 72/100"
+      "軽戦車 Iの研究"
     ],
-    "prerequisites": [
-      "panzer_iv"
+    "prerequisites": [],
+    "legacy_ids": [
+      "amc35",
+      "amr33",
+      "bt_7",
+      "hotchkiss_h35",
+      "l3_35",
+      "light_tank_vi",
+      "m2_light",
+      "panzer_i",
+      "panzer_ii",
+      "renault_r35",
+      "type95_hago"
     ]
   },
   {
-    "id": "stug_iii",
-    "title": "III号突撃砲",
-    "year": 1940,
-    "x": 100,
-    "y": 950,
-    "research_time": 123,
-    "reliability": "配備（制式採用）",
-    "desc": "歩兵支援用突撃砲として誕生し、のちに対戦車突撃砲へ発展。最も多く生産された独軍装甲戦闘車両。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "id": "improved_light_tank",
+    "title": "軽戦車 II",
+    "year": 1936,
+    "x": 200,
+    "y": 900,
+    "branch": "軽戦車",
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "軽戦車の車体・火力・防御を更新する。",
+    "asset_key": "improved_light_tank",
     "effects": [
-      "対人攻撃: 27/100",
-      "対物攻撃: 38/100",
-      "生存力: 31/100",
-      "機動力: 56/100",
-      "信頼度: 73/100"
+      "軽戦車 IIの研究"
     ],
     "prerequisites": [
-      "panzer_38t"
+      "basic_light_tank"
+    ],
+    "legacy_ids": [
+      "l6_40",
+      "m3_stuart",
+      "panzer_38t",
+      "t_40",
+      "t_60",
+      "t_70",
+      "valentine"
     ]
   },
   {
-    "id": "tiger",
-    "title": "ティーガーI",
-    "year": 1942,
-    "x": 100,
-    "y": 1100,
-    "research_time": 200,
-    "reliability": "少数配備",
-    "desc": "56トンの重戦車。88mm砲と厚い装甲を備え、連合軍戦車に圧倒的な優位を築いた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "id": "advanced_light_tank",
+    "title": "軽戦車 III",
+    "year": 1941,
+    "x": 200,
+    "y": 1150,
+    "branch": "軽戦車",
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "軽戦車の車体・火力・防御を更新する。",
+    "asset_key": "advanced_light_tank",
     "effects": [
-      "装甲: 78/100",
-      "攻撃: 78/100",
-      "突破: 45/100",
-      "機動力: 25/100",
-      "信頼度: 45/100"
+      "軽戦車 IIIの研究"
     ],
     "prerequisites": [
-      "stug_iii"
+      "improved_light_tank"
+    ],
+    "legacy_ids": [
+      "m24_chaffee"
     ]
   },
   {
-    "id": "elefant",
-    "title": "フェルディナント重駆逐戦車",
+    "id": "basic_medium_tank",
+    "title": "中戦車 I",
+    "year": 1939,
+    "x": 400,
+    "y": 1050,
+    "branch": "中戦車",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "中戦車の車体・火力・防御を更新する。",
+    "asset_key": "basic_medium_tank",
+    "effects": [
+      "中戦車 Iの研究"
+    ],
+    "prerequisites": [],
+    "legacy_ids": [
+      "cruiser_mk_iv",
+      "neubaufahrzeug",
+      "panzer_iii",
+      "panzer_iv",
+      "renault_d2",
+      "somua_s35",
+      "type89_tank",
+      "type97_tank"
+    ]
+  },
+  {
+    "id": "improved_medium_tank",
+    "title": "中戦車 II",
+    "year": 1941,
+    "x": 400,
+    "y": 1150,
+    "branch": "中戦車",
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "中戦車の車体・火力・防御を更新する。",
+    "asset_key": "improved_medium_tank",
+    "effects": [
+      "中戦車 IIの研究"
+    ],
+    "prerequisites": [
+      "basic_medium_tank"
+    ],
+    "legacy_ids": [
+      "crusader",
+      "m11_39",
+      "m13_40",
+      "m15_42",
+      "m3_lee",
+      "m4_sherman",
+      "matilda_2",
+      "t_34_76",
+      "t_43",
+      "type1_chihe",
+      "type2_ka-mi"
+    ]
+  },
+  {
+    "id": "advanced_medium_tank",
+    "title": "中戦車 III",
     "year": 1943,
     "x": 400,
-    "y": 50,
-    "research_time": 129,
-    "reliability": "配備（制式採用）",
-    "desc": "ポルシェ設計のタイガー試作車を改造した88mm砲搭載駆逐戦車。クルスクで防御力を見せたが機動性に欠けた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "y": 1250,
+    "branch": "中戦車",
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "中戦車の車体・火力・防御を更新する。",
+    "asset_key": "advanced_medium_tank",
     "effects": [
-      "対人攻撃: 12/100",
-      "対物攻撃: 63/100",
-      "生存力: 36/100",
-      "機動力: 46/100",
-      "信頼度: 70/100"
-    ],
-    "prerequisites": []
-  },
-  {
-    "id": "panther",
-    "title": "パンター",
-    "year": 1943,
-    "x": 400,
-    "y": 200,
-    "research_time": 210,
-    "reliability": "配備（後期）",
-    "desc": "ソ連T-34への対抗として開発された中戦車。傾斜装甲と75mm長砲身を持つ傑作戦車。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M3 11h14'/><circle cx='11' cy='15' r='3'/><path d='M5 11v4'/></svg>",
-    "effects": [
-      "装甲: 65/100",
-      "攻撃: 72/100",
-      "突破: 55/100",
-      "機動力: 42/100",
-      "信頼度: 40/100"
+      "中戦車 IIIの研究"
     ],
     "prerequisites": [
-      "elefant"
+      "improved_medium_tank"
+    ],
+    "legacy_ids": [
+      "cromwell",
+      "m22_locust",
+      "p43",
+      "panther",
+      "pt_76",
+      "sherman_firefly",
+      "t_34_85",
+      "t_44",
+      "type2_chiho",
+      "type3_chinu",
+      "type4_chito",
+      "type5_chiri"
     ]
   },
   {
-    "id": "hetzer",
-    "title": "ヘッツァー駆逐戦車",
-    "year": 1944,
-    "x": 400,
-    "y": 350,
-    "research_time": 131,
-    "reliability": "配備（制式採用）",
-    "desc": "38(t)戦車の車台を活かした小型駆逐戦車。低姿勢と待ち伏せ戦術で脅威の対戦車火力を発揮した。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "id": "basic_heavy_tank",
+    "title": "重戦車 I",
+    "year": 1934,
+    "x": 600,
+    "y": 800,
+    "branch": "重戦車",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "重戦車の車体・火力・防御を更新する。",
+    "asset_key": "basic_heavy_tank",
     "effects": [
-      "対人攻撃: 12/100",
-      "対物攻撃: 64/100",
-      "生存力: 37/100",
-      "機動力: 46/100",
-      "信頼度: 71/100"
+      "重戦車 Iの研究"
     ],
-    "prerequisites": [
-      "panther"
+    "prerequisites": [],
+    "legacy_ids": [
+      "char_b1",
+      "t_100",
+      "t_35"
     ]
   },
   {
-    "id": "jagdpanther",
-    "title": "ヤグドパンター",
-    "year": 1944,
-    "x": 400,
-    "y": 500,
-    "research_time": 131,
-    "reliability": "配備（制式採用）",
-    "desc": "パンター車台に88mm砲を搭載した重駆逐戦車。厚い装甲と卓越した主砲で「装甲狩人」と呼ばれた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "id": "improved_heavy_tank",
+    "title": "重戦車 II",
+    "year": 1936,
+    "x": 600,
+    "y": 900,
+    "branch": "重戦車",
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "重戦車の車体・火力・防御を更新する。",
+    "asset_key": "improved_heavy_tank",
     "effects": [
-      "対人攻撃: 12/100",
-      "対物攻撃: 64/100",
-      "生存力: 37/100",
-      "機動力: 46/100",
-      "信頼度: 71/100"
+      "重戦車 IIの研究"
     ],
     "prerequisites": [
-      "hetzer"
+      "basic_heavy_tank"
+    ],
+    "legacy_ids": [
+      "churchill",
+      "kv_1",
+      "kv_2",
+      "p26_40",
+      "smk",
+      "tiger"
     ]
   },
   {
-    "id": "wirbelwind",
-    "title": "ヴィルベルヴィント対空戦車",
-    "year": 1944,
-    "x": 400,
-    "y": 650,
-    "research_time": 131,
-    "reliability": "配備（制式採用）",
-    "desc": "4連装20mm Flak 38を旋回砲塔に載せた対空自走砲。連合軍の戦闘爆撃機に悩まされた独軍の即応策。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "id": "advanced_heavy_tank",
+    "title": "重戦車 III",
+    "year": 1941,
+    "x": 600,
+    "y": 1150,
+    "branch": "重戦車",
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "重戦車の車体・火力・防御を更新する。",
+    "asset_key": "advanced_heavy_tank",
     "effects": [
-      "対人攻撃: 12/100",
-      "対物攻撃: 64/100",
-      "生存力: 37/100",
-      "機動力: 46/100",
-      "信頼度: 71/100"
+      "重戦車 IIIの研究"
     ],
     "prerequisites": [
-      "jagdpanther"
-    ]
-  },
-  {
-    "id": "maus",
-    "title": "マウス超重戦車",
-    "year": 1944,
-    "x": 700,
-    "y": 50,
-    "research_time": 131,
-    "reliability": "低（試作止まり）",
-    "desc": "重量188tの超重戦車。ポルシェとクルップが手がけた巨大プロジェクトで、完成車2輌のみ。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
-    "effects": [
-      "対人攻撃: 29/100",
-      "対物攻撃: 43/100",
-      "生存力: 35/100",
-      "機動力: 56/100",
-      "信頼度: 77/100"
+      "improved_heavy_tank"
     ],
-    "prerequisites": []
-  },
-  {
-    "id": "tiger_ii",
-    "title": "ティーガーII",
-    "year": 1944,
-    "x": 700,
-    "y": 200,
-    "research_time": 230,
-    "reliability": "少数配備",
-    "desc": "「ケーニッヒスティーガー」。105トンの超重戦車で、正面装甲は当時のどの砲も貫けなかった。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
-    "effects": [
-      "装甲: 92/100",
-      "攻撃: 85/100",
-      "突破: 40/100",
-      "機動力: 15/100",
-      "信頼度: 30/100"
-    ],
-    "prerequisites": [
-      "maus"
-    ]
-  },
-  {
-    "id": "e100",
-    "title": "E-100超重戦車",
-    "year": 1945,
-    "x": 700,
-    "y": 350,
-    "research_time": 133,
-    "reliability": "低（試作止まり）",
-    "desc": "「開発シリーズE」計画の最終クラス。実車1輌のみで、戦争終結とともに計画は放棄された。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
-    "effects": [
-      "対人攻撃: 30/100",
-      "対物攻撃: 44/100",
-      "生存力: 36/100",
-      "機動力: 56/100",
-      "信頼度: 78/100"
-    ],
-    "prerequisites": [
+    "legacy_ids": [
+      "arl44",
+      "is_2",
+      "is_3",
+      "is_7",
+      "m26_pershing",
+      "obj_279",
+      "t29",
+      "t_10",
       "tiger_ii"
     ]
   },
   {
-    "id": "jagdtiger",
-    "title": "ヤグドティーガー",
+    "id": "generic_modern_tank",
+    "title": "現代型主力戦車",
     "year": 1945,
-    "x": 700,
-    "y": 500,
-    "research_time": 133,
-    "reliability": "配備（制式採用）",
-    "desc": "128mm砲を搭載する史上最重の量産駆逐戦車。圧倒的な火力と装甲を持つが、機械的信頼性は低かった。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "x": 800,
+    "y": 1350,
+    "branch": "主力戦車",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "機動力と防御を両立する戦後型戦車を研究する。",
+    "asset_key": "generic_modern_tank",
     "effects": [
-      "対人攻撃: 30/100",
-      "対物攻撃: 44/100",
-      "生存力: 36/100",
-      "機動力: 56/100",
-      "信頼度: 78/100"
+      "現代型主力戦車の研究"
     ],
     "prerequisites": [
-      "e100"
+      "advanced_medium_tank"
+    ],
+    "legacy_ids": [
+      "centurion",
+      "t_54",
+      "t_55"
+    ]
+  },
+  {
+    "id": "super_heavy_tank",
+    "title": "超重戦車",
+    "year": 1943,
+    "x": 1000,
+    "y": 1250,
+    "branch": "超重戦車",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "重装甲の突破用戦車を研究する。",
+    "asset_key": "super_heavy_tank",
+    "effects": [
+      "超重戦車の研究"
+    ],
+    "prerequisites": [
+      "improved_heavy_tank"
+    ],
+    "legacy_ids": [
+      "e100",
+      "fcm_f1",
+      "maus",
+      "oi_tank",
+      "t28",
+      "tortoise"
+    ]
+  },
+  {
+    "id": "armored_car_equipment_1",
+    "title": "装輪装甲車 I",
+    "year": 1936,
+    "x": 1200,
+    "y": 900,
+    "branch": "装輪装甲車",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "偵察と警備のための装輪装甲車を研究する。",
+    "asset_key": "ger_armored_car_equipment_1",
+    "effects": [
+      "装輪装甲車 Iの研究"
+    ],
+    "prerequisites": [],
+    "legacy_ids": [
+      "ba_10",
+      "btr_50",
+      "btr_60",
+      "panhard_ebr",
+      "type94_tk"
+    ]
+  },
+  {
+    "id": "armored_car_equipment_2",
+    "title": "装輪装甲車 II",
+    "year": 1940,
+    "x": 1200,
+    "y": 1100,
+    "branch": "装輪装甲車",
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "偵察と警備のための装輪装甲車を研究する。",
+    "asset_key": "ger_armored_car_equipment_2",
+    "effects": [
+      "装輪装甲車 IIの研究"
+    ],
+    "prerequisites": [
+      "armored_car_equipment_1"
+    ]
+  },
+  {
+    "id": "armored_car_equipment_3",
+    "title": "装輪装甲車 III",
+    "year": 1942,
+    "x": 1200,
+    "y": 1200,
+    "branch": "装輪装甲車",
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "偵察と警備のための装輪装甲車を研究する。",
+    "asset_key": "ger_armored_car_equipment_3",
+    "effects": [
+      "装輪装甲車 IIIの研究"
+    ],
+    "prerequisites": [
+      "armored_car_equipment_2"
+    ]
+  },
+  {
+    "id": "nsb_armor_tech_1",
+    "title": "装甲技術 I",
+    "year": 1936,
+    "x": 1400,
+    "y": 900,
+    "branch": "装甲技術",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "装甲板と車体構造の改良を研究する。",
+    "asset_key": "nsb_armor_tech_1",
+    "effects": [
+      "装甲技術 Iの研究"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "nsb_armor_tech_2",
+    "title": "装甲技術 II",
+    "year": 1939,
+    "x": 1400,
+    "y": 1050,
+    "branch": "装甲技術",
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "装甲板と車体構造の改良を研究する。",
+    "asset_key": "nsb_armor_tech_2",
+    "effects": [
+      "装甲技術 IIの研究"
+    ],
+    "prerequisites": [
+      "nsb_armor_tech_1"
+    ]
+  },
+  {
+    "id": "nsb_armor_tech_3",
+    "title": "装甲技術 III",
+    "year": 1942,
+    "x": 1400,
+    "y": 1200,
+    "branch": "装甲技術",
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "装甲板と車体構造の改良を研究する。",
+    "asset_key": "nsb_armor_tech_3",
+    "effects": [
+      "装甲技術 IIIの研究"
+    ],
+    "prerequisites": [
+      "nsb_armor_tech_2"
+    ]
+  },
+  {
+    "id": "nsb_armor_tech_4",
+    "title": "装甲技術 IV",
+    "year": 1945,
+    "x": 1400,
+    "y": 1350,
+    "branch": "装甲技術",
+    "research_time": 175,
+    "reliability": "未研究",
+    "desc": "装甲板と車体構造の改良を研究する。",
+    "asset_key": "nsb_armor_tech_4",
+    "effects": [
+      "装甲技術 IVの研究"
+    ],
+    "prerequisites": [
+      "nsb_armor_tech_3"
+    ]
+  },
+  {
+    "id": "nsb_engine_tech_1",
+    "title": "戦車エンジン I",
+    "year": 1936,
+    "x": 1600,
+    "y": 900,
+    "branch": "戦車エンジン",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "戦車用機関と駆動系を研究する。",
+    "asset_key": "nsb_engine_tech_1",
+    "effects": [
+      "戦車エンジン Iの研究"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "nsb_engine_tech_2",
+    "title": "戦車エンジン II",
+    "year": 1939,
+    "x": 1600,
+    "y": 1050,
+    "branch": "戦車エンジン",
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "戦車用機関と駆動系を研究する。",
+    "asset_key": "nsb_engine_tech_2",
+    "effects": [
+      "戦車エンジン IIの研究"
+    ],
+    "prerequisites": [
+      "nsb_engine_tech_1"
+    ]
+  },
+  {
+    "id": "nsb_engine_tech_3",
+    "title": "戦車エンジン III",
+    "year": 1942,
+    "x": 1600,
+    "y": 1200,
+    "branch": "戦車エンジン",
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "戦車用機関と駆動系を研究する。",
+    "asset_key": "nsb_engine_tech_3",
+    "effects": [
+      "戦車エンジン IIIの研究"
+    ],
+    "prerequisites": [
+      "nsb_engine_tech_2"
+    ]
+  },
+  {
+    "id": "nsb_engine_tech_4",
+    "title": "戦車エンジン IV",
+    "year": 1945,
+    "x": 1600,
+    "y": 1350,
+    "branch": "戦車エンジン",
+    "research_time": 175,
+    "reliability": "未研究",
+    "desc": "戦車用機関と駆動系を研究する。",
+    "asset_key": "nsb_engine_tech_4",
+    "effects": [
+      "戦車エンジン IVの研究"
+    ],
+    "prerequisites": [
+      "nsb_engine_tech_3"
+    ]
+  },
+  {
+    "id": "subtech_td",
+    "title": "駆逐戦車",
+    "year": 1940,
+    "x": 1800,
+    "y": 1100,
+    "branch": "駆逐戦車",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "駆逐戦車への車体転用を研究する。",
+    "asset_key": "subtech_td",
+    "effects": [
+      "駆逐戦車の研究"
+    ],
+    "prerequisites": [
+      "basic_medium_tank"
+    ],
+    "legacy_ids": [
+      "archer",
+      "elefant",
+      "hetzer",
+      "isu_152",
+      "jagdpanther",
+      "jagdtiger",
+      "m10_wolverine",
+      "m18_hellcat",
+      "m36_jackson",
+      "semovente_105_25",
+      "semovente_75_18",
+      "semovente_90_53",
+      "stug_iii",
+      "su_100",
+      "su_122",
+      "su_122_54",
+      "su_152",
+      "su_85",
+      "su_85a",
+      "type1_ho-ni",
+      "type5_ho-ri"
+    ]
+  },
+  {
+    "id": "subtech_art",
+    "title": "自走砲",
+    "year": 1940,
+    "x": 2000,
+    "y": 1100,
+    "branch": "自走砲",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "自走砲への車体転用を研究する。",
+    "asset_key": "subtech_art",
+    "effects": [
+      "自走砲の研究"
+    ],
+    "prerequisites": [
+      "basic_medium_tank"
+    ]
+  },
+  {
+    "id": "subtech_aa",
+    "title": "対空戦車",
+    "year": 1940,
+    "x": 2200,
+    "y": 1100,
+    "branch": "対空戦車",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "対空戦車への車体転用を研究する。",
+    "asset_key": "subtech_aa",
+    "effects": [
+      "対空戦車の研究"
+    ],
+    "prerequisites": [
+      "basic_light_tank"
+    ],
+    "legacy_ids": [
+      "wirbelwind"
+    ]
+  },
+  {
+    "id": "nsb_amphibious_drive_tech",
+    "title": "水陸両用駆動装置",
+    "year": 1940,
+    "x": 2400,
+    "y": 1100,
+    "branch": "水陸両用駆動装置",
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "水陸両用駆動装置への車体転用を研究する。",
+    "asset_key": "nsb_amphibious_drive_tech",
+    "effects": [
+      "水陸両用駆動装置の研究"
+    ],
+    "prerequisites": [
+      "improved_light_tank"
     ]
   }
 ]
