@@ -43,7 +43,7 @@ services:
     environment:
       PYTHONUNBUFFERED: "1"
       PYTHONDONTWRITEBYTECODE: "1"
-      SCRAPER_MAX_PASSES: "10"
+      SCRAPER_MAX_PASSES: "0"
     command: ["sh", "-ec", "pip install --disable-pip-version-check -q -r game/assets/scraper/requirements.txt && exec sh game/assets/scraper/scrape_loop.sh"]
 
 volumes:

@@ -48,63 +48,33 @@ const TopbarIcons = {
     const wrap = (inner, size = 32) =>
       '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">' + inner + '</svg>';
 
-    // 政治力 — 星と鷲の簡易シンボル (HoI4: eagle/star)
-    TopbarIcons.politicalPower = s(wrap(
-      '<circle cx="16" cy="16" r="14" fill="#2a3a4a" stroke="#c4ad72" stroke-width="1.5"/>' +
-      '<path d="M16 6 L18.5 13 L26 13 L20 17.5 L22.5 25 L16 20.5 L9.5 25 L12 17.5 L6 13 L13.5 13 Z" fill="#c4ad72"/>' +
-      '<circle cx="16" cy="16" r="2" fill="#2a3a4a"/>'
-    ));
-
-    // 安定度 — 盾
-    TopbarIcons.stability = s(wrap(
-      '<path d="M16 4 L26 8 L26 18 Q26 24 16 28 Q6 24 6 18 L6 8 Z" fill="#2a3a4a" stroke="#4ac46a" stroke-width="1.5"/>' +
-      '<path d="M16 10 L20 12 L20 17 Q20 21 16 23 Q12 21 12 17 L12 12 Z" fill="#4ac46a" opacity="0.6"/>' +
-      '<text x="16" y="20" text-anchor="middle" font-size="10" fill="#4ac46a" font-family="serif">S</text>'
-    ));
-
-    // 戦争協力度 — 握り拳 (シンプル化)
-    TopbarIcons.warSupport = s(wrap(
-      '<rect x="6" y="10" width="20" height="14" rx="3" fill="#2a3a4a" stroke="#d4843a" stroke-width="1.5"/>' +
-      '<rect x="8" y="12" width="16" height="3" fill="#d4843a" opacity="0.5"/>' +
-      '<rect x="8" y="16" width="16" height="3" fill="#d4843a" opacity="0.5"/>' +
-      '<rect x="8" y="20" width="16" height="2" fill="#d4843a" opacity="0.5"/>' +
-      '<path d="M10 10 Q10 6 16 6 Q22 6 22 10" fill="none" stroke="#d4843a" stroke-width="1.5"/>'
-    ));
-
-    // 人的資源 — 人型シルエット
-    TopbarIcons.manpower = s(wrap(
-      '<circle cx="16" cy="10" r="5" fill="#2a3a4a" stroke="#8a9aaa" stroke-width="1.5"/>' +
-      '<path d="M8 28 Q8 18 16 18 Q24 18 24 28" fill="#2a3a4a" stroke="#8a9aaa" stroke-width="1.5"/>' +
-      '<circle cx="14" cy="9" r="1" fill="#8a9aaa"/>' +
-      '<circle cx="18" cy="9" r="1" fill="#8a9aaa"/>'
-    ));
-
-    // 工場数 — 工場の煙突
-    TopbarIcons.factories = s(wrap(
-      '<rect x="6" y="14" width="5" height="14" fill="#2a3a4a" stroke="#8a9aaa" stroke-width="1"/>' +
-      '<rect x="13" y="10" width="5" height="18" fill="#2a3a4a" stroke="#8a9aaa" stroke-width="1"/>' +
-      '<rect x="20" y="16" width="5" height="12" fill="#2a3a4a" stroke="#8a9aaa" stroke-width="1"/>' +
-      '<path d="M7 14 Q7 10 8 8 M14 10 Q14 6 15 4 M21 16 Q21 12 22 10" fill="none" stroke="#8a9aaa" stroke-width="1" opacity="0.5"/>'
-    ));
-
-    // 燃料 — 燃料タンク
-    TopbarIcons.fuel = s(wrap(
-      '<rect x="8" y="8" width="16" height="20" rx="2" fill="#2a3a4a" stroke="#d4843a" stroke-width="1.5"/>' +
-      '<rect x="10" y="10" width="12" height="8" fill="#d4843a" opacity="0.4"/>' +
-      '<rect x="12" y="6" width="8" height="3" fill="none" stroke="#d4843a" stroke-width="1.5"/>' +
-      '<path d="M14 14 L16 11 L18 14 L16 17 Z" fill="#d4843a"/>' +
-      '<text x="16" y="24" text-anchor="middle" font-size="6" fill="#d4843a">F</text>'
-    ));
-
-    // 輸送船 — 船のシルエット
-    TopbarIcons.convoys = s(wrap(
-      '<path d="M4 22 L28 22 L25 28 L7 28 Z" fill="#2a3a4a" stroke="#4a8fc4" stroke-width="1.5"/>' +
-      '<rect x="12" y="14" width="8" height="8" fill="#2a3a4a" stroke="#4a8fc4" stroke-width="1.5"/>' +
-      '<rect x="14" y="10" width="4" height="4" fill="#2a3a4a" stroke="#4a8fc4" stroke-width="1.5"/>' +
-      '<path d="M16 10 L16 6" stroke="#4a8fc4" stroke-width="1.5"/>' +
-      '<path d="M16 6 L20 8 L16 8" fill="none" stroke="#4a8fc4" stroke-width="1"/>' +
-      '<path d="M4 25 Q4 27 7 27 M28 25 Q28 27 25 27" fill="none" stroke="#4a8fc4" stroke-width="1" opacity="0.5"/>'
-    ));
+    // Muted, embossed metal status symbols. Kept inline for reliable startup.
+    const metal = '<defs><linearGradient id="metal" x2="0" y2="1"><stop stop-color="#e0d5ad"/><stop offset=".45" stop-color="#bca674"/><stop offset="1" stop-color="#76623c"/></linearGradient></defs>';
+    const emblem = inner => s(wrap(metal + '<g fill="url(#metal)" stroke="#171e14" stroke-width=".7" stroke-linejoin="round">' + inner + '</g>'));
+    TopbarIcons.politicalPower = emblem(
+      '<path d="M15 7l2-3 3 2-2 3 3 3 9-5-3 7-7 4-2 3 5 6-7-3-7 3 5-6-2-3-7-4-3-7 9 5z"/><path d="M4 12l8 4M28 12l-8 4M16 11v9" fill="none" stroke="#ece0b3"/>'
+    );
+    TopbarIcons.stability = emblem(
+      '<path d="M16 3l11 4v10c0 6-5 10-11 13C10 27 5 23 5 17V7z"/><path d="M16 7l7 3v7c0 4-3 7-7 9-4-2-7-5-7-9v-7z" fill="#3e4b32"/><path d="M11 16l3 3 7-8" fill="none" stroke="#d8d1a9" stroke-width="2"/>'
+    );
+    TopbarIcons.warSupport = emblem(
+      '<path d="M10 29v-8l-5-7 1-6 4 1V5l4-1 3 1 4-1 3 2 3 1v11l-6 5v6z"/><path d="M10 9v7M14 5v9M18 5v9M22 6v8M10 18l8-2 4 3M10 24h11" fill="none" stroke="#655535"/>'
+    );
+    TopbarIcons.manpower = emblem(
+      '<path d="M5 29v-5l7-5v-3h8v3l7 5v5z"/><path d="M10 9h13v5l-4 5h-5l-4-5z"/><path d="M6 11C6 3 25 1 26 11l-2 2H7z"/><path d="M12 22l4 5 4-5" fill="none" stroke="#655535"/>'
+    );
+    TopbarIcons.factories = emblem(
+      '<path d="M3 29V17l8-5v5l8-5v7h4V5h5v24z"/><path d="M7 21h4v4H7zM15 21h4v4h-4zM23 22h3v3h-3z" fill="#232b1e"/><path d="M24 3c-4-2-6 1-9-1" fill="none" stroke="#bcbca5" stroke-width="2"/>'
+    );
+    TopbarIcons.fuel = emblem(
+      '<path d="M9 4h14v3l3 2v19H6V9l3-2z"/><path d="M12 4v3h8V4M9 12l14 12M23 12L9 24" fill="none" stroke="#655535"/><path d="M16 11c-1 3-4 5-4 7a4 4 0 008 0c0-2-3-4-4-7" fill="#d6bc7f"/>'
+    );
+    TopbarIcons.convoys = emblem(
+      '<path d="M2 22l28-3-5 9H7zM9 21v-6h13v5M13 15V9h4v6M20 15v-5h3v5"/><path d="M15 9V4l8 3h-8"/><path d="M3 30l4-1 4 1 5-1 5 1 5-1 4 1" fill="none" stroke="#aab7aa"/>'
+    );
+    TopbarIcons.worldTension = emblem(
+      '<circle cx="16" cy="16" r="13"/><circle cx="16" cy="16" r="10" fill="#3f4933"/><path d="M7 10l7-2 3 4-3 5-4-1-1 6M20 7l-2 6 6 2-2 9-4-3-2-5" fill="#c9b986"/>'
+    );
 
     // ── トップメニューアイコン ──
     // 研究 — 顕微鏡/フラスコ

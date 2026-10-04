@@ -234,12 +234,13 @@ class MappingAndDownloadTests(unittest.TestCase):
 
     def test_text_only_member_resolves_original_from_file_page(self):
         source = scraper.WikiScraper()
-        responses = [SimpleNamespace(text='<div class="fullImageLink"><a href="/images/a/ab/A.png">Original</a></div>', url="https://hoi4.paradoxwikis.com/File:A.png"),
+        responses = [SimpleNamespace(content=b"<html>missing public image</html>"),
+                     SimpleNamespace(text='<div class="fullImageLink"><a href="/images/a/ab/A.png">Original</a></div>', url="https://hoi4.paradoxwikis.com/File:A.png"),
                      SimpleNamespace(content=PNG)]
         source._get = Mock(side_effect=responses)
         result = source.download({"name": "A.png", "page_url": "/File:A.png"}, self.out)
         self.assertEqual(result.read_bytes(), PNG)
-        self.assertEqual(source._get.call_count, 2)
+        self.assertEqual(source._get.call_count, 3)
 
     def test_original_thumbnail_urls_keep_filename_and_separator(self):
         self.assertEqual(list(scraper.image_candidates("/images/thumb/a/ab/Foo.png/120px-Foo.png"))[0],

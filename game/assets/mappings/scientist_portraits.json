@@ -1,0 +1,24 @@
+{
+ "id": "scientist_portraits",
+ "label": "科学者ポートレート",
+ "source": "https://hoi4.paradoxwikis.com/Category:Scientist_portraits",
+ "mode": "wayback",
+ "scraped_at": "2026-10-04T07:30:37+0000",
+ "local_base": "assets/scientists/",
+ "count": 0,
+ "count_names": 0,
+ "images": [],
+ "crawler_version": 4,
+ "complete": false,
+ "traversal_complete": false,
+ "pages_visited": 0,
+ "pending_pages": [
+  "https://hoi4.paradoxwikis.com/Category:Scientist_portraits"
+ ],
+ "page_errors": {
+  "https://hoi4.paradoxwikis.com/Category:Scientist_portraits": "https://hoi4.paradoxwikis.com/Category:Scientist_portraits: HTTP 404: https://web.archive.org/web/2id_/https://hoi4.paradoxwikis.com/Category:Scientist_portraits; https://hoi4.paradoxwikis.com/Category:Scientist_portraits: HTTP 404: https://web.archive.org/web/2024id_/https://hoi4.paradoxwikis.com/Category:Scientist_portraits; https://hoi4.paradoxwikis.com/index.php?title=Category:Scientist_portraits: HTTP 404: https://web.archive.org/web/2id_/https://hoi4.paradoxwikis.com/index.php?title=Category:Scientist_portraits; https://hoi4.paradoxwikis.com/index.php?title=Category:Scientist_portraits: HTTP 404: https://web.archive.org/web/2024id_/https://hoi4.paradoxwikis.com/index.php?title=Category:Scientist_portraits"
+ },
+ "coverage": {},
+ "pending_downloads": [],
+ "failed": []
+}

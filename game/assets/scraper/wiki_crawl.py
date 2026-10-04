@@ -9,7 +9,7 @@ from urllib.parse import parse_qsl, quote, unquote, urlencode, urljoin, urlsplit
 from bs4 import BeautifulSoup
 
 WIKI_BASE = "https://hoi4.paradoxwikis.com"
-CRAWLER_VERSION = 3
+CRAWLER_VERSION = 5
 PAGING_KEYS = {"filefrom", "fileuntil", "subcatfrom", "subcatuntil", "pagefrom", "pageuntil"}
 
 
@@ -72,6 +72,9 @@ def name_key(name):
 
 
 def parse_category_page(html, page_url):
+    title = wiki_title(page_url)
+    if not title or not title.startswith("Category:"):
+        raise FetchError("カテゴリ以外にリダイレクトされました")
     soup = BeautifulSoup(html, "html.parser")
     sections = soup.select("#mw-category-media, #mw-subcategories, #mw-pages")
     empty_category = soup.select_one(".mw-category-generated, body.ns-14 #mw-content-text")
@@ -107,6 +110,7 @@ def parse_category_page(html, page_url):
 
     next_urls = {}
     current_title = wiki_title(page_url)
+    current_params = dict(parse_qsl(urlsplit(original_url(page_url)).query, keep_blank_values=True))
     for section in sections:
         for link in section.select("a[href]"):
             url = original_url(link["href"], page_url)
@@ -115,13 +119,27 @@ def parse_category_page(html, page_url):
             params = dict(parse_qsl(urlsplit(url).query, keep_blank_values=True))
             label = " ".join([link.get_text(" ", strip=True), link.get("title", ""),
                               link.get("aria-label", "")]).casefold()
-            if any(key.endswith("until") for key in params) or re.search(r"previous|prev\b|前", label):
+            if re.search(r"previous|prev\b|前", label):
                 continue
-            if any(key in params for key in ("filefrom", "subcatfrom", "pagefrom")):
+            # MediaWiki preserves the other sections' cursors in a next link.
+            # An unrelated *until must not hide a forward link; a retained
+            # *from on a back link must not create a new forward page either.
+            if any(key in params and params[key] != current_params.get(key)
+                   for key in ("filefrom", "subcatfrom", "pagefrom")):
                 # Keep the EXACT original path, query ordering and encoding.
                 next_urls[canonical_wiki_url(url)] = url
+    def advertised_total(section):
+        if section is None:
+            return None
+        text = section.get_text(" ", strip=True)
+        match = re.search(r"out of\s+([\d,]+)\s+total", text, re.I)
+        if not match:
+            match = re.search(r"following\s+([\d,]+)\s+(?:files|subcategories)", text, re.I)
+        return int(match.group(1).replace(",", "")) if match else None
+
     return {"files": list(files.values()), "subcats": list(subcats.values()),
-            "next_urls": list(next_urls.values())}
+            "next_urls": list(next_urls.values()), "file_total": advertised_total(media),
+            "subcategory_total": advertised_total(sub_section)}
 
 
 class CategoryCrawl:
@@ -133,11 +151,16 @@ class CategoryCrawl:
         root_url = WIKI_BASE + "/Category:" + quote(category.replace(" ", "_"), safe="_")
         root = canonical_wiki_url(root_url)
         self.data = {"version": CRAWLER_VERSION, "root": root, "pending": [
-            {"url": root_url, "subcategory": None}], "visited": [], "files": {}, "page_errors": {}}
+            {"url": root_url, "subcategory": None}], "visited": [], "files": {}, "page_errors": {},
+            "coverage": {}}
         if self.path and self.path.exists():
             saved = json.loads(self.path.read_text(encoding="utf-8"))
-            if saved.get("version") == CRAWLER_VERSION and saved.get("root") == root:
-                self.data = saved
+            if saved.get("root") == root:
+                if saved.get("version") == CRAWLER_VERSION:
+                    self.data = saved
+                else:
+                    # New completion checks require a fresh traversal, not new downloads.
+                    self.add_files(saved.get("files", {}).values())
 
     def add_files(self, files, subcategory=None, timestamp=None):
         for entry in files:
@@ -160,16 +183,36 @@ class CategoryCrawl:
             atomic_json(self.path, self.data)
 
     @property
-    def traversal_complete(self):
-        return bool(self.data["visited"]) and not self.data["pending"] and self.limit is None
+    def coverage_complete(self):
+        return all((entry.get("expected_files") is None or len(entry["files"]) >= entry["expected_files"])
+                   and (entry.get("expected_subcategories") is None
+                        or len(entry["subcategories"]) >= entry["expected_subcategories"])
+                   for entry in self.data["coverage"].values())
 
-    def run(self, fetch, accept_file, on_progress=lambda: None):
+    @property
+    def traversal_complete(self):
+        return (bool(self.data["visited"]) and not self.data["pending"] and not self.data["page_errors"]
+                and self.coverage_complete and self.limit is None)
+
+    def record_coverage(self, parsed, response_url, item):
+        title = wiki_title(response_url)
+        entry = self.data["coverage"].setdefault(title, {
+            "url": original_url(response_url), "subcategory": item["subcategory"],
+            "files": [], "subcategories": [], "expected_files": None, "expected_subcategories": None})
+        entry["files"] = sorted(set(entry["files"]) | {name_key(file["name"]) for file in parsed["files"]})
+        entry["subcategories"] = sorted(set(entry["subcategories"]) | {child["name"] for child in parsed["subcats"]})
+        for source, target in (("file_total", "expected_files"), ("subcategory_total", "expected_subcategories")):
+            if parsed[source] is not None:
+                entry[target] = max(entry[target] or 0, parsed[source])
+
+    def run(self, fetch, accept_file, on_progress=lambda: None, max_pages=None):
         queue = deque(self.data["pending"])
         deferred = []
         visited = set(self.data["visited"])
         queued = {canonical_wiki_url(item["url"]) for item in queue} | visited
+        attempts = 0
         try:
-            while queue:
+            while queue and (max_pages is None or attempts < max_pages):
                 # Keep the current page pending until its fetch has succeeded.
                 item = queue[0]
                 url = item["url"]
@@ -177,6 +220,7 @@ class CategoryCrawl:
                 if key in visited:
                     queue.popleft()
                     continue
+                attempts += 1
                 try:
                     html, response_url = fetch(url)
                     parsed = parse_category_page(html, response_url)
@@ -196,6 +240,7 @@ class CategoryCrawl:
                     visited.add(actual)
                     queued.add(actual)
                 self.data["page_errors"].pop(url, None)
+                self.record_coverage(parsed, response_url, item)
                 files = [entry for entry in parsed["files"] if accept_file(entry["name"])]
                 if self.limit is not None:
                     known = [entry for entry in files if name_key(entry["name"]) in self.data["files"]]
@@ -222,7 +267,22 @@ class CategoryCrawl:
                 if self.limit is not None and len(self.data["files"]) >= self.limit:
                     break
         finally:
+            if not queue and not deferred and self.limit is None and not self.coverage_complete:
+                # Missing continuation links must not silently truncate a category.
+                for title, entry in self.data["coverage"].items():
+                    missing_files = entry["expected_files"] is not None and len(entry["files"]) < entry["expected_files"]
+                    missing_children = (entry["expected_subcategories"] is not None
+                                        and len(entry["subcategories"]) < entry["expected_subcategories"])
+                    if missing_files or missing_children:
+                        visited = {key for key in visited if wiki_title(key) != title}
+                        deferred.append({"url": entry["url"], "subcategory": entry["subcategory"]})
+                        self.data["page_errors"][entry["url"]] = "カテゴリの公表件数に届いていません。巡回を再試行します"
+            # An alias may redirect successfully to a previously failed page.
+            # Resolve that deferred page/error in this pass, not forever later.
             self.data["visited"] = sorted(visited)
-            self.data["pending"] = list(queue) + deferred
+            self.data["pending"] = [item for item in list(queue) + deferred
+                                    if canonical_wiki_url(item["url"]) not in visited]
+            self.data["page_errors"] = {url: error for url, error in self.data["page_errors"].items()
+                                        if canonical_wiki_url(url) not in visited}
             self.save()
             on_progress()

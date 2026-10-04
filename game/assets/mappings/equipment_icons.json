@@ -3,10 +3,22 @@
  "label": "兵器設計・モジュール",
  "source": "https://hoi4.paradoxwikis.com/Category:Equipment_icons",
  "mode": "wayback",
- "scraped_at": "2026-10-04T05:52:28+0000",
+ "scraped_at": "2026-10-04T07:26:52+0000",
  "local_base": "assets/equipment/",
  "count": 0,
  "count_names": 0,
- "failed": [],
- "images": []
+ "images": [],
+ "crawler_version": 4,
+ "complete": false,
+ "traversal_complete": false,
+ "pages_visited": 0,
+ "pending_pages": [
+  "https://hoi4.paradoxwikis.com/Category:Equipment_icons"
+ ],
+ "page_errors": {
+  "https://hoi4.paradoxwikis.com/Category:Equipment_icons": "https://hoi4.paradoxwikis.com/Category:Equipment_icons: HTTP 404: https://web.archive.org/web/2id_/https://hoi4.paradoxwikis.com/Category:Equipment_icons; https://hoi4.paradoxwikis.com/Category:Equipment_icons: HTTP 404: https://web.archive.org/web/2024id_/https://hoi4.paradoxwikis.com/Category:Equipment_icons; https://hoi4.paradoxwikis.com/index.php?title=Category:Equipment_icons: HTTP 404: https://web.archive.org/web/2id_/https://hoi4.paradoxwikis.com/index.php?title=Category:Equipment_icons; https://hoi4.paradoxwikis.com/index.php?title=Category:Equipment_icons: HTTP 404: https://web.archive.org/web/2024id_/https://hoi4.paradoxwikis.com/index.php?title=Category:Equipment_icons"
+ },
+ "coverage": {},
+ "pending_downloads": [],
+ "failed": []
 }

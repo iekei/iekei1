@@ -1,0 +1,22 @@
+{
+ "id": "portraits",
+ "label": "全ポートレート",
+ "source": "https://hoi4.paradoxwikis.com/Category:Portraits",
+ "mode": "wayback",
+ "scraped_at": "2026-10-04T07:20:42+0000",
+ "local_base": "assets/portraits/",
+ "count": 0,
+ "count_names": 0,
+ "images": [],
+ "crawler_version": 4,
+ "complete": false,
+ "traversal_complete": false,
+ "pages_visited": 0,
+ "pending_pages": [
+  "https://hoi4.paradoxwikis.com/Category:Portraits"
+ ],
+ "page_errors": {},
+ "coverage": {},
+ "pending_downloads": [],
+ "failed": []
+}

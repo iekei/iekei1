@@ -1,0 +1,24 @@
+{
+ "id": "special_project_icons",
+ "label": "特別研究計画アイコン",
+ "source": "https://hoi4.paradoxwikis.com/Category:Special_project_icons",
+ "mode": "wayback",
+ "scraped_at": "2026-10-04T07:29:55+0000",
+ "local_base": "assets/special_projects/",
+ "count": 0,
+ "count_names": 0,
+ "images": [],
+ "crawler_version": 4,
+ "complete": false,
+ "traversal_complete": false,
+ "pages_visited": 0,
+ "pending_pages": [
+  "https://hoi4.paradoxwikis.com/Category:Special_project_icons"
+ ],
+ "page_errors": {
+  "https://hoi4.paradoxwikis.com/Category:Special_project_icons": "https://hoi4.paradoxwikis.com/Category:Special_project_icons: HTTP 404: https://web.archive.org/web/2id_/https://hoi4.paradoxwikis.com/Category:Special_project_icons; https://hoi4.paradoxwikis.com/Category:Special_project_icons: HTTP 404: https://web.archive.org/web/2024id_/https://hoi4.paradoxwikis.com/Category:Special_project_icons; https://hoi4.paradoxwikis.com/index.php?title=Category:Special_project_icons: HTTP 404: https://web.archive.org/web/2id_/https://hoi4.paradoxwikis.com/index.php?title=Category:Special_project_icons; https://hoi4.paradoxwikis.com/index.php?title=Category:Special_project_icons: HTTP 404: https://web.archive.org/web/2024id_/https://hoi4.paradoxwikis.com/index.php?title=Category:Special_project_icons"
+ },
+ "coverage": {},
+ "pending_downloads": [],
+ "failed": []
+}

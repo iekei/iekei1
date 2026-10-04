@@ -19,21 +19,23 @@ import time
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
+from functools import lru_cache
 from pathlib import Path
 from urllib.parse import parse_qsl, quote, urlsplit, urlunsplit
 
 import requests
 from bs4 import BeautifulSoup
 
+from archive_sources import category_candidates, original_image_candidates, original_image_url
 from wiki_crawl import (CRAWLER_VERSION, WIKI_BASE, CategoryCrawl, FetchError,
-                        RateLimited, atomic_json, name_key, original_url, wiki_title)
+                        RateLimited, atomic_json, original_url, parse_category_page)
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 ASSETS_DIR = SCRIPT_DIR.parent
 MAPPINGS_DIR = ASSETS_DIR / "mappings"
 STATE_DIR = SCRIPT_DIR / ".state"
 WAYBACK_BASE = "https://web.archive.org"
-WAYBACK_TS = "2024"
+WAYBACK_TS = "2"  # Latest capture first; fall back to pre-challenge 2024 captures.
 PAGE_DELAY = 10.0
 DL_DELAY = 3.0
 HTTP_TIMEOUT = (10, 60)
@@ -52,6 +54,12 @@ CATEGORIES = [
     {"id": "special_project_icons", "wiki_category": "Special_project_icons", "out_dir": "special_projects", "label": "特別研究計画アイコン"},
     {"id": "scientist_portraits", "wiki_category": "Scientist_portraits", "out_dir": "scientists", "label": "科学者ポートレート"},
     {"id": "land_unit_icons", "wiki_category": "Land_unit_icons", "out_dir": "land_units", "label": "陸軍ユニットアイコン"},
+    # Umbrella categories include icon families and leader/ace portraits omitted
+    # by the original ten targets. Descendants are discovered, never hardcoded.
+    {"id": "icons", "wiki_category": "Icons", "out_dir": "icons", "label": "全アイコン"},
+    {"id": "portraits", "wiki_category": "Portraits", "out_dir": "portraits", "label": "全ポートレート"},
+    {"id": "leader_portraits", "wiki_category": "Leader_portraits", "out_dir": "leaders", "label": "指導者ポートレート"},
+    {"id": "ace_portraits", "wiki_category": "Ace_portraits", "out_dir": "aces", "label": "エースポートレート"},
 ]
 
 
@@ -86,8 +94,17 @@ def is_image(content):
     return False
 
 
+@lru_cache(maxsize=32768)
+def _cached_signature(path, modified, size):
+    # Cache only the verdict, never the image bytes; writes invalidate via stat.
+    return is_image(path.read_bytes())
+
+
 def cached_image(path):
-    return path.is_file() and is_image(path.read_bytes())
+    if not path.is_file():
+        return False
+    stat = path.stat()
+    return _cached_signature(path, stat.st_mtime_ns, stat.st_size)
 
 
 def read_json(path):
@@ -115,14 +132,7 @@ def pretty_wiki_url(url):
 
 
 def image_candidates(url):
-    url = original_url(url)
-    parsed = urlsplit(url)
-    if "/images/thumb/" in parsed.path:
-        prefix, thumbnail = parsed.path.split("/thumb/", 1)
-        # Keep the original filename segment, including .svg; drop only the rendition.
-        full_path = prefix + "/" + thumbnail.rsplit("/", 1)[0]
-        yield urlunsplit(parsed._replace(path=full_path))
-    yield url
+    yield from original_image_candidates(url)
 
 
 class WikiScraper:
@@ -130,21 +140,22 @@ class WikiScraper:
         self.mode = mode
         self.timestamp = timestamp
         self.session = requests.Session()
-        self.session.headers.update({"User-Agent": "HoI4AssetCollector/2.0", "Accept-Language": "en"})
-        self.next_request = 0
+        self.session.headers.update({"User-Agent": "HoI4AssetCollector/5.0", "Accept-Language": "en"})
+        self.next_requests = {}
         self.context = None
 
-    def _get(self, url, image=False, timestamp=None):
+    def _get(self, url, image=False, timestamp=None, live=False):
         url = original_url(url)
-        if self.mode == "wayback":
+        if self.mode == "wayback" and not live:
             modifier = "im_" if image else "id_"
             url = f"{WAYBACK_BASE}/web/{timestamp or self.timestamp}{modifier}/{url}"
+        host = urlsplit(url).hostname
         last_error = "取得失敗"
         for attempt in range(MAX_RETRIES):
-            time.sleep(max(0, self.next_request - time.monotonic()))
+            time.sleep(max(0, self.next_requests.get(host, 0) - time.monotonic()))
             try:
                 response = self.session.get(url, timeout=HTTP_TIMEOUT)
-                self.next_request = time.monotonic() + (DL_DELAY if image else PAGE_DELAY)
+                self.next_requests[host] = time.monotonic() + (DL_DELAY if image else PAGE_DELAY)
                 if response.status_code == 429:
                     raise RateLimited(f"HTTP 429: {url}", retry_after_seconds(response.headers.get("Retry-After")))
                 if response.status_code == 200:
@@ -153,7 +164,7 @@ class WikiScraper:
                     raise FetchError(f"HTTP {response.status_code}: {url}")
                 last_error = f"HTTP {response.status_code}: {url}"
             except requests.RequestException as error:
-                self.next_request = time.monotonic() + PAGE_DELAY
+                self.next_requests[host] = time.monotonic() + PAGE_DELAY
                 last_error = str(error)
             print(f"    ! 再試行 {attempt + 1}/{MAX_RETRIES}: {last_error}", flush=True)
         raise FetchError(last_error)
@@ -161,13 +172,24 @@ class WikiScraper:
     def fetch_category_page(self, url):
         url = original_url(url)
         if self.context is None:
-            response = self._get(url)
-            return response.text, response.url
-        time.sleep(max(0, self.next_request - time.monotonic()))
+            candidates = category_candidates(url, self.timestamp) if self.mode == "wayback" else [(url, None)]
+            errors = []
+            for candidate, timestamp in candidates:
+                try:
+                    response = self._get(candidate, timestamp=timestamp)
+                    parse_category_page(response.text, response.url)
+                    return response.text, response.url
+                except RateLimited:
+                    raise
+                except FetchError as error:
+                    errors.append(f"{candidate}: {error}")
+            raise FetchError("; ".join(errors))
+        host = urlsplit(url).hostname
+        time.sleep(max(0, self.next_requests.get(host, 0) - time.monotonic()))
         page = self.context.new_page()
         try:
             response = page.goto(url, wait_until="domcontentloaded", timeout=60000)
-            self.next_request = time.monotonic() + PAGE_DELAY
+            self.next_requests[host] = time.monotonic() + PAGE_DELAY
             if response and response.status == 429:
                 raise RateLimited(f"HTTP 429: {url}", retry_after_seconds(response.headers.get("retry-after")))
             if response and response.status >= 400:
@@ -192,13 +214,14 @@ class WikiScraper:
         attempted = set()
         errors = []
 
-        def try_image(url):
+        def try_image(url, live=False):
             for candidate in image_candidates(url):
-                if candidate in attempted:
+                key = (candidate, live)
+                if key in attempted:
                     continue
-                attempted.add(candidate)
+                attempted.add(key)
                 try:
-                    response = self._get(candidate, image=True, timestamp=timestamp)
+                    response = self._get(candidate, image=True, timestamp=timestamp, live=live)
                     if not is_image(response.content) or (destination.suffix.lower() == ".svg" and b"<svg" not in response.content[:4096]):
                         raise FetchError(f"画像ではない、不完全、または形式が異なる: {candidate}")
                     out_dir.mkdir(parents=True, exist_ok=True)
@@ -212,7 +235,16 @@ class WikiScraper:
                     errors.append(str(error))
             return None
 
+        # Public originals frequently remain accessible even when HTML pages
+        # require a challenge. Keep the archive as fallback, not a bottleneck.
         if record.get("image_url"):
+            result = try_image(record["image_url"], live=True)
+            if result:
+                return result
+        result = try_image(original_image_url(record["name"]), live=True)
+        if result:
+            return result
+        if self.mode == "wayback" and record.get("image_url"):
             result = try_image(record["image_url"])
             if result:
                 return result
@@ -249,7 +281,7 @@ def build_mapping(cat, crawl, mode):
     for record in crawl.data["files"].values():
         candidate = ASSETS_DIR / cat["out_dir"] / sanitize_filename(record["name"])
         images.append({"name": record["name"], "key": file_key(record["name"]),
-                       "local": "assets/" + cat["out_dir"] + "/" + candidate.name if cached_image(candidate) else None,
+                       "local": "assets/" + cat["out_dir"] + "/" + quote(candidate.name, safe="") if cached_image(candidate) else None,
                        "live_url": WIKI_BASE + "/Special:FilePath/" + quote(record["name"], safe=""),
                        "source_page": record.get("page_url") or record.get("source_page"),
                        "subcategory": record.get("subcategory"), "image_url": record.get("image_url"),
@@ -263,7 +295,8 @@ def build_mapping(cat, crawl, mode):
                "crawler_version": CRAWLER_VERSION, "complete": complete,
                "traversal_complete": crawl.traversal_complete, "pages_visited": len(crawl.data["visited"]),
                "pending_pages": [item["url"] for item in crawl.data["pending"]],
-               "page_errors": crawl.data["page_errors"], "pending_downloads": pending_downloads,
+               "page_errors": crawl.data["page_errors"], "coverage": crawl.data["coverage"],
+               "pending_downloads": pending_downloads,
                "failed": [record["name"] for record in crawl.data["files"].values() if record.get("download_error")]}
     path = MAPPINGS_DIR / f"{cat['id']}.json"
     atomic_json(path, mapping)
@@ -275,7 +308,15 @@ def build_mapping(cat, crawl, mode):
 
 def mapping_is_complete(cat, mode):
     mapping = read_json(MAPPINGS_DIR / f"{cat['id']}.json")
+    coverage = mapping.get("coverage", {})
+    covered = bool(coverage) and all(
+        (entry.get("expected_files") is None or len(entry.get("files", [])) >= entry["expected_files"])
+        and (entry.get("expected_subcategories") is None
+             or len(entry.get("subcategories", [])) >= entry["expected_subcategories"])
+        for entry in coverage.values())
     return (mapping.get("crawler_version") == CRAWLER_VERSION and mapping.get("complete") is True
+            and mapping.get("traversal_complete") is True and covered
+            and mapping.get("count") == len(mapping.get("images", []))
             and mapping.get("mode") == mode and not mapping.get("pending_pages")
             and not mapping.get("pending_downloads") and not mapping.get("page_errors")
             and mapping.get("count_names") == len(mapping.get("images", []))
@@ -283,7 +324,7 @@ def mapping_is_complete(cat, mode):
                     for image in mapping.get("images", [])))
 
 
-def scrape_category(scraper, cat, limit=None, dry_run=False):
+def scrape_category(scraper, cat, limit=None, dry_run=False, page_budget=None, download_budget=None):
     print(f"[{scraper.mode}] {cat['id']}", flush=True)
     path = None if dry_run or limit is not None else STATE_DIR / f"{scraper.mode}-{cat['id']}.json"
     crawl = CategoryCrawl(cat["wiki_category"], path, limit)
@@ -293,18 +334,33 @@ def scrape_category(scraper, cat, limit=None, dry_run=False):
     # Test-limited runs must not replace a real category's complete mapping.
     publish = (lambda: None) if dry_run or limit is not None else lambda: build_mapping(cat, crawl, scraper.mode)
     try:
-        crawl.run(scraper.fetch_category_page, passes_filter, publish)
+        crawl.run(scraper.fetch_category_page, passes_filter, publish, max_pages=page_budget)
         if not dry_run:
-            for record in crawl.data["files"].values():
+            records = list(crawl.data["files"].values())
+            start = crawl.data.get("download_cursor", 0) % len(records) if records else 0
+            attempts = 0
+            for offset in range(len(records)):
+                position = (start + offset) % len(records)
+                record = records[position]
+                destination = ASSETS_DIR / cat["out_dir"] / sanitize_filename(record["name"])
+                if cached_image(destination):
+                    record.pop("download_error", None)
+                    continue
+                if download_budget is not None and attempts >= download_budget:
+                    break
+                attempts += 1
                 try:
                     scraper.download(record, ASSETS_DIR / cat["out_dir"])
                     record.pop("download_error", None)
+                    print(f"    + 保存: {record['name']}", flush=True)
                 except FetchError as error:
                     record["download_error"] = str(error)
                     print(f"    ! 画像保留: {record['name']} — {error}", flush=True)
                     if isinstance(error, RateLimited):
                         raise
                 finally:
+                    # Failed files must not occupy every later batch's first slots.
+                    crawl.data["download_cursor"] = (position + 1) % len(records)
                     crawl.save()
                     publish()
     finally:
@@ -323,7 +379,14 @@ def main():
     parser.add_argument("--dry-run", action="store_true", help="巡回のみ。画像・JSON・状態を保存しない")
     parser.add_argument("--skip-done", action="store_true", help="全ページ巡回＋全画像保存済みのみスキップ")
     parser.add_argument("--status", action="store_true", help="通信なしで進捗を表示（全件完了なら終了コード0）")
+    parser.add_argument("--json", action="store_true", help="--status の機械可読レポート")
+    parser.add_argument("--page-budget", type=int, default=2, help="1回・1カテゴリ当たりのページ取得数")
+    parser.add_argument("--download-budget", type=int, default=10, help="1回・1カテゴリ当たりの画像取得数")
     args = parser.parse_args()
+    if args.page_budget < 1 or args.download_budget < 1:
+        parser.error("取得数は1以上にしてください")
+    if args.json and not args.status:
+        parser.error("--json には --status が必要です")
     if args.limit is not None and args.limit < 1:
         parser.error("--limit は1以上にしてください")
     ids = {value.strip() for value in args.only.split(",")} if args.only else {cat["id"] for cat in CATEGORIES}
@@ -332,13 +395,23 @@ def main():
         parser.error(f"未知のカテゴリid: {sorted(unknown)}")
     targets = [cat for cat in CATEGORIES if cat["id"] in ids]
     if args.status:
-        complete = True
+        reports = []
         for cat in targets:
             mapping = read_json(MAPPINGS_DIR / f"{cat['id']}.json")
-            done = mapping_is_complete(cat, args.mode)
-            complete &= done
-            print(f"{cat['id']}: 保存 {mapping.get('count', 0)}/{mapping.get('count_names', 0)} / "
-                  f"{'完了' if done else '未完了'}", flush=True)
+            reports.append({"id": cat["id"], "complete": mapping_is_complete(cat, args.mode),
+                            "saved": mapping.get("count", 0), "discovered": mapping.get("count_names", 0),
+                            "pages_visited": mapping.get("pages_visited", 0),
+                            "pending_pages": mapping.get("pending_pages", []),
+                            "page_errors": mapping.get("page_errors", {}),
+                            "pending_downloads": mapping.get("pending_downloads", [])})
+        complete = all(report["complete"] for report in reports)
+        if args.json:
+            print(json.dumps({"complete": complete, "mode": args.mode, "categories": reports}, ensure_ascii=False))
+        else:
+            for report in reports:
+                print(f"{report['id']}: 保存 {report['saved']}/{report['discovered']} / "
+                      f"{'完了' if report['complete'] else '未完了'} / "
+                      f"保留ページ {len(report['pending_pages'])} / 保留画像 {len(report['pending_downloads'])}", flush=True)
         return 0 if complete else 1
     if args.skip_done:
         targets = [cat for cat in targets if not mapping_is_complete(cat, args.mode)]
@@ -369,7 +442,8 @@ def main():
             browser = playwright.chromium.launch(headless=True, args=["--no-sandbox"])
             scraper.context = browser.new_context(locale="en-US")
         for cat in targets:
-            scrape_category(scraper, cat, args.limit, args.dry_run)
+            scrape_category(scraper, cat, args.limit, args.dry_run,
+                            args.page_budget, args.download_budget)
     except RateLimited as error:
         if not args.dry_run:
             next_category = CATEGORIES[(CATEGORIES.index(cat) + 1) % len(CATEGORIES)]["id"]

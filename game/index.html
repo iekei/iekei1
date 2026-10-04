@@ -677,15 +677,15 @@
 
 <div id="game-root">
   <!-- ==================== TOP BAR ==================== -->
-  <header id="top-bar">
+  <header id="top-bar" aria-label="国家ステータスと時間操作">
     <div class="stats-group" id="stats-group">
       <button id="player-flag" title="政治画面を開く" onclick="WindowManager.open('politics')">🏳️</button>
-      <span id="stats-icons" style="display:flex;gap:16px;align-items:center;">
+      <span id="stats-icons" aria-label="国家ステータス">
         <!-- Filled dynamically by CoreEngine -->
       </span>
     </div>
     <div class="time-control-group">
-      <div id="calendar-display">1936年1月1日</div>
+      <div id="calendar-display" aria-label="ゲーム内の日付">1936年1月1日</div>
       <div class="speed-buttons" id="speed-buttons">
         <button class="speed-btn active" data-speed="0">⏸</button>
         <button class="speed-btn" data-speed="1">▶1</button>
@@ -696,9 +696,9 @@
       </div>
     </div>
     <div class="topbar-nav">
-      <button class="speed-btn" id="world-tension" onclick="GameUI.switchTab('diplomacy')" title="国際緊張度 (World Tension)">🌍 緊張度 <span class="wt-val">0%</span></button>
+      <button class="speed-btn" id="world-tension" data-tip-key="tension" aria-label="国際緊張度・外交画面を開く" onclick="GameUI.switchTab('diplomacy')"><img class="tension-icon" data-icon-key="worldTension" alt=""><span class="tension-content"><span class="tension-label">国際緊張度</span><span class="wt-val">0%</span></span></button>
       <button class="speed-btn" id="mp-indicator" onclick="GameUI.switchTab('multiplayer')">👥 単独</button>
-      <button class="speed-btn" id="cheat-toggle" onclick="CheatConsole.toggle()">~</button>
+      <button class="speed-btn" id="cheat-toggle" aria-label="デバッグコンソールを開く" onclick="CheatConsole.toggle()">~</button>
     </div>
   </header>
 
@@ -867,6 +867,7 @@
 <script src="assets/asset-registry.js"></script>
 <script src="assets/image-loader.js"></script>
 <script src="assets/topbar-icons.js"></script>
+<script src="assets/topbar-ui.js"></script>
 <script>
 /* ================================================================
    JavaScript Module Architecture
@@ -1135,6 +1136,7 @@ class CoreEngine {
     // アセットシステム初期化 (TopbarIcons SVG生成 + ImageLoader遅延読み込み)
     if (typeof TopbarIcons !== 'undefined') {
       TopbarIcons.init();
+      document.querySelector('#world-tension .tension-icon').src = TopbarIcons.get('worldTension');
       // ウィンドウナビゲーションボタンにメニューアイコンを割り当て
       document.querySelectorAll('.win-btn-icon[data-menu-icon]').forEach(img => {
         const key = img.dataset.menuIcon;
@@ -1232,27 +1234,18 @@ class CoreEngine {
         rows: ['保有数: <b>' + s.convoys + '</b>',
                '用途: 資源貿易・レンドリースの海上輸送',
                '通商破壊で喪失します'] };
+    },
+    tension: () => {
+      const s = CoreEngine.gameState;
+      return { title: '国際緊張度 (World Tension)',
+        rows: ['現在値: <b>' + Number(s.worldTension).toFixed(1) + '%</b>',
+               '戦争や歴史的イベントにより上昇します',
+               'クリック: 外交画面を開く'] };
     }
   };
 
   static setupStatTooltips() {
-    const group = document.getElementById('stats-group');
-    const tip = document.getElementById('stat-tooltip');
-    if (!group || !tip) return;
-    group.addEventListener('mouseover', (e) => {
-      const item = e.target.closest('.stat-item');
-      if (!item || !item.dataset.tipKey) { tip.classList.add('hidden'); return; }
-      const gen = CoreEngine.STAT_TOOLTIPS[item.dataset.tipKey];
-      if (!gen) return;
-      const t = gen();
-      tip.innerHTML = '<div class="stt-title">' + t.title + '</div>' +
-        t.rows.map(r => '<div class="stt-row">' + r + '</div>').join('');
-      tip.classList.remove('hidden');
-      const r = item.getBoundingClientRect();
-      tip.style.left = Math.min(r.left, window.innerWidth - 340) + 'px';
-      tip.style.top = (r.bottom + 6) + 'px';
-    });
-    group.addEventListener('mouseleave', () => tip.classList.add('hidden'));
+    TopbarUI.initTooltips(CoreEngine.STAT_TOOLTIPS);
   }
 
   // ---- 国際緊張度 (World Tension) ----
@@ -1310,7 +1303,10 @@ class CoreEngine {
 
   static updateSpeedUI() {
     document.querySelectorAll('.speed-btn[data-speed]').forEach(btn => {
-      btn.classList.toggle('active', parseInt(btn.dataset.speed) === CoreEngine.gameState.speed);
+      const active = parseInt(btn.dataset.speed) === CoreEngine.gameState.speed;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-pressed', String(active));
+      btn.setAttribute('aria-label', Number(btn.dataset.speed) ? '速度 ' + btn.dataset.speed : '一時停止');
     });
   }
 
@@ -1345,28 +1341,7 @@ class CoreEngine {
 
   static renderStats() {
     const s = CoreEngine.gameState;
-    // HoI4風SVGアイコン (TopbarIcons) を使用 — preload済みのデータURI
-    const ico = (key) => '<img class="stat-icon" src="' + (TopbarIcons.get(key) || '') + '" alt="">';
-    const html =
-      '<div class="stat-item" data-tip-key="pp">' + ico('politicalPower') +
-        '<div class="stat-content"><span class="stat-val">' + Math.floor(s.politicalPower) + '</span></div></div>' +
-      '<div class="stat-item" data-tip-key="stab">' + ico('stability') +
-        '<div class="stat-content"><span class="stat-val">' + Number(s.stability).toFixed(1) + '%</span>' +
-        '<div class="stat-bar"><div class="stat-bar-fill" style="width:' + s.stability + '%;background:var(--accent-green)"></div></div></div></div>' +
-      '<div class="stat-item" data-tip-key="ws">' + ico('warSupport') +
-        '<div class="stat-content"><span class="stat-val">' + Number(s.warSupport).toFixed(1) + '%</span>' +
-        '<div class="stat-bar"><div class="stat-bar-fill" style="width:' + s.warSupport + '%;background:var(--accent-orange)"></div></div></div></div>' +
-      '<div class="stat-item" data-tip-key="mp">' + ico('manpower') +
-        '<div class="stat-content"><span class="stat-val">' + (s.manpower/1000).toFixed(0) + 'K</span></div></div>' +
-      '<div class="stat-item" data-tip-key="fac">' + ico('factories') +
-        '<div class="stat-content"><span class="stat-val">' + s.civilianFactories + 'C / ' + s.militaryFactories + 'M</span></div></div>' +
-      '<div class="stat-item" data-tip-key="fuel">' + ico('fuel') +
-        '<div class="stat-content"><span class="stat-val">' + Math.floor(s.fuel) + '/' + s.maxFuel + '</span></div></div>' +
-      '<div class="stat-item" data-tip-key="convoy">' + ico('convoys') +
-        '<div class="stat-content"><span class="stat-val">' + s.convoys + '</span></div></div>';
-    // 国旗ボタンとステータスアイコン群は別要素なので innerHTML で上書きしない
-    const icons = document.getElementById('stats-icons');
-    if (icons) icons.innerHTML = html;
+    TopbarUI.render(s);
     CoreEngine.renderWorldTension();
     const flag = document.getElementById('player-flag');
     if (flag) flag.textContent = DataFetcher.getCountryFlag(s.country);
