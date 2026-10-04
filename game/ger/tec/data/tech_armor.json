@@ -1,353 +1,544 @@
 [
   {
-    "id": "neubaufahrzeug",
-    "title": "Nb.Fz.多砲塔戦車",
-    "year": 1936,
-    "x": 100,
-    "y": 50,
-    "research_time": 115,
-    "reliability": "配備（制式採用）",
-    "desc": "ライラインメタル製の試作多砲塔重戦車。実戦価は低かったが、ノルウェー戦線で威嚇用として用いられた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
-    "effects": [
-      "対人攻撃: 25/100",
-      "対物攻撃: 33/100",
-      "生存力: 28/100",
-      "機動力: 56/100",
-      "信頼度: 70/100"
-    ],
-    "prerequisites": []
-  },
-  {
-    "id": "panzer_i",
-    "title": "I号戦車",
-    "year": 1936,
-    "x": 100,
-    "y": 200,
-    "research_time": 100,
-    "reliability": "配備（訓練用）",
-    "desc": "軽戦車。機甲戦術の訓練と発展に用いられ、スペイン内戦で実戦試験された。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
-    "effects": [
-      "装甲: 8/100",
-      "攻撃: 8/100",
-      "突破: 6/100",
-      "機動力: 72/100",
-      "信頼度: 75/100"
-    ],
-    "prerequisites": [
-      "neubaufahrzeug"
-    ]
-  },
-  {
-    "id": "panzer_ii",
-    "title": "II号戦車",
-    "year": 1936,
-    "x": 100,
-    "y": 350,
-    "research_time": 115,
-    "reliability": "配備（制式採用）",
-    "desc": "20mm機関砲を主砲とする軽戦車。ポーランド電撃戦の主力で、のちに偵察・教導役へ移った。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
-    "effects": [
-      "対人攻撃: 25/100",
-      "対物攻撃: 33/100",
-      "生存力: 28/100",
-      "機動力: 56/100",
-      "信頼度: 70/100"
-    ],
-    "prerequisites": [
-      "panzer_i"
-    ]
-  },
-  {
-    "id": "panzer_iii",
-    "title": "III号戦車",
+    "id": "amphibious_tank_chassis",
+    "title": "Amphibious Tank Chassis",
     "year": 1938,
-    "x": 100,
-    "y": 500,
-    "research_time": 130,
-    "reliability": "配備（主力）",
-    "desc": "37mm→50mm砲を搭載した主力中戦車。ポーランド・フランス戦役の機甲部隊の中核。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
-    "effects": [
-      "装甲: 30/100",
-      "攻撃: 38/100",
-      "突破: 25/100",
-      "機動力: 55/100",
-      "信頼度: 68/100"
-    ],
-    "prerequisites": [
-      "panzer_ii"
-    ]
-  },
-  {
-    "id": "panzer_iv",
-    "title": "IV号戦車",
-    "year": 1938,
-    "x": 100,
-    "y": 650,
-    "research_time": 140,
-    "reliability": "配備（主力）",
-    "desc": "75mm砲を搭載した支援戦車。後に長砲身化され、戦争を通じて主力として生産が続いた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
-    "effects": [
-      "装甲: 38/100",
-      "攻撃: 52/100",
-      "突破: 30/100",
-      "機動力: 48/100",
-      "信頼度: 70/100"
-    ],
-    "prerequisites": [
-      "panzer_iii"
-    ]
-  },
-  {
-    "id": "panzer_38t",
-    "title": "38(t)戦車",
-    "year": 1939,
-    "x": 100,
-    "y": 800,
-    "research_time": 121,
-    "reliability": "配備（制式採用）",
-    "desc": "チェコŠkoda LT vz.38を接収・運用した軽戦車。信頼性が高く、バルバロッサ作戦の機甲師団を支えた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
-    "effects": [
-      "対人攻撃: 27/100",
-      "対物攻撃: 37/100",
-      "生存力: 30/100",
-      "機動力: 56/100",
-      "信頼度: 72/100"
-    ],
-    "prerequisites": [
-      "panzer_iv"
-    ]
-  },
-  {
-    "id": "stug_iii",
-    "title": "III号突撃砲",
-    "year": 1940,
-    "x": 100,
-    "y": 950,
-    "research_time": 123,
-    "reliability": "配備（制式採用）",
-    "desc": "歩兵支援用突撃砲として誕生し、のちに対戦車突撃砲へ発展。最も多く生産された独軍装甲戦闘車両。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
-    "effects": [
-      "対人攻撃: 27/100",
-      "対物攻撃: 38/100",
-      "生存力: 31/100",
-      "機動力: 56/100",
-      "信頼度: 73/100"
-    ],
-    "prerequisites": [
-      "panzer_38t"
-    ]
-  },
-  {
-    "id": "tiger",
-    "title": "ティーガーI",
-    "year": 1942,
-    "x": 100,
-    "y": 1100,
+    "x": -400,
+    "y": 250,
     "research_time": 200,
-    "reliability": "少数配備",
-    "desc": "56トンの重戦車。88mm砲と厚い装甲を備え、連合軍戦車に圧倒的な優位を築いた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_amphibious_tank_1",
     "effects": [
-      "装甲: 78/100",
-      "攻撃: 78/100",
-      "突破: 45/100",
-      "機動力: 25/100",
-      "信頼度: 45/100"
+      "配備可能: amphibious_tank_chassis_1",
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, tp_tech, mio_cat_tech_light_armor_and_modules"
     ],
     "prerequisites": [
-      "stug_iii"
+      "improved_light_tank_chassis"
     ]
   },
   {
-    "id": "elefant",
-    "title": "フェルディナント重駆逐戦車",
-    "year": 1943,
-    "x": 400,
-    "y": 50,
-    "research_time": 129,
-    "reliability": "配備（制式採用）",
-    "desc": "ポルシェ設計のタイガー試作車を改造した88mm砲搭載駆逐戦車。クルスクで防御力を見せたが機動性に欠けた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "id": "amphibious_drive",
+    "title": "Amphibious Drive",
+    "year": 1941,
+    "x": -400,
+    "y": 400,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "nsb_amphibious_drive_tech",
     "effects": [
-      "対人攻撃: 12/100",
-      "対物攻撃: 63/100",
-      "生存力: 36/100",
-      "機動力: 46/100",
-      "信頼度: 70/100"
+      "配備可能: light_tank_amphibious_chassis_0",
+      "配備可能: medium_tank_amphibious_chassis_0",
+      "配備可能: heavy_tank_amphibious_chassis_0",
+      "配備可能: light_tank_amphibious_chassis_1",
+      "配備可能: medium_tank_amphibious_chassis_1",
+      "配備可能: heavy_tank_amphibious_chassis_1",
+      "配備可能: light_tank_amphibious_chassis_2",
+      "配備可能: medium_tank_amphibious_chassis_2",
+      "配備可能: heavy_tank_amphibious_chassis_2",
+      "配備可能: light_tank_amphibious_chassis_3",
+      "配備可能: medium_tank_amphibious_chassis_3",
+      "配備可能: heavy_tank_amphibious_chassis_3",
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, tp_tech, mio_cat_tech_light_armor_and_modules"
+    ],
+    "prerequisites": [
+      "amphibious_tank_chassis"
+    ]
+  },
+  {
+    "id": "basic_light_tank_chassis",
+    "title": "Basic Light Tank Chassis",
+    "year": 1934,
+    "x": -100,
+    "y": 100,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_light_tank_chassis_1",
+    "effects": [
+      "配備可能: light_tank_chassis_1",
+      "配備可能: light_tank_destroyer_chassis_1",
+      "配備可能: light_tank_artillery_chassis_1",
+      "配備可能: light_tank_aa_chassis_1",
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_light_armor, mio_cat_tech_light_armor_and_modules"
+    ],
+    "prerequisites": [
+      "gwtank_chassis"
+    ]
+  },
+  {
+    "id": "improved_light_tank_chassis",
+    "title": "Improved Light Tank Chassis",
+    "year": 1936,
+    "x": -100,
+    "y": 200,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_light_tank_chassis_2",
+    "effects": [
+      "配備可能: light_tank_chassis_2",
+      "配備可能: light_tank_destroyer_chassis_2",
+      "配備可能: light_tank_artillery_chassis_2",
+      "配備可能: light_tank_aa_chassis_2",
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_light_armor, mio_cat_tech_light_armor_and_modules"
+    ],
+    "prerequisites": [
+      "basic_light_tank_chassis"
+    ]
+  },
+  {
+    "id": "advanced_light_tank_chassis",
+    "title": "Advanced Light Tank Chassis",
+    "year": 1941,
+    "x": -100,
+    "y": 400,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_light_tank_chassis_3",
+    "effects": [
+      "配備可能: light_tank_chassis_3",
+      "配備可能: light_tank_destroyer_chassis_3",
+      "配備可能: light_tank_artillery_chassis_3",
+      "配備可能: light_tank_aa_chassis_3",
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_light_armor, mio_cat_tech_light_armor_and_modules"
+    ],
+    "prerequisites": [
+      "improved_light_tank_chassis"
+    ]
+  },
+  {
+    "id": "sp_armored_lc_naval_engine_conversion_tech",
+    "title": "Sp Armored Lc Naval Engine Conversion Tech",
+    "year": 1943,
+    "x": 0,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_armored_lc_naval_engine_conversion",
+    "effects": [
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_heavy_armor, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": [
+      "super_heavy_tank_chassis"
+    ]
+  },
+  {
+    "id": "sp_armored_lc_transmission_improvements_tech",
+    "title": "Sp Armored Lc Transmission Improvements Tech",
+    "year": 1943,
+    "x": 0,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_armored_lc_transmission_improvements",
+    "effects": [
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_heavy_armor, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": [
+      "super_heavy_tank_chassis"
+    ]
+  },
+  {
+    "id": "sp_armored_lc_specialized_field_manuals_tech",
+    "title": "Sp Armored Lc Specialized Field Manuals Tech",
+    "year": 1943,
+    "x": 0,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_armored_lc_specialized_field_manuals",
+    "effects": [
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_heavy_armor, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": [
+      "super_heavy_tank_chassis"
+    ]
+  },
+  {
+    "id": "sp_armored_lc_weapon_fire_control_tech",
+    "title": "Sp Armored Lc Weapon Fire Control Tech",
+    "year": 1945,
+    "x": 0,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_armored_lc_weapon_fire_control",
+    "effects": [
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_heavy_armor, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": [
+      "sp_armored_lc_naval_engine_conversion_tech",
+      "sp_armored_lc_transmission_improvements_tech",
+      "sp_armored_lc_specialized_field_manuals_tech"
+    ]
+  },
+  {
+    "id": "gwtank_chassis",
+    "title": "Gwtank Chassis",
+    "year": 1918,
+    "x": 200,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_inter_war_light_tank_chassis",
+    "effects": [
+      "配備可能: light_tank_chassis_0",
+      "配備可能: medium_tank_chassis_0",
+      "配備可能: heavy_tank_chassis_0",
+      "配備可能: light_tank_destroyer_chassis_0",
+      "配備可能: medium_tank_destroyer_chassis_0",
+      "配備可能: heavy_tank_destroyer_chassis_0",
+      "配備可能: light_tank_artillery_chassis_0",
+      "配備可能: medium_tank_artillery_chassis_0",
+      "配備可能: heavy_tank_artillery_chassis_0",
+      "配備可能: light_tank_aa_chassis_0",
+      "配備可能: medium_tank_aa_chassis_0",
+      "配備可能: heavy_tank_aa_chassis_0",
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_light_armor, mio_cat_tech_light_armor_and_modules"
     ],
     "prerequisites": []
   },
   {
-    "id": "panther",
-    "title": "パンター",
+    "id": "basic_medium_tank_chassis",
+    "title": "Basic Medium Tank Chassis",
+    "year": 1938,
+    "x": 200,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_medium_tank_chassis_1",
+    "effects": [
+      "配備可能: medium_tank_chassis_1",
+      "配備可能: medium_tank_destroyer_chassis_1",
+      "配備可能: medium_tank_artillery_chassis_1",
+      "配備可能: medium_tank_aa_chassis_1",
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_medium_armor, mio_cat_tech_medium_armor_and_modules"
+    ],
+    "prerequisites": [
+      "gwtank_chassis"
+    ]
+  },
+  {
+    "id": "improved_medium_tank_chassis",
+    "title": "Improved Medium Tank Chassis",
+    "year": 1940,
+    "x": 200,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_medium_tank_chassis_2",
+    "effects": [
+      "配備可能: medium_tank_chassis_2",
+      "配備可能: medium_tank_destroyer_chassis_2",
+      "配備可能: medium_tank_artillery_chassis_2",
+      "配備可能: medium_tank_aa_chassis_2",
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_medium_armor, mio_cat_tech_medium_armor_and_modules"
+    ],
+    "prerequisites": [
+      "basic_medium_tank_chassis"
+    ]
+  },
+  {
+    "id": "advanced_medium_tank_chassis",
+    "title": "Advanced Medium Tank Chassis",
     "year": 1943,
-    "x": 400,
-    "y": 200,
-    "research_time": 210,
-    "reliability": "配備（後期）",
-    "desc": "ソ連T-34への対抗として開発された中戦車。傾斜装甲と75mm長砲身を持つ傑作戦車。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M3 11h14'/><circle cx='11' cy='15' r='3'/><path d='M5 11v4'/></svg>",
+    "x": 200,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_medium_tank_chassis_3",
     "effects": [
-      "装甲: 65/100",
-      "攻撃: 72/100",
-      "突破: 55/100",
-      "機動力: 42/100",
-      "信頼度: 40/100"
+      "配備可能: medium_tank_chassis_3",
+      "配備可能: medium_tank_destroyer_chassis_3",
+      "配備可能: medium_tank_artillery_chassis_3",
+      "配備可能: medium_tank_aa_chassis_3",
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_medium_armor, mio_cat_tech_medium_armor_and_modules"
     ],
     "prerequisites": [
-      "elefant"
+      "improved_medium_tank_chassis"
     ]
   },
   {
-    "id": "hetzer",
-    "title": "ヘッツァー駆逐戦車",
-    "year": 1944,
-    "x": 400,
-    "y": 350,
-    "research_time": 131,
-    "reliability": "配備（制式採用）",
-    "desc": "38(t)戦車の車台を活かした小型駆逐戦車。低姿勢と待ち伏せ戦術で脅威の対戦車火力を発揮した。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "id": "main_battle_tank_chassis",
+    "title": "Main Battle Tank Chassis",
+    "year": 1945,
+    "x": 200,
+    "y": 0,
+    "research_time": 250,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_modern_tank_chassis",
     "effects": [
-      "対人攻撃: 12/100",
-      "対物攻撃: 64/100",
-      "生存力: 37/100",
-      "機動力: 46/100",
-      "信頼度: 71/100"
+      "配備可能: modern_tank_chassis_1",
+      "配備可能: modern_tank_destroyer_chassis_1",
+      "配備可能: modern_tank_artillery_chassis_1",
+      "配備可能: modern_tank_aa_chassis_1",
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_medium_armor, mio_cat_tech_medium_armor_and_modules"
     ],
     "prerequisites": [
-      "panther"
+      "advanced_medium_tank_chassis",
+      "advanced_heavy_tank_chassis"
     ]
   },
   {
-    "id": "jagdpanther",
-    "title": "ヤグドパンター",
-    "year": 1944,
-    "x": 400,
-    "y": 500,
-    "research_time": 131,
-    "reliability": "配備（制式採用）",
-    "desc": "パンター車台に88mm砲を搭載した重駆逐戦車。厚い装甲と卓越した主砲で「装甲狩人」と呼ばれた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "id": "engine_tech_1",
+    "title": "Engine Tech 1",
+    "year": 1934,
+    "x": 200,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "nsb_engine_tech_1",
     "effects": [
-      "対人攻撃: 12/100",
-      "対物攻撃: 64/100",
-      "生存力: 37/100",
-      "機動力: 46/100",
-      "信頼度: 71/100"
-    ],
-    "prerequisites": [
-      "hetzer"
-    ]
-  },
-  {
-    "id": "wirbelwind",
-    "title": "ヴィルベルヴィント対空戦車",
-    "year": 1944,
-    "x": 400,
-    "y": 650,
-    "research_time": 131,
-    "reliability": "配備（制式採用）",
-    "desc": "4連装20mm Flak 38を旋回砲塔に載せた対空自走砲。連合軍の戦闘爆撃機に悩まされた独軍の即応策。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
-    "effects": [
-      "対人攻撃: 12/100",
-      "対物攻撃: 64/100",
-      "生存力: 37/100",
-      "機動力: 46/100",
-      "信頼度: 71/100"
-    ],
-    "prerequisites": [
-      "jagdpanther"
-    ]
-  },
-  {
-    "id": "maus",
-    "title": "マウス超重戦車",
-    "year": 1944,
-    "x": 700,
-    "y": 50,
-    "research_time": 131,
-    "reliability": "低（試作止まり）",
-    "desc": "重量188tの超重戦車。ポルシェとクルップが手がけた巨大プロジェクトで、完成車2輌のみ。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
-    "effects": [
-      "対人攻撃: 29/100",
-      "対物攻撃: 43/100",
-      "生存力: 35/100",
-      "機動力: 56/100",
-      "信頼度: 77/100"
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, mio_cat_tech_light_armor_and_modules, mio_cat_tech_medium_armor_and_modules, mio_cat_tech_heavy_armor_and_modules"
     ],
     "prerequisites": []
   },
   {
-    "id": "tiger_ii",
-    "title": "ティーガーII",
+    "id": "engine_tech_2",
+    "title": "Engine Tech 2",
+    "year": 1938,
+    "x": 200,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "nsb_engine_tech_2",
+    "effects": [
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, mio_cat_tech_light_armor_and_modules, mio_cat_tech_medium_armor_and_modules, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": [
+      "engine_tech_1"
+    ]
+  },
+  {
+    "id": "engine_tech_3",
+    "title": "Engine Tech 3",
+    "year": 1941,
+    "x": 200,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "nsb_engine_tech_3",
+    "effects": [
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, mio_cat_tech_light_armor_and_modules, mio_cat_tech_medium_armor_and_modules, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": [
+      "engine_tech_2"
+    ]
+  },
+  {
+    "id": "engine_tech_4",
+    "title": "Engine Tech 4",
     "year": 1944,
-    "x": 700,
-    "y": 200,
-    "research_time": 230,
-    "reliability": "少数配備",
-    "desc": "「ケーニッヒスティーガー」。105トンの超重戦車で、正面装甲は当時のどの砲も貫けなかった。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M2 12h20'/><path d='M18 12l2 4h-4z'/><path d='M6 12v3'/></svg>",
+    "x": 200,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "nsb_engine_tech_4",
     "effects": [
-      "装甲: 92/100",
-      "攻撃: 85/100",
-      "突破: 40/100",
-      "機動力: 15/100",
-      "信頼度: 30/100"
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, mio_cat_tech_light_armor_and_modules, mio_cat_tech_medium_armor_and_modules, mio_cat_tech_heavy_armor_and_modules"
     ],
     "prerequisites": [
-      "maus"
+      "engine_tech_3"
     ]
   },
   {
-    "id": "e100",
-    "title": "E-100超重戦車",
-    "year": 1945,
-    "x": 700,
-    "y": 350,
-    "research_time": 133,
-    "reliability": "低（試作止まり）",
-    "desc": "「開発シリーズE」計画の最終クラス。実車1輌のみで、戦争終結とともに計画は放棄された。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "id": "armor_tech_1",
+    "title": "Armor Tech 1",
+    "year": 1936,
+    "x": 300,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "nsb_armor_tech_1",
     "effects": [
-      "対人攻撃: 30/100",
-      "対物攻撃: 44/100",
-      "生存力: 36/100",
-      "機動力: 56/100",
-      "信頼度: 78/100"
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, mio_cat_tech_light_armor_and_modules, mio_cat_tech_medium_armor_and_modules, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "armor_tech_2",
+    "title": "Armor Tech 2",
+    "year": 1938,
+    "x": 300,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "nsb_armor_tech_2",
+    "effects": [
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, mio_cat_tech_light_armor_and_modules, mio_cat_tech_medium_armor_and_modules, mio_cat_tech_heavy_armor_and_modules"
     ],
     "prerequisites": [
-      "tiger_ii"
+      "armor_tech_1"
     ]
   },
   {
-    "id": "jagdtiger",
-    "title": "ヤグドティーガー",
-    "year": 1945,
-    "x": 700,
-    "y": 500,
-    "research_time": 133,
-    "reliability": "配備（制式採用）",
-    "desc": "128mm砲を搭載する史上最重の量産駆逐戦車。圧倒的な火力と装甲を持つが、機械的信頼性は低かった。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='12' width='20' height='8' rx='3'/><path d='M6 12l2-7h8l2 7'/><circle cx='5' cy='16' r='1.5'/><circle cx='12' cy='16' r='1.5'/><circle cx='19' cy='16' r='1.5'/></svg>",
+    "id": "armor_tech_3",
+    "title": "Armor Tech 3",
+    "year": 1941,
+    "x": 300,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "nsb_armor_tech_3",
     "effects": [
-      "対人攻撃: 30/100",
-      "対物攻撃: 44/100",
-      "生存力: 36/100",
-      "機動力: 56/100",
-      "信頼度: 78/100"
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, mio_cat_tech_light_armor_and_modules, mio_cat_tech_medium_armor_and_modules, mio_cat_tech_heavy_armor_and_modules"
     ],
     "prerequisites": [
-      "e100"
+      "armor_tech_2"
+    ]
+  },
+  {
+    "id": "armor_tech_4",
+    "title": "Armor Tech 4",
+    "year": 1944,
+    "x": 300,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "nsb_armor_tech_4",
+    "effects": [
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, mio_cat_tech_light_armor_and_modules, mio_cat_tech_medium_armor_and_modules, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": [
+      "armor_tech_3"
+    ]
+  },
+  {
+    "id": "improved_heavy_tank_chassis",
+    "title": "Improved Heavy Tank Chassis",
+    "year": 1940,
+    "x": 500,
+    "y": 0,
+    "research_time": 250,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_heavy_tank_chassis_2",
+    "effects": [
+      "配備可能: heavy_tank_chassis_2",
+      "配備可能: heavy_tank_destroyer_chassis_2",
+      "配備可能: heavy_tank_artillery_chassis_2",
+      "配備可能: heavy_tank_aa_chassis_2",
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_heavy_armor, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": [
+      "basic_heavy_tank_chassis"
+    ]
+  },
+  {
+    "id": "advanced_heavy_tank_chassis",
+    "title": "Advanced Heavy Tank Chassis",
+    "year": 1943,
+    "x": 500,
+    "y": 0,
+    "research_time": 250,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_heavy_tank_chassis_3",
+    "effects": [
+      "配備可能: heavy_tank_chassis_3",
+      "配備可能: heavy_tank_destroyer_chassis_3",
+      "配備可能: heavy_tank_artillery_chassis_3",
+      "配備可能: heavy_tank_aa_chassis_3",
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_heavy_armor, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": [
+      "improved_heavy_tank_chassis"
+    ]
+  },
+  {
+    "id": "basic_heavy_tank_chassis",
+    "title": "Basic Heavy Tank Chassis",
+    "year": 1934,
+    "x": 500,
+    "y": 100,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_heavy_tank_chassis_1",
+    "effects": [
+      "配備可能: heavy_tank_chassis_1",
+      "配備可能: heavy_tank_destroyer_chassis_1",
+      "配備可能: heavy_tank_artillery_chassis_1",
+      "配備可能: heavy_tank_aa_chassis_1",
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_heavy_armor, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": [
+      "gwtank_chassis"
+    ]
+  },
+  {
+    "id": "super_heavy_tank_chassis",
+    "title": "Super Heavy Tank Chassis",
+    "year": 1941,
+    "x": 900,
+    "y": 0,
+    "research_time": 300,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_super_heavy_tank_chassis",
+    "effects": [
+      "配備可能: super_heavy_tank_chassis_1",
+      "配備可能: super_heavy_tank_destroyer_chassis_1",
+      "配備可能: super_heavy_tank_artillery_chassis_1",
+      "配備可能: super_heavy_tank_aa_chassis_1",
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_heavy_armor, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": [
+      "improved_heavy_tank_chassis"
+    ]
+  },
+  {
+    "id": "sp_armored_advanced_flamethrower_tech",
+    "title": "Sp Armored Advanced Flamethrower Tech",
+    "year": 1941,
+    "x": 1200,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_armored_advanced_flamethrower",
+    "effects": [
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, mio_cat_tech_light_armor_and_modules, mio_cat_tech_medium_armor_and_modules, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": [
+      "gwtank_chassis"
+    ]
+  },
+  {
+    "id": "sp_armored_lc_high_impact_obliterator_cannon_tech",
+    "title": "Sp Armored Lc High Impact Obliterator Cannon Tech",
+    "year": 1943,
+    "x": 1300,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_armored_lc_high_impact_obliterator_cannon",
+    "effects": [
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_heavy_armor, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": [
+      "super_heavy_tank_chassis"
     ]
   }
 ]

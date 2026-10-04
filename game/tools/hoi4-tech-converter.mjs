@@ -405,7 +405,7 @@ function main() {
 
   const techFile = resolve(args.tech);
   const spriteFile = resolve(args.sprites);
-  const category = args.category || 'air';
+  const category = args.category || 'armor';
 
   console.log(`🔧 HOI4 Tech Tree Converter`);
   console.log(`  技術ファイル: ${techFile}`);
