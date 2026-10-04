@@ -24,3 +24,12 @@ docker compose -f docker-compose.base44.yml up -d
 - `math/js/community/backend.js` auto-detects the API at startup (`/api/health`); falls back to IndexedDB if unavailable.
 - No external credentials or secrets are needed.
 - Health check: `curl http://localhost:3000/` returns 200; `curl http://localhost:3000/api/health` returns `{"ok":true}`.
+
+## Wiki Asset Scraper (game/assets/scraper/)
+
+- Runs inside a throwaway `python:3.12-slim` container (host has no pip deps):
+  `docker run -d --name scraper-main -v "$PWD:/repo" -w /repo -e PYTHONUNBUFFERED=1 python:3.12-slim sh -c "pip install -q requests beautifulsoup4; python3 game/assets/scraper/scrape_wiki_assets.py --mode wayback --all; echo EXIT_CODE=$?"`
+- Progress: `docker logs -f scraper-main`; output dirs `game/assets/<category>/`, mappings `game/assets/mappings/<id>.json` + index `game/assets/asset-mapping.json`.
+- Wayback Machine rate-limits aggressively (HTTP 429, bursts last minutes). Pacing: PAGE_DELAY 4s, DL threads 1, DL_DELAY 2s, RETRY_429_WAIT 45s. If a category page 429s through all retries it is SKIPPED with an empty mapping — re-run with `--only <id1>,<id2>` afterwards to fill the gaps.
+- Downloads are resumable: existing files >300 bytes are skipped ("cached").
+- App-side integration: `AssetRegistry.loadScrapedMapping()` (fetches asset-mapping.json) and `loadCategoryMapping(id)` / `getLocal(id, key)` in game/assets/asset-registry.js; index is fetched at boot from `CoreEngine.init()` in game/index.html.

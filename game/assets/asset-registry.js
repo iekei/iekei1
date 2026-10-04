@@ -198,6 +198,59 @@ const AssetRegistry = {
     }
   },
 
+  // ── スクレイピング済みマッピング統合 ──
+  // scraper (assets/scraper/) が生成した asset-mapping.json / mappings/*.json
+  scrapedIndex: null,
+  scrapedMappings: {},
+
+  /** asset-mapping.json (カテゴリ索引) を読み込む。2回目以降はキャッシュを返す */
+  async loadScrapedMapping() {
+    if (this.scrapedIndex) return this.scrapedIndex;
+    try {
+      const res = await fetch('assets/asset-mapping.json', { cache: 'no-cache' });
+      if (!res.ok) return null;
+      this.scrapedIndex = await res.json();
+      return this.scrapedIndex;
+    } catch (e) {
+      console.warn('[AssetRegistry] asset-mapping.json 読み込み失敗', e);
+      return null;
+    }
+  },
+
+  /** カテゴリ1件分のマッピングJSON (mappings/<id>.json) を遅延読み込み */
+  async loadCategoryMapping(categoryId) {
+    if (this.scrapedMappings[categoryId]) return this.scrapedMappings[categoryId];
+    const index = await this.loadScrapedMapping();
+    const entry = index && index.categories && index.categories[categoryId];
+    if (!entry || !entry.mapping_file) return null;
+    try {
+      const res = await fetch(entry.mapping_file, { cache: 'no-cache' });
+      if (!res.ok) return null;
+      const mapping = await res.json();
+      // key → ローカル相対パス の辞書に整形 (ローカル未保存分は除く)
+      const locals = {};
+      (mapping.images || []).forEach(img => {
+        if (img.local) locals[img.key] = img.local;
+      });
+      this.scrapedMappings[categoryId] = { mapping, locals };
+      return this.scrapedMappings[categoryId];
+    } catch (e) {
+      console.warn('[AssetRegistry] ' + categoryId + ' マッピング読み込み失敗', e);
+      return null;
+    }
+  },
+
+  /**
+   * カテゴリ内の画像パスを解決する (同期的 — 事前に loadCategoryMapping 済みのこと)
+   * 返り値: ローカル相対パス | null (未収録)
+   */
+  getLocal(categoryId, nameOrKey) {
+    const m = this.scrapedMappings[categoryId];
+    if (!m) return null;
+    const key = String(nameOrKey).replace(/\.[^.]+$/, '').toLowerCase().replace(/[\s]+/g, '_');
+    return m.locals[key] || null;
+  },
+
   // ── 補助メソッド ──
 
   /** カテゴリIDから定義を取得 */

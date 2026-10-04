@@ -3,10 +3,144 @@
  "label": "トップバーアイコン",
  "source": "https://hoi4.paradoxwikis.com/Category:Topbar_icons",
  "mode": "wayback",
- "scraped_at": "2026-10-04T04:15:43+0000",
+ "scraped_at": "2026-10-04T04:51:56+0000",
  "local_base": "assets/topbar/",
- "count": 0,
- "count_names": 0,
- "failed": [],
- "images": []
+ "count": 3,
+ "count_names": 15,
+ "failed": [
+  "Achievements_button.png",
+  "Air_experience.png",
+  "Command_power.png",
+  "Convoys.png",
+  "Division_Overview.png",
+  "Fuel.png",
+  "Industrial_capacity.png",
+  "Manpower.png",
+  "National_unity.png",
+  "Navy_experience.png",
+  "Navy_Overview.png",
+  "Political_power.png"
+ ],
+ "images": [
+  {
+   "name": "Achievements_button.png",
+   "key": "achievements_button",
+   "local": null,
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Achievements_button.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Achievements_button.png",
+   "subcategory": null
+  },
+  {
+   "name": "Air_experience.png",
+   "key": "air_experience",
+   "local": null,
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Air_experience.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Air_experience.png",
+   "subcategory": null
+  },
+  {
+   "name": "Air_Forces.png",
+   "key": "air_forces",
+   "local": "assets/topbar/Air_Forces.png",
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Air_Forces.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Air_Forces.png",
+   "subcategory": null
+  },
+  {
+   "name": "Army_experience.png",
+   "key": "army_experience",
+   "local": "assets/topbar/Army_experience.png",
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Army_experience.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Army_experience.png",
+   "subcategory": null
+  },
+  {
+   "name": "Command_power.png",
+   "key": "command_power",
+   "local": null,
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Command_power.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Command_power.png",
+   "subcategory": null
+  },
+  {
+   "name": "Convoys.png",
+   "key": "convoys",
+   "local": null,
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Convoys.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Convoys.png",
+   "subcategory": null
+  },
+  {
+   "name": "Division_Overview.png",
+   "key": "division_overview",
+   "local": null,
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Division_Overview.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Division_Overview.png",
+   "subcategory": null
+  },
+  {
+   "name": "Fuel.png",
+   "key": "fuel",
+   "local": null,
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Fuel.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Fuel.png",
+   "subcategory": null
+  },
+  {
+   "name": "Industrial_capacity.png",
+   "key": "industrial_capacity",
+   "local": null,
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Industrial_capacity.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Industrial_capacity.png",
+   "subcategory": null
+  },
+  {
+   "name": "Manpower.png",
+   "key": "manpower",
+   "local": null,
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Manpower.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Manpower.png",
+   "subcategory": null
+  },
+  {
+   "name": "National_unity.png",
+   "key": "national_unity",
+   "local": null,
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/National_unity.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:National_unity.png",
+   "subcategory": null
+  },
+  {
+   "name": "Navy_experience.png",
+   "key": "navy_experience",
+   "local": null,
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Navy_experience.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Navy_experience.png",
+   "subcategory": null
+  },
+  {
+   "name": "Navy_Overview.png",
+   "key": "navy_overview",
+   "local": null,
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Navy_Overview.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Navy_Overview.png",
+   "subcategory": null
+  },
+  {
+   "name": "Nuclear_bomb_availability.png",
+   "key": "nuclear_bomb_availability",
+   "local": "assets/topbar/Nuclear_bomb_availability.png",
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Nuclear_bomb_availability.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Nuclear_bomb_availability.png",
+   "subcategory": null
+  },
+  {
+   "name": "Political_power.png",
+   "key": "political_power",
+   "local": null,
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Political_power.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Political_power.png",
+   "subcategory": null
+  }
+ ]
 }

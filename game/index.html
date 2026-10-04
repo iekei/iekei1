@@ -1142,6 +1142,10 @@ class CoreEngine {
         if (src) img.src = src;
       });
     }
+    // スクレイピング済みWikiアセットのマッピング索引をバックグラウンドで読み込む
+    if (typeof AssetRegistry !== 'undefined' && AssetRegistry.loadScrapedMapping) {
+      AssetRegistry.loadScrapedMapping();
+    }
     if (typeof ImageLoader !== 'undefined') {
       ImageLoader.init();
       // トップバー必須アイコンを事前読み込み (常に表示されるため)

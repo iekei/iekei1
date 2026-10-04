@@ -1,0 +1,12 @@
+{
+ "id": "operative_portraits",
+ "label": "諜報機関ポートレート",
+ "source": "https://hoi4.paradoxwikis.com/Category:Operative_portraits",
+ "mode": "wayback",
+ "scraped_at": "2026-10-04T04:44:11+0000",
+ "local_base": "assets/operatives/",
+ "count": 0,
+ "count_names": 0,
+ "failed": [],
+ "images": []
+}

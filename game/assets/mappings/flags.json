@@ -1,0 +1,12 @@
+{
+ "id": "flags",
+ "label": "国旗",
+ "source": "https://hoi4.paradoxwikis.com/Category:Flags",
+ "mode": "wayback",
+ "scraped_at": "2026-10-04T04:48:02+0000",
+ "local_base": "assets/flags/",
+ "count": 0,
+ "count_names": 0,
+ "failed": [],
+ "images": []
+}

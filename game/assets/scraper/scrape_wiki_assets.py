@@ -108,12 +108,12 @@ NAME_BLACKLIST = re.compile(
 MIN_BYTES = 300
 
 # 取得の丁寧さ (archive.org / 本家への負荷軽減)
-PAGE_DELAY = 4.0      # カテゴリページ巡回の間隔 (秒)
-DL_THREADS = 2        # 画像ダウンロードの同時数
-DL_DELAY = 1.2        # 各ダウンロード間の最小間隔 (秒)
+PAGE_DELAY = 10.0     # カテゴリページ巡回の間隔 (秒) — Waybackのレート制限回避
+DL_THREADS = 1        # 画像ダウンロードの同時数
+DL_DELAY = 3.0        # 各ダウンロード間の最小間隔 (秒)
 HTTP_TIMEOUT = 60
-MAX_RETRIES = 5
-RETRY_429_WAIT = 30   # 429 (Rate Limit) 時の待機秒数
+MAX_RETRIES = 6
+RETRY_429_WAIT = 120  # 429 (Rate Limit) 時の待機秒数 — ブロック解除待ちを含む
 
 BROWSER_UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
               "(KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36")
