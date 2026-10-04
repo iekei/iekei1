@@ -3,9 +3,9 @@
  "label": "科学者ポートレート",
  "source": "https://hoi4.paradoxwikis.com/Category:Scientist_portraits",
  "mode": "reader",
- "scraped_at": "2026-10-04T07:46:50+0000",
+ "scraped_at": "2026-10-04T10:00:53+0000",
  "local_base": "assets/scientists/",
- "count": 10,
+ "count": 75,
  "count_names": 105,
  "images": [
   {
@@ -111,7 +111,7 @@
   {
    "name": "Portrait_BEL_georges_lemaitre.png",
    "key": "portrait_bel_georges_lemaitre",
-   "local": null,
+   "local": "assets/scientists/Portrait_BEL_georges_lemaitre.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_BEL_georges_lemaitre.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_BEL_georges_lemaitre.png",
    "subcategory": null,
@@ -121,7 +121,7 @@
   {
    "name": "Portrait_BEL_karel_bossart.png",
    "key": "portrait_bel_karel_bossart",
-   "local": null,
+   "local": "assets/scientists/Portrait_BEL_karel_bossart.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_BEL_karel_bossart.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_BEL_karel_bossart.png",
    "subcategory": null,
@@ -131,7 +131,7 @@
   {
    "name": "Portrait_BEL_nicolas_florine.png",
    "key": "portrait_bel_nicolas_florine",
-   "local": null,
+   "local": "assets/scientists/Portrait_BEL_nicolas_florine.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_BEL_nicolas_florine.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_BEL_nicolas_florine.png",
    "subcategory": null,
@@ -141,7 +141,7 @@
   {
    "name": "Portrait_CAN_george_volkoff.png",
    "key": "portrait_can_george_volkoff",
-   "local": null,
+   "local": "assets/scientists/Portrait_CAN_george_volkoff.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_CAN_george_volkoff.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_CAN_george_volkoff.png",
    "subcategory": null,
@@ -151,7 +151,7 @@
   {
    "name": "Portrait_CHI_chu_chia_jen.png",
    "key": "portrait_chi_chu_chia_jen",
-   "local": null,
+   "local": "assets/scientists/Portrait_CHI_chu_chia_jen.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_CHI_chu_chia_jen.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_CHI_chu_chia_jen.png",
    "subcategory": null,
@@ -161,7 +161,7 @@
   {
    "name": "Portrait_CHI_wang_ganchang.png",
    "key": "portrait_chi_wang_ganchang",
-   "local": null,
+   "local": "assets/scientists/Portrait_CHI_wang_ganchang.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_CHI_wang_ganchang.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_CHI_wang_ganchang.png",
    "subcategory": null,
@@ -171,7 +171,7 @@
   {
    "name": "Portrait_CHI_wong_tsu.png",
    "key": "portrait_chi_wong_tsu",
-   "local": null,
+   "local": "assets/scientists/Portrait_CHI_wong_tsu.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_CHI_wong_tsu.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_CHI_wong_tsu.png",
    "subcategory": null,
@@ -181,7 +181,7 @@
   {
    "name": "Portrait_CHI_xu_tingyao.png",
    "key": "portrait_chi_xu_tingyao",
-   "local": null,
+   "local": "assets/scientists/Portrait_CHI_xu_tingyao.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_CHI_xu_tingyao.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_CHI_xu_tingyao.png",
    "subcategory": null,
@@ -191,7 +191,7 @@
   {
    "name": "Portrait_CZE_alexej_surin.png",
    "key": "portrait_cze_alexej_surin",
-   "local": null,
+   "local": "assets/scientists/Portrait_CZE_alexej_surin.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_CZE_alexej_surin.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_CZE_alexej_surin.png",
    "subcategory": null,
@@ -201,7 +201,7 @@
   {
    "name": "Portrait_CZE_antonin_husnik.png",
    "key": "portrait_cze_antonin_husnik",
-   "local": null,
+   "local": "assets/scientists/Portrait_CZE_antonin_husnik.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_CZE_antonin_husnik.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_CZE_antonin_husnik.png",
    "subcategory": null,
@@ -211,7 +211,7 @@
   {
    "name": "Portrait_CZE_georg_placzek.png",
    "key": "portrait_cze_georg_placzek",
-   "local": null,
+   "local": "assets/scientists/Portrait_CZE_georg_placzek.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_CZE_georg_placzek.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_CZE_georg_placzek.png",
    "subcategory": null,
@@ -221,7 +221,7 @@
   {
    "name": "Portrait_DEN_niels_bohr.png",
    "key": "portrait_den_niels_bohr",
-   "local": null,
+   "local": "assets/scientists/Portrait_DEN_niels_bohr.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_DEN_niels_bohr.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_DEN_niels_bohr.png",
    "subcategory": null,
@@ -231,7 +231,7 @@
   {
    "name": "Portrait_ENG_charles_goodeve.png",
    "key": "portrait_eng_charles_goodeve",
-   "local": null,
+   "local": "assets/scientists/Portrait_ENG_charles_goodeve.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_ENG_charles_goodeve.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_ENG_charles_goodeve.png",
    "subcategory": null,
@@ -241,7 +241,7 @@
   {
    "name": "Portrait_ENG_frank_whittle.png",
    "key": "portrait_eng_frank_whittle",
-   "local": null,
+   "local": "assets/scientists/Portrait_ENG_frank_whittle.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_ENG_frank_whittle.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_ENG_frank_whittle.png",
    "subcategory": null,
@@ -251,7 +251,7 @@
   {
    "name": "Portrait_ENG_james_chadwick.png",
    "key": "portrait_eng_james_chadwick",
-   "local": null,
+   "local": "assets/scientists/Portrait_ENG_james_chadwick.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_ENG_james_chadwick.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_ENG_james_chadwick.png",
    "subcategory": null,
@@ -261,7 +261,7 @@
   {
    "name": "Portrait_ENG_john_cockcroft.png",
    "key": "portrait_eng_john_cockcroft",
-   "local": null,
+   "local": "assets/scientists/Portrait_ENG_john_cockcroft.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_ENG_john_cockcroft.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_ENG_john_cockcroft.png",
    "subcategory": null,
@@ -271,7 +271,7 @@
   {
    "name": "Portrait_ENG_nevil_shute.png",
    "key": "portrait_eng_nevil_shute",
-   "local": null,
+   "local": "assets/scientists/Portrait_ENG_nevil_shute.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_ENG_nevil_shute.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_ENG_nevil_shute.png",
    "subcategory": null,
@@ -281,7 +281,7 @@
   {
    "name": "Portrait_ENG_robert_watson_watt.png",
    "key": "portrait_eng_robert_watson_watt",
-   "local": null,
+   "local": "assets/scientists/Portrait_ENG_robert_watson_watt.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_ENG_robert_watson_watt.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_ENG_robert_watson_watt.png",
    "subcategory": null,
@@ -291,7 +291,7 @@
   {
    "name": "Portrait_FRA_emile_rimailho.png",
    "key": "portrait_fra_emile_rimailho",
-   "local": null,
+   "local": "assets/scientists/Portrait_FRA_emile_rimailho.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_FRA_emile_rimailho.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_FRA_emile_rimailho.png",
    "subcategory": null,
@@ -301,7 +301,7 @@
   {
    "name": "Portrait_FRA_eugene_schneider_ii.png",
    "key": "portrait_fra_eugene_schneider_ii",
-   "local": null,
+   "local": "assets/scientists/Portrait_FRA_eugene_schneider_ii.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_FRA_eugene_schneider_ii.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_FRA_eugene_schneider_ii.png",
    "subcategory": null,
@@ -311,7 +311,7 @@
   {
    "name": "Portrait_FRA_francois_hussenot.png",
    "key": "portrait_fra_francois_hussenot",
-   "local": null,
+   "local": "assets/scientists/Portrait_FRA_francois_hussenot.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_FRA_francois_hussenot.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_FRA_francois_hussenot.png",
    "subcategory": null,
@@ -321,7 +321,7 @@
   {
    "name": "Portrait_FRA_frederic_joliot_curie.png",
    "key": "portrait_fra_frederic_joliot_curie",
-   "local": null,
+   "local": "assets/scientists/Portrait_FRA_frederic_joliot_curie.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_FRA_frederic_joliot_curie.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_FRA_frederic_joliot_curie.png",
    "subcategory": null,
@@ -331,7 +331,7 @@
   {
    "name": "Portrait_FRA_henri_edmond_fouche.png",
    "key": "portrait_fra_henri_edmond_fouche",
-   "local": null,
+   "local": "assets/scientists/Portrait_FRA_henri_edmond_fouche.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_FRA_henri_edmond_fouche.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_FRA_henri_edmond_fouche.png",
    "subcategory": null,
@@ -341,7 +341,7 @@
   {
    "name": "Portrait_FRA_irene_joliot_curie.png",
    "key": "portrait_fra_irene_joliot_curie",
-   "local": null,
+   "local": "assets/scientists/Portrait_FRA_irene_joliot_curie.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_FRA_irene_joliot_curie.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_FRA_irene_joliot_curie.png",
    "subcategory": null,
@@ -351,7 +351,7 @@
   {
    "name": "Portrait_FRA_joseph_bethenod.png",
    "key": "portrait_fra_joseph_bethenod",
-   "local": null,
+   "local": "assets/scientists/Portrait_FRA_joseph_bethenod.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_FRA_joseph_bethenod.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_FRA_joseph_bethenod.png",
    "subcategory": null,
@@ -361,7 +361,7 @@
   {
    "name": "Portrait_FRA_louis_renault.png",
    "key": "portrait_fra_louis_renault",
-   "local": null,
+   "local": "assets/scientists/Portrait_FRA_louis_renault.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_FRA_louis_renault.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_FRA_louis_renault.png",
    "subcategory": null,
@@ -371,7 +371,7 @@
   {
    "name": "Portrait_generic_europe_male_04_scientist.png",
    "key": "portrait_generic_europe_male_04_scientist",
-   "local": null,
+   "local": "assets/scientists/Portrait_generic_europe_male_04_scientist.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_generic_europe_male_04_scientist.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_generic_europe_male_04_scientist.png",
    "subcategory": null,
@@ -381,7 +381,7 @@
   {
    "name": "Portrait_GER_eduard_grote.png",
    "key": "portrait_ger_eduard_grote",
-   "local": null,
+   "local": "assets/scientists/Portrait_GER_eduard_grote.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_GER_eduard_grote.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_GER_eduard_grote.png",
    "subcategory": null,
@@ -391,7 +391,7 @@
   {
    "name": "Portrait_GER_erwin_aders.png",
    "key": "portrait_ger_erwin_aders",
-   "local": null,
+   "local": "assets/scientists/Portrait_GER_erwin_aders.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_GER_erwin_aders.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_GER_erwin_aders.png",
    "subcategory": null,
@@ -401,7 +401,7 @@
   {
    "name": "Portrait_GER_ferdinand_porsche.png",
    "key": "portrait_ger_ferdinand_porsche",
-   "local": null,
+   "local": "assets/scientists/Portrait_GER_ferdinand_porsche.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_GER_ferdinand_porsche.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_GER_ferdinand_porsche.png",
    "subcategory": null,
@@ -411,7 +411,7 @@
   {
    "name": "Portrait_GER_gustav_ludwig_hertz.png",
    "key": "portrait_ger_gustav_ludwig_hertz",
-   "local": null,
+   "local": "assets/scientists/Portrait_GER_gustav_ludwig_hertz.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_GER_gustav_ludwig_hertz.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_GER_gustav_ludwig_hertz.png",
    "subcategory": null,
@@ -421,7 +421,7 @@
   {
    "name": "Portrait_GER_hans_von_ohain.png",
    "key": "portrait_ger_hans_von_ohain",
-   "local": null,
+   "local": "assets/scientists/Portrait_GER_hans_von_ohain.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_GER_hans_von_ohain.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_GER_hans_von_ohain.png",
    "subcategory": null,
@@ -431,7 +431,7 @@
   {
    "name": "Portrait_GER_hellmuth_walter.png",
    "key": "portrait_ger_hellmuth_walter",
-   "local": null,
+   "local": "assets/scientists/Portrait_GER_hellmuth_walter.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_GER_hellmuth_walter.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_GER_hellmuth_walter.png",
    "subcategory": null,
@@ -441,7 +441,7 @@
   {
    "name": "Portrait_GER_henrich_focke.png",
    "key": "portrait_ger_henrich_focke",
-   "local": null,
+   "local": "assets/scientists/Portrait_GER_henrich_focke.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_GER_henrich_focke.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_GER_henrich_focke.png",
    "subcategory": null,
@@ -451,7 +451,7 @@
   {
    "name": "Portrait_GER_hermann_burkhardt.png",
    "key": "portrait_ger_hermann_burkhardt",
-   "local": null,
+   "local": "assets/scientists/Portrait_GER_hermann_burkhardt.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_GER_hermann_burkhardt.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_GER_hermann_burkhardt.png",
    "subcategory": null,
@@ -461,7 +461,7 @@
   {
    "name": "Portrait_GER_karl_heinrich_emil_becker.png",
    "key": "portrait_ger_karl_heinrich_emil_becker",
-   "local": null,
+   "local": "assets/scientists/Portrait_GER_karl_heinrich_emil_becker.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_GER_karl_heinrich_emil_becker.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_GER_karl_heinrich_emil_becker.png",
    "subcategory": null,
@@ -471,7 +471,7 @@
   {
    "name": "Portrait_GER_konrad_zuse.png",
    "key": "portrait_ger_konrad_zuse",
-   "local": null,
+   "local": "assets/scientists/Portrait_GER_konrad_zuse.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_GER_konrad_zuse.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_GER_konrad_zuse.png",
    "subcategory": null,
@@ -481,7 +481,7 @@
   {
    "name": "Portrait_GER_kurt_tank.png",
    "key": "portrait_ger_kurt_tank",
-   "local": null,
+   "local": "assets/scientists/Portrait_GER_kurt_tank.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_GER_kurt_tank.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_GER_kurt_tank.png",
    "subcategory": null,
@@ -491,7 +491,7 @@
   {
    "name": "Portrait_GER_manfred_von_ardenne.png",
    "key": "portrait_ger_manfred_von_ardenne",
-   "local": null,
+   "local": "assets/scientists/Portrait_GER_manfred_von_ardenne.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_GER_manfred_von_ardenne.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_GER_manfred_von_ardenne.png",
    "subcategory": null,
@@ -501,7 +501,7 @@
   {
    "name": "Portrait_GER_max_kramer.png",
    "key": "portrait_ger_max_kramer",
-   "local": null,
+   "local": "assets/scientists/Portrait_GER_max_kramer.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_GER_max_kramer.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_GER_max_kramer.png",
    "subcategory": null,
@@ -511,7 +511,7 @@
   {
    "name": "Portrait_GER_peter_adolf_thiessen.png",
    "key": "portrait_ger_peter_adolf_thiessen",
-   "local": null,
+   "local": "assets/scientists/Portrait_GER_peter_adolf_thiessen.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_GER_peter_adolf_thiessen.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_GER_peter_adolf_thiessen.png",
    "subcategory": null,
@@ -521,7 +521,7 @@
   {
    "name": "Portrait_GER_reinhold_platz.png",
    "key": "portrait_ger_reinhold_platz",
-   "local": null,
+   "local": "assets/scientists/Portrait_GER_reinhold_platz.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_GER_reinhold_platz.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_GER_reinhold_platz.png",
    "subcategory": null,
@@ -531,7 +531,7 @@
   {
    "name": "Portrait_GER_ulrich_gabler.png",
    "key": "portrait_ger_ulrich_gabler",
-   "local": null,
+   "local": "assets/scientists/Portrait_GER_ulrich_gabler.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_GER_ulrich_gabler.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_GER_ulrich_gabler.png",
    "subcategory": null,
@@ -541,7 +541,7 @@
   {
    "name": "Portrait_GER_werner_heisenberg.png",
    "key": "portrait_ger_werner_heisenberg",
-   "local": null,
+   "local": "assets/scientists/Portrait_GER_werner_heisenberg.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_GER_werner_heisenberg.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_GER_werner_heisenberg.png",
    "subcategory": null,
@@ -551,7 +551,7 @@
   {
    "name": "Portrait_GER_wernher_von_braun.png",
    "key": "portrait_ger_wernher_von_braun",
-   "local": null,
+   "local": "assets/scientists/Portrait_GER_wernher_von_braun.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_GER_wernher_von_braun.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_GER_wernher_von_braun.png",
    "subcategory": null,
@@ -561,7 +561,7 @@
   {
    "name": "Portrait_HOL_anthony_fokker.png",
    "key": "portrait_hol_anthony_fokker",
-   "local": null,
+   "local": "assets/scientists/Portrait_HOL_anthony_fokker.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_HOL_anthony_fokker.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_HOL_anthony_fokker.png",
    "subcategory": null,
@@ -571,7 +571,7 @@
   {
    "name": "Portrait_HUN_asboth_oszkar.png",
    "key": "portrait_hun_asboth_oszkar",
-   "local": null,
+   "local": "assets/scientists/Portrait_HUN_asboth_oszkar.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_HUN_asboth_oszkar.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_HUN_asboth_oszkar.png",
    "subcategory": null,
@@ -581,7 +581,7 @@
   {
    "name": "Portrait_HUN_edward_teller.png",
    "key": "portrait_hun_edward_teller",
-   "local": null,
+   "local": "assets/scientists/Portrait_HUN_edward_teller.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_HUN_edward_teller.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_HUN_edward_teller.png",
    "subcategory": null,
@@ -591,7 +591,7 @@
   {
    "name": "Portrait_HUN_gyorgy_jendrassik.png",
    "key": "portrait_hun_gyorgy_jendrassik",
-   "local": null,
+   "local": "assets/scientists/Portrait_HUN_gyorgy_jendrassik.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_HUN_gyorgy_jendrassik.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_HUN_gyorgy_jendrassik.png",
    "subcategory": null,
@@ -601,7 +601,7 @@
   {
    "name": "Portrait_HUN_john_von_neumann.png",
    "key": "portrait_hun_john_von_neumann",
-   "local": null,
+   "local": "assets/scientists/Portrait_HUN_john_von_neumann.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_HUN_john_von_neumann.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_HUN_john_von_neumann.png",
    "subcategory": null,
@@ -611,7 +611,7 @@
   {
    "name": "Portrait_HUN_leo_szilard.png",
    "key": "portrait_hun_leo_szilard",
-   "local": null,
+   "local": "assets/scientists/Portrait_HUN_leo_szilard.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_HUN_leo_szilard.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_HUN_leo_szilard.png",
    "subcategory": null,
@@ -621,7 +621,7 @@
   {
    "name": "Portrait_HUN_nicholas_straussler.png",
    "key": "portrait_hun_nicholas_straussler",
-   "local": null,
+   "local": "assets/scientists/Portrait_HUN_nicholas_straussler.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_HUN_nicholas_straussler.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_HUN_nicholas_straussler.png",
    "subcategory": null,
@@ -631,7 +631,7 @@
   {
    "name": "Portrait_IRE_ernest_walton.png",
    "key": "portrait_ire_ernest_walton",
-   "local": null,
+   "local": "assets/scientists/Portrait_IRE_ernest_walton.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_IRE_ernest_walton.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_IRE_ernest_walton.png",
    "subcategory": null,
@@ -641,7 +641,7 @@
   {
    "name": "Portrait_ITA_curio_bernardis.png",
    "key": "portrait_ita_curio_bernardis",
-   "local": null,
+   "local": "assets/scientists/Portrait_ITA_curio_bernardis.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_ITA_curio_bernardis.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_ITA_curio_bernardis.png",
    "subcategory": null,
@@ -651,7 +651,7 @@
   {
    "name": "Portrait_ITA_enrico_fermi.png",
    "key": "portrait_ita_enrico_fermi",
-   "local": null,
+   "local": "assets/scientists/Portrait_ITA_enrico_fermi.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_ITA_enrico_fermi.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_ITA_enrico_fermi.png",
    "subcategory": null,
@@ -661,7 +661,7 @@
   {
    "name": "Portrait_ITA_filippo_bonfiglietti.png",
    "key": "portrait_ita_filippo_bonfiglietti",
-   "local": null,
+   "local": "assets/scientists/Portrait_ITA_filippo_bonfiglietti.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_ITA_filippo_bonfiglietti.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_ITA_filippo_bonfiglietti.png",
    "subcategory": null,
@@ -671,7 +671,7 @@
   {
    "name": "Portrait_ITA_gaetano_crocco.png",
    "key": "portrait_ita_gaetano_crocco",
-   "local": null,
+   "local": "assets/scientists/Portrait_ITA_gaetano_crocco.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_ITA_gaetano_crocco.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_ITA_gaetano_crocco.png",
    "subcategory": null,
@@ -681,7 +681,7 @@
   {
    "name": "Portrait_ITA_giovanni_giorgi.png",
    "key": "portrait_ita_giovanni_giorgi",
-   "local": null,
+   "local": "assets/scientists/Portrait_ITA_giovanni_giorgi.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_ITA_giovanni_giorgi.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_ITA_giovanni_giorgi.png",
    "subcategory": null,
@@ -691,7 +691,7 @@
   {
    "name": "Portrait_ITA_mario_castoldi.png",
    "key": "portrait_ita_mario_castoldi",
-   "local": null,
+   "local": "assets/scientists/Portrait_ITA_mario_castoldi.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_ITA_mario_castoldi.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_ITA_mario_castoldi.png",
    "subcategory": null,
@@ -701,7 +701,7 @@
   {
    "name": "Portrait_ITA_robert_longhi.png",
    "key": "portrait_ita_robert_longhi",
-   "local": null,
+   "local": "assets/scientists/Portrait_ITA_robert_longhi.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_ITA_robert_longhi.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_ITA_robert_longhi.png",
    "subcategory": null,
@@ -711,7 +711,7 @@
   {
    "name": "Portrait_JAP_hideki_yukawa.png",
    "key": "portrait_jap_hideki_yukawa",
-   "local": null,
+   "local": "assets/scientists/Portrait_JAP_hideki_yukawa.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_JAP_hideki_yukawa.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_JAP_hideki_yukawa.png",
    "subcategory": null,
@@ -721,7 +721,7 @@
   {
    "name": "Portrait_JAP_hideo_itokawa.png",
    "key": "portrait_jap_hideo_itokawa",
-   "local": null,
+   "local": "assets/scientists/Portrait_JAP_hideo_itokawa.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_JAP_hideo_itokawa.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_JAP_hideo_itokawa.png",
    "subcategory": null,
@@ -771,7 +771,7 @@
   {
    "name": "Portrait_JAP_kijiro_nambu.png",
    "key": "portrait_jap_kijiro_nambu",
-   "local": null,
+   "local": "assets/scientists/Portrait_JAP_kijiro_nambu.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_JAP_kijiro_nambu.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_JAP_kijiro_nambu.png",
    "subcategory": null,
@@ -831,7 +831,7 @@
   {
    "name": "Portrait_PER_kazem_hasibi.png",
    "key": "portrait_per_kazem_hasibi",
-   "local": null,
+   "local": "assets/scientists/Portrait_PER_kazem_hasibi.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_PER_kazem_hasibi.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_PER_kazem_hasibi.png",
    "subcategory": null,
@@ -961,7 +961,7 @@
   {
    "name": "Portrait_SWE_lise_meitner.png",
    "key": "portrait_swe_lise_meitner",
-   "local": null,
+   "local": "assets/scientists/Portrait_SWE_lise_meitner.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Portrait_SWE_lise_meitner.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Portrait_SWE_lise_meitner.png",
    "subcategory": null,
@@ -1059,7 +1059,7 @@
    "snapshot_ts": null
   }
  ],
- "crawler_version": 5,
+ "crawler_version": 6,
  "complete": false,
  "traversal_complete": true,
  "pages_visited": 1,
@@ -1177,84 +1177,22 @@
     "Portrait_generic_europe_male_04_scientist.png"
    ],
    "subcategories": [],
+   "pages": [],
    "expected_files": 105,
-   "expected_subcategories": null
+   "expected_subcategories": null,
+   "expected_pages": null
   }
  },
  "pending_downloads": [
-  "Portrait_BEL_georges_lemaitre.png",
-  "Portrait_BEL_karel_bossart.png",
-  "Portrait_BEL_nicolas_florine.png",
-  "Portrait_CAN_george_volkoff.png",
-  "Portrait_CHI_chu_chia_jen.png",
-  "Portrait_CHI_wang_ganchang.png",
-  "Portrait_CHI_wong_tsu.png",
-  "Portrait_CHI_xu_tingyao.png",
-  "Portrait_CZE_alexej_surin.png",
-  "Portrait_CZE_antonin_husnik.png",
-  "Portrait_CZE_georg_placzek.png",
-  "Portrait_DEN_niels_bohr.png",
-  "Portrait_ENG_charles_goodeve.png",
-  "Portrait_ENG_frank_whittle.png",
-  "Portrait_ENG_james_chadwick.png",
-  "Portrait_ENG_john_cockcroft.png",
-  "Portrait_ENG_nevil_shute.png",
-  "Portrait_ENG_robert_watson_watt.png",
-  "Portrait_FRA_emile_rimailho.png",
-  "Portrait_FRA_eugene_schneider_ii.png",
-  "Portrait_FRA_francois_hussenot.png",
-  "Portrait_FRA_frederic_joliot_curie.png",
-  "Portrait_FRA_henri_edmond_fouche.png",
-  "Portrait_FRA_irene_joliot_curie.png",
-  "Portrait_FRA_joseph_bethenod.png",
-  "Portrait_FRA_louis_renault.png",
-  "Portrait_generic_europe_male_04_scientist.png",
-  "Portrait_GER_eduard_grote.png",
-  "Portrait_GER_erwin_aders.png",
-  "Portrait_GER_ferdinand_porsche.png",
-  "Portrait_GER_gustav_ludwig_hertz.png",
-  "Portrait_GER_hans_von_ohain.png",
-  "Portrait_GER_hellmuth_walter.png",
-  "Portrait_GER_henrich_focke.png",
-  "Portrait_GER_hermann_burkhardt.png",
-  "Portrait_GER_karl_heinrich_emil_becker.png",
-  "Portrait_GER_konrad_zuse.png",
-  "Portrait_GER_kurt_tank.png",
-  "Portrait_GER_manfred_von_ardenne.png",
-  "Portrait_GER_max_kramer.png",
-  "Portrait_GER_peter_adolf_thiessen.png",
-  "Portrait_GER_reinhold_platz.png",
-  "Portrait_GER_ulrich_gabler.png",
-  "Portrait_GER_werner_heisenberg.png",
-  "Portrait_GER_wernher_von_braun.png",
-  "Portrait_HOL_anthony_fokker.png",
-  "Portrait_HUN_asboth_oszkar.png",
-  "Portrait_HUN_edward_teller.png",
-  "Portrait_HUN_gyorgy_jendrassik.png",
-  "Portrait_HUN_john_von_neumann.png",
-  "Portrait_HUN_leo_szilard.png",
-  "Portrait_HUN_nicholas_straussler.png",
-  "Portrait_IRE_ernest_walton.png",
-  "Portrait_ITA_curio_bernardis.png",
-  "Portrait_ITA_enrico_fermi.png",
-  "Portrait_ITA_filippo_bonfiglietti.png",
-  "Portrait_ITA_gaetano_crocco.png",
-  "Portrait_ITA_giovanni_giorgi.png",
-  "Portrait_ITA_mario_castoldi.png",
-  "Portrait_ITA_robert_longhi.png",
-  "Portrait_JAP_hideki_yukawa.png",
-  "Portrait_JAP_hideo_itokawa.png",
   "Portrait_JAP_hideo_iwakuro_scientist.png",
   "Portrait_JAP_isoroku_yamamoto_scientist.png",
   "Portrait_JAP_jiro_horikoshi.png",
   "Portrait_JAP_keiji_fukuda.png",
-  "Portrait_JAP_kijiro_nambu.png",
   "Portrait_JAP_yoji_ito.png",
   "Portrait_JAP_yoshio_nishina.png",
   "Portrait_JAP_yoshitoshi_tokugawa_scientist.png",
   "Portrait_JAP_yuzuru_hiraga_scientist.png",
   "Portrait_PER_ahmad_zirakzadeh.png",
-  "Portrait_PER_kazem_hasibi.png",
   "Portrait_PHI_emma_rotor.png",
   "Portrait_PRC_he_zehui.png",
   "Portrait_PRC_qian_sanqiang.png",
@@ -1267,7 +1205,6 @@
   "Portrait_SOV_igor_kurchatov.png",
   "Portrait_SOV_sergei_korolev.png",
   "Portrait_SOV_vladimir_kotelnikov.png",
-  "Portrait_SWE_lise_meitner.png",
   "Portrait_TUR_vecihi_hurkus.png",
   "Portrait_USA_andrew_mckee.png",
   "Portrait_USA_edward_curtis_wells.png",
@@ -1278,5 +1215,36 @@
   "Portrait_USA_vannevar_bush.png",
   "Portrait_USA_william_francis_gibbs.png"
  ],
- "failed": []
+ "failed": [
+  "Portrait_JAP_hideo_iwakuro_scientist.png",
+  "Portrait_JAP_isoroku_yamamoto_scientist.png",
+  "Portrait_JAP_jiro_horikoshi.png",
+  "Portrait_JAP_keiji_fukuda.png",
+  "Portrait_JAP_yoji_ito.png",
+  "Portrait_JAP_yoshio_nishina.png",
+  "Portrait_JAP_yoshitoshi_tokugawa_scientist.png",
+  "Portrait_JAP_yuzuru_hiraga_scientist.png",
+  "Portrait_PER_ahmad_zirakzadeh.png",
+  "Portrait_PHI_emma_rotor.png",
+  "Portrait_PRC_he_zehui.png",
+  "Portrait_PRC_qian_sanqiang.png",
+  "Portrait_PRC_qian_xuesan.png",
+  "Portrait_PRC_wang_shusheng.png",
+  "Portrait_RAJ_homi_j_bhabha.png",
+  "Portrait_SOV_abram_ioffe.png",
+  "Portrait_SOV_arkady_nazarov.png",
+  "Portrait_SOV_boris_stechkin.png",
+  "Portrait_SOV_igor_kurchatov.png",
+  "Portrait_SOV_sergei_korolev.png",
+  "Portrait_SOV_vladimir_kotelnikov.png",
+  "Portrait_TUR_vecihi_hurkus.png",
+  "Portrait_USA_andrew_mckee.png",
+  "Portrait_USA_edward_curtis_wells.png",
+  "Portrait_USA_john_walter_christie.png",
+  "Portrait_USA_leslie_skinner.png",
+  "Portrait_USA_robert_goddard.png",
+  "Portrait_USA_robert_oppenheimer.png",
+  "Portrait_USA_vannevar_bush.png",
+  "Portrait_USA_william_francis_gibbs.png"
+ ]
 }

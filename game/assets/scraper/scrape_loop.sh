@@ -14,12 +14,20 @@ pass=0
 while [ "$MAX_PASSES" -eq 0 ] || [ "$pass" -lt "$MAX_PASSES" ]; do
   pass=$((pass + 1))
   echo "=== scraper pass ${pass}/${MAX_PASSES} ==="
-  code=0
-  python3 "$SCRIPT" --mode "$MODE" "$@" --skip-done || code=$?
-  if [ "$code" -gt 1 ]; then
-    echo "実行エラー（終了コード ${code}）。進捗を保持して停止します。"
-    exit "$code"
-  fi
+  # Discover across EVERY target first. Slow/unavailable image binaries must
+  # not keep categories later in the list from being discovered.
+  for stage in discovery download; do
+    code=0
+    if [ "$stage" = discovery ]; then
+      python3 "$SCRIPT" --mode "$MODE" "$@" --skip-done --download-budget 0 || code=$?
+    else
+      python3 "$SCRIPT" --mode "$MODE" "$@" --skip-done || code=$?
+    fi
+    if [ "$code" -gt 1 ]; then
+      echo "実行エラー（終了コード ${code}）。進捗を保持して停止します。"
+      exit "$code"
+    fi
+  done
   if python3 "$SCRIPT" --mode "$MODE" "$@" --status; then
     echo "=== 全カテゴリの巡回・画像保存が完了 ==="
     exit 0

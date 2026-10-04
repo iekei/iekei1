@@ -1,0 +1,49 @@
+/* Research view only; gameplay remains in ResearchManager. */
+#tpl-research { min-height: 0; }
+#tpl-research .research-tabs { overflow-x: auto; gap: 5px; padding: 8px; }
+#tpl-research .research-tab { display: flex; align-items: center; gap: 6px; flex-shrink: 0; padding: 6px 12px; }
+.research-tab img { width: 22px; height: 22px; object-fit: contain; }
+#tpl-research .research-slots { flex-wrap: wrap; gap: 5px; padding: 8px; }
+#tpl-research .research-slot { font-size: 10px; }
+.research-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border-mil); background: #1c2119; flex-shrink: 0; }
+.research-heading h2 { color: var(--text-gold); font-family: var(--mil-font-print); font-size: 17px; font-weight: 700; }
+.research-heading p { color: var(--text-secondary); font-size: 10px; margin-top: 3px; }
+.research-legend { display: flex; gap: 10px; color: var(--text-secondary); font-size: 10px; white-space: nowrap; }
+.research-legend i { display: inline-block; width: 7px; height: 7px; margin-right: 4px; background: var(--border-mil); }
+.research-legend .available { background: var(--accent-green); }
+.research-legend .researching { background: var(--text-gold); }
+#research-tree-container { min-height: 0; }
+#research-tree-viewport { min-width: 100%; min-height: 100%; }
+#research-svg-lines { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
+#game-root button.tech-node { width: 154px; height: 116px; padding: 8px; border-width: 1px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; }
+#game-root button.tech-node.available { border-color: var(--accent-green); }
+#game-root button.tech-node.locked { opacity: .68; }
+#game-root button.tech-node.selected { outline: 2px solid var(--text-gold); outline-offset: 3px; }
+.tech-icon { width: 72px; height: 44px; object-fit: contain; flex-shrink: 0; }
+#game-root .tech-node .tn-title { font-size: 11px; line-height: 1.35; max-width: 100%; }
+.tech-node .tn-meta { display: flex; align-items: center; gap: 8px; font-size: 9px; color: var(--text-secondary); }
+.tech-node .tn-status { font-size: 9px; color: var(--text-gold); }
+.research-level { position: absolute; left: 12px; color: var(--text-secondary); font-size: 9px; writing-mode: vertical-rl; letter-spacing: .08em; }
+.research-lane-label { position: absolute; top: 16px; color: var(--text-gold); font-size: 10px; border-bottom: 1px solid var(--mil-brass-dark); padding-bottom: 8px; text-align: center; }
+#research-svg-lines path { stroke-width: 2; }
+#research-svg-lines path[data-ready='true'] { stroke: var(--accent-green); }
+#research-detail { position: fixed; z-index: 6000; width: min(340px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); overflow-y: auto; background: var(--mil-grain), #20251c; border: 1px solid var(--text-gold); border-radius: 3px; box-shadow: var(--mil-frame); padding: 16px; color: var(--text-primary); font-size: 12px; }
+.tech-detail-header { display: flex; gap: 10px; align-items: center; padding-right: 16px; }
+.tech-detail-header img { width: 64px; height: 48px; object-fit: contain; }
+#research-detail h3 { font-family: var(--mil-font-print); color: var(--text-gold); font-size: 17px; line-height: 1.4; font-weight: 700; }
+.tech-detail-subtitle { color: var(--text-secondary); font-size: 10px; margin-top: 4px; }
+.tech-detail-close { position: absolute; right: 10px; top: 8px; color: var(--text-secondary); border: none; background: none; font-size: 20px; cursor: pointer; }
+.tech-detail-desc { color: var(--text-primary); line-height: 1.8; margin: 12px 0; }
+#research-detail h4 { color: var(--text-gold); font-size: 11px; border-top: 1px solid var(--border-mil); padding-top: 10px; margin: 10px 0 6px; }
+.tech-detail-effects { list-style: none; color: var(--text-secondary); line-height: 1.9; }
+.tech-detail-effects li::before { content: '＋ '; color: var(--accent-green); }
+.tech-detail-prerequisite { color: var(--text-secondary); line-height: 1.8; }
+.tech-detail-prerequisite.done { color: var(--accent-green); }
+.tech-detail-action { display: block; width: 100%; margin-top: 14px; padding: 9px; background: var(--mil-plate); border: 1px solid var(--text-gold); color: var(--text-gold); font-weight: 700; cursor: pointer; }
+.tech-detail-action:disabled { color: var(--text-secondary); border-color: var(--border-mil); cursor: not-allowed; }
+@media (max-width: 600px) {
+  .research-heading { flex-wrap: wrap; gap: 6px; padding: 9px 12px; }
+  .research-heading h2 { font-size: 15px; }
+  .research-legend { gap: 8px; }
+  #tpl-research .research-slot { padding: 4px 6px; }
+}

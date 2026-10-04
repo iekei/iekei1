@@ -2,10 +2,10 @@
  "id": "topbar_icons",
  "label": "トップバーアイコン",
  "source": "https://hoi4.paradoxwikis.com/Category:Topbar_icons",
- "mode": "wayback",
- "scraped_at": "2026-10-04T07:28:28+0000",
+ "mode": "reader",
+ "scraped_at": "2026-10-04T08:07:34+0000",
  "local_base": "assets/topbar/",
- "count": 13,
+ "count": 20,
  "count_names": 20,
  "images": [
   {
@@ -131,7 +131,7 @@
   {
    "name": "Navy_Overview.png",
    "key": "navy_overview",
-   "local": null,
+   "local": "assets/topbar/Navy_Overview.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Navy_Overview.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Navy_Overview.png",
    "subcategory": null,
@@ -151,7 +151,7 @@
   {
    "name": "Political_power.png",
    "key": "political_power",
-   "local": null,
+   "local": "assets/topbar/Political_power.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Political_power.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Political_power.png",
    "subcategory": null,
@@ -161,7 +161,7 @@
   {
    "name": "Stability.png",
    "key": "stability",
-   "local": null,
+   "local": "assets/topbar/Stability.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Stability.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Stability.png",
    "subcategory": null,
@@ -171,7 +171,7 @@
   {
    "name": "Toprow.png",
    "key": "toprow",
-   "local": null,
+   "local": "assets/topbar/Toprow.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Toprow.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Toprow.png",
    "subcategory": null,
@@ -181,7 +181,7 @@
   {
    "name": "War_support.png",
    "key": "war_support",
-   "local": null,
+   "local": "assets/topbar/War_support.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/War_support.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:War_support.png",
    "subcategory": null,
@@ -191,7 +191,7 @@
   {
    "name": "World_tension.png",
    "key": "world_tension",
-   "local": null,
+   "local": "assets/topbar/World_tension.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/World_tension.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:World_tension.png",
    "subcategory": null,
@@ -201,7 +201,7 @@
   {
    "name": "WorldTension100.png",
    "key": "worldtension100",
-   "local": null,
+   "local": "assets/topbar/WorldTension100.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/WorldTension100.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:WorldTension100.png",
    "subcategory": null,
@@ -209,8 +209,8 @@
    "snapshot_ts": "20240113043633"
   }
  ],
- "crawler_version": 4,
- "complete": false,
+ "crawler_version": 6,
+ "complete": true,
  "traversal_complete": true,
  "pages_visited": 1,
  "pending_pages": [],
@@ -242,18 +242,12 @@
     "World_tension.png"
    ],
    "subcategories": [],
+   "pages": [],
    "expected_files": 20,
-   "expected_subcategories": null
+   "expected_subcategories": null,
+   "expected_pages": null
   }
  },
- "pending_downloads": [
-  "Navy_Overview.png",
-  "Political_power.png",
-  "Stability.png",
-  "Toprow.png",
-  "War_support.png",
-  "World_tension.png",
-  "WorldTension100.png"
- ],
+ "pending_downloads": [],
  "failed": []
 }

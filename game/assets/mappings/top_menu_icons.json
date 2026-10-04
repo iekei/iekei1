@@ -2,10 +2,10 @@
  "id": "top_menu_icons",
  "label": "トップメニューアイコン",
  "source": "https://hoi4.paradoxwikis.com/Category:Top_menu_icons",
- "mode": "wayback",
- "scraped_at": "2026-10-04T07:29:20+0000",
+ "mode": "reader",
+ "scraped_at": "2026-10-04T08:08:08+0000",
  "local_base": "assets/top_menu/",
- "count": 11,
+ "count": 20,
  "count_names": 20,
  "images": [
   {
@@ -121,7 +121,7 @@
   {
    "name": "Logistics_button.png",
    "key": "logistics_button",
-   "local": null,
+   "local": "assets/top_menu/Logistics_button.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Logistics_button.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Logistics_button.png",
    "subcategory": null,
@@ -131,7 +131,7 @@
   {
    "name": "Officer_corps_button.png",
    "key": "officer_corps_button",
-   "local": null,
+   "local": "assets/top_menu/Officer_corps_button.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Officer_corps_button.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Officer_corps_button.png",
    "subcategory": null,
@@ -141,7 +141,7 @@
   {
    "name": "Production_button_transparent.png",
    "key": "production_button_transparent",
-   "local": null,
+   "local": "assets/top_menu/Production_button_transparent.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Production_button_transparent.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Production_button_transparent.png",
    "subcategory": null,
@@ -151,7 +151,7 @@
   {
    "name": "Production_button.png",
    "key": "production_button",
-   "local": null,
+   "local": "assets/top_menu/Production_button.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Production_button.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Production_button.png",
    "subcategory": null,
@@ -161,7 +161,7 @@
   {
    "name": "Qwertyui_hotkeys.png",
    "key": "qwertyui_hotkeys",
-   "local": null,
+   "local": "assets/top_menu/Qwertyui_hotkeys.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Qwertyui_hotkeys.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Qwertyui_hotkeys.png",
    "subcategory": null,
@@ -171,7 +171,7 @@
   {
    "name": "Research_button_transparent.png",
    "key": "research_button_transparent",
-   "local": null,
+   "local": "assets/top_menu/Research_button_transparent.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Research_button_transparent.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Research_button_transparent.png",
    "subcategory": null,
@@ -181,7 +181,7 @@
   {
    "name": "Research_button.png",
    "key": "research_button",
-   "local": null,
+   "local": "assets/top_menu/Research_button.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Research_button.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Research_button.png",
    "subcategory": null,
@@ -191,7 +191,7 @@
   {
    "name": "Trade_button_transparent.png",
    "key": "trade_button_transparent",
-   "local": null,
+   "local": "assets/top_menu/Trade_button_transparent.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Trade_button_transparent.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Trade_button_transparent.png",
    "subcategory": null,
@@ -201,7 +201,7 @@
   {
    "name": "Trade_button.png",
    "key": "trade_button",
-   "local": null,
+   "local": "assets/top_menu/Trade_button.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Trade_button.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Trade_button.png",
    "subcategory": null,
@@ -209,8 +209,8 @@
    "snapshot_ts": "20240113043736"
   }
  ],
- "crawler_version": 4,
- "complete": false,
+ "crawler_version": 6,
+ "complete": true,
  "traversal_complete": true,
  "pages_visited": 1,
  "pending_pages": [],
@@ -242,20 +242,12 @@
     "Trade_button_transparent.png"
    ],
    "subcategories": [],
+   "pages": [],
    "expected_files": 20,
-   "expected_subcategories": null
+   "expected_subcategories": null,
+   "expected_pages": null
   }
  },
- "pending_downloads": [
-  "Logistics_button.png",
-  "Officer_corps_button.png",
-  "Production_button_transparent.png",
-  "Production_button.png",
-  "Qwertyui_hotkeys.png",
-  "Research_button_transparent.png",
-  "Research_button.png",
-  "Trade_button_transparent.png",
-  "Trade_button.png"
- ],
+ "pending_downloads": [],
  "failed": []
 }

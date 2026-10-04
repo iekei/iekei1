@@ -3,9 +3,9 @@
  "label": "兵器設計・モジュール",
  "source": "https://hoi4.paradoxwikis.com/Category:Equipment_icons",
  "mode": "reader",
- "scraped_at": "2026-10-04T07:47:29+0000",
+ "scraped_at": "2026-10-04T09:40:45+0000",
  "local_base": "assets/equipment/",
- "count": 10,
+ "count": 40,
  "count_names": 353,
  "images": [
   {
@@ -111,7 +111,7 @@
   {
    "name": "Fuel_tank.png",
    "key": "fuel_tank",
-   "local": null,
+   "local": "assets/equipment/Fuel_tank.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Fuel_tank.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Fuel_tank.png",
    "subcategory": null,
@@ -121,7 +121,7 @@
   {
    "name": "GER_fighter1.png",
    "key": "ger_fighter1",
-   "local": null,
+   "local": "assets/equipment/GER_fighter1.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/GER_fighter1.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:GER_fighter1.png",
    "subcategory": null,
@@ -131,7 +131,7 @@
   {
    "name": "GER_light_plane_1.png",
    "key": "ger_light_plane_1",
-   "local": null,
+   "local": "assets/equipment/GER_light_plane_1.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/GER_light_plane_1.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:GER_light_plane_1.png",
    "subcategory": null,
@@ -141,7 +141,7 @@
   {
    "name": "GER_medium_plane_1.png",
    "key": "ger_medium_plane_1",
-   "local": null,
+   "local": "assets/equipment/GER_medium_plane_1.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/GER_medium_plane_1.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:GER_medium_plane_1.png",
    "subcategory": null,
@@ -151,7 +151,7 @@
   {
    "name": "GER_tactical_bomber1.png",
    "key": "ger_tactical_bomber1",
-   "local": null,
+   "local": "assets/equipment/GER_tactical_bomber1.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/GER_tactical_bomber1.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:GER_tactical_bomber1.png",
    "subcategory": null,
@@ -161,7 +161,7 @@
   {
    "name": "Guided_missile_1.png",
    "key": "guided_missile_1",
-   "local": null,
+   "local": "assets/equipment/Guided_missile_1.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Guided_missile_1.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Guided_missile_1.png",
    "subcategory": null,
@@ -171,7 +171,7 @@
   {
    "name": "Guided_missile_2.png",
    "key": "guided_missile_2",
-   "local": null,
+   "local": "assets/equipment/Guided_missile_2.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Guided_missile_2.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Guided_missile_2.png",
    "subcategory": null,
@@ -181,7 +181,7 @@
   {
    "name": "Guided_missile_3.png",
    "key": "guided_missile_3",
-   "local": null,
+   "local": "assets/equipment/Guided_missile_3.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Guided_missile_3.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Guided_missile_3.png",
    "subcategory": null,
@@ -191,7 +191,7 @@
   {
    "name": "Heavy_battery.png",
    "key": "heavy_battery",
-   "local": null,
+   "local": "assets/equipment/Heavy_battery.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Heavy_battery.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Heavy_battery.png",
    "subcategory": null,
@@ -201,7 +201,7 @@
   {
    "name": "Jap_suicide_craft_medium.png",
    "key": "jap_suicide_craft_medium",
-   "local": null,
+   "local": "assets/equipment/Jap_suicide_craft_medium.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Jap_suicide_craft_medium.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Jap_suicide_craft_medium.png",
    "subcategory": null,
@@ -211,7 +211,7 @@
   {
    "name": "Light_battery.png",
    "key": "light_battery",
-   "local": null,
+   "local": "assets/equipment/Light_battery.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Light_battery.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Light_battery.png",
    "subcategory": null,
@@ -221,7 +221,7 @@
   {
    "name": "Light_plane_1.png",
    "key": "light_plane_1",
-   "local": null,
+   "local": "assets/equipment/Light_plane_1.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Light_plane_1.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Light_plane_1.png",
    "subcategory": null,
@@ -231,7 +231,7 @@
   {
    "name": "Light_plane_2.png",
    "key": "light_plane_2",
-   "local": null,
+   "local": "assets/equipment/Light_plane_2.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Light_plane_2.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Light_plane_2.png",
    "subcategory": null,
@@ -241,7 +241,7 @@
   {
    "name": "Light_plane_3.png",
    "key": "light_plane_3",
-   "local": null,
+   "local": "assets/equipment/Light_plane_3.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Light_plane_3.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Light_plane_3.png",
    "subcategory": null,
@@ -251,7 +251,7 @@
   {
    "name": "Light_plane_4.png",
    "key": "light_plane_4",
-   "local": null,
+   "local": "assets/equipment/Light_plane_4.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Light_plane_4.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Light_plane_4.png",
    "subcategory": null,
@@ -261,7 +261,7 @@
   {
    "name": "Medium_battery.png",
    "key": "medium_battery",
-   "local": null,
+   "local": "assets/equipment/Medium_battery.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Medium_battery.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Medium_battery.png",
    "subcategory": null,
@@ -271,7 +271,7 @@
   {
    "name": "Medium_light_battery.png",
    "key": "medium_light_battery",
-   "local": null,
+   "local": "assets/equipment/Medium_light_battery.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Medium_light_battery.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Medium_light_battery.png",
    "subcategory": null,
@@ -281,7 +281,7 @@
   {
    "name": "Nuclear_missile_equipment_1.png",
    "key": "nuclear_missile_equipment_1",
-   "local": null,
+   "local": "assets/equipment/Nuclear_missile_equipment_1.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Nuclear_missile_equipment_1.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Nuclear_missile_equipment_1.png",
    "subcategory": null,
@@ -291,7 +291,7 @@
   {
    "name": "Nuclear_missile_equipment_2.png",
    "key": "nuclear_missile_equipment_2",
-   "local": null,
+   "local": "assets/equipment/Nuclear_missile_equipment_2.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Nuclear_missile_equipment_2.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Nuclear_missile_equipment_2.png",
    "subcategory": null,
@@ -301,7 +301,7 @@
   {
    "name": "Radar.png",
    "key": "radar",
-   "local": null,
+   "local": "assets/equipment/Radar.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Radar.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Radar.png",
    "subcategory": null,
@@ -311,7 +311,7 @@
   {
    "name": "Rocket_interceptor_1.png",
    "key": "rocket_interceptor_1",
-   "local": null,
+   "local": "assets/equipment/Rocket_interceptor_1.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Rocket_interceptor_1.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Rocket_interceptor_1.png",
    "subcategory": null,
@@ -321,7 +321,7 @@
   {
    "name": "Rocket_interceptor_2.png",
    "key": "rocket_interceptor_2",
-   "local": null,
+   "local": "assets/equipment/Rocket_interceptor_2.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Rocket_interceptor_2.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Rocket_interceptor_2.png",
    "subcategory": null,
@@ -331,7 +331,7 @@
   {
    "name": "Rocket_interceptor_3.png",
    "key": "rocket_interceptor_3",
-   "local": null,
+   "local": "assets/equipment/Rocket_interceptor_3.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Rocket_interceptor_3.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Rocket_interceptor_3.png",
    "subcategory": null,
@@ -341,7 +341,7 @@
   {
    "name": "Rocket_interceptor.png",
    "key": "rocket_interceptor",
-   "local": null,
+   "local": "assets/equipment/Rocket_interceptor.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Rocket_interceptor.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Rocket_interceptor.png",
    "subcategory": null,
@@ -351,7 +351,7 @@
   {
    "name": "Sam_missile_equipment.png",
    "key": "sam_missile_equipment",
-   "local": null,
+   "local": "assets/equipment/Sam_missile_equipment.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Sam_missile_equipment.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Sam_missile_equipment.png",
    "subcategory": null,
@@ -361,7 +361,7 @@
   {
    "name": "Secondary_battery.png",
    "key": "secondary_battery",
-   "local": null,
+   "local": "assets/equipment/Secondary_battery.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Secondary_battery.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Secondary_battery.png",
    "subcategory": null,
@@ -371,7 +371,7 @@
   {
    "name": "Ship_torpedo_launcher.png",
    "key": "ship_torpedo_launcher",
-   "local": null,
+   "local": "assets/equipment/Ship_torpedo_launcher.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Ship_torpedo_launcher.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Ship_torpedo_launcher.png",
    "subcategory": null,
@@ -381,7 +381,7 @@
   {
    "name": "Sonar.png",
    "key": "sonar",
-   "local": null,
+   "local": "assets/equipment/Sonar.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Sonar.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Sonar.png",
    "subcategory": null,
@@ -391,7 +391,7 @@
   {
    "name": "Sub_torpedo_launcher.png",
    "key": "sub_torpedo_launcher",
-   "local": null,
+   "local": "assets/equipment/Sub_torpedo_launcher.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Sub_torpedo_launcher.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Sub_torpedo_launcher.png",
    "subcategory": null,
@@ -401,7 +401,7 @@
   {
    "name": "Submarine_snorkel.png",
    "key": "submarine_snorkel",
-   "local": null,
+   "local": "assets/equipment/Submarine_snorkel.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Submarine_snorkel.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Submarine_snorkel.png",
    "subcategory": null,
@@ -3539,7 +3539,7 @@
    "snapshot_ts": null
   }
  ],
- "crawler_version": 5,
+ "crawler_version": 6,
  "complete": false,
  "traversal_complete": true,
  "pages_visited": 5,
@@ -3597,8 +3597,10 @@
     "Ship_module_icons",
     "Tank_module_icons"
    ],
+   "pages": [],
    "expected_files": 40,
-   "expected_subcategories": 4
+   "expected_subcategories": 4,
+   "expected_pages": null
   },
   "Category:Module_slot_icons": {
    "url": "https://hoi4.paradoxwikis.com/Category:Module_slot_icons",
@@ -3619,8 +3621,10 @@
     "Slot_torpedo.png"
    ],
    "subcategories": [],
+   "pages": [],
    "expected_files": 13,
-   "expected_subcategories": null
+   "expected_subcategories": null,
+   "expected_pages": null
   },
   "Category:Plane_module_icons": {
    "url": "https://hoi4.paradoxwikis.com/Category:Plane_module_icons",
@@ -3720,8 +3724,10 @@
     "Rocket_propelled_bombs_1.png"
    ],
    "subcategories": [],
+   "pages": [],
    "expected_files": 92,
-   "expected_subcategories": null
+   "expected_subcategories": null,
+   "expected_pages": null
   },
   "Category:Ship_module_icons": {
    "url": "https://hoi4.paradoxwikis.com/Category:Ship_module_icons",
@@ -3822,8 +3828,10 @@
     "Submarine_snorkel_2.png"
    ],
    "subcategories": [],
+   "pages": [],
    "expected_files": 93,
-   "expected_subcategories": null
+   "expected_subcategories": null,
+   "expected_pages": null
   },
   "Category:Tank_module_icons": {
    "url": "https://hoi4.paradoxwikis.com/Category:Tank_module_icons",
@@ -3946,41 +3954,13 @@
     "Tank_module_wheeled_suspension.png"
    ],
    "subcategories": [],
+   "pages": [],
    "expected_files": 115,
-   "expected_subcategories": null
+   "expected_subcategories": null,
+   "expected_pages": null
   }
  },
  "pending_downloads": [
-  "Fuel_tank.png",
-  "GER_fighter1.png",
-  "GER_light_plane_1.png",
-  "GER_medium_plane_1.png",
-  "GER_tactical_bomber1.png",
-  "Guided_missile_1.png",
-  "Guided_missile_2.png",
-  "Guided_missile_3.png",
-  "Heavy_battery.png",
-  "Jap_suicide_craft_medium.png",
-  "Light_battery.png",
-  "Light_plane_1.png",
-  "Light_plane_2.png",
-  "Light_plane_3.png",
-  "Light_plane_4.png",
-  "Medium_battery.png",
-  "Medium_light_battery.png",
-  "Nuclear_missile_equipment_1.png",
-  "Nuclear_missile_equipment_2.png",
-  "Radar.png",
-  "Rocket_interceptor_1.png",
-  "Rocket_interceptor_2.png",
-  "Rocket_interceptor_3.png",
-  "Rocket_interceptor.png",
-  "Sam_missile_equipment.png",
-  "Secondary_battery.png",
-  "Ship_torpedo_launcher.png",
-  "Sonar.png",
-  "Sub_torpedo_launcher.png",
-  "Submarine_snorkel.png",
   "Slot_anti_air.png",
   "Slot_armor.png",
   "Slot_battery.png",
@@ -4295,5 +4275,9 @@
   "Tank_module_wet_ammo_storage.png",
   "Tank_module_wheeled_suspension.png"
  ],
- "failed": []
+ "failed": [
+  "Slot_anti_air.png",
+  "Slot_armor.png",
+  "Slot_battery.png"
+ ]
 }

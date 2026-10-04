@@ -12,6 +12,8 @@
 | `image-loader.js` | 画像の遅延読み込み・動的ロード・事前読み込み・キャッシュ制御 |
 | `topbar-icons.js` | トップバー用インラインSVGアイコン (データURI) |
 | `topbar.css` | トップバー・ウィンドウナビゲーションのアイコンスタイル |
+| `research-tree.js` / `research-tree.css` | 前提技術のレーン配置・直角接続線・クリック詳細パネル |
+| `research-icons.js` | 研究画面を開いた時にWiki索引を読み込み、兵器カテゴリ別アイコンを解決 |
 
 ## アセットカテゴリ (AssetRegistry)
 

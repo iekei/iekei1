@@ -12,7 +12,9 @@ Playwright and Chromium. HTTP 429 pauses the whole pass; it is never completion.
 """
 
 import argparse
+import fcntl
 import json
+import shutil
 import re
 import sys
 import time
@@ -28,7 +30,7 @@ from bs4 import BeautifulSoup
 
 from archive_sources import category_candidates, original_image_candidates, original_image_url
 from wiki_crawl import (CRAWLER_VERSION, WIKI_BASE, CategoryCrawl, FetchError,
-                        RateLimited, atomic_json, original_url, parse_category_page)
+                        RateLimited, atomic_json, coverage_satisfied, original_url, parse_category_page)
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 ASSETS_DIR = SCRIPT_DIR.parent
@@ -140,7 +142,7 @@ class WikiScraper:
         self.mode = mode
         self.timestamp = timestamp
         self.session = requests.Session()
-        self.session.headers.update({"User-Agent": "HoI4AssetCollector/5.0", "Accept-Language": "en"})
+        self.session.headers.update({"User-Agent": "HoI4AssetCollector/6.0", "Accept-Language": "en"})
         self.next_requests = {}
         self.context = None
 
@@ -215,29 +217,42 @@ class WikiScraper:
         destination = out_dir / sanitize_filename(record["name"])
         if cached_image(destination):
             return destination
+        # Umbrella and child categories share files. Reuse verified originals
+        # instead of requesting the same binary again for each output directory.
+        for category in CATEGORIES:
+            existing = ASSETS_DIR / category["out_dir"] / destination.name
+            if existing != destination and cached_image(existing):
+                out_dir.mkdir(parents=True, exist_ok=True)
+                temporary = destination.with_suffix(destination.suffix + ".part")
+                shutil.copyfile(existing, temporary)
+                temporary.replace(destination)
+                return destination
         timestamp = record.get("snapshot_ts")
         attempted = set()
         errors = []
 
         def try_image(url, live=False):
+            stamps = [None] if live or self.mode == "live" else list(dict.fromkeys([
+                timestamp or self.timestamp, "2", "2024"]))
             for candidate in image_candidates(url):
-                key = (candidate, live)
-                if key in attempted:
-                    continue
-                attempted.add(key)
-                try:
-                    response = self._get(candidate, image=True, timestamp=timestamp, live=live)
-                    if not is_image(response.content) or (destination.suffix.lower() == ".svg" and b"<svg" not in response.content[:4096]):
-                        raise FetchError(f"画像ではない、不完全、または形式が異なる: {candidate}")
-                    out_dir.mkdir(parents=True, exist_ok=True)
-                    temporary = destination.with_suffix(destination.suffix + ".part")
-                    temporary.write_bytes(response.content)
-                    temporary.replace(destination)
-                    return destination
-                except RateLimited:
-                    raise
-                except FetchError as error:
-                    errors.append(str(error))
+                for stamp in stamps:
+                    key = (candidate, live, stamp)
+                    if key in attempted:
+                        continue
+                    attempted.add(key)
+                    try:
+                        response = self._get(candidate, image=True, timestamp=stamp, live=live)
+                        if not is_image(response.content) or (destination.suffix.lower() == ".svg" and b"<svg" not in response.content[:4096]):
+                            raise FetchError(f"画像ではない、不完全、または形式が異なる: {candidate} ({stamp or 'live'})")
+                        out_dir.mkdir(parents=True, exist_ok=True)
+                        temporary = destination.with_suffix(destination.suffix + ".part")
+                        temporary.write_bytes(response.content)
+                        temporary.replace(destination)
+                        return destination
+                    except RateLimited:
+                        raise
+                    except FetchError as error:
+                        errors.append(str(error))
             return None
 
         # Public originals frequently remain accessible even when HTML pages
@@ -314,11 +329,7 @@ def build_mapping(cat, crawl, mode):
 def mapping_is_complete(cat, mode):
     mapping = read_json(MAPPINGS_DIR / f"{cat['id']}.json")
     coverage = mapping.get("coverage", {})
-    covered = bool(coverage) and all(
-        (entry.get("expected_files") is None or len(entry.get("files", [])) >= entry["expected_files"])
-        and (entry.get("expected_subcategories") is None
-             or len(entry.get("subcategories", [])) >= entry["expected_subcategories"])
-        for entry in coverage.values())
+    covered = bool(coverage) and coverage_satisfied(coverage)
     return (mapping.get("crawler_version") == CRAWLER_VERSION and mapping.get("complete") is True
             and mapping.get("traversal_complete") is True and covered
             and mapping.get("count") == len(mapping.get("images", []))
@@ -369,6 +380,9 @@ def scrape_category(scraper, cat, limit=None, dry_run=False, page_budget=None, d
                     crawl.save()
                     publish()
     finally:
+        # Cached files may clear old errors without making a network request.
+        # Persist those repairs as well as interrupted download progress.
+        crawl.save()
         publish()
     print(f"    - {len(crawl.data['files'])} 件発見 / 巡回完了={crawl.traversal_complete}", flush=True)
     return crawl
@@ -386,10 +400,10 @@ def main():
     parser.add_argument("--status", action="store_true", help="通信なしで進捗を表示（全件完了なら終了コード0）")
     parser.add_argument("--json", action="store_true", help="--status の機械可読レポート")
     parser.add_argument("--page-budget", type=int, default=2, help="1回・1カテゴリ当たりのページ取得数")
-    parser.add_argument("--download-budget", type=int, default=10, help="1回・1カテゴリ当たりの画像取得数")
+    parser.add_argument("--download-budget", type=int, default=10, help="1回・1カテゴリ当たりの画像取得数。0は巡回・索引保存のみ")
     args = parser.parse_args()
-    if args.page_budget < 1 or args.download_budget < 1:
-        parser.error("取得数は1以上にしてください")
+    if args.page_budget < 1 or args.download_budget < 0:
+        parser.error("ページ取得数は1以上、画像取得数は0以上にしてください")
     if args.json and not args.status:
         parser.error("--json には --status が必要です")
     if args.limit is not None and args.limit < 1:
@@ -468,5 +482,25 @@ def main():
     return 0 if complete else 1
 
 
+def acquire_writer_lock():
+    """One writer across all modes; checkpoints and merged mappings are shared."""
+    STATE_DIR.mkdir(parents=True, exist_ok=True)
+    handle = (STATE_DIR / "writer.lock").open("a")
+    try:
+        fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        handle.close()
+        raise
+    return handle
+
+
 if __name__ == "__main__":
-    sys.exit(main())
+    if any(flag in sys.argv for flag in ("--status", "--dry-run", "--limit")):
+        sys.exit(main())
+    try:
+        lock = acquire_writer_lock()
+    except BlockingIOError:
+        print("別の収集プロセスが実行中です。索引への同時書き込みを防ぐため停止します。", flush=True)
+        sys.exit(2)
+    with lock:
+        sys.exit(main())

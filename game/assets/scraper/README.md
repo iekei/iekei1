@@ -1,6 +1,8 @@
 # HoI4 Wiki アセット収集
 
-Composeでは依頼対象の `Scientist_portraits`・`Equipment_icons`・`Flags` を優先収集します。
+Composeでは科学者・兵器モジュール・国旗の3カテゴリを優先して収集します。
+各ラウンドは指定された全対象の巡回・発見を先に進め、
+その後で画像本体を取得するため、遅い画像取得で後続カテゴリの発見が止まりません。
 `Equipment_icons` の `Module_slot_icons`・`Plane_module_icons`・`Ship_module_icons`・
 `Tank_module_icons` も、親カテゴリのリンクから発見して収集します。
 
@@ -29,7 +31,10 @@ Composeは起動時に `requirements.txt` の固定バージョンをインス�
 バックグラウンドジョブはサンドボックスが稼働している間だけ動きます。
 
 既定のComposeジョブは `SCRAPER_MODE=reader` と
-`SCRAPER_ONLY=scientist_portraits,equipment_icons,flags` で動きます。
+`SCRAPER_ONLY=scientist_portraits,equipment_icons,flags`（対象3カテゴリ）で動きます。
+他カテゴリのチェックポイントも維持されます。全14カテゴリを再開する場合は
+Composeの `SCRAPER_ONLY` を空にしてください。
+CLIは `.state/writer.lock` により全モード共通の排他的書き込みを行います。
 公開のJina Readerから `X-Return-Format: html` で完全なカテゴリHTMLを取得し、
 元のWiki URLを基準に解析します。チャレンジ画面を成功扱いにせず、429時は停止します。
 画像本体はWikiの原画像を優先し、失敗時はWaybackを照会します。
@@ -59,8 +64,11 @@ HTTP 429は直ちに全体を止め、`Retry-After` と保存した冷却時刻�
 
 ### アーカイブの回復
 
-新しいスナップショットを先に試し、チャレンジ画面・欠落・取得失敗なら2024年の
-スナップショットを試します。カテゴリのルートだけは `index.php?title=...` も照会します。
+カテゴリページ・画像本体とも、新しいスナップショットを先に試し、
+チャレンジ画面・欠落・取得失敗なら2024年のスナップショットを試します。
+画像は発見元の保存日時→最新→2024年の順に、重複を除いて照会します。
+HTTP 429の場合は過去スナップショットへ進まず、冷却を守ります。
+カテゴリのルートだけは `index.php?title=...` も照会します。
 `Operative_portraits` の過去の名称 `Operatives_portraits` もフォールバックで照会します。
 最初のリクエストは常に発見したURLそのものです。429時に別URLへ逃げて再試行しません。
 テキストだけのファイル名でも、MediaWikiの公開原画像パス、`File:` ページ、
@@ -70,8 +78,10 @@ HTTP 429は直ちに全体を止め、`Retry-After` と保存した冷却時刻�
 
 各ページ・画像後に `.state/` のチェックポイントを保存します（git対象外）。
 成功したページや有効な保存済み画像は取り直さず、保留分だけを処理します。
-バージョン5では複合カーソルの巡回を再検証するためページ情報を再収集しますが、
+バージョン6では画像・子カテゴリに加えて通常ページの公表件数も照合し、
+`pagefrom` が欠落したカテゴリを完了にしません。ページ情報は再収集しますが、
 旧チェックポイントのファイル名や保存済み画像は引き継ぎます。
+複数カテゴリが共有する有効な保存済み原画像はローカルで再利用します。
 他セクションの `*until` が付いた次ページも辿り、変化しない `*from` を持つ戻りリンクは
 次ページと誤認しません。失敗ページが別名カテゴリからのリダイレクトで取得できた場合は、
 同じラウンドで保留とエラーを解消します。
@@ -109,6 +119,8 @@ python3 game/assets/scraper/scrape_wiki_assets.py --only flags --dry-run
 python3 game/assets/scraper/scrape_wiki_assets.py --only flags --limit 50
 # バッチ数はCLIで調整可能
 python3 game/assets/scraper/scrape_wiki_assets.py --all --page-budget 2 --download-budget 10
+# 巡回・発見を保存するが、画像本体はまだ取得しない（完了扱いではない）
+python3 game/assets/scraper/scrape_wiki_assets.py --mode reader --all --download-budget 0
 # 通信なしの回帰テスト
 python3 -m unittest discover -s game/assets/scraper -p 'test_*.py' -v
 ```

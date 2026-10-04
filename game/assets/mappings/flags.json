@@ -3,9 +3,9 @@
  "label": "国旗",
  "source": "https://hoi4.paradoxwikis.com/Category:Flags",
  "mode": "reader",
- "scraped_at": "2026-10-04T07:47:35+0000",
+ "scraped_at": "2026-10-04T09:40:48+0000",
  "local_base": "assets/flags/",
- "count": 59,
+ "count": 119,
  "count_names": 739,
  "images": [
   {
@@ -581,7 +581,7 @@
   {
    "name": "Chinese_Empire.png",
    "key": "chinese_empire",
-   "local": null,
+   "local": "assets/flags/Chinese_Empire.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Chinese_Empire.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Chinese_Empire.png",
    "subcategory": null,
@@ -591,7 +591,7 @@
   {
    "name": "Co-operative_Republic_of_Guyana.png",
    "key": "co-operative_republic_of_guyana",
-   "local": null,
+   "local": "assets/flags/Co-operative_Republic_of_Guyana.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Co-operative_Republic_of_Guyana.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Co-operative_Republic_of_Guyana.png",
    "subcategory": null,
@@ -601,7 +601,7 @@
   {
    "name": "Colombia.png",
    "key": "colombia",
-   "local": null,
+   "local": "assets/flags/Colombia.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Colombia.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Colombia.png",
    "subcategory": null,
@@ -611,7 +611,7 @@
   {
    "name": "Commonwealth_of_the_Bahamas.png",
    "key": "commonwealth_of_the_bahamas",
-   "local": null,
+   "local": "assets/flags/Commonwealth_of_the_Bahamas.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Commonwealth_of_the_Bahamas.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Commonwealth_of_the_Bahamas.png",
    "subcategory": null,
@@ -641,7 +641,7 @@
   {
    "name": "Communist_Spain.png",
    "key": "communist_spain",
-   "local": null,
+   "local": "assets/flags/Communist_Spain.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Communist_Spain.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Communist_Spain.png",
    "subcategory": null,
@@ -651,7 +651,7 @@
   {
    "name": "Confederacy_of_American_States.png",
    "key": "confederacy_of_american_states",
-   "local": null,
+   "local": "assets/flags/Confederacy_of_American_States.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Confederacy_of_American_States.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Confederacy_of_American_States.png",
    "subcategory": null,
@@ -661,7 +661,7 @@
   {
    "name": "Confederated_Finno-Russian_Republics.png",
    "key": "confederated_finno-russian_republics",
-   "local": null,
+   "local": "assets/flags/Confederated_Finno-Russian_Republics.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Confederated_Finno-Russian_Republics.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Confederated_Finno-Russian_Republics.png",
    "subcategory": null,
@@ -671,7 +671,7 @@
   {
    "name": "Congo-Brazzaville.png",
    "key": "congo-brazzaville",
-   "local": null,
+   "local": "assets/flags/Congo-Brazzaville.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Congo-Brazzaville.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Congo-Brazzaville.png",
    "subcategory": null,
@@ -681,7 +681,7 @@
   {
    "name": "Congolese_State.png",
    "key": "congolese_state",
-   "local": null,
+   "local": "assets/flags/Congolese_State.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Congolese_State.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Congolese_State.png",
    "subcategory": null,
@@ -691,7 +691,7 @@
   {
    "name": "Congressional_Commonwealth.png",
    "key": "congressional_commonwealth",
-   "local": null,
+   "local": "assets/flags/Congressional_Commonwealth.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Congressional_Commonwealth.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Congressional_Commonwealth.png",
    "subcategory": null,
@@ -701,7 +701,7 @@
   {
    "name": "Corsican_Republic.png",
    "key": "corsican_republic",
-   "local": null,
+   "local": "assets/flags/Corsican_Republic.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Corsican_Republic.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Corsican_Republic.png",
    "subcategory": null,
@@ -711,7 +711,7 @@
   {
    "name": "Costa_Rica.png",
    "key": "costa_rica",
-   "local": null,
+   "local": "assets/flags/Costa_Rica.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Costa_Rica.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Costa_Rica.png",
    "subcategory": null,
@@ -721,7 +721,7 @@
   {
    "name": "Crown_of_Aragon.png",
    "key": "crown_of_aragon",
-   "local": null,
+   "local": "assets/flags/Crown_of_Aragon.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Crown_of_Aragon.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Crown_of_Aragon.png",
    "subcategory": null,
@@ -731,7 +731,7 @@
   {
    "name": "Crown_of_Castille.png",
    "key": "crown_of_castille",
-   "local": null,
+   "local": "assets/flags/Crown_of_Castille.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Crown_of_Castille.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Crown_of_Castille.png",
    "subcategory": null,
@@ -741,7 +741,7 @@
   {
    "name": "Cuba.png",
    "key": "cuba",
-   "local": null,
+   "local": "assets/flags/Cuba.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Cuba.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Cuba.png",
    "subcategory": null,
@@ -751,7 +751,7 @@
   {
    "name": "Czechoslovakia.png",
    "key": "czechoslovakia",
-   "local": null,
+   "local": "assets/flags/Czechoslovakia.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Czechoslovakia.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Czechoslovakia.png",
    "subcategory": null,
@@ -761,7 +761,7 @@
   {
    "name": "Côte_d'Ivoire.png",
    "key": "côte_d'ivoire",
-   "local": null,
+   "local": "assets/flags/C%C3%B4te_d%27Ivoire.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/C%C3%B4te_d%27Ivoire.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:C%C3%B4te_d%27Ivoire.png",
    "subcategory": null,
@@ -771,7 +771,7 @@
   {
    "name": "Dahomey.png",
    "key": "dahomey",
-   "local": null,
+   "local": "assets/flags/Dahomey.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Dahomey.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Dahomey.png",
    "subcategory": null,
@@ -781,7 +781,7 @@
   {
    "name": "Democratic_Republic_of_Cabo_Verde.png",
    "key": "democratic_republic_of_cabo_verde",
-   "local": null,
+   "local": "assets/flags/Democratic_Republic_of_Cabo_Verde.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Democratic_Republic_of_Cabo_Verde.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Democratic_Republic_of_Cabo_Verde.png",
    "subcategory": null,
@@ -791,7 +791,7 @@
   {
    "name": "Democratic_Siam.png",
    "key": "democratic_siam",
-   "local": null,
+   "local": "assets/flags/Democratic_Siam.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Democratic_Siam.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Democratic_Siam.png",
    "subcategory": null,
@@ -801,7 +801,7 @@
   {
    "name": "Democratic_Socialist_Republic_of_Sri_Lanka.png",
    "key": "democratic_socialist_republic_of_sri_lanka",
-   "local": null,
+   "local": "assets/flags/Democratic_Socialist_Republic_of_Sri_Lanka.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Democratic_Socialist_Republic_of_Sri_Lanka.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Democratic_Socialist_Republic_of_Sri_Lanka.png",
    "subcategory": null,
@@ -811,7 +811,7 @@
   {
    "name": "Denmark.png",
    "key": "denmark",
-   "local": null,
+   "local": "assets/flags/Denmark.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Denmark.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Denmark.png",
    "subcategory": null,
@@ -821,7 +821,7 @@
   {
    "name": "Djibouti.png",
    "key": "djibouti",
-   "local": null,
+   "local": "assets/flags/Djibouti.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Djibouti.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Djibouti.png",
    "subcategory": null,
@@ -831,7 +831,7 @@
   {
    "name": "Dominican_Republic.png",
    "key": "dominican_republic",
-   "local": null,
+   "local": "assets/flags/Dominican_Republic.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Dominican_Republic.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Dominican_Republic.png",
    "subcategory": null,
@@ -841,7 +841,7 @@
   {
    "name": "Dominion_of_Canada.png",
    "key": "dominion_of_canada",
-   "local": null,
+   "local": "assets/flags/Dominion_of_Canada.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Dominion_of_Canada.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Dominion_of_Canada.png",
    "subcategory": null,
@@ -851,7 +851,7 @@
   {
    "name": "Don_Cossack_Host.png",
    "key": "don_cossack_host",
-   "local": null,
+   "local": "assets/flags/Don_Cossack_Host.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Don_Cossack_Host.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Don_Cossack_Host.png",
    "subcategory": null,
@@ -861,7 +861,7 @@
   {
    "name": "Don_Republic.png",
    "key": "don_republic",
-   "local": null,
+   "local": "assets/flags/Don_Republic.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Don_Republic.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Don_Republic.png",
    "subcategory": null,
@@ -871,7 +871,7 @@
   {
    "name": "Duchy_of_Schleswig-Holstein.png",
    "key": "duchy_of_schleswig-holstein",
-   "local": null,
+   "local": "assets/flags/Duchy_of_Schleswig-Holstein.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Duchy_of_Schleswig-Holstein.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Duchy_of_Schleswig-Holstein.png",
    "subcategory": null,
@@ -881,7 +881,7 @@
   {
    "name": "East_Africa.png",
    "key": "east_africa",
-   "local": null,
+   "local": "assets/flags/East_Africa.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/East_Africa.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:East_Africa.png",
    "subcategory": null,
@@ -891,7 +891,7 @@
   {
    "name": "East_Germany.png",
    "key": "east_germany",
-   "local": null,
+   "local": "assets/flags/East_Germany.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/East_Germany.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:East_Germany.png",
    "subcategory": null,
@@ -901,7 +901,7 @@
   {
    "name": "Ecuador.png",
    "key": "ecuador",
-   "local": null,
+   "local": "assets/flags/Ecuador.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Ecuador.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Ecuador.png",
    "subcategory": null,
@@ -911,7 +911,7 @@
   {
    "name": "Egypt.png",
    "key": "egypt",
-   "local": null,
+   "local": "assets/flags/Egypt.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Egypt.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Egypt.png",
    "subcategory": null,
@@ -921,7 +921,7 @@
   {
    "name": "El_Salvador.png",
    "key": "el_salvador",
-   "local": null,
+   "local": "assets/flags/El_Salvador.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/El_Salvador.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:El_Salvador.png",
    "subcategory": null,
@@ -931,7 +931,7 @@
   {
    "name": "Emirate_of_Harar.png",
    "key": "emirate_of_harar",
-   "local": null,
+   "local": "assets/flags/Emirate_of_Harar.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Emirate_of_Harar.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Emirate_of_Harar.png",
    "subcategory": null,
@@ -941,7 +941,7 @@
   {
    "name": "Empire_of_Solomon.png",
    "key": "empire_of_solomon",
-   "local": null,
+   "local": "assets/flags/Empire_of_Solomon.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Empire_of_Solomon.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Empire_of_Solomon.png",
    "subcategory": null,
@@ -951,7 +951,7 @@
   {
    "name": "Empire_of_Zion.png",
    "key": "empire_of_zion",
-   "local": null,
+   "local": "assets/flags/Empire_of_Zion.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Empire_of_Zion.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Empire_of_Zion.png",
    "subcategory": null,
@@ -961,7 +961,7 @@
   {
    "name": "England.png",
    "key": "england",
-   "local": null,
+   "local": "assets/flags/England.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/England.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:England.png",
    "subcategory": null,
@@ -971,7 +971,7 @@
   {
    "name": "Equatorial_Guinea.png",
    "key": "equatorial_guinea",
-   "local": null,
+   "local": "assets/flags/Equatorial_Guinea.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Equatorial_Guinea.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Equatorial_Guinea.png",
    "subcategory": null,
@@ -981,7 +981,7 @@
   {
    "name": "Eritrea.png",
    "key": "eritrea",
-   "local": null,
+   "local": "assets/flags/Eritrea.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Eritrea.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Eritrea.png",
    "subcategory": null,
@@ -991,7 +991,7 @@
   {
    "name": "Estonia.png",
    "key": "estonia",
-   "local": null,
+   "local": "assets/flags/Estonia.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Estonia.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Estonia.png",
    "subcategory": null,
@@ -1001,7 +1001,7 @@
   {
    "name": "Eternal_Nordic_Empire.png",
    "key": "eternal_nordic_empire",
-   "local": null,
+   "local": "assets/flags/Eternal_Nordic_Empire.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Eternal_Nordic_Empire.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Eternal_Nordic_Empire.png",
    "subcategory": null,
@@ -1011,7 +1011,7 @@
   {
    "name": "Ethiopia.png",
    "key": "ethiopia",
-   "local": null,
+   "local": "assets/flags/Ethiopia.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Ethiopia.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Ethiopia.png",
    "subcategory": null,
@@ -1021,7 +1021,7 @@
   {
    "name": "European_Federation.png",
    "key": "european_federation",
-   "local": null,
+   "local": "assets/flags/European_Federation.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/European_Federation.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:European_Federation.png",
    "subcategory": null,
@@ -1031,7 +1031,7 @@
   {
    "name": "Evenkia.png",
    "key": "evenkia",
-   "local": null,
+   "local": "assets/flags/Evenkia.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Evenkia.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Evenkia.png",
    "subcategory": null,
@@ -1041,7 +1041,7 @@
   {
    "name": "Far_Eastern_Republic.png",
    "key": "far_eastern_republic",
-   "local": null,
+   "local": "assets/flags/Far_Eastern_Republic.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Far_Eastern_Republic.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Far_Eastern_Republic.png",
    "subcategory": null,
@@ -1051,7 +1051,7 @@
   {
    "name": "Federal_League.png",
    "key": "federal_league",
-   "local": null,
+   "local": "assets/flags/Federal_League.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Federal_League.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Federal_League.png",
    "subcategory": null,
@@ -1061,7 +1061,7 @@
   {
    "name": "Federal_Republic_of_Kabardins_and_Karachay-Balkars.png",
    "key": "federal_republic_of_kabardins_and_karachay-balkars",
-   "local": null,
+   "local": "assets/flags/Federal_Republic_of_Kabardins_and_Karachay-Balkars.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Federal_Republic_of_Kabardins_and_Karachay-Balkars.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Federal_Republic_of_Kabardins_and_Karachay-Balkars.png",
    "subcategory": null,
@@ -1071,7 +1071,7 @@
   {
    "name": "Federated_States_of_Micronesia.png",
    "key": "federated_states_of_micronesia",
-   "local": null,
+   "local": "assets/flags/Federated_States_of_Micronesia.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Federated_States_of_Micronesia.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Federated_States_of_Micronesia.png",
    "subcategory": null,
@@ -1081,7 +1081,7 @@
   {
    "name": "Finland.png",
    "key": "finland",
-   "local": null,
+   "local": "assets/flags/Finland.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Finland.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Finland.png",
    "subcategory": null,
@@ -1091,7 +1091,7 @@
   {
    "name": "France.png",
    "key": "france",
-   "local": null,
+   "local": "assets/flags/France.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/France.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:France.png",
    "subcategory": null,
@@ -1101,7 +1101,7 @@
   {
    "name": "Free_City_of_Danzig.png",
    "key": "free_city_of_danzig",
-   "local": null,
+   "local": "assets/flags/Free_City_of_Danzig.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Free_City_of_Danzig.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Free_City_of_Danzig.png",
    "subcategory": null,
@@ -1111,7 +1111,7 @@
   {
    "name": "Free_France.png",
    "key": "free_france",
-   "local": null,
+   "local": "assets/flags/Free_France.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Free_France.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Free_France.png",
    "subcategory": null,
@@ -1121,7 +1121,7 @@
   {
    "name": "Free_State_of_Thuringia.png",
    "key": "free_state_of_thuringia",
-   "local": null,
+   "local": "assets/flags/Free_State_of_Thuringia.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Free_State_of_Thuringia.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Free_State_of_Thuringia.png",
    "subcategory": null,
@@ -1131,7 +1131,7 @@
   {
    "name": "Gabon.png",
    "key": "gabon",
-   "local": null,
+   "local": "assets/flags/Gabon.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Gabon.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Gabon.png",
    "subcategory": null,
@@ -1141,7 +1141,7 @@
   {
    "name": "Galicia.png",
    "key": "galicia",
-   "local": null,
+   "local": "assets/flags/Galicia.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Galicia.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Galicia.png",
    "subcategory": null,
@@ -1151,7 +1151,7 @@
   {
    "name": "Gambela.png",
    "key": "gambela",
-   "local": null,
+   "local": "assets/flags/Gambela.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Gambela.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Gambela.png",
    "subcategory": null,
@@ -1161,7 +1161,7 @@
   {
    "name": "Generalgouvernement.png",
    "key": "generalgouvernement",
-   "local": null,
+   "local": "assets/flags/Generalgouvernement.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Generalgouvernement.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Generalgouvernement.png",
    "subcategory": null,
@@ -1171,7 +1171,7 @@
   {
    "name": "German_Empire.png",
    "key": "german_empire",
-   "local": null,
+   "local": "assets/flags/German_Empire.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/German_Empire.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:German_Empire.png",
    "subcategory": null,
@@ -1181,7 +1181,7 @@
   {
    "name": "German_Reich.png",
    "key": "german_reich",
-   "local": null,
+   "local": "assets/flags/German_Reich.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/German_Reich.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:German_Reich.png",
    "subcategory": null,
@@ -1191,7 +1191,7 @@
   {
    "name": "Ghana.png",
    "key": "ghana",
-   "local": null,
+   "local": "assets/flags/Ghana.png",
    "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Ghana.png",
    "source_page": "https://hoi4.paradoxwikis.com/File:Ghana.png",
    "subcategory": null,
@@ -7399,7 +7399,7 @@
    "snapshot_ts": null
   }
  ],
- "crawler_version": 5,
+ "crawler_version": 6,
  "complete": false,
  "traversal_complete": true,
  "pages_visited": 4,
@@ -8143,71 +8143,15 @@
     "Zimbabwe.png"
    ],
    "subcategories": [],
+   "pages": [
+    "Template:Flag"
+   ],
    "expected_files": 731,
-   "expected_subcategories": null
+   "expected_subcategories": null,
+   "expected_pages": null
   }
  },
  "pending_downloads": [
-  "Chinese_Empire.png",
-  "Co-operative_Republic_of_Guyana.png",
-  "Colombia.png",
-  "Commonwealth_of_the_Bahamas.png",
-  "Communist_Spain.png",
-  "Confederacy_of_American_States.png",
-  "Confederated_Finno-Russian_Republics.png",
-  "Congo-Brazzaville.png",
-  "Congolese_State.png",
-  "Congressional_Commonwealth.png",
-  "Corsican_Republic.png",
-  "Costa_Rica.png",
-  "Crown_of_Aragon.png",
-  "Crown_of_Castille.png",
-  "Cuba.png",
-  "Czechoslovakia.png",
-  "Côte_d'Ivoire.png",
-  "Dahomey.png",
-  "Democratic_Republic_of_Cabo_Verde.png",
-  "Democratic_Siam.png",
-  "Democratic_Socialist_Republic_of_Sri_Lanka.png",
-  "Denmark.png",
-  "Djibouti.png",
-  "Dominican_Republic.png",
-  "Dominion_of_Canada.png",
-  "Don_Cossack_Host.png",
-  "Don_Republic.png",
-  "Duchy_of_Schleswig-Holstein.png",
-  "East_Africa.png",
-  "East_Germany.png",
-  "Ecuador.png",
-  "Egypt.png",
-  "El_Salvador.png",
-  "Emirate_of_Harar.png",
-  "Empire_of_Solomon.png",
-  "Empire_of_Zion.png",
-  "England.png",
-  "Equatorial_Guinea.png",
-  "Eritrea.png",
-  "Estonia.png",
-  "Eternal_Nordic_Empire.png",
-  "Ethiopia.png",
-  "European_Federation.png",
-  "Evenkia.png",
-  "Far_Eastern_Republic.png",
-  "Federal_League.png",
-  "Federal_Republic_of_Kabardins_and_Karachay-Balkars.png",
-  "Federated_States_of_Micronesia.png",
-  "Finland.png",
-  "France.png",
-  "Free_City_of_Danzig.png",
-  "Free_France.png",
-  "Free_State_of_Thuringia.png",
-  "Gabon.png",
-  "Galicia.png",
-  "Gambela.png",
-  "Generalgouvernement.png",
-  "German_Empire.png",
-  "German_Reich.png",
-  "Ghana.png",
   "Gojjam.png",
   "Grand_Duchy_of_Hesse.png",
   "Grand_Duchy_of_Mecklenburg.png",

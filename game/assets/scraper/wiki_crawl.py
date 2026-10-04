@@ -9,7 +9,7 @@ from urllib.parse import parse_qsl, quote, unquote, urlencode, urljoin, urlsplit
 from bs4 import BeautifulSoup
 
 WIKI_BASE = "https://hoi4.paradoxwikis.com"
-CRAWLER_VERSION = 5
+CRAWLER_VERSION = 6
 PAGING_KEYS = {"filefrom", "fileuntil", "subcatfrom", "subcatuntil", "pagefrom", "pageuntil"}
 
 
@@ -128,18 +128,40 @@ def parse_category_page(html, page_url):
                    for key in ("filefrom", "subcatfrom", "pagefrom")):
                 # Keep the EXACT original path, query ordering and encoding.
                 next_urls[canonical_wiki_url(url)] = url
+    page_members = set()
+    page_section = soup.select_one("#mw-pages")
+    if page_section:
+        for link in page_section.select(".mw-category a[href], .mw-content-ltr li a[href]"):
+            url = original_url(link["href"], page_url)
+            parsed_url = urlsplit(url)
+            if parsed_url.hostname != "hoi4.paradoxwikis.com":
+                continue
+            params = dict(parse_qsl(parsed_url.query))
+            member = params.get("title") or unquote(parsed_url.path).lstrip("/")
+            if member and not (PAGING_KEYS & params.keys()):
+                page_members.add(member.replace(" ", "_"))
+
     def advertised_total(section):
         if section is None:
             return None
         text = section.get_text(" ", strip=True)
         match = re.search(r"out of\s+([\d,]+)\s+total", text, re.I)
         if not match:
-            match = re.search(r"following\s+([\d,]+)\s+(?:files|subcategories)", text, re.I)
+            match = re.search(r"following\s+([\d,]+)\s+(?:files|subcategories|pages)", text, re.I)
         return int(match.group(1).replace(",", "")) if match else None
 
     return {"files": list(files.values()), "subcats": list(subcats.values()),
             "next_urls": list(next_urls.values()), "file_total": advertised_total(media),
-            "subcategory_total": advertised_total(sub_section)}
+            "subcategory_total": advertised_total(sub_section),
+            "pages": sorted(page_members), "page_total": advertised_total(page_section)}
+
+
+def coverage_satisfied(coverage):
+    return all(entry.get(expected) is None or len(entry.get(members, [])) >= entry[expected]
+               for entry in coverage.values()
+               for members, expected in (("files", "expected_files"),
+                                         ("subcategories", "expected_subcategories"),
+                                         ("pages", "expected_pages")))
 
 
 class CategoryCrawl:
@@ -184,10 +206,7 @@ class CategoryCrawl:
 
     @property
     def coverage_complete(self):
-        return all((entry.get("expected_files") is None or len(entry["files"]) >= entry["expected_files"])
-                   and (entry.get("expected_subcategories") is None
-                        or len(entry["subcategories"]) >= entry["expected_subcategories"])
-                   for entry in self.data["coverage"].values())
+        return coverage_satisfied(self.data["coverage"])
 
     @property
     def traversal_complete(self):
@@ -198,10 +217,13 @@ class CategoryCrawl:
         title = wiki_title(response_url)
         entry = self.data["coverage"].setdefault(title, {
             "url": original_url(response_url), "subcategory": item["subcategory"],
-            "files": [], "subcategories": [], "expected_files": None, "expected_subcategories": None})
+            "files": [], "subcategories": [], "pages": [], "expected_files": None,
+            "expected_subcategories": None, "expected_pages": None})
         entry["files"] = sorted(set(entry["files"]) | {name_key(file["name"]) for file in parsed["files"]})
         entry["subcategories"] = sorted(set(entry["subcategories"]) | {child["name"] for child in parsed["subcats"]})
-        for source, target in (("file_total", "expected_files"), ("subcategory_total", "expected_subcategories")):
+        entry["pages"] = sorted(set(entry.get("pages", [])) | set(parsed["pages"]))
+        for source, target in (("file_total", "expected_files"), ("subcategory_total", "expected_subcategories"),
+                               ("page_total", "expected_pages")):
             if parsed[source] is not None:
                 entry[target] = max(entry[target] or 0, parsed[source])
 
@@ -273,7 +295,9 @@ class CategoryCrawl:
                     missing_files = entry["expected_files"] is not None and len(entry["files"]) < entry["expected_files"]
                     missing_children = (entry["expected_subcategories"] is not None
                                         and len(entry["subcategories"]) < entry["expected_subcategories"])
-                    if missing_files or missing_children:
+                    missing_pages = (entry.get("expected_pages") is not None
+                                     and len(entry.get("pages", [])) < entry["expected_pages"])
+                    if missing_files or missing_children or missing_pages:
                         visited = {key for key in visited if wiki_title(key) != title}
                         deferred.append({"url": entry["url"], "subcategory": entry["subcategory"]})
                         self.data["page_errors"][entry["url"]] = "カテゴリの公表件数に届いていません。巡回を再試行します"

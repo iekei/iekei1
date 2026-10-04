@@ -663,6 +663,7 @@
   <link rel="stylesheet" href="military-theme.css">
   <link rel="stylesheet" href="strategy.css">
   <link rel="stylesheet" href="assets/topbar.css">
+  <link rel="stylesheet" href="assets/research-tree.css">
 </head>
 <body>
 <!-- ==================== START SCREEN (Scenario / Nation Select) ==================== -->
@@ -773,8 +774,12 @@
 
     <div class="window-template tpl-research" id="tpl-research" data-title="🔬 研究" data-w="880" data-h="620">
       <div class="research-slots" id="research-slots"></div>
-      <div class="research-tabs" id="research-tabs"></div>
-      <div id="research-tree-container">
+      <div class="research-tabs" id="research-tabs" aria-label="技術カテゴリ"></div>
+      <div class="research-heading">
+        <div><h2 id="research-category-title">歩兵 技術ツリー</h2><p id="research-category-summary">クリックで技術の詳細を確認できます</p></div>
+        <div class="research-legend"><span><i class="available"></i>研究可能</span><span><i class="researching"></i>研究中</span><span><i></i>未解放</span></div>
+      </div>
+      <div id="research-tree-container" aria-label="前提技術のツリー">
         <div id="research-tree-viewport">
           <svg id="research-svg-lines"></svg>
           <div id="research-nodes"></div>
@@ -868,6 +873,8 @@
 <script src="assets/image-loader.js"></script>
 <script src="assets/topbar-icons.js"></script>
 <script src="assets/topbar-ui.js"></script>
+<script src="assets/research-icons.js"></script>
+<script src="assets/research-tree.js"></script>
 <script>
 /* ================================================================
    JavaScript Module Architecture
@@ -5315,14 +5322,10 @@ class ResearchManager {
   }
 
   static renderTabs() {
-    const cats = [
-      { id: 'infantry', name: '🪖 歩兵' }, { id: 'armor', name: '🚜 装甲' },
-      { id: 'artillery', name: '💥 砲兵' }, { id: 'naval', name: '⚓ 海軍' },
-      { id: 'air', name: '✈️ 航空' }, { id: 'engineering', name: '🛠️ 工学' },
-      { id: 'industry', name: '🏭 産業' }
-    ];
-    document.getElementById('research-tabs').innerHTML = cats.map(c =>
-      '<button class="research-tab ' + (c.id === ResearchManager.currentCategory ? 'active' : '') + '" onclick="ResearchManager.setCategory(\'' + c.id + '\')">' + c.name + '</button>'
+    document.getElementById('research-tabs').innerHTML = Object.entries(ResearchIcons.categories).map(([id, category]) =>
+      '<button type="button" data-category="' + id + '" aria-pressed="' + (id === ResearchManager.currentCategory) + '" class="research-tab ' +
+      (id === ResearchManager.currentCategory ? 'active' : '') + '" onclick="ResearchManager.setCategory(\'' + id + '\')">' +
+      '<img src="' + ResearchIcons.fallback(id) + '" data-icon-key="' + id + '" alt="">' + category.label + '</button>'
     ).join('');
   }
 
@@ -5344,9 +5347,12 @@ class ResearchManager {
   }
 
   static setCategory(cat) {
+    ResearchTreeUI.closeDetail();
     ResearchManager.currentCategory = cat;
     ResearchManager.renderTabs();
     ResearchManager.render();
+    document.getElementById('research-tree-container').scrollTo(0, 0);
+    document.querySelector('.research-tab[data-category="' + cat + '"]')?.focus({ preventScroll: true });
   }
 
   static findTech(techId) {
@@ -5358,58 +5364,7 @@ class ResearchManager {
   }
 
   static render() {
-    const container = document.getElementById('research-nodes');
-    const svg = document.getElementById('research-svg-lines');
-    const techs = ResearchManager.techData[ResearchManager.currentCategory] || [];
-    container.innerHTML = '';
-    svg.innerHTML = '';
-
-    if (techs.length === 0) {
-      container.innerHTML = '<p style="color:var(--text-secondary);padding:20px;">技術データがありません。</p>';
-      return;
-    }
-
-    let svgContent = '';
-    techs.forEach(t => {
-      if (t.prerequisites) {
-        t.prerequisites.forEach(preId => {
-          const pre = techs.find(t2 => t2.id === preId);
-          if (pre) {
-            const x1 = pre.x + 55, y1 = pre.y + 30;
-            const x2 = t.x + 55, y2 = t.y + 30;
-            const isDone = ResearchManager.researchedTech.has(preId);
-            // 直角接続線 (曲線禁止): 垂直→水平→垂直 のみで結ぶ
-            const midY = (y1 + y2) / 2;
-            svgContent += '<path d="M' + x1 + ',' + y1 + ' L' + x1 + ',' + midY + ' L' + x2 + ',' + midY + ' L' + x2 + ',' + y2 + '" stroke="' + (isDone ? '#4ac46a' : '#3a4a5a') + '" stroke-width="2" fill="none" opacity="0.4"/>';
-          }
-        });
-      }
-    });
-    // ノード数に応じて木のサイズを動的に拡張 (多数の兵器データに対応)
-    const maxX = Math.max(800, ...techs.map(t => (t.x || 100) + 160));
-    const maxY = Math.max(1600, ...techs.map(t => (t.y || 50) + 120));
-    svg.innerHTML = svgContent;
-    svg.setAttribute('width', String(maxX));
-    svg.setAttribute('height', String(maxY));
-    const viewport = document.getElementById('research-tree-viewport');
-    if (viewport) { viewport.style.minWidth = maxX + 'px'; viewport.style.minHeight = maxY + 'px'; }
-
-    techs.forEach(t => {
-      const isResearched = ResearchManager.researchedTech.has(t.id);
-      const isResearching = Object.values(ResearchManager.researching).some(r => r.techId === t.id);
-      let cls = 'tech-node';
-      if (isResearched) cls += ' researched';
-      else if (isResearching) cls += ' researching';
-      const node = document.createElement('div');
-      node.className = cls;
-      node.style.left = t.x + 'px';
-      node.style.top = t.y + 'px';
-      const rEntry = isResearching ? Object.values(ResearchManager.researching).find(r => r.techId === t.id) : null;
-      const progHtml = (rEntry && !isResearched) ? '<div class="tn-progress">' + Math.floor(rEntry.progress / rEntry.total * 100) + '%</div>' : '';
-      node.innerHTML = '<div class="tn-svg">' + (t.svg || '') + '</div><div class="tn-title">' + t.title + '</div><div class="tn-year">' + (t.year || '') + '</div>' + progHtml;
-      node.addEventListener('click', () => ResearchManager.selectTech(t));
-      container.appendChild(node);
-    });
+    ResearchTreeUI.render();
   }
 
   static selectTech(tech) {
@@ -5944,7 +5899,10 @@ class GameUI {
     if (tabName === 'politics') PoliticsManager.render();
   }
 
-  static onWindowClosed(tabName) { /* focus管理はWindowManagerが行う */ }
+  static onWindowClosed(tabName) {
+    if (tabName === 'research') ResearchTreeUI.closeDetail();
+    /* focus管理はWindowManagerが行う */
+  }
 
   static notify(message, type) {
     const container = document.getElementById('notification-container');
