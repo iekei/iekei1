@@ -1,0 +1,156 @@
+/** HoI4-inspired instruments. Presentation only; no gameplay rules. */
+#top-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 14px;
+  height: 72px;
+  padding: 8px 16px;
+  position: relative;
+  z-index: 40;
+  background: var(--mil-grain), linear-gradient(180deg, #414638, #282e24 55%, #1e241c);
+  border-bottom: 3px double #8d7950;
+  box-shadow: inset 0 1px 0 #d5d8bd30, inset 0 -3px 6px #0008, 0 3px 8px #0009;
+}
+#top-bar::before, #top-bar::after {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #858775;
+  box-shadow: inset 0 1px 0 #dedbcd66, 0 1px 2px #000;
+}
+#top-bar::before { left: 5px; }
+#top-bar::after { right: 5px; }
+#top-bar .stats-group { gap: 10px; min-width: 0; }
+#stats-icons {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
+  background: #11160e;
+  border: 1px solid #11160e;
+  border-radius: 2px;
+  box-shadow: inset 0 1px 3px #000, 0 1px 0 #d5d8bd20;
+}
+#top-bar .stat-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  height: 49px;
+  padding: 4px 6px;
+  border: 1px solid #5a604733;
+  border-radius: 0;
+  background: linear-gradient(180deg, #282f22, #1d231a);
+  box-shadow: inset 0 1px 0 #d5d8bd12;
+  user-select: none;
+  cursor: help;
+}
+#top-bar .stat-item:is(:hover, :focus-visible) {
+  background: linear-gradient(180deg, #424732, #2c3022);
+  border-color: var(--mil-brass-dark);
+  outline: 1px solid var(--text-gold);
+  outline-offset: -1px;
+}
+#top-bar .stat-icon {
+  width: 28px;
+  height: 32px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 1px #0009);
+}
+#top-bar .stat-content { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+#top-bar .stat-label { font-size: 9px; line-height: 1; color: #b4b7a3; white-space: nowrap; letter-spacing: .04em; }
+#top-bar .stat-val {
+  color: #e2dfcf;
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  white-space: nowrap;
+  text-shadow: 0 2px 1px #000;
+}
+#top-bar .stat-bar { width: 100%; height: 3px; background: #0d120a; border-radius: 0; overflow: hidden; }
+#top-bar .stat-bar-fill { height: 100%; transition: width .3s; }
+#top-bar .stat-bar-fill.green { background: linear-gradient(180deg, #b3c59a, #748961); }
+#top-bar .stat-bar-fill.amber { background: linear-gradient(180deg, #d5b77a, #93723f); }
+#game-root #player-flag {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 47px;
+  padding: 0;
+  margin: 0;
+  font-size: 29px;
+  flex-shrink: 0;
+  border: 3px double #918263;
+  background: linear-gradient(180deg, #22281d, #10160e);
+  box-shadow: inset 0 0 8px #000, 0 2px 3px #0008;
+}
+#top-bar .time-control-group { display: flex; flex-direction: column; align-items: stretch; gap: 4px; }
+#top-bar #calendar-display {
+  font-family: var(--mil-font-print);
+  font-size: 13px;
+  line-height: 1.2;
+  text-align: center;
+  padding: 3px 12px;
+  min-width: 170px;
+  color: #dac58f;
+}
+#top-bar .speed-buttons { display: flex; gap: 3px; }
+#top-bar .speed-btn[data-speed] { flex: 1; padding: 3px 5px; font-size: 10px; line-height: 1; min-height: 22px; }
+#top-bar .topbar-nav { gap: 5px; align-items: center; }
+#top-bar .topbar-nav .speed-btn { display: flex; align-items: center; justify-content: center; gap: 5px; min-height: 34px; padding: 5px 7px; font-size: 11px; }
+#top-bar #world-tension { border-color: var(--mil-brass-dark); }
+#world-tension .tension-icon { width: 24px; height: 24px; object-fit: contain; }
+#world-tension .tension-content { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
+#world-tension .tension-label { font-size: 9px; color: var(--text-secondary); white-space: nowrap; }
+#world-tension .wt-val { font-size: 13px; font-variant-numeric: tabular-nums; }
+#top-bar #cheat-toggle { min-width: 28px; color: var(--text-secondary); }
+
+/* Existing window navigation icons are unchanged. */
+#window-nav { gap: 2px; padding: 3px 6px; }
+.win-btn { display: flex; align-items: center; gap: 5px; padding: 4px 10px 4px 6px; font-size: 11px; border-radius: 3px; }
+.win-btn .win-btn-icon { width: 20px; height: 20px; flex-shrink: 0; display: block; filter: drop-shadow(0 1px 1px #0008); opacity: .85; }
+.win-btn:hover .win-btn-icon { opacity: 1; }
+.win-btn.open .win-btn-icon { opacity: 1; filter: drop-shadow(0 0 4px #c4ad7280); }
+
+#stat-tooltip {
+  min-width: min(240px, calc(100vw - 16px));
+  max-width: min(330px, calc(100vw - 16px));
+  background: var(--mil-grain), linear-gradient(180deg, #303728, #171e14);
+  border: 3px double #8d7950;
+  border-radius: 2px;
+  padding: 12px 15px;
+  box-shadow: inset 0 1px 0 #dedbcd20, 0 8px 24px #000b;
+}
+#stat-tooltip .stt-title { color: #d9c58d; font-weight: 700; font-size: 13px; margin-bottom: 8px; padding-bottom: 7px; border-bottom: 1px solid #76623c; }
+#stat-tooltip .stt-row { color: #b1b2a1; font-size: 11px; line-height: 1.8; overflow-wrap: anywhere; }
+#stat-tooltip .stt-row b { color: #e2dfcf; font-variant-numeric: tabular-nums; }
+
+@media (max-width: 1200px) {
+  #top-bar { height: auto; min-height: 112px; grid-template-columns: 1fr auto; gap: 6px 14px; }
+  #top-bar .stats-group { grid-column: 1 / -1; }
+  #top-bar .time-control-group { flex-direction: row; align-items: center; }
+  #top-bar #calendar-display { min-width: 140px; }
+  #top-bar .speed-buttons { min-width: 170px; }
+}
+@media (max-width: 768px) {
+  #top-bar { padding: 6px 8px; gap: 6px; grid-template-columns: 1fr; }
+  #top-bar .stats-group { gap: 6px; }
+  #stats-icons { display: flex; overflow-x: auto; scrollbar-width: thin; }
+  #top-bar .stat-item { flex: 0 0 auto; min-width: 91px; }
+  #top-bar .stat-icon { width: 24px; }
+  #top-bar .stat-val { font-size: 12px; }
+  #top-bar .time-control-group { gap: 8px; }
+  #top-bar #calendar-display { min-width: 130px; }
+  #top-bar .speed-buttons { flex: 1; min-width: 0; }
+  #top-bar .topbar-nav { justify-content: flex-end; }
+  .win-btn { padding: 4px 6px; font-size: 0; }
+  .win-btn .win-btn-icon { width: 22px; height: 22px; }
+}
+@media (prefers-reduced-motion: reduce) { #top-bar .stat-bar-fill { transition: none; } }

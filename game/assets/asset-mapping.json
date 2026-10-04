@@ -1,0 +1,119 @@
+{
+ "generated_at": "2026-10-04T10:00:53+0000",
+ "source": "https://hoi4.paradoxwikis.com",
+ "note": "game/index.html からの相対パス。AssetRegistry.loadScrapedMapping() で読み込む。",
+ "categories": {
+  "topbar_icons": {
+   "label": "トップバーアイコン",
+   "local_base": "assets/topbar/",
+   "count": 20,
+   "count_names": 20,
+   "complete": true,
+   "mapping_file": "assets/mappings/topbar_icons.json"
+  },
+  "operative_portraits": {
+   "label": "諜報機関ポートレート",
+   "local_base": "assets/operatives/",
+   "count": 45,
+   "count_names": 105,
+   "complete": false,
+   "mapping_file": "assets/mappings/operative_portraits.json"
+  },
+  "flags": {
+   "label": "国旗",
+   "local_base": "assets/flags/",
+   "count": 119,
+   "count_names": 739,
+   "complete": false,
+   "mapping_file": "assets/mappings/flags.json"
+  },
+  "technology_icons": {
+   "label": "テクノロジーアイコン",
+   "local_base": "assets/technology/",
+   "count": 66,
+   "count_names": 483,
+   "complete": false,
+   "mapping_file": "assets/mappings/technology_icons.json"
+  },
+  "equipment_icons": {
+   "label": "兵器設計・モジュール",
+   "local_base": "assets/equipment/",
+   "count": 40,
+   "count_names": 353,
+   "complete": false,
+   "mapping_file": "assets/mappings/equipment_icons.json"
+  },
+  "national_focus_icons": {
+   "label": "国家方針アイコン",
+   "local_base": "assets/focus/",
+   "count": 43,
+   "count_names": 1370,
+   "complete": false,
+   "mapping_file": "assets/mappings/national_focus_icons.json"
+  },
+  "top_menu_icons": {
+   "label": "トップメニューアイコン",
+   "local_base": "assets/top_menu/",
+   "count": 20,
+   "count_names": 20,
+   "complete": true,
+   "mapping_file": "assets/mappings/top_menu_icons.json"
+  },
+  "special_project_icons": {
+   "label": "特別研究計画アイコン",
+   "local_base": "assets/special_projects/",
+   "count": 27,
+   "count_names": 51,
+   "complete": false,
+   "mapping_file": "assets/mappings/special_project_icons.json"
+  },
+  "scientist_portraits": {
+   "label": "科学者ポートレート",
+   "local_base": "assets/scientists/",
+   "count": 75,
+   "count_names": 105,
+   "complete": false,
+   "mapping_file": "assets/mappings/scientist_portraits.json"
+  },
+  "land_unit_icons": {
+   "label": "陸軍ユニットアイコン",
+   "local_base": "assets/land_units/",
+   "count": 28,
+   "count_names": 196,
+   "complete": false,
+   "mapping_file": "assets/mappings/land_unit_icons.json"
+  },
+  "icons": {
+   "label": "全アイコン",
+   "local_base": "assets/icons/",
+   "count": 30,
+   "count_names": 646,
+   "complete": false,
+   "mapping_file": "assets/mappings/icons.json"
+  },
+  "portraits": {
+   "label": "全ポートレート",
+   "local_base": "assets/portraits/",
+   "count": 1,
+   "count_names": 524,
+   "complete": false,
+   "mapping_file": "assets/mappings/portraits.json"
+  },
+  "leader_portraits": {
+   "label": "指導者ポートレート",
+   "local_base": "assets/leaders/",
+   "count": 29,
+   "count_names": 407,
+   "complete": false,
+   "mapping_file": "assets/mappings/leader_portraits.json"
+  },
+  "ace_portraits": {
+   "label": "エースポートレート",
+   "local_base": "assets/aces/",
+   "count": 1,
+   "count_names": 33,
+   "complete": false,
+   "mapping_file": "assets/mappings/ace_portraits.json"
+  }
+ }
+}

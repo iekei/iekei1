@@ -662,6 +662,8 @@
   </style>
   <link rel="stylesheet" href="military-theme.css">
   <link rel="stylesheet" href="strategy.css">
+  <link rel="stylesheet" href="assets/topbar.css">
+  <link rel="stylesheet" href="assets/research-tree.css">
 </head>
 <body>
 <!-- ==================== START SCREEN (Scenario / Nation Select) ==================== -->
@@ -676,15 +678,15 @@
 
 <div id="game-root">
   <!-- ==================== TOP BAR ==================== -->
-  <header id="top-bar">
+  <header id="top-bar" aria-label="国家ステータスと時間操作">
     <div class="stats-group" id="stats-group">
       <button id="player-flag" title="政治画面を開く" onclick="WindowManager.open('politics')">🏳️</button>
-      <span id="stats-icons" style="display:flex;gap:16px;align-items:center;">
+      <span id="stats-icons" aria-label="国家ステータス">
         <!-- Filled dynamically by CoreEngine -->
       </span>
     </div>
     <div class="time-control-group">
-      <div id="calendar-display">1936年1月1日</div>
+      <div id="calendar-display" aria-label="ゲーム内の日付">1936年1月1日</div>
       <div class="speed-buttons" id="speed-buttons">
         <button class="speed-btn active" data-speed="0">⏸</button>
         <button class="speed-btn" data-speed="1">▶1</button>
@@ -695,9 +697,9 @@
       </div>
     </div>
     <div class="topbar-nav">
-      <button class="speed-btn" id="world-tension" onclick="GameUI.switchTab('diplomacy')" title="国際緊張度 (World Tension)">🌍 緊張度 <span class="wt-val">0%</span></button>
+      <button class="speed-btn" id="world-tension" data-tip-key="tension" aria-label="国際緊張度・外交画面を開く" onclick="GameUI.switchTab('diplomacy')"><img class="tension-icon" data-icon-key="worldTension" alt=""><span class="tension-content"><span class="tension-label">国際緊張度</span><span class="wt-val">0%</span></span></button>
       <button class="speed-btn" id="mp-indicator" onclick="GameUI.switchTab('multiplayer')">👥 単独</button>
-      <button class="speed-btn" id="cheat-toggle" onclick="CheatConsole.toggle()">~</button>
+      <button class="speed-btn" id="cheat-toggle" aria-label="デバッグコンソールを開く" onclick="CheatConsole.toggle()">~</button>
     </div>
   </header>
 
@@ -709,20 +711,20 @@
 
   <!-- ==================== WINDOW NAVIGATION RAIL ==================== -->
   <nav id="window-nav">
-    <span style="font-size:11px;color:var(--text-secondary);margin-right:4px;">🪟 ウィンドウ:</span>
-    <button class="win-btn" data-tab="focus" onclick="GameUI.switchTab('focus')">🌲 国家方針</button>
-    <button class="win-btn" data-tab="research" onclick="GameUI.switchTab('research')">🔬 研究</button>
-    <button class="win-btn" data-tab="special" onclick="GameUI.switchTab('special')">⚛️ 特別研究</button>
-    <button class="win-btn" data-tab="nuclear" onclick="GameUI.switchTab('nuclear')">☢️ 核攻撃</button>
-    <button class="win-btn" data-tab="construction" onclick="GameUI.switchTab('construction')">🏗️ 建設</button>
-    <button class="win-btn" data-tab="trade" onclick="GameUI.switchTab('trade')">📦 貿易</button>
-    <button class="win-btn" data-tab="diplomacy" onclick="GameUI.switchTab('diplomacy')">🤝 外交</button>
-    <button class="win-btn" data-tab="cards" onclick="GameUI.switchTab('cards')">🃏 将軍カード</button>
-    <button class="win-btn" data-tab="division" onclick="GameUI.switchTab('division')">⚔️ 師団編成</button>
-    <button class="win-btn" data-tab="multiplayer" onclick="GameUI.switchTab('multiplayer')">🌐 マルチ</button>
-    <button class="win-btn" data-tab="nation" onclick="GameUI.switchTab('nation')">🏛️ 固有システム</button>
-    <button class="win-btn" data-tab="winsave" onclick="GameUI.switchTab('winsave')">💾 セーブ/ロード</button>
-    <button class="win-btn" onclick="WindowManager.closeAll()">🗺️ マップ画面</button>
+    <span style="font-size:11px;color:var(--text-secondary);margin-right:4px;white-space:nowrap;">ウィンドウ:</span>
+    <button class="win-btn" data-tab="focus" onclick="GameUI.switchTab('focus')"><img class="win-btn-icon" data-menu-icon="focus" alt=""> 国家方針</button>
+    <button class="win-btn" data-tab="research" onclick="GameUI.switchTab('research')"><img class="win-btn-icon" data-menu-icon="research" alt=""> 研究</button>
+    <button class="win-btn" data-tab="special" onclick="GameUI.switchTab('special')"><img class="win-btn-icon" data-menu-icon="special" alt=""> 特別研究</button>
+    <button class="win-btn" data-tab="nuclear" onclick="GameUI.switchTab('nuclear')"><img class="win-btn-icon" data-menu-icon="nuclear" alt=""> 核攻撃</button>
+    <button class="win-btn" data-tab="construction" onclick="GameUI.switchTab('construction')"><img class="win-btn-icon" data-menu-icon="construction" alt=""> 建設</button>
+    <button class="win-btn" data-tab="trade" onclick="GameUI.switchTab('trade')"><img class="win-btn-icon" data-menu-icon="trade" alt=""> 貿易</button>
+    <button class="win-btn" data-tab="diplomacy" onclick="GameUI.switchTab('diplomacy')"><img class="win-btn-icon" data-menu-icon="diplomacy" alt=""> 外交</button>
+    <button class="win-btn" data-tab="cards" onclick="GameUI.switchTab('cards')"><img class="win-btn-icon" data-menu-icon="cards" alt=""> 将軍カード</button>
+    <button class="win-btn" data-tab="division" onclick="GameUI.switchTab('division')"><img class="win-btn-icon" data-menu-icon="division" alt=""> 師団編成</button>
+    <button class="win-btn" data-tab="multiplayer" onclick="GameUI.switchTab('multiplayer')"><img class="win-btn-icon" data-menu-icon="multiplayer" alt=""> マルチ</button>
+    <button class="win-btn" data-tab="nation" onclick="GameUI.switchTab('nation')"><img class="win-btn-icon" data-menu-icon="nation" alt=""> 固有システム</button>
+    <button class="win-btn" data-tab="winsave" onclick="GameUI.switchTab('winsave')"><img class="win-btn-icon" data-menu-icon="winsave" alt=""> セーブ/ロード</button>
+    <button class="win-btn" onclick="WindowManager.closeAll()"><img class="win-btn-icon" data-menu-icon="map" alt=""> マップ画面</button>
   </nav>
 
   <!-- ==================== OPERATING SCREEN (fullscreen map) ==================== -->
@@ -772,8 +774,12 @@
 
     <div class="window-template tpl-research" id="tpl-research" data-title="🔬 研究" data-w="880" data-h="620">
       <div class="research-slots" id="research-slots"></div>
-      <div class="research-tabs" id="research-tabs"></div>
-      <div id="research-tree-container">
+      <div class="research-tabs" id="research-tabs" aria-label="技術カテゴリ"></div>
+      <div class="research-heading">
+        <div><h2 id="research-category-title">歩兵 技術ツリー</h2><p id="research-category-summary">クリックで技術の詳細を確認できます</p></div>
+        <div class="research-legend"><span><i class="available"></i>研究可能</span><span><i class="researching"></i>研究中</span><span><i></i>未解放</span></div>
+      </div>
+      <div id="research-tree-container" aria-label="前提技術のツリー">
         <div id="research-tree-viewport">
           <svg id="research-svg-lines"></svg>
           <div id="research-nodes"></div>
@@ -863,6 +869,12 @@
   <input type="text" id="cheat-console-input" placeholder="コマンドを入力... (nuke 10, pp 500, focus.autocomplete...)" onkeydown="CheatConsole.handleInput(event)">
 </div>
 
+<script src="assets/asset-registry.js"></script>
+<script src="assets/image-loader.js"></script>
+<script src="assets/topbar-icons.js"></script>
+<script src="assets/topbar-ui.js"></script>
+<script src="assets/research-icons.js"></script>
+<script src="assets/research-tree.js"></script>
 <script>
 /* ================================================================
    JavaScript Module Architecture
@@ -1128,6 +1140,35 @@ class CoreEngine {
 
   static init() {
     CoreEngine.gameState.fuel = CoreEngine.gameState.maxFuel * 0.5;
+    // アセットシステム初期化 (TopbarIcons SVG生成 + ImageLoader遅延読み込み)
+    if (typeof TopbarIcons !== 'undefined') {
+      TopbarIcons.init();
+      document.querySelector('#world-tension .tension-icon').src = TopbarIcons.get('worldTension');
+      // ウィンドウナビゲーションボタンにメニューアイコンを割り当て
+      document.querySelectorAll('.win-btn-icon[data-menu-icon]').forEach(img => {
+        const key = img.dataset.menuIcon;
+        const src = TopbarIcons.getMenu(key);
+        if (src) img.src = src;
+      });
+    }
+    // スクレイピング済みWikiアセットのマッピング索引をバックグラウンドで読み込む
+    if (typeof AssetRegistry !== 'undefined' && AssetRegistry.loadScrapedMapping) {
+      AssetRegistry.loadScrapedMapping();
+    }
+    if (typeof ImageLoader !== 'undefined') {
+      ImageLoader.init();
+      // トップバー必須アイコンを事前読み込み (常に表示されるため)
+      const essentialIcons = [];
+      if (typeof TopbarIcons !== 'undefined') {
+        ['politicalPower','stability','warSupport','manpower','factories','fuel','convoys'].forEach(k => {
+          const u = TopbarIcons.get(k); if (u) essentialIcons.push(u);
+        });
+        Object.keys(TopbarIcons.menu).forEach(k => {
+          const u = TopbarIcons.getMenu(k); if (u) essentialIcons.push(u);
+        });
+      }
+      if (essentialIcons.length) ImageLoader.preload(essentialIcons);
+    }
     CoreEngine.updateSpeedUI();
     document.querySelectorAll('.speed-btn[data-speed]').forEach(btn => { const speed = Number(btn.dataset.speed); btn.title = speed ? '1日 / ' + (CoreEngine.speedIntervals[speed] / 1000) + '秒' : '一時停止 (Space)'; });
     CoreEngine.renderStats();
@@ -1200,27 +1241,18 @@ class CoreEngine {
         rows: ['保有数: <b>' + s.convoys + '</b>',
                '用途: 資源貿易・レンドリースの海上輸送',
                '通商破壊で喪失します'] };
+    },
+    tension: () => {
+      const s = CoreEngine.gameState;
+      return { title: '国際緊張度 (World Tension)',
+        rows: ['現在値: <b>' + Number(s.worldTension).toFixed(1) + '%</b>',
+               '戦争や歴史的イベントにより上昇します',
+               'クリック: 外交画面を開く'] };
     }
   };
 
   static setupStatTooltips() {
-    const group = document.getElementById('stats-group');
-    const tip = document.getElementById('stat-tooltip');
-    if (!group || !tip) return;
-    group.addEventListener('mouseover', (e) => {
-      const item = e.target.closest('.stat-item');
-      if (!item || !item.dataset.tipKey) { tip.classList.add('hidden'); return; }
-      const gen = CoreEngine.STAT_TOOLTIPS[item.dataset.tipKey];
-      if (!gen) return;
-      const t = gen();
-      tip.innerHTML = '<div class="stt-title">' + t.title + '</div>' +
-        t.rows.map(r => '<div class="stt-row">' + r + '</div>').join('');
-      tip.classList.remove('hidden');
-      const r = item.getBoundingClientRect();
-      tip.style.left = Math.min(r.left, window.innerWidth - 340) + 'px';
-      tip.style.top = (r.bottom + 6) + 'px';
-    });
-    group.addEventListener('mouseleave', () => tip.classList.add('hidden'));
+    TopbarUI.initTooltips(CoreEngine.STAT_TOOLTIPS);
   }
 
   // ---- 国際緊張度 (World Tension) ----
@@ -1278,7 +1310,10 @@ class CoreEngine {
 
   static updateSpeedUI() {
     document.querySelectorAll('.speed-btn[data-speed]').forEach(btn => {
-      btn.classList.toggle('active', parseInt(btn.dataset.speed) === CoreEngine.gameState.speed);
+      const active = parseInt(btn.dataset.speed) === CoreEngine.gameState.speed;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-pressed', String(active));
+      btn.setAttribute('aria-label', Number(btn.dataset.speed) ? '速度 ' + btn.dataset.speed : '一時停止');
     });
   }
 
@@ -1313,19 +1348,7 @@ class CoreEngine {
 
   static renderStats() {
     const s = CoreEngine.gameState;
-    const html =
-      '<div class="stat-item" data-tip-key="pp">🏛️ <span class="stat-val">' + Math.floor(s.politicalPower) + '</span></div>' +
-      '<div class="stat-item" data-tip-key="stab">📊 <span class="stat-val">' + Number(s.stability).toFixed(1) + '%</span>' +
-        '<div class="stat-bar"><div class="stat-bar-fill" style="width:' + s.stability + '%;background:var(--accent-green)"></div></div></div>' +
-      '<div class="stat-item" data-tip-key="ws">⚔️ <span class="stat-val">' + Number(s.warSupport).toFixed(1) + '%</span>' +
-        '<div class="stat-bar"><div class="stat-bar-fill" style="width:' + s.warSupport + '%;background:var(--accent-orange)"></div></div></div>' +
-      '<div class="stat-item" data-tip-key="mp">👥 <span class="stat-val">' + (s.manpower/1000).toFixed(0) + 'K</span></div>' +
-      '<div class="stat-item" data-tip-key="fac">🏭 <span class="stat-val">' + s.civilianFactories + 'C / ' + s.militaryFactories + 'M</span></div>' +
-      '<div class="stat-item" data-tip-key="fuel">⛽ <span class="stat-val">' + Math.floor(s.fuel) + '/' + s.maxFuel + '</span></div>' +
-      '<div class="stat-item" data-tip-key="convoy">🚢 <span class="stat-val">' + s.convoys + '</span></div>';
-    // 国旗ボタンとステータスアイコン群は別要素なので innerHTML で上書きしない
-    const icons = document.getElementById('stats-icons');
-    if (icons) icons.innerHTML = html;
+    TopbarUI.render(s);
     CoreEngine.renderWorldTension();
     const flag = document.getElementById('player-flag');
     if (flag) flag.textContent = DataFetcher.getCountryFlag(s.country);
@@ -5299,14 +5322,10 @@ class ResearchManager {
   }
 
   static renderTabs() {
-    const cats = [
-      { id: 'infantry', name: '🪖 歩兵' }, { id: 'armor', name: '🚜 装甲' },
-      { id: 'artillery', name: '💥 砲兵' }, { id: 'naval', name: '⚓ 海軍' },
-      { id: 'air', name: '✈️ 航空' }, { id: 'engineering', name: '🛠️ 工学' },
-      { id: 'industry', name: '🏭 産業' }
-    ];
-    document.getElementById('research-tabs').innerHTML = cats.map(c =>
-      '<button class="research-tab ' + (c.id === ResearchManager.currentCategory ? 'active' : '') + '" onclick="ResearchManager.setCategory(\'' + c.id + '\')">' + c.name + '</button>'
+    document.getElementById('research-tabs').innerHTML = Object.entries(ResearchIcons.categories).map(([id, category]) =>
+      '<button type="button" data-category="' + id + '" aria-pressed="' + (id === ResearchManager.currentCategory) + '" class="research-tab ' +
+      (id === ResearchManager.currentCategory ? 'active' : '') + '" onclick="ResearchManager.setCategory(\'' + id + '\')">' +
+      '<img src="' + ResearchIcons.fallback(id) + '" data-icon-key="' + id + '" alt="">' + category.label + '</button>'
     ).join('');
   }
 
@@ -5328,9 +5347,12 @@ class ResearchManager {
   }
 
   static setCategory(cat) {
+    ResearchTreeUI.closeDetail();
     ResearchManager.currentCategory = cat;
     ResearchManager.renderTabs();
     ResearchManager.render();
+    document.getElementById('research-tree-container').scrollTo(0, 0);
+    document.querySelector('.research-tab[data-category="' + cat + '"]')?.focus({ preventScroll: true });
   }
 
   static findTech(techId) {
@@ -5342,58 +5364,7 @@ class ResearchManager {
   }
 
   static render() {
-    const container = document.getElementById('research-nodes');
-    const svg = document.getElementById('research-svg-lines');
-    const techs = ResearchManager.techData[ResearchManager.currentCategory] || [];
-    container.innerHTML = '';
-    svg.innerHTML = '';
-
-    if (techs.length === 0) {
-      container.innerHTML = '<p style="color:var(--text-secondary);padding:20px;">技術データがありません。</p>';
-      return;
-    }
-
-    let svgContent = '';
-    techs.forEach(t => {
-      if (t.prerequisites) {
-        t.prerequisites.forEach(preId => {
-          const pre = techs.find(t2 => t2.id === preId);
-          if (pre) {
-            const x1 = pre.x + 55, y1 = pre.y + 30;
-            const x2 = t.x + 55, y2 = t.y + 30;
-            const isDone = ResearchManager.researchedTech.has(preId);
-            // 直角接続線 (曲線禁止): 垂直→水平→垂直 のみで結ぶ
-            const midY = (y1 + y2) / 2;
-            svgContent += '<path d="M' + x1 + ',' + y1 + ' L' + x1 + ',' + midY + ' L' + x2 + ',' + midY + ' L' + x2 + ',' + y2 + '" stroke="' + (isDone ? '#4ac46a' : '#3a4a5a') + '" stroke-width="2" fill="none" opacity="0.4"/>';
-          }
-        });
-      }
-    });
-    // ノード数に応じて木のサイズを動的に拡張 (多数の兵器データに対応)
-    const maxX = Math.max(800, ...techs.map(t => (t.x || 100) + 160));
-    const maxY = Math.max(1600, ...techs.map(t => (t.y || 50) + 120));
-    svg.innerHTML = svgContent;
-    svg.setAttribute('width', String(maxX));
-    svg.setAttribute('height', String(maxY));
-    const viewport = document.getElementById('research-tree-viewport');
-    if (viewport) { viewport.style.minWidth = maxX + 'px'; viewport.style.minHeight = maxY + 'px'; }
-
-    techs.forEach(t => {
-      const isResearched = ResearchManager.researchedTech.has(t.id);
-      const isResearching = Object.values(ResearchManager.researching).some(r => r.techId === t.id);
-      let cls = 'tech-node';
-      if (isResearched) cls += ' researched';
-      else if (isResearching) cls += ' researching';
-      const node = document.createElement('div');
-      node.className = cls;
-      node.style.left = t.x + 'px';
-      node.style.top = t.y + 'px';
-      const rEntry = isResearching ? Object.values(ResearchManager.researching).find(r => r.techId === t.id) : null;
-      const progHtml = (rEntry && !isResearched) ? '<div class="tn-progress">' + Math.floor(rEntry.progress / rEntry.total * 100) + '%</div>' : '';
-      node.innerHTML = '<div class="tn-svg">' + (t.svg || '') + '</div><div class="tn-title">' + t.title + '</div><div class="tn-year">' + (t.year || '') + '</div>' + progHtml;
-      node.addEventListener('click', () => ResearchManager.selectTech(t));
-      container.appendChild(node);
-    });
+    ResearchTreeUI.render();
   }
 
   static selectTech(tech) {
@@ -5911,6 +5882,8 @@ class GameUI {
 
   // ウィンドウが開かれた時に対応するパネルを再描画
   static onWindowOpened(tabName) {
+    // タブオープン時に動的画像ロードをトリガー (遅延読み込み)
+    if (typeof ImageLoader !== 'undefined') ImageLoader.triggerTabLoad(tabName);
     if (tabName === 'special') SpecialProjectManager.render();
     if (tabName === 'nuclear') NuclearManager.render();
     if (tabName === 'construction') ConstructionManager.render();
@@ -5926,7 +5899,10 @@ class GameUI {
     if (tabName === 'politics') PoliticsManager.render();
   }
 
-  static onWindowClosed(tabName) { /* focus管理はWindowManagerが行う */ }
+  static onWindowClosed(tabName) {
+    if (tabName === 'research') ResearchTreeUI.closeDetail();
+    /* focus管理はWindowManagerが行う */
+  }
 
   static notify(message, type) {
     const container = document.getElementById('notification-container');
@@ -6039,6 +6015,20 @@ async function initGame() {
   if (typeof DLC !== 'undefined') DLC.onGameStart();   // 全DLC拡張 (ドクトリン/兵器設計/諜報/MIO・国際市場/講和会議/将軍特性)
   StrategyGame.init();
   CardSystem.deck.forEach(card => CardSystem.applyModifiers(card.id));
+
+  // ── タブ別動的画像ロード登録 (ImageLoader) ──
+  // 各タブオープン時にコンテナ内の data-src 画像を遅延ロード
+  if (typeof ImageLoader !== 'undefined') {
+    ImageLoader.onTabOpen('focus', () => ImageLoader.observeAll('#focus-nodes'));
+    ImageLoader.onTabOpen('research', () => ImageLoader.observeAll('#research-nodes'));
+    ImageLoader.onTabOpen('special', () => ImageLoader.observeAll('#special-projects-content'));
+    ImageLoader.onTabOpen('cards', () => ImageLoader.observeAll('#cards-content'));
+    ImageLoader.onTabOpen('diplomacy', () => ImageLoader.observeAll('#diplomacy-content'));
+    ImageLoader.onTabOpen('trade', () => ImageLoader.observeAll('#trade-content'));
+    ImageLoader.onTabOpen('division', () => ImageLoader.observeAll('#division-content'));
+    ImageLoader.onTabOpen('politics', () => ImageLoader.observeAll('#politics-content'));
+  }
+
   CoreEngine.renderStats();
   CoreEngine.renderWorldTension();
   CoreEngine.log(CoreEngine.gameState.country + ' — ゲームを開始しました。速度ボタンで時間を進めてください。');

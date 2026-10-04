@@ -1,0 +1,253 @@
+{
+ "id": "top_menu_icons",
+ "label": "トップメニューアイコン",
+ "source": "https://hoi4.paradoxwikis.com/Category:Top_menu_icons",
+ "mode": "reader",
+ "scraped_at": "2026-10-04T08:08:08+0000",
+ "local_base": "assets/top_menu/",
+ "count": 20,
+ "count_names": 20,
+ "images": [
+  {
+   "name": "Construction_button_transparent.png",
+   "key": "construction_button_transparent",
+   "local": "assets/top_menu/Construction_button_transparent.png",
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Construction_button_transparent.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Construction_button_transparent.png",
+   "subcategory": null,
+   "image_url": "https://hoi4.paradoxwikis.com/images/8/8a/Construction_button_transparent.png",
+   "snapshot_ts": "20240113043736"
+  },
+  {
+   "name": "Construction_button.png",
+   "key": "construction_button",
+   "local": "assets/top_menu/Construction_button.png",
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Construction_button.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Construction_button.png",
+   "subcategory": null,
+   "image_url": "https://hoi4.paradoxwikis.com/images/7/7c/Construction_button.png",
+   "snapshot_ts": "20240113043736"
+  },
+  {
+   "name": "Decision_button_transparent.png",
+   "key": "decision_button_transparent",
+   "local": "assets/top_menu/Decision_button_transparent.png",
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Decision_button_transparent.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Decision_button_transparent.png",
+   "subcategory": null,
+   "image_url": "https://hoi4.paradoxwikis.com/images/0/0c/Decision_button_transparent.png",
+   "snapshot_ts": "20240113043736"
+  },
+  {
+   "name": "Decision_button.png",
+   "key": "decision_button",
+   "local": "assets/top_menu/Decision_button.png",
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Decision_button.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Decision_button.png",
+   "subcategory": null,
+   "image_url": "https://hoi4.paradoxwikis.com/images/6/68/Decision_button.png",
+   "snapshot_ts": "20240113043736"
+  },
+  {
+   "name": "Deployment_button_transparent.png",
+   "key": "deployment_button_transparent",
+   "local": "assets/top_menu/Deployment_button_transparent.png",
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Deployment_button_transparent.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Deployment_button_transparent.png",
+   "subcategory": null,
+   "image_url": "https://hoi4.paradoxwikis.com/images/e/e1/Deployment_button_transparent.png",
+   "snapshot_ts": "20240113043736"
+  },
+  {
+   "name": "Deployment_button.png",
+   "key": "deployment_button",
+   "local": "assets/top_menu/Deployment_button.png",
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Deployment_button.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Deployment_button.png",
+   "subcategory": null,
+   "image_url": "https://hoi4.paradoxwikis.com/images/b/b6/Deployment_button.png",
+   "snapshot_ts": "20240113043736"
+  },
+  {
+   "name": "Diplomacy_button_transparent.png",
+   "key": "diplomacy_button_transparent",
+   "local": "assets/top_menu/Diplomacy_button_transparent.png",
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Diplomacy_button_transparent.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Diplomacy_button_transparent.png",
+   "subcategory": null,
+   "image_url": "https://hoi4.paradoxwikis.com/images/5/5b/Diplomacy_button_transparent.png",
+   "snapshot_ts": "20240113043736"
+  },
+  {
+   "name": "Diplomacy_button.png",
+   "key": "diplomacy_button",
+   "local": "assets/top_menu/Diplomacy_button.png",
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Diplomacy_button.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Diplomacy_button.png",
+   "subcategory": null,
+   "image_url": "https://hoi4.paradoxwikis.com/images/6/67/Diplomacy_button.png",
+   "snapshot_ts": "20240113043736"
+  },
+  {
+   "name": "Intelligence_button_transparent.png",
+   "key": "intelligence_button_transparent",
+   "local": "assets/top_menu/Intelligence_button_transparent.png",
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Intelligence_button_transparent.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Intelligence_button_transparent.png",
+   "subcategory": null,
+   "image_url": "https://hoi4.paradoxwikis.com/images/f/f9/Intelligence_button_transparent.png",
+   "snapshot_ts": "20240113043736"
+  },
+  {
+   "name": "Intelligence_button.png",
+   "key": "intelligence_button",
+   "local": "assets/top_menu/Intelligence_button.png",
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Intelligence_button.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Intelligence_button.png",
+   "subcategory": null,
+   "image_url": "https://hoi4.paradoxwikis.com/images/d/de/Intelligence_button.png",
+   "snapshot_ts": "20240113043736"
+  },
+  {
+   "name": "Logistics_button_transparent.png",
+   "key": "logistics_button_transparent",
+   "local": "assets/top_menu/Logistics_button_transparent.png",
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Logistics_button_transparent.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Logistics_button_transparent.png",
+   "subcategory": null,
+   "image_url": "https://hoi4.paradoxwikis.com/images/c/c6/Logistics_button_transparent.png",
+   "snapshot_ts": "20240113043736"
+  },
+  {
+   "name": "Logistics_button.png",
+   "key": "logistics_button",
+   "local": "assets/top_menu/Logistics_button.png",
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Logistics_button.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Logistics_button.png",
+   "subcategory": null,
+   "image_url": "https://hoi4.paradoxwikis.com/images/6/6e/Logistics_button.png",
+   "snapshot_ts": "20240113043736"
+  },
+  {
+   "name": "Officer_corps_button.png",
+   "key": "officer_corps_button",
+   "local": "assets/top_menu/Officer_corps_button.png",
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Officer_corps_button.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Officer_corps_button.png",
+   "subcategory": null,
+   "image_url": "https://hoi4.paradoxwikis.com/images/b/be/Officer_corps_button.png",
+   "snapshot_ts": "20240113043736"
+  },
+  {
+   "name": "Production_button_transparent.png",
+   "key": "production_button_transparent",
+   "local": "assets/top_menu/Production_button_transparent.png",
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Production_button_transparent.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Production_button_transparent.png",
+   "subcategory": null,
+   "image_url": "https://hoi4.paradoxwikis.com/images/e/ea/Production_button_transparent.png",
+   "snapshot_ts": "20240113043736"
+  },
+  {
+   "name": "Production_button.png",
+   "key": "production_button",
+   "local": "assets/top_menu/Production_button.png",
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Production_button.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Production_button.png",
+   "subcategory": null,
+   "image_url": "https://hoi4.paradoxwikis.com/images/d/dd/Production_button.png",
+   "snapshot_ts": "20240113043736"
+  },
+  {
+   "name": "Qwertyui_hotkeys.png",
+   "key": "qwertyui_hotkeys",
+   "local": "assets/top_menu/Qwertyui_hotkeys.png",
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Qwertyui_hotkeys.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Qwertyui_hotkeys.png",
+   "subcategory": null,
+   "image_url": "https://hoi4.paradoxwikis.com/images/thumb/6/60/Qwertyui_hotkeys.png/120px-Qwertyui_hotkeys.png",
+   "snapshot_ts": "20240113043736"
+  },
+  {
+   "name": "Research_button_transparent.png",
+   "key": "research_button_transparent",
+   "local": "assets/top_menu/Research_button_transparent.png",
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Research_button_transparent.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Research_button_transparent.png",
+   "subcategory": null,
+   "image_url": "https://hoi4.paradoxwikis.com/images/1/1d/Research_button_transparent.png",
+   "snapshot_ts": "20240113043736"
+  },
+  {
+   "name": "Research_button.png",
+   "key": "research_button",
+   "local": "assets/top_menu/Research_button.png",
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Research_button.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Research_button.png",
+   "subcategory": null,
+   "image_url": "https://hoi4.paradoxwikis.com/images/7/74/Research_button.png",
+   "snapshot_ts": "20240113043736"
+  },
+  {
+   "name": "Trade_button_transparent.png",
+   "key": "trade_button_transparent",
+   "local": "assets/top_menu/Trade_button_transparent.png",
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Trade_button_transparent.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Trade_button_transparent.png",
+   "subcategory": null,
+   "image_url": "https://hoi4.paradoxwikis.com/images/f/f6/Trade_button_transparent.png",
+   "snapshot_ts": "20240113043736"
+  },
+  {
+   "name": "Trade_button.png",
+   "key": "trade_button",
+   "local": "assets/top_menu/Trade_button.png",
+   "live_url": "https://hoi4.paradoxwikis.com/Special:FilePath/Trade_button.png",
+   "source_page": "https://hoi4.paradoxwikis.com/File:Trade_button.png",
+   "subcategory": null,
+   "image_url": "https://hoi4.paradoxwikis.com/images/1/1b/Trade_button.png",
+   "snapshot_ts": "20240113043736"
+  }
+ ],
+ "crawler_version": 6,
+ "complete": true,
+ "traversal_complete": true,
+ "pages_visited": 1,
+ "pending_pages": [],
+ "page_errors": {},
+ "coverage": {
+  "Category:Top_menu_icons": {
+   "url": "https://hoi4.paradoxwikis.com/Category:Top_menu_icons",
+   "subcategory": null,
+   "files": [
+    "Construction_button.png",
+    "Construction_button_transparent.png",
+    "Decision_button.png",
+    "Decision_button_transparent.png",
+    "Deployment_button.png",
+    "Deployment_button_transparent.png",
+    "Diplomacy_button.png",
+    "Diplomacy_button_transparent.png",
+    "Intelligence_button.png",
+    "Intelligence_button_transparent.png",
+    "Logistics_button.png",
+    "Logistics_button_transparent.png",
+    "Officer_corps_button.png",
+    "Production_button.png",
+    "Production_button_transparent.png",
+    "Qwertyui_hotkeys.png",
+    "Research_button.png",
+    "Research_button_transparent.png",
+    "Trade_button.png",
+    "Trade_button_transparent.png"
+   ],
+   "subcategories": [],
+   "pages": [],
+   "expected_files": 20,
+   "expected_subcategories": null,
+   "expected_pages": null
+  }
+ },
+ "pending_downloads": [],
+ "failed": []
+}
