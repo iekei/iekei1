@@ -1,0 +1,14 @@
+{
+ "generated_at": "2026-10-04T04:15:43+0000",
+ "source": "https://hoi4.paradoxwikis.com",
+ "note": "game/index.html からの相対パス。AssetRegistry.loadScrapedMapping() で読み込む。",
+ "categories": {
+  "topbar_icons": {
+   "label": "トップバーアイコン",
+   "mapping_file": "assets/mappings/topbar_icons.json",
+   "local_base": "assets/topbar/",
+   "count": 0,
+   "count_names": 0
+  }
+ }
+}
