@@ -212,10 +212,31 @@ class OffensivePlanner {
   static next(army) {
     if (!army.executing || BattleManager.battles.some(b=>b.attackerArmyId===army.id)) return;
     const s=CoreEngine.gameState;
-    if (!army.route?.length) { army.executing=false; army.status='目標到達・駐留'; army.progress=100; return; }
+    if (!army.route?.length) {
+      // ルート完了時: 前線から次の隣接敵プロヴィンスを探して進軍継続
+      if (army.goalPid && MapRenderer.ownerOf(army.goalPid) !== s.country) {
+        // 目標に到達していない場合、A*で再経路計算
+        const newRoute = OffensivePlanner.path(army.positionPid, army.goalPid);
+        if (newRoute.length > 1) {
+          army.route = newRoute.slice(1);
+        } else {
+          army.executing=false; army.status='目標到達・駐留'; army.progress=100; return;
+        }
+      } else {
+        army.executing=false; army.status='目標到達・駐留'; army.progress=100; return;
+      }
+    }
     if (army.divisions.reduce((n,d)=>n+d.org,0)/Math.max(1,army.divisions.length)<50) { army.status='組織力回復'; return; }
     const pid=army.route[0];
-    if (!(MapRenderer.provNeighbors.get(army.positionPid)||new Set()).has(pid)) { army.executing=false; army.status='経路が切断'; return; }
+    // 必ず隣接プロヴィンスのみを攻撃 (ワープ禁止)
+    if (!(MapRenderer.provNeighbors.get(army.positionPid)||new Set()).has(pid)) {
+      // 経路が切断された場合、再計算
+      if (army.goalPid) {
+        const newRoute = OffensivePlanner.path(army.positionPid, army.goalPid);
+        if (newRoute.length > 1) { army.route = newRoute.slice(1); OffensivePlanner.next(army); return; }
+      }
+      army.executing=false; army.status='経路が切断'; return;
+    }
     const owner=MapRenderer.ownerOf(pid);
     if (owner===s.country) { army.status='行軍'; return; }
     if (!s.atWar.includes(owner)) { army.executing=false; army.status='中立国の前で停止'; return; }
@@ -232,9 +253,15 @@ class OffensivePlanner {
     if (b) { army.progress=Math.round(b.progress*100); return; }
     army.divisions.forEach(d=>{d.org=Math.min(d.maxOrg,d.org+(army.executing?2:3));});
     if (!army.executing) return; // Occupied ground is held; never return to the old base.
+    // 行軍中: 自国領プロヴィンスを通過する際にルートを進める (1マスずつ)
     if (army.status==='行軍' && army.route?.length) {
       const next=army.route[0];
-      if (MapRenderer.ownerOf(next)===CoreEngine.gameState.country) { army.route.shift(); OffensivePlanner.hold(army,next); }
+      if (MapRenderer.ownerOf(next)===CoreEngine.gameState.country) {
+        army.route.shift();
+        OffensivePlanner.hold(army,next);
+        // 前線を更新 (自国領が拡大したため)
+        OffensivePlanner.updateFrontline(army);
+      }
     }
     OffensivePlanner.next(army);
   }
@@ -257,15 +284,108 @@ class OffensivePlanner {
       OffensivePlanner.capture(b.provId,b.attacker);
       OffensivePlanner.hold(army,b.provId);
       if (army.route?.[0]===b.provId) army.route.shift();
-      // The active line follows the connected bridgehead, not the initial border.
-      const owned=[b.provId,...(MapRenderer.provNeighbors.get(b.provId)||[])].filter(p=>MapRenderer.ownerOf(p)===b.attacker);
-      army.frontline=owned.filter(p=>[...(MapRenderer.provNeighbors.get(p)||[])].some(n=>CoreEngine.gameState.atWar.includes(MapRenderer.ownerOf(n))))
-        .map(p=>MapRenderer.provCentroid.get(p)).filter(Boolean);
-      CoreEngine.log('🏆 '+army.name+'がプロビンス '+b.provId+'を占領。ここを足場に次の地域へ進軍します。');
+      // 動的前線更新: 占領したプロヴィンスを含む、新しい国境線全体を再計算
+      OffensivePlanner.updateFrontline(army);
+      // 攻撃チェーンの再計算 (視覚的な進撃経路)
+      if (army.targetState) {
+        const newChain = BattlePlanManager.buildAttackChain(army.targetState);
+        if (newChain.length) army.chain = newChain;
+      }
+      // 前線の隙間を埋める自動再配置
+      OffensivePlanner.redistribute(army);
+      CoreEngine.log('🏆 '+army.name+'がプロビンス '+b.provId+'を占領。前線を更新し、次の地域へ進軍します。');
       if (b.invasion || b.airdrop) { army.executing=false; army.status='橋頭堡を確保・駐留'; army.route=null; }
       else { army.executing=true; OffensivePlanner.next(army); }
     } else { army.executing=false; army.status=b.advantage<=-.1?'攻撃失敗・駐留':'膠着・駐留'; }
     army.progress=0;
+  }
+
+  // ---- 動的前線更新: 新しい国境線に合わせて前線を再計算 ----
+  static updateFrontline(army) {
+    const s = CoreEngine.gameState;
+    const player = s.country;
+    const enemyTag = army.frontEnemy;
+    if (!enemyTag) return;
+    // 自国領プロヴィンスのうち、交戦国に隣接するものを全て収集
+    const frontierPids = [];
+    MapRenderer.provNeighbors.forEach((set, pid) => {
+      if (!OffensivePlanner.isLand(pid)) return;
+      if (MapRenderer.ownerOf(pid) !== player) return;
+      // このプロヴィンスが交戦国に隣接しているか
+      for (const n of set) {
+        if (!OffensivePlanner.isLand(n)) continue;
+        if (s.atWar.includes(MapRenderer.ownerOf(n))) {
+          frontierPids.push(pid);
+          break;
+        }
+      }
+    });
+    if (!frontierPids.length) return;
+    // 軍集団の拠点に最も近い点から最近傍順に並べて国境線に沿わせる
+    const base = army.base;
+    const ordered = [];
+    let cur = frontierPids.reduce((best, pid) => {
+      const c = MapRenderer.provCentroid.get(pid);
+      const bc = MapRenderer.provCentroid.get(best);
+      return Math.hypot(c[0]-base[0], c[1]-base[1]) < Math.hypot(bc[0]-base[0], bc[1]-base[1]) ? pid : best;
+    });
+    ordered.push(cur);
+    let remaining = frontierPids.filter(p => p !== cur);
+    while (remaining.length) {
+      const cc = MapRenderer.provCentroid.get(cur);
+      cur = remaining.reduce((best, pid) => {
+        const bc = MapRenderer.provCentroid.get(best);
+        const pc = MapRenderer.provCentroid.get(pid);
+        return Math.hypot(pc[0]-cc[0], pc[1]-cc[1]) < Math.hypot(bc[0]-cc[0], bc[1]-cc[1]) ? pid : best;
+      });
+      ordered.push(cur);
+      remaining = remaining.filter(p => p !== cur);
+    }
+    army.frontline = ordered.map(pid => MapRenderer.provCentroid.get(pid)).filter(Boolean);
+  }
+
+  // ---- 自動再配置: 前線の隙間（師団がいない前線プロヴィンス）を埋める ----
+  static redistribute(army) {
+    if (!army.frontline || !army.frontline.length) return;
+    const s = CoreEngine.gameState;
+    const player = s.country;
+    // 前線プロヴィンス (自国領で交戦国に隣接) を取得
+    const frontierPids = [];
+    MapRenderer.provNeighbors.forEach((set, pid) => {
+      if (!OffensivePlanner.isLand(pid) || MapRenderer.ownerOf(pid) !== player) return;
+      if ([...set].some(n => OffensivePlanner.isLand(n) && s.atWar.includes(MapRenderer.ownerOf(n)))) {
+        frontierPids.push(pid);
+      }
+    });
+    if (!frontierPids.length) return;
+    // 軍集団の師団が配置されているプロヴィンス
+    const occupiedPids = new Set(army.divisions.map(d => d.pid).filter(Boolean));
+    // 師団がいない前線プロヴィンス = 隙間
+    const gaps = frontierPids.filter(pid => !occupiedPids.has(pid));
+    if (!gaps.length) return;
+    // 最も近い隙間に師団を再配置 (組織力が十分な師団を優先)
+    gaps.forEach(gapPid => {
+      const gapC = MapRenderer.provCentroid.get(gapPid);
+      if (!gapC) return;
+      // 最も近い、かつ組織力が50以上の師団を探す
+      let bestDiv = null, bestD = Infinity;
+      army.divisions.forEach(d => {
+        if (d.org < 50) return;
+        const dc = MapRenderer.provCentroid.get(d.pid);
+        if (!dc) return;
+        const dist = Math.hypot(dc[0]-gapC[0], dc[1]-gapC[1]);
+        // 前線にいない師団 (後方) を優先的に移動
+        if (!frontierPids.includes(d.pid) && dist < bestD) {
+          bestD = dist;
+          bestDiv = d;
+        }
+      });
+      if (bestDiv) {
+        bestDiv.pid = gapPid;
+        bestDiv.x = gapC[0];
+        bestDiv.y = gapC[1];
+      }
+    });
   }
   static duration(army,pid,base) {
     const terrain=MapRenderer.provinces.terr[MapRenderer.provinces.p[pid]?.[5]];

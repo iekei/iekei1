@@ -140,6 +140,7 @@ class TrainingManager {
   static renderQueue() {
     const el = document.getElementById('training-queue');
     if (!el) return;
+    if (!Array.isArray(TrainingManager.queue)) TrainingManager.queue = [];
     const s = CoreEngine.gameState;
     let html = '<div class="sp-section"><h3>📋 徴兵・訓練キュー (装備在庫: ' + Math.floor(s.equipment || 0) + ' / 兵員: ' + Math.floor(s.manpower).toLocaleString() + ')</h3>';
     if (TrainingManager.queue.length === 0) {

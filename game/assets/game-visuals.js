@@ -79,14 +79,14 @@ const GameVisuals = {
     return '<figure class="project-blueprint"><img src="'+this.escape(this.url('special_project_icons',file))+'" alt="'+this.escape(sci.category_name || '特別研究')+'の参考設計図" loading="lazy"><figcaption>関連分野の参考設計図</figcaption></figure>';
   },
   unitFiles: {
-    infantry:'Albanian_Militia.png', artillery:'Artillery.png', armor:'Heavy_tank_cropped.png',
-    anti_tank:'Anti-tank.png', anti_air:'Anti-air.png', engineer:'Engineer.png', recon:'Cavalry.png',
-    ranger:'Assault_engineer.png', mountaineer:'Albanian_Militia.png', paratrooper:'Airborne_armored_recon.png', marine:'Amtrac.png',
-    jet_fighter:'Airborne_armored_recon.png', v2_rocket:'Artillery.png', nuke_battalion:'Artillery.png', land_battleship:'Heavy_tank_cropped.png'
+    infantry:'unit_infantry_icon.png', artillery:'support_unit_field_guns_icon.png', armor:'unit_heavy_armor_icon.png',
+    anti_tank:'support_unit_at_icon.png', anti_air:'unit_anti_air_icon.png', engineer:'unit_engineer_icon.png', recon:'unit_recon_icon.png',
+    ranger:'unit_ranger_battalion_icon.png', mountaineer:'unit_mountain_icon.png', paratrooper:'support_unit_airborne_armored_recon_icon.png', marine:'unit_amphibious_mechanized_icon.png',
+    jet_fighter:'support_unit_airborne_armored_recon_icon.png', v2_rocket:'support_unit_rocket_art_icon.png', nuke_battalion:'support_unit_field_guns_icon.png', land_battleship:'unit_heavy_armor_icon.png'
   },
   unit(battalion) {
     const file = this.unitFiles[battalion.id] || this.unitFiles.infantry;
-    const dimensions = GameAssetData.units[file];
+    const dimensions = GameAssetData.units[file] || { width: 76, height: 42 };
     // 152px two-state sheets use x=0..75. Existing <=76px PNGs are already green-only.
     const width = dimensions.width;
     const left = width > 76 ? 0 : Math.floor((76-width)/2);

@@ -1,163 +1,487 @@
 [
   {
-    "id": "eng_25pdr",
-    "title": "25ポンド野砲",
-    "year": 1936,
-    "x": 100,
-    "y": 50,
-    "research_time": 100,
-    "reliability": "配備",
-    "desc": "イギリス標準野戦砲。87.6mm。高い汎用性。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#4a8fc4' stroke-width='1.5'><path d='M4 18h16'/><path d='M8 18l4-8h4l4 8'/></svg>",
-    "effects": [
-      "攻撃: 50/100",
-      "射程: 60/100",
-      "機動力: 68/100",
-      "信頼度: 85/100"
-    ],
-    "prerequisites": []
-  },
-  {
-    "id": "bl72_howitzer",
-    "title": "BL 7.2インチ榴弾砲",
-    "year": 1940,
-    "x": 100,
-    "y": 200,
-    "research_time": 103,
-    "reliability": "配備（制式採用）",
-    "desc": "米8インチ砲身を改造した重榴弾砲。要塞攻撃に用いられた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
-    "effects": [
-      "対人攻撃: 41/100",
-      "対物攻撃: 45/100",
-      "生存力: 15/100",
-      "機動力: 48/100",
-      "信頼度: 75/100"
-    ],
-    "prerequisites": [
-      "eng_25pdr"
-    ]
-  },
-  {
-    "id": "bl55_gun",
-    "title": "BL 5.5インチ加農砲",
+    "id": "sp_shock_hardening_techniques",
+    "title": "Sp Shock Hardening Techniques",
     "year": 1941,
-    "x": 100,
-    "y": 350,
-    "research_time": 105,
-    "reliability": "配備（制式採用）",
-    "desc": "中距離の5.5インチ野戦重砲。イギリス陸軍の師団砲兵の重火力。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "x": -900,
+    "y": 400,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_surface_shock_hardening_techniques",
     "effects": [
-      "対人攻撃: 41/100",
-      "対物攻撃: 46/100",
-      "生存力: 15/100",
-      "機動力: 48/100",
-      "信頼度: 76/100"
+      "カテゴリ: artillery, mio_cat_all_artillery_equipment, mio_cat_artillery"
     ],
     "prerequisites": [
-      "bl72_howitzer"
+      "antiair2"
     ]
   },
   {
-    "id": "qf2_pounder",
-    "title": "QF 2ポンド対戦車砲",
-    "year": 1936,
-    "x": 400,
-    "y": 50,
-    "research_time": 95,
-    "reliability": "配備（制式採用）",
-    "desc": "開戦初期の標準対戦車砲。小口径で装甲進化とともに役目を終えた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
-    "effects": [
-      "対人攻撃: 14/100",
-      "対物攻撃: 50/100",
-      "生存力: 14/100",
-      "機動力: 44/100",
-      "信頼度: 66/100"
-    ],
-    "prerequisites": []
-  },
-  {
-    "id": "qf6_pounder",
-    "title": "QF 6ポンド対戦車砲",
+    "id": "sp_variable_time_fuze_shells",
+    "title": "Sp Variable Time Fuze Shells",
     "year": 1942,
-    "x": 400,
-    "y": 200,
-    "research_time": 107,
-    "reliability": "配備（制式採用）",
-    "desc": "北アフリカから導入された中口径対戦車砲。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "x": -900,
+    "y": 500,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_surface_variable_time_fuze_shells",
     "effects": [
-      "対人攻撃: 14/100",
-      "対物攻撃: 59/100",
-      "生存力: 14/100",
-      "機動力: 44/100",
-      "信頼度: 71/100"
+      "カテゴリ: artillery, mio_cat_all_artillery_equipment, mio_cat_artillery"
     ],
     "prerequisites": [
-      "qf2_pounder"
+      "sp_shock_hardening_techniques"
     ]
   },
   {
-    "id": "qf17_pounder",
-    "title": "QF 17ポンド対戦車砲",
-    "year": 1943,
-    "x": 400,
-    "y": 350,
-    "research_time": 109,
-    "reliability": "配備（制式採用）",
-    "desc": "独重戦車に対抗できる強力な対戦車砲。ファイアフライに搭載された。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "id": "sp_artillery_purpose_built_gun_motor_carriages_tech",
+    "title": "Sp Artillery Purpose Built Gun Motor Carriages Tech",
+    "year": 1940,
+    "x": -400,
+    "y": 300,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_artillery_purpose_built_gun_motor_carriages",
     "effects": [
-      "対人攻撃: 14/100",
-      "対物攻撃: 61/100",
-      "生存力: 14/100",
-      "機動力: 44/100",
-      "信頼度: 72/100"
+      "カテゴリ: artillery, mio_cat_all_artillery_equipment, mio_cat_artillery"
     ],
     "prerequisites": [
-      "qf6_pounder"
+      "artillery1"
     ]
   },
   {
-    "id": "37inch_aa",
-    "title": "3.7インチ高射砲",
-    "year": 1938,
-    "x": 700,
-    "y": 50,
-    "research_time": 99,
-    "reliability": "配備（制式採用）",
-    "desc": "88mm相当の高射砲。対空・対地両用の重高射砲。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "id": "sp_artillery_rocket_assisted_projectiles_tech",
+    "title": "Sp Artillery Rocket Assisted Projectiles Tech",
+    "year": 1940,
+    "x": -200,
+    "y": 300,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_artillery_rocket_assisted_projectiles",
     "effects": [
-      "対人攻撃: 39/100",
-      "対物攻撃: 42/100",
-      "生存力: 15/100",
-      "機動力: 48/100",
-      "信頼度: 73/100"
+      "カテゴリ: artillery, mio_cat_all_artillery_equipment, mio_cat_artillery"
+    ],
+    "prerequisites": [
+      "artillery1"
+    ]
+  },
+  {
+    "id": "gw_artillery",
+    "title": "Gw Artillery",
+    "year": 1936,
+    "x": 0,
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "Art_1_comintern",
+    "effects": [
+      "配備可能: artillery_equipment_1",
+      "カテゴリ: artillery, mio_cat_all_artillery_equipment, mio_cat_artillery"
     ],
     "prerequisites": []
   },
   {
-    "id": "sexton",
-    "title": "セクストン自走榴弾砲",
-    "year": 1943,
-    "x": 700,
-    "y": 200,
-    "research_time": 109,
-    "reliability": "配備（制式採用）",
-    "desc": "ラム戦車車台に25ポンド砲を搭載した自走砲。カナダ製で英陸軍の砲兵中核。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#8a9ad0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='18' r='3'/><path d='M12 15L4 7'/><path d='M5 6h6'/></svg>",
+    "id": "interwar_artillery",
+    "title": "Interwar Artillery",
+    "year": 1936,
+    "x": 0,
+    "y": 100,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "artillery1",
     "effects": [
-      "対人攻撃: 43/100",
-      "対物攻撃: 49/100",
-      "生存力: 15/100",
-      "機動力: 48/100",
-      "信頼度: 78/100"
+      "カテゴリ: artillery, mio_cat_all_artillery_equipment, mio_cat_artillery"
     ],
     "prerequisites": [
-      "37inch_aa"
+      "gw_artillery"
+    ]
+  },
+  {
+    "id": "interwar_antiair",
+    "title": "Interwar Antiair",
+    "year": 1936,
+    "x": 0,
+    "y": 100,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "AA_1_allies",
+    "effects": [
+      "配備可能: anti_air_equipment_1",
+      "カテゴリ: artillery, cat_anti_air, mio_cat_all_artillery_equipment"
+    ],
+    "prerequisites": [
+      "gw_artillery"
+    ]
+  },
+  {
+    "id": "interwar_antitank",
+    "title": "Interwar Antitank",
+    "year": 1936,
+    "x": 0,
+    "y": 100,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "AT_1_allies",
+    "effects": [
+      "配備可能: anti_tank_equipment_1",
+      "カテゴリ: artillery, cat_anti_tank, mio_cat_all_artillery_equipment"
+    ],
+    "prerequisites": [
+      "gw_artillery"
+    ]
+  },
+  {
+    "id": "artillery1",
+    "title": "Artillery 1",
+    "year": 1939,
+    "x": 0,
+    "y": 200,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "Art_2_comintern",
+    "effects": [
+      "配備可能: artillery_equipment_2",
+      "カテゴリ: artillery, mio_cat_all_artillery_equipment, mio_cat_artillery"
+    ],
+    "prerequisites": [
+      "interwar_artillery"
+    ]
+  },
+  {
+    "id": "antiair1",
+    "title": "Antiair 1",
+    "year": 1939,
+    "x": 0,
+    "y": 200,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "antiair1",
+    "effects": [
+      "カテゴリ: artillery, cat_anti_air, mio_cat_all_artillery_equipment"
+    ],
+    "prerequisites": [
+      "interwar_antiair"
+    ]
+  },
+  {
+    "id": "antitank1",
+    "title": "Antitank 1",
+    "year": 1939,
+    "x": 0,
+    "y": 200,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "antitank2",
+    "effects": [
+      "カテゴリ: artillery, cat_anti_tank, mio_cat_all_artillery_equipment"
+    ],
+    "prerequisites": [
+      "interwar_antitank"
+    ]
+  },
+  {
+    "id": "artillery2",
+    "title": "Artillery 2",
+    "year": 1940,
+    "x": 0,
+    "y": 300,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "artillery2",
+    "effects": [
+      "カテゴリ: artillery, mio_cat_all_artillery_equipment, mio_cat_artillery"
+    ],
+    "prerequisites": [
+      "artillery1"
+    ]
+  },
+  {
+    "id": "rocket_artillery",
+    "title": "Rocket Artillery",
+    "year": 1940,
+    "x": 0,
+    "y": 300,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "Rocket_Art_1_allies",
+    "effects": [
+      "配備可能: rocket_artillery_equipment_1",
+      "カテゴリ: rocketry, mio_cat_all_artillery_equipment"
+    ],
+    "prerequisites": [
+      "artillery2"
+    ]
+  },
+  {
+    "id": "antiair2",
+    "title": "Antiair 2",
+    "year": 1940,
+    "x": 0,
+    "y": 300,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "AA_2_allies",
+    "effects": [
+      "配備可能: anti_air_equipment_2",
+      "カテゴリ: artillery, cat_anti_air, mio_cat_all_artillery_equipment"
+    ],
+    "prerequisites": [
+      "antiair1"
+    ]
+  },
+  {
+    "id": "antitank2",
+    "title": "Antitank 2",
+    "year": 1940,
+    "x": 0,
+    "y": 300,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "AT_2_allies",
+    "effects": [
+      "配備可能: anti_tank_equipment_2",
+      "カテゴリ: artillery, cat_anti_tank, mio_cat_all_artillery_equipment"
+    ],
+    "prerequisites": [
+      "antitank1"
+    ]
+  },
+  {
+    "id": "artillery3",
+    "title": "Artillery 3",
+    "year": 1941,
+    "x": 0,
+    "y": 400,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "artillery3",
+    "effects": [
+      "カテゴリ: artillery, mio_cat_all_artillery_equipment, mio_cat_artillery"
+    ],
+    "prerequisites": [
+      "artillery2"
+    ]
+  },
+  {
+    "id": "rocket_artillery2",
+    "title": "Rocket Artillery 2",
+    "year": 1941,
+    "x": 0,
+    "y": 400,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "rocket_artillery2",
+    "effects": [
+      "カテゴリ: rocketry, mio_cat_all_artillery_equipment"
+    ],
+    "prerequisites": [
+      "rocket_artillery"
+    ]
+  },
+  {
+    "id": "antiair3",
+    "title": "Antiair 3",
+    "year": 1941,
+    "x": 0,
+    "y": 400,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "antiair2",
+    "effects": [
+      "カテゴリ: artillery, cat_anti_air, mio_cat_all_artillery_equipment"
+    ],
+    "prerequisites": [
+      "antiair2"
+    ]
+  },
+  {
+    "id": "antitank3",
+    "title": "Antitank 3",
+    "year": 1941,
+    "x": 0,
+    "y": 400,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "antitank3",
+    "effects": [
+      "カテゴリ: artillery, cat_anti_tank, mio_cat_all_artillery_equipment"
+    ],
+    "prerequisites": [
+      "antitank2"
+    ]
+  },
+  {
+    "id": "artillery4",
+    "title": "Artillery 4",
+    "year": 1942,
+    "x": 0,
+    "y": 500,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "Art_3_comintern",
+    "effects": [
+      "配備可能: artillery_equipment_3",
+      "カテゴリ: artillery, mio_cat_all_artillery_equipment, mio_cat_artillery"
+    ],
+    "prerequisites": [
+      "artillery3"
+    ]
+  },
+  {
+    "id": "rocket_artillery3",
+    "title": "Rocket Artillery 3",
+    "year": 1942,
+    "x": 0,
+    "y": 500,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "rocket_artillery3",
+    "effects": [
+      "カテゴリ: rocketry, mio_cat_all_artillery_equipment"
+    ],
+    "prerequisites": [
+      "rocket_artillery2"
+    ]
+  },
+  {
+    "id": "antiair4",
+    "title": "Antiair 4",
+    "year": 1942,
+    "x": 0,
+    "y": 500,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "antiair5",
+    "effects": [
+      "カテゴリ: artillery, cat_anti_air, mio_cat_all_artillery_equipment"
+    ],
+    "prerequisites": [
+      "antiair3"
+    ]
+  },
+  {
+    "id": "antitank4",
+    "title": "Antitank 4",
+    "year": 1942,
+    "x": 0,
+    "y": 500,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "antitank5",
+    "effects": [
+      "カテゴリ: artillery, cat_anti_tank, mio_cat_all_artillery_equipment"
+    ],
+    "prerequisites": [
+      "antitank3"
+    ]
+  },
+  {
+    "id": "artillery5",
+    "title": "Artillery 5",
+    "year": 1943,
+    "x": 0,
+    "y": 600,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "artillery5",
+    "effects": [
+      "カテゴリ: artillery, mio_cat_all_artillery_equipment, mio_cat_artillery"
+    ],
+    "prerequisites": [
+      "artillery4"
+    ]
+  },
+  {
+    "id": "rocket_artillery4",
+    "title": "Rocket Artillery 4",
+    "year": 1943,
+    "x": 0,
+    "y": 600,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "Rocket_Art_2_allies",
+    "effects": [
+      "配備可能: rocket_artillery_equipment_2",
+      "カテゴリ: rocketry, mio_cat_all_artillery_equipment"
+    ],
+    "prerequisites": [
+      "rocket_artillery3"
+    ]
+  },
+  {
+    "id": "antiair5",
+    "title": "Antiair 5",
+    "year": 1943,
+    "x": 0,
+    "y": 600,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "AA_3_allies",
+    "effects": [
+      "配備可能: anti_air_equipment_3",
+      "カテゴリ: artillery, cat_anti_air, mio_cat_all_artillery_equipment"
+    ],
+    "prerequisites": [
+      "antiair4"
+    ]
+  },
+  {
+    "id": "antitank5",
+    "title": "Antitank 5",
+    "year": 1943,
+    "x": 0,
+    "y": 600,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "AT_3_allies",
+    "effects": [
+      "配備可能: anti_tank_equipment_3",
+      "カテゴリ: artillery, cat_anti_tank, mio_cat_all_artillery_equipment"
+    ],
+    "prerequisites": [
+      "antitank4"
+    ]
+  },
+  {
+    "id": "sp_advance_sabot_shells",
+    "title": "Sp Advance Sabot Shells",
+    "year": 1942,
+    "x": 500,
+    "y": 500,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_advance_sabot_shell",
+    "effects": [
+      "カテゴリ: artillery, cat_anti_tank, mio_cat_all_artillery_equipment"
+    ],
+    "prerequisites": [
+      "antitank3"
     ]
   }
 ]

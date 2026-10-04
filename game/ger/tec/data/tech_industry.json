@@ -1,179 +1,727 @@
 [
   {
-    "id": "autobahn",
-    "title": "アウトバーン建設",
-    "year": 1936,
-    "x": 100,
-    "y": 50,
-    "research_time": 110,
-    "reliability": "完成",
-    "desc": "高速自動車網の建設。軍需輸送とモータリゼーションの基盤となった。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M4 20V10l4 4V10l4 4V10l4 4V10l4 10z'/></svg>",
-    "effects": [
-      "建設速度: +10%",
-      "輸送効率: +12%"
-    ],
-    "prerequisites": []
-  },
-  {
-    "id": "ig_farben",
-    "title": "IGファルベン総合化学",
-    "year": 1936,
-    "x": 100,
-    "y": 200,
-    "research_time": 125,
-    "reliability": "配備（制式採用）",
-    "desc": "合成ゴム・合成燃料を統括する世界最大の化学コンツェルン。独戦争経済の化学的基盤。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
-    "effects": [
-      "生産効率上限: +9.6%",
-      "生産効率保持率: +9.6%"
-    ],
-    "prerequisites": [
-      "autobahn"
-    ]
-  },
-  {
-    "id": "synthetic_fuel",
-    "title": "合成燃料工場",
-    "year": 1936,
-    "x": 100,
-    "y": 350,
-    "research_time": 140,
-    "reliability": "運用中",
-    "desc": "石炭液化による合成燃料。ルーマニア石油への依存を減らす国家的事業。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M8 3h6v18H8z'/><path d='M14 8h3v8'/><path d='M10 7v3'/></svg>",
-    "effects": [
-      "燃料生産: +25%",
-      "石油依存: -15%"
-    ],
-    "prerequisites": [
-      "ig_farben"
-    ]
-  },
-  {
-    "id": "hermann_goring_works",
-    "title": "ヘルマン・ゲーリング国家工廠",
+    "id": "oil_processing",
+    "title": "Oil Processing",
     "year": 1937,
-    "x": 100,
-    "y": 500,
-    "research_time": 127,
-    "reliability": "配備（制式採用）",
-    "desc": "鉄鋼・兵器を一括管理する国営重工業複合体。占領地工場の吸収統合で急拡大した。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
-    "effects": [
-      "生産効率上限: +9.9%",
-      "生産効率保持率: +9.9%"
-    ],
-    "prerequisites": [
-      "synthetic_fuel"
-    ]
-  },
-  {
-    "id": "organisation_todt",
-    "title": "トート組織 (OT)",
-    "year": 1938,
-    "x": 100,
-    "y": 650,
-    "research_time": 129,
-    "reliability": "配備（制式採用）",
-    "desc": "大規模土木・軍事建設を統括する国家建設組織。大西洋の壁・アウトバーンを支えた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
-    "effects": [
-      "生産効率上限: +10.1%",
-      "生産効率保持率: +10.1%"
-    ],
-    "prerequisites": [
-      "hermann_goring_works"
-    ]
-  },
-  {
-    "id": "rheinmetall",
-    "title": "ラインメタル拡張",
-    "year": 1938,
-    "x": 100,
-    "y": 800,
-    "research_time": 130,
-    "reliability": "運用中",
-    "desc": "火砲・装甲車両の生産ライン拡張。開戦時の軍需生産を支えた。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M4 20V10l4 4V10l4 4V10l4 4V10l4 10z'/></svg>",
-    "effects": [
-      "軍需工場出力: +10%",
-      "装備生産効率: +8%"
-    ],
-    "prerequisites": [
-      "organisation_todt"
-    ]
-  },
-  {
-    "id": "synthetic_rubber",
-    "title": "合成ゴム (ブナ)",
-    "year": 1937,
-    "x": 400,
-    "y": 50,
-    "research_time": 120,
-    "reliability": "運用中",
-    "desc": "天然ゴム代替の合成ゴム生産。タイヤ・ホースなど軍需資材を自給した。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M8 3h6v18H8z'/><path d='M14 8h3v8'/><path d='M10 7v3'/></svg>",
-    "effects": [
-      "ゴム自給: +30%",
-      "車両信頼度: +5%"
-    ],
-    "prerequisites": []
-  },
-  {
-    "id": "four_year_plan_ind",
-    "title": "四ヵ年計画の産業動員",
-    "year": 1938,
-    "x": 400,
+    "x": -100,
     "y": 200,
     "research_time": 150,
-    "reliability": "運用中",
-    "desc": "ゲーリング主宰の四ヵ年計画。戦争経済への全面移行を推進した。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M4 20V10l4 4V10l4 4V10l4 4V10l4 10z'/></svg>",
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "oil_processing",
     "effects": [
-      "工場出力: +12%",
-      "資源採掘: +10%",
-      "建設速度: +8%"
+      "カテゴリ: industry, synth_resources, cat_synth_oil"
     ],
     "prerequisites": [
-      "synthetic_rubber"
+      "synth_oil_experiments"
     ]
   },
   {
-    "id": "krupp_expansion",
-    "title": "クルップ重工業拡張",
-    "year": 1938,
+    "id": "improved_oil_processing",
+    "title": "Improved Oil Processing",
+    "year": 1939,
+    "x": -100,
+    "y": 300,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "improved_oil_processing",
+    "effects": [
+      "カテゴリ: industry, synth_resources, cat_synth_oil"
+    ],
+    "prerequisites": [
+      "oil_processing"
+    ]
+  },
+  {
+    "id": "advanced_oil_processing",
+    "title": "Advanced Oil Processing",
+    "year": 1941,
+    "x": -100,
+    "y": 400,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "advanced_oil_processing",
+    "effects": [
+      "カテゴリ: industry, synth_resources, cat_synth_oil"
+    ],
+    "prerequisites": [
+      "improved_oil_processing"
+    ]
+  },
+  {
+    "id": "flexible_line",
+    "title": "Flexible Line",
+    "year": 1943,
+    "x": -100,
+    "y": 500,
+    "research_time": 250,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "flexible_line",
+    "effects": [
+      "カテゴリ: industry, cat_production"
+    ],
+    "prerequisites": [
+      "assembly_line_production"
+    ]
+  },
+  {
+    "id": "modern_oil_processing",
+    "title": "Modern Oil Processing",
+    "year": 1943,
+    "x": -100,
+    "y": 500,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "modern_oil_processing",
+    "effects": [
+      "カテゴリ: industry, synth_resources, cat_synth_oil"
+    ],
+    "prerequisites": [
+      "advanced_oil_processing"
+    ]
+  },
+  {
+    "id": "basic_machine_tools",
+    "title": "Basic Machine Tools",
+    "year": 1936,
+    "x": 0,
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "basic_machine_tools",
+    "effects": [
+      "カテゴリ: industry, cat_production"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "construction1",
+    "title": "Construction 1",
+    "year": 1936,
+    "x": 0,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "basic_construction",
+    "effects": [
+      "カテゴリ: industry, construction_tech"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "synth_oil_experiments",
+    "title": "Synth Oil Experiments",
+    "year": 1936,
+    "x": 0,
+    "y": 100,
+    "research_time": 300,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "synth_oil_experiments",
+    "effects": [
+      "カテゴリ: industry, synth_resources, cat_synth_oil"
+    ],
+    "prerequisites": [
+      "fuel_silos"
+    ]
+  },
+  {
+    "id": "construction2",
+    "title": "Construction 2",
+    "year": 1937,
+    "x": 0,
+    "y": 100,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "improved_construction",
+    "effects": [
+      "カテゴリ: industry, construction_tech"
+    ],
+    "prerequisites": [
+      "construction1"
+    ]
+  },
+  {
+    "id": "improved_machine_tools",
+    "title": "Improved Machine Tools",
+    "year": 1937,
+    "x": 0,
+    "y": 200,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "improved_machine_tools",
+    "effects": [
+      "カテゴリ: industry, cat_production"
+    ],
+    "prerequisites": [
+      "basic_machine_tools"
+    ]
+  },
+  {
+    "id": "construction3",
+    "title": "Construction 3",
+    "year": 1939,
+    "x": 0,
+    "y": 200,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "advanced_construction",
+    "effects": [
+      "カテゴリ: industry, construction_tech"
+    ],
+    "prerequisites": [
+      "construction2"
+    ]
+  },
+  {
+    "id": "advanced_machine_tools",
+    "title": "Advanced Machine Tools",
+    "year": 1939,
+    "x": 0,
+    "y": 300,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "advanced_machine_tools",
+    "effects": [
+      "カテゴリ: industry, cat_production"
+    ],
+    "prerequisites": [
+      "improved_machine_tools"
+    ]
+  },
+  {
+    "id": "construction4",
+    "title": "Construction 4",
+    "year": 1941,
+    "x": 0,
+    "y": 300,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "improved_conversion",
+    "effects": [
+      "カテゴリ: industry, construction_tech"
+    ],
+    "prerequisites": [
+      "construction3"
+    ]
+  },
+  {
+    "id": "assembly_line_production",
+    "title": "Assembly Line Production",
+    "year": 1941,
+    "x": 0,
+    "y": 400,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "assembly_line_production",
+    "effects": [
+      "カテゴリ: industry, cat_production"
+    ],
+    "prerequisites": [
+      "advanced_machine_tools"
+    ]
+  },
+  {
+    "id": "construction5",
+    "title": "Construction 5",
+    "year": 1943,
+    "x": 0,
+    "y": 400,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "advanced_conversion",
+    "effects": [
+      "カテゴリ: industry, construction_tech"
+    ],
+    "prerequisites": [
+      "construction4"
+    ]
+  },
+  {
+    "id": "fuel_silos",
+    "title": "Fuel Silos",
+    "year": 1936,
+    "x": 100,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "fuel_silos",
+    "effects": [
+      "カテゴリ: industry, synth_resources"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "rubber_processing",
+    "title": "Rubber Processing",
+    "year": 1937,
+    "x": 100,
+    "y": 200,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "rubber_processing",
+    "effects": [
+      "カテゴリ: industry, synth_resources, cat_synth_rubber"
+    ],
+    "prerequisites": [
+      "synth_oil_experiments"
+    ]
+  },
+  {
+    "id": "improved_rubber_processing",
+    "title": "Improved Rubber Processing",
+    "year": 1939,
+    "x": 100,
+    "y": 300,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "improved_rubber_processing",
+    "effects": [
+      "カテゴリ: industry, synth_resources, cat_synth_rubber"
+    ],
+    "prerequisites": [
+      "rubber_processing"
+    ]
+  },
+  {
+    "id": "advanced_rubber_processing",
+    "title": "Advanced Rubber Processing",
+    "year": 1941,
+    "x": 100,
+    "y": 400,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "advanced_rubber_processing",
+    "effects": [
+      "カテゴリ: industry, synth_resources, cat_synth_rubber"
+    ],
+    "prerequisites": [
+      "improved_rubber_processing"
+    ]
+  },
+  {
+    "id": "streamlined_line",
+    "title": "Streamlined Line",
+    "year": 1943,
+    "x": 100,
+    "y": 500,
+    "research_time": 250,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "streamlined_line",
+    "effects": [
+      "カテゴリ: industry, cat_production"
+    ],
+    "prerequisites": [
+      "assembly_line_production"
+    ]
+  },
+  {
+    "id": "modern_rubber_processing",
+    "title": "Modern Rubber Processing",
+    "year": 1943,
+    "x": 100,
+    "y": 500,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "modern_rubber_processing",
+    "effects": [
+      "カテゴリ: industry, synth_resources, cat_synth_rubber"
+    ],
+    "prerequisites": [
+      "advanced_rubber_processing"
+    ]
+  },
+  {
+    "id": "excavation1",
+    "title": "Excavation 1",
+    "year": 1936,
+    "x": 200,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "excavation1",
+    "effects": [
+      "カテゴリ: industry, construction_tech, excavation_tech"
+    ],
+    "prerequisites": [
+      "construction1"
+    ]
+  },
+  {
+    "id": "excavation2",
+    "title": "Excavation 2",
+    "year": 1937,
+    "x": 200,
+    "y": 100,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "excavation2",
+    "effects": [
+      "カテゴリ: industry, construction_tech, excavation_tech"
+    ],
+    "prerequisites": [
+      "construction2"
+    ]
+  },
+  {
+    "id": "improved_equipment_conversion",
+    "title": "Improved Equipment Conversion",
+    "year": 1937,
+    "x": 200,
+    "y": 200,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "coal_efficiency1",
+    "effects": [
+      "カテゴリ: industry, cat_production, construction_tech, excavation_tech"
+    ],
+    "prerequisites": [
+      "improved_machine_tools"
+    ]
+  },
+  {
+    "id": "excavation3",
+    "title": "Excavation 3",
+    "year": 1939,
+    "x": 200,
+    "y": 200,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "excavation3",
+    "effects": [
+      "カテゴリ: industry, construction_tech, excavation_tech"
+    ],
+    "prerequisites": [
+      "construction3"
+    ]
+  },
+  {
+    "id": "advanced_equipment_conversion",
+    "title": "Advanced Equipment Conversion",
+    "year": 1939,
+    "x": 200,
+    "y": 300,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "coal_efficiency2",
+    "effects": [
+      "カテゴリ: industry, cat_production, construction_tech, excavation_tech"
+    ],
+    "prerequisites": [
+      "improved_equipment_conversion"
+    ]
+  },
+  {
+    "id": "excavation4",
+    "title": "Excavation 4",
+    "year": 1941,
+    "x": 200,
+    "y": 300,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "excavation4",
+    "effects": [
+      "カテゴリ: industry, construction_tech, excavation_tech"
+    ],
+    "prerequisites": [
+      "construction4"
+    ]
+  },
+  {
+    "id": "excavation5",
+    "title": "Excavation 5",
+    "year": 1943,
+    "x": 200,
+    "y": 400,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "excavation5",
+    "effects": [
+      "カテゴリ: industry, construction_tech, excavation_tech"
+    ],
+    "prerequisites": [
+      "construction5"
+    ]
+  },
+  {
+    "id": "fuel_refining",
+    "title": "Fuel Refining",
+    "year": 1936,
+    "x": 300,
+    "y": 100,
+    "research_time": 300,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "fuel_refining1",
+    "effects": [
+      "カテゴリ: industry, synth_resources"
+    ],
+    "prerequisites": [
+      "fuel_silos"
+    ]
+  },
+  {
+    "id": "fuel_refining2",
+    "title": "Fuel Refining 2",
+    "year": 1937,
+    "x": 300,
+    "y": 200,
+    "research_time": 300,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "fuel_refining2",
+    "effects": [
+      "カテゴリ: industry, synth_resources"
+    ],
+    "prerequisites": [
+      "fuel_refining"
+    ]
+  },
+  {
+    "id": "fuel_refining3",
+    "title": "Fuel Refining 3",
+    "year": 1939,
+    "x": 300,
+    "y": 300,
+    "research_time": 300,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "fuel_refining3",
+    "effects": [
+      "カテゴリ: industry, synth_resources"
+    ],
+    "prerequisites": [
+      "fuel_refining2"
+    ]
+  },
+  {
+    "id": "fuel_refining4",
+    "title": "Fuel Refining 4",
+    "year": 1941,
+    "x": 300,
+    "y": 400,
+    "research_time": 300,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "fuel_refining4",
+    "effects": [
+      "カテゴリ: industry, synth_resources"
+    ],
+    "prerequisites": [
+      "fuel_refining3"
+    ]
+  },
+  {
+    "id": "fuel_refining5",
+    "title": "Fuel Refining 5",
+    "year": 1943,
+    "x": 300,
+    "y": 500,
+    "research_time": 300,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "fuel_refining5",
+    "effects": [
+      "カテゴリ: industry, synth_resources"
+    ],
+    "prerequisites": [
+      "fuel_refining4"
+    ]
+  },
+  {
+    "id": "concentrated_industry",
+    "title": "Concentrated Industry",
+    "year": 1936,
     "x": 400,
-    "y": 350,
-    "research_time": 129,
-    "reliability": "配備（制式採用）",
-    "desc": "重砲・装甲車両の生産能力を一段と拡大させる重工業集積計画。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
+    "y": 100,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "concentrated_industry",
     "effects": [
-      "生産効率上限: +10.1%",
-      "生産効率保持率: +10.1%"
+      "カテゴリ: industry, concentrated_industry_category"
     ],
     "prerequisites": [
-      "four_year_plan_ind"
+      "basic_machine_tools"
     ]
   },
   {
-    "id": "forced_labor",
-    "title": "強制労働動員",
+    "id": "concentrated_industry2",
+    "title": "Concentrated Industry 2",
+    "year": 1937,
+    "x": 400,
+    "y": 200,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "concentrated_industry2",
+    "effects": [
+      "カテゴリ: industry, concentrated_industry_category"
+    ],
+    "prerequisites": [
+      "concentrated_industry"
+    ]
+  },
+  {
+    "id": "concentrated_industry3",
+    "title": "Concentrated Industry 3",
+    "year": 1939,
+    "x": 400,
+    "y": 300,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "concentrated_industry3",
+    "effects": [
+      "カテゴリ: industry, concentrated_industry_category"
+    ],
+    "prerequisites": [
+      "concentrated_industry2"
+    ]
+  },
+  {
+    "id": "concentrated_industry4",
+    "title": "Concentrated Industry 4",
     "year": 1941,
     "x": 400,
-    "y": 500,
-    "research_time": 135,
-    "reliability": "配備（制式採用）",
-    "desc": "占領地域から動員した労働力で軍需生産を維持する経済制度。",
-    "svg": "<svg viewBox='0 0 24 24' fill='none' stroke='#c0c8d0' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M2 20h20'/><path d='M6 20V10l4 3V10l4 3V6l6 4v10'/></svg>",
+    "y": 400,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "concentrated_industry4",
     "effects": [
-      "生産効率上限: +10.9%",
-      "生産効率保持率: +10.9%"
+      "カテゴリ: industry, concentrated_industry_category"
     ],
     "prerequisites": [
-      "krupp_expansion"
+      "concentrated_industry3"
+    ]
+  },
+  {
+    "id": "concentrated_industry5",
+    "title": "Concentrated Industry 5",
+    "year": 1943,
+    "x": 400,
+    "y": 500,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "concentrated_industry5",
+    "effects": [
+      "カテゴリ: industry, concentrated_industry_category"
+    ],
+    "prerequisites": [
+      "concentrated_industry4"
+    ]
+  },
+  {
+    "id": "dispersed_industry",
+    "title": "Dispersed Industry",
+    "year": 1936,
+    "x": 600,
+    "y": 100,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "dispersed_industry",
+    "effects": [
+      "カテゴリ: industry, dispersed_industry_category"
+    ],
+    "prerequisites": [
+      "basic_machine_tools"
+    ]
+  },
+  {
+    "id": "dispersed_industry2",
+    "title": "Dispersed Industry 2",
+    "year": 1937,
+    "x": 600,
+    "y": 200,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "dispersed_industry2",
+    "effects": [
+      "カテゴリ: industry, dispersed_industry_category"
+    ],
+    "prerequisites": [
+      "dispersed_industry"
+    ]
+  },
+  {
+    "id": "dispersed_industry3",
+    "title": "Dispersed Industry 3",
+    "year": 1939,
+    "x": 600,
+    "y": 300,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "dispersed_industry3",
+    "effects": [
+      "カテゴリ: industry, dispersed_industry_category"
+    ],
+    "prerequisites": [
+      "dispersed_industry2"
+    ]
+  },
+  {
+    "id": "dispersed_industry4",
+    "title": "Dispersed Industry 4",
+    "year": 1941,
+    "x": 600,
+    "y": 400,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "dispersed_industry4",
+    "effects": [
+      "カテゴリ: industry, dispersed_industry_category"
+    ],
+    "prerequisites": [
+      "dispersed_industry3"
+    ]
+  },
+  {
+    "id": "dispersed_industry5",
+    "title": "Dispersed Industry 5",
+    "year": 1943,
+    "x": 600,
+    "y": 500,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "dispersed_industry5",
+    "effects": [
+      "カテゴリ: industry, dispersed_industry_category"
+    ],
+    "prerequisites": [
+      "dispersed_industry4"
     ]
   }
 ]
