@@ -1,0 +1,192 @@
+/**
+ * topbar.css — HoI4風トップバー・ウィンドウナビゲーション アイコンスタイル
+ * military-theme.css の上に積み重ねて適用される。
+ * DOM構造・ゲームロジックは変更せず、アイコン表示とレイアウトのみを上書き。
+ */
+
+/* ── トップバー: アイコン付きステータス表示 ── */
+#top-bar {
+  height: 56px;
+  padding: 4px 12px;
+  gap: 8px;
+}
+
+.stats-group {
+  gap: 4px;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px 2px 4px;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid transparent;
+  transition: border-color 0.15s, background 0.15s;
+  cursor: default;
+  user-select: none;
+}
+
+.stat-item:hover {
+  border-color: var(--mil-brass-dark, #76623c);
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.stat-item .stat-icon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  display: block;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.6));
+}
+
+.stat-item .stat-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 40px;
+}
+
+.stat-item .stat-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.stat-item .stat-bar {
+  width: 56px;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 2px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.stat-item .stat-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* ── 国旗ボタン ── */
+#player-flag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 36px;
+  font-size: 22px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-mil, #61634f);
+  border-radius: 3px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+#player-flag:hover {
+  border-color: var(--text-gold, #c4ad72);
+  box-shadow: 0 0 6px rgba(196, 173, 114, 0.3);
+}
+
+/* ── ウィンドウナビゲーション: アイコン付きボタン ── */
+#window-nav {
+  gap: 2px;
+  padding: 3px 6px;
+}
+
+.win-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px 4px 6px;
+  font-size: 11px;
+  border-radius: 3px;
+}
+
+.win-btn .win-btn-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: block;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.5));
+  opacity: 0.85;
+}
+
+.win-btn:hover .win-btn-icon {
+  opacity: 1;
+}
+
+.win-btn.open .win-btn-icon {
+  opacity: 1;
+  filter: drop-shadow(0 0 4px rgba(196, 173, 114, 0.5));
+}
+
+/* ── トップバーナビ (右側) ── */
+.topbar-nav {
+  gap: 3px;
+}
+
+.topbar-nav .speed-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+}
+
+/* ── ツールチップ改善 (HoI4風) ── */
+#stat-tooltip {
+  min-width: 220px;
+  background: linear-gradient(180deg, #1a2230, #121820);
+  border: 1px solid var(--mil-brass-dark, #76623c);
+  border-radius: 4px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  padding: 10px 14px;
+}
+
+#stat-tooltip .stt-title {
+  color: var(--text-gold, #c4ad72);
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border-mil, #2a3a4a);
+}
+
+#stat-tooltip .stt-row {
+  color: var(--text-secondary, #8a9aaa);
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+#stat-tooltip .stt-row b {
+  color: var(--text-primary, #c8d0d8);
+}
+
+/* ── スピードボタン アイコン ── */
+.speed-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── レスポンシブ: 狭画面でテキスト非表示 ── */
+@media (max-width: 768px) {
+  .win-btn {
+    padding: 4px 6px;
+    font-size: 0;
+  }
+  .win-btn .win-btn-icon {
+    width: 22px;
+    height: 22px;
+  }
+  .stat-item .stat-content {
+    min-width: 30px;
+  }
+  .stat-item .stat-val {
+    font-size: 11px;
+  }
+}

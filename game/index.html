@@ -662,6 +662,7 @@
   </style>
   <link rel="stylesheet" href="military-theme.css">
   <link rel="stylesheet" href="strategy.css">
+  <link rel="stylesheet" href="assets/topbar.css">
 </head>
 <body>
 <!-- ==================== START SCREEN (Scenario / Nation Select) ==================== -->
@@ -709,20 +710,20 @@
 
   <!-- ==================== WINDOW NAVIGATION RAIL ==================== -->
   <nav id="window-nav">
-    <span style="font-size:11px;color:var(--text-secondary);margin-right:4px;">🪟 ウィンドウ:</span>
-    <button class="win-btn" data-tab="focus" onclick="GameUI.switchTab('focus')">🌲 国家方針</button>
-    <button class="win-btn" data-tab="research" onclick="GameUI.switchTab('research')">🔬 研究</button>
-    <button class="win-btn" data-tab="special" onclick="GameUI.switchTab('special')">⚛️ 特別研究</button>
-    <button class="win-btn" data-tab="nuclear" onclick="GameUI.switchTab('nuclear')">☢️ 核攻撃</button>
-    <button class="win-btn" data-tab="construction" onclick="GameUI.switchTab('construction')">🏗️ 建設</button>
-    <button class="win-btn" data-tab="trade" onclick="GameUI.switchTab('trade')">📦 貿易</button>
-    <button class="win-btn" data-tab="diplomacy" onclick="GameUI.switchTab('diplomacy')">🤝 外交</button>
-    <button class="win-btn" data-tab="cards" onclick="GameUI.switchTab('cards')">🃏 将軍カード</button>
-    <button class="win-btn" data-tab="division" onclick="GameUI.switchTab('division')">⚔️ 師団編成</button>
-    <button class="win-btn" data-tab="multiplayer" onclick="GameUI.switchTab('multiplayer')">🌐 マルチ</button>
-    <button class="win-btn" data-tab="nation" onclick="GameUI.switchTab('nation')">🏛️ 固有システム</button>
-    <button class="win-btn" data-tab="winsave" onclick="GameUI.switchTab('winsave')">💾 セーブ/ロード</button>
-    <button class="win-btn" onclick="WindowManager.closeAll()">🗺️ マップ画面</button>
+    <span style="font-size:11px;color:var(--text-secondary);margin-right:4px;white-space:nowrap;">ウィンドウ:</span>
+    <button class="win-btn" data-tab="focus" onclick="GameUI.switchTab('focus')"><img class="win-btn-icon" data-menu-icon="focus" alt=""> 国家方針</button>
+    <button class="win-btn" data-tab="research" onclick="GameUI.switchTab('research')"><img class="win-btn-icon" data-menu-icon="research" alt=""> 研究</button>
+    <button class="win-btn" data-tab="special" onclick="GameUI.switchTab('special')"><img class="win-btn-icon" data-menu-icon="special" alt=""> 特別研究</button>
+    <button class="win-btn" data-tab="nuclear" onclick="GameUI.switchTab('nuclear')"><img class="win-btn-icon" data-menu-icon="nuclear" alt=""> 核攻撃</button>
+    <button class="win-btn" data-tab="construction" onclick="GameUI.switchTab('construction')"><img class="win-btn-icon" data-menu-icon="construction" alt=""> 建設</button>
+    <button class="win-btn" data-tab="trade" onclick="GameUI.switchTab('trade')"><img class="win-btn-icon" data-menu-icon="trade" alt=""> 貿易</button>
+    <button class="win-btn" data-tab="diplomacy" onclick="GameUI.switchTab('diplomacy')"><img class="win-btn-icon" data-menu-icon="diplomacy" alt=""> 外交</button>
+    <button class="win-btn" data-tab="cards" onclick="GameUI.switchTab('cards')"><img class="win-btn-icon" data-menu-icon="cards" alt=""> 将軍カード</button>
+    <button class="win-btn" data-tab="division" onclick="GameUI.switchTab('division')"><img class="win-btn-icon" data-menu-icon="division" alt=""> 師団編成</button>
+    <button class="win-btn" data-tab="multiplayer" onclick="GameUI.switchTab('multiplayer')"><img class="win-btn-icon" data-menu-icon="multiplayer" alt=""> マルチ</button>
+    <button class="win-btn" data-tab="nation" onclick="GameUI.switchTab('nation')"><img class="win-btn-icon" data-menu-icon="nation" alt=""> 固有システム</button>
+    <button class="win-btn" data-tab="winsave" onclick="GameUI.switchTab('winsave')"><img class="win-btn-icon" data-menu-icon="winsave" alt=""> セーブ/ロード</button>
+    <button class="win-btn" onclick="WindowManager.closeAll()"><img class="win-btn-icon" data-menu-icon="map" alt=""> マップ画面</button>
   </nav>
 
   <!-- ==================== OPERATING SCREEN (fullscreen map) ==================== -->
@@ -863,6 +864,9 @@
   <input type="text" id="cheat-console-input" placeholder="コマンドを入力... (nuke 10, pp 500, focus.autocomplete...)" onkeydown="CheatConsole.handleInput(event)">
 </div>
 
+<script src="assets/asset-registry.js"></script>
+<script src="assets/image-loader.js"></script>
+<script src="assets/topbar-icons.js"></script>
 <script>
 /* ================================================================
    JavaScript Module Architecture
@@ -1128,6 +1132,30 @@ class CoreEngine {
 
   static init() {
     CoreEngine.gameState.fuel = CoreEngine.gameState.maxFuel * 0.5;
+    // アセットシステム初期化 (TopbarIcons SVG生成 + ImageLoader遅延読み込み)
+    if (typeof TopbarIcons !== 'undefined') {
+      TopbarIcons.init();
+      // ウィンドウナビゲーションボタンにメニューアイコンを割り当て
+      document.querySelectorAll('.win-btn-icon[data-menu-icon]').forEach(img => {
+        const key = img.dataset.menuIcon;
+        const src = TopbarIcons.getMenu(key);
+        if (src) img.src = src;
+      });
+    }
+    if (typeof ImageLoader !== 'undefined') {
+      ImageLoader.init();
+      // トップバー必須アイコンを事前読み込み (常に表示されるため)
+      const essentialIcons = [];
+      if (typeof TopbarIcons !== 'undefined') {
+        ['politicalPower','stability','warSupport','manpower','factories','fuel','convoys'].forEach(k => {
+          const u = TopbarIcons.get(k); if (u) essentialIcons.push(u);
+        });
+        Object.keys(TopbarIcons.menu).forEach(k => {
+          const u = TopbarIcons.getMenu(k); if (u) essentialIcons.push(u);
+        });
+      }
+      if (essentialIcons.length) ImageLoader.preload(essentialIcons);
+    }
     CoreEngine.updateSpeedUI();
     document.querySelectorAll('.speed-btn[data-speed]').forEach(btn => { const speed = Number(btn.dataset.speed); btn.title = speed ? '1日 / ' + (CoreEngine.speedIntervals[speed] / 1000) + '秒' : '一時停止 (Space)'; });
     CoreEngine.renderStats();
@@ -1313,16 +1341,25 @@ class CoreEngine {
 
   static renderStats() {
     const s = CoreEngine.gameState;
+    // HoI4風SVGアイコン (TopbarIcons) を使用 — preload済みのデータURI
+    const ico = (key) => '<img class="stat-icon" src="' + (TopbarIcons.get(key) || '') + '" alt="">';
     const html =
-      '<div class="stat-item" data-tip-key="pp">🏛️ <span class="stat-val">' + Math.floor(s.politicalPower) + '</span></div>' +
-      '<div class="stat-item" data-tip-key="stab">📊 <span class="stat-val">' + Number(s.stability).toFixed(1) + '%</span>' +
-        '<div class="stat-bar"><div class="stat-bar-fill" style="width:' + s.stability + '%;background:var(--accent-green)"></div></div></div>' +
-      '<div class="stat-item" data-tip-key="ws">⚔️ <span class="stat-val">' + Number(s.warSupport).toFixed(1) + '%</span>' +
-        '<div class="stat-bar"><div class="stat-bar-fill" style="width:' + s.warSupport + '%;background:var(--accent-orange)"></div></div></div>' +
-      '<div class="stat-item" data-tip-key="mp">👥 <span class="stat-val">' + (s.manpower/1000).toFixed(0) + 'K</span></div>' +
-      '<div class="stat-item" data-tip-key="fac">🏭 <span class="stat-val">' + s.civilianFactories + 'C / ' + s.militaryFactories + 'M</span></div>' +
-      '<div class="stat-item" data-tip-key="fuel">⛽ <span class="stat-val">' + Math.floor(s.fuel) + '/' + s.maxFuel + '</span></div>' +
-      '<div class="stat-item" data-tip-key="convoy">🚢 <span class="stat-val">' + s.convoys + '</span></div>';
+      '<div class="stat-item" data-tip-key="pp">' + ico('politicalPower') +
+        '<div class="stat-content"><span class="stat-val">' + Math.floor(s.politicalPower) + '</span></div></div>' +
+      '<div class="stat-item" data-tip-key="stab">' + ico('stability') +
+        '<div class="stat-content"><span class="stat-val">' + Number(s.stability).toFixed(1) + '%</span>' +
+        '<div class="stat-bar"><div class="stat-bar-fill" style="width:' + s.stability + '%;background:var(--accent-green)"></div></div></div></div>' +
+      '<div class="stat-item" data-tip-key="ws">' + ico('warSupport') +
+        '<div class="stat-content"><span class="stat-val">' + Number(s.warSupport).toFixed(1) + '%</span>' +
+        '<div class="stat-bar"><div class="stat-bar-fill" style="width:' + s.warSupport + '%;background:var(--accent-orange)"></div></div></div></div>' +
+      '<div class="stat-item" data-tip-key="mp">' + ico('manpower') +
+        '<div class="stat-content"><span class="stat-val">' + (s.manpower/1000).toFixed(0) + 'K</span></div></div>' +
+      '<div class="stat-item" data-tip-key="fac">' + ico('factories') +
+        '<div class="stat-content"><span class="stat-val">' + s.civilianFactories + 'C / ' + s.militaryFactories + 'M</span></div></div>' +
+      '<div class="stat-item" data-tip-key="fuel">' + ico('fuel') +
+        '<div class="stat-content"><span class="stat-val">' + Math.floor(s.fuel) + '/' + s.maxFuel + '</span></div></div>' +
+      '<div class="stat-item" data-tip-key="convoy">' + ico('convoys') +
+        '<div class="stat-content"><span class="stat-val">' + s.convoys + '</span></div></div>';
     // 国旗ボタンとステータスアイコン群は別要素なので innerHTML で上書きしない
     const icons = document.getElementById('stats-icons');
     if (icons) icons.innerHTML = html;
@@ -5911,6 +5948,8 @@ class GameUI {
 
   // ウィンドウが開かれた時に対応するパネルを再描画
   static onWindowOpened(tabName) {
+    // タブオープン時に動的画像ロードをトリガー (遅延読み込み)
+    if (typeof ImageLoader !== 'undefined') ImageLoader.triggerTabLoad(tabName);
     if (tabName === 'special') SpecialProjectManager.render();
     if (tabName === 'nuclear') NuclearManager.render();
     if (tabName === 'construction') ConstructionManager.render();
@@ -6039,6 +6078,20 @@ async function initGame() {
   if (typeof DLC !== 'undefined') DLC.onGameStart();   // 全DLC拡張 (ドクトリン/兵器設計/諜報/MIO・国際市場/講和会議/将軍特性)
   StrategyGame.init();
   CardSystem.deck.forEach(card => CardSystem.applyModifiers(card.id));
+
+  // ── タブ別動的画像ロード登録 (ImageLoader) ──
+  // 各タブオープン時にコンテナ内の data-src 画像を遅延ロード
+  if (typeof ImageLoader !== 'undefined') {
+    ImageLoader.onTabOpen('focus', () => ImageLoader.observeAll('#focus-nodes'));
+    ImageLoader.onTabOpen('research', () => ImageLoader.observeAll('#research-nodes'));
+    ImageLoader.onTabOpen('special', () => ImageLoader.observeAll('#special-projects-content'));
+    ImageLoader.onTabOpen('cards', () => ImageLoader.observeAll('#cards-content'));
+    ImageLoader.onTabOpen('diplomacy', () => ImageLoader.observeAll('#diplomacy-content'));
+    ImageLoader.onTabOpen('trade', () => ImageLoader.observeAll('#trade-content'));
+    ImageLoader.onTabOpen('division', () => ImageLoader.observeAll('#division-content'));
+    ImageLoader.onTabOpen('politics', () => ImageLoader.observeAll('#politics-content'));
+  }
+
   CoreEngine.renderStats();
   CoreEngine.renderWorldTension();
   CoreEngine.log(CoreEngine.gameState.country + ' — ゲームを開始しました。速度ボタンで時間を進めてください。');
