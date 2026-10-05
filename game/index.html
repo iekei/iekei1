@@ -665,7 +665,8 @@
   <link rel="stylesheet" href="assets/game-visuals.css?v=artwork-3">
   <link rel="stylesheet" href="assets/topbar.css">
   <link rel="stylesheet" href="assets/research-tree.css">
-</head>
+  <link rel="stylesheet" href="assets/equipment-designer.css">
+  </head>
 <body>
 <!-- ==================== START SCREEN (Scenario / Nation Select) ==================== -->
 <div id="start-screen">
@@ -1239,7 +1240,7 @@ class CoreEngine {
       return { title: '燃料 (Fuel)',
         rows: ['現在値: <b>' + Math.floor(s.fuel) + ' / ' + s.maxFuel + '</b>',
                '獲得量: 石油資源 × 0.1/日',
-               '用途: 海軍・空軍・機甲部隊の運用'] };
+               '用途: 海軍���空軍・機甲部隊の運用'] };
     },
     convoy: () => {
       const s = CoreEngine.gameState;
@@ -3179,7 +3180,7 @@ class BattlePlanManager {
     army.route = null;
     army.arrow = null; army.targetState = null; army.chain = null;
     CoreEngine.log(army.name + 'の前線を' + enemyTag + 'との国境に自動設定しました (' + ordered.length + '地点)。');
-    GameUI.notify('✅ ' + enemyTag + 'との国境に前線を自動スナップ (' + ordered.length + '地点) — Shift+右ドラッグで攻撃矢印を描けます', 'success');
+    GameUI.notify('✅ ' + enemyTag + 'との国境に前��を自動スナップ (' + ordered.length + '地点) — Shift+右ドラッグで攻撃矢印を描けます', 'success');
     MultiplayerManager.broadcast({ type: 'battle_front', army: army.id, points: ordered });
     BattlePlanManager.renderPanel();
   }
@@ -3317,7 +3318,7 @@ class BattlePlanManager {
       const unit = [...BattlePlanManager.navy, ...BattlePlanManager.air].find(u => u.id === armyId);
       if (!unit) return;
       if (!unit.zone && !unit.area && !unit.target) {
-        GameUI.notify(unit.type === 'navy' ? '先に海域を左クリックして指定してください。' : '先に空域を左クリックして指定してください。', 'alert');
+        GameUI.notify(unit.type === 'navy' ? '先に海域���左クリックして指定してください。' : '先に空域を左クリックして指定してください。', 'alert');
         return;
       }
       if (unit.zone) unit.mission = unit.zone.mission;
@@ -4427,7 +4428,7 @@ class DivisionDesigner {
       '<div style="margin-top:10px;">' +
       '<label style="font-size:12px;color:var(--text-secondary);margin-right:6px;">配備先軍集団:</label>' +
       '<select id="recruit-target-army" style="background:var(--bg-panel);border:1px solid var(--border-mil);color:var(--text-primary);border-radius:4px;padding:4px 8px;font-size:12px;" onchange="TrainingManager.targetArmyId = this.value ? parseInt(this.value) : null">' +
-      '<option value="">自動配備 (最も師団の少ない軍集団)</option>' +
+      '<option value="">自動配�� (最も師団の少ない軍集団)</option>' +
       (BattlePlanManager.armies || []).map(a => '<option value="' + a.id + '"' + (TrainingManager.targetArmyId === a.id ? ' selected' : '') + '>' + a.name + ' (師団' + a.divisions.length + ')</option>').join('') +
       '</select><br>' +
       '<button class="sp-btn" onclick="TrainingManager.recruit()">📝 この編成で徴兵 (兵員・兵器が揃い次第訓練開始)</button></div>' +
@@ -5398,7 +5399,7 @@ class ResearchManager {
   static selectTech(tech) {
     if (ResearchManager.researchedTech.has(tech.id)) { GameUI.notify('既に研究済みです。'); return; }
     if (tech.prerequisites && !tech.prerequisites.every(p => ResearchManager.researchedTech.has(p))) {
-      GameUI.notify('前提技術が不足しています。', 'alert'); return;
+      GameUI.notify('前提技術��不足しています。', 'alert'); return;
     }
     const s = CoreEngine.gameState;
     const penalty = ResearchManager.researchPenalty(tech);
@@ -5887,7 +5888,7 @@ class SaveLoadManager {
         '</span></div>' +
         (meta
           ? '<div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">📅 ' + meta.date + ' | ' + DataFetcher.getCountryFlagImage(meta.country) + ' ' + meta.country +
-            ' | 🃏 デッキ' + meta.deck + '枚 / 🎖️ 雇用' + meta.hired + '人 | 保存: ' + meta.savedAt + '</div>'
+            ' | 🃏 ���ッキ' + meta.deck + '枚 / 🎖️ 雇用' + meta.hired + '人 | 保存: ' + meta.savedAt + '</div>'
           : '<div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">空きスロット</div>') +
         '</div>';
     }
@@ -6081,6 +6082,8 @@ window.addEventListener('DOMContentLoaded', () => StartScreen.show());
 <script src="training.js"></script>
 <!-- ==================== DLC拡張モジュール (ドクトリン/兵器設計/諜報/MIO・国際市場/講和会議/将軍特性) ==================== -->
 <script src="dlc.js?v=artwork-2"></script>
-<script src="strategy.js?v=artwork-2"></script>
-</body>
+  <script src="strategy.js?v=artwork-2"></script>
+  <script src="assets/technology-resolver.js"></script>
+  <script src="assets/equipment-designer.js"></script>
+  </body>
 </html>
