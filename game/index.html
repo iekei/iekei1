@@ -927,8 +927,8 @@
 <script src="assets/topbar-icons.js"></script>
 <script src="assets/topbar-ui.js"></script>
   <script src="assets/research-icons.js"></script>
-  <script src="assets/nf-reward-loader.js"></script>
   <script src="assets/hoi4-effects-config.js"></script>
+  <script src="assets/nf-reward-loader.js"></script>
   <script src="assets/nf-reward-debug.js"></script>
   <script src="assets/technology-resolver.js"></script>
   <script src="assets/research-i18n.js"></script>
@@ -1680,11 +1680,15 @@ class FocusTreeManager {
     tt.querySelector('.tt-title').textContent = f.title || f.name || f.id;
     tt.querySelector('.tt-time').textContent = '必要日数: ' + (f.cost || 70) + '日';
     const rewards = FocusTreeManager.getCompletionRewards(f);
-    const formatted = rewards.map(reward => window.HOI4EffectsConfig?.formatEffect ? window.HOI4EffectsConfig.formatEffect(reward) : (window.formatCompletionReward ? window.formatCompletionReward(reward) : '・' + (reward.type || '効果') + ': ' + (reward.value ?? ''))).filter(Boolean);
+    const formatted = rewards.map(reward => {
+      const result = window.HOI4EffectsConfig?.formatEffect?.(reward) || window.formatEffect?.(reward);
+      if (result) return typeof result === 'string' ? { text: result, color: undefined } : result;
+      return { text: '・' + (reward.type || '効果') + ': ' + (reward.value ?? ''), color: undefined };
+    }).filter(Boolean);
     const effect = f.effect || '';
     tt.querySelector('.tt-effect').innerHTML =
       (effect ? '<span class="tt-effect-description">' + GameTools.escape(effect) + '</span>' : '') +
-      (formatted.length ? '<span class="tt-effect-label">完了報酬</span>' + formatted.map(line => '<span class="tt-reward ' + FocusTreeManager.rewardClass(rewards[formatted.indexOf(line)]) + '">' + GameTools.escape(line) + '</span>').join('') : '<span class="tt-effect-description">完了報酬なし</span>');
+      (formatted.length ? '<span class="tt-effect-label">完了報酬</span>' + formatted.map((line, index) => '<span class="tt-reward ' + FocusTreeManager.rewardClass(rewards[index]) + '"' + (line.color ? ' style="color:' + line.color + '"' : '') + '>' + GameTools.escape(line.text) + '</span>').join('') : '<span class="tt-effect-description">完了報酬なし</span>');
     tt.classList.remove('hidden');
     FocusTreeManager.moveTooltip(e);
   }
@@ -1800,7 +1804,7 @@ class SpecialProjectManager {
     s.civilianFactories -= facilityCost;
     SpecialProjectManager.projects[sciId] = { phase: 'feasibility', progress: 0, factories: 0, completed: false };
     CoreEngine.log('科学者を雇用し、特別研究施設を建設しました。');
-    GameUI.notify('特別研究施設を建設しました！', 'success');
+    GameUI.notify('特別研究施設を建設しま���た！', 'success');
     CoreEngine.renderStats();
     SpecialProjectManager.render();
     MultiplayerManager.broadcast({ type: 'sp_hire', sciId: sciId });
@@ -4708,7 +4712,7 @@ class CheatConsole {
         CoreEngine.renderStats();
         break;
       case 'it':
-        CheatConsole.output('全技術研究を即座に完了します（チート）');
+        CheatConsole.output('全技術研究���即座に完了します（チート）');
         if (ResearchManager.techData) {
           Object.values(ResearchManager.techData).forEach(cat => {
             cat.forEach(t => ResearchManager.researchedTech.add(t.id));
