@@ -53,6 +53,7 @@ class NationalFocusManager {
     if (state.progress < focus.days) return;
     state.completed.push(focus.id); state.active = null; state.progress = 0;
     this.applyEffect(focus.effect || {});
+    this.applyCompletionRewards(focus.completion_rewards || focus.completionRewards || []);
     CoreEngine.log('国家方針完了: ' + focus.name);
   }
   static dateReady(f) { if (!f.date) return true; const d = CoreEngine.gameState.date; return d >= new Date(f.date[0], f.date[1] - 1, f.date[2]); }

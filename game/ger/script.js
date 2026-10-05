@@ -353,7 +353,11 @@ function showTooltip(e, nf) {
   let status = isCompleted ? "【達成済み】" : (isActive ? "【実行中】" : (isLocked ? "🔒【選択不可/排他】" : "🔓【選択可能】"));
   document.getElementById('tooltip-title').textContent = `${nf.title} ${status}`;
   document.getElementById('tooltip-time').textContent = `⏱️ 必要時間: ${isActive ? focusDaysRemaining + "日 (進行中)" : (nf.cost || 70) + "日"}`;
-  document.getElementById('tooltip-effect').textContent = nf.effect || "効果なし";
+  const rewards = nf.completion_rewards || nf.completionRewards || [];
+  const rewardText = rewards.length
+    ? `\n\n【達成報酬】\n${rewards.map(formatCompletionReward).join('\n')}`
+    : '';
+  document.getElementById('tooltip-effect').textContent = `${nf.effect || "効果なし"}${rewardText}`;
   
   tooltip.classList.remove('hidden');
   moveTooltip(e);
