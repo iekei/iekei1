@@ -517,7 +517,7 @@ class BlueprintRenderer {
     const blueprintImage = BlueprintRenderer.image || (BlueprintRenderer.image = (() => {
       const image = new Image();
       image.crossOrigin = 'anonymous';
-      image.src = 'assets/blueprints/aircraft-blueprint.png';
+      image.src = '/game/assets/blueprints/aircraft-blueprint.png';
       image.onload = () => { const current = document.getElementById('bp-canvas'); if (current) BlueprintRenderer.draw(cat, draft, current); };
       return image;
     })());

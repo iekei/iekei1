@@ -874,6 +874,7 @@ class IntelOperations {
   static startOp(id) {
     const s=CoreEngine.gameState,tag=s.intel.selected,def=DLC_INTEL_OPS.find(o=>o.id===id);
     if(id==='crypto') { const slot=s.intel.assignments.findIndex(a=>a.kind==='idle');return IntelOperations.assign(slot,'decrypt',tag); }
+    if (id === 'subvert' && !s.atWar?.length) { GameUI.notify('破壊活動は戦時中のみ実行できます。', 'alert'); return false; }
     const idle=Array.from({length:s.intel.spies},(_,i)=>i).filter(i=>(!s.intel.assignments[i]||s.intel.assignments[i].kind==='idle'));
     if(!def||s.intel.op||!tag||idle.length<2||IntelOperations.target(tag).network<50||s.politicalPower<50){GameUI.notify('情報網50%・待機諜報員2名・政治力50が必要です。','alert');return false;}
     s.politicalPower-=50;s.intel.op={id,target:tag,slots:idle.slice(0,2),preparation:45,progress:0,dur:90};IntelOperations.render();return true;
