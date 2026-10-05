@@ -2596,6 +2596,11 @@ class MapRenderer {
 
     c.addEventListener('mousedown', (e) => {
       if (e.button === 0) {
+        if (BattlePlanManager.arrowTool) {
+          const wp = MapRenderer.screenToWorld(e.offsetX, e.offsetY);
+          BattlePlanManager.startArrowDrag(wp);
+          return;
+        }
         panning = true; moved = 0;
         sx = lx = e.clientX; sy = ly = e.clientY;
       } else if (e.button === 2) {
@@ -2611,7 +2616,7 @@ class MapRenderer {
         moved += Math.abs(dx) + Math.abs(dy);
         MapRenderer.cam.x += dx; MapRenderer.cam.y += dy;
         lx = e.clientX; ly = e.clientY;
-      } else if (rightDown && BattlePlanManager.dragMode) {
+      } else if ((rightDown || BattlePlanManager.dragMode === 'arrow') && BattlePlanManager.dragMode) {
         rightMoved += Math.abs(e.movementX || 0) + Math.abs(e.movementY || 0);
         BattlePlanManager.onDragMove(MapRenderer.screenToWorld(e.offsetX, e.offsetY));
       }
@@ -2619,7 +2624,9 @@ class MapRenderer {
       BattleManager.handleHover(e.clientX, e.clientY);
     });
     c.addEventListener('mouseup', (e) => {
-      if (e.button === 0 && panning) {
+      if (e.button === 0 && BattlePlanManager.dragMode === 'arrow') {
+        BattlePlanManager.endDrag();
+      } else if (e.button === 0 && panning) {
         panning = false;
         if (moved < 6) MapRenderer.handlePrimaryClick(e.offsetX, e.offsetY);
       } else if (e.button === 2) {
@@ -2921,6 +2928,7 @@ class BattlePlanManager {
   static selectedArmyId = null;
   static dragMode = null;      // 'front' | 'arrow' | 'area'
   static dragPoints = [];
+  static arrowTool = false;    // left-drag attack order mode
   // ---- 海��/空軍オーダー (DLC拡張): 陸軍と同じマップ操作で哨戒・攻撃エリアを設定 ----
   static activeForce = 'army';   // 'army' | 'navy' | 'air'
   static invasionMode = false;   // 強襲上陸モード (沿岸の敵州を左クリックで上陸)
@@ -4097,7 +4105,7 @@ class PoliticsManager {
       if (s.nationSystems.paranoia !== undefined) spirits.push({ name: 'スターリンのパラノイア (' + Math.round(s.nationSystems.paranoia) + ')', desc: '高まると将軍カードが粛清されるリスク' });
       if (s.nationSystems.armyInfluence !== undefined) spirits.push({ name: '陸海軍の対立 (陸軍 ' + Math.round(s.nationSystems.armyInfluence) + ')', desc: '陸海軍の影響力バランスが補正に影響' });
       if (s.nationSystems.congressDem !== undefined) spirits.push({ name: '連邦議会 (与党 ' + Math.round(s.nationSystems.congressDem) + '議席)', desc: '議会多数派���安定度ボーナス' });
-      if (s.nationSystems.polarization !== undefined) spirits.push({ name: '政治的二極化 (' + Math.round(s.nationSystems.polarization) + ')', desc: '安定度の変動を増幅' });
+      if (s.nationSystems.polarization !== undefined) spirits.push({ name: '政治的��極化 (' + Math.round(s.nationSystems.polarization) + ')', desc: '安定度の変動を増幅' });
     }
     if (s.atWar.length > 0) spirits.push({ name: '戦時中 (' + s.atWar.join(', ') + ')', desc: '戦争協力度ボーナス・経済ペナルティ' });
     if (spirits.length === 0) html += '<span class="politics-spirit">精神的安定 — ペナルティ/ボーナスなし</span>';

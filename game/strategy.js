@@ -473,7 +473,7 @@ class ArmyRoster {
       html+='</div><div class="army-strip">'+list.map(u=>'<div class="army-tile">'+GameTools.button(u.name,"BattlePlanManager.selectUnit('"+u.id+"')")+'<p>'+Math.floor((BattlePlanManager.activeForce==='navy'?CoreEngine.gameState.ships:CoreEngine.gameState.planes)/Math.max(1,list.length))+' / '+GameTools.escape(u.mission)+'</p>'+GameTools.button(u.executing?'中止':'任務開始',"BattlePlanManager."+(u.executing?'abort':'execute')+"('"+u.id+"')")+'<select onchange="BattlePlanManager.selectUnit(\''+u.id+'\');BattlePlanManager.setMission(this.value)">'+BattlePlanManager.missions[u.type].map(m=>'<option value="'+m.id+'"'+(m.id===u.mission?' selected':'')+'>'+m.label+'</option>').join('')+'</select></div>').join('')+'</div>';
     } else {
       html+=GameTools.button('＋軍集団','BattlePlanManager.addArmy()')+GameTools.button('師団を配属 ('+CoreEngine.gameState.strategy.reserves.length+' 未所属)','ArmyRoster.assignModal()');
-      html+=GameTools.button(ArmyRoster.frontTool?'前線指定中…':'前線を引く','ArmyRoster.toggleFront()')+GameTools.button('攻撃線: Shift＋右ドラッグ','GameUI.notify(\'前線から敵地へShift＋右ドラッグしてください\')');
+      html+=GameTools.button(ArmyRoster.frontTool?'前線指定中…':'前線を引く','ArmyRoster.toggleFront()')+GameTools.button(BattlePlanManager.arrowTool?'攻撃線指定中…':'攻撃線を引く','BattlePlanManager.arrowTool=!BattlePlanManager.arrowTool;ArmyRoster.frontTool=false;BattlePlanManager.renderPanel()');
       html+=GameTools.button('強襲上陸','BattlePlanManager.toggleInvasion()')+GameTools.button('空挺降下','ArmyRoster.airdropTool=!ArmyRoster.airdropTool;ArmyRoster.frontTool=false;ArmyRoster.render()');
       html+='<span>Space: 時間停止/再開　Enter: ニュースを閉じる</span></div><div class="army-strip">';
       BattlePlanManager.armies.forEach(a=>{
