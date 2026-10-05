@@ -1,5 +1,8 @@
 'use strict';
 
+// -----------------------------------------------------------------------------
+// 1. NFRewardLoader: GitHubからParadox形式の達成報酬データを取得・パースするローダー
+// -----------------------------------------------------------------------------
 window.NFRewardLoader = {
   API: 'https://api.github.com/repos/cbrzeczysz/hoi4-history/git/trees/main?recursive=1',
   RAW: 'https://raw.githubusercontent.com/cbrzeczysz/hoi4-history/main/',
@@ -33,7 +36,7 @@ window.NFRewardLoader = {
     const tree = await response.json();
     const names = this.countryFiles[country] || [];
     
-    // 対象ファイルをフィルタリング（germany.txt など）
+    // 対象ファイルをフィルタリング
     const files = (tree.tree || []).filter(item => 
       item.type === 'blob' && 
       /common\/national_focus\/.+\.(txt|json)$/i.test(item.path) && 
@@ -83,7 +86,6 @@ window.NFRewardLoader = {
     }
   },
 
-  // カッコ { } の深さを計算して、ブロックの終端を見つける関数
   blockEnd(text, open) {
     if (open < 0 || text[open] !== '{') return -1;
     let depth = 0;
@@ -94,13 +96,11 @@ window.NFRewardLoader = {
     return -1;
   },
 
-  // completion_reward の中身を解析する関数（改行・空白の乱れに強い設計）
   parseBlock(block) {
     const rewards = [];
-    // タブや複数改行を単一のスペースに正規化（Paradox構文の乱れを吸収）
+    // タブや複数改行を単一のスペースに正規化
     const normalized = block.replace(/\s+/g, ' ').trim();
     
-    // key = value または key = { ... } をマッチさせる正規表現
     const regex = /([a-zA-Z0-9_]+)\s*=\s*({[^}]+}|[^{} ]+)/g;
     let match;
 
@@ -109,7 +109,6 @@ window.NFRewardLoader = {
       const raw = match[2].trim();
 
       if (raw.startsWith('{')) {
-        // { name = XYZ bonus = 1.0 } のような入れ子ブロックの処理
         const reward = { type };
         const innerRegex = /([a-zA-Z0-9_]+)\s*=\s*([^{} ]+)/g;
         let innerMatch;
@@ -118,7 +117,6 @@ window.NFRewardLoader = {
         }
         rewards.push(reward);
       } else {
-        // 通常の key = value の処理
         rewards.push({ 
           type, 
           [type === 'add_ideas' ? 'idea' : 'value']: this.scalar(raw.replace(/[{}]/g, '').trim()) 
@@ -128,17 +126,19 @@ window.NFRewardLoader = {
     return rewards;
   },
 
-  // 数値化できるものは数値(Number)に、それ以外は文字列(String)にする関数
   scalar(value) {
     const clean = String(value).replace(/["']/g, '');
     return /^-?\d+(\.\d+)?$/.test(clean) ? Number(clean) : clean;
   }
 };
 
+// -----------------------------------------------------------------------------
+// 2. formatCompletionReward: パースした報酬を日本語のツールチップテキストに変換
+// -----------------------------------------------------------------------------
 window.formatCompletionReward = function rewardText(reward) {
   if (!reward || !reward.type) return '';
 
-  // 1. ツールチップに表示させないシステム内部用の制御フラグ（WikiのControl/Hidden effects）
+  // 内部システムフラグを除外
   const ignoreTypes = new Set([
     'if', 'limit', 'else', 'elseif', 'random', 'random_list', 'every_other_country',
     'set_global_flag', 'clr_global_flag', 'set_country_flag', 'clr_country_flag', 'set_state_flag',
@@ -146,14 +146,12 @@ window.formatCompletionReward = function rewardText(reward) {
     'sound_effect', 'log', 'set_rule', 'save_event_target_as'
   ]);
 
-  // 国タグ(GER, JAPなど)や、ただの数字だけのキーは弾く
   if (ignoreTypes.has(reward.type) || /^[A-Z]{3}$/.test(reward.type) \vert{}\vert{} /^[0-9]+$/.test(reward.type)) {
     return null;
   }
 
-  // 2. Paradox Wiki準拠の膨大な日本語翻訳辞書（カテゴリ別）
+  // Paradox Effectの日本語翻訳辞書
   const labels = {
-    // --- 政治・国家 (Politics & Government) ---
     add_political_power: '政治力',
     add_stability: '安定度',
     add_war_support: '戦争協力度',
@@ -166,22 +164,16 @@ window.formatCompletionReward = function rewardText(reward) {
     retire_country_leader: '国家指導者の引退',
     add_named_threat: '国際緊張度',
     add_threat: '国際緊張度',
-
-    // --- 経験値 (Experience) ---
     add_army_experience: '陸軍経験値',
     army_experience: '陸軍経験値',
     add_navy_experience: '海軍経験値',
     navy_experience: '海軍経験値',
     add_air_experience: '空軍経験値',
     air_experience: '空軍経験値',
-
-    // --- 研究・技術 (Technology) ---
     add_research_slot: '研究スロット',
     add_tech_bonus: '研究ボーナス',
     add_doctrine_cost_reduction: 'ドクトリン割引',
     set_technology: '技術の獲得',
-
-    // --- 外交・戦争 (Diplomacy) ---
     create_wargoal: '開戦事由を作成',
     add_state_claim: '州の請求権',
     add_state_core: '中核州を追加',
@@ -196,15 +188,11 @@ window.formatCompletionReward = function rewardText(reward) {
     give_guarantee: '独立保証',
     leave_faction: '陣営を離脱',
     may_provoke_hostility: '敵対的行動の解禁',
-
-    // --- 経済・建設 (Economy & Building) ---
     add_offsite_building: 'オフサイト工場',
     add_extra_state_shared_building_slots: '追加建築スロット',
     add_building_construction: '建設',
     add_resource: '資源を追加',
     add_equipment_to_stockpile: '備蓄に装備を追加',
-
-    // --- 軍事・人的資源 (Military & Manpower) ---
     add_manpower: '人的資源',
     random_owned_controlled_state: 'ランダムな支配州',
     every_owned_state: '全ての所有州',
@@ -213,7 +201,6 @@ window.formatCompletionReward = function rewardText(reward) {
     add_ace: 'エースパイロット'
   };
 
-  // 3. 特殊なフォーマットが必要なEffect（研究ボーナスなど）
   if (reward.type === 'add_tech_bonus') {
     const category = reward.category || '全般';
     const bonus = reward.bonus ? ` ${(Number(reward.bonus) * 100).toFixed(0)}%` : '';
@@ -221,39 +208,31 @@ window.formatCompletionReward = function rewardText(reward) {
     return `・研究ボーナス: ${category}${bonus}${uses}`;
   }
 
-  // 4. 日本語ラベルの取得、または未翻訳コマンドの自動整形処理
   let label = labels[reward.type];
   if (!label) {
-    // 辞書にない未知のEffectの場合、スネークケースを読みやすい英語に変換
-    // 例: "unlock_decision_tooltip" -> "Unlock Decision Tooltip"
-    label = reward.type
-      .split('_')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+    label = reward.type.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
   }
 
-  // 5. 値(Value)の抽出
   let value = reward.value ?? reward.idea ?? reward.amount ?? reward.target ?? reward.building ?? '';
 
-  // 小数表記（0.05など）をパーセント表示（+5.00%）に変換
   if (typeof value === 'number' && Math.abs(value) < 1 && value !== 0) {
     return `・${label}: ${value >= 0 ? '+' : ''}${(value * 100).toFixed(2)}%`;
   }
-
-  // 通常数値の正負符号表示
   if (typeof value === 'number') {
     return `・${label}: ${value >= 0 ? '+' : ''}${value}`;
   }
 
-  // 文字列など
   return value ? `・${label}: ${value}` : `・${label}`;
 };
 
-// 描画側の呼び出し処理
+// -----------------------------------------------------------------------------
+// 3. 描画用ヘルパー: 報酬配列からツールチップ用HTMLを生成
+// -----------------------------------------------------------------------------
 window.generateTooltipHTML = function(rewards) {
   if (!Array.isArray(rewards)) return '';
   const formattedLines = rewards.map(r => window.formatCompletionReward(r)).filter(Boolean);
   return formattedLines.length > 0 ? `【達成報酬】<br>` + formattedLines.join('<br>') : '';
 };
 
+// モジュールの準備完了フラグ
 window.NFRewardLoaderReady = true;
