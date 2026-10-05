@@ -363,7 +363,8 @@ function showTooltip(e, nf) {
   const rewardText = formattedRewards.length
     ? `\n\n【達成報酬】\n${formattedRewards.join('\n')}`
     : '';
-  document.getElementById('tooltip-effect').textContent = `${nf.effect || "効果なし"}${rewardText}`;
+  const translateText = window.HOI4EffectsConfig?.translateText || window.translateText || (text => text);
+  document.getElementById('tooltip-effect').textContent = translateText(`${nf.effect || "効果なし"}${rewardText}`);
   
   tooltip.classList.remove('hidden');
   moveTooltip(e);

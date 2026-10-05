@@ -24,6 +24,21 @@
     annex_target: { label: '対象国を占領', unit: '', valueKey: 'country' }
   };
 
+  const fallbackTranslations = {
+    add_political_power: '政治力', add_stability: '安定度', add_war_support: '戦争協力度',
+    add_army_experience: '陸軍経験値', add_navy_experience: '海軍経験値', add_air_experience: '空軍経験値',
+    add_ideas: '国家精神を追加', remove_ideas: '国家精神を削除', add_research_slot: '研究スロット',
+    add_tech_bonus: '研究ボーナス', annex_country: '国家を併合', annex_target: '対象国を占領',
+    arms_factory: '軍需工場', civ_factory: '民需工場', dockyard: '海軍造船所', add_opinion_modifier: '関係改善補正',
+    set_country_flag: '国家フラグを設定', clr_country_flag: '国家フラグを解除', set_global_flag: '世界フラグを設定',
+    GER_flag: 'ドイツ国家フラグ', JAP: '日本', AUS: 'オーストリア', CZE: 'チェコスロバキア'
+  };
+
+  function translateText(text) {
+    if (!text || typeof text !== 'string') return text || '';
+    return text.replace(/\\b[A-Za-z][A-Za-z0-9_]*\\b/g, token => fallbackTranslations[token] || token.split('_').join(' '));
+  }
+
   function numericValue(reward) {
     const value = reward && (reward.value ?? reward.amount ?? reward.bonus);
     return typeof value === 'number' ? value : Number(value);
@@ -91,7 +106,7 @@
     return gameState;
   }
 
-  global.HOI4EffectsConfig = { definitions, ignoreTypes, formatEffect, applyEffect };
+  global.HOI4EffectsConfig = { definitions, ignoreTypes, formatEffect, applyEffect, translateText, fallbackTranslations };
   // Consumers can keep working if the config script is loaded after a preview component.
   global.formatEffect = global.formatEffect || formatEffect;
   global.applyEffect = global.applyEffect || applyEffect;
