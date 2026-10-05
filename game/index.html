@@ -1056,9 +1056,7 @@ class DataFetcher {
     const paths = DataFetcher.FOCUS_PATHS[country];
     if (!paths) return [];
     const results = await Promise.all(paths.map(p => DataFetcher.fetchJSON(p)));
-    const focuses = results.filter(r => r).flat();
-  // Merge authoritative completion_reward effects from hoi4-history when available.
-  return window.NFRewardLoader ? await window.NFRewardLoader.enrich(country, focuses) : focuses;
+    return results.filter(r => r).flat();
   }
 
   static async fetchTechTree(country, category) {
@@ -1472,7 +1470,11 @@ class FocusTreeManager {
   static noChecks = false;
 
   static async init(country) {
-    FocusTreeManager.focuses = await DataFetcher.fetchFocusTree(country);
+    const rawFocuses = await DataFetcher.fetchFocusTree(country);
+    const enrichedFocuses = window.NFRewardLoader
+      ? await window.NFRewardLoader.enrich(country || 'GER', rawFocuses)
+      : rawFocuses;
+    FocusTreeManager.focuses = enrichedFocuses;
     FocusTreeManager.focusMap = {};
     FocusTreeManager.focuses.forEach(f => { FocusTreeManager.focusMap[f.id] = f; });
     FocusTreeManager.render();
@@ -3677,7 +3679,7 @@ class BattlePlanManager {
         ctx.fillRect(s[0] - w / 2, s[1] - h / 2 - 5, w * (d.org / d.maxOrg), 3);
         ctx.fillStyle='#d4a843';ctx.font='bold 10px sans-serif';ctx.textAlign='center';
         ctx.fillText(d.count+'師団',s[0],s[1]+h/2+12);
-        // 軍集団番号 (選択中のみ)
+        // 軍集団番�� (選択中のみ)
         if (selected) {
           ctx.fillStyle = '#d4a843';
           ctx.font = 'bold 9px sans-serif';
@@ -4402,7 +4404,7 @@ class DiplomacyManager {
     const accepted = c.relation >= 50 || Math.random() < (c.relation / 50);
     if (accepted) {
       s.militaryAccess[countryId] = true;
-      CoreEngine.log('🤝 ' + c.name + 'が軍事通行券を承諾しました。自軍が同国を通過できます。');
+      CoreEngine.log('��� ' + c.name + 'が軍事通行券を承諾しました。自軍が同国を通過できます。');
       GameUI.notify('🤝 ' + c.name + 'が軍事通行券を承諾しました！', 'success');
     } else {
       CoreEngine.log('❌ ' + c.name + 'に軍事通行券を拒否されました。関係を改善してください。');
@@ -5820,7 +5822,7 @@ class UniqueNationSystems {
       UniqueNationSystems.gauge(pol, 'linear-gradient(90deg,#a03c5a,#4a5a6a,#3a6a4a)') +
       '<button class="mp-btn" onclick="UniqueNationSystems.shiftFRA(-10)">🚩 人民戦線と組む (PP 30)</button>' +
       '<button class="mp-btn" onclick="UniqueNationSystems.shiftFRA(10)">🛡️ 右派と組む (PP 30)</button>' +
-      '<p style="font-size:11px;color:var(--text-secondary);margin-top:6px;">現在: ' + (centered ? '✔ 政治的混乱が収束 — 政治力獲得 +0.25/日' : '⚠️ 政治が二極化中 (安定度ボーナスなし)') + '</p></div>';
+      '<p style="font-size:11px;color:var(--text-secondary);margin-top:6px;">現在: ' + (centered ? '✔ 政治的混乱が収束 — 政治力獲得 +0.25/日' : '⚠️ 政治���二極化中 (安定度ボーナスなし)') + '</p></div>';
   }
 
   static shiftFRA(delta) {
