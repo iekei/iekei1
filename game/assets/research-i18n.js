@@ -85,6 +85,9 @@ const ResearchI18n = {
     anti_air: '対空砲',
     anti_tank: '対戦車砲',
     // 海軍
+    small_ship_1: '1936年型基本型駆逐艦船体',
+    small_ship_2: '1940年型改良型駆逐艦船体',
+    basic_ship: '基本艦船',
     naval: '海軍',
     basic_ship: '基本艦船',
     improved_ship: '改良艦船',

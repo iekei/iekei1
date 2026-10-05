@@ -163,7 +163,7 @@ class DLC {
       tplRoot.appendChild(el);
     });
 
-    // ナビレールにボタン追加
+    // ナビレールにボタン���加
     const rail = document.getElementById('window-nav');
     const btnDefs = [
       ['doctrine', '📜 ドクトリン'], ['designer', '🛠️ 兵器設計'], ['intel', '🕵️ 諜報'],
@@ -465,6 +465,8 @@ class EquipmentDesigner {
 
   static setCategory(k) { EquipmentDesigner.category = k; EquipmentDesigner.render(); }
 }
+
+if (typeof window !== 'undefined') window.EquipmentDesigner = EquipmentDesigner;
 
 // ==========================================================
 // BlueprintRenderer — 設計図 (ブループリント) の動的描画

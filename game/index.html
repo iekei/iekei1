@@ -659,13 +659,34 @@
     /* --- Layout Wrapper --- */
     #game-root { display: flex; flex-direction: column; height: 100vh; }
     #operating-screen { flex: 1; overflow: hidden; position: relative; }
+  .war-overlay { position: fixed; inset: 0; z-index: 9000; display: grid; place-items: center; padding: 16px; background: rgba(4,8,12,.82); }
+  .war-window { width: min(760px, 96vw); max-height: 88vh; overflow: auto; background: var(--bg-panel); border: 2px solid var(--text-gold); box-shadow: 0 16px 48px #000; color: var(--text-primary); }
+  .war-window header, .war-window footer, .war-score { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border-mil); }
+  .war-window h2 { margin: 0; color: var(--text-gold); font-size: 20px; }
+  .war-score { color: var(--text-secondary); }
+  .war-score b { color: #e5bf58; font-size: 17px; }
+  .peace-actions { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 16px; }
+  .peace-actions button, .war-window footer button, .chat-tabs button, #chat-form button { background: var(--bg-panel-light); border: 1px solid var(--border-mil); color: var(--text-primary); padding: 7px 10px; cursor: pointer; }
+  .peace-actions button:hover, .war-window footer button:hover, .chat-tabs button:hover { border-color: var(--text-gold); }
+  .peace-states { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 6px; padding: 0 16px 16px; }
+  .peace-state { display: flex; justify-content: space-between; gap: 8px; background: #202a31; border: 1px solid #3a4b55; color: var(--text-primary); padding: 9px; text-align: left; cursor: pointer; }
+  .peace-state.selected { border-color: var(--text-gold); background: #4a3d1d; }
+  .peace-state small { color: var(--text-gold); }
+  .war-window footer { border-top: 1px solid var(--border-mil); border-bottom: 0; }
+  .war-confirm { background: #5b4520 !important; border-color: var(--text-gold) !important; }
+  .faction-chat { margin-top: 18px; border: 1px solid var(--border-mil); background: var(--bg-panel-light); }
+  .chat-tabs { display: flex; gap: 4px; padding: 8px; border-bottom: 1px solid var(--border-mil); }
+  #chat-messages { min-height: 180px; max-height: 240px; overflow-y: auto; padding: 10px; line-height: 1.7; font-size: 12px; }
+  #chat-form { display: flex; gap: 6px; padding: 8px; border-top: 1px solid var(--border-mil); }
+  #chat-input { flex: 1; min-width: 0; background: #121a20; border: 1px solid var(--border-mil); color: var(--text-primary); padding: 7px; }
   </style>
   <link rel="stylesheet" href="military-theme.css">
   <link rel="stylesheet" href="strategy.css">
   <link rel="stylesheet" href="assets/game-visuals.css?v=artwork-3">
   <link rel="stylesheet" href="assets/topbar.css">
   <link rel="stylesheet" href="assets/research-tree.css">
-</head>
+  <link rel="stylesheet" href="assets/equipment-designer.css">
+  </head>
 <body>
 <!-- ==================== START SCREEN (Scenario / Nation Select) ==================== -->
 <div id="start-screen">
@@ -700,7 +721,7 @@
     <div class="topbar-nav">
       <button class="speed-btn" id="world-tension" data-tip-key="tension" aria-label="国際緊張度・外交画面を開く" onclick="GameUI.switchTab('diplomacy')"><img class="tension-icon" data-icon-key="worldTension" alt=""><span class="tension-content"><span class="tension-label">国際緊張度</span><span class="wt-val">0%</span></span></button>
       <button class="speed-btn" id="mp-indicator" onclick="GameUI.switchTab('multiplayer')">👥 単独</button>
-      <button class="speed-btn" id="cheat-toggle" aria-label="デバッグコンソールを開く" onclick="CheatConsole.toggle()">~</button>
+      <button class="speed-btn" id="cheat-toggle" aria-label="デバッグ�����ンソールを開く" onclick="CheatConsole.toggle()">~</button>
     </div>
   </header>
 
@@ -879,6 +900,7 @@
 <script src="assets/research-icons.js"></script>
 <script src="assets/research-i18n.js"></script>
 <script src="assets/research-tree.js"></script>
+<script src="war-systems.js"></script>
 <script>
 /* ================================================================
    JavaScript Module Architecture
@@ -1141,8 +1163,8 @@ class CoreEngine {
 
   static timer = null;
   static tickCallbacks = [];
-  // One tick is one game day. Keep preparation and battles readable at every speed.
-  static speedIntervals = { 1: 12000, 2: 7000, 3: 4000, 4: 2000, 5: 1000 };
+  // One tick is one game hour. Speed 5 runs as fast as the browser can process safely.
+  static speedIntervals = { 1: 1000, 2: 250, 3: 80, 4: 25, 5: 1 };
 
   static init() {
     CoreEngine.gameState.fuel = CoreEngine.gameState.maxFuel * 0.5;
@@ -1176,7 +1198,7 @@ class CoreEngine {
       if (essentialIcons.length) ImageLoader.preload(essentialIcons);
     }
     CoreEngine.updateSpeedUI();
-    document.querySelectorAll('.speed-btn[data-speed]').forEach(btn => { const speed = Number(btn.dataset.speed); btn.title = speed ? '1日 / ' + (CoreEngine.speedIntervals[speed] / 1000) + '秒' : '一時停止 (Space)'; });
+    document.querySelectorAll('.speed-btn[data-speed]').forEach(btn => { const speed = Number(btn.dataset.speed); btn.title = speed ? (speed === 5 ? '可能な限り高速' : '1時間 / ' + (CoreEngine.speedIntervals[speed] / 1000) + '秒') : '一時停止 (Space)'; });
     CoreEngine.renderStats();
     document.querySelectorAll('.speed-btn[data-speed]').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -1239,7 +1261,7 @@ class CoreEngine {
       return { title: '燃料 (Fuel)',
         rows: ['現在値: <b>' + Math.floor(s.fuel) + ' / ' + s.maxFuel + '</b>',
                '獲得量: 石油資源 × 0.1/日',
-               '用途: 海軍・空軍・機甲部隊の運用'] };
+               '用途: 海軍���空軍・機甲部隊の運用'] };
     },
     convoy: () => {
       const s = CoreEngine.gameState;
@@ -1326,15 +1348,15 @@ class CoreEngine {
   static tick(remote=false) {
     if ((!remote&&CoreEngine.gameState.paused) || (MultiplayerManager.connected&&!MultiplayerManager.isHost&&!remote)) return;
     const d = CoreEngine.gameState.date;
-    d.setDate(d.getDate() + 1);
-
-    const ppGain = 1 + CoreEngine.gameState.cardModifiers.politicalPowerGain;
-    CoreEngine.gameState.politicalPower = Math.min(999, CoreEngine.gameState.politicalPower + ppGain);
+  d.setHours(d.getHours() + 1);
+  
+  const hourly = CoreEngine.gameState.cardModifiers.politicalPowerGain / 24;
+  CoreEngine.gameState.politicalPower = Math.min(999, CoreEngine.gameState.politicalPower + hourly);
     CoreEngine.gameState.fuel = Math.min(CoreEngine.gameState.maxFuel,
-      CoreEngine.gameState.fuel + CoreEngine.gameState.resources.oil * 0.1);
+      CoreEngine.gameState.fuel + CoreEngine.gameState.resources.oil * 0.1 / 24);
     // 徴兵法律に応じた人的資源の蓄積
     if (typeof PoliticsManager !== 'undefined') {
-      CoreEngine.gameState.manpower += PoliticsManager.dailyManpowerGain();
+      CoreEngine.gameState.manpower += PoliticsManager.dailyManpowerGain() / 24;
     }
 
     CoreEngine.tickCallbacks.forEach(cb => {
@@ -1343,6 +1365,7 @@ class CoreEngine {
 
     CoreEngine.renderStats();
     CoreEngine.updateCalendar();
+    if (typeof FocusTreeManager !== 'undefined' && FocusTreeManager.activeFocus) FocusTreeManager.render();
     if (!remote) MultiplayerManager.broadcast({
       type: 'tick',
       date: CoreEngine.gameState.date.toISOString(),
@@ -1363,7 +1386,7 @@ class CoreEngine {
   static updateCalendar() {
     const d = CoreEngine.gameState.date;
     document.getElementById('calendar-display').textContent =
-      d.getFullYear() + '年' + (d.getMonth()+1) + '月' + d.getDate() + '日';
+      d.getFullYear() + '年' + String(d.getMonth()+1).padStart(2, '0') + '月' + String(d.getDate()).padStart(2, '0') + '日 ' + String(d.getHours()).padStart(2, '0') + '時';
   }
 
   static log(message) {
@@ -1917,7 +1940,7 @@ class NuclearManager {
 }
 
 // ==========================================================
-// Module 6: WindowManager — OS風ウィンドウ管理（ドラッグ・リサイズ・zIndex）
+// Module 6: WindowManager — OS風ウィンドウ管���（ドラッグ・リサイズ・zIndex）
 // ==========================================================
 class WindowManager {
   static windows = new Map(); // tab -> win object
@@ -2119,7 +2142,7 @@ class MapRenderer {
     } catch (e) {
       console.error('MapRenderer init failed:', e);
       document.getElementById('map-loading-text').textContent =
-        '地図データの読み込みに失敗しました: ' + e.message + ' — 他のウィンドウは利用可能です。';
+        '地図データの読み込みに失敗しました: ' + e.message + ' — 他のウィンドウは利用可��です。';
       document.querySelector('#map-loading .spinner').style.display = 'none';
     }
   }
@@ -2971,7 +2994,7 @@ class BattlePlanManager {
     const gs = CoreEngine.gameState;
     const states = MapRenderer.states;
     if (!states[targetSid]) return [];
-    // 目標から逆方向に BFS: 自国領 or 開戦済みの敵領 or 軍事通行券承諾国のみ通過できる
+    // 目標から逆方向に BFS: 自国領 or 開戦済みの敵領 or 軍事通行券承諾��のみ通過できる
     const prev = new Map();
     prev.set(targetSid, null);
     const q = [targetSid];
@@ -3178,8 +3201,8 @@ class BattlePlanManager {
     army.frontEnemy = enemyTag;
     army.route = null;
     army.arrow = null; army.targetState = null; army.chain = null;
-    CoreEngine.log(army.name + 'の前線を' + enemyTag + 'との国境に自動設定しました (' + ordered.length + '地点)。');
-    GameUI.notify('✅ ' + enemyTag + 'との国境に前線を自動スナップ (' + ordered.length + '地点) — Shift+右ドラッグで攻撃矢印を描けます', 'success');
+    CoreEngine.log(army.name + 'の前線を' + enemyTag + 'との国境に自動設定しました (' + ordered.length + '���点)。');
+    GameUI.notify('✅ ' + enemyTag + 'との国境に前��を自動スナップ (' + ordered.length + '地点) — Shift+右ドラッグで攻撃矢印を描けます', 'success');
     MultiplayerManager.broadcast({ type: 'battle_front', army: army.id, points: ordered });
     BattlePlanManager.renderPanel();
   }
@@ -3312,12 +3335,12 @@ class BattlePlanManager {
   }
 
   static execute(armyId) {
-    // 海軍/空軍: ミッション実行 (哨戒・制空・攻撃)
+    // 海軍/空軍: ミッション実行 (哨戒・制空���攻撃)
     if (typeof armyId === 'string' && (armyId.startsWith('nav') || armyId.startsWith('air'))) {
       const unit = [...BattlePlanManager.navy, ...BattlePlanManager.air].find(u => u.id === armyId);
       if (!unit) return;
       if (!unit.zone && !unit.area && !unit.target) {
-        GameUI.notify(unit.type === 'navy' ? '先に海域を左クリックして指定してください。' : '先に空域を左クリックして指定してください。', 'alert');
+        GameUI.notify(unit.type === 'navy' ? '先に海域���左クリックして指定してください。' : '先に空域を左クリックして指定してください。', 'alert');
         return;
       }
       if (unit.zone) unit.mission = unit.zone.mission;
@@ -3584,7 +3607,7 @@ class BattlePlanManager {
           ctx.stroke();
         }
       }
-      // 任務海域・空域 (クリック指定) のマーカー
+      // 任務海域・空域 (���リック指定) のマーカー
       if (unit.zone) {
         const z = worldToScreen(unit.zone.x, unit.zone.y);
         const zc = navy ? 'rgba(90,160,255,0.95)' : 'rgba(120,200,255,0.95)';
@@ -3994,7 +4017,7 @@ class PoliticsManager {
       if (s.nationSystems.mefoIssued) spirits.push({ name: 'MEFO手形 (有効)', desc: '建設コスト -20%・特別研究促進' });
       if (s.nationSystems.paranoia !== undefined) spirits.push({ name: 'スターリンのパラノイア (' + Math.round(s.nationSystems.paranoia) + ')', desc: '高まると将軍カードが粛清されるリスク' });
       if (s.nationSystems.armyInfluence !== undefined) spirits.push({ name: '陸海軍の対立 (陸軍 ' + Math.round(s.nationSystems.armyInfluence) + ')', desc: '陸海軍の影響力バランスが補正に影響' });
-      if (s.nationSystems.congressDem !== undefined) spirits.push({ name: '連邦議会 (与党 ' + Math.round(s.nationSystems.congressDem) + '議席)', desc: '議会多数派の安定度ボーナス' });
+      if (s.nationSystems.congressDem !== undefined) spirits.push({ name: '連邦議会 (与党 ' + Math.round(s.nationSystems.congressDem) + '議席)', desc: '議会多数派���安定度ボーナス' });
       if (s.nationSystems.polarization !== undefined) spirits.push({ name: '政治的二極化 (' + Math.round(s.nationSystems.polarization) + ')', desc: '安定度の変動を増幅' });
     }
     if (s.atWar.length > 0) spirits.push({ name: '戦時中 (' + s.atWar.join(', ') + ')', desc: '戦争協力度ボーナス・経済ペナルティ' });
@@ -4174,7 +4197,7 @@ class DiplomacyManager {
     DiplomacyManager.renderCountryList();
   }
 
-  // ---- 国リスト部分のみ再描画 (検索時にフォーカスを保つ) ----
+  // ---- 国リスト部分の���再描画 (検索時にフォーカスを保つ) ----
   static renderCountryList() {
     const listEl = document.getElementById('diplo-country-list');
     if (!listEl) return;
@@ -4260,11 +4283,11 @@ class DiplomacyManager {
     DiplomacyManager.render();
   }
 
-  // ---- 軍事通行券の要請 (承諾すれば自軍がその国を通過できる) ----
+  // ---- 軍事通行券の要請 (承諾すれば自軍がその国を通過��きる) ----
   static requestMilitaryAccess(countryId) {
     const s = CoreEngine.gameState;
     if (s.militaryAccess[countryId]) { GameUI.notify('既に軍事通行券を承諾済みです。', 'alert'); return; }
-    if (s.politicalPower < 15) { GameUI.notify('政治力が不足しています (PP15必要)。', 'alert'); return; }
+    if (s.politicalPower < 15) { GameUI.notify('政治力が不足し���います (PP15必要)。', 'alert'); return; }
     const c = DiplomacyManager.countries.find(c => c.id === countryId);
     if (!c || c.relation < 20) { GameUI.notify('関係が不十分です (関係+20以上必要)。', 'alert'); return; }
     s.politicalPower -= 15;
@@ -4427,7 +4450,7 @@ class DivisionDesigner {
       '<div style="margin-top:10px;">' +
       '<label style="font-size:12px;color:var(--text-secondary);margin-right:6px;">配備先軍集団:</label>' +
       '<select id="recruit-target-army" style="background:var(--bg-panel);border:1px solid var(--border-mil);color:var(--text-primary);border-radius:4px;padding:4px 8px;font-size:12px;" onchange="TrainingManager.targetArmyId = this.value ? parseInt(this.value) : null">' +
-      '<option value="">自動配備 (最も師団の少ない軍集団)</option>' +
+      '<option value="">自動配�� (最も師団の少ない軍集団)</option>' +
       (BattlePlanManager.armies || []).map(a => '<option value="' + a.id + '"' + (TrainingManager.targetArmyId === a.id ? ' selected' : '') + '>' + a.name + ' (師団' + a.divisions.length + ')</option>').join('') +
       '</select><br>' +
       '<button class="sp-btn" onclick="TrainingManager.recruit()">📝 この編成で徴兵 (兵員・兵器が揃い次第訓練開始)</button></div>' +
@@ -4801,7 +4824,7 @@ class MultiplayerManager {
   static onData(data, fromPeer) {
     if (!data || !data.type) return;
     const conn0 = MultiplayerManager.connections[fromPeer];
-    // ホスト側: パスワード認証が済んでいない接続からは認証メッセージ以外を破棄
+    // ホスト側: パス���ード認証が済んでいない接続からは認証メッセージ以外を破棄
     if (conn0 && conn0.authOk === false && data.type !== 'auth_resp') return;
     if (StrategyGame.onMessage(data, fromPeer)) return;
     switch (data.type) {
@@ -5029,7 +5052,7 @@ class CardSystem {
       if (e.key && /_unlocked_cards$/.test(e.key)) {
         if (WindowManager.isOpen('cards')) CardSystem.render();
         const tag = e.key.replace('_unlocked_cards', '').toUpperCase();
-        GameUI.notify('🎴 ガチャとリアルタイム同期: ' + DataFetcher.getCountryFlag(tag) + ' 新しいカードが雇用可能になりました！', 'success');
+        GameUI.notify('🎴 ガチャとリアルタイム同期: ' + DataFetcher.getCountryFlag(tag) + ' 新しいカードが雇用可能になりまし��！', 'success');
         CoreEngine.log('ガチャカードとリアルタイム同期しました (' + e.key + ')');
       }
     });
@@ -5398,7 +5421,7 @@ class ResearchManager {
   static selectTech(tech) {
     if (ResearchManager.researchedTech.has(tech.id)) { GameUI.notify('既に研究済みです。'); return; }
     if (tech.prerequisites && !tech.prerequisites.every(p => ResearchManager.researchedTech.has(p))) {
-      GameUI.notify('前提技術が不足しています。', 'alert'); return;
+      GameUI.notify('前提技術��不足しています。', 'alert'); return;
     }
     const s = CoreEngine.gameState;
     const penalty = ResearchManager.researchPenalty(tech);
@@ -5540,7 +5563,7 @@ class UniqueNationSystems {
     let html = '<div class="mp-panel"><h3>📜 MEFO手形 (メフォ紙幣)</h3>' +
       '<p style="font-size:12px;color:var(--text-secondary);">再軍備資金を隠蔽した決済手形。発行すると24ヶ月間、特別研究施設の建設コストが20%減少します (期限が来ると自動失効)。</p>';
     if (st.mefoIssued) {
-      html += '<p style="color:var(--accent-green);font-size:13px;">✔ 発行中 — 残り約' + Math.ceil(st.mefoMonthsLeft / 30) + 'ヶ月 / 建設コスト -20%</p>';
+      html += '<p style="color:var(--accent-green);font-size:13px;">✔ ��行中 — 残り約' + Math.ceil(st.mefoMonthsLeft / 30) + 'ヶ月 / 建設コスト -20%</p>';
     } else {
       html += '<button class="mp-btn" onclick="UniqueNationSystems.issueMefo()">MEFO手形を発行 (政治力 50)</button>';
     }
@@ -5887,7 +5910,7 @@ class SaveLoadManager {
         '</span></div>' +
         (meta
           ? '<div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">📅 ' + meta.date + ' | ' + DataFetcher.getCountryFlagImage(meta.country) + ' ' + meta.country +
-            ' | 🃏 デッキ' + meta.deck + '枚 / 🎖️ 雇用' + meta.hired + '人 | 保存: ' + meta.savedAt + '</div>'
+            ' | 🃏 ���ッキ' + meta.deck + '枚 / 🎖️ 雇用' + meta.hired + '人 | 保存: ' + meta.savedAt + '</div>'
           : '<div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">空きスロット</div>') +
         '</div>';
     }
@@ -5972,7 +5995,7 @@ class StartScreen {
     { tag: 'GER', name: 'ドイツ', desc: '最強の陸軍。MEFO手形で経済を加速し、カードで得た機甲将軍と電撃戦を展開する。', feature: '陸軍最強・MEFO手形', pp: 120, cf: 22, mf: 18 },
     { tag: 'SOV', name: 'ソビエト連邦', desc: '大粛清と「スターリンのパラノイア」ゲージ。圧倒的な人的資源と戦略的縦深を活かす。', feature: '人的資源最大・パラノイア', pp: 100, cf: 25, mf: 20, manpower: 1800000 },
     { tag: 'JAP', name: '大日本帝国', desc: '「陸海軍の対立」ディシジョン。提督カードを配備して太平洋の制海権を握る。', feature: '海軍強国・陸海軍対立', pp: 90, cf: 15, mf: 14, dockyards: 8 },
-    { tag: 'USA', name: 'アメリカ', desc: '「連邦議会」UIで上下院の議席を管理し、大恐慌からの脱出と巨大な工業力を活かす。', feature: '議会UI・工業力最大', pp: 80, cf: 35, mf: 10 },
+    { tag: 'USA', name: 'アメリカ', desc: '「連邦議会」UIで上下院の議席を管理し、大恐慌からの脱出と巨大な工業力を活かす。', feature: '議���UI・工業力最大', pp: 80, cf: 35, mf: 10 },
     { tag: 'ENG', name: 'イギリス', desc: '帝国会議で自治領を連携させ、強力なRAFとシーレーン防衛でドイツに立ち向かう。', feature: '帝国会議・RAF', pp: 100, cf: 28, mf: 12, dockyards: 7 },
     { tag: 'FRA', name: 'フランス', desc: '政治の二極化と安定度管理。マジノ線を延長し、国家方針で大恐慌のデバフを解除する。', feature: 'マジノ線・二極化管理', pp: 80, cf: 18, mf: 10 },
     { tag: 'ITA', name: 'イタリア', desc: '「権力の均衡」UIでムッソリーニと国王の権力バランスを調整し地中海の覇権を狙う。', feature: '権力の均衡UI', pp: 90, cf: 14, mf: 12, dockyards: 5 }
@@ -6081,6 +6104,8 @@ window.addEventListener('DOMContentLoaded', () => StartScreen.show());
 <script src="training.js"></script>
 <!-- ==================== DLC拡張モジュール (ドクトリン/兵器設計/諜報/MIO・国際市場/講和会議/将軍特性) ==================== -->
 <script src="dlc.js?v=artwork-2"></script>
-<script src="strategy.js?v=artwork-2"></script>
-</body>
+  <script src="strategy.js?v=artwork-2"></script>
+  <script src="assets/technology-resolver.js"></script>
+  <script src="assets/equipment-designer.js"></script>
+  </body>
 </html>
