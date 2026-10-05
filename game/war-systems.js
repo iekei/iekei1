@@ -3,7 +3,10 @@
 
 class WarSystems {
   static countryNames = { GER: 'ドイツ国', JAP: '大日本帝国', SOV: 'ソビエト連邦', USA: 'アメリカ合衆国', ENG: 'イギリス', FRA: 'フランス', ITA: 'イタリア', POL: 'ポーランド', CHI: '中国', CZE: 'チェコスロバキア', HUN: 'ハンガリー', ROM: 'ルーマニア', TUR: 'トルコ', FIN: 'フィンランド', CAN: 'カナダ', AST: 'オーストラリア', RAJ: 'インド', MEX: 'メキシコ', SPR: 'スペイン', POR: 'ポルトガル' };
-  static provinceNames = { Tokyo: '東京', Berlin: 'ベルリン', Paris: 'パリ', London: 'ロンドン', Moscow: 'モスクワ', Washington: 'ワシントン', Rome: 'ローマ', Warsaw: 'ワルシャワ', Praha: 'プラハ', Madrid: 'マドリード', Beijing: '北京', Shanghai: '上海', Helsinki: 'ヘルシンキ' };
+  static provinceNames = {
+    Tokyo: '東京', Berlin: 'ベルリン', Paris: 'パリ', London: 'ロンドン', Moscow: 'モスクワ', Washington: 'ワシントン', Rome: 'ローマ', Warsaw: 'ワルシャワ', Praha: 'プラハ', Madrid: 'マドリード', Beijing: '北京', Shanghai: '上海', Helsinki: 'ヘルシンキ',
+    Osaka: '大阪', Kyoto: '京都', Nagoya: '名古屋', Hiroshima: '広島', Fukuoka: '福岡', Seoul: 'ソウル', Busan: '釜山', Nanjing: '南京', Guangzhou: '広州', Hong_Kong: '香港', Vladivostok: 'ウラジオストク', Leningrad: 'レニングラード', Stalingrad: 'スターリングラード', Kiev: 'キエフ', Minsk: 'ミンスク', Kharkov: 'ハリコフ', Rostov: 'ロストフ', Munich: 'ミュンヘン', Hamburg: 'ハンブルク', Cologne: 'ケルン', Frankfurt: 'フランクフルト', Vienna: 'ウィーン', Prague: 'プラハ', Budapest: 'ブダペスト', Bucharest: 'ブカレスト', Belgrade: 'ベオグラード', Warsaw: 'ワルシャワ', Amsterdam: 'アムステルダム', Brussels: 'ブリュッセル', Madrid: 'マドリード', Lisbon: 'リスボン', Stockholm: 'ストックホルム', Oslo: 'オスロ', Copenhagen: 'コペンハーゲン', Ankara: 'アンカラ', Istanbul: 'イスタンブール', Cairo: 'カイロ', New_York: 'ニューヨーク', Los_Angeles: 'ロサンゼルス', Chicago: 'シカゴ', Ottawa: 'オタワ'
+  };
   static chat = { tab: 'all', messages: [] };
   static volunteers = [];
   static expeditionary = [];

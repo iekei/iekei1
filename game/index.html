@@ -161,6 +161,14 @@
     .tech-node .tn-year { font-size: 9px; color: var(--text-secondary); }
     .tech-node .tn-svg { margin: 2px auto; }
     .tech-node .tn-progress { font-size: 9px; color: var(--text-gold); margin-top: 2px; }
+    .tech-node .tech-icon { width: 54px; height: 54px; object-fit: contain; display: block; margin: 2px auto 5px; }
+    .tech-node .tn-title { display: block; min-height: 25px; }
+    #game-help { position: fixed; right: 16px; bottom: 16px; z-index: 1200; width: min(340px, calc(100vw - 32px)); background: rgba(20,26,33,.97); border: 1px solid var(--text-gold); border-radius: 8px; box-shadow: 0 8px 28px rgba(0,0,0,.55); color: var(--text-primary); padding: 12px; }
+    #game-help[hidden] { display: none; }
+    #game-help h3 { color: var(--text-gold); font-size: 14px; margin-bottom: 8px; }
+    #game-help ul { padding-left: 18px; color: var(--text-secondary); font-size: 12px; line-height: 1.7; }
+    #game-help-close { float: right; border: 0; background: none; color: var(--text-secondary); cursor: pointer; font-size: 18px; }
+    #game-help-toggle { position: fixed; right: 16px; bottom: 16px; z-index: 1199; border: 1px solid var(--text-gold); background: var(--bg-panel); color: var(--text-gold); border-radius: 999px; padding: 8px 12px; cursor: pointer; }
     .research-slots { display: flex; gap: 6px; padding: 4px 8px; background: var(--bg-panel); flex-shrink: 0; }
     .research-slot {
       background: var(--bg-panel-light); border: 1px solid var(--border-mil); border-radius: 4px;
@@ -699,7 +707,19 @@
   </div>
 </div>
 
-<div id="game-root">
+  <div id="game-root">
+  <button id="game-help-toggle" type="button" aria-controls="game-help" aria-expanded="false">操作方法</button>
+  <aside id="game-help" hidden aria-label="ゲーム操作方法">
+    <button id="game-help-close" type="button" aria-label="操作方法を閉じる">×</button>
+    <h3>操作方法</h3>
+    <ul>
+      <li><strong>画面を開く:</strong> 上部のメニューから研究・外交・生産などを選択</li>
+      <li><strong>マップ:</strong> 左ドラッグで移動、ホイールでズーム、州をクリックで詳細</li>
+      <li><strong>チャット:</strong> マルチプレイ画面の全体／陣営タブを切替</li>
+      <li><strong>研究:</strong> 技術ノードをクリックして詳細を確認し、研究を開始</li>
+      <li><strong>時間:</strong> 上部の一時停止・速度ボタンで進行を変更</li>
+    </ul>
+  </aside>
   <!-- ==================== TOP BAR ==================== -->
   <header id="top-bar" aria-label="国家ステータスと時間操作">
     <div class="stats-group" id="stats-group">
@@ -879,6 +899,18 @@
   </div>
 </div>
 
+<button id="game-help-toggle" type="button" aria-expanded="false" aria-controls="game-help">操作方法</button>
+<section id="game-help" hidden aria-labelledby="game-help-title">
+  <button id="game-help-close" type="button" aria-label="操作方法を閉じる">×</button>
+  <h3 id="game-help-title">操作方法</h3>
+  <ul>
+    <li>マップ上の州をクリックすると詳細を表示します。</li>
+    <li>上部の研究・生産・外交ボタンから各画面を開けます。</li>
+    <li>チャットは画面右側のチャットボタンから開き、入力欄で送信します。</li>
+    <li>Escキーで開いているパネルや操作ガイドを閉じられます。</li>
+  </ul>
+</section>
+
 <!-- Notification Container -->
 <div id="notification-container"></div>
 
@@ -898,10 +930,12 @@
 <script src="assets/image-loader.js"></script>
 <script src="assets/topbar-icons.js"></script>
 <script src="assets/topbar-ui.js"></script>
-<script src="assets/research-icons.js"></script>
-<script src="assets/research-i18n.js"></script>
-<script src="assets/research-tree.js"></script>
-<script src="war-systems.js"></script>
+  <script src="assets/research-icons.js"></script>
+  <script src="assets/technology-resolver.js"></script>
+  <script src="assets/research-i18n.js"></script>
+  <script src="assets/research-tree.js"></script>
+  <script src="assets/game-help.js"></script>
+  <script src="war-systems.js"></script>
 <script>
 /* ================================================================
    JavaScript Module Architecture
@@ -3150,7 +3184,7 @@ class BattlePlanManager {
     // 制海権の確認 (25%以上必要)
     if (!army.divisions.length) { GameUI.notify('上陸する師団を配属してください。', 'alert'); return; }
     const sup = CoreEngine.gameState.navalSupremacy || 0;
-    if (sup < 25) { GameUI.notify('⚓ 制海権が不足しています (25%以上必要・現在' + Math.floor(sup) + '%)。海軍の哨戒で制海権を確保してください。', 'alert'); return; }
+    if (sup < 25) { GameUI.notify('⚓ 制海権が不足しています (25%以上必要・現在' + Math.floor(sup) + '%)。海軍の哨��で制海権を確保してください。', 'alert'); return; }
     // 上陸開始 (陸路接続は不要 — これが強襲上陸)
     const c = MapRenderer.stateCenter.get(String(sid)) || wp;
     army.executing = true; army.progress = 0; army.chain = null;
@@ -4165,7 +4199,7 @@ class DiplomacyManager {
 
     let html = '<div class="faction-panel"><h3>🏰 陣営 (Faction)</h3>';
     if (DiplomacyManager.factions.length === 0) {
-      html += '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">陣営がありません。新しい陣営を設立できます。</p>' +
+      html += '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">陣営がありません���新しい陣営を設立できます。</p>' +
         '<button class="diplo-btn" onclick="DiplomacyManager.createFaction()" style="background:var(--text-gold);color:#000;">陣営を設立 (PP25)</button>';
     } else {
       DiplomacyManager.factions.forEach(f => {
@@ -4231,7 +4265,7 @@ class DiplomacyManager {
       if (atWar) {
         html += '<span style="color:var(--accent-red);font-size:12px;font-weight:700;">⚔️ 戦争状態</span>';
       } else if (justified) {
-        html += '<button class="diplo-btn" style="background:var(--accent-red);color:#fff;" onclick="DiplomacyManager.declareWar(\'' + c.id + '\')">⚔️ 宣戦布告 (緊張度+15%)</button>';
+        html += '<button class="diplo-btn" style="background:var(--accent-red);color:#fff;" onclick="DiplomacyManager.declareWar(\'' + c.id + '\')">⚔️ 宣戦布��� (緊張度+15%)</button>';
       } else if (justifying) {
         html += '<span style="color:var(--text-secondary);font-size:11px;">正当化中... 残り' + Math.round(justifying) + '日</span>';
       } else {

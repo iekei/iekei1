@@ -269,13 +269,15 @@ function renderProductionLines() {
       statusText = `<span style="color: #f85149; font-weight: bold;">⚠️ 資源不足により生産不可</span>`;
     }
 
+    const factoryIcons = Array.from({ length: line.factories }, (_, index) => `<span class="factory-icon" title="軍需工場 ${index + 1}">工</span>`).join('');
     const card = document.createElement('div');
     card.className = `line-card ${line.isShortage ? 'shortage-line' : ''}`;
     card.innerHTML = `
       <div class="line-details" style="flex: 1;">
         <strong>${tech.title}</strong>
         <div>${statusText}</div>
-        <div style="font-size: 12px; color: #8b949e; margin-top: 2px;">1日生産量: <b>${dailyOutput}</b> 個 (工場数: ${line.factories})</div>
+        <div class="factory-allocation" aria-label="軍需工場 ${line.factories}個">${factoryIcons}<span class="factory-count">${line.factories}工場</span></div>
+        <div style="font-size: 12px; color: #8b949e; margin-top: 2px;">1日生産量: <b>${dailyOutput}</b> 個</div>
         <div style="font-size: 11px; color: #8b949e; margin-top: 2px;">消費資源(1日合計): ${costHtml}</div>
         <div class="factory-controls" style="margin-top: 6px;">
           工場割当: 

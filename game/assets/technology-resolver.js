@@ -7,8 +7,12 @@
       const key = encodeURIComponent(id);
       return `${this.base}/${tag}/${key}.png`;
     },
-    generic(id) { return `${this.base}/generic/${encodeURIComponent(id)}.png`; },
-    resolve(country, id) { return { src: this.country(country, id), fallback: this.generic(id) }; },
+    generic(id) { return `${this.base}/${encodeURIComponent(id)}.png`; },
+    resolve(country, id) {
+      const key = String(id || '').replace(/^tech_/, '');
+      const countryPath = this.country(country, key);
+      return { src: countryPath, fallback: `${this.base}/${encodeURIComponent(key)}.png` };
+    },
     apply(image, country, id) {
       const asset = this.resolve(country, id);
       image.src = asset.src;
