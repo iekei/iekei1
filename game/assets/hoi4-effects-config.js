@@ -32,13 +32,13 @@
     const definition = definitions[reward.type] || { label: reward.type.split('_').join(' '), unit: '', signed: true };
     if (definition.valueKey === 'category') {
       const bonus = Number(reward.bonus);
-      return `・${definition.label}: ${reward.category || '全般'}${Number.isFinite(bonus) ? ` ${bonus * 100}%` : ''}`;
+      return { text: `・${definition.label}: ${reward.category || '全般'}${Number.isFinite(bonus) ? ` ${bonus * 100}%` : ''}`, color: bonus < 0 ? '#ef4444' : '#22c55e' };
     }
-    if (definition.valueKey === 'idea') return `・${definition.label}: ${reward.idea || reward.value || ''}`.replace(/: $/, '');
+    if (definition.valueKey === 'idea') return { text: `・${definition.label}: ${reward.idea || reward.value || ''}`.replace(/: $/, ''), color: reward.type === 'remove_ideas' ? '#ef4444' : '#22c55e' };
     const value = numericValue(reward);
-    if (!Number.isFinite(value)) return `・${definition.label}`;
+    if (!Number.isFinite(value)) return { text: `・${definition.label}`, color: '#22c55e' };
     const display = Math.abs(value) < 1 && value !== 0 ? `${value >= 0 ? '+' : ''}${(value * 100).toFixed(2)}` : `${value >= 0 && definition.signed ? '+' : ''}${value}`;
-    return `・${definition.label}: ${display}${definition.unit}`;
+    return { text: `・${definition.label}: ${display}${definition.unit}`, color: value < 0 ? '#ef4444' : '#22c55e' };
   }
 
   function applyEffect(gameState, reward) {
@@ -49,12 +49,18 @@
       case 'add_stability': gameState.stability = (gameState.stability || 0) + (Number.isFinite(value) ? value : 0); break;
       case 'add_war_support': gameState.warSupport = (gameState.warSupport || 0) + (Number.isFinite(value) ? value : 0); break;
       case 'add_army_experience': gameState.armyExperience = (gameState.armyExperience || 0) + (Number.isFinite(value) ? value : 0); if (gameState.xp) gameState.xp.army = (gameState.xp.army || 0) + value; break;
+      case 'add_navy_experience': gameState.navyExperience = (gameState.navyExperience || 0) + (Number.isFinite(value) ? value : 0); if (gameState.xp) gameState.xp.navy = (gameState.xp.navy || 0) + value; break;
+      case 'add_air_experience': gameState.airExperience = (gameState.airExperience || 0) + (Number.isFinite(value) ? value : 0); if (gameState.xp) gameState.xp.air = (gameState.xp.air || 0) + value; break;
       case 'add_ideas': gameState.ideas = Array.isArray(gameState.ideas) ? gameState.ideas : []; if (reward.idea && !gameState.ideas.includes(reward.idea)) gameState.ideas.push(reward.idea); break;
+      case 'remove_ideas': if (Array.isArray(gameState.ideas)) gameState.ideas = gameState.ideas.filter(idea => idea !== reward.idea); break;
+      case 'add_research_slot': gameState.researchSlots = (gameState.researchSlots || 0) + (Number.isFinite(value) ? value : 0); break;
       default: break;
     }
     return gameState;
   }
 
   global.HOI4EffectsConfig = { definitions, ignoreTypes, formatEffect, applyEffect };
+  // Consumers can keep working if the config script is loaded after a preview component.
   global.formatEffect = global.formatEffect || formatEffect;
+  global.applyEffect = global.applyEffect || applyEffect;
 })(window);
