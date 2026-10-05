@@ -928,6 +928,7 @@
 <script src="assets/topbar-ui.js"></script>
   <script src="assets/research-icons.js"></script>
   <script src="assets/nf-reward-loader.js"></script>
+  <script src="assets/hoi4-effects-config.js"></script>
   <script src="assets/nf-reward-debug.js"></script>
   <script src="assets/technology-resolver.js"></script>
   <script src="assets/research-i18n.js"></script>
@@ -1679,7 +1680,7 @@ class FocusTreeManager {
     tt.querySelector('.tt-title').textContent = f.title || f.name || f.id;
     tt.querySelector('.tt-time').textContent = '必要日数: ' + (f.cost || 70) + '日';
     const rewards = FocusTreeManager.getCompletionRewards(f);
-    const formatted = rewards.map(reward => window.formatCompletionReward ? window.formatCompletionReward(reward) : '・' + (reward.type || '効果') + ': ' + (reward.value ?? '')).filter(Boolean);
+    const formatted = rewards.map(reward => window.HOI4EffectsConfig?.formatEffect ? window.HOI4EffectsConfig.formatEffect(reward) : (window.formatCompletionReward ? window.formatCompletionReward(reward) : '・' + (reward.type || '効果') + ': ' + (reward.value ?? ''))).filter(Boolean);
     const effect = f.effect || '';
     tt.querySelector('.tt-effect').innerHTML =
       (effect ? '<span class="tt-effect-description">' + GameTools.escape(effect) + '</span>' : '') +
@@ -3025,7 +3026,7 @@ class BattlePlanManager {
     return BattlePlanManager.armies.find(a => a.id === BattlePlanManager.selectedArmyId) || null;
   }
 
-  // ---- 軍集団を自由に追加 ----
+  // ---- 軍集団を自由に���加 ----
   static addArmy() {
     const player = CoreEngine.gameState.country;
     const homeStates = Object.entries(MapRenderer.states)
@@ -3150,7 +3151,7 @@ class BattlePlanManager {
       // 海軍/空軍はドラッグではなく海域・空域の左クリックで指定する
       const unit = BattlePlanManager.selectedUnit();
       if (!unit) { GameUI.notify('パネルから部隊を選択してください。', 'alert'); return; }
-      GameUI.notify(unit.type === 'navy' ? '⚓ 海域を左クリックして任務を割り当ててください。' : '✈️ 空域を左クリックして行動を指示してください。', 'alert');
+      GameUI.notify(unit.type === 'navy' ? '⚓ 海域を左クリックして任務を割り当ててくださ���。' : '✈️ 空域を左クリックして行動を指示してください。', 'alert');
       return;
     }
     BattlePlanManager.dragPoints = [worldPt];
@@ -3202,7 +3203,7 @@ class BattlePlanManager {
       '<button class="army-btn" onclick="BattlePlanManager.execute(\'' + unit.id + '\')">▶ この' + (isSea ? '海域' : '空域') + 'で任務開始</button> ' +
       '<button class="army-btn" style="background:var(--bg-panel-light)" onclick="BattlePlanManager.clearFront(\'' + unit.id + '\')">��� 解除</button>' +
       '</div>';
-    GameUI.openModal('⚓ ' + unit.name + ' — ' + (isSea ? '海域' : '空域') + '情報', html);
+    GameUI.openModal('⚓ ' + unit.name + ' �� ' + (isSea ? '海域' : '空域') + '情報', html);
   }
 
   // ---- 攻撃矢印 (Shift+右ドラッグ) / 海軍・空軍: 攻撃目標の指定 ----
@@ -4137,7 +4138,7 @@ class PoliticsManager {
     html += '</div>';
 
     // 法律
-    html += '<div class="politics-section"><h3>📜 法律 (Laws)</h3>';
+    html += '<div class="politics-section"><h3>�� 法律 (Laws)</h3>';
     [['conscription', '徴兵法律'], ['economy', '経済法律']].forEach(([kind, label]) => {
       const cur = PoliticsManager.currentLaw(kind);
       const next = PoliticsManager.nextLaw(kind);
@@ -4404,7 +4405,7 @@ class DiplomacyManager {
     const accepted = c.relation >= 50 || Math.random() < (c.relation / 50);
     if (accepted) {
       s.militaryAccess[countryId] = true;
-      CoreEngine.log('��� ' + c.name + 'が軍事通行券を承諾しました。自軍が同国を通過できます。');
+      CoreEngine.log('��� ' + c.name + 'が軍事��行券を承諾しました。自軍が同国を通過できます。');
       GameUI.notify('🤝 ' + c.name + 'が軍事通行券を承諾しました！', 'success');
     } else {
       CoreEngine.log('❌ ' + c.name + 'に軍事通行券を拒否されました。関係を改善してください。');
@@ -5303,7 +5304,7 @@ class CardSystem {
 
     Object.entries(CardSystem.allCards).forEach(entry => {
       const country = entry[0], cards = entry[1];
-      // 国家制限: 自国のカードパックのみ表示 (WORLDパックは無関係)
+      // 国家制限: 自国のカードパックのみ表示 (WORLD��ックは無関係)
       if (cards.length === 0 || country === 'WORLD' || country !== myCountry) return;
       html += '<div style="margin-bottom:16px;"><h4 style="color:var(--text-secondary);margin-bottom:6px;">' + DataFetcher.getCountryFlagImage(country) + ' ' + country + ' パック</h4><div class="card-grid">';
       cards.forEach(card => {
