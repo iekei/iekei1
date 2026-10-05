@@ -919,6 +919,7 @@
 <script src="assets/topbar-icons.js"></script>
 <script src="assets/topbar-ui.js"></script>
   <script src="assets/research-icons.js"></script>
+  <script src="assets/nf-reward-loader.js"></script>
   <script src="assets/technology-resolver.js"></script>
   <script src="assets/research-i18n.js"></script>
   <script src="assets/research-tree.js"></script>
@@ -1046,7 +1047,9 @@ class DataFetcher {
     const paths = DataFetcher.FOCUS_PATHS[country];
     if (!paths) return [];
     const results = await Promise.all(paths.map(p => DataFetcher.fetchJSON(p)));
-    return results.filter(r => r).flat();
+    const focuses = results.filter(r => r).flat();
+  // Merge authoritative completion_reward effects from hoi4-history when available.
+  return window.NFRewardLoader ? await window.NFRewardLoader.enrich(country, focuses) : focuses;
   }
 
   static async fetchTechTree(country, category) {
@@ -2881,7 +2884,7 @@ class BattlePlanManager {
   static selectedArmyId = null;
   static dragMode = null;      // 'front' | 'arrow' | 'area'
   static dragPoints = [];
-  // ---- 海軍/空軍オーダー (DLC拡張): 陸軍と同じマップ操作で哨戒・攻撃エリアを設定 ----
+  // ---- 海��/空軍オーダー (DLC拡張): 陸軍と同じマップ操作で哨戒・攻撃エリアを設定 ----
   static activeForce = 'army';   // 'army' | 'navy' | 'air'
   static invasionMode = false;   // 強襲上陸モード (沿岸の敵州を左クリックで上陸)
   static navy = [];
