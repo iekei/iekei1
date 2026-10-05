@@ -793,7 +793,7 @@
     <div id="map-help">
       左ドラッグ: マップ移動 / ホイール: ズーム / 左クリック (他国領土): <b style="color:#7de87a">「前線を引く」で国境を自動指定</b><br>
       右ドラッグ: 前線 / Shift+右ドラッグ: <b style="color:#ff6a6a">攻撃矢印</b> (前線から段階的に占領・飛び地不可)<br>
-      🌊 強襲上陸は作戦指揮パネルから / 開戦中は国境の敵師団を表示 / 暗号照合後は対象国全域の情報を表示<br>
+      🌊 強襲上陸は作戦指揮パネルから / 開戦中は国境の敵師団を表示 / 暗号照合後は���象国全域の情報を表示<br>
       陸軍は隣接地域を進軍。中立国・海への飛び越しはできません。
     </div>
 
@@ -920,6 +920,7 @@
 <script src="assets/topbar-ui.js"></script>
   <script src="assets/research-icons.js"></script>
   <script src="assets/nf-reward-loader.js"></script>
+  <script src="assets/nf-reward-debug.js"></script>
   <script src="assets/technology-resolver.js"></script>
   <script src="assets/research-i18n.js"></script>
   <script src="assets/research-tree.js"></script>
@@ -1594,8 +1595,10 @@ class FocusTreeManager {
     FocusTreeManager.activeFocus = null;
     FocusTreeManager.focusProgress = 0;
     FocusTreeManager.applyFocusEffect(f);
+    const completionRewards = f.completion_rewards || f.completionRewards || [];
+    window.dispatchEvent(new CustomEvent('nf-reward-debug', { detail: { message: `completion_reward 適用: ${f.title || id}`, data: { focusId: id, rewards: completionRewards, rewardCount: completionRewards.length } } }));
     if (window.NationalFocusManager && typeof NationalFocusManager.applyCompletionRewards === 'function') {
-      NationalFocusManager.applyCompletionRewards(f.completion_rewards || f.completionRewards || []);
+      NationalFocusManager.applyCompletionRewards(completionRewards);
     }
     DecisionManager.onFocus(f);
     CoreEngine.log('国家方針「' + f.title + '」が完了しました！');
@@ -4750,7 +4753,7 @@ class MultiplayerManager {
 
     MultiplayerManager.peer.on('open', (id) => {
       MultiplayerManager.connected = true;
-      MultiplayerManager.setStatus('ホスト開始 (ID: ' + id + ')', true);
+      MultiplayerManager.setStatus('ホス���開始 (ID: ' + id + ')', true);
       document.getElementById('mp-indicator').textContent = '👥 ホスト';
       GameUI.notify('ルーム作成完了！ID: ' + roomId);
       MultiplayerManager.updatePlayerList();
@@ -5693,7 +5696,7 @@ class UniqueNationSystems {
       '<div style="display:flex;height:14px;border:1px solid var(--border-mil);border-radius:7px;overflow:hidden;margin:6px 0;">' +
       '<div style="width:' + demPct + '%;background:#3c6ea0;"></div><div style="width:' + (100 - demPct) + '%;background:#a03c3c;"></div></div>' +
       '<button class="mp-btn" onclick="UniqueNationSystems.passUSABill()">📜 法案を通過させる (PP 40)</button>' +
-      '<p style="font-size:11px;color:var(--text-secondary);margin-top:6px;">過半数維持: ' + (demPct >= 55 ? '✔ 政治力獲得 +0.25/日' : '✖ 議会が分裂中 — ロビー活動が必要') + '</p></div>';
+      '<p style="font-size:11px;color:var(--text-secondary);margin-top:6px;">過半数維持: ' + (demPct >= 55 ? '✔ 政治力獲得 +0.25/日' : '✖ 議会が分裂中 — ロビー活動���必要') + '</p></div>';
   }
 
   static passUSABill() {
