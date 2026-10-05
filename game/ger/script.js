@@ -354,10 +354,17 @@ function showTooltip(e, nf) {
   document.getElementById('tooltip-title').textContent = `${nf.title} ${status}`;
   document.getElementById('tooltip-time').textContent = `⏱️ 必要時間: ${isActive ? focusDaysRemaining + "日 (進行中)" : (nf.cost || 70) + "日"}`;
   const rewards = nf.completion_rewards || nf.completionRewards || [];
-  const rewardText = rewards.length
-    ? `\n\n【達成報酬】\n${rewards.map(formatCompletionReward).join('\n')}`
+  const formatReward = (reward) => {
+    const formatted = window.HOI4EffectsConfig?.formatEffect?.(reward) || window.formatEffect?.(reward);
+    if (formatted) return typeof formatted === 'string' ? formatted : formatted.text;
+    return window.formatCompletionReward?.(reward) || null;
+  };
+  const formattedRewards = rewards.map(formatReward).filter(Boolean);
+  const rewardText = formattedRewards.length
+    ? `\n\n【達成報酬】\n${formattedRewards.join('\n')}`
     : '';
-  document.getElementById('tooltip-effect').textContent = `${nf.effect || "効果なし"}${rewardText}`;
+  const translateText = window.HOI4EffectsConfig?.translateText || window.translateText || (text => text);
+  document.getElementById('tooltip-effect').textContent = translateText(`${nf.effect || "効果なし"}${rewardText}`);
   
   tooltip.classList.remove('hidden');
   moveTooltip(e);

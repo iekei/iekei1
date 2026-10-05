@@ -36,7 +36,50 @@ class NationalFocusManager {
     CoreEngine.registerTickCallback(() => NationalFocusManager.onTick());
   }
 
-  static tree(tag) { return this.TREES[tag] || [{ id: 'generic_industry', name: '工業化促進', days: 70, effect: { civilianFactories: 1 } }, { id: 'generic_army', name: '軍備拡張', days: 70, requires: ['generic_industry'], effect: { militaryFactories: 1 } }]; }
+  static tree(tag) {
+    const tree = this.TREES[tag] || [
+      { id: 'generic_industry', name: '工業化促進', days: 70, effect: { civilianFactories: 1 } },
+      { id: 'generic_army', name: '軍備拡張', days: 70, requires: ['generic_industry'], effect: { militaryFactories: 1 } }
+    ];
+    // 外部読み込みの方針にも、UI表示と実行処理で共通の報酬形式を必ず付与する。
+    return tree.map(focus => {
+      const existingRewards = focus.completion_rewards || focus.completionRewards;
+      return existingRewards?.length
+        ? { ...focus, completion_rewards: existingRewards }
+        : { ...focus, _completionRewardsGenerated: true, completion_rewards: this.buildCompletionRewards(focus, tag) };
+    });
+  }
+
+  static buildCompletionRewards(focus, tag) {
+    const effect = focus.effect || {};
+    const rewards = [];
+    const add = (type, value) => { if (value !== undefined && value !== null && Number(value) !== 0) rewards.push({ type, value: Number(value) }); };
+    add('add_political_power', effect.politicalPower);
+    add('add_stability', effect.stability);
+    add('add_war_support', effect.warSupport);
+    add('add_army_experience', effect.armyXp);
+    add('add_navy_experience', effect.navyXp);
+    add('add_air_experience', effect.airXp);
+    add('add_research_slot', effect.researchSlots);
+    add('add_world_tension', effect.worldTension);
+    if (effect.civilianFactories) rewards.push({ type: 'add_building_construction', building: 'industrial_complex', level: Number(effect.civilianFactories) });
+    if (effect.militaryFactories) rewards.push({ type: 'add_building_construction', building: 'arms_factory', level: Number(effect.militaryFactories) });
+    if (effect.dockyards) rewards.push({ type: 'add_building_construction', building: 'dockyard', level: Number(effect.dockyards) });
+
+    const text = `${focus.id || ''} ${focus.name || ''} ${focus.title || ''}`.toLowerCase();
+    // 「西の壁」等の bunker は単なる文字列ではなく、陸軍要塞の建設として扱う。
+    if (/bunker|west_wall|西の壁|要塞|マジノ/.test(text)) {
+      const level = Number(focus.bunkerLevel || focus.forts || focus.level || 1);
+      rewards.push({ type: 'add_building_construction', building: 'bunker', level: Number.isFinite(level) && level > 0 ? level : 1 });
+    }
+    // アンシュルス等の国家統合方針は対象国を占領可能にする。
+    const annexTargets = /anschluss|アンシュルス/.test(text) ? ['AUS'] : /sudeten|ズデーテン/.test(text) ? ['CZE'] : null;
+    if (annexTargets) rewards.push({ type: 'annex_country', country: annexTargets });
+    // 報酬未定義の方針にも、方針完了を空表示にしない基本的な政治効果を付与。
+    if (!rewards.length) rewards.push({ type: 'add_political_power', value: tag === 'GER' ? 50 : 25 });
+    return rewards;
+  }
+
   static onTick() {
     const s = CoreEngine.gameState;
     if (!s.ai && s.country !== CoreEngine.gameState.country) return;
@@ -52,7 +95,7 @@ class NationalFocusManager {
     state.progress += 1 / 24;
     if (state.progress < focus.days) return;
     state.completed.push(focus.id); state.active = null; state.progress = 0;
-    this.applyEffect(focus.effect || {});
+    if (!focus._completionRewardsGenerated) this.applyEffect(focus.effect || {});
     this.applyCompletionRewards(focus.completion_rewards || focus.completionRewards || []);
     CoreEngine.log('国家方針完了: ' + focus.name);
   }
@@ -68,11 +111,7 @@ class NationalFocusManager {
       if (!reward || !reward.type) return;
       const applyEffect = window.HOI4EffectsConfig?.applyEffect || window.applyEffect;
       if (typeof applyEffect === 'function') applyEffect(s, reward);
-      const value = Number(reward.value || reward.amount || 0);
-      if (reward.type === 'add_research_slot') s.researchSlots = (s.researchSlots || 0) + value;
-      else if (reward.type === 'add_navy_experience') s.xp.navy = Math.min(9999, (s.xp.navy || 0) + value);
-      else if (reward.type === 'add_air_experience') s.xp.air = Math.min(9999, (s.xp.air || 0) + value);
-      else if (reward.type === 'add_tech_bonus') {
+      if (reward.type === 'add_tech_bonus') {
         s.techBonuses = s.techBonuses || [];
         s.techBonuses.push({ category: reward.category, bonus: reward.bonus, uses: reward.uses });
       }
