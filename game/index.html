@@ -1595,7 +1595,7 @@ class FocusTreeManager {
     FocusTreeManager.activeFocus = null;
     FocusTreeManager.focusProgress = 0;
     FocusTreeManager.applyFocusEffect(f);
-    const completionRewards = f.completion_rewards || f.completionRewards || [];
+    const completionRewards = FocusTreeManager.normalizeCompletionRewards(f);
     window.dispatchEvent(new CustomEvent('nf-reward-debug', { detail: { message: `completion_reward 適用: ${f.title || id}`, data: { focusId: id, rewards: completionRewards, rewardCount: completionRewards.length } } }));
     if (window.NationalFocusManager && typeof NationalFocusManager.applyCompletionRewards === 'function') {
       NationalFocusManager.applyCompletionRewards(completionRewards);
@@ -1620,11 +1620,25 @@ class FocusTreeManager {
     CoreEngine.renderStats();
   }
 
+  static normalizeCompletionRewards(f) {
+    const raw = f?.completion_rewards ?? f?.completionRewards ?? f?.completion_reward ?? f?.completionReward ?? [];
+    if (!raw) return [];
+    if (Array.isArray(raw)) return raw.filter(reward => reward && typeof reward === 'object');
+    if (typeof raw === 'object') {
+      if (raw.type) return [raw];
+      return Object.entries(raw).flatMap(([type, value]) => {
+        if (value && typeof value === 'object' && !Array.isArray(value)) return [{ type, ...value }];
+        return [{ type, value }];
+      });
+    }
+    return [];
+  }
+
   static showTooltip(f, e) {
   const tt = document.getElementById('focus-tooltip');
   tt.querySelector('.tt-title').textContent = f.title;
   tt.querySelector('.tt-time').textContent = '必要日数: ' + (f.cost || 70) + '日';
-  const rewards = f.completion_rewards || f.completionRewards || [];
+  const rewards = FocusTreeManager.normalizeCompletionRewards(f);
   const rewardText = rewards.length
     ? '\n\n【達成報酬】\n' + rewards.map(reward => window.formatCompletionReward
       ? window.formatCompletionReward(reward)
@@ -1853,7 +1867,7 @@ class NuclearManager {
       '<button class="nuclear-btn" onclick="NuclearManager.launchStrike()" ' + (!canStrike ? 'disabled' : '') + '>☢️ 核攻撃を実行</button></div>' +
 
       '<div class="nuclear-panel"><h3>🎯 ターゲット選択</h3>' +
-      '<p style="font-size:12px;color:var(--text-secondary);">敵国の主要都市・工業地帯を攻撃対象として選択できます。</p>' +
+      '<p style="font-size:12px;color:var(--text-secondary);">敵国の主要都市・工業地帯を攻撃対象として選択��きます。</p>' +
       '<div id="nuke-targets" style="margin-top:8px;">' + NuclearManager.renderTargets() + '</div></div>';
   }
 
@@ -2180,7 +2194,7 @@ class MapRenderer {
     } catch (e) {
       console.error('MapRenderer init failed:', e);
       document.getElementById('map-loading-text').textContent =
-        '地図データの読み込みに失敗しました: ' + e.message + ' — 他のウィンドウは利用可��です。';
+        '��図データの読み込みに失敗しました: ' + e.message + ' — 他のウィンドウは利用可��です。';
       document.querySelector('#map-loading .spinner').style.display = 'none';
     }
   }
@@ -3129,7 +3143,7 @@ class BattlePlanManager {
       '</div>' +
       '<div style="margin-top:10px;text-align:center;">' +
       '<button class="army-btn" onclick="BattlePlanManager.execute(\'' + unit.id + '\')">▶ この' + (isSea ? '海域' : '空域') + 'で任務開始</button> ' +
-      '<button class="army-btn" style="background:var(--bg-panel-light)" onclick="BattlePlanManager.clearFront(\'' + unit.id + '\')">✕ 解除</button>' +
+      '<button class="army-btn" style="background:var(--bg-panel-light)" onclick="BattlePlanManager.clearFront(\'' + unit.id + '\')">��� 解除</button>' +
       '</div>';
     GameUI.openModal('⚓ ' + unit.name + ' — ' + (isSea ? '海域' : '空域') + '情報', html);
   }
@@ -3174,7 +3188,7 @@ class BattlePlanManager {
     const st = sid ? MapRenderer.states[sid] : null;
     if (!st) { GameUI.notify('上陸目標は陸上の州に指定してください。', 'alert'); return; }
     const player = CoreEngine.gameState.country;
-    if (MapRenderer.ownerOf(pid) === player) { GameUI.notify('自国の州には上陸できません。', 'alert'); return; }
+    if (MapRenderer.ownerOf(pid) === player) { GameUI.notify('自国の州には上��できません。', 'alert'); return; }
     if (!CoreEngine.gameState.atWar.includes(MapRenderer.ownerOf(pid))) {
       GameUI.notify('⚔️ ' + MapRenderer.ownerOf(pid) + 'とは開戦していません。先に宣戦布告してください。', 'alert'); return;
     }
@@ -3269,7 +3283,7 @@ class BattlePlanManager {
       }
     } else if (BattlePlanManager.dragMode === 'front') {
       // 前線は「他国に面した自国領土」にしか置けない。
-      // ドラッグ点を国境プロビンス (自国領 & 陸の国境あり) に自動スナップする。
+      // ドラッグ点を国境プ��ビンス (自国領 & 陸の国境あり) に自動スナップする。
       const player = CoreEngine.gameState.country;
       const snapped = [];
       let dropped = 0;
@@ -3954,7 +3968,7 @@ class ResourceManager {
 class PoliticsManager {
   static LAWS = {
     conscription: [
-      { id: 'volunteer', name: '志���兵制', cost: 0, mpPerDay: 100, wsReq: 0 },
+      { id: 'volunteer', name: '志���兵��', cost: 0, mpPerDay: 100, wsReq: 0 },
       { id: 'limited', name: '限定徴兵', cost: 100, mpPerDay: 300, wsReq: 10 },
       { id: 'extensive', name: '大規模徴兵', cost: 150, mpPerDay: 600, wsReq: 25 },
       { id: 'service', name: '兵役必須法', cost: 200, mpPerDay: 1000, wsReq: 50 }
@@ -4408,7 +4422,7 @@ class DivisionDesigner {
     if (!p) return;
     DivisionDesigner.grid = p.grid.map(row => row.map(cell => cell ? { ...cell } : null));
     CoreEngine.log('📂 プリセット「' + p.name + '」を読み込みました。');
-    GameUI.notify('��� プリセット「' + p.name + '」を読み込みました', 'success');
+    GameUI.notify('��� プ���セット「' + p.name + '」を読み込みました', 'success');
     DivisionDesigner.render();
   }
 
@@ -4725,7 +4739,7 @@ class MultiplayerManager {
     const container = document.getElementById('multiplayer-content');
     container.innerHTML =
       '<div class="mp-panel"><h3>🌐 P2Pマルチプレイ (PeerJS)</h3>' +
-      '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">ルームIDを共有してクロスデバイスでプレイできます。サーバーレス直接通信（PeerJS）を使���します。</p>' +
+      '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">ルームIDを共有してクロスデバイスでプレイできます。サーバーレス直接通信（PeerJS）を使����します。</p>' +
       '<div style="margin-bottom:8px;"><label style="font-size:12px;color:var(--text-secondary);">ルームコード: </label>' +
       '<input type="text" class="mp-input" id="mp-room-id" placeholder="ルームコードを入力"></div>' +
       '<div style="margin-bottom:8px;"><label style="font-size:12px;color:var(--text-secondary);">パスワード: </label>' +
@@ -5142,7 +5156,7 @@ class CardSystem {
     }
     if (CardSystem.isHired(cardId)) { GameUI.notify('すでに雇用しています。', 'alert'); return; }
     if (!CardSystem.isUnlocked(cardId, country)) {
-      GameUI.notify('🔒 ガチャで引き当てたカードのみ雇用できます。', 'alert');
+      GameUI.notify('🔒 ��チャで引き当てたカードのみ雇用できます。', 'alert');
       return;
     }
     const cost = CardSystem.HIRE_COST[card.rank] || CardSystem.HIRE_COST.default;
@@ -5948,7 +5962,7 @@ class SaveLoadManager {
         '</span></div>' +
         (meta
           ? '<div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">📅 ' + meta.date + ' | ' + DataFetcher.getCountryFlagImage(meta.country) + ' ' + meta.country +
-            ' | 🃏 ����ッキ' + meta.deck + '枚 / 🎖️ 雇用' + meta.hired + '人 | 保存: ' + meta.savedAt + '</div>'
+            ' | 🃏 ������ッキ' + meta.deck + '枚 / 🎖️ 雇用' + meta.hired + '人 | 保存: ' + meta.savedAt + '</div>'
           : '<div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">空きスロット</div>') +
         '</div>';
     }
