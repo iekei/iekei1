@@ -113,7 +113,7 @@
       background: radial-gradient(ellipse at center, #111820 0%, #0a0c0f 100%);
     }
     #focus-tree-viewport { position: relative; min-width: 2400px; min-height: 1200px; }
-    #focus-svg-lines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+    #focus-svg-lines { position: absolute; top: 0; left: 0; width: auto; height: auto; overflow: visible; pointer-events: none; }
     .focus-node {
       position: absolute; width: 120px; padding: 6px; border-radius: 6px;
       background: var(--bg-panel-light); border: 2px solid var(--border-mil);
@@ -1501,8 +1501,14 @@ class FocusTreeManager {
       }
     });
     svg.innerHTML = svgContent;
-    svg.setAttribute('width', '2400');
-    svg.setAttribute('height', '1200');
+    const focusBounds = FocusTreeManager.focuses.reduce((bounds, focus) => ({
+      width: Math.max(bounds.width, Number(focus.x || 0) + 190),
+      height: Math.max(bounds.height, Number(focus.y || 0) + 130)
+    }), { width: 2400, height: 1200 });
+    svg.setAttribute('width', String(focusBounds.width));
+    svg.setAttribute('height', String(focusBounds.height));
+    svg.style.width = focusBounds.width + 'px';
+    svg.style.height = focusBounds.height + 'px';
 
     // Draw focus nodes
     FocusTreeManager.focuses.forEach(f => {
@@ -1522,7 +1528,8 @@ class FocusTreeManager {
 
       const iconUrl = DataFetcher.getFocusIconUrl(f.id);
       const iconHtml = '<img src="' + iconUrl + '" onerror="this.style.display=\'none\'" alt="">';
-      const titleShort = f.title.length > 12 ? f.title.substring(0, 11) + '…' : f.title;
+      const displayTitle = f.title || f.name || f.id || '国家方針';
+      const titleShort = displayTitle.length > 12 ? displayTitle.substring(0, 11) + '…' : displayTitle;
 
       const node = document.createElement('div');
       node.className = cls;
@@ -1533,7 +1540,10 @@ class FocusTreeManager {
         '<div class="fn-cost">📅' + (f.cost || 70) + '日</div>' +
         progressHtml;
   node.addEventListener('click', () => FocusTreeManager.selectFocus(f.id));
+  node.setAttribute('tabindex', '0');
+  node.setAttribute('aria-label', displayTitle);
   node.addEventListener('mouseenter', (e) => FocusTreeManager.showTooltip(f, e));
+  node.addEventListener('pointerover', (e) => FocusTreeManager.showTooltip(f, e));
   node.addEventListener('mousemove', (e) => FocusTreeManager.moveTooltip(e));
   node.addEventListener('mouseleave', () => FocusTreeManager.hideTooltip());
   node.addEventListener('focusin', (e) => FocusTreeManager.showTooltip(f, e));
@@ -1624,7 +1634,7 @@ class FocusTreeManager {
   }
 
   static normalizeCompletionRewards(f) {
-    const raw = f?.completion_rewards ?? f?.completionRewards ?? f?.completion_reward ?? f?.completionReward ?? [];
+    const raw = f?.completion_rewards ?? f?.completionRewards ?? f?.completion_reward ?? f?.complication_reward ?? f?.complication_rewards ?? f?.completionReward ?? [];
     if (!raw) return [];
     if (Array.isArray(raw)) return raw.filter(reward => reward && typeof reward === 'object');
     if (typeof raw === 'object') {
@@ -1644,9 +1654,11 @@ class FocusTreeManager {
   tt.querySelector('.tt-time').textContent = '必要日数: ' + (f.cost || 70) + '日';
   const rewards = FocusTreeManager.normalizeCompletionRewards(f);
   const rewardText = rewards.length
-    ? '\n\n【達成報酬】\n' + rewards.map(reward => window.formatCompletionReward
-      ? window.formatCompletionReward(reward)
-      : ('・' + (reward.type || '効果') + ': ' + (reward.value ?? reward.idea ?? ''))).join('\n')
+    ? '\n\n【達成報酬】\n' + rewards.map(reward => {
+      const type = reward.type || reward.effect || '効果';
+      const value = reward.value ?? reward.amount ?? reward.idea ?? reward.category ?? '';
+      return window.formatCompletionReward ? window.formatCompletionReward(reward) : '・' + type + ': ' + value;
+    }).join('\n')
     : '';
   tt.querySelector('.tt-effect').textContent = (f.effect || '効果なし') + rewardText;
     tt.classList.remove('hidden');
@@ -2219,7 +2231,7 @@ class MapRenderer {
       DataFetcher.fetchJSON(DataFetcher.MAPDATA_PROVINCES),
       DataFetcher.fetchJSON(DataFetcher.MAPDATA_STATES)
     ]);
-    if (!provData || !stateData) throw new Error('マップ定義JSONが見つかりません');
+    if (!provData || !stateData) throw new Error('マップ定義JSON���見つかりません');
     MapRenderer.provinces = provData;
     MapRenderer.states = stateData;
 
@@ -2228,7 +2240,7 @@ class MapRenderer {
       st.provinces.forEach(pid => MapRenderer.provToState.set(pid, sid));
     });
     Object.entries(provData.p).forEach(([pid, p]) => {
-      // BUG FIX: bit演算は符号付きint32になるため >>> 0 で unsigned に正規化する。
+      // BUG FIX: bit演算は符号付きint32にな��ため >>> 0 で unsigned に正規化する。
       // これがないと Uint32Array (常に正の値) のルックアップが一切一致せず、
       // 全ピクセルが「未認識」扱いになり陸地が描画されない。
       const key = ((255 << 24) | (p[2] << 16) | (p[1] << 8) | p[0]) >>> 0;
@@ -2431,7 +2443,7 @@ class MapRenderer {
     return [...sids];
   }
 
-  // 座標を最寄りの国境プロビンス重心へスナップ (maxDist以内)
+  // 座標を最寄りの国境プロビン���重心へスナップ (maxDist以内)
   static snapToBorderProvince(pt, playerTag, maxDist) {
     const list = MapRenderer.borderProvinceList(playerTag);
     let best = null, bestD = maxDist || 120;
@@ -3776,7 +3788,7 @@ class BattlePlanManager {
   }
 }
 
-// グローバルヘルパー (パネルのHTML onclickから参照)
+// グロ���バルヘルパー (パネルのHTML onclickから参照)
 function BattleManager_clearFront(armyId) { BattlePlanManager.clearFront(armyId); }
 
 // ==========================================================
@@ -4134,7 +4146,7 @@ class DiplomacyManager {
     CAN: 'カナダ', AST: 'オーストラリア', NZL: 'ニュージーランド', SAF: '南アフリカ', RAJ: 'イギリス領インド',
     MAL: 'マラヤ', INS: '蘭領東インド', PHI: 'フィリピン', TAN: 'タンガニーカ',
     SWE: 'スウェーデン', NOR: 'ノルウェー', DEN: 'デンマーク', FIN: 'フィンランド', ICE: 'アイスランド',
-    HOL: 'オランダ', BEL: 'ベルギー', LUX: 'ルクセンブルク', SWI: 'スイス', POR: 'ポルトガル',
+    HOL: 'オランダ', BEL: 'ベルギー', LUX: 'ルクセンブルク', SWI: 'ス���ス', POR: 'ポルトガル',
     SPR: 'スペイン', GRE: 'ギリシャ', ALB: 'アルバニア', YUG: 'ユーゴスラビア', ROM: 'ルーマニア',
     BUL: 'ブルガリア', HUN: 'ハンガリー', CZE: 'チェコスロバキア', AUS: 'オーストリア',
     TUR: 'トルコ', IRE: 'アイルランド', EST: 'エストニア', LAT: 'ラトビア', LIT: 'リトアニア',
@@ -4402,13 +4414,13 @@ class DivisionDesigner {
     { id: 'anti_air', name: '対空', icon: '🛡️', attack: 8, defense: 10, org: 15 },
     { id: 'engineer', name: '工兵', icon: '🔧', attack: 5, defense: 25, org: 30 },
     { id: 'recon', name: '偵察', icon: '🔭', attack: 8, defense: 12, org: 25 },
-    { id: 'ranger', name: 'レンジャー（森林・河川）', icon: '🌲', attack: 14, defense: 22, org: 65 },
+    { id: 'ranger', name: 'レ��ジャー（森林・河川）', icon: '🌲', attack: 14, defense: 22, org: 65 },
     { id: 'mountaineer', name: '山岳兵', icon: '⛰️', attack: 14, defense: 24, org: 65 },
     { id: 'paratrooper', name: '空挺兵', icon: '🪂', attack: 12, defense: 18, org: 60 },
     { id: 'marine', name: '海兵隊', icon: '⚓', attack: 15, defense: 20, org: 65 }
   ];
   static specialBattalions = [];
-  static presets = [];   // 師団編成プリセット
+  static presets = [];   // 師団編成���リセット
 
   static init() {
     // プリセットをゲーム状態から復元
@@ -6065,7 +6077,7 @@ class StartScreen {
     { tag: 'USA', name: 'アメリカ', desc: '「連邦議会」UIで上下院の議席を管理し、大恐慌からの脱出と巨大な工業力を活かす。', feature: '議���UI・工業力最大', pp: 80, cf: 35, mf: 10 },
     { tag: 'ENG', name: 'イギリス', desc: '帝国会議で自治領を連携させ、強力なRAFとシーレーン防衛でドイツに立ち向かう。', feature: '帝国会議・RAF', pp: 100, cf: 28, mf: 12, dockyards: 7 },
     { tag: 'FRA', name: 'フランス', desc: '政治の二極化と安定度管理。マジノ線を延長し、国家方針で大恐慌のデバフを解除する。', feature: 'マジノ線・二極化管理', pp: 80, cf: 18, mf: 10 },
-    { tag: 'ITA', name: 'イタリア', desc: '「権力の均衡」UIでムッソリーニと国王の権力バランスを調整し地中海の覇権を狙う。', feature: '権力の均衡UI', pp: 90, cf: 14, mf: 12, dockyards: 5 }
+    { tag: 'ITA', name: 'イタリア', desc: '「権力の均衡」UIでムッソリーニと国王の権力バランスを調整し地中海の覇権���狙う。', feature: '権力の均衡UI', pp: 90, cf: 14, mf: 12, dockyards: 5 }
   ];
 
   static show() {
