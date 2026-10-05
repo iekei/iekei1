@@ -138,50 +138,82 @@ window.NFRewardLoader = {
 window.formatCompletionReward = function rewardText(reward) {
   if (!reward || !reward.type) return '';
 
-  // 1. ツールチップに表示不要な内部制御コード・フラグ類を除外（スキップ）
+  // 1. ツールチップに表示させないシステム内部用の制御フラグ（WikiのControl/Hidden effects）
   const ignoreTypes = new Set([
-    '42', '51', 'if', 'limit', 'FRA', 'GER', 'USA', 'ENG', 'SOV', 'JAP', 'ITA',
-    'set_global_flag', 'clr_global_flag', 'set_country_flag', 'clr_country_flag',
-    'custom_effect_tooltip', 'hidden_effect', 'mark_focus_tree_layout_dirty',
-    'add_named_threat', 'sound_effect', 'effect_tooltip'
+    'if', 'limit', 'else', 'elseif', 'random', 'random_list', 'every_other_country',
+    'set_global_flag', 'clr_global_flag', 'set_country_flag', 'clr_country_flag', 'set_state_flag',
+    'custom_effect_tooltip', 'hidden_effect', 'mark_focus_tree_layout_dirty', 'effect_tooltip',
+    'sound_effect', 'log', 'set_rule', 'save_event_target_as'
   ]);
-  
-  if (ignoreTypes.has(reward.type) || /^[0-9]+$/.test(reward.type)) {
-    return null; // 非表示対象
+
+  // 国タグ(GER, JAPなど)や、ただの数字だけのキーは弾く
+  if (ignoreTypes.has(reward.type) || /^[A-Z]{3}$/.test(reward.type) \vert{}\vert{} /^[0-9]+$/.test(reward.type)) {
+    return null;
   }
 
-  // 2. 日本語ラベルマッピング（Paradoxスクリプトキー → 日本語名称）
+  // 2. Paradox Wiki準拠の膨大な日本語翻訳辞書（カテゴリ別）
   const labels = {
-    // 政治・社会
+    // --- 政治・国家 (Politics & Government) ---
     add_political_power: '政治力',
-    add_war_support: '戦争協力度',
     add_stability: '安定度',
-    add_research_slot: '研究スロット',
-    add_ideas: '国家精神',
-    
-    // 軍事経験値
+    add_war_support: '戦争協力度',
+    add_command_power: '指揮力',
+    add_ideas: '国家精神を追加',
+    remove_ideas: '国家精神を削除',
+    swap_ideas: '国家精神の変更',
+    add_popularity: '政党支持率',
+    set_party_popularity: '政党支持率を変更',
+    retire_country_leader: '国家指導者の引退',
+    add_named_threat: '国際緊張度',
+    add_threat: '国際緊張度',
+
+    // --- 経験値 (Experience) ---
     add_army_experience: '陸軍経験値',
     army_experience: '陸軍経験値',
     add_navy_experience: '海軍経験値',
     navy_experience: '海軍経験値',
     add_air_experience: '空軍経験値',
     air_experience: '空軍経験値',
-    
-    // 研究ボーナス
+
+    // --- 研究・技術 (Technology) ---
+    add_research_slot: '研究スロット',
     add_tech_bonus: '研究ボーナス',
-    
-    // 緊張度・外交
-    generate_wargoal: '開戦事由の獲得',
+    add_doctrine_cost_reduction: 'ドクトリン割引',
+    set_technology: '技術の獲得',
+
+    // --- 外交・戦争 (Diplomacy) ---
     create_wargoal: '開戦事由を作成',
+    add_state_claim: '州の請求権',
+    add_state_core: '中核州を追加',
+    remove_state_core: '中核州を削除',
+    declare_war_on: '宣戦布告',
+    puppet: '傀儡国化',
+    annex_country: '併合',
+    white_peace: '白紙和平',
+    add_to_faction: '陣営に参加',
+    remove_from_faction: '陣営から離脱',
+    dismantle_faction: '陣営の解散',
+    give_guarantee: '独立保証',
+    leave_faction: '陣営を離脱',
     may_provoke_hostility: '敵対的行動の解禁',
-    
-    // 建造・インフラ
+
+    // --- 経済・建設 (Economy & Building) ---
     add_offsite_building: 'オフサイト工場',
-    add_extra_state_shared_building_slots: '建築スロット追加',
-    add_building_construction: '構造物の建設'
+    add_extra_state_shared_building_slots: '追加建築スロット',
+    add_building_construction: '建設',
+    add_resource: '資源を追加',
+    add_equipment_to_stockpile: '備蓄に装備を追加',
+
+    // --- 軍事・人的資源 (Military & Manpower) ---
+    add_manpower: '人的資源',
+    random_owned_controlled_state: 'ランダムな支配州',
+    every_owned_state: '全ての所有州',
+    load_oob: '部隊の展開',
+    create_unit: '師団の編成',
+    add_ace: 'エースパイロット'
   };
 
-  // 3. 研究ボーナスの専用フォーマット処理
+  // 3. 特殊なフォーマットが必要なEffect（研究ボーナスなど）
   if (reward.type === 'add_tech_bonus') {
     const category = reward.category || '全般';
     const bonus = reward.bonus ? ` ${(Number(reward.bonus) * 100).toFixed(0)}%` : '';
@@ -189,14 +221,23 @@ window.formatCompletionReward = function rewardText(reward) {
     return `・研究ボーナス: ${category}${bonus}${uses}`;
   }
 
-  // 4. 数値および値の整形処理
-  const label = labels[reward.type] || reward.type;
-  let value = reward.value ?? reward.idea ?? reward.amount ?? '';
+  // 4. 日本語ラベルの取得、または未翻訳コマンドの自動整形処理
+  let label = labels[reward.type];
+  if (!label) {
+    // 辞書にない未知のEffectの場合、スネークケースを読みやすい英語に変換
+    // 例: "unlock_decision_tooltip" -> "Unlock Decision Tooltip"
+    label = reward.type
+      .split('_')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  }
+
+  // 5. 値(Value)の抽出
+  let value = reward.value ?? reward.idea ?? reward.amount ?? reward.target ?? reward.building ?? '';
 
   // 小数表記（0.05など）をパーセント表示（+5.00%）に変換
   if (typeof value === 'number' && Math.abs(value) < 1 && value !== 0) {
-    const percent = (value * 100).toFixed(2);
-    return `・${label}: ${value >= 0 ? '+' : ''}${percent}%`;
+    return `・${label}: ${value >= 0 ? '+' : ''}${(value * 100).toFixed(2)}%`;
   }
 
   // 通常数値の正負符号表示
@@ -204,20 +245,15 @@ window.formatCompletionReward = function rewardText(reward) {
     return `・${label}: ${value >= 0 ? '+' : ''}${value}`;
   }
 
+  // 文字列など
   return value ? `・${label}: ${value}` : `・${label}`;
 };
 
-// 描画側の呼び出し処理（null の要素を除外してツールチップ文字列を生成する）
+// 描画側の呼び出し処理
 window.generateTooltipHTML = function(rewards) {
   if (!Array.isArray(rewards)) return '';
-  
-  const formattedLines = rewards
-    .map(r => window.formatCompletionReward(r))
-    .filter(Boolean); // null (非表示項目) を排除
-
-  return formattedLines.length > 0
-    ? `【達成報酬】<br>` + formattedLines.join('<br>')
-    : '';
+  const formattedLines = rewards.map(r => window.formatCompletionReward(r)).filter(Boolean);
+  return formattedLines.length > 0 ? `【達成報酬】<br>` + formattedLines.join('<br>') : '';
 };
 
 window.NFRewardLoaderReady = true;
