@@ -39,7 +39,7 @@ class NationalFocusManager {
   static tree(tag) { return this.TREES[tag] || [{ id: 'generic_industry', name: '工業化促進', days: 70, effect: { civilianFactories: 1 } }, { id: 'generic_army', name: '軍備拡張', days: 70, requires: ['generic_industry'], effect: { militaryFactories: 1 } }]; }
   static onTick() {
     const s = CoreEngine.gameState;
-    if (!s.ai) return;
+    if (!s.ai && s.country !== CoreEngine.gameState.country) return;
     if (!s.nationalFocus) s.nationalFocus = { active: null, progress: 0, completed: [] };
     const state = s.nationalFocus;
     const tree = this.tree(s.country);

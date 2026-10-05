@@ -198,7 +198,7 @@ class BattleManager {
       const exceeded = attackValue > defenseValue;
       b.hitChance = exceeded ? 0.4 : 0.2;
       b.damage = Math.max(0, attackValue / defenseValue) * b.hitChance * 2;
-      b.progress += (1 / b.totalDays) * Math.max(0.55, Math.min(2.5, b.damage));
+      b.progress += (1 / (b.totalDays * 24)) * Math.max(0.55, Math.min(2.5, b.damage));
       // 火力優勢が戦況の揺らぎより強く反映される
       b.advantage = Math.max(-1, Math.min(1, b.advantage + (b.damage - 0.35) * 0.025 + (Math.random() - 0.5) * 0.012));
       if (b.progress >= 1) resolved.push(b);

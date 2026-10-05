@@ -701,7 +701,7 @@
     <div class="topbar-nav">
       <button class="speed-btn" id="world-tension" data-tip-key="tension" aria-label="国際緊張度・外交画面を開く" onclick="GameUI.switchTab('diplomacy')"><img class="tension-icon" data-icon-key="worldTension" alt=""><span class="tension-content"><span class="tension-label">国際緊張度</span><span class="wt-val">0%</span></span></button>
       <button class="speed-btn" id="mp-indicator" onclick="GameUI.switchTab('multiplayer')">👥 単独</button>
-      <button class="speed-btn" id="cheat-toggle" aria-label="デバッグ���ンソールを開く" onclick="CheatConsole.toggle()">~</button>
+      <button class="speed-btn" id="cheat-toggle" aria-label="デバッグ�����ンソールを開く" onclick="CheatConsole.toggle()">~</button>
     </div>
   </header>
 
@@ -1344,6 +1344,7 @@ class CoreEngine {
 
     CoreEngine.renderStats();
     CoreEngine.updateCalendar();
+    if (typeof FocusTreeManager !== 'undefined' && FocusTreeManager.activeFocus) FocusTreeManager.render();
     if (!remote) MultiplayerManager.broadcast({
       type: 'tick',
       date: CoreEngine.gameState.date.toISOString(),
@@ -1364,7 +1365,7 @@ class CoreEngine {
   static updateCalendar() {
     const d = CoreEngine.gameState.date;
     document.getElementById('calendar-display').textContent =
-      d.getFullYear() + '年' + (d.getMonth()+1) + '月' + d.getDate() + '日 ' + String(d.getHours()).padStart(2, '0') + ':00';
+      d.getFullYear() + '年' + String(d.getMonth()+1).padStart(2, '0') + '月' + String(d.getDate()).padStart(2, '0') + '日 ' + String(d.getHours()).padStart(2, '0') + '時';
   }
 
   static log(message) {
@@ -5030,7 +5031,7 @@ class CardSystem {
       if (e.key && /_unlocked_cards$/.test(e.key)) {
         if (WindowManager.isOpen('cards')) CardSystem.render();
         const tag = e.key.replace('_unlocked_cards', '').toUpperCase();
-        GameUI.notify('🎴 ガチャとリアルタイム同期: ' + DataFetcher.getCountryFlag(tag) + ' 新しいカードが雇用可能になりました！', 'success');
+        GameUI.notify('🎴 ガチャとリアルタイム同期: ' + DataFetcher.getCountryFlag(tag) + ' 新しいカードが雇用可能になりまし��！', 'success');
         CoreEngine.log('ガチャカードとリアルタイム同期しました (' + e.key + ')');
       }
     });
@@ -5973,7 +5974,7 @@ class StartScreen {
     { tag: 'GER', name: 'ドイツ', desc: '最強の陸軍。MEFO手形で経済を加速し、カードで得た機甲将軍と電撃戦を展開する。', feature: '陸軍最強・MEFO手形', pp: 120, cf: 22, mf: 18 },
     { tag: 'SOV', name: 'ソビエト連邦', desc: '大粛清と「スターリンのパラノイア」ゲージ。圧倒的な人的資源と戦略的縦深を活かす。', feature: '人的資源最大・パラノイア', pp: 100, cf: 25, mf: 20, manpower: 1800000 },
     { tag: 'JAP', name: '大日本帝国', desc: '「陸海軍の対立」ディシジョン。提督カードを配備して太平洋の制海権を握る。', feature: '海軍強国・陸海軍対立', pp: 90, cf: 15, mf: 14, dockyards: 8 },
-    { tag: 'USA', name: 'アメリカ', desc: '「連邦議会」UIで上下院の議席を管理し、大恐慌からの脱出と巨大な工業力を活かす。', feature: '議会UI・工業力最大', pp: 80, cf: 35, mf: 10 },
+    { tag: 'USA', name: 'アメリカ', desc: '「連邦議会」UIで上下院の議席を管理し、大恐慌からの脱出と巨大な工業力を活かす。', feature: '議���UI・工業力最大', pp: 80, cf: 35, mf: 10 },
     { tag: 'ENG', name: 'イギリス', desc: '帝国会議で自治領を連携させ、強力なRAFとシーレーン防衛でドイツに立ち向かう。', feature: '帝国会議・RAF', pp: 100, cf: 28, mf: 12, dockyards: 7 },
     { tag: 'FRA', name: 'フランス', desc: '政治の二極化と安定度管理。マジノ線を延長し、国家方針で大恐慌のデバフを解除する。', feature: 'マジノ線・二極化管理', pp: 80, cf: 18, mf: 10 },
     { tag: 'ITA', name: 'イタリア', desc: '「権力の均衡」UIでムッソリーニと国王の権力バランスを調整し地中海の覇権を狙う。', feature: '権力の均衡UI', pp: 90, cf: 14, mf: 12, dockyards: 5 }

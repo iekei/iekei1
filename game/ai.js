@@ -203,8 +203,8 @@ class AIManager {
   static tickWars() {
     MapRenderer.buildStateAdjacency();
     AIManager.state.wars.forEach(w => {
-      w.day++;
-      if (w.day % 5 !== 0) return;   // 5日に1度、戦線が動く
+      w.day += 1 / 24;
+      if (w.day < 5 || Math.floor(w.day) % 5 !== 0) return;   // 5日に1度、戦線が動く
       AIManager.advanceWar(w);
     });
   }
@@ -235,7 +235,7 @@ class AIManager {
       const ai = AIManager.aiOf(tag);
       const list = AIManager.focusList(tag);
       if (ai.idx >= list.length) return;   // 史実方針をすべて完了
-      ai.prog++;
+      ai.prog += 1 / 24;
       if (ai.prog >= list[ai.idx].days) {
         const f = list[ai.idx];
         ai.prog = 0;
