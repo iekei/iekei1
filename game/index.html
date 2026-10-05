@@ -113,7 +113,7 @@
       background: radial-gradient(ellipse at center, #111820 0%, #0a0c0f 100%);
     }
     #focus-tree-viewport { position: relative; min-width: 2400px; min-height: 1200px; }
-    #focus-svg-lines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+    #focus-svg-lines { position: absolute; top: 0; left: 0; width: auto; height: auto; overflow: visible; pointer-events: none; }
     .focus-node {
       position: absolute; width: 120px; padding: 6px; border-radius: 6px;
       background: var(--bg-panel-light); border: 2px solid var(--border-mil);
@@ -1501,8 +1501,14 @@ class FocusTreeManager {
       }
     });
     svg.innerHTML = svgContent;
-    svg.setAttribute('width', '2400');
-    svg.setAttribute('height', '1200');
+    const focusBounds = FocusTreeManager.focuses.reduce((bounds, focus) => ({
+      width: Math.max(bounds.width, Number(focus.x || 0) + 190),
+      height: Math.max(bounds.height, Number(focus.y || 0) + 130)
+    }), { width: 2400, height: 1200 });
+    svg.setAttribute('width', String(focusBounds.width));
+    svg.setAttribute('height', String(focusBounds.height));
+    svg.style.width = focusBounds.width + 'px';
+    svg.style.height = focusBounds.height + 'px';
 
     // Draw focus nodes
     FocusTreeManager.focuses.forEach(f => {
@@ -2225,7 +2231,7 @@ class MapRenderer {
       DataFetcher.fetchJSON(DataFetcher.MAPDATA_PROVINCES),
       DataFetcher.fetchJSON(DataFetcher.MAPDATA_STATES)
     ]);
-    if (!provData || !stateData) throw new Error('マップ定義JSONが見つかりません');
+    if (!provData || !stateData) throw new Error('マップ定義JSON���見つかりません');
     MapRenderer.provinces = provData;
     MapRenderer.states = stateData;
 
@@ -4408,7 +4414,7 @@ class DivisionDesigner {
     { id: 'anti_air', name: '対空', icon: '🛡️', attack: 8, defense: 10, org: 15 },
     { id: 'engineer', name: '工兵', icon: '🔧', attack: 5, defense: 25, org: 30 },
     { id: 'recon', name: '偵察', icon: '🔭', attack: 8, defense: 12, org: 25 },
-    { id: 'ranger', name: 'レンジャー（森林・河川）', icon: '🌲', attack: 14, defense: 22, org: 65 },
+    { id: 'ranger', name: 'レ��ジャー（森林・河川）', icon: '🌲', attack: 14, defense: 22, org: 65 },
     { id: 'mountaineer', name: '山岳兵', icon: '⛰️', attack: 14, defense: 24, org: 65 },
     { id: 'paratrooper', name: '空挺兵', icon: '🪂', attack: 12, defense: 18, org: 60 },
     { id: 'marine', name: '海兵隊', icon: '⚓', attack: 15, defense: 20, org: 65 }

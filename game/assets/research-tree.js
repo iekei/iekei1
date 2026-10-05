@@ -119,6 +119,8 @@ const ResearchTreeUI = {
     viewport.style.minHeight = layout.height + 'px';
     lines.setAttribute('width', layout.width);
     lines.setAttribute('height', layout.height);
+    lines.style.width = layout.width + 'px';
+    lines.style.height = layout.height + 'px';
     layout.lanes.forEach(lane => {
       const label = document.createElement('div');
       label.className = 'research-lane-label';
@@ -231,7 +233,7 @@ const ResearchTreeUI = {
     let subtitle = ResearchIcons.categories[category].label + ' / ' + (tech.year || '—') + '年 / 研究 ' + (tech.research_time || 100) + '日';
     if (penalty.percent > 0) subtitle += ' / 先取りペナルティ +' + penalty.percent + '% (' + Math.round((tech.research_time || 100) * penalty.multiplier) + '日)';
     detail.querySelector('.tech-detail-subtitle').textContent = subtitle;
-    detail.querySelector('.tech-detail-desc').textContent = tech.desc || '説明はまだ登録されていません。';
+    detail.querySelector('.tech-detail-desc').textContent = tech.desc || '説明はまだ登録されて��ません。';
     const effects = detail.querySelector('.tech-detail-effects');
     effects.replaceChildren();
     (tech.effects && tech.effects.length ? tech.effects : ['効果データ未登録']).forEach(effect => {
