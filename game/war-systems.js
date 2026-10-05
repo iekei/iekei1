@@ -28,7 +28,10 @@ class WarSystems {
     this._messageBound = true;
   }
   static name(tag) { return this.countryNames[tag] || tag || '不明'; }
-  static stateName(st, fallback) { return this.provinceNames[st?.name] || st?.name || fallback || '州'; }
+  static stateName(st, fallback) {
+    const original = st?.originalName || st?.name || '';
+    return this.provinceNames[original] || this.provinceNames[original.replace(/\\s+/g, '_')] || original || fallback || '州';
+  }
   static patchNames() {
     const apply = () => {
       if (typeof MapRenderer === 'undefined' || !MapRenderer.states) return false;

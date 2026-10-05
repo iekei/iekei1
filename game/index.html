@@ -899,18 +899,6 @@
   </div>
 </div>
 
-<button id="game-help-toggle" type="button" aria-expanded="false" aria-controls="game-help">操作方法</button>
-<section id="game-help" hidden aria-labelledby="game-help-title">
-  <button id="game-help-close" type="button" aria-label="操作方法を閉じる">×</button>
-  <h3 id="game-help-title">操作方法</h3>
-  <ul>
-    <li>マップ上の州をクリックすると詳細を表示します。</li>
-    <li>上部の研究・生産・外交ボタンから各画面を開けます。</li>
-    <li>チャットは画面右側のチャットボタンから開き、入力欄で送信します。</li>
-    <li>Escキーで開いているパネルや操作ガイドを閉じられます。</li>
-  </ul>
-</section>
-
 <!-- Notification Container -->
 <div id="notification-container"></div>
 
@@ -952,7 +940,7 @@
    ================================================================ */
 
 // ==========================================================
-// Module 1: DataFetcher — 動的データフェッチ (hoi4-history + local)
+// Module 1: DataFetcher �� 動的データフェッチ (hoi4-history + local)
 // ==========================================================
 class DataFetcher {
   static HOI4_REPO_RAW = 'https://raw.githubusercontent.com/cbrzeczysz/hoi4-history/main';
@@ -1360,7 +1348,7 @@ class CoreEngine {
     MultiplayerManager.broadcast({ type: 'speed', speed: speed });
   }
 
-  // 他プレイヤーからの速度変更を強制受信 (ホストが送信)
+  // 他プレイヤーからの速���変更を強制受信 (ホストが送信)
   static remoteSetSpeed(speed) {
     CoreEngine.gameState.speed = speed;
     CoreEngine.gameState.paused = (speed === 0);
@@ -3135,7 +3123,7 @@ class BattlePlanManager {
   static startArrowDrag(worldPt) {
     if (BattlePlanManager.activeForce === 'army') {
       const army = BattlePlanManager.selectedArmy();
-      if (!army) { GameUI.notify('軍集団パネルから軍集団を選択してください。', 'alert'); return; }
+      if (!army) { GameUI.notify('軍集団パネルから���集団を選択してください。', 'alert'); return; }
     } else {
       const unit = BattlePlanManager.selectedUnit();
       if (!unit) { GameUI.notify('パネルから部隊を選択してください。', 'alert'); return; }
@@ -3847,7 +3835,7 @@ class ConstructionManager {
     const s = CoreEngine.gameState;
     const sid = ConstructionManager.selectedStateId;
     const st = sid ? MapRenderer.states[sid] : null;
-    if (!st) { GameUI.notify('州を選択してください。', 'alert'); return; }
+    if (!st) { GameUI.notify('州を選��してください。', 'alert'); return; }
     if (st.owner !== s.country) { GameUI.notify('自国の州のみ建設可能です。', 'alert'); return; }
     const b = ConstructionManager.BUILDINGS.find(x => x.id === buildingId);
     if (!b) return;
@@ -4094,7 +4082,7 @@ class DiplomacyManager {
     GER: 'ドイツ', SOV: 'ソ連', JAP: '日本', USA: 'アメリカ', ENG: 'イギリス', FRA: 'フランス',
     ITA: 'イタリア', POL: 'ポーランド', CHI: '中華民国', CHS: '中華ソビエト', PRC: '中華ソビエト',
     MEN: '蒙疆政府', MAN: '満州国', GXC: '広西軍閥', YUN: '雲南軍閥', SIK: '新疆軍閥', SHX: '山西軍閥',
-    XSM: '馬家軍', TIB: 'チベット', MON: 'モンゴル', NEP: 'ネパール', BHU: 'ブータン',
+    XSM: '馬家軍', TIB: '��ベット', MON: 'モンゴル', NEP: 'ネパール', BHU: 'ブータン',
     BRA: 'ブラジル', ARG: 'アルゼンチン', MEX: 'メキシコ', CHL: 'チリ', PER: 'ペルー',
     BOL: 'ボリビア', PAR: 'パラグアイ', URG: 'ウルグアイ', ECU: 'エクアドル', COL: 'コロンビア',
     VEN: 'ベネズエラ', PAN: 'パナマ', COS: 'コスタリカ', HON: 'ホンジュラス', ELS: 'エルサルバドル',
@@ -4232,7 +4220,7 @@ class DiplomacyManager {
     DiplomacyManager.renderCountryList();
   }
 
-  // ---- 国リスト部分の���再描画 (検索時にフォーカスを保つ) ----
+  // ---- 国リスト部分の���再描��� (検索時にフォーカスを保つ) ----
   static renderCountryList() {
     const listEl = document.getElementById('diplo-country-list');
     if (!listEl) return;
@@ -4671,7 +4659,7 @@ class CheatConsole {
         var knownOwners = new Set(Object.values(MapRenderer.states || {}).map(function(st){ return st.owner; }));
         if (tagCountry && (DataFetcher.getCountryFlag(tagCountry) !== '🏳️' || knownOwners.has(tagCountry))) {
           s.country = tagCountry;
-          CheatConsole.output('プレイヤー国を' + tagCountry + 'に変更しました');
+          CheatConsole.output('プレイヤー国を' + tagCountry + 'に変��しました');
           CoreEngine.renderStats();
           if (DataFetcher.FOCUS_PATHS[tagCountry]) FocusTreeManager.init(tagCountry);
           if (MapRenderer.ready) { MapRenderer.centerOn(tagCountry); MapRenderer.invalidateModes(); }
@@ -5058,7 +5046,7 @@ class CardSystem {
     'hitler': { type: 'passive', name: '国家の象徴', desc: '政治力獲得量+0.5、安定度+10%', modifiers: { politicalPowerGain: 0.5, stabilityBonus: 10 } },
     'stalin': { type: 'passive', name: '鉄の意志', desc: '安定度+15%、戦争協力度+10%', modifiers: { stabilityBonus: 15 } },
     'hermann': { type: 'passive', name: '特別研究の推進者', desc: '特別研究進行速度+30%、施設建設コスト-20%', modifiers: { specialProjectSpeed: 0.3, facilityCostReduction: 0.2 } },
-    'rommel': { type: 'active', name: '電撃作戦', desc: '機甲速度+15%、突破+20%（アクティブ）', modifiers: { armorSpeed: 0.15, armorBreakthrough: 0.20 }, activeName: '電撃作戦' },
+    'rommel': { type: 'active', name: '電撃作戦', desc: '機甲速度+15%、突破+20%（アクティブ）', modifiers: { armorSpeed: 0.15, armorBreakthrough: 0.20 }, activeName: '���撃作戦' },
     'guderian': { type: 'active', name: '電撃戦', desc: '機甲速度+20%、突破+15%（アクティブ）', modifiers: { armorSpeed: 0.20, armorBreakthrough: 0.15 }, activeName: '電撃戦' },
     'mstein': { type: 'active', name: '奇襲作戦', desc: '計画ボーナス+25%（アクティブ）', modifiers: {}, activeName: '奇襲作戦' },
     'rundstedt': { type: 'passive', name: '老練の指揮', desc: '全師団防御+10%', modifiers: {} },
@@ -6079,7 +6067,7 @@ class StartScreen {
 }
 
 // ==========================================================
-// INITIALIZATION — ゲーム起動
+// INITIALIZATION �� ゲーム起動
 // ==========================================================
 async function initGame() {
   CoreEngine.init();
