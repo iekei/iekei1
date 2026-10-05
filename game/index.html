@@ -1532,10 +1532,13 @@ class FocusTreeManager {
         '<div class="fn-title">' + titleShort + '</div>' +
         '<div class="fn-cost">📅' + (f.cost || 70) + '日</div>' +
         progressHtml;
-      node.addEventListener('click', () => FocusTreeManager.selectFocus(f.id));
-      node.addEventListener('mouseenter', (e) => FocusTreeManager.showTooltip(f, e));
-      node.addEventListener('mouseleave', () => FocusTreeManager.hideTooltip());
-      container.appendChild(node);
+  node.addEventListener('click', () => FocusTreeManager.selectFocus(f.id));
+  node.addEventListener('mouseenter', (e) => FocusTreeManager.showTooltip(f, e));
+  node.addEventListener('mousemove', (e) => FocusTreeManager.moveTooltip(e));
+  node.addEventListener('mouseleave', () => FocusTreeManager.hideTooltip());
+  node.addEventListener('focusin', (e) => FocusTreeManager.showTooltip(f, e));
+  node.addEventListener('focusout', () => FocusTreeManager.hideTooltip());
+  container.appendChild(node);
     });
   }
 
@@ -1636,7 +1639,8 @@ class FocusTreeManager {
 
   static showTooltip(f, e) {
   const tt = document.getElementById('focus-tooltip');
-  tt.querySelector('.tt-title').textContent = f.title;
+  if (!tt || !f) return;
+  tt.querySelector('.tt-title').textContent = f.title || f.name || f.id;
   tt.querySelector('.tt-time').textContent = '必要日数: ' + (f.cost || 70) + '日';
   const rewards = FocusTreeManager.normalizeCompletionRewards(f);
   const rewardText = rewards.length
@@ -1650,8 +1654,19 @@ class FocusTreeManager {
     tt.style.top = (e.clientY + 14) + 'px';
   }
 
+  static moveTooltip(e) {
+    const tt = document.getElementById('focus-tooltip');
+    if (!tt || !e) return;
+    const offset = 14;
+    const maxX = Math.max(8, window.innerWidth - tt.offsetWidth - 8);
+    const maxY = Math.max(8, window.innerHeight - tt.offsetHeight - 8);
+    tt.style.left = Math.min(e.clientX + offset, maxX) + 'px';
+    tt.style.top = Math.min(e.clientY + offset, maxY) + 'px';
+  }
+
   static hideTooltip() {
-    document.getElementById('focus-tooltip').classList.add('hidden');
+    const tt = document.getElementById('focus-tooltip');
+    if (tt) tt.classList.add('hidden');
   }
 }
 
@@ -4108,7 +4123,7 @@ class PoliticsManager {
 class DiplomacyManager {
   // 国タグ → 日本語名 (地図上の全84か国 + 予備)
   static COUNTRY_NAMES = {
-    GER: 'ドイツ', SOV: 'ソ連', JAP: '日本', USA: 'アメリカ', ENG: 'イギリス', FRA: 'フランス',
+    GER: 'ドイツ', SOV: 'ソ連', JAP: '日本', USA: 'アメリカ', ENG: 'イギ��ス', FRA: 'フランス',
     ITA: 'イタリア', POL: 'ポーランド', CHI: '中華民国', CHS: '中華ソビエト', PRC: '中華ソビエト',
     MEN: '蒙疆政府', MAN: '満州国', GXC: '広西軍閥', YUN: '雲南軍閥', SIK: '新疆軍閥', SHX: '山西軍閥',
     XSM: '馬家軍', TIB: '��ベット', MON: 'モンゴル', NEP: 'ネパール', BHU: 'ブータン',
@@ -5666,7 +5681,7 @@ class UniqueNationSystems {
     UniqueNationSystems.broadcastState();
   }
 
-  /* --- 大日本帝国: 陸海軍の対立 --- */
+  /* --- 大日本帝国: 陸海軍の対�� --- */
   static renderJAP(st) {
     const army = Math.round(st.armyInfluence === undefined ? 50 : st.armyInfluence);
     const navy = 100 - army;
@@ -5807,7 +5822,7 @@ class UniqueNationSystems {
 }
 
 // ==========================================================
-// Module 16: SaveLoadManager — セーブ/ロード (スロット + JSON入出力)
+// Module 16: SaveLoadManager — セーブ/ロード (ス��ット + JSON入出力)
 //   保存内容: 世界情勢 (資源・工場・政治力等) / 国家方針進捗 /
 //   デッキ・雇用カード / 国家固有システム
 // ==========================================================
