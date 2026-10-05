@@ -53,9 +53,31 @@ class NationalFocusManager {
     if (state.progress < focus.days) return;
     state.completed.push(focus.id); state.active = null; state.progress = 0;
     this.applyEffect(focus.effect || {});
+    this.applyCompletionRewards(focus.completion_rewards || focus.completionRewards || []);
     CoreEngine.log('国家方針完了: ' + focus.name);
   }
   static dateReady(f) { if (!f.date) return true; const d = CoreEngine.gameState.date; return d >= new Date(f.date[0], f.date[1] - 1, f.date[2]); }
+  static applyCompletionRewards(rewards) {
+    const s = CoreEngine.gameState;
+    rewards.forEach(reward => {
+      if (!reward || !reward.type) return;
+      const value = Number(reward.value || 0);
+      if (reward.type === 'add_political_power') s.politicalPower = (s.politicalPower || 0) + value;
+      else if (reward.type === 'add_stability') s.stability = Math.min(1, (s.stability || 0) + value);
+      else if (reward.type === 'add_war_support') s.warSupport = Math.min(1, (s.warSupport || 0) + value);
+      else if (reward.type === 'add_research_slot') s.researchSlots = (s.researchSlots || 0) + value;
+      else if (reward.type === 'add_army_experience') s.xp.army = Math.min(9999, (s.xp.army || 0) + value);
+      else if (reward.type === 'add_navy_experience') s.xp.navy = Math.min(9999, (s.xp.navy || 0) + value);
+      else if (reward.type === 'add_air_experience') s.xp.air = Math.min(9999, (s.xp.air || 0) + value);
+      else if (reward.type === 'add_ideas' && reward.idea) {
+        s.ideas = Array.isArray(s.ideas) ? s.ideas : [];
+        if (!s.ideas.includes(reward.idea)) s.ideas.push(reward.idea);
+      } else if (reward.type === 'add_tech_bonus') {
+        s.techBonuses = s.techBonuses || [];
+        s.techBonuses.push({ category: reward.category, bonus: reward.bonus, uses: reward.uses });
+      }
+    });
+  }
   static applyEffect(effect) {
     const s = CoreEngine.gameState;
     Object.entries(effect).forEach(([key, value]) => {
