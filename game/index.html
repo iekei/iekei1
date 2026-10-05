@@ -1612,10 +1612,26 @@ class FocusTreeManager {
   }
 
   static showTooltip(f, e) {
-    const tt = document.getElementById('focus-tooltip');
-    tt.querySelector('.tt-title').textContent = f.title;
-    tt.querySelector('.tt-time').textContent = '必要日数: ' + (f.cost || 70) + '日';
-    tt.querySelector('.tt-effect').textContent = f.effect || '効果なし';
+  const tt = document.getElementById('focus-tooltip');
+  tt.querySelector('.tt-title').textContent = f.title;
+  tt.querySelector('.tt-time').textContent = '必要日数: ' + (f.cost || 70) + '日';
+  const rewards = f.completion_rewards || f.completionRewards || [];
+  const rewardText = rewards.length
+    ? '\n\n【達成報酬】\n' + rewards.map(reward => {
+      const value = Number(reward.value || 0);
+      const shown = reward.type === 'add_stability' || reward.type === 'add_war_support'
+        ? (value * 100).toFixed(2) + '%'
+        : (value > 0 ? '+' : '') + value;
+      const labels = {
+        add_political_power: '政治力', add_stability: '安定度', add_war_support: '戦争協力度',
+        add_research_slot: '研究枠', add_army_experience: '陸軍経験値',
+        add_navy_experience: '海軍経験値', add_air_experience: '空軍経験値',
+        add_ideas: '国家精神', add_tech_bonus: '研究ボーナス'
+      };
+      return '・' + (labels[reward.type] || reward.type) + ': ' + (reward.type === 'add_ideas' ? reward.idea : shown);
+    }).join('\n')
+    : '';
+  tt.querySelector('.tt-effect').textContent = (f.effect || '効果なし') + rewardText;
     tt.classList.remove('hidden');
     tt.style.left = (e.clientX + 14) + 'px';
     tt.style.top = (e.clientY + 14) + 'px';
@@ -3933,7 +3949,7 @@ class ResourceManager {
 }
 
 // ==========================================================
-// Module 7b: PoliticsManager — 政治画面 (指導者・国家精神・法律)
+// Module 7b: PoliticsManager — 政治画面 (指導者・国家精��・法律)
 //   左上の国旗クリックで開く。法律は政治力を消費して変更。
 // ==========================================================
 class PoliticsManager {
@@ -4721,7 +4737,7 @@ class MultiplayerManager {
       '<div class="mp-status" id="mp-status">未接続</div>' +
       '<div class="mp-player-list" id="mp-player-list"></div></div>' +
       '<div class="mp-panel"><h3>📡 同期情報</h3>' +
-      '<p style="font-size:12px;color:var(--text-secondary);">ゲーム時間・速度・国家方針進行・研究進捗・特別研究進捗・カード発動・核攻撃が全プレイヤー間で同期されます。</p>' +
+      '<p style="font-size:12px;color:var(--text-secondary);">ゲーム時間・��度・国家方針進行・研究進捗・特別研究進捗・カード発動・核攻撃が全プレイヤー間で同期されます。</p>' +
       '<div style="margin-top:8px;font-size:12px;"><div>プレイヤーID: <strong>' + MultiplayerManager.playerId + '</strong></div>' +
       '<div>接続状態: <strong id="mp-conn-state">未接続</strong></div></div></div>';
   }
@@ -5183,7 +5199,7 @@ class CardSystem {
     const gachaLink = myPack ? 'card/' + myPack + '/index.html' : null;
     let html = '<div class="card-deck-area"><h3>🃏 将軍・指導者カードデッキ</h3>' +
       '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">カードをクリックしてデッキに編成します。編成したカードの固有能力がゲームに適用されます。' +
-      ' ガチャで引き当てたカードは政治力を消費して「雇用・配備」できます。' +
+      ' ガチャ��引き当てたカードは政治力を消費して「雇用・配備」できます。' +
       (gachaLink
         ? '<a href="' + gachaLink + '" target="_blank" style="color:var(--text-gold);margin-left:8px;">🎴 ' + DataFetcher.getCountryFlagImage(myPack) + ' ' + myPack + ' ガチャを開く (10連で11連目SSR確定)</a>'
         : '<span style="color:var(--text-secondary);margin-left:8px;">※ ' + DataFetcher.getCountryFlagImage(myCountry) + ' ' + myCountry + 'には専用カードパックがありません (GER/SOV/JAPのみ)</span>') +
@@ -5933,7 +5949,7 @@ class SaveLoadManager {
         '</span></div>' +
         (meta
           ? '<div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">📅 ' + meta.date + ' | ' + DataFetcher.getCountryFlagImage(meta.country) + ' ' + meta.country +
-            ' | 🃏 ���ッキ' + meta.deck + '枚 / 🎖️ 雇用' + meta.hired + '人 | 保存: ' + meta.savedAt + '</div>'
+            ' | 🃏 ����ッキ' + meta.deck + '枚 / 🎖️ 雇用' + meta.hired + '人 | 保存: ' + meta.savedAt + '</div>'
           : '<div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">空きスロット</div>') +
         '</div>';
     }
@@ -5949,7 +5965,7 @@ class SaveLoadManager {
 // Module 17: GameUI — UI管理・ウィンドウ切替・モーダル・通知
 // ==========================================================
 class GameUI {
-  // 現在のタブ = 最前面のウィンドウ (ウィンドウUI化に伴う互換getter)
+  // 現在のタブ = 最前面のウィンドウ (ウィン��ウUI化に伴う互換getter)
   static get currentTab() {
     const top = WindowManager.topWindow();
     return top ? top.tab : null;
