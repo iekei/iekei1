@@ -42,6 +42,12 @@ class BattleManager {
       attackerArmyId: army.id,
       // プレイヤー視点の優勢度 (-1 〜 +1)
       advantage: BattleManager.calcOffensiveAdvantage(army, st),
+      softAttack: BattleManager.attackProfile(army).soft,
+      hardAttack: BattleManager.attackProfile(army).hard,
+      defense: BattleManager.defenseProfile(st).defense,
+      breakthrough: BattleManager.defenseProfile(st).breakthrough,
+      hitChance: 0.2,
+      damage: 0,
       progress: 0,
       totalDays: 0
     };
@@ -73,6 +79,12 @@ class BattleManager {
       defender: CoreEngine.gameState.country,
       attackerArmyId: null,
       advantage: BattleManager.calcDefenseAdvantage(stateId),
+      softAttack: 30,
+      hardAttack: 12,
+      defense: 60,
+      breakthrough: 35,
+      hitChance: 0.2,
+      damage: 0,
       progress: 0,
       totalDays: 0
     };
@@ -84,13 +96,29 @@ class BattleManager {
     return b;
   }
 
+  static attackProfile(army) {
+    const count = Math.max(1, army?.divisions?.length || 1);
+    const tech = BattleManager.totalFirepower();
+    const mods = CoreEngine.gameState.cardModifiers || {};
+    const soft = count * (35 + tech * 0.55 + (mods.softAttack || 0));
+    const hard = count * (12 + tech * 0.25 + (mods.hardAttack || mods.armorBreakthrough || 0));
+    return { soft, hard };
+  }
+
+  static defenseProfile(st) {
+    const fort = st && st.b ? (st.b.fort || 0) * 8 : 0;
+    const supply = (st && st.supply ? st.supply : 0) * 1.5;
+    return { defense: 50 + fort + supply, breakthrough: 35 + fort * 0.5 };
+  }
+
   static calcOffensiveAdvantage(army, st) {
-    // 攻撃側: 平均組織力 + 研究済み技術の火力 / 防御側: 基礎戦力 + 要塞 + 補給ボーナス
+    // HOI4式の火力対防御比較。防御を超えた射撃は命中率を倍化する。
     const org = army.divisions.reduce((s, d) => s + d.org, 0) / Math.max(1, army.divisions.length);
-    // 研究済み技術の合計火力を攻勢ボーナスに反映
-    const firepowerBonus = BattleManager.totalFirepower() / 200;
-    const defense = 50 + (st && st.b ? (st.b.fort || 0) * 8 : 0) + (st && st.supply ? st.supply : 0) * 1.5;
-    let adv = (org + firepowerBonus + Math.min(25, army.divisions.length * 1.2) - defense) / 100;
+    const attack = BattleManager.attackProfile(army);
+    const defensive = BattleManager.defenseProfile(st);
+    const ratio = (attack.soft + attack.hard * 0.6) / Math.max(1, defensive.defense + defensive.breakthrough);
+    const firepowerBonus = Math.max(-0.25, Math.min(0.55, (ratio - 0.8) * 0.45));
+    let adv = (org + Math.min(25, army.divisions.length * 1.2) - defensive.defense) / 100 + firepowerBonus;
     // 将軍カードの攻勢ボーナス (軍集団に割り当てられた将軍の階級で決まる)
     if (army.general && army.general.rank) adv += (BattleManager.GENERAL_BONUS[army.general.rank] || 0);
     // 海軍/空軍の行動支援: 周辺で任務実行中の部隊が戦闘を支援する
@@ -165,9 +193,14 @@ class BattleManager {
     const resolved = [];
     BattleManager.battles.forEach(b => {
       if(b.preparation>0){b.preparation--;return;}
-      b.progress += 1 / b.totalDays;
-      // 戦況の揺らぎ (ダイスロール)
-      b.advantage = Math.max(-1, Math.min(1, b.advantage + (Math.random() - 0.5) * 0.06));
+      const attackValue = b.softAttack + b.hardAttack * 0.6;
+      const defenseValue = Math.max(1, b.defense + b.breakthrough);
+      const exceeded = attackValue > defenseValue;
+      b.hitChance = exceeded ? 0.4 : 0.2;
+      b.damage = Math.max(0, attackValue / defenseValue) * b.hitChance * 2;
+      b.progress += (1 / b.totalDays) * Math.max(0.55, Math.min(2.5, b.damage));
+      // 火力優勢が戦況の揺らぎより強く反映される
+      b.advantage = Math.max(-1, Math.min(1, b.advantage + (b.damage - 0.35) * 0.025 + (Math.random() - 0.5) * 0.012));
       if (b.progress >= 1) resolved.push(b);
     });
     resolved.forEach(b => BattleManager.resolve(b));
@@ -319,6 +352,8 @@ class BattleManager {
         DataFetcher.getCountryFlagImage(b.defender) + ' ' + b.defender + '</div>' +
         '<div class="bt-line">戦況: <span style="color:' + color + ';font-weight:bold;">' +
         BattleManager.statusLabel(b) + '</span> (' + Math.round(Math.abs(b.advantage) * 100) + '%)</div>' +
+        '<div class="bt-line">火力: <b>' + Math.round(b.softAttack || 0) + '</b> / 対甲 <b>' + Math.round(b.hardAttack || 0) + '</b> vs 防御 <b>' + Math.round(b.defense || 0) + '</b></div>' +
+        '<div class="bt-line">命中率: <b style="color:' + (b.hitChance >= 0.4 ? '#4ac46a' : '#e0c040') + '">' + Math.round((b.hitChance || 0.2) * 100) + '%</b>　ダメージ指数: <b>' + (b.damage || 0).toFixed(2) + '</b></div>' +
         '<div class="bt-line">残り約 <span style="color:var(--text-gold);font-weight:bold;">' + BattleManager.daysLeft(b) + '</span> 日で決着予定</div>' +
         '<div class="bt-line" style="color:var(--text-secondary);font-size:10px;">' +
         (b.kind === 'offensive' ? '勝てば占領 / 負ければ逆に占領される' : '勝てば防衛成功 / 負ければ占領される') + '</div>';

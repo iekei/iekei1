@@ -701,7 +701,7 @@
     <div class="topbar-nav">
       <button class="speed-btn" id="world-tension" data-tip-key="tension" aria-label="国際緊張度・外交画面を開く" onclick="GameUI.switchTab('diplomacy')"><img class="tension-icon" data-icon-key="worldTension" alt=""><span class="tension-content"><span class="tension-label">国際緊張度</span><span class="wt-val">0%</span></span></button>
       <button class="speed-btn" id="mp-indicator" onclick="GameUI.switchTab('multiplayer')">👥 単独</button>
-      <button class="speed-btn" id="cheat-toggle" aria-label="デバッグコンソールを開く" onclick="CheatConsole.toggle()">~</button>
+      <button class="speed-btn" id="cheat-toggle" aria-label="デバッグ���ンソールを開く" onclick="CheatConsole.toggle()">~</button>
     </div>
   </header>
 
@@ -1142,8 +1142,8 @@ class CoreEngine {
 
   static timer = null;
   static tickCallbacks = [];
-  // One tick is one game day. Keep preparation and battles readable at every speed.
-  static speedIntervals = { 1: 12000, 2: 7000, 3: 4000, 4: 2000, 5: 1000 };
+  // One tick is one game hour. Speed 5 runs as fast as the browser can process safely.
+  static speedIntervals = { 1: 1000, 2: 250, 3: 80, 4: 25, 5: 1 };
 
   static init() {
     CoreEngine.gameState.fuel = CoreEngine.gameState.maxFuel * 0.5;
@@ -1177,7 +1177,7 @@ class CoreEngine {
       if (essentialIcons.length) ImageLoader.preload(essentialIcons);
     }
     CoreEngine.updateSpeedUI();
-    document.querySelectorAll('.speed-btn[data-speed]').forEach(btn => { const speed = Number(btn.dataset.speed); btn.title = speed ? '1日 / ' + (CoreEngine.speedIntervals[speed] / 1000) + '秒' : '一時停止 (Space)'; });
+    document.querySelectorAll('.speed-btn[data-speed]').forEach(btn => { const speed = Number(btn.dataset.speed); btn.title = speed ? (speed === 5 ? '可能な限り高速' : '1時間 / ' + (CoreEngine.speedIntervals[speed] / 1000) + '秒') : '一時停止 (Space)'; });
     CoreEngine.renderStats();
     document.querySelectorAll('.speed-btn[data-speed]').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -1327,15 +1327,15 @@ class CoreEngine {
   static tick(remote=false) {
     if ((!remote&&CoreEngine.gameState.paused) || (MultiplayerManager.connected&&!MultiplayerManager.isHost&&!remote)) return;
     const d = CoreEngine.gameState.date;
-    d.setDate(d.getDate() + 1);
-
-    const ppGain = 1 + CoreEngine.gameState.cardModifiers.politicalPowerGain;
-    CoreEngine.gameState.politicalPower = Math.min(999, CoreEngine.gameState.politicalPower + ppGain);
+  d.setHours(d.getHours() + 1);
+  
+  const hourly = CoreEngine.gameState.cardModifiers.politicalPowerGain / 24;
+  CoreEngine.gameState.politicalPower = Math.min(999, CoreEngine.gameState.politicalPower + hourly);
     CoreEngine.gameState.fuel = Math.min(CoreEngine.gameState.maxFuel,
-      CoreEngine.gameState.fuel + CoreEngine.gameState.resources.oil * 0.1);
+      CoreEngine.gameState.fuel + CoreEngine.gameState.resources.oil * 0.1 / 24);
     // 徴兵法律に応じた人的資源の蓄積
     if (typeof PoliticsManager !== 'undefined') {
-      CoreEngine.gameState.manpower += PoliticsManager.dailyManpowerGain();
+      CoreEngine.gameState.manpower += PoliticsManager.dailyManpowerGain() / 24;
     }
 
     CoreEngine.tickCallbacks.forEach(cb => {
@@ -1364,7 +1364,7 @@ class CoreEngine {
   static updateCalendar() {
     const d = CoreEngine.gameState.date;
     document.getElementById('calendar-display').textContent =
-      d.getFullYear() + '年' + (d.getMonth()+1) + '月' + d.getDate() + '日';
+      d.getFullYear() + '年' + (d.getMonth()+1) + '月' + d.getDate() + '日 ' + String(d.getHours()).padStart(2, '0') + ':00';
   }
 
   static log(message) {
@@ -2120,7 +2120,7 @@ class MapRenderer {
     } catch (e) {
       console.error('MapRenderer init failed:', e);
       document.getElementById('map-loading-text').textContent =
-        '地図データの読み込みに失敗しました: ' + e.message + ' — 他のウィンドウは利用可能です。';
+        '地図データの読み込みに失敗しました: ' + e.message + ' — 他のウィンドウは利用可��です。';
       document.querySelector('#map-loading .spinner').style.display = 'none';
     }
   }
@@ -2972,7 +2972,7 @@ class BattlePlanManager {
     const gs = CoreEngine.gameState;
     const states = MapRenderer.states;
     if (!states[targetSid]) return [];
-    // 目標から逆方向に BFS: 自国領 or 開戦済みの敵領 or 軍事通行券承諾国のみ通過できる
+    // 目標から逆方向に BFS: 自国領 or 開戦済みの敵領 or 軍事通行券承諾��のみ通過できる
     const prev = new Map();
     prev.set(targetSid, null);
     const q = [targetSid];
@@ -3179,7 +3179,7 @@ class BattlePlanManager {
     army.frontEnemy = enemyTag;
     army.route = null;
     army.arrow = null; army.targetState = null; army.chain = null;
-    CoreEngine.log(army.name + 'の前線を' + enemyTag + 'との国境に自動設定しました (' + ordered.length + '地点)。');
+    CoreEngine.log(army.name + 'の前線を' + enemyTag + 'との国境に自動設定しました (' + ordered.length + '���点)。');
     GameUI.notify('✅ ' + enemyTag + 'との国境に前��を自動スナップ (' + ordered.length + '地点) — Shift+右ドラッグで攻撃矢印を描けます', 'success');
     MultiplayerManager.broadcast({ type: 'battle_front', army: army.id, points: ordered });
     BattlePlanManager.renderPanel();
@@ -3585,7 +3585,7 @@ class BattlePlanManager {
           ctx.stroke();
         }
       }
-      // 任務海域・空域 (クリック指定) のマーカー
+      // 任務海域・空域 (���リック指定) のマーカー
       if (unit.zone) {
         const z = worldToScreen(unit.zone.x, unit.zone.y);
         const zc = navy ? 'rgba(90,160,255,0.95)' : 'rgba(120,200,255,0.95)';
@@ -4265,7 +4265,7 @@ class DiplomacyManager {
   static requestMilitaryAccess(countryId) {
     const s = CoreEngine.gameState;
     if (s.militaryAccess[countryId]) { GameUI.notify('既に軍事通行券を承諾済みです。', 'alert'); return; }
-    if (s.politicalPower < 15) { GameUI.notify('政治力が不足しています (PP15必要)。', 'alert'); return; }
+    if (s.politicalPower < 15) { GameUI.notify('政治力が不足し���います (PP15必要)。', 'alert'); return; }
     const c = DiplomacyManager.countries.find(c => c.id === countryId);
     if (!c || c.relation < 20) { GameUI.notify('関係が不十分です (関係+20以上必要)。', 'alert'); return; }
     s.politicalPower -= 15;
