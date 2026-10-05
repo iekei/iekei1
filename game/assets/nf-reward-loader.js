@@ -136,20 +136,88 @@ window.NFRewardLoader = {
 };
 
 window.formatCompletionReward = function rewardText(reward) {
-  const labels = { 
-    add_political_power: '政治力', add_war_support: '戦争協力度', 
-    add_stability: '安定度', add_research_slot: '研究スロット', 
-    add_army_experience: '陸軍経験値', add_navy_experience: '海軍経験値', 
-    add_air_experience: '空軍経験値', add_ideas: '国家精神', 
-    add_tech_bonus: '研究ボーナス' 
-  };
-  const label = labels[reward.type] || reward.type;
-  if (reward.type === 'add_tech_bonus') {
-    return `・${label}: ${reward.category || '全般'} ${(Number(reward.bonus || 0) * 100).toFixed(0)}%${reward.uses ? `（${reward.uses}回分）` : ''}`;
+  if (!reward || !reward.type) return '';
+
+  // 1. ツールチップに表示不要な内部制御コード・フラグ類を除外（スキップ）
+  const ignoreTypes = new Set([
+    '42', '51', 'if', 'limit', 'FRA', 'GER', 'USA', 'ENG', 'SOV', 'JAP', 'ITA',
+    'set_global_flag', 'clr_global_flag', 'set_country_flag', 'clr_country_flag',
+    'custom_effect_tooltip', 'hidden_effect', 'mark_focus_tree_layout_dirty',
+    'add_named_threat', 'sound_effect', 'effect_tooltip'
+  ]);
+  
+  if (ignoreTypes.has(reward.type) || /^[0-9]+$/.test(reward.type)) {
+    return null; // 非表示対象
   }
-  const value = reward.value ?? reward.idea ?? '';
-  const display = typeof value === 'number' && Math.abs(value) < 1 ? `${(value * 100).toFixed(2)}%` : value;
-  return `・${label}: ${typeof display === 'number' && display >= 0 ? '+' : ''}${display}`;
+
+  // 2. 日本語ラベルマッピング（Paradoxスクリプトキー → 日本語名称）
+  const labels = {
+    // 政治・社会
+    add_political_power: '政治力',
+    add_war_support: '戦争協力度',
+    add_stability: '安定度',
+    add_research_slot: '研究スロット',
+    add_ideas: '国家精神',
+    
+    // 軍事経験値
+    add_army_experience: '陸軍経験値',
+    army_experience: '陸軍経験値',
+    add_navy_experience: '海軍経験値',
+    navy_experience: '海軍経験値',
+    add_air_experience: '空軍経験値',
+    air_experience: '空軍経験値',
+    
+    // 研究ボーナス
+    add_tech_bonus: '研究ボーナス',
+    
+    // 緊張度・外交
+    generate_wargoal: '開戦事由の獲得',
+    create_wargoal: '開戦事由を作成',
+    may_provoke_hostility: '敵対的行動の解禁',
+    
+    // 建造・インフラ
+    add_offsite_building: 'オフサイト工場',
+    add_extra_state_shared_building_slots: '建築スロット追加',
+    add_building_construction: '構造物の建設'
+  };
+
+  // 3. 研究ボーナスの専用フォーマット処理
+  if (reward.type === 'add_tech_bonus') {
+    const category = reward.category || '全般';
+    const bonus = reward.bonus ? ` ${(Number(reward.bonus) * 100).toFixed(0)}%` : '';
+    const uses = reward.uses ? `（${reward.uses}回分）` : '';
+    return `・研究ボーナス: ${category}${bonus}${uses}`;
+  }
+
+  // 4. 数値および値の整形処理
+  const label = labels[reward.type] || reward.type;
+  let value = reward.value ?? reward.idea ?? reward.amount ?? '';
+
+  // 小数表記（0.05など）をパーセント表示（+5.00%）に変換
+  if (typeof value === 'number' && Math.abs(value) < 1 && value !== 0) {
+    const percent = (value * 100).toFixed(2);
+    return `・${label}: ${value >= 0 ? '+' : ''}${percent}%`;
+  }
+
+  // 通常数値の正負符号表示
+  if (typeof value === 'number') {
+    return `・${label}: ${value >= 0 ? '+' : ''}${value}`;
+  }
+
+  return value ? `・${label}: ${value}` : `・${label}`;
+};
+
+// 描画側の呼び出し処理（null の要素を除外してツールチップ文字列を生成する）
+window.generateTooltipHTML = function(rewards) {
+  if (!Array.isArray(rewards)) return '';
+  
+  const formattedLines = rewards
+    .map(r => window.formatCompletionReward(r))
+    .filter(Boolean); // null (非表示項目) を排除
+
+  return formattedLines.length > 0
+    ? `【達成報酬】<br>` + formattedLines.join('<br>')
+    : '';
 };
 
 window.NFRewardLoaderReady = true;
