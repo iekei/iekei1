@@ -12,7 +12,17 @@ class WarSystems {
   static init() {
     this.patchNames(); this.mountChat();
     if (typeof CoreEngine !== 'undefined') CoreEngine.registerTickCallback(() => this.onTick());
+    this.bindMultiplayer();
     window.addEventListener('keydown', e => { if (e.key === 'Escape' && this.conference) this.closeConference(); });
+  }
+  static bindMultiplayer() {
+    if (typeof MultiplayerManager === 'undefined' || typeof MultiplayerManager.onMessage !== 'function' || this._messageBound) return;
+    const original = MultiplayerManager.onMessage.bind(MultiplayerManager);
+    MultiplayerManager.onMessage = (data, peer) => {
+      if (data?.type === 'chat') this.receiveChat({ ...data, from: data.from || '未知' });
+      return original(data, peer);
+    };
+    this._messageBound = true;
   }
   static name(tag) { return this.countryNames[tag] || tag || '不明'; }
   static stateName(st, fallback) { return this.provinceNames[st?.name] || st?.name || fallback || '州'; }
@@ -61,7 +71,7 @@ class WarSystems {
   static mountChat() {
     const host = document.getElementById('multiplayer-content'); if (!host) return;
     host.insertAdjacentHTML('beforeend', `<div class="faction-chat"><div class="chat-tabs"><button data-chat="all">全体</button><button data-chat="faction">陣営</button></div><div id="chat-messages" aria-live="polite"></div><form id="chat-form"><input id="chat-input" maxlength="240" placeholder="メッセージを入力" aria-label="チャットメッセージ"><button>送信</button></form></div>`);
-    host.querySelectorAll('[data-chat]').forEach(b => b.onclick = () => { this.chat.tab = b.dataset.chat; this.renderChat(); }); host.querySelector('#chat-form').onsubmit = e => { e.preventDefault(); const input = host.querySelector('#chat-input'); const text = input.value.trim(); if (!text) return; this.chat.messages.push({ text, from: CoreEngine.gameState.country, channel: this.chat.tab }); MultiplayerManager.broadcast({ type: 'chat', text, channel: this.chat.tab }); input.value = ''; this.renderChat(); }; this.renderChat();
+    host.querySelectorAll('[data-chat]').forEach(b => b.onclick = () => { this.chat.tab = b.dataset.chat; host.querySelectorAll('[data-chat]').forEach(x => x.setAttribute('aria-selected', String(x === b))); this.renderChat(); }); host.querySelectorAll('[data-chat]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.chat === this.chat.tab))); host.querySelector('#chat-form').onsubmit = e => { e.preventDefault(); const input = host.querySelector('#chat-input'); const text = input.value.trim(); if (!text) return; const message = { text, from: CoreEngine.gameState.country, channel: this.chat.tab, faction: CoreEngine.gameState.faction || CoreEngine.gameState.factionId || null }; this.chat.messages.push(message); if (typeof MultiplayerManager !== 'undefined') MultiplayerManager.broadcast({ type: 'chat', ...message }); input.value = ''; this.renderChat(); }; this.renderChat();
   }
   static receiveChat(message) { if (!message?.text) return; this.chat.messages.push(message); this.renderChat(); }
   static renderChat() { const box = document.getElementById('chat-messages'); if (!box) return; box.innerHTML = this.chat.messages.filter(m => this.chat.tab === 'all' || m.channel === 'faction').slice(-40).map(m => `<div><b>${this.name(m.from)}:</b> ${this.escape(m.text)}</div>`).join(''); box.scrollTop = box.scrollHeight; }

@@ -686,6 +686,7 @@
   <link rel="stylesheet" href="assets/topbar.css">
   <link rel="stylesheet" href="assets/research-tree.css">
   <link rel="stylesheet" href="assets/equipment-designer.css">
+  <link rel="stylesheet" href="assets/war-systems.css">
   </head>
 <body>
 <!-- ==================== START SCREEN (Scenario / Nation Select) ==================== -->
@@ -2086,7 +2087,7 @@ class WindowManager {
 
 // ==========================================================
 // Module 7: MapRenderer — HoI4風詳細マップ描画 (provinces.bmp + 州データ)
-// データソース: cbrzeczysz/hoi4-history (map/definition.csv, history/states/*.txt)
+// デー���ソース: cbrzeczysz/hoi4-history (map/definition.csv, history/states/*.txt)
 // ==========================================================
 class MapRenderer {
   static canvas = null;
@@ -3446,7 +3447,7 @@ class BattlePlanManager {
       if (unit.mission === 'ground') gs.warSupport = Math.min(100, gs.warSupport + 3);
       if (unit.mission === 'patrol') gs.airSupremacy = Math.min(100, (gs.airSupremacy || 0) + 10);
     }
-    CoreEngine.log('🏆 ' + unit.name + 'のミッション完了: ' + unit.mission);
+    CoreEngine.log('🏆 ' + unit.name + 'のミッシ��ン完了: ' + unit.mission);
     GameUI.notify('ミッション完了！ XP+15', 'success');
     MultiplayerManager.broadcast({ type: 'force_complete', force: unit.type, id: unit.id, mission: unit.mission });
   }
@@ -3960,7 +3961,7 @@ class PoliticsManager {
     const s = CoreEngine.gameState;
     const ws = PoliticsManager.LAWS[kind].indexOf(next) ? s.warSupport : 100;
     if (kind === 'conscription' && s.warSupport < next.wsReq) {
-      GameUI.notify('戦争協力度が不足しています (' + next.wsReq + '% 必要)。', 'alert'); return;
+      GameUI.notify('戦争協力度が不足しています (' + next.wsReq + '% 必���)。', 'alert'); return;
     }
     if (s.politicalPower < next.cost) { GameUI.notify('政治力が不足しています。', 'alert'); return; }
     s.politicalPower -= next.cost;
@@ -4692,7 +4693,7 @@ class MultiplayerManager {
       '<input type="text" class="mp-input" id="mp-room-id" placeholder="ルームコードを入力"></div>' +
       '<div style="margin-bottom:8px;"><label style="font-size:12px;color:var(--text-secondary);">パスワード: </label>' +
       '<input type="password" class="mp-input" id="mp-room-pass" placeholder="ルームパスワード (任意)"></div>' +
-      '<button class="mp-btn" onclick="MultiplayerManager.hostRoom()">ルーム作成 (ホスト)</button>' +
+      '<button class="mp-btn" onclick="MultiplayerManager.hostRoom()">ルー���作成 (ホスト)</button>' +
       '<button class="mp-btn" onclick="MultiplayerManager.joinRoom()">ルームに参加</button>' +
       '<button class="mp-btn" onclick="MultiplayerManager.disconnect()" style="background:var(--accent-red);">切断</button>' +
       '<div class="mp-status" id="mp-status">未接続</div>' +
