@@ -848,8 +848,11 @@ class IntelOperations {
     const s=CoreEngine.gameState;
     if(!s.intel.agency||s.intel.spies+s.intel.recruiting.length>=s.intel.level*2||s.politicalPower<75)return false;
     const choices = GameVisuals.operativeChoices(s.country, [...s.intel.roster, ...s.intel.recruiting.map(recruit => recruit.operativeId)]);
-    const person = operativeId ? choices.find(person => person.id === operativeId) : choices[0];
-    if (!person) return false;
+  const person = operativeId ? choices.find(person => person.id === operativeId) : choices[0];
+  if (!person || (person.country && person.country !== s.country)) {
+    GameUI.notify('自国所属の諜報員のみ採用できます。', 'alert');
+    return false;
+  }
     s.politicalPower-=75;s.intel.recruiting.push({days:30,operativeId:person.id});IntelOperations.render();return true;
   }
   static selectCandidate(id) {

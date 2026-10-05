@@ -348,10 +348,10 @@ class EquipmentDesigner {
   { id: 'engine', name: '機関', options: [{ id: 'steam', name: '蒸気タービン', cost: 14, weight: 4, power: 16, engineCapacity: 6 }, { id: 'diesel', name: '艦用ディーゼル', cost: 12, weight: 3, power: 11, engineCapacity: 5 }] }
   ]},
   plane: { label: '航空機', xpKey: 'air', hulls: [
-  { id: 'fighter', name: '戦闘機機体', cost: 10, capacity: 3, weight: 4, baseSpeed: 520 }, { id: 'bomber', name: '爆撃機機体', cost: 20, capacity: 6, weight: 9, baseSpeed: 410 }, { id: 'carrier', name: '艦上機機体', cost: 18, capacity: 4, weight: 6, baseSpeed: 460 }],
+  { id: 'fighter', name: '戦闘機機体', cost: 10, capacity: 3, weight: 4, baseSpeed: 520, requires: 'aircraft_technology' }, { id: 'bomber', name: '爆撃機機体', cost: 20, capacity: 6, weight: 9, baseSpeed: 410, requires: 'air_bomber_technology' }, { id: 'carrier', name: '艦上機機体', cost: 18, capacity: 4, weight: 6, baseSpeed: 460, requires: 'carrier_technology' }],
   slots: [
-  { id: 'engine', name: 'エンジン', options: [{ id: 'e1', name: '標準エンジン', cost: 10, weight: 2, power: 14, engineCapacity: 3 }, { id: 'e2', name: '高出力エンジン', cost: 18, weight: 3, power: 24, engineCapacity: 6 }] },
-  { id: 'weapon', name: '武装', options: [{ id: 'mg', name: '機銃強化', cost: 10, weight: 1, attack: 12, role: '制空' }, { id: 'rocket', name: 'ロケット弾', cost: 16, weight: 2, attack: 18, role: '対地攻撃' }, { id: 'torpedo', name: '航空魚雷', cost: 18, weight: 3, attack: 21, role: '対艦攻撃' }] },
+  { id: 'engine', name: 'エンジン', options: [{ id: 'e1', name: '標準エンジン', cost: 10, weight: 2, power: 14, engineCapacity: 3, requires: 'aircraft_engine_1' }, { id: 'e2', name: '高出力エンジン', cost: 18, weight: 3, power: 24, engineCapacity: 6, requires: 'aircraft_engine_2' }] },
+  { id: 'weapon', name: '武装', options: [{ id: 'mg', name: '機銃強化', cost: 10, weight: 1, attack: 12, role: '制空', requires: 'fighter_weapons_1' }, { id: 'rocket', name: 'ロケット弾', cost: 16, weight: 2, attack: 18, role: '対地攻撃', requires: 'air_ground_support' }, { id: 'torpedo', name: '航空魚雷', cost: 18, weight: 3, attack: 21, role: '対艦攻撃', requires: 'naval_strike_technology' }] },
   { id: 'armor', name: '防弾', options: [{ id: 'plate', name: '防弾鋼板', cost: 10, weight: 2, defense: 12 }, { id: 'none3', name: 'なし', cost: 0, weight: 0 }] },
   { id: 'fuel', name: '燃料タンク', options: [{ id: 'long', name: '増槽', cost: 12, weight: 2, defense: 3, role: '長距離' }, { id: 'none4', name: '標準燃料', cost: 0, weight: 0 }] }
   ]}
@@ -513,9 +513,21 @@ class BlueprintRenderer {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     const W = canvas.width, H = canvas.height;
-    // ---- 青い下地 + 方眼 ----
+    // ---- 生成した実物風ブループリントを下地にして方眼を重ねる ----
+    const blueprintImage = BlueprintRenderer.image || (BlueprintRenderer.image = (() => {
+      const image = new Image();
+      image.crossOrigin = 'anonymous';
+      image.src = 'assets/blueprints/aircraft-blueprint.png';
+      image.onload = () => { const current = document.getElementById('bp-canvas'); if (current) BlueprintRenderer.draw(cat, draft, current); };
+      return image;
+    })());
     ctx.fillStyle = '#14406e';
     ctx.fillRect(0, 0, W, H);
+    if (cat === 'plane' && blueprintImage.complete && blueprintImage.naturalWidth) {
+      ctx.globalAlpha = 0.72;
+      ctx.drawImage(blueprintImage, 0, 0, W, H);
+      ctx.globalAlpha = 1;
+    }
     ctx.strokeStyle = 'rgba(120,175,225,0.22)';
     ctx.lineWidth = 1;
     for (let x = 20; x < W; x += 20) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
