@@ -151,56 +151,101 @@ window.formatCompletionReward = function rewardText(reward) {
   }
 
   // Paradox Effectの日本語翻訳辞書
+ // Paradox Effectの日本語翻訳辞書（拡張版）
   const labels = {
+    // --- 政治・国家パラメータ ---
     add_political_power: '政治力',
     add_stability: '安定度',
     add_war_support: '戦争協力度',
     add_command_power: '指揮力',
+    add_popularity: '政党支持率',
+    set_party_popularity: '政党支持率を変更',
+    set_politics: '政治体制の変更',
+    retire_country_leader: '国家指導者の引退',
+    create_country_leader: '新しい国家指導者',
+    add_country_leader_trait: '指導者特性を追加',
+    remove_country_leader_trait: '指導者特性を削除',
     add_ideas: '国家精神を追加',
     remove_ideas: '国家精神を削除',
     swap_ideas: '国家精神の変更',
-    add_popularity: '政党支持率',
-    set_party_popularity: '政党支持率を変更',
-    retire_country_leader: '国家指導者の引退',
+    add_timed_idea: '期間限定の国家精神',
     add_named_threat: '国際緊張度',
     add_threat: '国際緊張度',
+
+    // --- 軍事・経験値・部隊 ---
     add_army_experience: '陸軍経験値',
     army_experience: '陸軍経験値',
     add_navy_experience: '海軍経験値',
     navy_experience: '海軍経験値',
     add_air_experience: '空軍経験値',
     air_experience: '空軍経験値',
+    add_manpower: '人的資源',
+    load_oob: '部隊の展開',
+    create_unit: '師団の編成',
+    add_ace: 'エースパイロット',
+    create_corps_commander: '軍団長を生成',
+    create_field_marshal: '元帥を生成',
+    create_navy_leader: '提督を生成',
+    add_corps_commander_role: '将軍職の付与',
+    add_field_marshal_role: '元帥職の付与',
+
+    // --- 研究・技術・ドクトリン ---
     add_research_slot: '研究スロット',
+    set_research_slots: '研究スロット数を設定',
     add_tech_bonus: '研究ボーナス',
     add_doctrine_cost_reduction: 'ドクトリン割引',
-    set_technology: '技術の獲得',
+    set_technology: '技術を獲得',
+    give_technology: '技術の供与',
+
+    // --- 外交・領土・戦争 ---
     create_wargoal: '開戦事由を作成',
+    declare_war_on: '宣戦布告',
     add_state_claim: '州の請求権',
     add_state_core: '中核州を追加',
     remove_state_core: '中核州を削除',
-    declare_war_on: '宣戦布告',
     puppet: '傀儡国化',
     annex_country: '併合',
     white_peace: '白紙和平',
+    create_faction: '陣営の設立',
     add_to_faction: '陣営に参加',
     remove_from_faction: '陣営から離脱',
     dismantle_faction: '陣営の解散',
-    give_guarantee: '独立保証',
     leave_faction: '陣営を離脱',
+    give_guarantee: '独立保証',
+    send_equipment: '装備の供与',
     may_provoke_hostility: '敵対的行動の解禁',
+
+    // --- 建設・経済・資源 ---
     add_offsite_building: 'オフサイト工場',
     add_extra_state_shared_building_slots: '追加建築スロット',
     add_building_construction: '建設',
     add_resource: '資源を追加',
     add_equipment_to_stockpile: '備蓄に装備を追加',
-    add_manpower: '人的資源',
-    random_owned_controlled_state: 'ランダムな支配州',
-    every_owned_state: '全ての所有州',
-    load_oob: '部隊の展開',
-    create_unit: '師団の編成',
-    add_ace: 'エースパイロット'
-  };
 
+    // 施設タイプ（building指定用）
+    industrial_complex: '民需工場',
+    arms_factory: '軍需工場',
+    dockyard: '造船所',
+    synthetic_refinery: '人造石油施設',
+    infrastructure: 'インフラ',
+    air_base: '空軍基地',
+    naval_base: '海軍基地',
+    bunker: '要塞',
+    coastal_bunker: '沿岸要塞',
+    anti_air_building: '対空砲',
+    radar_station: 'レーダー基地',
+    fuel_silo: '燃料サイロ',
+    nuclear_reactor: '原子炉',
+    rocket_site: 'ロケット発射場',
+
+    // --- スコープ・イベント ---
+    random_owned_controlled_state: 'ランダムな支配州',
+    every_owned_state: 'すべての所有州',
+    random_neighbor_state: '隣接するランダムな州',
+    country_event: '国家イベントが発生',
+    news_event: 'ニュースイベントが発生'
+  };
+  
   if (reward.type === 'add_tech_bonus') {
     const category = reward.category || '全般';
     const bonus = reward.bonus ? ` ${(Number(reward.bonus) * 100).toFixed(0)}%` : '';
