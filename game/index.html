@@ -659,6 +659,26 @@
     /* --- Layout Wrapper --- */
     #game-root { display: flex; flex-direction: column; height: 100vh; }
     #operating-screen { flex: 1; overflow: hidden; position: relative; }
+  .war-overlay { position: fixed; inset: 0; z-index: 9000; display: grid; place-items: center; padding: 16px; background: rgba(4,8,12,.82); }
+  .war-window { width: min(760px, 96vw); max-height: 88vh; overflow: auto; background: var(--bg-panel); border: 2px solid var(--text-gold); box-shadow: 0 16px 48px #000; color: var(--text-primary); }
+  .war-window header, .war-window footer, .war-score { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border-mil); }
+  .war-window h2 { margin: 0; color: var(--text-gold); font-size: 20px; }
+  .war-score { color: var(--text-secondary); }
+  .war-score b { color: #e5bf58; font-size: 17px; }
+  .peace-actions { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 16px; }
+  .peace-actions button, .war-window footer button, .chat-tabs button, #chat-form button { background: var(--bg-panel-light); border: 1px solid var(--border-mil); color: var(--text-primary); padding: 7px 10px; cursor: pointer; }
+  .peace-actions button:hover, .war-window footer button:hover, .chat-tabs button:hover { border-color: var(--text-gold); }
+  .peace-states { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 6px; padding: 0 16px 16px; }
+  .peace-state { display: flex; justify-content: space-between; gap: 8px; background: #202a31; border: 1px solid #3a4b55; color: var(--text-primary); padding: 9px; text-align: left; cursor: pointer; }
+  .peace-state.selected { border-color: var(--text-gold); background: #4a3d1d; }
+  .peace-state small { color: var(--text-gold); }
+  .war-window footer { border-top: 1px solid var(--border-mil); border-bottom: 0; }
+  .war-confirm { background: #5b4520 !important; border-color: var(--text-gold) !important; }
+  .faction-chat { margin-top: 18px; border: 1px solid var(--border-mil); background: var(--bg-panel-light); }
+  .chat-tabs { display: flex; gap: 4px; padding: 8px; border-bottom: 1px solid var(--border-mil); }
+  #chat-messages { min-height: 180px; max-height: 240px; overflow-y: auto; padding: 10px; line-height: 1.7; font-size: 12px; }
+  #chat-form { display: flex; gap: 6px; padding: 8px; border-top: 1px solid var(--border-mil); }
+  #chat-input { flex: 1; min-width: 0; background: #121a20; border: 1px solid var(--border-mil); color: var(--text-primary); padding: 7px; }
   </style>
   <link rel="stylesheet" href="military-theme.css">
   <link rel="stylesheet" href="strategy.css">
@@ -880,6 +900,7 @@
 <script src="assets/research-icons.js"></script>
 <script src="assets/research-i18n.js"></script>
 <script src="assets/research-tree.js"></script>
+<script src="war-systems.js"></script>
 <script>
 /* ================================================================
    JavaScript Module Architecture
@@ -1919,7 +1940,7 @@ class NuclearManager {
 }
 
 // ==========================================================
-// Module 6: WindowManager — OS風ウィンドウ管理（ドラッグ・リサイズ・zIndex）
+// Module 6: WindowManager — OS風ウィンドウ管���（ドラッグ・リサイズ・zIndex）
 // ==========================================================
 class WindowManager {
   static windows = new Map(); // tab -> win object
@@ -3314,7 +3335,7 @@ class BattlePlanManager {
   }
 
   static execute(armyId) {
-    // 海軍/空軍: ミッション実行 (哨戒・制空・攻撃)
+    // 海軍/空軍: ミッション実行 (哨戒・制空���攻撃)
     if (typeof armyId === 'string' && (armyId.startsWith('nav') || armyId.startsWith('air'))) {
       const unit = [...BattlePlanManager.navy, ...BattlePlanManager.air].find(u => u.id === armyId);
       if (!unit) return;
@@ -3996,7 +4017,7 @@ class PoliticsManager {
       if (s.nationSystems.mefoIssued) spirits.push({ name: 'MEFO手形 (有効)', desc: '建設コスト -20%・特別研究促進' });
       if (s.nationSystems.paranoia !== undefined) spirits.push({ name: 'スターリンのパラノイア (' + Math.round(s.nationSystems.paranoia) + ')', desc: '高まると将軍カードが粛清されるリスク' });
       if (s.nationSystems.armyInfluence !== undefined) spirits.push({ name: '陸海軍の対立 (陸軍 ' + Math.round(s.nationSystems.armyInfluence) + ')', desc: '陸海軍の影響力バランスが補正に影響' });
-      if (s.nationSystems.congressDem !== undefined) spirits.push({ name: '連邦議会 (与党 ' + Math.round(s.nationSystems.congressDem) + '議席)', desc: '議会多数派の安定度ボーナス' });
+      if (s.nationSystems.congressDem !== undefined) spirits.push({ name: '連邦議会 (与党 ' + Math.round(s.nationSystems.congressDem) + '議席)', desc: '議会多数派���安定度ボーナス' });
       if (s.nationSystems.polarization !== undefined) spirits.push({ name: '政治的二極化 (' + Math.round(s.nationSystems.polarization) + ')', desc: '安定度の変動を増幅' });
     }
     if (s.atWar.length > 0) spirits.push({ name: '戦時中 (' + s.atWar.join(', ') + ')', desc: '戦争協力度ボーナス・経済ペナルティ' });
@@ -4176,7 +4197,7 @@ class DiplomacyManager {
     DiplomacyManager.renderCountryList();
   }
 
-  // ---- 国リスト部分のみ再描画 (検索時にフォーカスを保つ) ----
+  // ---- 国リスト部分の���再描画 (検索時にフォーカスを保つ) ----
   static renderCountryList() {
     const listEl = document.getElementById('diplo-country-list');
     if (!listEl) return;
@@ -4262,7 +4283,7 @@ class DiplomacyManager {
     DiplomacyManager.render();
   }
 
-  // ---- 軍事通行券の要請 (承諾すれば自軍がその国を通過できる) ----
+  // ---- 軍事通行券の要請 (承諾すれば自軍がその国を通過��きる) ----
   static requestMilitaryAccess(countryId) {
     const s = CoreEngine.gameState;
     if (s.militaryAccess[countryId]) { GameUI.notify('既に軍事通行券を承諾済みです。', 'alert'); return; }
@@ -4803,7 +4824,7 @@ class MultiplayerManager {
   static onData(data, fromPeer) {
     if (!data || !data.type) return;
     const conn0 = MultiplayerManager.connections[fromPeer];
-    // ホスト側: パスワード認証が済んでいない接続からは認証メッセージ以外を破棄
+    // ホスト側: パス���ード認証が済んでいない接続からは認証メッセージ以外を破棄
     if (conn0 && conn0.authOk === false && data.type !== 'auth_resp') return;
     if (StrategyGame.onMessage(data, fromPeer)) return;
     switch (data.type) {
@@ -5542,7 +5563,7 @@ class UniqueNationSystems {
     let html = '<div class="mp-panel"><h3>📜 MEFO手形 (メフォ紙幣)</h3>' +
       '<p style="font-size:12px;color:var(--text-secondary);">再軍備資金を隠蔽した決済手形。発行すると24ヶ月間、特別研究施設の建設コストが20%減少します (期限が来ると自動失効)。</p>';
     if (st.mefoIssued) {
-      html += '<p style="color:var(--accent-green);font-size:13px;">✔ 発行中 — 残り約' + Math.ceil(st.mefoMonthsLeft / 30) + 'ヶ月 / 建設コスト -20%</p>';
+      html += '<p style="color:var(--accent-green);font-size:13px;">✔ ��行中 — 残り約' + Math.ceil(st.mefoMonthsLeft / 30) + 'ヶ月 / 建設コスト -20%</p>';
     } else {
       html += '<button class="mp-btn" onclick="UniqueNationSystems.issueMefo()">MEFO手形を発行 (政治力 50)</button>';
     }
