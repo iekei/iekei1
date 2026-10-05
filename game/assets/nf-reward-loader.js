@@ -115,6 +115,9 @@ window.NFRewardLoader = {
         while ((innerMatch = innerRegex.exec(raw))) {
           reward[innerMatch[1]] = this.scalar(innerMatch[2]);
         }
+        // Paradoxの building = { building = bunker level = 3 } は、
+        // 表示・実行側で扱いやすい共通の建設エフェクトへ正規化する。
+        if (type === 'building' && reward.building) reward.type = 'add_building_construction';
         rewards.push(reward);
       } else {
         rewards.push({ 
@@ -137,6 +140,9 @@ window.NFRewardLoader = {
 // -----------------------------------------------------------------------------
 window.formatCompletionReward = function rewardText(reward) {
   if (!reward || !reward.type) return '';
+  const configured = window.HOI4EffectsConfig?.formatEffect?.(reward);
+  if (configured) return configured.text;
+
 
   // 内部システムフラグを除外
   const ignoreTypes = new Set([
@@ -206,7 +212,7 @@ window.formatCompletionReward = function rewardText(reward) {
     puppet: '傀儡国化',
     annex_country: '併合',
     white_peace: '白紙和平',
-    create_faction: '陣営の設立',
+    create_faction: '陣���の設立',
     add_to_faction: '陣営に参加',
     remove_from_faction: '陣営から離脱',
     dismantle_faction: '陣営の解散',

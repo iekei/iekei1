@@ -20,6 +20,9 @@
     remove_ideas: { label: '国家精神を削除', unit: '', valueKey: 'idea' },
     add_research_slot: { label: '研究スロット', unit: '', signed: true },
     add_tech_bonus: { label: '研究ボーナス', unit: '%', valueKey: 'category' },
+    add_building_construction: { label: '建設', unit: 'レベル', valueKey: 'building' },
+    building: { label: '建設', unit: 'レベル', valueKey: 'building' },
+    add_offsite_building: { label: '施設を追加', unit: '', valueKey: 'building' },
     annex_country: { label: '国家を併合', unit: '', valueKey: 'country' },
     annex_target: { label: '対象国を占領', unit: '', valueKey: 'country' }
   };
@@ -31,7 +34,11 @@
     add_tech_bonus: '研究ボーナス', annex_country: '国家を併合', annex_target: '対象国を占領',
     arms_factory: '軍需工場', civ_factory: '民需工場', dockyard: '海軍造船所', add_opinion_modifier: '関係改善補正',
     set_country_flag: '国家フラグを設定', clr_country_flag: '国家フラグを解除', set_global_flag: '世界フラグを設定',
-    GER_flag: 'ドイツ国家フラグ', JAP: '日本', AUS: 'オーストリア', CZE: 'チェコスロバキア'
+    GER_flag: 'ドイツ国家フラグ', JAP: '日本', AUS: 'オーストリア', CZE: 'チェコスロバキア',
+    building: '建設', level: 'レベル', state: '州', states: '州', owner: '所有者',
+    GER_west_wall_forts: 'ドイツ西部国境要塞', GER_west_wall_tt: '西の壁',
+    bunker: '陸軍要塞', coastal_bunker: '沿岸要塞', industrial_complex: '民需工場',
+    arms_factory: '軍需工場', dockyard: '海軍造船所', infrastructure: 'インフラ'
   };
 
   function translateText(text) {
@@ -52,6 +59,12 @@
       return { text: `・${definition.label}: ${reward.category || '全般'}${Number.isFinite(bonus) ? ` ${bonus * 100}%` : ''}`, color: bonus < 0 ? '#ef4444' : '#22c55e' };
     }
     if (definition.valueKey === 'idea') return { text: `・${definition.label}: ${reward.idea || reward.value || ''}`.replace(/: $/, ''), color: reward.type === 'remove_ideas' ? '#ef4444' : '#22c55e' };
+    if (definition.valueKey === 'building') {
+      const building = reward.building || reward.type;
+      const level = Number(reward.level ?? reward.value ?? reward.amount ?? 1);
+      const label = fallbackTranslations[building] || building.replace(/_/g, ' ');
+      return { text: `・${label}を${Number.isFinite(level) ? `+${level}` : ''}建設`, color: '#22c55e' };
+    }
     if (definition.valueKey === 'country') {
       const targets = reward.country || reward.targetCountry || reward.countries || reward.targets;
       const targetText = (Array.isArray(targets) ? targets : [targets]).filter(Boolean).join(', ');
@@ -98,6 +111,17 @@
       case 'add_air_experience': gameState.airExperience = (gameState.airExperience || 0) + (Number.isFinite(value) ? value : 0); if (gameState.xp) gameState.xp.air = (gameState.xp.air || 0) + value; break;
       case 'add_ideas': gameState.ideas = Array.isArray(gameState.ideas) ? gameState.ideas : []; if (reward.idea && !gameState.ideas.includes(reward.idea)) gameState.ideas.push(reward.idea); break;
       case 'remove_ideas': if (Array.isArray(gameState.ideas)) gameState.ideas = gameState.ideas.filter(idea => idea !== reward.idea); break;
+      case 'building':
+      case 'add_building_construction':
+      case 'add_offsite_building': {
+        const building = reward.building || reward.type;
+        const level = Number(reward.level ?? reward.value ?? reward.amount ?? 1);
+        gameState.buildings = gameState.buildings || {};
+        gameState.buildings[building] = (gameState.buildings[building] || 0) + (Number.isFinite(level) ? level : 0);
+        if (building === 'bunker') gameState.landFortLevel = (gameState.landFortLevel || 0) + (Number.isFinite(level) ? level : 0);
+        if (building === 'coastal_bunker') gameState.coastalFortLevel = (gameState.coastalFortLevel || 0) + (Number.isFinite(level) ? level : 0);
+        break;
+      }
       case 'annex_country':
       case 'annex_target': annexCountries(gameState, reward); break;
       case 'add_research_slot': gameState.researchSlots = (gameState.researchSlots || 0) + (Number.isFinite(value) ? value : 0); break;

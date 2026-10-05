@@ -68,11 +68,7 @@ class NationalFocusManager {
       if (!reward || !reward.type) return;
       const applyEffect = window.HOI4EffectsConfig?.applyEffect || window.applyEffect;
       if (typeof applyEffect === 'function') applyEffect(s, reward);
-      const value = Number(reward.value || reward.amount || 0);
-      if (reward.type === 'add_research_slot') s.researchSlots = (s.researchSlots || 0) + value;
-      else if (reward.type === 'add_navy_experience') s.xp.navy = Math.min(9999, (s.xp.navy || 0) + value);
-      else if (reward.type === 'add_air_experience') s.xp.air = Math.min(9999, (s.xp.air || 0) + value);
-      else if (reward.type === 'add_tech_bonus') {
+      if (reward.type === 'add_tech_bonus') {
         s.techBonuses = s.techBonuses || [];
         s.techBonuses.push({ category: reward.category, bonus: reward.bonus, uses: reward.uses });
       }
