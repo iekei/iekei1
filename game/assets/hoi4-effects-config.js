@@ -24,7 +24,9 @@
     building: { label: '建設', unit: 'レベル', valueKey: 'building' },
     add_offsite_building: { label: '施設を追加', unit: '', valueKey: 'building' },
     annex_country: { label: '国家を併合', unit: '', valueKey: 'country' },
-    annex_target: { label: '対象国を占領', unit: '', valueKey: 'country' }
+    annex_target: { label: '対象国を占領', unit: '', valueKey: 'country' },
+    add_world_tension: { label: '世界の緊張度', unit: '%', signed: true },
+    add_building_construction: { label: '建設', unit: 'レベル', valueKey: 'building' }
   };
 
   const fallbackTranslations = {
@@ -125,6 +127,7 @@
       case 'annex_country':
       case 'annex_target': annexCountries(gameState, reward); break;
       case 'add_research_slot': gameState.researchSlots = (gameState.researchSlots || 0) + (Number.isFinite(value) ? value : 0); break;
+      case 'add_world_tension': gameState.worldTension = Math.max(0, Math.min(100, (gameState.worldTension || 0) + (Number.isFinite(value) ? value : 0))); break;
       default: break;
     }
     return gameState;
