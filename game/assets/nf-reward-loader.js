@@ -146,7 +146,7 @@ window.formatCompletionReward = function rewardText(reward) {
     'sound_effect', 'log', 'set_rule', 'save_event_target_as'
   ]);
 
-  if (ignoreTypes.has(reward.type) || /^[A-Z]{3}$/.test(reward.type) \vert{}\vert{} /^[0-9]+$/.test(reward.type)) {
+  if (ignoreTypes.has(reward.type) || /^[A-Z]{3}$/.test(reward.type) || /^[0-9]+$/.test(reward.type)) {
     return null;
   }
 
