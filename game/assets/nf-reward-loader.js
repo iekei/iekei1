@@ -13,8 +13,10 @@ window.NFRewardLoader = {
   cache: new Map(),
   async enrich(country, focuses) {
     if (!Array.isArray(focuses) || !focuses.length) return focuses || [];
+    window.dispatchEvent(new CustomEvent('nf-reward-debug', { detail: { message: `報酬マッピング開始: ${country}`, data: { focuses: focuses.length } } }));
     try {
       const rewards = await this.load(country);
+      window.dispatchEvent(new CustomEvent('nf-reward-debug', { detail: { message: `報酬マッピング取得完了: ${country}`, data: { availableRewards: rewards.size } } }));
       return focuses.map(focus => {
         const id = focus.id || focus.focus_id;
         return focus.completion_rewards?.length || !rewards.has(id)
@@ -23,6 +25,7 @@ window.NFRewardLoader = {
       });
     } catch (error) {
       console.warn('[NFRewardLoader] 達成報酬の外部読み込みをスキップ:', error.message);
+      window.dispatchEvent(new CustomEvent('nf-reward-debug', { detail: { message: '報酬マッピング取得失敗', data: { error: error.message } } }));
       return focuses;
     }
   },
