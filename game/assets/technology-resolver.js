@@ -1,29 +1,29 @@
+/* Technology image lookup.
+ * ResearchIcons owns category and mapping resolution; this helper only exposes
+ * the same local technology directory for other screens without overriding it.
+ */
 (function () {
   'use strict';
+  const base = 'assets/technology';
+  const normalize = value => String(value || '').replace(/^tech_/i, '').trim();
+  const index = () => (typeof GameAssetData !== 'undefined' && Array.isArray(GameAssetData.technology))
+    ? GameAssetData.technology
+    : [];
+  const find = id => {
+    const wanted = normalize(id).toLowerCase();
+    return index().find(file => file.replace(/\\.png$/i, '').toLowerCase() === wanted) || null;
+  };
   const TechnologyAssets = {
-    base: 'assets/technology',
-    country(country, id) {
-      const tag = String(country || window.CoreEngine?.gameState?.country || 'generic').toUpperCase();
-      const key = encodeURIComponent(id);
-      return `${this.base}/${tag}/${key}.png`;
+    base,
+    resolve(country, id) {
+      const file = find(id);
+      return { src: file ? `${base}/${file}` : `${base}/${encodeURIComponent(normalize(id))}.png`, file };
     },
-    generic(id) { return `${this.base}/generic/${encodeURIComponent(id)}.png`; },
-    resolve(country, id) { return { src: this.country(country, id), fallback: this.generic(id) }; },
     apply(image, country, id) {
       const asset = this.resolve(country, id);
       image.src = asset.src;
-      image.onerror = () => { image.onerror = null; image.src = asset.fallback; };
       return image;
     }
   };
   window.TechnologyAssets = TechnologyAssets;
-  if (window.ResearchIcons) {
-    const original = window.ResearchIcons.resolve;
-    window.ResearchIcons.resolve = function (tech, category) {
-      const result = original ? original.call(this, tech, category) : { src: TechnologyAssets.generic(tech.id), key: tech.id, source: category };
-      const country = window.CoreEngine?.gameState?.country;
-      const paths = TechnologyAssets.resolve(country, tech.id);
-      return { ...result, src: paths.src, github: paths.fallback, key: tech.id };
-    };
-  }
 })();

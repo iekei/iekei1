@@ -65,6 +65,9 @@ body {
 .action-btn.danger:hover { background: #f85149; }
 
 .line-details { font-size: 12px; color: #c9d1d9; display: flex; flex-direction: column; gap: 4px; }
+.factory-allocation { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin-top: 5px; padding: 5px 7px; background: #11161d; border: 1px solid #30363d; border-radius: 4px; }
+.factory-icon { display: inline-grid; place-items: center; width: 22px; height: 22px; color: #e3b341; background: #2b2414; border: 1px solid #8b6b24; border-radius: 3px; font-size: 14px; }
+.factory-count { margin-left: 4px; color: #e3b341; font-weight: 700; font-size: 11px; }
 .factory-controls { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
 .factory-controls button {
   background: #21262d; color: #c9d1d9; border: 1px solid #30363d; width: 24px; height: 24px; border-radius: 4px; cursor: pointer; font-weight: bold;
@@ -300,6 +303,9 @@ body {
 .action-btn.danger:hover { background: #f85149; }
 
 .line-details { font-size: 12px; color: #c9d1d9; display: flex; flex-direction: column; gap: 4px; }
+.factory-allocation { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin-top: 5px; padding: 5px 7px; background: #11161d; border: 1px solid #30363d; border-radius: 4px; }
+.factory-icon { display: inline-grid; place-items: center; width: 22px; height: 22px; color: #e3b341; background: #2b2414; border: 1px solid #8b6b24; border-radius: 3px; font-size: 14px; }
+.factory-count { margin-left: 4px; color: #e3b341; font-weight: 700; font-size: 11px; }
 .factory-controls { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
 .factory-controls button {
   background: #21262d; color: #c9d1d9; border: 1px solid #30363d; width: 24px; height: 24px; border-radius: 4px; cursor: pointer; font-weight: bold;

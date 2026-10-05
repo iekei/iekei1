@@ -161,6 +161,14 @@
     .tech-node .tn-year { font-size: 9px; color: var(--text-secondary); }
     .tech-node .tn-svg { margin: 2px auto; }
     .tech-node .tn-progress { font-size: 9px; color: var(--text-gold); margin-top: 2px; }
+    .tech-node .tech-icon { width: 54px; height: 54px; object-fit: contain; display: block; margin: 2px auto 5px; }
+    .tech-node .tn-title { display: block; min-height: 25px; }
+    #game-help { position: fixed; right: 16px; bottom: 16px; z-index: 1200; width: min(340px, calc(100vw - 32px)); background: rgba(20,26,33,.97); border: 1px solid var(--text-gold); border-radius: 8px; box-shadow: 0 8px 28px rgba(0,0,0,.55); color: var(--text-primary); padding: 12px; }
+    #game-help[hidden] { display: none; }
+    #game-help h3 { color: var(--text-gold); font-size: 14px; margin-bottom: 8px; }
+    #game-help ul { padding-left: 18px; color: var(--text-secondary); font-size: 12px; line-height: 1.7; }
+    #game-help-close { float: right; border: 0; background: none; color: var(--text-secondary); cursor: pointer; font-size: 18px; }
+    #game-help-toggle { position: fixed; right: 16px; bottom: 16px; z-index: 1199; border: 1px solid var(--text-gold); background: var(--bg-panel); color: var(--text-gold); border-radius: 999px; padding: 8px 12px; cursor: pointer; }
     .research-slots { display: flex; gap: 6px; padding: 4px 8px; background: var(--bg-panel); flex-shrink: 0; }
     .research-slot {
       background: var(--bg-panel-light); border: 1px solid var(--border-mil); border-radius: 4px;
@@ -686,6 +694,7 @@
   <link rel="stylesheet" href="assets/topbar.css">
   <link rel="stylesheet" href="assets/research-tree.css">
   <link rel="stylesheet" href="assets/equipment-designer.css">
+  <link rel="stylesheet" href="assets/war-systems.css">
   </head>
 <body>
 <!-- ==================== START SCREEN (Scenario / Nation Select) ==================== -->
@@ -698,7 +707,19 @@
   </div>
 </div>
 
-<div id="game-root">
+  <div id="game-root">
+  <button id="game-help-toggle" type="button" aria-controls="game-help" aria-expanded="false">操作方法</button>
+  <aside id="game-help" hidden aria-label="ゲーム操作方法">
+    <button id="game-help-close" type="button" aria-label="操作方法を閉じる">×</button>
+    <h3>操作方法</h3>
+    <ul>
+      <li><strong>画面を開く:</strong> 上部のメニューから研究・外交・生産などを選択</li>
+      <li><strong>マップ:</strong> 左ドラッグで移動、ホイールでズーム、州をクリックで詳細</li>
+      <li><strong>チャット:</strong> マルチプレイ画面の全体／陣営タブを切替</li>
+      <li><strong>研究:</strong> 技術ノードをクリックして詳細を確認し、研究を開始</li>
+      <li><strong>時間:</strong> 上部の一時停止・速度ボタンで進行を変更</li>
+    </ul>
+  </aside>
   <!-- ==================== TOP BAR ==================== -->
   <header id="top-bar" aria-label="国家ステータスと時間操作">
     <div class="stats-group" id="stats-group">
@@ -897,10 +918,12 @@
 <script src="assets/image-loader.js"></script>
 <script src="assets/topbar-icons.js"></script>
 <script src="assets/topbar-ui.js"></script>
-<script src="assets/research-icons.js"></script>
-<script src="assets/research-i18n.js"></script>
-<script src="assets/research-tree.js"></script>
-<script src="war-systems.js"></script>
+  <script src="assets/research-icons.js"></script>
+  <script src="assets/technology-resolver.js"></script>
+  <script src="assets/research-i18n.js"></script>
+  <script src="assets/research-tree.js"></script>
+  <script src="assets/game-help.js"></script>
+  <script src="war-systems.js"></script>
 <script>
 /* ================================================================
    JavaScript Module Architecture
@@ -917,7 +940,7 @@
    ================================================================ */
 
 // ==========================================================
-// Module 1: DataFetcher — 動的データフェッチ (hoi4-history + local)
+// Module 1: DataFetcher �� 動的データフェッチ (hoi4-history + local)
 // ==========================================================
 class DataFetcher {
   static HOI4_REPO_RAW = 'https://raw.githubusercontent.com/cbrzeczysz/hoi4-history/main';
@@ -1325,7 +1348,7 @@ class CoreEngine {
     MultiplayerManager.broadcast({ type: 'speed', speed: speed });
   }
 
-  // 他プレイヤーからの速度変更を強制受信 (ホストが送信)
+  // 他プレイヤーからの速���変更を強制受信 (ホストが送信)
   static remoteSetSpeed(speed) {
     CoreEngine.gameState.speed = speed;
     CoreEngine.gameState.paused = (speed === 0);
@@ -2086,7 +2109,7 @@ class WindowManager {
 
 // ==========================================================
 // Module 7: MapRenderer — HoI4風詳細マップ描画 (provinces.bmp + 州データ)
-// データソース: cbrzeczysz/hoi4-history (map/definition.csv, history/states/*.txt)
+// デー���ソース: cbrzeczysz/hoi4-history (map/definition.csv, history/states/*.txt)
 // ==========================================================
 class MapRenderer {
   static canvas = null;
@@ -3100,7 +3123,7 @@ class BattlePlanManager {
   static startArrowDrag(worldPt) {
     if (BattlePlanManager.activeForce === 'army') {
       const army = BattlePlanManager.selectedArmy();
-      if (!army) { GameUI.notify('軍集団パネルから軍集団を選択してください。', 'alert'); return; }
+      if (!army) { GameUI.notify('軍集団パネルから���集団を選択してください。', 'alert'); return; }
     } else {
       const unit = BattlePlanManager.selectedUnit();
       if (!unit) { GameUI.notify('パネルから部隊を選択してください。', 'alert'); return; }
@@ -3149,7 +3172,7 @@ class BattlePlanManager {
     // 制海権の確認 (25%以上必要)
     if (!army.divisions.length) { GameUI.notify('上陸する師団を配属してください。', 'alert'); return; }
     const sup = CoreEngine.gameState.navalSupremacy || 0;
-    if (sup < 25) { GameUI.notify('⚓ 制海権が不足しています (25%以上必要・現在' + Math.floor(sup) + '%)。海軍の哨戒で制海権を確保してください。', 'alert'); return; }
+    if (sup < 25) { GameUI.notify('⚓ 制海権が不足しています (25%以上必要・現在' + Math.floor(sup) + '%)。海軍の哨��で制海権を確保してください。', 'alert'); return; }
     // 上陸開始 (陸路接続は不要 — これが強襲上陸)
     const c = MapRenderer.stateCenter.get(String(sid)) || wp;
     army.executing = true; army.progress = 0; army.chain = null;
@@ -3446,7 +3469,7 @@ class BattlePlanManager {
       if (unit.mission === 'ground') gs.warSupport = Math.min(100, gs.warSupport + 3);
       if (unit.mission === 'patrol') gs.airSupremacy = Math.min(100, (gs.airSupremacy || 0) + 10);
     }
-    CoreEngine.log('🏆 ' + unit.name + 'のミッション完了: ' + unit.mission);
+    CoreEngine.log('🏆 ' + unit.name + 'のミッシ��ン完了: ' + unit.mission);
     GameUI.notify('ミッション完了！ XP+15', 'success');
     MultiplayerManager.broadcast({ type: 'force_complete', force: unit.type, id: unit.id, mission: unit.mission });
   }
@@ -3812,7 +3835,7 @@ class ConstructionManager {
     const s = CoreEngine.gameState;
     const sid = ConstructionManager.selectedStateId;
     const st = sid ? MapRenderer.states[sid] : null;
-    if (!st) { GameUI.notify('州を選択してください。', 'alert'); return; }
+    if (!st) { GameUI.notify('州を選��してください。', 'alert'); return; }
     if (st.owner !== s.country) { GameUI.notify('自国の州のみ建設可能です。', 'alert'); return; }
     const b = ConstructionManager.BUILDINGS.find(x => x.id === buildingId);
     if (!b) return;
@@ -3960,7 +3983,7 @@ class PoliticsManager {
     const s = CoreEngine.gameState;
     const ws = PoliticsManager.LAWS[kind].indexOf(next) ? s.warSupport : 100;
     if (kind === 'conscription' && s.warSupport < next.wsReq) {
-      GameUI.notify('戦争協力度が不足しています (' + next.wsReq + '% 必要)。', 'alert'); return;
+      GameUI.notify('戦争協力度が不足しています (' + next.wsReq + '% 必���)。', 'alert'); return;
     }
     if (s.politicalPower < next.cost) { GameUI.notify('政治力が不足しています。', 'alert'); return; }
     s.politicalPower -= next.cost;
@@ -4059,7 +4082,7 @@ class DiplomacyManager {
     GER: 'ドイツ', SOV: 'ソ連', JAP: '日本', USA: 'アメリカ', ENG: 'イギリス', FRA: 'フランス',
     ITA: 'イタリア', POL: 'ポーランド', CHI: '中華民国', CHS: '中華ソビエト', PRC: '中華ソビエト',
     MEN: '蒙疆政府', MAN: '満州国', GXC: '広西軍閥', YUN: '雲南軍閥', SIK: '新疆軍閥', SHX: '山西軍閥',
-    XSM: '馬家軍', TIB: 'チベット', MON: 'モンゴル', NEP: 'ネパール', BHU: 'ブータン',
+    XSM: '馬家軍', TIB: '��ベット', MON: 'モンゴル', NEP: 'ネパール', BHU: 'ブータン',
     BRA: 'ブラジル', ARG: 'アルゼンチン', MEX: 'メキシコ', CHL: 'チリ', PER: 'ペルー',
     BOL: 'ボリビア', PAR: 'パラグアイ', URG: 'ウルグアイ', ECU: 'エクアドル', COL: 'コロンビア',
     VEN: 'ベネズエラ', PAN: 'パナマ', COS: 'コスタリカ', HON: 'ホンジュラス', ELS: 'エルサルバドル',
@@ -4164,7 +4187,7 @@ class DiplomacyManager {
 
     let html = '<div class="faction-panel"><h3>🏰 陣営 (Faction)</h3>';
     if (DiplomacyManager.factions.length === 0) {
-      html += '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">陣営がありません。新しい陣営を設立できます。</p>' +
+      html += '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">陣営がありません���新しい陣営を設立できます。</p>' +
         '<button class="diplo-btn" onclick="DiplomacyManager.createFaction()" style="background:var(--text-gold);color:#000;">陣営を設立 (PP25)</button>';
     } else {
       DiplomacyManager.factions.forEach(f => {
@@ -4197,7 +4220,7 @@ class DiplomacyManager {
     DiplomacyManager.renderCountryList();
   }
 
-  // ---- 国リスト部分の���再描画 (検索時にフォーカスを保つ) ----
+  // ---- 国リスト部分の���再描��� (検索時にフォーカスを保つ) ----
   static renderCountryList() {
     const listEl = document.getElementById('diplo-country-list');
     if (!listEl) return;
@@ -4230,7 +4253,7 @@ class DiplomacyManager {
       if (atWar) {
         html += '<span style="color:var(--accent-red);font-size:12px;font-weight:700;">⚔️ 戦争状態</span>';
       } else if (justified) {
-        html += '<button class="diplo-btn" style="background:var(--accent-red);color:#fff;" onclick="DiplomacyManager.declareWar(\'' + c.id + '\')">⚔️ 宣戦布告 (緊張度+15%)</button>';
+        html += '<button class="diplo-btn" style="background:var(--accent-red);color:#fff;" onclick="DiplomacyManager.declareWar(\'' + c.id + '\')">⚔️ 宣戦布��� (緊張度+15%)</button>';
       } else if (justifying) {
         html += '<span style="color:var(--text-secondary);font-size:11px;">正当化中... 残り' + Math.round(justifying) + '日</span>';
       } else {
@@ -4636,7 +4659,7 @@ class CheatConsole {
         var knownOwners = new Set(Object.values(MapRenderer.states || {}).map(function(st){ return st.owner; }));
         if (tagCountry && (DataFetcher.getCountryFlag(tagCountry) !== '🏳️' || knownOwners.has(tagCountry))) {
           s.country = tagCountry;
-          CheatConsole.output('プレイヤー国を' + tagCountry + 'に変更しました');
+          CheatConsole.output('プレイヤー国を' + tagCountry + 'に変��しました');
           CoreEngine.renderStats();
           if (DataFetcher.FOCUS_PATHS[tagCountry]) FocusTreeManager.init(tagCountry);
           if (MapRenderer.ready) { MapRenderer.centerOn(tagCountry); MapRenderer.invalidateModes(); }
@@ -4692,7 +4715,7 @@ class MultiplayerManager {
       '<input type="text" class="mp-input" id="mp-room-id" placeholder="ルームコードを入力"></div>' +
       '<div style="margin-bottom:8px;"><label style="font-size:12px;color:var(--text-secondary);">パスワード: </label>' +
       '<input type="password" class="mp-input" id="mp-room-pass" placeholder="ルームパスワード (任意)"></div>' +
-      '<button class="mp-btn" onclick="MultiplayerManager.hostRoom()">ルーム作成 (ホスト)</button>' +
+      '<button class="mp-btn" onclick="MultiplayerManager.hostRoom()">ルー���作成 (ホスト)</button>' +
       '<button class="mp-btn" onclick="MultiplayerManager.joinRoom()">ルームに参加</button>' +
       '<button class="mp-btn" onclick="MultiplayerManager.disconnect()" style="background:var(--accent-red);">切断</button>' +
       '<div class="mp-status" id="mp-status">未接続</div>' +
@@ -5023,7 +5046,7 @@ class CardSystem {
     'hitler': { type: 'passive', name: '国家の象徴', desc: '政治力獲得量+0.5、安定度+10%', modifiers: { politicalPowerGain: 0.5, stabilityBonus: 10 } },
     'stalin': { type: 'passive', name: '鉄の意志', desc: '安定度+15%、戦争協力度+10%', modifiers: { stabilityBonus: 15 } },
     'hermann': { type: 'passive', name: '特別研究の推進者', desc: '特別研究進行速度+30%、施設建設コスト-20%', modifiers: { specialProjectSpeed: 0.3, facilityCostReduction: 0.2 } },
-    'rommel': { type: 'active', name: '電撃作戦', desc: '機甲速度+15%、突破+20%（アクティブ）', modifiers: { armorSpeed: 0.15, armorBreakthrough: 0.20 }, activeName: '電撃作戦' },
+    'rommel': { type: 'active', name: '電撃作戦', desc: '機甲速度+15%、突破+20%（アクティブ）', modifiers: { armorSpeed: 0.15, armorBreakthrough: 0.20 }, activeName: '���撃作戦' },
     'guderian': { type: 'active', name: '電撃戦', desc: '機甲速度+20%、突破+15%（アクティブ）', modifiers: { armorSpeed: 0.20, armorBreakthrough: 0.15 }, activeName: '電撃戦' },
     'mstein': { type: 'active', name: '奇襲作戦', desc: '計画ボーナス+25%（アクティブ）', modifiers: {}, activeName: '奇襲作戦' },
     'rundstedt': { type: 'passive', name: '老練の指揮', desc: '全師団防御+10%', modifiers: {} },
@@ -6044,7 +6067,7 @@ class StartScreen {
 }
 
 // ==========================================================
-// INITIALIZATION — ゲーム起動
+// INITIALIZATION �� ゲーム起動
 // ==========================================================
 async function initGame() {
   CoreEngine.init();

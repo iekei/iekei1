@@ -1,0 +1,684 @@
+[
+  {
+    "id": "tech_support",
+    "title": "Tech Support",
+    "year": 1918,
+    "x": 0,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "support_equipment_1",
+    "effects": [
+      "配備可能: support_equipment_1",
+      "カテゴリ: support_tech"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "tech_engineers",
+    "title": "Tech Engineers",
+    "year": 1936,
+    "x": 0,
+    "y": 0,
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "engineers",
+    "effects": [
+      "カテゴリ: support_tech, engineers_tech"
+    ],
+    "prerequisites": [
+      "tech_support"
+    ]
+  },
+  {
+    "id": "tech_engineers2",
+    "title": "Tech Engineers 2",
+    "year": 1939,
+    "x": 0,
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "engineers2",
+    "effects": [
+      "カテゴリ: support_tech, engineers_tech"
+    ],
+    "prerequisites": [
+      "tech_engineers"
+    ]
+  },
+  {
+    "id": "tech_engineers3",
+    "title": "Tech Engineers 3",
+    "year": 1942,
+    "x": 0,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "engineers3",
+    "effects": [
+      "カテゴリ: support_tech, engineers_tech"
+    ],
+    "prerequisites": [
+      "tech_engineers2"
+    ]
+  },
+  {
+    "id": "tech_engineers4",
+    "title": "Tech Engineers 4",
+    "year": 1945,
+    "x": 0,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "engineers4",
+    "effects": [
+      "カテゴリ: support_tech, engineers_tech"
+    ],
+    "prerequisites": [
+      "tech_engineers3"
+    ]
+  },
+  {
+    "id": "tech_field_hospital",
+    "title": "Tech Field Hospital",
+    "year": 1936,
+    "x": 0,
+    "y": 0,
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tech_field_hospital",
+    "effects": [
+      "カテゴリ: support_tech, hospital_tech, motorized_equipment, mio_cat_tech_all_motorized_mechanized"
+    ],
+    "prerequisites": [
+      "tech_support"
+    ]
+  },
+  {
+    "id": "tech_field_hospital2",
+    "title": "Tech Field Hospital 2",
+    "year": 1939,
+    "x": 0,
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tech_field_hospital2",
+    "effects": [
+      "カテゴリ: support_tech, hospital_tech, motorized_equipment, mio_cat_tech_all_motorized_mechanized"
+    ],
+    "prerequisites": [
+      "tech_field_hospital"
+    ]
+  },
+  {
+    "id": "tech_field_hospital3",
+    "title": "Tech Field Hospital 3",
+    "year": 1942,
+    "x": 0,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tech_field_hospital3",
+    "effects": [
+      "カテゴリ: support_tech, hospital_tech, motorized_equipment, mio_cat_tech_all_motorized_mechanized"
+    ],
+    "prerequisites": [
+      "tech_field_hospital2"
+    ]
+  },
+  {
+    "id": "tech_field_hospital4",
+    "title": "Tech Field Hospital 4",
+    "year": 1945,
+    "x": 0,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tech_field_hospital4",
+    "effects": [
+      "カテゴリ: support_tech, hospital_tech, motorized_equipment, mio_cat_tech_all_motorized_mechanized"
+    ],
+    "prerequisites": [
+      "tech_field_hospital3"
+    ]
+  },
+  {
+    "id": "tech_logistics_company",
+    "title": "Tech Logistics Company",
+    "year": 1936,
+    "x": 0,
+    "y": 0,
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tech_logistics_company",
+    "effects": [
+      "カテゴリ: support_tech, logistics_tech, motorized_equipment, mio_cat_tech_all_motorized_mechanized"
+    ],
+    "prerequisites": [
+      "tech_support"
+    ]
+  },
+  {
+    "id": "tech_logistics_company2",
+    "title": "Tech Logistics Company 2",
+    "year": 1939,
+    "x": 0,
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tech_logistics_company2",
+    "effects": [
+      "カテゴリ: support_tech, logistics_tech, motorized_equipment, mio_cat_tech_all_motorized_mechanized"
+    ],
+    "prerequisites": [
+      "tech_logistics_company"
+    ]
+  },
+  {
+    "id": "tech_logistics_company3",
+    "title": "Tech Logistics Company 3",
+    "year": 1942,
+    "x": 0,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tech_logistics_company3",
+    "effects": [
+      "カテゴリ: support_tech, logistics_tech, motorized_equipment, mio_cat_tech_all_motorized_mechanized"
+    ],
+    "prerequisites": [
+      "tech_logistics_company2"
+    ]
+  },
+  {
+    "id": "tech_logistics_company4",
+    "title": "Tech Logistics Company 4",
+    "year": 1945,
+    "x": 0,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tech_logistics_company4",
+    "effects": [
+      "カテゴリ: support_tech, logistics_tech, motorized_equipment, mio_cat_tech_all_motorized_mechanized"
+    ],
+    "prerequisites": [
+      "tech_logistics_company3"
+    ]
+  },
+  {
+    "id": "tech_signal_company",
+    "title": "Tech Signal Company",
+    "year": 1936,
+    "x": 0,
+    "y": 0,
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tech_signal_company",
+    "effects": [
+      "カテゴリ: support_tech, signal_company_tech, electronics"
+    ],
+    "prerequisites": [
+      "tech_support"
+    ]
+  },
+  {
+    "id": "tech_signal_company2",
+    "title": "Tech Signal Company 2",
+    "year": 1939,
+    "x": 0,
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tech_signal_company2",
+    "effects": [
+      "カテゴリ: support_tech, signal_company_tech, electronics"
+    ],
+    "prerequisites": [
+      "tech_signal_company"
+    ]
+  },
+  {
+    "id": "tech_signal_company3",
+    "title": "Tech Signal Company 3",
+    "year": 1942,
+    "x": 0,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tech_signal_company3",
+    "effects": [
+      "カテゴリ: support_tech, signal_company_tech, electronics"
+    ],
+    "prerequisites": [
+      "tech_signal_company2"
+    ]
+  },
+  {
+    "id": "tech_signal_company4",
+    "title": "Tech Signal Company 4",
+    "year": 1945,
+    "x": 0,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tech_signal_company4",
+    "effects": [
+      "カテゴリ: support_tech, signal_company_tech, electronics"
+    ],
+    "prerequisites": [
+      "tech_signal_company3"
+    ]
+  },
+  {
+    "id": "basic_train",
+    "title": "Basic Train",
+    "year": 1910,
+    "x": 0,
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "train_equipment_1",
+    "effects": [
+      "配備可能: train_equipment_1",
+      "カテゴリ: train_tech"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "wartime_train",
+    "title": "Wartime Train",
+    "year": 1939,
+    "x": 0,
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "train_equipment_2",
+    "effects": [
+      "配備可能: train_equipment_2",
+      "カテゴリ: train_tech"
+    ],
+    "prerequisites": [
+      "basic_train"
+    ]
+  },
+  {
+    "id": "sp_armored_engineer_tech",
+    "title": "Sp Armored Engineer Tech",
+    "year": 1938,
+    "x": 100,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_armored_engineer",
+    "effects": [
+      "カテゴリ: support_tech, engineers_tech"
+    ],
+    "prerequisites": [
+      "tech_engineers"
+    ]
+  },
+  {
+    "id": "tech_recon",
+    "title": "Tech Recon",
+    "year": 1936,
+    "x": 200,
+    "y": 0,
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "recon",
+    "effects": [
+      "カテゴリ: support_tech, recon_tech"
+    ],
+    "prerequisites": [
+      "tech_support"
+    ]
+  },
+  {
+    "id": "tech_recon2",
+    "title": "Tech Recon 2",
+    "year": 1939,
+    "x": 200,
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "recon2",
+    "effects": [
+      "カテゴリ: support_tech, recon_tech"
+    ],
+    "prerequisites": [
+      "tech_recon"
+    ]
+  },
+  {
+    "id": "tech_recon3",
+    "title": "Tech Recon 3",
+    "year": 1942,
+    "x": 200,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "recon3",
+    "effects": [
+      "カテゴリ: support_tech, recon_tech"
+    ],
+    "prerequisites": [
+      "tech_recon2"
+    ]
+  },
+  {
+    "id": "tech_recon4",
+    "title": "Tech Recon 4",
+    "year": 1945,
+    "x": 200,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "recon4",
+    "effects": [
+      "カテゴリ: support_tech, recon_tech"
+    ],
+    "prerequisites": [
+      "tech_recon3"
+    ]
+  },
+  {
+    "id": "armored_train",
+    "title": "Armored Train",
+    "year": 1936,
+    "x": 200,
+    "y": 150,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "train_equipment_3",
+    "effects": [
+      "配備可能: train_equipment_3",
+      "カテゴリ: train_tech"
+    ],
+    "prerequisites": [
+      "basic_train"
+    ]
+  },
+  {
+    "id": "sp_helicopter_artillery_observers_tech",
+    "title": "Sp Helicopter Artillery Observers Tech",
+    "year": 1938,
+    "x": 300,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_aircraft_artillery_observers",
+    "effects": [
+      "カテゴリ: support_tech, recon_tech, helicopter_tech"
+    ],
+    "prerequisites": [
+      "tech_recon"
+    ]
+  },
+  {
+    "id": "tech_military_police",
+    "title": "Tech Military Police",
+    "year": 1936,
+    "x": 400,
+    "y": 0,
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tech_military_police",
+    "effects": [
+      "カテゴリ: support_tech, military_police_tech"
+    ],
+    "prerequisites": [
+      "tech_support"
+    ]
+  },
+  {
+    "id": "tech_military_police2",
+    "title": "Tech Military Police 2",
+    "year": 1939,
+    "x": 400,
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tech_military_police2",
+    "effects": [
+      "カテゴリ: support_tech, military_police_tech"
+    ],
+    "prerequisites": [
+      "tech_military_police"
+    ]
+  },
+  {
+    "id": "tech_military_police3",
+    "title": "Tech Military Police 3",
+    "year": 1942,
+    "x": 400,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tech_military_police3",
+    "effects": [
+      "カテゴリ: support_tech, military_police_tech"
+    ],
+    "prerequisites": [
+      "tech_military_police2"
+    ]
+  },
+  {
+    "id": "tech_military_police4",
+    "title": "Tech Military Police 4",
+    "year": 1945,
+    "x": 400,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tech_military_police4",
+    "effects": [
+      "カテゴリ: support_tech, military_police_tech"
+    ],
+    "prerequisites": [
+      "tech_military_police3"
+    ]
+  },
+  {
+    "id": "railway_gun",
+    "title": "Railway Gun",
+    "year": 1936,
+    "x": 400,
+    "y": 150,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_railway_gun",
+    "effects": [
+      "配備可能: railway_gun_equipment_1",
+      "カテゴリ: train_tech, artillery"
+    ],
+    "prerequisites": [
+      "armored_train"
+    ]
+  },
+  {
+    "id": "sp_armored_motorized_military_police_tech",
+    "title": "Sp Armored Motorized Military Police Tech",
+    "year": 1938,
+    "x": 500,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_armored_motorized_military_police",
+    "effects": [
+      "配備可能: motorbike_equipment_1",
+      "カテゴリ: support_tech, military_police_tech"
+    ],
+    "prerequisites": [
+      "tech_military_police"
+    ]
+  },
+  {
+    "id": "tech_maintenance_company",
+    "title": "Tech Maintenance Company",
+    "year": 1936,
+    "x": 600,
+    "y": 0,
+    "research_time": 125,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tech_maintenance_company",
+    "effects": [
+      "カテゴリ: support_tech, maintenance_company_tech"
+    ],
+    "prerequisites": [
+      "tech_support"
+    ]
+  },
+  {
+    "id": "tech_maintenance_company2",
+    "title": "Tech Maintenance Company 2",
+    "year": 1939,
+    "x": 600,
+    "y": 0,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tech_maintenance_company2",
+    "effects": [
+      "カテゴリ: support_tech, maintenance_company_tech"
+    ],
+    "prerequisites": [
+      "tech_maintenance_company"
+    ]
+  },
+  {
+    "id": "tech_maintenance_company3",
+    "title": "Tech Maintenance Company 3",
+    "year": 1942,
+    "x": 600,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tech_maintenance_company3",
+    "effects": [
+      "カテゴリ: support_tech, maintenance_company_tech"
+    ],
+    "prerequisites": [
+      "tech_maintenance_company2"
+    ]
+  },
+  {
+    "id": "tech_maintenance_company4",
+    "title": "Tech Maintenance Company 4",
+    "year": 1945,
+    "x": 600,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "tech_maintenance_company4",
+    "effects": [
+      "カテゴリ: support_tech, maintenance_company_tech"
+    ],
+    "prerequisites": [
+      "tech_maintenance_company3"
+    ]
+  },
+  {
+    "id": "sp_armored_maintenance_tech",
+    "title": "Sp Armored Maintenance Tech",
+    "year": 1938,
+    "x": 700,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_armored_maintenance",
+    "effects": [
+      "カテゴリ: support_tech, maintenance_company_tech"
+    ],
+    "prerequisites": [
+      "tech_maintenance_company"
+    ]
+  },
+  {
+    "id": "sp_helicopter_med_evac_tech",
+    "title": "Sp Helicopter Med Evac Tech",
+    "year": 1938,
+    "x": 1000,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_aircraft_med_evac",
+    "effects": [
+      "カテゴリ: support_tech, hospital_tech, helicopter_tech"
+    ],
+    "prerequisites": [
+      "tech_field_hospital"
+    ]
+  },
+  {
+    "id": "sp_helicopter_transport_pods_tech",
+    "title": "Sp Helicopter Transport Pods Tech",
+    "year": 1938,
+    "x": 1200,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_aircraft_transport_pods",
+    "effects": [
+      "カテゴリ: support_tech, logistics_tech, helicopter_tech"
+    ],
+    "prerequisites": [
+      "tech_logistics_company"
+    ]
+  },
+  {
+    "id": "sp_armored_signal_tech",
+    "title": "Sp Armored Signal Tech",
+    "year": 1938,
+    "x": 1500,
+    "y": 0,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_armored_signal",
+    "effects": [
+      "カテゴリ: support_tech, signal_company_tech, electronics"
+    ],
+    "prerequisites": [
+      "tech_signal_company"
+    ]
+  }
+]

@@ -332,27 +332,29 @@ class EquipmentDesigner {
   static draft = { tank: { hull: null, modules: {} }, ship: { hull: null, modules: {} }, plane: { hull: null, modules: {} } };
 
   static DATA = {
-    tank: { label: '🚜 戦車', xpKey: 'army', hulls: [
-      { id: 'lt', name: '軽戦車', cost: 10 }, { id: 'mt', name: '中戦車', cost: 20 }, { id: 'ht', name: '重戦車', cost: 30 }],
-      slots: [
-        { id: 'gun', name: '主砲', options: [{ id: 'how', name: '榴弾砲', cost: 15, stat: 'soft' }, { id: 'at', name: '対戦車砲', cost: 15, stat: 'hard' }, { id: 'aa', name: '高射砲', cost: 12, stat: 'aa' }] },
-        { id: 'armor', name: '装甲', options: [{ id: 'steel', name: '均質鋼板', cost: 10, stat: 'armor' }, { id: 'slope', name: '傾斜装甲', cost: 18, stat: 'armor+' }] },
-        { id: 'engine', name: 'エンジン', options: [{ id: 'gas', name: 'ガソリン', cost: 10, stat: 'speed' }, { id: 'diesel', name: 'ディーゼル', cost: 14, stat: 'speed+' }] }
-      ]},
-    ship: { label: '⚓ 艦船', xpKey: 'navy', hulls: [
-      { id: 'dd', name: '駆逐艦', cost: 10 }, { id: 'cl', name: '巡洋艦', cost: 20 }, { id: 'bb', name: '戦艦', cost: 35 }, { id: 'cv', name: '空母', cost: 40 }],
-      slots: [
-        { id: 'gun', name: '主砲', options: [{ id: 'lgun', name: '大口径主砲', cost: 18, stat: 'fire' }, { id: 'aa', name: '対空機銃', cost: 10, stat: 'aa' }] },
-        { id: 'torp', name: '魚雷', options: [{ id: 'tub', name: '魚雷発射管', cost: 12, stat: 'torp' }, { id: 'none', name: '装備なし', cost: 0, stat: '' }] },
-        { id: 'radar', name: '電装', options: [{ id: 'radar', name: 'レーダー', cost: 20, stat: 'spot' }, { id: 'none2', name: '装備なし', cost: 0, stat: '' }] }
-      ]},
-    plane: { label: '✈️ 航空機', xpKey: 'air', hulls: [
-      { id: 'fighter', name: '戦闘機', cost: 10 }, { id: 'bomber', name: '爆撃機', cost: 20 }, { id: 'carrier', name: '艦上機', cost: 18 }],
-      slots: [
-        { id: 'engine', name: 'エンジン', options: [{ id: 'e1', name: '標準エンジン', cost: 10, stat: 'speed' }, { id: 'e2', name: '高出力エンジン', cost: 18, stat: 'speed+' }] },
-        { id: 'weapon', name: '武装', options: [{ id: 'mg', name: '機銃強化', cost: 10, stat: 'aa' }, { id: 'rocket', name: 'ロケット弾', cost: 16, stat: 'hard' }] },
-        { id: 'armor', name: '防弾', options: [{ id: 'plate', name: '防弾鋼板', cost: 10, stat: 'armor' }, { id: 'none3', name: 'なし', cost: 0, stat: '' }] }
-      ]}
+  tank: { label: '戦車', xpKey: 'army', hulls: [
+  { id: 'lt', name: '軽戦車車体', cost: 10, capacity: 3, weight: 8, baseSpeed: 42 }, { id: 'mt', name: '中戦車車体', cost: 20, capacity: 5, weight: 18, baseSpeed: 32 }, { id: 'ht', name: '重戦車車体', cost: 30, capacity: 7, weight: 32, baseSpeed: 24 }],
+  slots: [
+  { id: 'gun', name: '主砲', options: [{ id: 'how', name: '榴弾砲', cost: 15, weight: 3, attack: 15, role: '歩兵支援' }, { id: 'at', name: '対戦車砲', cost: 15, weight: 4, attack: 17, role: '対戦車' }, { id: 'aa', name: '高射砲', cost: 12, weight: 2, attack: 10, role: '対空' }] },
+  { id: 'armor', name: '装甲', options: [{ id: 'steel', name: '均質鋼板', cost: 10, weight: 5, defense: 12 }, { id: 'slope', name: '傾斜装甲', cost: 18, weight: 4, defense: 16 }] },
+  { id: 'engine', name: 'エンジン', options: [{ id: 'gas', name: 'ガソリン 400馬力', cost: 10, weight: 2, power: 12, engineCapacity: 3 }, { id: 'diesel', name: 'ディーゼル 550馬力', cost: 14, weight: 3, power: 18, engineCapacity: 5 }] }
+  ]},
+  ship: { label: '艦船', xpKey: 'navy', hulls: [
+  { id: 'dd', name: '駆逐艦船体', cost: 10, capacity: 4, weight: 12, baseSpeed: 34 }, { id: 'cl', name: '巡洋艦船体', cost: 20, capacity: 6, weight: 24, baseSpeed: 28 }, { id: 'bb', name: '戦艦船体', cost: 35, capacity: 9, weight: 48, baseSpeed: 22 }, { id: 'cv', name: '空母船体', cost: 40, capacity: 8, weight: 42, baseSpeed: 25 }],
+  slots: [
+  { id: 'gun', name: '主砲', options: [{ id: 'lgun', name: '大口径主砲', cost: 18, weight: 5, attack: 20, role: '対艦' }, { id: 'aa', name: '対空機銃', cost: 10, weight: 2, attack: 11, role: '対空' }] },
+  { id: 'torp', name: '魚雷', options: [{ id: 'tub', name: '魚雷発射管', cost: 12, weight: 3, attack: 16, role: '対艦雷撃' }, { id: 'none', name: '装備なし', cost: 0, weight: 0 }] },
+  { id: 'radar', name: '電装', options: [{ id: 'radar', name: 'レーダー', cost: 20, weight: 1, attack: 4, defense: 8, role: '索敵' }, { id: 'none2', name: '装備なし', cost: 0, weight: 0 }] },
+  { id: 'engine', name: '機関', options: [{ id: 'steam', name: '蒸気タービン', cost: 14, weight: 4, power: 16, engineCapacity: 6 }, { id: 'diesel', name: '艦用ディーゼル', cost: 12, weight: 3, power: 11, engineCapacity: 5 }] }
+  ]},
+  plane: { label: '航空機', xpKey: 'air', hulls: [
+  { id: 'fighter', name: '戦闘機機体', cost: 10, capacity: 3, weight: 4, baseSpeed: 520, requires: 'aircraft_technology' }, { id: 'bomber', name: '爆撃機機体', cost: 20, capacity: 6, weight: 9, baseSpeed: 410, requires: 'air_bomber_technology' }, { id: 'carrier', name: '艦上機機体', cost: 18, capacity: 4, weight: 6, baseSpeed: 460, requires: 'carrier_technology' }],
+  slots: [
+  { id: 'engine', name: 'エンジン', options: [{ id: 'e1', name: '標準エンジン', cost: 10, weight: 2, power: 14, engineCapacity: 3, requires: 'aircraft_engine_1' }, { id: 'e2', name: '高出力エンジン', cost: 18, weight: 3, power: 24, engineCapacity: 6, requires: 'aircraft_engine_2' }] },
+  { id: 'weapon', name: '武装', options: [{ id: 'mg', name: '機銃強化', cost: 10, weight: 1, attack: 12, role: '制空', requires: 'fighter_weapons_1' }, { id: 'rocket', name: 'ロケット弾', cost: 16, weight: 2, attack: 18, role: '対地攻撃', requires: 'air_ground_support' }, { id: 'torpedo', name: '航空魚雷', cost: 18, weight: 3, attack: 21, role: '対艦攻撃', requires: 'naval_strike_technology' }] },
+  { id: 'armor', name: '防弾', options: [{ id: 'plate', name: '防弾鋼板', cost: 10, weight: 2, defense: 12 }, { id: 'none3', name: 'なし', cost: 0, weight: 0 }] },
+  { id: 'fuel', name: '燃料タンク', options: [{ id: 'long', name: '増槽', cost: 12, weight: 2, defense: 3, role: '長距離' }, { id: 'none4', name: '標準燃料', cost: 0, weight: 0 }] }
+  ]}
   };
 
   static cost(cat) {
@@ -372,8 +374,31 @@ class EquipmentDesigner {
   }
 
   static pickModule(slotId, optId) {
-    EquipmentDesigner.draft[EquipmentDesigner.category].modules[slotId] = optId;
-    EquipmentDesigner.render();
+  EquipmentDesigner.draft[EquipmentDesigner.category].modules[slotId] = optId;
+  EquipmentDesigner.render();
+  }
+
+  static performance(cat) {
+  const d = EquipmentDesigner.DATA[cat];
+  const draft = EquipmentDesigner.draft[cat];
+  const hull = d.hulls.find(h => h.id === draft.hull);
+  const modules = d.slots.flatMap(slot => {
+    const option = slot.options.find(item => item.id === draft.modules[slot.id]);
+    return option ? [option] : [];
+  });
+  const weight = (hull?.weight || 0) + modules.reduce((sum, item) => sum + (item.weight || 0), 0);
+  const engine = modules.find(item => item.engineCapacity);
+  const capacity = engine?.engineCapacity || hull?.capacity || 0;
+  const usedCapacity = modules.length;
+  const overload = Math.max(0, usedCapacity - capacity);
+  const power = (engine?.power || 0) + modules.reduce((sum, item) => sum + (item.power || 0), 0);
+  const baseSpeed = hull?.baseSpeed || 0;
+  const speed = Math.max(1, Math.round(baseSpeed * (1 - overload * 0.08) + power * 1.5 - weight * 0.45));
+  const attack = modules.reduce((sum, item) => sum + (item.attack || 0), 0);
+  const defense = modules.reduce((sum, item) => sum + (item.defense || 0), 0);
+  const roles = modules.map(item => item.role).filter(Boolean);
+  const overall = Math.max(0, Math.round((speed / (cat === 'plane' ? 10 : 1)) * 0.25 + attack * 1.6 + defense * 1.3 + power * 0.4 - overload * 8));
+  return { weight, capacity, usedCapacity, overload, power, speed, attack, defense, roles, overall };
   }
 
   static saveDesign() {
@@ -391,7 +416,8 @@ class EquipmentDesigner {
       const o = mid ? s.options.find(o => o.id === mid) : null;
       return o ? s.name + ': ' + o.name : s.name + ': —';
     });
-    const design = { id: 'd' + Date.now(), cat: cat, name: hull.name + ' ' + (d.slots.map(s => { const o = s.options.find(o => o.id === draft.modules[s.id]); return o ? o.name : ''; }).filter(Boolean).join('/')), stats: mods, cost: cost };
+    const performance = EquipmentDesigner.performance(cat);
+    const design = { id: 'd' + Date.now(), cat: cat, name: hull.name + ' ' + (d.slots.map(s => { const o = s.options.find(o => o.id === draft.modules[s.id]); return o ? o.name : ''; }).filter(Boolean).join('/')), modules: { ...draft.modules }, stats: mods, performance, cost: cost };
     EquipmentDesigner.designs.push(design);
     // 設計採用 → 兵器バフ (戦闘力に反映)
     if (cat === 'tank') gs.cardModifiers.armorBreakthrough += 3 + Math.floor(cost / 10);
@@ -426,10 +452,15 @@ class EquipmentDesigner {
 
     // 設計エディタ
     html += '<div class="dlc-section"><h3>設計エディタ (XPを消費してモジュールを組み替え)</h3>';
-    // ---- ブループリント (設計するにつれて図面が変わる) ----
-    html += '<div class="dlc-card"><h4>📐 設計図 (ブループリント)</h4>' +
-      '<canvas id="bp-canvas" width="440" height="250" style="width:100%;max-width:440px;height:auto;border:1px solid var(--border-mil,#3a4a5a);border-radius:6px;display:block;margin:6px 0 10px;"></canvas>' +
-      '<div style="font-size:10px;color:var(--text-secondary);">車体・モジュールを選ぶと図面が変化します (破線=未選択)</div></div>';
+    const perf = EquipmentDesigner.performance(cat);
+    const bar = (label, value, max) => '<div class="designer-meter"><span>' + label + '</span><b>' + value + '</b><i><em style="width:' + Math.min(100, Math.max(0, value / max * 100)) + '%"></em></i></div>';
+    html += '<div class="designer-performance"><div class="designer-performance-head"><strong>総合性能 ' + perf.overall + '</strong><span>' + (perf.overload ? '積載超過 ' + perf.overload + '枠' : '設計許容内') + '</span></div>' +
+      bar('攻撃力', perf.attack, 80) + bar('防御 / 生存性', perf.defense, 80) + bar('速度', perf.speed, cat === 'plane' ? 700 : 60) +
+      '<div class="designer-facts"><span>重量 <b>' + perf.weight + ' t</b></span><span>出力 <b>' + perf.power + '</b></span><span>モジュール <b>' + perf.usedCapacity + ' / ' + perf.capacity + '</b></span></div>' +
+      '<div class="designer-roles">任務: ' + (perf.roles.length ? perf.roles.join(' / ') : '未選択') + '</div></div>';
+    html += '<div class="dlc-card blueprint-card"><h4>設計図 / リアルタイム・ブループリント</h4>' +
+      '<canvas id="bp-canvas" width="440" height="250"></canvas>' +
+      '<div class="blueprint-caption">選択した車体・エンジン・武装・装甲を図面へ即時反映。破線は未選択のモジュールです。</div></div>';
     html += '<div class="dlc-card"><h4>ベース (車体/船体/機体)</h4>';
     d.hulls.forEach(h => {
       html += '<div class="dlc-row"><input type="radio" ' + (draft.hull === h.id ? 'checked' : '') + ' onchange="EquipmentDesigner.pickHull(\'' + h.id + '\')">' + h.name + ' <span style="color:var(--text-gold)">' + h.cost + 'XP</span></div>';
@@ -438,7 +469,7 @@ class EquipmentDesigner {
     d.slots.forEach(s => {
       html += '<div class="dlc-card"><h4>' + s.name + '</h4>';
       s.options.forEach(o => {
-        html += '<div class="dlc-row"><input type="radio" ' + (draft.modules[s.id] === o.id ? 'checked' : '') + ' onchange="EquipmentDesigner.pickModule(\'' + s.id + '\',\'' + o.id + '\')">' + o.name + ' <span style="color:var(--text-gold)">' + o.cost + 'XP</span></div>';
+        html += '<div class="dlc-row module-option"><input type="radio" ' + (draft.modules[s.id] === o.id ? 'checked' : '') + ' onchange="EquipmentDesigner.pickModule(\'' + s.id + '\',\'' + o.id + '\')"><span>' + o.name + '</span><small>' + (o.weight ? o.weight + 't' : '') + (o.attack ? ' 攻' + o.attack : '') + (o.defense ? ' 防' + o.defense : '') + '</small><span style="color:var(--text-gold)">' + o.cost + 'XP</span></div>';
       });
       html += '</div>';
     });
@@ -482,9 +513,21 @@ class BlueprintRenderer {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     const W = canvas.width, H = canvas.height;
-    // ---- 青い下地 + 方眼 ----
+    // ---- 生成した実物風ブループリントを下地にして方眼を重ねる ----
+    const blueprintImage = BlueprintRenderer.image || (BlueprintRenderer.image = (() => {
+      const image = new Image();
+      image.crossOrigin = 'anonymous';
+      image.src = '/game/assets/blueprints/aircraft-blueprint.png';
+      image.onload = () => { const current = document.getElementById('bp-canvas'); if (current) BlueprintRenderer.draw(cat, draft, current); };
+      return image;
+    })());
     ctx.fillStyle = '#14406e';
     ctx.fillRect(0, 0, W, H);
+    if (cat === 'plane' && blueprintImage.complete && blueprintImage.naturalWidth) {
+      ctx.globalAlpha = 0.72;
+      ctx.drawImage(blueprintImage, 0, 0, W, H);
+      ctx.globalAlpha = 1;
+    }
     ctx.strokeStyle = 'rgba(120,175,225,0.22)';
     ctx.lineWidth = 1;
     for (let x = 20; x < W; x += 20) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }

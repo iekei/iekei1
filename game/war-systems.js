@@ -3,7 +3,10 @@
 
 class WarSystems {
   static countryNames = { GER: 'ドイツ国', JAP: '大日本帝国', SOV: 'ソビエト連邦', USA: 'アメリカ合衆国', ENG: 'イギリス', FRA: 'フランス', ITA: 'イタリア', POL: 'ポーランド', CHI: '中国', CZE: 'チェコスロバキア', HUN: 'ハンガリー', ROM: 'ルーマニア', TUR: 'トルコ', FIN: 'フィンランド', CAN: 'カナダ', AST: 'オーストラリア', RAJ: 'インド', MEX: 'メキシコ', SPR: 'スペイン', POR: 'ポルトガル' };
-  static provinceNames = { Tokyo: '東京', Berlin: 'ベルリン', Paris: 'パリ', London: 'ロンドン', Moscow: 'モスクワ', Washington: 'ワシントン', Rome: 'ローマ', Warsaw: 'ワルシャワ', Praha: 'プラハ', Madrid: 'マドリード', Beijing: '北京', Shanghai: '上海', Helsinki: 'ヘルシンキ' };
+  static provinceNames = {
+    Tokyo: '東京', Berlin: 'ベルリン', Paris: 'パリ', London: 'ロンドン', Moscow: 'モスクワ', Washington: 'ワシントン', Rome: 'ローマ', Warsaw: 'ワルシャワ', Praha: 'プラハ', Madrid: 'マドリード', Beijing: '北京', Shanghai: '上海', Helsinki: 'ヘルシンキ',
+    Osaka: '大阪', Kyoto: '京都', Nagoya: '名古屋', Hiroshima: '広島', Fukuoka: '福岡', Seoul: 'ソウル', Busan: '釜山', Nanjing: '南京', Guangzhou: '広州', Hong_Kong: '香港', Vladivostok: 'ウラジオストク', Leningrad: 'レニングラード', Stalingrad: 'スターリングラード', Kiev: 'キエフ', Minsk: 'ミンスク', Kharkov: 'ハリコフ', Rostov: 'ロストフ', Munich: 'ミュンヘン', Hamburg: 'ハンブルク', Cologne: 'ケルン', Frankfurt: 'フランクフルト', Vienna: 'ウィーン', Prague: 'プラハ', Budapest: 'ブダペスト', Bucharest: 'ブカレスト', Belgrade: 'ベオグラード', Warsaw: 'ワルシャワ', Amsterdam: 'アムステルダム', Brussels: 'ブリュッセル', Madrid: 'マドリード', Lisbon: 'リスボン', Stockholm: 'ストックホルム', Oslo: 'オスロ', Copenhagen: 'コペンハーゲン', Ankara: 'アンカラ', Istanbul: 'イスタンブール', Cairo: 'カイロ', New_York: 'ニューヨーク', Los_Angeles: 'ロサンゼルス', Chicago: 'シカゴ', Ottawa: 'オタワ'
+  };
   static chat = { tab: 'all', messages: [] };
   static volunteers = [];
   static expeditionary = [];
@@ -12,10 +15,23 @@ class WarSystems {
   static init() {
     this.patchNames(); this.mountChat();
     if (typeof CoreEngine !== 'undefined') CoreEngine.registerTickCallback(() => this.onTick());
+    this.bindMultiplayer();
     window.addEventListener('keydown', e => { if (e.key === 'Escape' && this.conference) this.closeConference(); });
   }
+  static bindMultiplayer() {
+    if (typeof MultiplayerManager === 'undefined' || typeof MultiplayerManager.onMessage !== 'function' || this._messageBound) return;
+    const original = MultiplayerManager.onMessage.bind(MultiplayerManager);
+    MultiplayerManager.onMessage = (data, peer) => {
+      if (data?.type === 'chat') this.receiveChat({ ...data, from: data.from || '未知' });
+      return original(data, peer);
+    };
+    this._messageBound = true;
+  }
   static name(tag) { return this.countryNames[tag] || tag || '不明'; }
-  static stateName(st, fallback) { return this.provinceNames[st?.name] || st?.name || fallback || '州'; }
+  static stateName(st, fallback) {
+    const original = st?.originalName || st?.name || '';
+    return this.provinceNames[original] || this.provinceNames[original.replace(/\\s+/g, '_')] || original || fallback || '州';
+  }
   static patchNames() {
     const apply = () => {
       if (typeof MapRenderer === 'undefined' || !MapRenderer.states) return false;
@@ -61,7 +77,7 @@ class WarSystems {
   static mountChat() {
     const host = document.getElementById('multiplayer-content'); if (!host) return;
     host.insertAdjacentHTML('beforeend', `<div class="faction-chat"><div class="chat-tabs"><button data-chat="all">全体</button><button data-chat="faction">陣営</button></div><div id="chat-messages" aria-live="polite"></div><form id="chat-form"><input id="chat-input" maxlength="240" placeholder="メッセージを入力" aria-label="チャットメッセージ"><button>送信</button></form></div>`);
-    host.querySelectorAll('[data-chat]').forEach(b => b.onclick = () => { this.chat.tab = b.dataset.chat; this.renderChat(); }); host.querySelector('#chat-form').onsubmit = e => { e.preventDefault(); const input = host.querySelector('#chat-input'); const text = input.value.trim(); if (!text) return; this.chat.messages.push({ text, from: CoreEngine.gameState.country, channel: this.chat.tab }); MultiplayerManager.broadcast({ type: 'chat', text, channel: this.chat.tab }); input.value = ''; this.renderChat(); }; this.renderChat();
+    host.querySelectorAll('[data-chat]').forEach(b => b.onclick = () => { this.chat.tab = b.dataset.chat; host.querySelectorAll('[data-chat]').forEach(x => x.setAttribute('aria-selected', String(x === b))); this.renderChat(); }); host.querySelectorAll('[data-chat]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.chat === this.chat.tab))); host.querySelector('#chat-form').onsubmit = e => { e.preventDefault(); const input = host.querySelector('#chat-input'); const text = input.value.trim(); if (!text) return; const message = { text, from: CoreEngine.gameState.country, channel: this.chat.tab, faction: CoreEngine.gameState.faction || CoreEngine.gameState.factionId || null }; this.chat.messages.push(message); if (typeof MultiplayerManager !== 'undefined') MultiplayerManager.broadcast({ type: 'chat', ...message }); input.value = ''; this.renderChat(); }; this.renderChat();
   }
   static receiveChat(message) { if (!message?.text) return; this.chat.messages.push(message); this.renderChat(); }
   static renderChat() { const box = document.getElementById('chat-messages'); if (!box) return; box.innerHTML = this.chat.messages.filter(m => this.chat.tab === 'all' || m.channel === 'faction').slice(-40).map(m => `<div><b>${this.name(m.from)}:</b> ${this.escape(m.text)}</div>`).join(''); box.scrollTop = box.scrollHeight; }
