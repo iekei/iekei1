@@ -132,12 +132,20 @@
     }
     .focus-progress-fill { height: 100%; background: var(--text-gold); transition: width 0.3s; }
     #focus-tooltip {
-      position: fixed; z-index: 1000; background: var(--bg-panel); border: 1px solid var(--border-mil);
-      border-radius: 6px; padding: 10px; max-width: 280px; font-size: 12px;
-      pointer-events: none; box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      position: fixed; z-index: 1000; width: min(310px, calc(100vw - 20px));
+      background: rgba(18,22,26,.97); border: 1px solid rgba(212,168,67,.65);
+      border-radius: 3px; padding: 11px 12px; font-size: 12px; pointer-events: none;
+      box-shadow: 0 7px 24px rgba(0,0,0,.65), inset 0 0 0 1px rgba(58,68,77,.55);
     }
-    #focus-tooltip .tt-title { font-weight: 600; color: var(--text-gold); margin-bottom: 4px; }
-    #focus-tooltip .tt-effect { color: var(--text-secondary); white-space: pre-line; margin-top: 4px; }
+    #focus-tooltip .tt-title { font-weight: 700; color: #e3c36a; margin-bottom: 3px; }
+    #focus-tooltip .tt-time { color: var(--text-secondary); font-size: 11px; }
+    #focus-tooltip .tt-effect { color: var(--text-secondary); margin-top: 7px; }
+    #focus-tooltip .tt-effect-label { display: block; border-top: 1px solid #3a444d; padding-top: 7px; margin-bottom: 4px; color: #b8c2ca; font-weight: 600; }
+    #focus-tooltip .tt-effect-description { display: block; margin-bottom: 5px; color: #8a9aaa; white-space: pre-line; }
+    #focus-tooltip .tt-reward { display: block; line-height: 1.55; }
+    #focus-tooltip .tt-reward.positive { color: #69d483; }
+    #focus-tooltip .tt-reward.negative { color: #e27676; }
+    #focus-tooltip .tt-reward.neutral { color: #72b7e8; }
 
     /* --- 5. Research / Tech Tree Styles --- */
     .tpl-research { display: flex; flex-direction: column; height: 100%; }
@@ -882,11 +890,11 @@
 <div id="battle-tooltip" class="hidden"></div>
 
 <!-- Focus Tooltip -->
-<div id="focus-tooltip" class="hidden">
+  <div id="focus-tooltip" class="hidden" role="tooltip" aria-live="polite">
   <div class="tt-title"></div>
   <div class="tt-time"></div>
   <div class="tt-effect"></div>
-</div>
+  </div>
 
 <!-- Generic Modal -->
 <div class="modal-overlay hidden" id="generic-modal-overlay">
@@ -1647,23 +1655,35 @@ class FocusTreeManager {
     return [];
   }
 
+  // Preview fallback that mirrors assets/nf-reward-loader.js when a focus has no source data.
+  static getCompletionRewards(f) {
+    const rewards = FocusTreeManager.normalizeCompletionRewards(f);
+    if (rewards.length || !f?.id) return rewards;
+    const previewRewards = {
+      demo_political_power: [{ type: 'add_political_power', value: 120 }, { type: 'add_army_experience', value: 50 }],
+      demo_industry: [{ type: 'add_stability', value: 5 }, { type: 'add_research_slot', value: 1 }]
+    };
+    return previewRewards[f.id] || [];
+  }
+
+  static rewardClass(reward) {
+    const value = Number(reward?.value ?? reward?.amount ?? reward?.bonus ?? 0);
+    return value < 0 ? 'negative' : value > 0 ? 'positive' : 'neutral';
+  }
+
   static showTooltip(f, e) {
-  const tt = document.getElementById('focus-tooltip');
-  if (!tt || !f) return;
-  tt.querySelector('.tt-title').textContent = f.title || f.name || f.id;
-  tt.querySelector('.tt-time').textContent = '必要日数: ' + (f.cost || 70) + '日';
-  const rewards = FocusTreeManager.normalizeCompletionRewards(f);
-  const rewardText = rewards.length
-    ? '\n\n【達成報酬】\n' + rewards.map(reward => {
-      const type = reward.type || reward.effect || '効果';
-      const value = reward.value ?? reward.amount ?? reward.idea ?? reward.category ?? '';
-      return window.formatCompletionReward ? window.formatCompletionReward(reward) : '・' + type + ': ' + value;
-    }).join('\n')
-    : '';
-  tt.querySelector('.tt-effect').textContent = (f.effect || '効果なし') + rewardText;
+    const tt = document.getElementById('focus-tooltip');
+    if (!tt || !f) return;
+    tt.querySelector('.tt-title').textContent = f.title || f.name || f.id;
+    tt.querySelector('.tt-time').textContent = '必要日数: ' + (f.cost || 70) + '日';
+    const rewards = FocusTreeManager.getCompletionRewards(f);
+    const formatted = rewards.map(reward => window.formatCompletionReward ? window.formatCompletionReward(reward) : '・' + (reward.type || '効果') + ': ' + (reward.value ?? '')).filter(Boolean);
+    const effect = f.effect || '';
+    tt.querySelector('.tt-effect').innerHTML =
+      (effect ? '<span class="tt-effect-description">' + GameTools.escape(effect) + '</span>' : '') +
+      (formatted.length ? '<span class="tt-effect-label">完了報酬</span>' + formatted.map(line => '<span class="tt-reward ' + FocusTreeManager.rewardClass(rewards[formatted.indexOf(line)]) + '">' + GameTools.escape(line) + '</span>').join('') : '<span class="tt-effect-description">完了報酬なし</span>');
     tt.classList.remove('hidden');
-    tt.style.left = (e.clientX + 14) + 'px';
-    tt.style.top = (e.clientY + 14) + 'px';
+    FocusTreeManager.moveTooltip(e);
   }
 
   static moveTooltip(e) {
@@ -2596,6 +2616,11 @@ class MapRenderer {
 
     c.addEventListener('mousedown', (e) => {
       if (e.button === 0) {
+        if (BattlePlanManager.arrowTool) {
+          const wp = MapRenderer.screenToWorld(e.offsetX, e.offsetY);
+          BattlePlanManager.startArrowDrag(wp);
+          return;
+        }
         panning = true; moved = 0;
         sx = lx = e.clientX; sy = ly = e.clientY;
       } else if (e.button === 2) {
@@ -2611,7 +2636,7 @@ class MapRenderer {
         moved += Math.abs(dx) + Math.abs(dy);
         MapRenderer.cam.x += dx; MapRenderer.cam.y += dy;
         lx = e.clientX; ly = e.clientY;
-      } else if (rightDown && BattlePlanManager.dragMode) {
+      } else if ((rightDown || BattlePlanManager.dragMode === 'arrow') && BattlePlanManager.dragMode) {
         rightMoved += Math.abs(e.movementX || 0) + Math.abs(e.movementY || 0);
         BattlePlanManager.onDragMove(MapRenderer.screenToWorld(e.offsetX, e.offsetY));
       }
@@ -2619,7 +2644,9 @@ class MapRenderer {
       BattleManager.handleHover(e.clientX, e.clientY);
     });
     c.addEventListener('mouseup', (e) => {
-      if (e.button === 0 && panning) {
+      if (e.button === 0 && BattlePlanManager.dragMode === 'arrow') {
+        BattlePlanManager.endDrag();
+      } else if (e.button === 0 && panning) {
         panning = false;
         if (moved < 6) MapRenderer.handlePrimaryClick(e.offsetX, e.offsetY);
       } else if (e.button === 2) {
@@ -2921,6 +2948,7 @@ class BattlePlanManager {
   static selectedArmyId = null;
   static dragMode = null;      // 'front' | 'arrow' | 'area'
   static dragPoints = [];
+  static arrowTool = false;    // left-drag attack order mode
   // ---- 海��/空軍オーダー (DLC拡張): 陸軍と同じマップ操作で哨戒・攻撃エリアを設定 ----
   static activeForce = 'army';   // 'army' | 'navy' | 'air'
   static invasionMode = false;   // 強襲上陸モード (沿岸の敵州を左クリックで上陸)
@@ -3494,7 +3522,7 @@ class BattlePlanManager {
         st.b.fort--;
         MapRenderer.invalidateModes();
         CoreEngine.log('💥 艦砲射撃: ' + st.name + 'の要塞を破壊 (残り' + st.b.fort + ')');
-        GameUI.notify('⚓ 艦砲射撃成功: ' + st.name + ' の要塞を破壊！', 'success');
+        GameUI.notify('⚓ 艦砲射撃成功: ' + st.name + ' の要��を破壊！', 'success');
         MultiplayerManager.broadcast({ type: 'bomb', state: target.sid, key: 'fort' });
       }
     }
@@ -4097,7 +4125,7 @@ class PoliticsManager {
       if (s.nationSystems.paranoia !== undefined) spirits.push({ name: 'スターリンのパラノイア (' + Math.round(s.nationSystems.paranoia) + ')', desc: '高まると将軍カードが粛清されるリスク' });
       if (s.nationSystems.armyInfluence !== undefined) spirits.push({ name: '陸海軍の対立 (陸軍 ' + Math.round(s.nationSystems.armyInfluence) + ')', desc: '陸海軍の影響力バランスが補正に影響' });
       if (s.nationSystems.congressDem !== undefined) spirits.push({ name: '連邦議会 (与党 ' + Math.round(s.nationSystems.congressDem) + '議席)', desc: '議会多数派���安定度ボーナス' });
-      if (s.nationSystems.polarization !== undefined) spirits.push({ name: '政治的二極化 (' + Math.round(s.nationSystems.polarization) + ')', desc: '安定度の変動を増幅' });
+      if (s.nationSystems.polarization !== undefined) spirits.push({ name: '政治的��極化 (' + Math.round(s.nationSystems.polarization) + ')', desc: '安定度の変動を増幅' });
     }
     if (s.atWar.length > 0) spirits.push({ name: '戦時中 (' + s.atWar.join(', ') + ')', desc: '戦争協力度ボーナス・経済ペナルティ' });
     if (spirits.length === 0) html += '<span class="politics-spirit">精神的安定 — ペナルティ/ボーナスなし</span>';
@@ -4152,7 +4180,7 @@ class DiplomacyManager {
     TUR: 'トルコ', IRE: 'アイルランド', EST: 'エストニア', LAT: 'ラトビア', LIT: 'リトアニア',
     PRU: 'プロイセン', ETH: 'エチオピア', AFA: 'アフリカ連邦', EGY: 'エジプト', IRQ: 'イラク',
     IRN: 'イラン', SAU: 'サウジアラビア', YEM: 'イエメン', OMA: 'オマーン', AFG: 'アフガニスタン',
-    SIA: 'シャム', LIB: 'リベリア', SPR2: 'スペイン国民軍', FRA2: 'ヴィシー・フランス'
+    SIA: 'シャム', LIB: 'リベリア', SPR2: 'スペイン国民軍', FRA2: 'ヴィシ��・フランス'
   };
 
   // 開戦前からの初期関係値 (主要国のみ)
@@ -5657,7 +5685,7 @@ class UniqueNationSystems {
       st.mefoMonthsLeft = 24 * 30;
       CoreEngine.gameState.cardModifiers.facilityCostReduction = (CoreEngine.gameState.cardModifiers.facilityCostReduction || 0) + 0.2;
       GameUI.notify('MEFO手形を発行 — 建設コスト -20% (24ヶ月間)', 'success');
-      CoreEngine.log('MEFO手形を発行。隠れた再軍備資金が調達された。');
+      CoreEngine.log('MEFO手形を発行。隠れた再軍備資金が調���された。');
       UniqueNationSystems.render();
       UniqueNationSystems.broadcastState();
     }
@@ -5761,7 +5789,7 @@ class UniqueNationSystems {
   static renderENG(st) {
     const sup = Math.round(st.dominionSupport === undefined ? 60 : st.dominionSupport);
     return '<div class="mp-panel"><h3>🌍 帝国会議 (大英帝国)</h3>' +
-      '<p style="font-size:12px;color:var(--text-secondary);">自治領・植民地との連携。招集するたびに自治領支持が10消費されます (日ごとに少しずつ回復)。船団と人的資源を獲得。</p>' +
+      '<p style="font-size:12px;color:var(--text-secondary);">自治領・植民地との連携。招集す���たびに自治領支持が10消費されます (日ごとに少しずつ回復)。船団と人的資源を獲得。</p>' +
       '<div style="font-size:12px;">自治領支持: <strong style="color:#d4a843;">' + sup + ' / 100</strong></div>' +
       UniqueNationSystems.gauge(sup, '#8a7a3a') +
       '<button class="mp-btn" onclick="UniqueNationSystems.convokeImperial()" ' + (sup >= 10 ? '' : 'disabled') + '>🤝 帝国会議を招集 (PP 40 / 支持10)</button></div>';
@@ -6072,7 +6100,7 @@ class StartScreen {
   static selected = null;
   static NATIONS = [
     { tag: 'GER', name: 'ドイツ', desc: '最強の陸軍。MEFO手形で経済を加速し、カードで得た機甲将軍と電撃戦を展開する。', feature: '陸軍最強・MEFO手形', pp: 120, cf: 22, mf: 18 },
-    { tag: 'SOV', name: 'ソビエト連邦', desc: '大粛清と「スターリンのパラノイア」ゲージ。圧倒的な人的資源と戦略的縦深を活かす。', feature: '人的資源最大・パラノイア', pp: 100, cf: 25, mf: 20, manpower: 1800000 },
+    { tag: 'SOV', name: 'ソビエト連邦', desc: '大粛清と「スターリン��パラノイア」ゲージ。圧倒的な人的資源と戦略的縦深を活かす。', feature: '人的資源最大・パラノイア', pp: 100, cf: 25, mf: 20, manpower: 1800000 },
     { tag: 'JAP', name: '大日本帝国', desc: '「陸海軍の対立」ディシジョン。提督カードを配備して太平洋の制海権を握る。', feature: '海軍強国・陸海軍対立', pp: 90, cf: 15, mf: 14, dockyards: 8 },
     { tag: 'USA', name: 'アメリカ', desc: '「連邦議会」UIで上下院の議席を管理し、大恐慌からの脱出と巨大な工業力を活かす。', feature: '議���UI・工業力最大', pp: 80, cf: 35, mf: 10 },
     { tag: 'ENG', name: 'イギリス', desc: '帝国会議で自治領を連携させ、強力なRAFとシーレーン防衛でドイツに立ち向かう。', feature: '帝国会議・RAF', pp: 100, cf: 28, mf: 12, dockyards: 7 },
