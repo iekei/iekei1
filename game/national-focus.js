@@ -59,7 +59,12 @@ class NationalFocusManager {
   static dateReady(f) { if (!f.date) return true; const d = CoreEngine.gameState.date; return d >= new Date(f.date[0], f.date[1] - 1, f.date[2]); }
   static applyCompletionRewards(rewards) {
     const s = CoreEngine.gameState;
-    rewards.forEach(reward => {
+    const normalizedRewards = Array.isArray(rewards)
+      ? rewards
+      : rewards && typeof rewards === 'object'
+        ? (rewards.type ? [rewards] : Object.entries(rewards).map(([type, value]) => ({ type, value })))
+        : [];
+    normalizedRewards.forEach(reward => {
       if (!reward || !reward.type) return;
       const value = Number(reward.value || 0);
       if (reward.type === 'add_political_power') s.politicalPower = (s.politicalPower || 0) + value;
