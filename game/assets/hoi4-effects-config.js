@@ -19,7 +19,9 @@
     add_ideas: { label: '国家精神を追加', unit: '', valueKey: 'idea' },
     remove_ideas: { label: '国家精神を削除', unit: '', valueKey: 'idea' },
     add_research_slot: { label: '研究スロット', unit: '', signed: true },
-    add_tech_bonus: { label: '研究ボーナス', unit: '%', valueKey: 'category' }
+    add_tech_bonus: { label: '研究ボーナス', unit: '%', valueKey: 'category' },
+    annex_country: { label: '国家を併合', unit: '', valueKey: 'country' },
+    annex_target: { label: '対象国を占領', unit: '', valueKey: 'country' }
   };
 
   function numericValue(reward) {
@@ -35,10 +37,38 @@
       return { text: `・${definition.label}: ${reward.category || '全般'}${Number.isFinite(bonus) ? ` ${bonus * 100}%` : ''}`, color: bonus < 0 ? '#ef4444' : '#22c55e' };
     }
     if (definition.valueKey === 'idea') return { text: `・${definition.label}: ${reward.idea || reward.value || ''}`.replace(/: $/, ''), color: reward.type === 'remove_ideas' ? '#ef4444' : '#22c55e' };
+    if (definition.valueKey === 'country') {
+      const targets = reward.country || reward.targetCountry || reward.countries || reward.targets;
+      const targetText = (Array.isArray(targets) ? targets : [targets]).filter(Boolean).join(', ');
+      return { text: `・${definition.label}: ${targetText || '指定国'}`, color: '#22c55e' };
+    }
     const value = numericValue(reward);
     if (!Number.isFinite(value)) return { text: `・${definition.label}`, color: '#22c55e' };
     const display = Math.abs(value) < 1 && value !== 0 ? `${value >= 0 ? '+' : ''}${(value * 100).toFixed(2)}` : `${value >= 0 && definition.signed ? '+' : ''}${value}`;
     return { text: `・${definition.label}: ${display}${definition.unit}`, color: value < 0 ? '#ef4444' : '#22c55e' };
+  }
+
+  function annexCountries(gameState, reward) {
+    const targets = reward.country || reward.targetCountry || reward.countries || reward.targets;
+    const targetTags = (Array.isArray(targets) ? targets : [targets]).filter(Boolean);
+    if (!targetTags.length) return;
+
+    // MapRenderer is optional so this effect also works in the v0 preview/dummy state.
+    const states = global.MapRenderer && global.MapRenderer.states;
+    if (states && typeof global.MapRenderer.captureState === 'function') {
+      Object.entries(states).forEach(([stateId, state]) => {
+        if (state && targetTags.includes(state.owner)) global.MapRenderer.captureState(stateId, gameState.country);
+      });
+    }
+
+    gameState.occupiedCountries = Array.isArray(gameState.occupiedCountries) ? gameState.occupiedCountries : [];
+    targetTags.forEach(tag => {
+      if (!gameState.occupiedCountries.includes(tag)) gameState.occupiedCountries.push(tag);
+    });
+    gameState.annexedCountries = Array.isArray(gameState.annexedCountries) ? gameState.annexedCountries : [];
+    targetTags.forEach(tag => {
+      if (!gameState.annexedCountries.includes(tag)) gameState.annexedCountries.push(tag);
+    });
   }
 
   function applyEffect(gameState, reward) {
@@ -53,6 +83,8 @@
       case 'add_air_experience': gameState.airExperience = (gameState.airExperience || 0) + (Number.isFinite(value) ? value : 0); if (gameState.xp) gameState.xp.air = (gameState.xp.air || 0) + value; break;
       case 'add_ideas': gameState.ideas = Array.isArray(gameState.ideas) ? gameState.ideas : []; if (reward.idea && !gameState.ideas.includes(reward.idea)) gameState.ideas.push(reward.idea); break;
       case 'remove_ideas': if (Array.isArray(gameState.ideas)) gameState.ideas = gameState.ideas.filter(idea => idea !== reward.idea); break;
+      case 'annex_country':
+      case 'annex_target': annexCountries(gameState, reward); break;
       case 'add_research_slot': gameState.researchSlots = (gameState.researchSlots || 0) + (Number.isFinite(value) ? value : 0); break;
       default: break;
     }
