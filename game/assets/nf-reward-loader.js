@@ -43,17 +43,19 @@ window.NFRewardLoader = {
     return merged;
   },
   parse(text, output) {
-    const focusPattern = /(\w+)\s*=\s*\{/g;
+    const source = text.replace(/#[^\r\n]*/g, '');
+    const focusPattern = /(^|\n)\s*([A-Za-z0-9_:.-]+)\s*=\s*\{/g;
     let match;
-    while ((match = focusPattern.exec(text))) {
-      const end = this.blockEnd(text, focusPattern.lastIndex - 1);
+    while ((match = focusPattern.exec(source))) {
+      const open = source.indexOf('{', match.index);
+      const end = this.blockEnd(source, open);
       if (end < 0) break;
-      const block = text.slice(focusPattern.lastIndex, end);
-      const rewardStart = block.search(/completion_reward\s*=\s*\{/);
-      if (rewardStart >= 0) {
-        const absolute = focusPattern.lastIndex + rewardStart;
-        const rewardEnd = this.blockEnd(text, text.indexOf('{', absolute));
-        if (rewardEnd >= 0) output.set(match[1], this.parseBlock(text.slice(text.indexOf('{', absolute) + 1, rewardEnd)));
+      const body = source.slice(open + 1, end);
+      const rewardMatch = /(?:^|\n)\s*completion_reward\s*=\s*\{/.exec(body);
+      if (rewardMatch) {
+        const rewardOpen = body.indexOf('{', rewardMatch.index);
+        const rewardEnd = this.blockEnd(body, rewardOpen);
+        if (rewardEnd >= 0) output.set(match[2], this.parseBlock(body.slice(rewardOpen + 1, rewardEnd)));
       }
       focusPattern.lastIndex = end + 1;
     }

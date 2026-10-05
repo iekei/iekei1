@@ -1594,6 +1594,9 @@ class FocusTreeManager {
     FocusTreeManager.activeFocus = null;
     FocusTreeManager.focusProgress = 0;
     FocusTreeManager.applyFocusEffect(f);
+    if (window.NationalFocusManager && typeof NationalFocusManager.applyCompletionRewards === 'function') {
+      NationalFocusManager.applyCompletionRewards(f.completion_rewards || f.completionRewards || []);
+    }
     DecisionManager.onFocus(f);
     CoreEngine.log('国家方針「' + f.title + '」が完了しました！');
     GameUI.notify('方針完了: ' + f.title, 'success');
@@ -1620,19 +1623,9 @@ class FocusTreeManager {
   tt.querySelector('.tt-time').textContent = '必要日数: ' + (f.cost || 70) + '日';
   const rewards = f.completion_rewards || f.completionRewards || [];
   const rewardText = rewards.length
-    ? '\n\n【達成報酬】\n' + rewards.map(reward => {
-      const value = Number(reward.value || 0);
-      const shown = reward.type === 'add_stability' || reward.type === 'add_war_support'
-        ? (value * 100).toFixed(2) + '%'
-        : (value > 0 ? '+' : '') + value;
-      const labels = {
-        add_political_power: '政治力', add_stability: '安定度', add_war_support: '戦争協力度',
-        add_research_slot: '研究枠', add_army_experience: '陸軍経験値',
-        add_navy_experience: '海軍経験値', add_air_experience: '空軍経験値',
-        add_ideas: '国家精神', add_tech_bonus: '研究ボーナス'
-      };
-      return '・' + (labels[reward.type] || reward.type) + ': ' + (reward.type === 'add_ideas' ? reward.idea : shown);
-    }).join('\n')
+    ? '\n\n【達成報酬】\n' + rewards.map(reward => window.formatCompletionReward
+      ? window.formatCompletionReward(reward)
+      : ('・' + (reward.type || '効果') + ': ' + (reward.value ?? reward.idea ?? ''))).join('\n')
     : '';
   tt.querySelector('.tt-effect').textContent = (f.effect || '効果なし') + rewardText;
     tt.classList.remove('hidden');
@@ -3958,7 +3951,7 @@ class ResourceManager {
 class PoliticsManager {
   static LAWS = {
     conscription: [
-      { id: 'volunteer', name: '志願兵制', cost: 0, mpPerDay: 100, wsReq: 0 },
+      { id: 'volunteer', name: '志���兵制', cost: 0, mpPerDay: 100, wsReq: 0 },
       { id: 'limited', name: '限定徴兵', cost: 100, mpPerDay: 300, wsReq: 10 },
       { id: 'extensive', name: '大規模徴兵', cost: 150, mpPerDay: 600, wsReq: 25 },
       { id: 'service', name: '兵役必須法', cost: 200, mpPerDay: 1000, wsReq: 50 }
@@ -4412,7 +4405,7 @@ class DivisionDesigner {
     if (!p) return;
     DivisionDesigner.grid = p.grid.map(row => row.map(cell => cell ? { ...cell } : null));
     CoreEngine.log('📂 プリセット「' + p.name + '」を読み込みました。');
-    GameUI.notify('📂 プリセット「' + p.name + '」を読み込みました', 'success');
+    GameUI.notify('��� プリセット「' + p.name + '」を読み込みました', 'success');
     DivisionDesigner.render();
   }
 
@@ -4729,7 +4722,7 @@ class MultiplayerManager {
     const container = document.getElementById('multiplayer-content');
     container.innerHTML =
       '<div class="mp-panel"><h3>🌐 P2Pマルチプレイ (PeerJS)</h3>' +
-      '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">ルームIDを共有してクロスデバイスでプレイできます。サーバーレス直接通信（PeerJS）を使用します。</p>' +
+      '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">ルームIDを共有してクロスデバイスでプレイできます。サーバーレス直接通信（PeerJS）を使���します。</p>' +
       '<div style="margin-bottom:8px;"><label style="font-size:12px;color:var(--text-secondary);">ルームコード: </label>' +
       '<input type="text" class="mp-input" id="mp-room-id" placeholder="ルームコードを入力"></div>' +
       '<div style="margin-bottom:8px;"><label style="font-size:12px;color:var(--text-secondary);">パスワード: </label>' +
@@ -5569,7 +5562,7 @@ class UniqueNationSystems {
 
   static spendPP(cost) {
     if (CoreEngine.gameState.politicalPower < cost) {
-      GameUI.notify('政治力が足りません (必要: ' + cost + ')。', 'alert');
+      GameUI.notify('政治���が足りません (必要: ' + cost + ')。', 'alert');
       return false;
     }
     CoreEngine.gameState.politicalPower -= cost;
