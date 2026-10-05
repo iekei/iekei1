@@ -1,532 +1,658 @@
 [
   {
-    "id": "early_light_cruiser",
-    "title": "Early Light Cruiser",
+    "id": "early_ship_hull_submarine",
+    "title": "Early Ship Hull Submarine",
     "year": 1922,
-    "x": -100,
-    "y": 50,
-    "research_time": 150,
-    "reliability": "未研究",
-    "desc": "",
-    "asset_key": "early_light_cruiser",
-    "effects": [
-      "配備可能: light_cruiser_1",
-      "カテゴリ: naval_artillery, naval_equipment, ca_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_cruiser_and_modules"
-    ],
-    "prerequisites": []
-  },
-  {
-    "id": "early_battlecruiser",
-    "title": "Early Battlecruiser",
-    "year": 1922,
-    "x": -100,
-    "y": 50,
-    "research_time": 150,
-    "reliability": "未研究",
-    "desc": "",
-    "asset_key": "early_battlecruiser",
-    "effects": [
-      "配備可能: battle_cruiser_1",
-      "カテゴリ: naval_artillery, naval_equipment, bc_tech, mio_cat_tech_all_capital_ship_and_modules"
-    ],
-    "prerequisites": []
-  },
-  {
-    "id": "basic_light_cruiser",
-    "title": "Basic Light Cruiser",
-    "year": 1936,
-    "x": -100,
-    "y": 350,
-    "research_time": 200,
-    "reliability": "未研究",
-    "desc": "",
-    "asset_key": "basic_light_cruiser",
-    "effects": [
-      "配備可能: light_cruiser_2",
-      "カテゴリ: naval_artillery, naval_equipment, ca_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_cruiser_and_modules"
-    ],
-    "prerequisites": [
-      "early_light_cruiser",
-      "basic_heavy_cruiser"
-    ]
-  },
-  {
-    "id": "improved_light_cruiser",
-    "title": "Improved Light Cruiser",
-    "year": 1940,
-    "x": -100,
-    "y": 650,
-    "research_time": 200,
-    "reliability": "未研究",
-    "desc": "",
-    "asset_key": "improved_light_cruiser",
-    "effects": [
-      "配備可能: light_cruiser_3",
-      "カテゴリ: naval_artillery, naval_equipment, ca_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_cruiser_and_modules"
-    ],
-    "prerequisites": [
-      "basic_light_cruiser",
-      "improved_heavy_cruiser"
-    ]
-  },
-  {
-    "id": "basic_battlecruiser",
-    "title": "Basic Battlecruiser",
-    "year": 1940,
-    "x": -100,
-    "y": 650,
-    "research_time": 200,
-    "reliability": "未研究",
-    "desc": "",
-    "asset_key": "basic_battlecruiser",
-    "effects": [
-      "配備可能: battle_cruiser_2",
-      "カテゴリ: naval_artillery, naval_equipment, bc_tech, mio_cat_tech_all_capital_ship_and_modules"
-    ],
-    "prerequisites": [
-      "early_battlecruiser",
-      "improved_battleship"
-    ]
-  },
-  {
-    "id": "advanced_light_cruiser",
-    "title": "Advanced Light Cruiser",
-    "year": 1944,
-    "x": -100,
-    "y": 950,
-    "research_time": 200,
-    "reliability": "未研究",
-    "desc": "",
-    "asset_key": "advanced_light_cruiser",
-    "effects": [
-      "配備可能: light_cruiser_4",
-      "カテゴリ: naval_artillery, naval_equipment, ca_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_cruiser_and_modules"
-    ],
-    "prerequisites": [
-      "improved_light_cruiser",
-      "advanced_heavy_cruiser"
-    ]
-  },
-  {
-    "id": "early_destroyer",
-    "title": "Early Destroyer",
-    "year": 1922,
-    "x": 0,
-    "y": 50,
-    "research_time": 150,
-    "reliability": "未研究",
-    "desc": "",
-    "asset_key": "early_destroyer",
-    "effects": [
-      "配備可能: destroyer_1",
-      "カテゴリ: naval_equipment, dd_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_destroyer_and_modules"
-    ],
-    "prerequisites": []
-  },
-  {
-    "id": "transport",
-    "title": "Transport",
-    "year": 1922,
-    "x": 0,
-    "y": 50,
-    "research_time": 150,
-    "reliability": "未研究",
-    "desc": "",
-    "asset_key": "transport",
-    "effects": [
-      "カテゴリ: naval_equipment, tp_tech"
-    ],
-    "prerequisites": []
-  },
-  {
-    "id": "early_carrier",
-    "title": "Early Carrier",
-    "year": 1922,
-    "x": 0,
-    "y": 50,
-    "research_time": 150,
-    "reliability": "未研究",
-    "desc": "",
-    "asset_key": "early_carrier",
-    "effects": [
-      "配備可能: carrier_1",
-      "カテゴリ: naval_equipment, cv_tech, mio_cat_tech_all_carrier_and_modules"
-    ],
-    "prerequisites": []
-  },
-  {
-    "id": "early_submarine",
-    "title": "Early Submarine",
-    "year": 1922,
-    "x": 0,
-    "y": 50,
+    "x": -200,
+    "y": 100,
     "research_time": 150,
     "reliability": "未研究",
     "desc": "",
     "asset_key": "early_submarine",
     "effects": [
-      "配備可能: submarine_1",
+      "配備可能: ship_hull_submarine_1",
       "カテゴリ: naval_equipment, ss_tech, mio_cat_tech_all_submarine_and_modules"
     ],
     "prerequisites": []
   },
   {
-    "id": "basic_destroyer",
-    "title": "Basic Destroyer",
+    "id": "basic_ship_hull_submarine",
+    "title": "Basic Ship Hull Submarine",
     "year": 1936,
-    "x": 0,
-    "y": 350,
-    "research_time": 200,
-    "reliability": "未研究",
-    "desc": "",
-    "asset_key": "basic_destroyer",
-    "effects": [
-      "配備可能: destroyer_2",
-      "カテゴリ: naval_equipment, dd_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_destroyer_and_modules"
-    ],
-    "prerequisites": [
-      "early_destroyer"
-    ]
-  },
-  {
-    "id": "basic_carrier",
-    "title": "Basic Carrier",
-    "year": 1936,
-    "x": 0,
-    "y": 350,
-    "research_time": 200,
-    "reliability": "未研究",
-    "desc": "",
-    "asset_key": "basic_carrier",
-    "effects": [
-      "配備可能: carrier_2",
-      "カテゴリ: naval_equipment, cv_tech, mio_cat_tech_all_carrier_and_modules"
-    ],
-    "prerequisites": [
-      "early_carrier"
-    ]
-  },
-  {
-    "id": "basic_submarine",
-    "title": "Basic Submarine",
-    "year": 1936,
-    "x": 0,
-    "y": 350,
-    "research_time": 200,
+    "x": -200,
+    "y": 400,
+    "research_time": 150,
     "reliability": "未研究",
     "desc": "",
     "asset_key": "basic_submarine",
     "effects": [
-      "配備可能: submarine_2",
+      "配備可能: ship_hull_submarine_2",
       "カテゴリ: naval_equipment, ss_tech, mio_cat_tech_all_submarine_and_modules"
     ],
     "prerequisites": [
-      "early_submarine"
+      "early_ship_hull_submarine"
     ]
   },
   {
-    "id": "improved_destroyer",
-    "title": "Improved Destroyer",
-    "year": 1940,
-    "x": 0,
-    "y": 650,
-    "research_time": 200,
-    "reliability": "未研究",
-    "desc": "",
-    "asset_key": "improved_destroyer",
-    "effects": [
-      "配備可能: destroyer_3",
-      "カテゴリ: naval_equipment, dd_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_destroyer_and_modules"
-    ],
-    "prerequisites": [
-      "basic_destroyer"
-    ]
-  },
-  {
-    "id": "landing_craft",
-    "title": "Landing Craft",
-    "year": 1940,
-    "x": 0,
-    "y": 650,
-    "research_time": 200,
-    "reliability": "未研究",
-    "desc": "",
-    "asset_key": "landing_craft",
-    "effects": [
-      "配備可能: floating_harbor_equipment_1",
-      "カテゴリ: naval_equipment, tp_tech"
-    ],
-    "prerequisites": [
-      "transport"
-    ]
-  },
-  {
-    "id": "improved_carrier",
-    "title": "Improved Carrier",
-    "year": 1940,
-    "x": 0,
-    "y": 650,
-    "research_time": 200,
-    "reliability": "未研究",
-    "desc": "",
-    "asset_key": "improved_carrier",
-    "effects": [
-      "配備可能: carrier_3",
-      "カテゴリ: naval_equipment, cv_tech, mio_cat_tech_all_carrier_and_modules"
-    ],
-    "prerequisites": [
-      "basic_carrier"
-    ]
-  },
-  {
-    "id": "improved_submarine",
-    "title": "Improved Submarine",
-    "year": 1940,
-    "x": 0,
-    "y": 650,
+    "id": "improved_ship_hull_submarine",
+    "title": "Improved Ship Hull Submarine",
+    "year": 1939,
+    "x": -200,
+    "y": 700,
     "research_time": 200,
     "reliability": "未研究",
     "desc": "",
     "asset_key": "improved_submarine",
     "effects": [
-      "配備可能: submarine_3",
+      "配備可能: ship_hull_submarine_3",
       "カテゴリ: naval_equipment, ss_tech, mio_cat_tech_all_submarine_and_modules"
     ],
     "prerequisites": [
-      "basic_submarine"
+      "basic_ship_hull_submarine"
     ]
   },
   {
-    "id": "advanced_destroyer",
-    "title": "Advanced Destroyer",
-    "year": 1944,
-    "x": 0,
-    "y": 950,
-    "research_time": 200,
-    "reliability": "未研究",
-    "desc": "",
-    "asset_key": "advanced_destroyer",
-    "effects": [
-      "配備可能: destroyer_4",
-      "カテゴリ: naval_equipment, dd_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_destroyer_and_modules"
-    ],
-    "prerequisites": [
-      "improved_destroyer"
-    ]
-  },
-  {
-    "id": "tank_landing_craft",
-    "title": "Tank Landing Craft",
-    "year": 1944,
-    "x": 0,
-    "y": 950,
-    "research_time": 200,
-    "reliability": "未研究",
-    "desc": "",
-    "asset_key": "tank_landing_craft",
-    "effects": [
-      "カテゴリ: naval_equipment, tp_tech"
-    ],
-    "prerequisites": [
-      "landing_craft"
-    ]
-  },
-  {
-    "id": "advanced_carrier",
-    "title": "Advanced Carrier",
-    "year": 1944,
-    "x": 0,
-    "y": 950,
-    "research_time": 200,
-    "reliability": "未研究",
-    "desc": "",
-    "asset_key": "advanced_carrier",
-    "effects": [
-      "配備可能: carrier_4",
-      "カテゴリ: naval_equipment, cv_tech, mio_cat_tech_all_carrier_and_modules"
-    ],
-    "prerequisites": [
-      "improved_carrier"
-    ]
-  },
-  {
-    "id": "advanced_submarine",
-    "title": "Advanced Submarine",
-    "year": 1944,
-    "x": 0,
-    "y": 950,
+    "id": "advanced_ship_hull_submarine",
+    "title": "Advanced Ship Hull Submarine",
+    "year": 1943,
+    "x": -200,
+    "y": 1000,
     "research_time": 200,
     "reliability": "未研究",
     "desc": "",
     "asset_key": "advanced_submarine",
     "effects": [
-      "配備可能: submarine_4",
+      "配備可能: ship_hull_submarine_4",
       "カテゴリ: naval_equipment, ss_tech, mio_cat_tech_all_submarine_and_modules"
     ],
     "prerequisites": [
-      "improved_submarine"
+      "improved_ship_hull_submarine"
     ]
   },
   {
-    "id": "early_heavy_cruiser",
-    "title": "Early Heavy Cruiser",
+    "id": "early_ship_hull_cruiser",
+    "title": "Early Ship Hull Cruiser",
     "year": 1922,
-    "x": 100,
-    "y": 50,
+    "x": -100,
+    "y": 100,
     "research_time": 150,
     "reliability": "未研究",
     "desc": "",
-    "asset_key": "early_heavy_cruiser",
+    "asset_key": "early_light_cruiser",
     "effects": [
-      "配備可能: heavy_cruiser_1",
-      "カテゴリ: naval_artillery, naval_equipment, ca_tech, mio_cat_tech_all_capital_ship_and_modules, mio_cat_tech_all_cruiser_and_modules"
+      "配備可能: ship_hull_cruiser_1",
+      "カテゴリ: naval_equipment, ca_tech, mio_cat_tech_all_capital_ship_and_modules, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_cruiser_and_modules"
     ],
     "prerequisites": []
   },
   {
-    "id": "early_battleship",
-    "title": "Early Battleship",
+    "id": "early_ship_hull_carrier",
+    "title": "Early Ship Hull Carrier",
     "year": 1922,
-    "x": 100,
-    "y": 50,
+    "x": -100,
+    "y": 100,
+    "research_time": 175,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "early_carrier",
+    "effects": [
+      "配備可能: ship_hull_carrier_conversion_bb",
+      "配備可能: ship_hull_carrier_conversion_ca",
+      "カテゴリ: naval_equipment, cv_tech, mio_cat_tech_all_carrier_and_modules"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "basic_ship_hull_cruiser",
+    "title": "Basic Ship Hull Cruiser",
+    "year": 1936,
+    "x": -100,
+    "y": 400,
     "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "basic_light_cruiser",
+    "effects": [
+      "配備可能: ship_hull_cruiser_2",
+      "カテゴリ: naval_equipment, ca_tech, mio_cat_tech_all_capital_ship_and_modules, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_cruiser_and_modules"
+    ],
+    "prerequisites": [
+      "early_ship_hull_cruiser"
+    ]
+  },
+  {
+    "id": "basic_ship_hull_carrier",
+    "title": "Basic Ship Hull Carrier",
+    "year": 1936,
+    "x": -100,
+    "y": 400,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "basic_carrier",
+    "effects": [
+      "配備可能: ship_hull_carrier_1",
+      "カテゴリ: naval_equipment, cv_tech, mio_cat_tech_all_carrier_and_modules"
+    ],
+    "prerequisites": [
+      "early_ship_hull_carrier"
+    ]
+  },
+  {
+    "id": "basic_submarine_snorkel",
+    "title": "Basic Submarine Snorkel",
+    "year": 1939,
+    "x": -100,
+    "y": 650,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "basic_submarine_snorkel",
+    "effects": [
+      "カテゴリ: naval_equipment, ss_tech, ship_modules_tech, mio_cat_tech_all_submarine_and_modules"
+    ],
+    "prerequisites": [
+      "improved_ship_hull_submarine"
+    ]
+  },
+  {
+    "id": "improved_ship_hull_cruiser",
+    "title": "Improved Ship Hull Cruiser",
+    "year": 1939,
+    "x": -100,
+    "y": 700,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "improved_light_cruiser",
+    "effects": [
+      "配備可能: ship_hull_cruiser_3",
+      "カテゴリ: naval_equipment, ca_tech, mio_cat_tech_all_capital_ship_and_modules, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_cruiser_and_modules"
+    ],
+    "prerequisites": [
+      "basic_ship_hull_cruiser"
+    ]
+  },
+  {
+    "id": "improved_ship_hull_carrier",
+    "title": "Improved Ship Hull Carrier",
+    "year": 1939,
+    "x": -100,
+    "y": 700,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "improved_carrier",
+    "effects": [
+      "配備可能: ship_hull_carrier_2",
+      "カテゴリ: naval_equipment, cv_tech, mio_cat_tech_all_carrier_and_modules"
+    ],
+    "prerequisites": [
+      "basic_ship_hull_carrier"
+    ]
+  },
+  {
+    "id": "improved_submarine_snorkel",
+    "title": "Improved Submarine Snorkel",
+    "year": 1943,
+    "x": -100,
+    "y": 950,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "improved_submarine_snorkel",
+    "effects": [
+      "カテゴリ: naval_equipment, ss_tech, ship_modules_tech, mio_cat_tech_all_submarine_and_modules"
+    ],
+    "prerequisites": [
+      "basic_submarine_snorkel"
+    ]
+  },
+  {
+    "id": "advanced_ship_hull_cruiser",
+    "title": "Advanced Ship Hull Cruiser",
+    "year": 1943,
+    "x": -100,
+    "y": 1000,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "advanced_light_cruiser",
+    "effects": [
+      "配備可能: ship_hull_cruiser_4",
+      "カテゴリ: naval_equipment, ca_tech, mio_cat_tech_all_capital_ship_and_modules, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_cruiser_and_modules"
+    ],
+    "prerequisites": [
+      "improved_ship_hull_cruiser"
+    ]
+  },
+  {
+    "id": "advanced_ship_hull_carrier",
+    "title": "Advanced Ship Hull Carrier",
+    "year": 1943,
+    "x": -100,
+    "y": 1000,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "advanced_carrier",
+    "effects": [
+      "配備可能: ship_hull_carrier_3",
+      "カテゴリ: naval_equipment, cv_tech, mio_cat_tech_all_carrier_and_modules"
+    ],
+    "prerequisites": [
+      "improved_ship_hull_carrier"
+    ]
+  },
+  {
+    "id": "early_ship_hull_light",
+    "title": "Early Ship Hull Light",
+    "year": 1922,
+    "x": 0,
+    "y": 100,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "early_destroyer",
+    "effects": [
+      "配備可能: ship_hull_light_1",
+      "カテゴリ: naval_equipment, dd_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_destroyer_and_modules"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "basic_cruiser_armor_scheme",
+    "title": "Basic Cruiser Armor Scheme",
+    "year": 1922,
+    "x": 0,
+    "y": 100,
+    "research_time": 50,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "basic_cruiser_armor_scheme",
+    "effects": [
+      "カテゴリ: naval_armor, naval_equipment, ca_tech, ship_modules_tech, mio_cat_tech_all_capital_ship_and_modules, mio_cat_tech_all_cruiser_and_modules, mio_cat_tech_all_carrier_and_modules"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "early_ship_hull_heavy",
+    "title": "Early Ship Hull Heavy",
+    "year": 1922,
+    "x": 0,
+    "y": 100,
+    "research_time": 175,
     "reliability": "未研究",
     "desc": "",
     "asset_key": "early_battleship",
     "effects": [
-      "配備可能: battleship_1",
-      "カテゴリ: naval_artillery, naval_equipment, bb_tech, mio_cat_tech_all_capital_ship_and_modules"
+      "配備可能: ship_hull_heavy_1",
+      "カテゴリ: naval_equipment, bb_tech, bc_tech, mio_cat_tech_all_capital_ship_and_modules"
     ],
     "prerequisites": []
   },
   {
-    "id": "basic_heavy_cruiser",
-    "title": "Basic Heavy Cruiser",
+    "id": "basic_heavy_armor_scheme",
+    "title": "Basic Heavy Armor Scheme",
     "year": 1936,
-    "x": 100,
-    "y": 350,
-    "research_time": 200,
+    "x": 0,
+    "y": 250,
+    "research_time": 125,
     "reliability": "未研究",
     "desc": "",
-    "asset_key": "basic_heavy_cruiser",
+    "asset_key": "basic_heavy_armor_scheme",
     "effects": [
-      "配備可能: heavy_cruiser_2",
-      "カテゴリ: naval_artillery, naval_equipment, ca_tech, mio_cat_tech_all_capital_ship_and_modules, mio_cat_tech_all_cruiser_and_modules"
+      "カテゴリ: naval_armor, naval_equipment, bb_tech, bc_tech, ship_modules_tech, mio_cat_tech_all_capital_ship_and_modules"
     ],
     "prerequisites": [
-      "basic_light_cruiser",
-      "early_heavy_cruiser"
+      "basic_cruiser_armor_scheme",
+      "basic_ship_hull_heavy"
     ]
   },
   {
-    "id": "basic_battleship",
-    "title": "Basic Battleship",
+    "id": "basic_ship_hull_light",
+    "title": "Basic Ship Hull Light",
     "year": 1936,
-    "x": 100,
-    "y": 350,
-    "research_time": 200,
+    "x": 0,
+    "y": 400,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "basic_destroyer",
+    "effects": [
+      "配備可能: ship_hull_light_2",
+      "カテゴリ: naval_equipment, dd_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_destroyer_and_modules"
+    ],
+    "prerequisites": [
+      "early_ship_hull_light"
+    ]
+  },
+  {
+    "id": "basic_ship_hull_heavy",
+    "title": "Basic Ship Hull Heavy",
+    "year": 1936,
+    "x": 0,
+    "y": 400,
+    "research_time": 150,
     "reliability": "未研究",
     "desc": "",
     "asset_key": "basic_battleship",
     "effects": [
-      "配備可能: battleship_2",
-      "カテゴリ: naval_artillery, naval_equipment, bb_tech, mio_cat_tech_all_capital_ship_and_modules"
+      "配備可能: ship_hull_heavy_2",
+      "カテゴリ: naval_equipment, bb_tech, bc_tech, mio_cat_tech_all_capital_ship_and_modules"
     ],
     "prerequisites": [
-      "early_battleship"
+      "early_ship_hull_heavy"
     ]
   },
   {
-    "id": "improved_heavy_cruiser",
-    "title": "Improved Heavy Cruiser",
-    "year": 1940,
-    "x": 100,
-    "y": 650,
-    "research_time": 200,
+    "id": "improved_heavy_armor_scheme",
+    "title": "Improved Heavy Armor Scheme",
+    "year": 1936,
+    "x": 0,
+    "y": 400,
+    "research_time": 125,
     "reliability": "未研究",
     "desc": "",
-    "asset_key": "improved_heavy_cruiser",
+    "asset_key": "improved_heavy_armor_scheme",
     "effects": [
-      "配備可能: heavy_cruiser_3",
-      "カテゴリ: naval_artillery, naval_equipment, ca_tech, mio_cat_tech_all_capital_ship_and_modules, mio_cat_tech_all_cruiser_and_modules"
+      "カテゴリ: naval_armor, naval_equipment, bb_tech, bc_tech, ship_modules_tech, mio_cat_tech_all_capital_ship_and_modules"
     ],
     "prerequisites": [
-      "improved_light_cruiser",
-      "basic_heavy_cruiser"
+      "basic_heavy_armor_scheme"
     ]
   },
   {
-    "id": "improved_battleship",
-    "title": "Improved Battleship",
-    "year": 1940,
-    "x": 100,
-    "y": 650,
-    "research_time": 200,
+    "id": "improved_ship_hull_light",
+    "title": "Improved Ship Hull Light",
+    "year": 1939,
+    "x": 0,
+    "y": 700,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "improved_destroyer",
+    "effects": [
+      "配備可能: ship_hull_light_3",
+      "カテゴリ: naval_equipment, dd_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_destroyer_and_modules"
+    ],
+    "prerequisites": [
+      "basic_ship_hull_light"
+    ]
+  },
+  {
+    "id": "improved_ship_hull_heavy",
+    "title": "Improved Ship Hull Heavy",
+    "year": 1939,
+    "x": 0,
+    "y": 700,
+    "research_time": 150,
     "reliability": "未研究",
     "desc": "",
     "asset_key": "improved_battleship",
     "effects": [
-      "配備可能: battleship_3",
-      "カテゴリ: naval_artillery, naval_equipment, bb_tech, mio_cat_tech_all_capital_ship_and_modules"
+      "配備可能: ship_hull_heavy_3",
+      "カテゴリ: naval_equipment, bb_tech, bc_tech, mio_cat_tech_all_capital_ship_and_modules"
     ],
     "prerequisites": [
-      "basic_battlecruiser",
-      "basic_battleship"
+      "basic_ship_hull_heavy"
     ]
   },
   {
-    "id": "advanced_heavy_cruiser",
-    "title": "Advanced Heavy Cruiser",
-    "year": 1944,
-    "x": 100,
-    "y": 950,
+    "id": "sp_refined_pykrete",
+    "title": "Sp Refined Pykrete",
+    "year": 1942,
+    "x": 0,
+    "y": 850,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_surface_refined_pykrete",
+    "effects": [
+      "カテゴリ: naval_equipment, cv_tech, mio_cat_tech_all_carrier_and_modules, pykrete_tech"
+    ],
+    "prerequisites": [
+      "improved_ship_hull_carrier"
+    ]
+  },
+  {
+    "id": "advanced_ship_hull_light",
+    "title": "Advanced Ship Hull Light",
+    "year": 1943,
+    "x": 0,
+    "y": 1000,
     "research_time": 200,
     "reliability": "未研究",
     "desc": "",
-    "asset_key": "advanced_heavy_cruiser",
+    "asset_key": "advanced_destroyer",
     "effects": [
-      "配備可能: heavy_cruiser_4",
-      "カテゴリ: naval_artillery, naval_equipment, ca_tech, mio_cat_tech_all_capital_ship_and_modules, mio_cat_tech_all_cruiser_and_modules"
+      "配備可能: ship_hull_light_4",
+      "カテゴリ: naval_equipment, dd_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_destroyer_and_modules"
     ],
     "prerequisites": [
-      "advanced_light_cruiser",
-      "improved_heavy_cruiser"
+      "improved_ship_hull_light"
     ]
   },
   {
-    "id": "advanced_battleship",
-    "title": "Advanced Battleship",
-    "year": 1944,
-    "x": 100,
-    "y": 950,
-    "research_time": 200,
+    "id": "advanced_ship_hull_heavy",
+    "title": "Advanced Ship Hull Heavy",
+    "year": 1943,
+    "x": 0,
+    "y": 1000,
+    "research_time": 150,
     "reliability": "未研究",
     "desc": "",
     "asset_key": "advanced_battleship",
     "effects": [
-      "配備可能: battleship_4",
-      "カテゴリ: naval_artillery, naval_equipment, bb_tech, mio_cat_tech_all_capital_ship_and_modules"
+      "配備可能: ship_hull_heavy_4",
+      "カテゴリ: naval_equipment, bb_tech, bc_tech, mio_cat_tech_all_capital_ship_and_modules"
     ],
     "prerequisites": [
-      "improved_battleship"
+      "improved_ship_hull_heavy"
     ]
   },
   {
-    "id": "heavy_battleship2",
-    "title": "Heavy Battleship 2",
+    "id": "sp_ice_composite_runawayas",
+    "title": "Sp Ice Composite Runawayas",
     "year": 1944,
-    "x": 300,
+    "x": 0,
+    "y": 1150,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_surface_ice_composite_runways",
+    "effects": [
+      "カテゴリ: naval_equipment, cv_tech, mio_cat_tech_all_carrier_and_modules, pykrete_tech"
+    ],
+    "prerequisites": [
+      "sp_refined_pykrete"
+    ]
+  },
+  {
+    "id": "smoke_generator",
+    "title": "Smoke Generator",
+    "year": 1922,
+    "x": 100,
+    "y": 100,
+    "research_time": 75,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "smoke_generator",
+    "effects": [
+      "カテゴリ: naval_equipment, dd_tech, ship_modules_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_destroyer_and_modules"
+    ],
+    "prerequisites": [
+      "early_ship_hull_light"
+    ]
+  },
+  {
+    "id": "basic_depth_charges",
+    "title": "Basic Depth Charges",
+    "year": 1922,
+    "x": 100,
+    "y": 200,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "basic_depth_charges",
+    "effects": [
+      "カテゴリ: naval_equipment, dd_tech, asw_tech, ship_modules_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_destroyer_and_modules"
+    ],
+    "prerequisites": [
+      "early_ship_hull_light"
+    ]
+  },
+  {
+    "id": "improved_depth_charges",
+    "title": "Improved Depth Charges",
+    "year": 1936,
+    "x": 100,
+    "y": 400,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "improved_depth_charges",
+    "effects": [
+      "カテゴリ: naval_equipment, dd_tech, asw_tech, ship_modules_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_destroyer_and_modules"
+    ],
+    "prerequisites": [
+      "basic_depth_charges"
+    ]
+  },
+  {
+    "id": "sp_aip_engine_improved_tech",
+    "title": "Sp Aip Engine Improved Tech",
+    "year": 1939,
+    "x": 100,
+    "y": 650,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_submarine_aip_diesel_combination_engines",
+    "effects": [
+      "カテゴリ: naval_equipment, ss_tech, ship_modules_tech, mio_cat_tech_all_submarine_and_modules"
+    ],
+    "prerequisites": [
+      "basic_ship_hull_submarine"
+    ]
+  },
+  {
+    "id": "advanced_depth_charges",
+    "title": "Advanced Depth Charges",
+    "year": 1939,
+    "x": 100,
+    "y": 700,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "advanced_depth_charges",
+    "effects": [
+      "カテゴリ: naval_equipment, dd_tech, asw_tech, ship_modules_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_destroyer_and_modules"
+    ],
+    "prerequisites": [
+      "improved_depth_charges"
+    ]
+  },
+  {
+    "id": "sp_aip_engine_advanced_tech",
+    "title": "Sp Aip Engine Advanced Tech",
+    "year": 1943,
+    "x": 100,
     "y": 950,
     "research_time": 200,
     "reliability": "未研究",
     "desc": "",
-    "asset_key": "heavy_battleship2",
+    "asset_key": "sp_submarine_high_speed_walter_engines",
     "effects": [
-      "配備可能: SH_battleship_2",
-      "カテゴリ: naval_equipment, shbb_tech, mio_cat_tech_all_capital_ship_and_modules"
+      "カテゴリ: naval_equipment, ss_tech, ship_modules_tech, mio_cat_tech_all_submarine_and_modules"
     ],
     "prerequisites": [
-      "basic_battleship"
+      "sp_aip_engine_improved_tech"
+    ]
+  },
+  {
+    "id": "modern_depth_charges",
+    "title": "Modern Depth Charges",
+    "year": 1943,
+    "x": 100,
+    "y": 1000,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "modern_depth_charges",
+    "effects": [
+      "カテゴリ: naval_equipment, dd_tech, asw_tech, ship_modules_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_destroyer_and_modules"
+    ],
+    "prerequisites": [
+      "advanced_depth_charges"
+    ]
+  },
+  {
+    "id": "sonar",
+    "title": "Sonar",
+    "year": 1922,
+    "x": 200,
+    "y": 50,
+    "research_time": 150,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sonar",
+    "effects": [
+      "カテゴリ: naval_equipment, dd_tech, asw_tech, ship_modules_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_destroyer_and_modules"
+    ],
+    "prerequisites": [
+      "early_ship_hull_light"
+    ]
+  },
+  {
+    "id": "improved_sonar",
+    "title": "Improved Sonar",
+    "year": 1936,
+    "x": 200,
+    "y": 350,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "improved_sonar",
+    "effects": [
+      "カテゴリ: naval_equipment, dd_tech, asw_tech, ship_modules_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_destroyer_and_modules"
+    ],
+    "prerequisites": [
+      "sonar"
+    ]
+  },
+  {
+    "id": "advanced_sonar",
+    "title": "Advanced Sonar",
+    "year": 1939,
+    "x": 200,
+    "y": 650,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "advanced_sonar",
+    "effects": [
+      "カテゴリ: naval_equipment, dd_tech, asw_tech, ship_modules_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_destroyer_and_modules"
+    ],
+    "prerequisites": [
+      "improved_sonar"
+    ]
+  },
+  {
+    "id": "modern_sonar",
+    "title": "Modern Sonar",
+    "year": 1943,
+    "x": 200,
+    "y": 950,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "modern_sonar",
+    "effects": [
+      "カテゴリ: naval_equipment, dd_tech, asw_tech, ship_modules_tech, mio_cat_tech_all_screen_ship_and_modules, mio_cat_tech_all_destroyer_and_modules"
+    ],
+    "prerequisites": [
+      "advanced_sonar"
     ]
   }
 ]

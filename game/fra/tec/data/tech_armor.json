@@ -1,257 +1,544 @@
 [
   {
-    "id": "amphibious_tank",
-    "title": "Amphibious Tank",
-    "year": 1940,
-    "x": -800,
-    "y": 350,
+    "id": "amphibious_tank_chassis",
+    "title": "Amphibious Tank Chassis",
+    "year": 1938,
+    "x": -400,
+    "y": 250,
     "research_time": 200,
     "reliability": "未研究",
     "desc": "",
     "asset_key": "generic_amphibious_tank_1",
     "effects": [
-      "配備可能: amphibious_tank_equipment_1",
+      "配備可能: amphibious_tank_chassis_1",
       "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, tp_tech, mio_cat_tech_light_armor_and_modules"
     ],
     "prerequisites": [
-      "improved_light_tank"
+      "improved_light_tank_chassis"
     ]
   },
   {
-    "id": "amphibious_tank_2",
-    "title": "Amphibious Tank 2",
-    "year": 1942,
-    "x": -800,
-    "y": 450,
-    "research_time": 200,
-    "reliability": "未研究",
-    "desc": "",
-    "asset_key": "generic_amphibious_tank_2",
-    "effects": [
-      "配備可能: amphibious_tank_equipment_2",
-      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, tp_tech, mio_cat_tech_light_armor_and_modules"
-    ],
-    "prerequisites": [
-      "amphibious_tank"
-    ]
-  },
-  {
-    "id": "basic_light_tank",
-    "title": "Basic Light Tank",
-    "year": 1934,
-    "x": -400,
-    "y": 100,
-    "research_time": 200,
-    "reliability": "未研究",
-    "desc": "",
-    "asset_key": "basic_light_tank",
-    "effects": [
-      "配備可能: light_tank_equipment_1",
-      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_light_armor, mio_cat_tech_light_armor_and_modules"
-    ],
-    "prerequisites": [
-      "gwtank"
-    ]
-  },
-  {
-    "id": "improved_light_tank",
-    "title": "Improved Light Tank",
-    "year": 1936,
-    "x": -400,
-    "y": 200,
-    "research_time": 200,
-    "reliability": "未研究",
-    "desc": "",
-    "asset_key": "improved_light_tank",
-    "effects": [
-      "配備可能: light_tank_equipment_2",
-      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_light_armor, mio_cat_tech_light_armor_and_modules"
-    ],
-    "prerequisites": [
-      "basic_light_tank"
-    ]
-  },
-  {
-    "id": "advanced_light_tank",
-    "title": "Advanced Light Tank",
+    "id": "amphibious_drive",
+    "title": "Amphibious Drive",
     "year": 1941,
     "x": -400,
     "y": 400,
     "research_time": 200,
     "reliability": "未研究",
     "desc": "",
-    "asset_key": "advanced_light_tank",
+    "asset_key": "nsb_amphibious_drive_tech",
     "effects": [
-      "配備可能: light_tank_equipment_3",
-      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_light_armor, mio_cat_tech_light_armor_and_modules"
+      "配備可能: light_tank_amphibious_chassis_0",
+      "配備可能: medium_tank_amphibious_chassis_0",
+      "配備可能: heavy_tank_amphibious_chassis_0",
+      "配備可能: light_tank_amphibious_chassis_1",
+      "配備可能: medium_tank_amphibious_chassis_1",
+      "配備可能: heavy_tank_amphibious_chassis_1",
+      "配備可能: light_tank_amphibious_chassis_2",
+      "配備可能: medium_tank_amphibious_chassis_2",
+      "配備可能: heavy_tank_amphibious_chassis_2",
+      "配備可能: light_tank_amphibious_chassis_3",
+      "配備可能: medium_tank_amphibious_chassis_3",
+      "配備可能: heavy_tank_amphibious_chassis_3",
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, tp_tech, mio_cat_tech_light_armor_and_modules"
     ],
     "prerequisites": [
-      "improved_light_tank"
+      "amphibious_tank_chassis"
     ]
   },
   {
-    "id": "gwtank",
-    "title": "Gwtank",
-    "year": 1918,
+    "id": "basic_light_tank_chassis",
+    "title": "Basic Light Tank Chassis",
+    "year": 1934,
+    "x": -100,
+    "y": 100,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_light_tank_chassis_1",
+    "effects": [
+      "配備可能: light_tank_chassis_1",
+      "配備可能: light_tank_destroyer_chassis_1",
+      "配備可能: light_tank_artillery_chassis_1",
+      "配備可能: light_tank_aa_chassis_1",
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_light_armor, mio_cat_tech_light_armor_and_modules"
+    ],
+    "prerequisites": [
+      "gwtank_chassis"
+    ]
+  },
+  {
+    "id": "improved_light_tank_chassis",
+    "title": "Improved Light Tank Chassis",
+    "year": 1936,
+    "x": -100,
+    "y": 200,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_light_tank_chassis_2",
+    "effects": [
+      "配備可能: light_tank_chassis_2",
+      "配備可能: light_tank_destroyer_chassis_2",
+      "配備可能: light_tank_artillery_chassis_2",
+      "配備可能: light_tank_aa_chassis_2",
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_light_armor, mio_cat_tech_light_armor_and_modules"
+    ],
+    "prerequisites": [
+      "basic_light_tank_chassis"
+    ]
+  },
+  {
+    "id": "advanced_light_tank_chassis",
+    "title": "Advanced Light Tank Chassis",
+    "year": 1941,
+    "x": -100,
+    "y": 400,
+    "research_time": 200,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_light_tank_chassis_3",
+    "effects": [
+      "配備可能: light_tank_chassis_3",
+      "配備可能: light_tank_destroyer_chassis_3",
+      "配備可能: light_tank_artillery_chassis_3",
+      "配備可能: light_tank_aa_chassis_3",
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_light_armor, mio_cat_tech_light_armor_and_modules"
+    ],
+    "prerequisites": [
+      "improved_light_tank_chassis"
+    ]
+  },
+  {
+    "id": "sp_armored_lc_naval_engine_conversion_tech",
+    "title": "Sp Armored Lc Naval Engine Conversion Tech",
+    "year": 1943,
     "x": 0,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_armored_lc_naval_engine_conversion",
+    "effects": [
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_heavy_armor, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": [
+      "super_heavy_tank_chassis"
+    ]
+  },
+  {
+    "id": "sp_armored_lc_transmission_improvements_tech",
+    "title": "Sp Armored Lc Transmission Improvements Tech",
+    "year": 1943,
+    "x": 0,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_armored_lc_transmission_improvements",
+    "effects": [
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_heavy_armor, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": [
+      "super_heavy_tank_chassis"
+    ]
+  },
+  {
+    "id": "sp_armored_lc_specialized_field_manuals_tech",
+    "title": "Sp Armored Lc Specialized Field Manuals Tech",
+    "year": 1943,
+    "x": 0,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_armored_lc_specialized_field_manuals",
+    "effects": [
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_heavy_armor, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": [
+      "super_heavy_tank_chassis"
+    ]
+  },
+  {
+    "id": "sp_armored_lc_weapon_fire_control_tech",
+    "title": "Sp Armored Lc Weapon Fire Control Tech",
+    "year": 1945,
+    "x": 0,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_armored_lc_weapon_fire_control",
+    "effects": [
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_heavy_armor, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": [
+      "sp_armored_lc_naval_engine_conversion_tech",
+      "sp_armored_lc_transmission_improvements_tech",
+      "sp_armored_lc_specialized_field_manuals_tech"
+    ]
+  },
+  {
+    "id": "gwtank_chassis",
+    "title": "Gwtank Chassis",
+    "year": 1918,
+    "x": 200,
     "y": 0,
     "research_time": 200,
     "reliability": "未研究",
     "desc": "",
-    "asset_key": "gwtank",
+    "asset_key": "generic_inter_war_light_tank_chassis",
     "effects": [
-      "配備可能: gw_tank_equipment",
+      "配備可能: light_tank_chassis_0",
+      "配備可能: medium_tank_chassis_0",
+      "配備可能: heavy_tank_chassis_0",
+      "配備可能: light_tank_destroyer_chassis_0",
+      "配備可能: medium_tank_destroyer_chassis_0",
+      "配備可能: heavy_tank_destroyer_chassis_0",
+      "配備可能: light_tank_artillery_chassis_0",
+      "配備可能: medium_tank_artillery_chassis_0",
+      "配備可能: heavy_tank_artillery_chassis_0",
+      "配備可能: light_tank_aa_chassis_0",
+      "配備可能: medium_tank_aa_chassis_0",
+      "配備可能: heavy_tank_aa_chassis_0",
       "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_light_armor, mio_cat_tech_light_armor_and_modules"
     ],
     "prerequisites": []
   },
   {
-    "id": "basic_medium_tank",
-    "title": "Basic Medium Tank",
-    "year": 1939,
-    "x": 0,
-    "y": 300,
+    "id": "basic_medium_tank_chassis",
+    "title": "Basic Medium Tank Chassis",
+    "year": 1938,
+    "x": 200,
+    "y": 0,
     "research_time": 200,
     "reliability": "未研究",
     "desc": "",
-    "asset_key": "basic_medium_tank",
+    "asset_key": "generic_medium_tank_chassis_1",
     "effects": [
-      "配備可能: medium_tank_equipment_1",
+      "配備可能: medium_tank_chassis_1",
+      "配備可能: medium_tank_destroyer_chassis_1",
+      "配備可能: medium_tank_artillery_chassis_1",
+      "配備可能: medium_tank_aa_chassis_1",
       "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_medium_armor, mio_cat_tech_medium_armor_and_modules"
     ],
     "prerequisites": [
-      "improved_light_tank"
+      "gwtank_chassis"
     ]
   },
   {
-    "id": "improved_medium_tank",
-    "title": "Improved Medium Tank",
-    "year": 1941,
-    "x": 0,
-    "y": 400,
+    "id": "improved_medium_tank_chassis",
+    "title": "Improved Medium Tank Chassis",
+    "year": 1940,
+    "x": 200,
+    "y": 0,
     "research_time": 200,
     "reliability": "未研究",
     "desc": "",
-    "asset_key": "improved_medium_tank",
+    "asset_key": "generic_medium_tank_chassis_2",
     "effects": [
-      "配備可能: medium_tank_equipment_2",
+      "配備可能: medium_tank_chassis_2",
+      "配備可能: medium_tank_destroyer_chassis_2",
+      "配備可能: medium_tank_artillery_chassis_2",
+      "配備可能: medium_tank_aa_chassis_2",
       "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_medium_armor, mio_cat_tech_medium_armor_and_modules"
     ],
     "prerequisites": [
-      "basic_medium_tank",
-      "improved_heavy_tank"
+      "basic_medium_tank_chassis"
     ]
   },
   {
-    "id": "advanced_medium_tank",
-    "title": "Advanced Medium Tank",
+    "id": "advanced_medium_tank_chassis",
+    "title": "Advanced Medium Tank Chassis",
     "year": 1943,
-    "x": 0,
-    "y": 500,
+    "x": 200,
+    "y": 0,
     "research_time": 200,
     "reliability": "未研究",
     "desc": "",
-    "asset_key": "advanced_medium_tank",
+    "asset_key": "generic_medium_tank_chassis_3",
     "effects": [
-      "配備可能: medium_tank_equipment_3",
+      "配備可能: medium_tank_chassis_3",
+      "配備可能: medium_tank_destroyer_chassis_3",
+      "配備可能: medium_tank_artillery_chassis_3",
+      "配備可能: medium_tank_aa_chassis_3",
       "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_medium_armor, mio_cat_tech_medium_armor_and_modules"
     ],
     "prerequisites": [
-      "improved_medium_tank",
-      "advanced_heavy_tank"
+      "improved_medium_tank_chassis"
     ]
   },
   {
-    "id": "main_battle_tank",
-    "title": "Main Battle Tank",
+    "id": "main_battle_tank_chassis",
+    "title": "Main Battle Tank Chassis",
     "year": 1945,
     "x": 200,
-    "y": 600,
+    "y": 0,
     "research_time": 250,
     "reliability": "未研究",
     "desc": "",
-    "asset_key": "main_battle_tank",
+    "asset_key": "generic_modern_tank_chassis",
     "effects": [
-      "配備可能: modern_tank_equipment_1",
+      "配備可能: modern_tank_chassis_1",
+      "配備可能: modern_tank_destroyer_chassis_1",
+      "配備可能: modern_tank_artillery_chassis_1",
+      "配備可能: modern_tank_aa_chassis_1",
       "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_medium_armor, mio_cat_tech_medium_armor_and_modules"
     ],
     "prerequisites": [
-      "advanced_medium_tank",
-      "advanced_heavy_tank"
+      "advanced_medium_tank_chassis",
+      "advanced_heavy_tank_chassis"
     ]
   },
   {
-    "id": "basic_heavy_tank",
-    "title": "Basic Heavy Tank",
+    "id": "engine_tech_1",
+    "title": "Engine Tech 1",
     "year": 1934,
-    "x": 400,
+    "x": 200,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "nsb_engine_tech_1",
+    "effects": [
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, mio_cat_tech_light_armor_and_modules, mio_cat_tech_medium_armor_and_modules, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "engine_tech_2",
+    "title": "Engine Tech 2",
+    "year": 1938,
+    "x": 200,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "nsb_engine_tech_2",
+    "effects": [
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, mio_cat_tech_light_armor_and_modules, mio_cat_tech_medium_armor_and_modules, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": [
+      "engine_tech_1"
+    ]
+  },
+  {
+    "id": "engine_tech_3",
+    "title": "Engine Tech 3",
+    "year": 1941,
+    "x": 200,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "nsb_engine_tech_3",
+    "effects": [
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, mio_cat_tech_light_armor_and_modules, mio_cat_tech_medium_armor_and_modules, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": [
+      "engine_tech_2"
+    ]
+  },
+  {
+    "id": "engine_tech_4",
+    "title": "Engine Tech 4",
+    "year": 1944,
+    "x": 200,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "nsb_engine_tech_4",
+    "effects": [
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, mio_cat_tech_light_armor_and_modules, mio_cat_tech_medium_armor_and_modules, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": [
+      "engine_tech_3"
+    ]
+  },
+  {
+    "id": "armor_tech_1",
+    "title": "Armor Tech 1",
+    "year": 1936,
+    "x": 300,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "nsb_armor_tech_1",
+    "effects": [
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, mio_cat_tech_light_armor_and_modules, mio_cat_tech_medium_armor_and_modules, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": []
+  },
+  {
+    "id": "armor_tech_2",
+    "title": "Armor Tech 2",
+    "year": 1938,
+    "x": 300,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "nsb_armor_tech_2",
+    "effects": [
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, mio_cat_tech_light_armor_and_modules, mio_cat_tech_medium_armor_and_modules, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": [
+      "armor_tech_1"
+    ]
+  },
+  {
+    "id": "armor_tech_3",
+    "title": "Armor Tech 3",
+    "year": 1941,
+    "x": 300,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "nsb_armor_tech_3",
+    "effects": [
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, mio_cat_tech_light_armor_and_modules, mio_cat_tech_medium_armor_and_modules, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": [
+      "armor_tech_2"
+    ]
+  },
+  {
+    "id": "armor_tech_4",
+    "title": "Armor Tech 4",
+    "year": 1944,
+    "x": 300,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "nsb_armor_tech_4",
+    "effects": [
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, mio_cat_tech_light_armor_and_modules, mio_cat_tech_medium_armor_and_modules, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": [
+      "armor_tech_3"
+    ]
+  },
+  {
+    "id": "improved_heavy_tank_chassis",
+    "title": "Improved Heavy Tank Chassis",
+    "year": 1940,
+    "x": 500,
+    "y": 0,
+    "research_time": 250,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_heavy_tank_chassis_2",
+    "effects": [
+      "配備可能: heavy_tank_chassis_2",
+      "配備可能: heavy_tank_destroyer_chassis_2",
+      "配備可能: heavy_tank_artillery_chassis_2",
+      "配備可能: heavy_tank_aa_chassis_2",
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_heavy_armor, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": [
+      "basic_heavy_tank_chassis"
+    ]
+  },
+  {
+    "id": "advanced_heavy_tank_chassis",
+    "title": "Advanced Heavy Tank Chassis",
+    "year": 1943,
+    "x": 500,
+    "y": 0,
+    "research_time": 250,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "generic_heavy_tank_chassis_3",
+    "effects": [
+      "配備可能: heavy_tank_chassis_3",
+      "配備可能: heavy_tank_destroyer_chassis_3",
+      "配備可能: heavy_tank_artillery_chassis_3",
+      "配備可能: heavy_tank_aa_chassis_3",
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_heavy_armor, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": [
+      "improved_heavy_tank_chassis"
+    ]
+  },
+  {
+    "id": "basic_heavy_tank_chassis",
+    "title": "Basic Heavy Tank Chassis",
+    "year": 1934,
+    "x": 500,
     "y": 100,
     "research_time": 200,
     "reliability": "未研究",
     "desc": "",
-    "asset_key": "basic_heavy_tank",
+    "asset_key": "generic_heavy_tank_chassis_1",
     "effects": [
-      "配備可能: heavy_tank_equipment_1",
+      "配備可能: heavy_tank_chassis_1",
+      "配備可能: heavy_tank_destroyer_chassis_1",
+      "配備可能: heavy_tank_artillery_chassis_1",
+      "配備可能: heavy_tank_aa_chassis_1",
       "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_heavy_armor, mio_cat_tech_heavy_armor_and_modules"
     ],
     "prerequisites": [
-      "gwtank"
+      "gwtank_chassis"
     ]
   },
   {
-    "id": "improved_heavy_tank",
-    "title": "Improved Heavy Tank",
-    "year": 1941,
-    "x": 400,
-    "y": 400,
-    "research_time": 250,
-    "reliability": "未研究",
-    "desc": "",
-    "asset_key": "improved_heavy_tank",
-    "effects": [
-      "配備可能: heavy_tank_equipment_2",
-      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_heavy_armor, mio_cat_tech_heavy_armor_and_modules"
-    ],
-    "prerequisites": [
-      "improved_medium_tank",
-      "basic_heavy_tank"
-    ]
-  },
-  {
-    "id": "advanced_heavy_tank",
-    "title": "Advanced Heavy Tank",
-    "year": 1943,
-    "x": 400,
-    "y": 500,
-    "research_time": 250,
-    "reliability": "未研究",
-    "desc": "",
-    "asset_key": "advanced_heavy_tank",
-    "effects": [
-      "配備可能: heavy_tank_equipment_3",
-      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_heavy_armor, mio_cat_tech_heavy_armor_and_modules"
-    ],
-    "prerequisites": [
-      "advanced_medium_tank",
-      "improved_heavy_tank"
-    ]
-  },
-  {
-    "id": "super_heavy_tank",
-    "title": "Super Heavy Tank",
+    "id": "super_heavy_tank_chassis",
+    "title": "Super Heavy Tank Chassis",
     "year": 1941,
     "x": 900,
-    "y": 400,
+    "y": 0,
     "research_time": 300,
     "reliability": "未研究",
     "desc": "",
-    "asset_key": "super_heavy_tank",
+    "asset_key": "generic_super_heavy_tank_chassis",
     "effects": [
-      "配備可能: super_heavy_tank_equipment_1",
+      "配備可能: super_heavy_tank_chassis_1",
+      "配備可能: super_heavy_tank_destroyer_chassis_1",
+      "配備可能: super_heavy_tank_artillery_chassis_1",
+      "配備可能: super_heavy_tank_aa_chassis_1",
       "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_heavy_armor, mio_cat_tech_heavy_armor_and_modules"
     ],
     "prerequisites": [
-      "improved_heavy_tank"
+      "improved_heavy_tank_chassis"
+    ]
+  },
+  {
+    "id": "sp_armored_advanced_flamethrower_tech",
+    "title": "Sp Armored Advanced Flamethrower Tech",
+    "year": 1941,
+    "x": 1200,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_armored_advanced_flamethrower",
+    "effects": [
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, mio_cat_tech_light_armor_and_modules, mio_cat_tech_medium_armor_and_modules, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": [
+      "gwtank_chassis"
+    ]
+  },
+  {
+    "id": "sp_armored_lc_high_impact_obliterator_cannon_tech",
+    "title": "Sp Armored Lc High Impact Obliterator Cannon Tech",
+    "year": 1943,
+    "x": 1300,
+    "y": 0,
+    "research_time": 100,
+    "reliability": "未研究",
+    "desc": "",
+    "asset_key": "sp_armored_lc_high_impact_obliterator_cannon",
+    "effects": [
+      "カテゴリ: armor, mio_cat_tech_all_armor_and_modules, cat_heavy_armor, mio_cat_tech_heavy_armor_and_modules"
+    ],
+    "prerequisites": [
+      "super_heavy_tank_chassis"
     ]
   }
 ]
