@@ -1658,20 +1658,23 @@ class FocusTreeManager {
     return [];
   }
 
-  // Preview fallback that mirrors assets/nf-reward-loader.js when a focus has no source data.
+  // 共通フォールバック (HOI4EffectsConfig.buildRewardsFromFocus) で、外部データ未読み込み時も
+  // 方針の id / title / effect から完了報酬を生成し、ツールチップ表示と状態更新を継続する。
   static getCompletionRewards(f) {
     const rewards = FocusTreeManager.normalizeCompletionRewards(f);
-    if (rewards.length || !f?.id) return rewards;
-    const previewRewards = {
-      demo_political_power: [{ type: 'add_political_power', value: 120 }, { type: 'add_army_experience', value: 50 }],
-      demo_industry: [{ type: 'add_stability', value: 5 }, { type: 'add_research_slot', value: 1 }]
-    };
-    return previewRewards[f.id] || [];
+    if (rewards.length) return rewards;
+    const builder = window.HOI4EffectsConfig?.buildRewardsFromFocus;
+    if (typeof builder === 'function' && f?.id) return builder(f, CoreEngine.gameState?.country || 'GER');
+    return [];
   }
 
   static rewardClass(reward) {
-    const value = Number(reward?.value ?? reward?.amount ?? reward?.bonus ?? 0);
-    return value < 0 ? 'negative' : value > 0 ? 'positive' : 'neutral';
+    // 建設・併合・国家精神など value 以外の項目も考慮して色分けする。
+    const value = Number(reward?.value ?? reward?.amount ?? reward?.bonus ?? reward?.level ?? 0);
+    const isAdditive = ['add_ideas', 'annex_country', 'annex_target', 'occupy_country', 'add_research_slot', 'add_tech_bonus', 'add_building_construction', 'building', 'add_offsite_building'].includes(reward?.type);
+    if (value < 0) return 'negative';
+    if (value > 0 || isAdditive) return 'positive';
+    return 'neutral';
   }
 
   static showTooltip(f, e) {
@@ -1680,15 +1683,18 @@ class FocusTreeManager {
     tt.querySelector('.tt-title').textContent = f.title || f.name || f.id;
     tt.querySelector('.tt-time').textContent = '必要日数: ' + (f.cost || 70) + '日';
     const rewards = FocusTreeManager.getCompletionRewards(f);
-    const formatted = rewards.map(reward => {
+    // 共通フォーマッターが null を返した (内部制御キー・未定義スキップ) 報酬は表示から除外する。
+    // 整形結果と元報酬をペアにして、色とCSSクラスがずれないようにする。
+    const pairs = rewards.map(reward => {
       const result = window.HOI4EffectsConfig?.formatEffect?.(reward) || window.formatEffect?.(reward);
-      if (result) return typeof result === 'string' ? { text: result, color: undefined } : result;
-      return { text: '・' + (reward.type || '効果') + ': ' + (reward.value ?? ''), color: undefined };
+      if (!result) return null;
+      const line = typeof result === 'string' ? { text: result, color: undefined } : result;
+      return { line, reward };
     }).filter(Boolean);
     const effect = f.effect || '';
     tt.querySelector('.tt-effect').innerHTML =
       (effect ? '<span class="tt-effect-description">' + GameTools.escape(effect) + '</span>' : '') +
-      (formatted.length ? '<span class="tt-effect-label">完了報酬</span>' + formatted.map((line, index) => '<span class="tt-reward ' + FocusTreeManager.rewardClass(rewards[index]) + '"' + (line.color ? ' style="color:' + line.color + '"' : '') + '>' + GameTools.escape(line.text) + '</span>').join('') : '<span class="tt-effect-description">完了報酬なし</span>');
+      (pairs.length ? '<span class="tt-effect-label">完了報酬</span>' + pairs.map(({ line, reward }) => '<span class="tt-reward ' + FocusTreeManager.rewardClass(reward) + '"' + (line.color ? ' style="color:' + line.color + '"' : '') + '>' + GameTools.escape(line.text) + '</span>').join('') : '<span class="tt-effect-description">完了報酬なし</span>');
     tt.classList.remove('hidden');
     FocusTreeManager.moveTooltip(e);
   }

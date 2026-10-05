@@ -95,14 +95,48 @@ function completeActiveFocus() {
     targets.forEach(id => lockedFocuses.add(id));
   }
 
+  // 共通の報酬システムでゲーム状態へ反映 (政治力・安定度・経験値・要塞・併合など)
+  const rewards = getFocusRewards(completedNf);
+  applyCompletionRewards(rewards);
+  // 旧来の effect 文字列解析は表示用ログのみに使用し、状態変更は共通処理に一本化
   applyFocusEffects(completedNf.effect);
 
-  const effectClean = completedNf.effect ? completedNf.effect.replace(/\n/g, ' / ') : '特記事項なし';
-  setLogText(`🎉【国家方針完了】「${completedNf.title}」を達成！ 報酬: [ ${effectClean} ]`);
+  const rewardText = rewards.map(r => {
+    const f = window.HOI4EffectsConfig?.formatEffect?.(r);
+    return f ? f.text : '';
+  }).filter(Boolean).join(' / ');
+  setLogText(`🎉【国家方針完了】「${completedNf.title}」を達成！${rewardText ? ' 報酬: [ ' + rewardText + ' ]' : ''}`);
 
   activeFocus = null;
   focusDaysRemaining = 0;
   renderTree();
+}
+
+// 方針の completion_rewards を取得し、未定義なら共通フォールバックで生成する。
+function getFocusRewards(nf) {
+  const existing = nf.completion_rewards || nf.completionRewards;
+  if (Array.isArray(existing) && existing.length) return existing;
+  const builder = window.HOI4EffectsConfig?.buildRewardsFromFocus;
+  return typeof builder === 'function' ? builder(nf, 'GER') : [];
+}
+
+// 共通の applyEffect で報酬を gameStats へ反映する。
+function applyCompletionRewards(rewards) {
+  const apply = window.HOI4EffectsConfig?.applyEffect || window.applyEffect;
+  if (typeof apply !== 'function') return;
+  // gameStats を gameState 互換の形へ投影して共通処理へ渡す
+  const state = {
+    politicalPower: gameStats.politicalPower,
+    stability: gameStats.stability,
+    warSupport: gameStats.warSupport,
+    worldTension: gameStats.aggression
+  };
+  rewards.forEach(r => apply(state, r));
+  gameStats.politicalPower = state.politicalPower;
+  gameStats.stability = state.stability;
+  gameStats.warSupport = state.warSupport;
+  gameStats.aggression = state.worldTension;
+  updateStatusBarUI();
 }
 
 function setLogText(text) {
@@ -353,15 +387,16 @@ function showTooltip(e, nf) {
   let status = isCompleted ? "【達成済み】" : (isActive ? "【実行中】" : (isLocked ? "🔒【選択不可/排他】" : "🔓【選択可能】"));
   document.getElementById('tooltip-title').textContent = `${nf.title} ${status}`;
   document.getElementById('tooltip-time').textContent = `⏱️ 必要時間: ${isActive ? focusDaysRemaining + "日 (進行中)" : (nf.cost || 70) + "日"}`;
-  const rewards = nf.completion_rewards || nf.completionRewards || [];
+  const rewards = getFocusRewards(nf);
   const formatReward = (reward) => {
     const formatted = window.HOI4EffectsConfig?.formatEffect?.(reward) || window.formatEffect?.(reward);
-    if (formatted) return typeof formatted === 'string' ? formatted : formatted.text;
-    return window.formatCompletionReward?.(reward) || null;
+    if (formatted) return typeof formatted === 'string' ? { text: formatted, color: undefined } : formatted;
+    const text = window.formatCompletionReward?.(reward);
+    return text ? { text, color: undefined } : null;
   };
   const formattedRewards = rewards.map(formatReward).filter(Boolean);
   const rewardText = formattedRewards.length
-    ? `\n\n【達成報酬】\n${formattedRewards.join('\n')}`
+    ? `\n\n【達成報酬】\n${formattedRewards.map(r => r.text).join('\n')}`
     : '';
   const translateText = window.HOI4EffectsConfig?.translateText || window.translateText || (text => text);
   document.getElementById('tooltip-effect').textContent = translateText(`${nf.effect || "効果なし"}${rewardText}`);
