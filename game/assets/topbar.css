@@ -81,9 +81,10 @@
 #game-root #player-flag {
   display: grid;
   place-items: center;
-  width: 48px;
-  height: 47px;
-  padding: 0;
+  box-sizing: border-box;
+  width: 52px;
+  height: 38px;
+  padding: 3px;
   margin: 0;
   font-size: 29px;
   flex-shrink: 0;
@@ -91,6 +92,7 @@
   background: linear-gradient(180deg, #22281d, #10160e);
   box-shadow: inset 0 0 8px #000, 0 2px 3px #0008;
 }
+#game-root #player-flag .country-flag { width: 100%; height: 100%; object-fit: cover; }
 #top-bar .time-control-group { display: flex; flex-direction: column; align-items: stretch; gap: 4px; }
 #top-bar #calendar-display {
   font-family: var(--mil-font-print);

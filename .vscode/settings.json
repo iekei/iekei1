@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^node <<'NODE'\nconst fs = require\\('fs'\\);\nconst vm = require\\('vm'\\);\nconst code = fs\\.readFileSync\\('/workspaces/iekei1/game/ai\\.js','utf8'\\);\nconst context = \\{\n  window: \\{\\},\n  CoreEngine: \\{ gameState: \\{ country: 'GER', ai: \\{ focus: \\{\\}, doneEvents: \\[\\], wars: \\[\\], tech: \\{\\}, spyDay: 0 \\} \\}, log\\(\\)\\{\\}, renderStats\\(\\)\\{\\}, registerTickCallback\\(\\)\\{\\} \\},\n  MapRenderer: \\{ ready: true, states: \\{\\}, provinces: \\{ p: \\{\\} \\}, buildStateAdjacency\\(\\)\\{\\}, captureState\\(\\)\\{return true;\\} \\},\n  GameUI: \\{ notify\\(\\)\\{\\} \\},\n  DataFetcher: \\{ getCountryFlag: \\(\\) => '🇩🇪' \\},\n  NewsManager: \\{ fireCustom\\(\\)\\{\\} \\},\n  MultiplayerManager: \\{ broadcast\\(\\)\\{\\}, connected: false, isHost: false \\},\n  ResearchManager: \\{\\},\n  IntelOperations: \\{ counterPower\\(\\)\\{ return 0; \\} \\},\n  console\n\\};\ncontext\\.global = context;\nvm\\.createContext\\(context\\);\nvm\\.runInContext\\(code, context\\);\nconst ok = typeof context\\.AIManager\\.takeoverCountry === 'function';\nconsole\\.log\\(JSON\\.stringify\\(\\{ ok \\}\\)\\);\nif \\(!ok\\) process\\.exit\\(1\\);\nNODE$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

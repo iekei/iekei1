@@ -28,14 +28,39 @@ class WarSystems {
     this._messageBound = true;
   }
   static name(tag) { return this.countryNames[tag] || tag || '不明'; }
-  static stateName(st, fallback) {
+  static stateName(st, fallback, stateId) {
     const original = st?.originalName || st?.name || '';
-    return this.provinceNames[original] || this.provinceNames[original.replace(/\\s+/g, '_')] || original || fallback || '州';
+    const tag = st?.owner || CoreEngine.gameState.country || 'GER';
+    const tagKey = stateId ? tag + '_STATE_' + stateId : null;
+    const genericKey = stateId ? 'STATE_' + stateId : null;
+    const tagged = tagKey && window.l10n?.t(tagKey, tag);
+    if (tagged && tagged !== tagKey) return tagged;
+    const generic = genericKey && window.l10n?.t(genericKey, tag);
+    if (generic && generic !== genericKey) return generic;
+    return this.provinceNames[original] || this.provinceNames[original.replace(/\s+/g, '_')] ||
+      (st?.name && st.name !== original ? st.name : null) || fallback || (stateId ? '州' + stateId : '州');
+  }
+  static provinceName(provinceId) {
+    const stateId = typeof MapRenderer !== 'undefined' ? MapRenderer.stateOf(Number(provinceId)) : null;
+    const st = stateId && MapRenderer.states?.[stateId];
+    const tag = st?.owner || CoreEngine.gameState.country || 'GER';
+    if (st?.vp && Object.prototype.hasOwnProperty.call(st.vp, provinceId)) {
+      const countryKey = tag + '_VICTORY_POINTS_' + provinceId;
+      const countryName = window.l10n?.t(countryKey, tag);
+      if (countryName && countryName !== countryKey) return countryName;
+      const key = 'VICTORY_POINTS_' + provinceId;
+      const name = window.l10n?.t(key, tag);
+      if (name && name !== key) return name;
+    }
+    return st ? this.stateName(st, null, stateId) : '海域 ' + provinceId;
   }
   static patchNames() {
     const apply = () => {
       if (typeof MapRenderer === 'undefined' || !MapRenderer.states) return false;
-      Object.values(MapRenderer.states).forEach(st => { st.originalName = st.originalName || st.name; st.name = this.stateName(st); });
+      Object.entries(MapRenderer.states).forEach(([sid, st]) => {
+        st.originalName = st.originalName || st.name;
+        st.name = this.stateName(st, null, sid);
+      });
       return true;
     };
     if (!apply()) { const timer = setInterval(() => { if (apply()) clearInterval(timer); }, 250); }

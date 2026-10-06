@@ -10,6 +10,10 @@
 .army-portrait strong { display: block; padding: 3px; background: #14180f; color: var(--text-gold); font-size: 12px; }
 .portrait-placeholder { display: grid; place-items: center; height: 72px; font-size: 32px; }
 .army-tile-info { font-size: 11px; }
+.air-wing-control { display: flex; align-items: center; gap: 5px; margin: 3px 0; color: var(--text-secondary); font-size: 10px; }
+.air-wing-control select { max-width: 140px; min-width: 0; background: var(--bg-panel); border: 1px solid var(--border-mil); color: var(--text-primary); }
+.air-wing-control input[type='number'] { width: 58px; }
+.air-wing-range { display: block; margin: 3px 0; color: var(--text-secondary); font-size: 10px; }
 #map-help { bottom: 225px; max-width: 430px; }
 #game-root input[type='number'] { width: 80px; padding: 4px; }
 .production-row { display: grid; grid-template-columns: 1fr 90px 160px 150px; align-items: center; gap: 8px; padding: 10px; border-bottom: 1px solid var(--border-mil); }

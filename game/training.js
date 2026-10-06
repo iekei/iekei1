@@ -13,13 +13,13 @@ class TrainingManager {
   static nextId = 1;
   static targetArmyId = null;   // 徴兵した師団の配備先軍集団 (null = 自動配備)
 
-  // 大隊ごとの兵器消費量 (師団編成によって必要装備が変わる)
-  static BATTALION_COST = {
-    infantry: 100, engineer: 100, recon: 100,
-    anti_tank: 150, anti_air: 150,
-    artillery: 200,
-    armor: 350,
-    jet_fighter: 300, v2_rocket: 320, nuke_battalion: 400, land_battleship: 380
+  // 大隊1個あたりの装備ロードアウト。徴兵・補充で同じ表を使う。
+  static BATTALION_EQUIPMENT = {
+    infantry: { infantry: 100 }, engineer: { infantry: 100 }, recon: { infantry: 100 },
+    ranger: { infantry: 100 }, mountaineer: { infantry: 100 }, paratrooper: { infantry: 100 }, marine: { infantry: 100 },
+    anti_tank: { artillery: 150 }, anti_air: { artillery: 150 }, artillery: { artillery: 200 },
+    armor: { tank: 350 }, land_battleship: { tank: 380 },
+    jet_fighter: { fighter: 300 }, v2_rocket: { artillery: 320 }, nuke_battalion: { infantry: 400 }
   };
 
   static init() {
@@ -39,21 +39,25 @@ class TrainingManager {
       if (c) { comp[c.id] = (comp[c.id] || 0) + 1; count++; }
     }));
     if (!count) return null;
-    let equipNeed = 0;
-    Object.entries(comp).forEach(([id, n]) => {
-      equipNeed += (TrainingManager.BATTALION_COST[id] || 100) * n;
-    });
+    const equipmentNeeds = TrainingManager.equipmentNeedsFor(comp);
+    const equipNeed = Object.values(equipmentNeeds).reduce((sum, amount) => sum + amount, 0);
     // 訓練期間: 基礎2ヶ月 (60日) — 機甲・砲兵・特別大隊が多いほど長い (最大5ヶ月)
     const trainDays = Math.min(150, Math.round(60 +
       (comp.armor || 0) * 9 + (comp.artillery || 0) * 5 +
       (comp.jet_fighter || 0) * 7 + (comp.v2_rocket || 0) * 7 +
       (comp.nuke_battalion || 0) * 10 + (comp.land_battleship || 0) * 8));
-    const equipmentNeeds = {};
-    Object.entries(comp).forEach(([id,n]) => {
-      const type = id === 'armor' ? 'tank' : ['artillery','anti_tank','anti_air'].includes(id) ? 'artillery' : id === 'jet_fighter' ? 'fighter' : 'infantry';
-      equipmentNeeds[type] = (equipmentNeeds[type] || 0) + (TrainingManager.BATTALION_COST[id] || 100) * n;
-    });
     return { comp, count, equipNeed, equipmentNeeds, trainDays, manpowerNeed: count * 10000 };
+  }
+
+  static equipmentNeedsFor(comp, missingPercent = 100) {
+    const needs = {};
+    Object.entries(comp || {}).forEach(([id, count]) => {
+      const loadout = TrainingManager.BATTALION_EQUIPMENT[id] || { infantry: 100 };
+      Object.entries(loadout).forEach(([type, amount]) => {
+        needs[type] = (needs[type] || 0) + amount * count * missingPercent / 100;
+      });
+    });
+    return needs;
   }
 
   // ---- 徴兵命令を作成 (兵員・兵器が集まり次第訓練開始) ----
@@ -92,7 +96,7 @@ class TrainingManager {
     const s = CoreEngine.gameState;
     if (s.recruitQueue !== TrainingManager.queue) TrainingManager.queue = s.recruitQueue;  // ロード後の再接続
     TrainingManager.tickProduction();
-    let changed = false;
+    let changed = TrainingManager.reinforce();
     TrainingManager.queue.forEach(o => {
       if (o.phase === 'gathering') {
         // 兵員 (人的資源) と兵器が揃い次第訓練開始 — ここで両方を消費する
@@ -113,7 +117,8 @@ class TrainingManager {
           const a = (BattlePlanManager.armies || []).find(x => x.id === o.targetArmyId);
           const division = {
             id: s.strategy.nextDivisionId++, name: o.name, comp: o.comp,
-            org: 30, maxOrg: 60, type: Object.keys(o.comp)[0],
+            org: 30, maxOrg: 60, equipmentStrength: 100,
+            equipmentNeeds: TrainingManager.equipmentNeedsFor(o.comp), type: Object.keys(o.comp)[0],
             x: a?.base[0] || 0, y: a?.base[1] || 0, pid: a?.positionPid
           };
           if (a && !a.executing) a.divisions.push(division);
@@ -134,6 +139,27 @@ class TrainingManager {
   // ---- 兵器の生産: 軍需工場が資源を消費して装備を生産 (資源不足では生産不可) ----
   static tickProduction() {
     ProductionManager.tick();
+  }
+
+  static reinforce() {
+    if (typeof ArmyRoster === 'undefined' || typeof ProductionManager === 'undefined') return false;
+    const stock = ProductionManager.account(CoreEngine.gameState.country).stock;
+    let changed = false;
+    ArmyRoster.all().forEach(division => {
+      const strength = Number.isFinite(division.equipmentStrength) ? division.equipmentStrength : 100;
+      if (strength >= 100 || !division.comp) return;
+      const missing = 100 - strength;
+      const fullNeeds = TrainingManager.equipmentNeedsFor(division.comp, missing);
+      const ratio = Math.min(1, ...Object.entries(fullNeeds).map(([type, amount]) =>
+        amount > 0 ? (stock[type] || 0) / amount : 1));
+      if (!(ratio > 0)) return;
+      const consumed = Object.fromEntries(Object.entries(fullNeeds).map(([type, amount]) => [type, amount * ratio]));
+      if (!ProductionManager.consume(consumed)) return;
+      division.equipmentStrength = Math.min(100, strength + missing * ratio);
+      division.equipmentNeeds = TrainingManager.equipmentNeedsFor(division.comp);
+      changed = true;
+    });
+    return changed;
   }
 
   // ---- 徴兵キューUI (師団編成ウィンドウ内) ----

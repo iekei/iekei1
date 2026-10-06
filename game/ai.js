@@ -199,6 +199,22 @@ class AIManager {
     AIManager.state.wars = AIManager.state.wars.filter(w => !(w.a === a && w.b === b));
   }
 
+  static takeoverCountry(tag, reason = '接続切断') {
+    if (!tag || tag === CoreEngine.gameState.country) return false;
+    if (!AIManager.state) AIManager.state = CoreEngine.gameState.ai || { focus: {}, doneEvents: [], wars: [], tech: {}, spyDay: 0 };
+    if (!CoreEngine.gameState.ai) CoreEngine.gameState.ai = AIManager.state;
+    AIManager.aiOf(tag);
+    if (CoreEngine.gameState.strategy?.peers) {
+      Object.entries(CoreEngine.gameState.strategy.peers).forEach(([peer, country]) => {
+        if (country === tag) delete CoreEngine.gameState.strategy.peers[peer];
+      });
+    }
+    if (CoreEngine.gameState.strategy?.publicCountries) delete CoreEngine.gameState.strategy.publicCountries[tag];
+    CoreEngine.log('🤖 ' + tag + ' が' + reason + 'によりAIへ引き継がれました');
+    if (typeof GameUI !== 'undefined') GameUI.notify('🤖 ' + tag + ' の接続が切れたため、AIが継承しました。', 'alert');
+    return true;
+  }
+
   // ---- AI vs AI 戦争の進行: 国境州が徐々に攻側へ移る ----
   static tickWars() {
     MapRenderer.buildStateAdjacency();
@@ -278,10 +294,11 @@ class AIManager {
     const s = CoreEngine.gameState;
     const player = s.country;
     const intel = s.intel;
+    const attackers = ['GER', 'SOV', 'JAP', 'ENG'].filter(tag => tag !== player && s.atWar?.includes(tag));
+    if (!attackers.length) return;
     // プレイヤーが諜報機関を持っていれば発見されやすい
     const agencyLevel = intel && intel.agency ? intel.level || 0 : 0;
     if (Math.random() < Math.max(0.05, 0.5 - agencyLevel * 0.05 - IntelOperations.counterPower() * 0.1)) {
-      const attackers = ['GER', 'SOV', 'JAP', 'ENG'].filter(t => t !== player);
       const spy = attackers[Math.floor(Math.random() * attackers.length)];
       const what = Math.random() < 0.5 ? '設計図の盗難' : '工場の破壊工作';
       if (what === '設計図の盗難') {

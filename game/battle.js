@@ -225,12 +225,27 @@ class BattleManager {
   // ---- 戦闘結果の確定 → 占領 / 逆占領 ----
   static resolve(b) {
     BattleManager.battles = BattleManager.battles.filter(x => x.id !== b.id);
+    BattleManager.applyEquipmentLosses(b);
     if (b.kind === 'offensive') OffensivePlanner.result(b);
     else if (b.advantage <= -0.1) OffensivePlanner.capture(b.provId, b.attacker);
     else CoreEngine.log('🛡️ 防衛戦終了: プロビンス ' + b.provId + 'を維持しました。');
     MultiplayerManager.broadcast({ type: 'battle_end', battleId: b.id, state: b.stateId, advantage: b.advantage, kind: b.kind });
     BattlePlanManager.renderPanel();
     CoreEngine.renderStats();
+  }
+
+  static applyEquipmentLosses(battle) {
+    const attackerArmy = (BattlePlanManager.armies || []).find(army => army.id === battle.attackerArmyId);
+    const affected = battle.kind === 'offensive'
+      ? (attackerArmy?.divisions || [])
+      : ArmyRoster.all().filter(division => Number(division.pid) === Number(battle.provId));
+    const loss = 2 + Math.floor(Math.random() * 4) +
+      (battle.defender === CoreEngine.gameState.country && battle.advantage < 0 ? 2 : 0);
+    affected.forEach(division => {
+      const current = Number.isFinite(division.equipmentStrength) ? division.equipmentStrength : 100;
+      division.equipmentStrength = Math.max(0, current - loss);
+    });
+    return affected.length;
   }
 
   static nearestOwnState(fromPt) {

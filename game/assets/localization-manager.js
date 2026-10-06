@@ -131,7 +131,11 @@
       if (!this.loadedBaseLanguages.has(language)) {
         await this.load([
           `data/localisation/${language}/focus_l_${language}.yml`,
-          `data/localisation/${language}/research_l_${language}.yml`
+          `data/localisation/${language}/research_l_${language}.yml`,
+          `data/localisation/${language}/state_names_l_${language}.yml`,
+          `data/localisation/${language}/victory_points_l_${language}.yml`,
+          `data/localisation/${language}/province_names_l_${language}.yml`,
+          `data/localisation/${language}/strategic_region_names_l_${language}.yml`
         ]);
         this.loadedBaseLanguages.add(language);
       }

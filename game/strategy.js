@@ -470,7 +470,24 @@ class ArmyRoster {
     let html='<div class="army-tools">'+['army','navy','air'].map((f,i)=>GameTools.button(['陸軍','海軍','空軍'][i],"BattlePlanManager.setForce('"+f+"')")).join('');
     if (BattlePlanManager.activeForce!=='army') {
       const list=BattlePlanManager.activeForce==='navy'?BattlePlanManager.navy:BattlePlanManager.air;
-      html+='</div><div class="army-strip">'+list.map(u=>'<div class="army-tile">'+GameTools.button(u.name,"BattlePlanManager.selectUnit('"+u.id+"')")+'<p>'+Math.floor((BattlePlanManager.activeForce==='navy'?CoreEngine.gameState.ships:CoreEngine.gameState.planes)/Math.max(1,list.length))+' / '+GameTools.escape(u.mission)+'</p>'+GameTools.button(u.executing?'中止':'任務開始',"BattlePlanManager."+(u.executing?'abort':'execute')+"('"+u.id+"')")+'<select onchange="BattlePlanManager.selectUnit(\''+u.id+'\');BattlePlanManager.setMission(this.value)">'+BattlePlanManager.missions[u.type].map(m=>'<option value="'+m.id+'"'+(m.id===u.mission?' selected':'')+'>'+m.label+'</option>').join('')+'</select></div>').join('')+'</div>';
+      html+='</div><div class="army-strip">';
+      list.forEach(u=>{
+        const isAir=u.type==='air';
+        const assigned=Number(u.aircraftCount)||0;
+        const otherAssigned=isAir?BattlePlanManager.air.filter(other=>other.id!==u.id).reduce((sum,other)=>sum+(Number(other.aircraftCount)||0),0):0;
+        const maxAssigned=isAir?Math.max(0,Math.floor(Number(CoreEngine.gameState.planes)||0)-otherAssigned):0;
+        const airbases=isAir?BattlePlanManager.ownedAirbases():[];
+        const airControls=isAir
+          ? '<label class="air-wing-control">基地 <select onchange="BattlePlanManager.assignAirbase(\''+u.id+'\',this.value)"><option value="">未配備</option>'+airbases.map(([id,state])=>'<option value="'+id+'"'+(String(id)===u.baseStateId?' selected':'')+'>'+GameTools.escape(state.name||('州'+id))+' ('+state.b.air_base+')</option>').join('')+'</select></label>'+
+            '<label class="air-wing-control">航空機 <input type="number" min="0" max="'+maxAssigned+'" value="'+assigned+'" onchange="BattlePlanManager.setAirWingAircraft(\''+u.id+'\',this.value)"></label>'+
+            '<small class="air-wing-range">航続距離 '+BattlePlanManager.airRange(u)+' / '+(BattlePlanManager.airWingReady(u)?'配備可能':'基地・機体未配備')+'</small>'
+          : '';
+        html+='<div class="army-tile">'+GameTools.button(u.name,"BattlePlanManager.selectUnit('"+u.id+"')")+
+          '<div class="army-tile-info"><p>'+Math.floor((isAir?assigned:CoreEngine.gameState.ships/Math.max(1,list.length)))+' / '+GameTools.escape(u.mission)+'</p>'+airControls+
+          GameTools.button(u.executing?'中止':'任務開始',"BattlePlanManager."+(u.executing?'abort':'execute')+"('"+u.id+"')",isAir&&!BattlePlanManager.airWingReady(u))+
+          '<select onchange="BattlePlanManager.selectUnit(\''+u.id+'\');BattlePlanManager.setMission(this.value)">'+BattlePlanManager.missions[u.type].map(m=>'<option value="'+m.id+'"'+(m.id===u.mission?' selected':'')+'>'+m.label+'</option>').join('')+'</select></div></div>';
+      });
+      html+='</div>';
     } else {
       html+=GameTools.button('＋軍集団','BattlePlanManager.addArmy()')+GameTools.button('師団を配属 ('+CoreEngine.gameState.strategy.reserves.length+' 未所属)','ArmyRoster.assignModal()');
       html+=GameTools.button(ArmyRoster.frontTool?'前線指定中…':'前線を引く','ArmyRoster.toggleFront()')+GameTools.button(BattlePlanManager.arrowTool?'攻撃線指定中…':'攻撃線を引く','BattlePlanManager.arrowTool=!BattlePlanManager.arrowTool;ArmyRoster.frontTool=false;BattlePlanManager.renderPanel()');
@@ -874,7 +891,7 @@ class IntelOperations {
   static startOp(id) {
     const s=CoreEngine.gameState,tag=s.intel.selected,def=DLC_INTEL_OPS.find(o=>o.id===id);
     if(id==='crypto') { const slot=s.intel.assignments.findIndex(a=>a.kind==='idle');return IntelOperations.assign(slot,'decrypt',tag); }
-    if (id === 'subvert' && !s.atWar?.length) { GameUI.notify('破壊活動は戦時中のみ実行できます。', 'alert'); return false; }
+    if (!tag || !s.atWar?.includes(tag)) { GameUI.notify('作戦の実行には対象国との宣戦布告が必要です。情報網構築・準備は平時も行えます。', 'alert'); return false; }
     const idle=Array.from({length:s.intel.spies},(_,i)=>i).filter(i=>(!s.intel.assignments[i]||s.intel.assignments[i].kind==='idle'));
     if(!def||s.intel.op||!tag||idle.length<2||IntelOperations.target(tag).network<50||s.politicalPower<50){GameUI.notify('情報網50%・待機諜報員2名・政治力50が必要です。','alert');return false;}
     s.politicalPower-=50;s.intel.op={id,target:tag,slots:idle.slice(0,2),preparation:45,progress:0,dur:90};IntelOperations.render();return true;
@@ -900,7 +917,7 @@ class IntelOperations {
     Object.entries(intel.targets).forEach(([tag,t])=>{
       if(!intel.assignments.some(a=>a.kind==='network'&&a.target===tag))t.network=Math.max(0,t.network-.15);
     });
-    if(intel.op){const op=intel.op;if(op.preparation>0)op.preparation--;else op.progress++;
+    if(intel.op){const op=intel.op;if(!s.atWar?.includes(op.target)){CoreEngine.log('対象国との和平により諜報作戦を中止しました: '+op.target);intel.op=null;IntelOperations.render();return;}if(op.preparation>0)op.preparation--;else op.progress++;
       if(op.progress>=op.dur){
         if(op.id==='infil')IntelOperations.target(op.target).network=Math.min(100,IntelOperations.target(op.target).network+20);
         if(op.id==='politics')s.stability=Math.min(100,s.stability+3);

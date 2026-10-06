@@ -17,7 +17,7 @@ function fixture() {
   const inline=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(m=>m[1]).filter(s=>s.trim()).join('\n');
   for (const file of ['asset-registry','game-asset-data','game-visuals']) vm.runInContext(fs.readFileSync(path.join(root,'assets',file+'.js'),'utf8'),ctx,{filename:file+'.js'});
   vm.runInContext(inline,ctx,{filename:'index.html:inline'});
-  for(const name of ['battle','news','ai','training','dlc','strategy'])vm.runInContext(fs.readFileSync(path.join(root,name+'.js'),'utf8'),ctx,{filename:name+'.js'});
+  for(const name of ['battle','news','ai','training','dlc','strategy','war-systems'])vm.runInContext(fs.readFileSync(path.join(root,name+'.js'),'utf8'),ctx,{filename:name+'.js'});
   const run=source=>vm.runInContext(source,ctx);
   run(`
     StrategyGame.prepare();IntelOperations.ensure();DLC.ensureState();
@@ -29,7 +29,13 @@ function fixture() {
     MapRenderer.provNeighbors=new Map();MapRenderer.provCentroid=new Map();MapRenderer.provToState=new Map();MapRenderer.stateCenter=new Map();
     for(let p=1;p<=6;p++){MapRenderer.provinces.p[p]=[0,0,0,0,0,0];MapRenderer.provCentroid.set(p,[p*10,0]);MapRenderer.provNeighbors.set(p,new Set([p-1,p+1].filter(n=>n>=1&&n<=6)));MapRenderer.provToState.set(p,String(Math.ceil(p/2)));}
     MapRenderer.stateCenter=new Map([['1',[15,0]],['2',[35,0]],['3',[55,0]]]);
-    MapRenderer.provinceAt=(x,y)=>Math.round(x/10);
+    MapRenderer.provinceAt=(x,y)=>{
+      const mapW=MapRenderer.mapW||1, mapH=MapRenderer.mapH||1;
+      const rawX=Math.floor(x), rawY=Math.floor(y);
+      const wx=((rawX % mapW)+mapW)%mapW;
+      const wy=((rawY % mapH)+mapH)%mapH;
+      return MapRenderer.idMap ? MapRenderer.idMap[wy * mapW + wx] ?? null : Math.round(x/10);
+    };
     const army={id:1,name:'Test Army',base:[10,0],positionPid:1,divisions:Array.from({length:8},(_,i)=>({id:i+1,org:60,maxOrg:60,x:10,y:0,comp:{infantry:6}})),frontline:[[20,0]],arrow:{from:[20,0],to:[60,0]},executing:false};
     BattlePlanManager.armies=[army];BattlePlanManager.selectedArmyId=1;
     CoreEngine.gameState.atWar=['POL'];CoreEngine.gameState.recruitQueue=[];TrainingManager.queue=CoreEngine.gameState.recruitQueue;
@@ -47,6 +53,51 @@ test('offensive occupies adjacent provinces one by one, holds gains and continue
   for(let i=0;i<40;i++)run('OffensivePlanner.tickArmy(BattlePlanManager.armies[0]);if(BattleManager.battles[0]){BattleManager.battles[0].advantage=.8;BattleManager.resolve(BattleManager.battles[0]);}');
   assert.equal(run('MapRenderer.ownerOf(6)'),'GER');assert.equal(run('BattlePlanManager.armies[0].positionPid'),6);assert.equal(run('BattlePlanManager.armies[0].executing'),false);
   run('for(let i=0;i<100;i++)OffensivePlanner.tickArmy(BattlePlanManager.armies[0])');assert.equal(run('BattlePlanManager.armies[0].base[0]'),60);
+});
+
+test('map wrapping handles offscreen coordinates and convoy losses scale with naval pressure',()=>{
+  const {run}=fixture();
+  run(`MapRenderer.mapW=3;MapRenderer.mapH=2;MapRenderer.idMap = new Uint16Array([10,11,12,20,21,22]);`);
+  assert.equal(run('MapRenderer.provinceAt(4, 1)'), 21);
+  assert.equal(run('MapRenderer.provinceAt(3, 2)'), 10);
+  run('CoreEngine.gameState.convoys = 100; CoreEngine.gameState.navalSupremacy = 60;');
+  assert.equal(run('typeof BattlePlanManager.applyConvoyDamage'), 'function');
+  const before = run('CoreEngine.gameState.convoys');
+  run('BattlePlanManager.applyConvoyDamage("POL", 0.8);');
+  assert.ok(run('CoreEngine.gameState.convoys') < before);
+  assert.ok(run('CoreEngine.gameState.convoys') >= 0);
+});
+test('division counters aggregate armies at province centers',()=>{
+  const {run}=fixture();
+  run(`BattlePlanManager.armies=[
+    {id:1,positionPid:3,divisions:[{id:1,x:9,y:8,org:30,maxOrg:60},{id:2,x:11,y:9,org:60,maxOrg:60}]},
+    {id:2,positionPid:3,divisions:[{id:3,x:12,y:10,org:45,maxOrg:60}]},
+    {id:3,positionPid:4,divisions:[{id:4,x:42,y:10,org:50,maxOrg:60}]}
+  ];BattlePlanManager.selectedArmyId=2;MapRenderer.provCentroid.set(3,[31,17]);MapRenderer.provCentroid.set(4,[43,19]);`);
+  const markers=JSON.parse(run('JSON.stringify(BattlePlanManager.divisionMarkers())'));
+  assert.equal(markers.length,2);
+  assert.deepEqual(markers[0],{pid:3,x:31,y:17,count:3,org:135,maxOrg:180,selected:true});
+  assert.deepEqual(markers[1],{pid:4,x:43,y:19,count:1,org:50,maxOrg:60,selected:false});
+});
+test('map labels use localized state names for non-VP land and Japanese IDs for sea',()=>{
+  const {run,node}=fixture();
+  run(`window.l10n={t:key=>key==='STATE_2'?'国境州':key};MapRenderer.states['2'].vp={};`);
+  assert.equal(run(`WarSystems.provinceName(3)`),'国境州');
+  assert.equal(run(`WarSystems.provinceName(999)`),'海域 999');
+  run(`MapRenderer.selectProvince(999);`);
+  assert.match(node('map-info-overlay').innerHTML,/<strong>海域 999<\/strong>/);
+});
+test('air wings require an owned airbase and allocated planes and respect wrapped range',()=>{
+  const {run}=fixture();
+  run(`MapRenderer.states['1'].b.air_base=2;MapRenderer.stateCenter.set('1',[15,10]);CoreEngine.gameState.planes=20;MapRenderer.mapW=100;BattlePlanManager.air=[{id:'air1',type:'air',base:null,baseStateId:null,aircraftCount:0,range:30},{id:'air2',type:'air',base:null,baseStateId:null,aircraftCount:0,range:30}];`);
+  assert.equal(run(`BattlePlanManager.assignAirbase('air1','1')`),true);
+  assert.equal(run(`BattlePlanManager.airWingReady(BattlePlanManager.air[0])`),false);
+  assert.equal(run(`BattlePlanManager.setAirWingAircraft('air1',12)`),true);
+  assert.equal(run(`BattlePlanManager.airWingReady(BattlePlanManager.air[0])`),true);
+  assert.equal(run(`BattlePlanManager.airTargetInRange(BattlePlanManager.air[0],[95,10])`),true);
+  assert.equal(run(`BattlePlanManager.airTargetInRange(BattlePlanManager.air[0],[60,10])`),false);
+  assert.equal(run(`BattlePlanManager.setAirWingAircraft('air2',9)`),false);
+  assert.equal(run(`BattlePlanManager.setAirWingAircraft('air2',8)`),true);
 });
 test('neutral land and disconnected territory cannot be crossed; defeat does not grant a whole state',()=>{
   const {run}=fixture();run('MapRenderer.states["2"].owner="DEN";OffensivePlanner.execute(1)');assert.equal(run('BattleManager.battles.length'),0);assert.equal(run('BattlePlanManager.armies[0].executing'),false);
@@ -176,4 +227,21 @@ test('legacy anonymous spies and queued recruits receive distinct persistent ide
   run('CoreEngine.gameState.intel={agency:"Test",level:3,spies:2,assignments:[],recruiting:[{days:10}]};IntelOperations.ensure();globalThis.ids=JSON.stringify(CoreEngine.gameState.intel.roster);IntelOperations.ensure()');
   assert.equal(run('JSON.stringify(CoreEngine.gameState.intel.roster)'),run('ids'));
   assert.equal(run('new Set([...CoreEngine.gameState.intel.roster,CoreEngine.gameState.intel.recruiting[0].operativeId]).size'),3);
+});
+
+test('disconnect releases the peer country back to AI control',()=>{
+  const {run}=fixture();
+  run(`MultiplayerManager.isHost=true;MultiplayerManager.remoteCountries={};CoreEngine.gameState.strategy.peers.peerA='FRA';`);
+  run(`MultiplayerManager.handleDisconnect('peerA');`);
+  assert.equal(run(`CoreEngine.gameState.strategy.peers.peerA`),undefined);
+  assert.equal(run(`AIManager.state.focus.FRA !== undefined`),true);
+});
+test('client continues locally after host disconnects',()=>{
+  const {run}=fixture();
+  run(`MultiplayerManager.connected=true;MultiplayerManager.isHost=false;MultiplayerManager.roomId='host';MultiplayerManager.remoteCountries.host='SOV';CoreEngine.gameState.speed=2;CoreEngine.gameState.paused=false;MultiplayerManager.handleDisconnect('host');`);
+  assert.equal(run('MultiplayerManager.connected'),false);
+  assert.equal(run('MultiplayerManager.roomId'),null);
+  assert.equal(run('CoreEngine.timer'),1);
+  assert.equal(run('CoreEngine.gameState.paused'),false);
+  assert.equal(run('AIManager.state.focus.SOV !== undefined'),true);
 });

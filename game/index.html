@@ -1189,7 +1189,7 @@ class CoreEngine {
     convoys: 100,
     researchSlots: 3,
     cardModifiers: {
-      politicalPowerGain: 0,
+      politicalPowerGain: 24,
       stabilityBonus: 0,
       specialProjectSpeed: 0,
       facilityCostReduction: 0,
@@ -1406,6 +1406,17 @@ class CoreEngine {
     // 徴兵法律に応じた人的資源の蓄積
     if (typeof PoliticsManager !== 'undefined') {
       CoreEngine.gameState.manpower += PoliticsManager.dailyManpowerGain() / 24;
+    }
+    if (typeof MapRenderer !== 'undefined' && MapRenderer.states) {
+      const country = CoreEngine.gameState.country;
+      const states = Object.values(MapRenderer.states).filter(st => st.owner === country);
+      const airBases = states.reduce((sum, st) => sum + (st.b && st.b.air_base ? st.b.air_base : 0), 0);
+      const navalBases = states.reduce((sum, st) => sum + (st.b && st.b.naval_base ? st.b.naval_base : 0), 0);
+      CoreEngine.gameState.airSupremacy = Math.min(100, Math.max(0, (CoreEngine.gameState.airSupremacy || 0) + airBases * 0.04 + (CoreEngine.gameState.planes || 0) * 0.0007));
+      CoreEngine.gameState.navalSupremacy = Math.min(100, Math.max(0, (CoreEngine.gameState.navalSupremacy || 0) + navalBases * 0.05 + (CoreEngine.gameState.ships || 0) * 0.0013));
+      if (navalBases > 0 && (CoreEngine.gameState.convoys || 0) < 1000) {
+        CoreEngine.gameState.convoys = (CoreEngine.gameState.convoys || 0) + 0.05;
+      }
     }
 
     CoreEngine.tickCallbacks.forEach(cb => {
@@ -2560,10 +2571,11 @@ class MapRenderer {
   static stateOf(pid) { return MapRenderer.provToState.get(pid) || null; }
 
   static provinceAt(wx, wy) {
-    if (!MapRenderer.idMap) return null;
-    const x = Math.floor(wx), y = Math.floor(wy);
-    if (x < 0 || y < 0 || x >= MapRenderer.mapW || y >= MapRenderer.mapH) return null;
-    return MapRenderer.idMap[y * MapRenderer.mapW + x] || null;
+    if (!MapRenderer.idMap || !MapRenderer.mapW || !MapRenderer.mapH) return null;
+    const rawX = Math.floor(wx), rawY = Math.floor(wy);
+    const x = ((rawX % MapRenderer.mapW) + MapRenderer.mapW) % MapRenderer.mapW;
+    const y = ((rawY % MapRenderer.mapH) + MapRenderer.mapH) % MapRenderer.mapH;
+    return MapRenderer.idMap[y * MapRenderer.mapW + x] ?? null;
   }
 
   static centerOn(tag) {
@@ -2629,6 +2641,7 @@ class MapRenderer {
         if (x + 1 < W) add(id, idm[i + 1]);
         if (y + 1 < H) add(id, idm[i + W]);
       }
+      add(idm[row], idm[row + W - 1]);
     }
     MapRenderer.provNeighbors = nb;
   }
@@ -2966,7 +2979,17 @@ class MapRenderer {
 
   static worldToScreen(wx, wy) {
     const cam = MapRenderer.cam;
-    return [wx * cam.scale + cam.x, wy * cam.scale + cam.y];
+    const wrapAxis = (value, size, screenSize, offset) => {
+      if (!size || !Number.isFinite(value)) return offset;
+      const period = size * cam.scale;
+      if (period <= 0) return offset;
+      const centered = value * cam.scale + offset;
+      const center = screenSize / 2;
+      return centered + Math.round((center - centered) / period) * period;
+    };
+    const sx = wrapAxis(wx, MapRenderer.mapW, MapRenderer.canvas ? MapRenderer.canvas.width : 0, cam.x);
+    const sy = wrapAxis(wy, MapRenderer.mapH, MapRenderer.canvas ? MapRenderer.canvas.height : 0, cam.y);
+    return [sx, sy];
   }
 
   static selectProvince(pid) {
@@ -2978,11 +3001,15 @@ class MapRenderer {
     const terr = pd ? MapRenderer.provinces.terr[pd[5]] : '不明';
     const coastal = pd && pd[4] ? '沿岸' : '内陸';
     const overlay = document.getElementById('map-info-overlay');
+    const provinceName = typeof WarSystems !== 'undefined'
+      ? WarSystems.provinceName(pid)
+      : 'プロビンス ' + pid;
     if (st) {
       const owner = st.owner || '無所属';
       const b = st.b || {};
       overlay.innerHTML =
-        '<strong>' + DataFetcher.getCountryFlagImage(owner) + ' ' + st.name + '</strong><br>' +
+        '<strong>' + DataFetcher.getCountryFlagImage(owner) + ' ' + provinceName + '</strong><br>' +
+        '<span style="color:var(--text-secondary);font-size:11px;">州: ' + st.name + '</span><br>' +
         '<span style="color:var(--text-secondary);font-size:11px;">所有国: ' + owner + ' | 州ID: ' + sid + '</span><br>' +
         '<span style="color:var(--text-secondary);font-size:11px;">地形: ' + terr + ' (' + coastal + ') | 補給: ' + (st.supply || 0) + '</span><br>' +
         '<span style="color:var(--text-gold);font-size:11px;">🏭民需' + (b.industrial_complex || 0) +
@@ -2990,7 +3017,7 @@ class MapRenderer {
         ' ✈️飛行場' + (b.air_base || 0) + ' 🛤️' + (b.infrastructure || 0) + '</span>';
       ConstructionManager.selectState(sid);
     } else {
-      overlay.innerHTML = '<strong>海域</strong><br><span style="color:var(--text-secondary);font-size:11px;">プロビンスID: ' + pid + '</span>';
+      overlay.innerHTML = '<strong>' + provinceName + '</strong><br><span style="color:var(--text-secondary);font-size:11px;">海域ID: ' + pid + '</span>';
     }
   }
 
@@ -3019,8 +3046,13 @@ class MapRenderer {
   }
 
   static startRenderLoop() {
+    MapRenderer.lastRenderAt = 0;
     const loop = () => {
-      if (MapRenderer.ready) MapRenderer.render();
+      const now = performance.now();
+      if (MapRenderer.ready && now - MapRenderer.lastRenderAt >= 1000 / 30) {
+        MapRenderer.lastRenderAt = now;
+        MapRenderer.render();
+      }
       requestAnimationFrame(loop);
     };
     requestAnimationFrame(loop);
@@ -3037,7 +3069,12 @@ class MapRenderer {
     if (!modeCanvas) modeCanvas = MapRenderer.getModeCanvas(MapRenderer.mode);
 
     ctx.imageSmoothingEnabled = cam.scale < 1.5;
-    ctx.drawImage(modeCanvas, cam.x, cam.y, MapRenderer.mapW * cam.scale, MapRenderer.mapH * cam.scale);
+    const mapWidth = MapRenderer.mapW * cam.scale;
+    const firstCopy = Math.floor(-cam.x / mapWidth) - 1;
+    const lastCopy = Math.ceil((MapRenderer.canvas.width - cam.x) / mapWidth) + 1;
+    for (let copy = firstCopy; copy <= lastCopy; copy++) {
+      ctx.drawImage(modeCanvas, cam.x + copy * mapWidth, cam.y, mapWidth, MapRenderer.mapH * cam.scale);
+    }
 
     // 州名ラベル (ズームイン時)
     if (cam.scale >= 2.2 && (MapRenderer.mode === 'political' || MapRenderer.mode === 'construction')) {
@@ -3102,6 +3139,28 @@ class MapRenderer {
       ctx.beginPath();
       ctx.arc(s[0], s[1], pulse, 0, Math.PI * 2);
       ctx.stroke();
+    }
+
+    if (BattlePlanManager.activeForce === 'air') {
+      const wing = BattlePlanManager.selectedUnit();
+      if (wing?.type === 'air' && BattlePlanManager.airWingReady(wing)) {
+        const center = MapRenderer.worldToScreen(wing.base[0], wing.base[1]);
+        const radius = BattlePlanManager.airRange(wing) * MapRenderer.cam.scale;
+        const period = MapRenderer.mapW * MapRenderer.cam.scale;
+        ctx.save();
+        ctx.strokeStyle = 'rgba(125,190,255,0.9)';
+        ctx.fillStyle = 'rgba(80,140,220,0.10)';
+        ctx.lineWidth = 2;
+        for (let offset = -1; offset <= 1; offset++) {
+          const x = center[0] + offset * period;
+          if (x + radius < 0 || x - radius > MapRenderer.canvas.width) continue;
+          ctx.beginPath();
+          ctx.arc(x, center[1], radius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
     }
 
     // 前線・攻撃矢印・師団マーカー描画
@@ -3187,6 +3246,60 @@ class BattlePlanManager {
     return units.find(u => u.id === BattlePlanManager.selectedUnitId) || null;
   }
 
+  static ownedAirbases() {
+    const country = CoreEngine.gameState.country;
+    return Object.entries(MapRenderer.states || {})
+      .filter(([, state]) => state.owner === country && Number(state.b?.air_base) > 0);
+  }
+
+  static assignAirbase(unitId, stateId) {
+    const unit = BattlePlanManager.air.find(item => item.id === unitId);
+    const state = MapRenderer.states?.[stateId];
+    const center = MapRenderer.stateCenter.get(String(stateId));
+    if (!unit || !state || state.owner !== CoreEngine.gameState.country || Number(state.b?.air_base) < 1 || !center) return false;
+    unit.baseStateId = String(stateId);
+    unit.base = center.slice();
+    BattlePlanManager.renderPanel();
+    return true;
+  }
+
+  static setAirWingAircraft(unitId, requested) {
+    const unit = BattlePlanManager.air.find(item => item.id === unitId);
+    const amount = Number(requested);
+    if (!unit || !Number.isInteger(amount) || amount < 0) return false;
+    const assignedElsewhere = BattlePlanManager.air
+      .filter(item => item.id !== unitId)
+      .reduce((sum, item) => sum + (Number(item.aircraftCount) || 0), 0);
+    const available = Math.max(0, Math.floor(Number(CoreEngine.gameState.planes) || 0) - assignedElsewhere);
+    if (amount > available) {
+      GameUI.notify('配備可能な航空機数を超えています。', 'alert');
+      return false;
+    }
+    unit.aircraftCount = amount;
+    BattlePlanManager.renderPanel();
+    return true;
+  }
+
+  static airRange(unit) {
+    return Math.max(0, Number(unit?.range) || 450);
+  }
+
+  static airWingReady(unit) {
+    const state = MapRenderer.states?.[unit?.baseStateId];
+    return !!unit?.base && Number(unit.aircraftCount) > 0 && state?.owner === CoreEngine.gameState.country && Number(state.b?.air_base) > 0;
+  }
+
+  static airTargetInRange(unit, point) {
+    if (!BattlePlanManager.airWingReady(unit) || !point) return false;
+    const width = MapRenderer.mapW;
+    let dx = Math.abs(point[0] - unit.base[0]);
+    if (width > 0) {
+      dx = ((dx % width) + width) % width;
+      dx = Math.min(dx, width - dx);
+    }
+    return Math.hypot(dx, point[1] - unit.base[1]) <= BattlePlanManager.airRange(unit);
+  }
+
   static selectUnit(id) {
     BattlePlanManager.selectedUnitId = id;
     BattlePlanManager.renderPanel();
@@ -3200,16 +3313,19 @@ class BattlePlanManager {
     const player = CoreEngine.gameState.country;
     const centers = Object.values(MapRenderer.states)
       .filter(st => st.owner === player)
-      .map(st => MapRenderer.stateCenter.get(Object.keys(st.vp || {})[0]))
+      .map(st => MapRenderer.stateCenter.get(String(Object.keys(MapRenderer.states).find(id => MapRenderer.states[id] === st))))
       .filter(Boolean);
     const base = centers[0] || [MapRenderer.mapW / 2, MapRenderer.mapH / 2];
+    const airbase = BattlePlanManager.ownedAirbases()[0];
+    const airbaseCenter = airbase ? MapRenderer.stateCenter.get(String(airbase[0])) : null;
     // 艦隊 ×2 / 航空集団 ×2
     BattlePlanManager.navy = [1, 2].map(i => ({
       id: 'nav' + i, name: '第' + i + '艦隊', type: 'navy', base: [base[0] + i * 40, base[1] + 60],
       area: null, target: null, mission: 'patrol', executing: false, progress: 0, strength: 100
     }));
     BattlePlanManager.air = [1, 2].map(i => ({
-      id: 'air' + i, name: '第' + i + '航空集団', type: 'air', base: [base[0] - i * 40, base[1] - 60],
+      id: 'air' + i, name: '第' + i + '航空集団', type: 'air', base: airbaseCenter ? airbaseCenter.slice() : null,
+      baseStateId: airbase ? String(airbase[0]) : null, aircraftCount: 0, range: 450,
       area: null, target: null, mission: 'air_sup', executing: false, progress: 0, strength: 100
     }));
   }
@@ -3376,10 +3492,19 @@ class BattlePlanManager {
       GameUI.notify('⚓ 海軍は海域をクリックしてください (陸地は割り当てできません)。', 'alert');
       return false;
     }
+    if (unit.type === 'air' && !BattlePlanManager.airWingReady(unit)) {
+      GameUI.notify('航空基地を選び、保有航空機を配備してください。', 'alert');
+      return false;
+    }
+    if (unit.type === 'air' && !BattlePlanManager.airTargetInRange(unit, wp)) {
+      GameUI.notify('指定した空域はこの航空隊の航続距離外です。', 'alert');
+      return false;
+    }
     unit.zone = { pid: pid, x: wp[0], y: wp[1], mission: BattlePlanManager.activeMission[unit.type] };
     unit.area = null; unit.target = null; unit.executing = false; unit.progress = 0;
     BattlePlanManager.showZoneInfo(unit, pid);
-    CoreEngine.log(unit.name + 'を' + (unit.type === 'navy' ? '海域' : '空域') + ' (プロビンス' + pid + ') に配備しました。');
+    const locationName = typeof WarSystems !== 'undefined' ? WarSystems.provinceName(pid) : 'プロビンス ' + pid;
+    CoreEngine.log(unit.name + 'を' + (unit.type === 'navy' ? '海域' : '空域') + '「' + locationName + '」に配備しました。');
     MultiplayerManager.broadcast({ type: 'force_zone', force: unit.type, id: unit.id, zone: unit.zone });
     return true;
   }
@@ -3391,10 +3516,11 @@ class BattlePlanManager {
     const type = pd ? typeNames[pd[3]] : '不明';
     const terr = pd ? MapRenderer.provinces.terr[pd[5]] : '不明';
     const isSea = type === 'sea' || type === 'lake';
+    const locationName = typeof WarSystems !== 'undefined' ? WarSystems.provinceName(pid) : 'プロビンス ' + pid;
     const unitsHere = [...BattlePlanManager.navy, ...BattlePlanManager.air].filter(u => u.zone && u.zone.pid === pid);
     const html =
       '<div style="text-align:center;margin-bottom:10px;font-size:34px;">' + (isSea ? '🌊' : '☁️') + '</div>' +
-      '<h3 style="color:var(--text-gold);text-align:center;margin-bottom:8px;">' + (isSea ? '海域' : '空域') + ' プロビンス ' + pid + '</h3>' +
+      '<h3 style="color:var(--text-gold);text-align:center;margin-bottom:8px;">' + (isSea ? '海域' : '空域') + ' ' + locationName + '</h3>' +
       '<p style="font-size:12px;color:var(--text-secondary);text-align:center;margin-bottom:10px;">' +
       (isSea
         ? '艦隊を配備できる海域です。哨戒・攻撃・通商護衛の任務を実行できます。'
@@ -3652,11 +3778,25 @@ class BattlePlanManager {
     return IntelligenceManager.visibleDivisions();
   }
 
+  static applyConvoyDamage(enemyTag, pressure = 1) {
+    const gs = CoreEngine.gameState;
+    const current = Number(gs.convoys || 0);
+    if (current <= 0) return 0;
+    const base = 4 + Math.max(0, 30 - (gs.navalSupremacy || 0) * 0.35) * Number(pressure || 1);
+    const loss = Math.min(current, Math.max(1, Math.round(base * (enemyTag ? 1.15 : 0.75))));
+    gs.convoys = Math.max(0, current - loss);
+    return loss;
+  }
+
   static execute(armyId) {
     // 海軍/空軍: ミッション実行 (哨戒・制空���攻撃)
     if (typeof armyId === 'string' && (armyId.startsWith('nav') || armyId.startsWith('air'))) {
       const unit = [...BattlePlanManager.navy, ...BattlePlanManager.air].find(u => u.id === armyId);
       if (!unit) return;
+      if (unit.type === 'air' && !BattlePlanManager.airWingReady(unit)) {
+        GameUI.notify('航空基地を選び、保有航空機を配備してください。', 'alert');
+        return;
+      }
       if (!unit.zone && !unit.area && !unit.target) {
         GameUI.notify(unit.type === 'navy' ? '先に海域���左クリックして指定してください。' : '先に空域を左クリックして指定してください。', 'alert');
         return;
@@ -3739,7 +3879,13 @@ class BattlePlanManager {
     }
     // 海軍「攻撃」: 敵輸送船団を攻撃 (護衛を持つ国がいれば相殺)
     if (unit.type === 'navy' && unit.mission === 'strike' && unit.progress % 40 < 1.2) {
-      CoreEngine.log('⚔️ ' + unit.name + 'が敵輸送船団を攻撃しました。');
+      const enemyTag = gs.atWar.find(tag => tag !== player) || null;
+      const loss = BattlePlanManager.applyConvoyDamage(enemyTag, 0.8);
+      if (loss > 0) {
+        CoreEngine.log('⚔️ ' + unit.name + 'が敵輸送船団を攻撃し、' + loss + '隻を喪失させました。');
+      } else {
+        CoreEngine.log('⚔️ ' + unit.name + 'が敵輸送船団を攻撃しました。');
+      }
     }
     // 空軍「制空」: 制空権をじわじわ獲得
     if (unit.type === 'air' && unit.mission === 'air_sup') {
@@ -3797,6 +3943,24 @@ class BattlePlanManager {
 
   static renderPanel() {
     ArmyRoster.render();
+  }
+
+  static divisionMarkers() {
+    const markers = new Map();
+    BattlePlanManager.armies.forEach(army => army.divisions.forEach(division => {
+      const pid = division.pid || army.positionPid || MapRenderer.provinceAt(division.x, division.y);
+      if (!pid) return;
+      const center = MapRenderer.provCentroid.get(Number(pid)) || [division.x || 0, division.y || 0];
+      if (!markers.has(pid)) {
+        markers.set(pid, { pid: Number(pid), x: center[0], y: center[1], count: 0, org: 0, maxOrg: 0, selected: false });
+      }
+      const marker = markers.get(pid);
+      marker.count += 1;
+      marker.org += Number(division.org) || 0;
+      marker.maxOrg += Number(division.maxOrg) || 0;
+      marker.selected ||= army.id === BattlePlanManager.selectedArmyId;
+    }));
+    return [...markers.values()];
   }
 
   // ---- Canvasオーバーレイ描画: 前線・矢印・師団 ----
@@ -3860,17 +4024,25 @@ class BattlePlanManager {
         }
       }
       // 師団マーカー (NATO風歩兵記号 + 組織力バー) — マップ上で常に確認できる
-      const markers=new Map();
-      army.divisions.forEach(d=>{
-        const pid=d.pid||army.positionPid||MapRenderer.provinceAt(d.x,d.y);
-        if(!markers.has(pid))markers.set(pid,{...d,count:0,org:0,maxOrg:0});
-        const marker=markers.get(pid);marker.count++;marker.org+=d.org;marker.maxOrg+=d.maxOrg;
-      });
-      markers.forEach(d => {
+      if (army !== BattlePlanManager.armies[0]) return;
+      BattlePlanManager.divisionMarkers().forEach(d => {
         const s = worldToScreen(d.x, d.y);
         if (s[0] < -30 || s[1] < -30 || s[0] > ctx.canvas.width + 30 || s[1] > ctx.canvas.height + 30) return;
-        const selected = army.id === BattlePlanManager.selectedArmyId;
+        const selected = d.selected;
+        const pid = d.pid;
+        const engaged = BattleManager.battles.some(battle => Number(battle.provId) === Number(pid));
         const w = 16, h = 13;
+        if (engaged) {
+          ctx.save();
+          ctx.strokeStyle = '#e05555';
+          ctx.shadowColor = '#e05555';
+          ctx.shadowBlur = 8;
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(s[0], s[1], 15 + Math.sin(Date.now() / 180) * 2, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        }
         // 本体 (NATO歩兵記号: 矩形 + 斜め十字)
         ctx.fillStyle = selected ? 'rgba(212,168,67,0.95)' : 'rgba(90,110,140,0.92)';
         ctx.fillRect(s[0] - w / 2, s[1] - h / 2, w, h);
@@ -3884,17 +4056,13 @@ class BattlePlanManager {
         // 組織力バー
         ctx.fillStyle = '#222';
         ctx.fillRect(s[0] - w / 2, s[1] - h / 2 - 5, w, 3);
-        ctx.fillStyle = d.org / d.maxOrg > 0.5 ? '#4ac46a' : '#e0c040';
-        ctx.fillRect(s[0] - w / 2, s[1] - h / 2 - 5, w * (d.org / d.maxOrg), 3);
-        ctx.fillStyle='#d4a843';ctx.font='bold 10px sans-serif';ctx.textAlign='center';
-        ctx.fillText(d.count+'師団',s[0],s[1]+h/2+12);
-        // 軍集団番�� (選択中のみ)
-        if (selected) {
-          ctx.fillStyle = '#d4a843';
-          ctx.font = 'bold 9px sans-serif';
-          ctx.textAlign = 'center';
-          ctx.fillText(army.name, s[0], s[1] - h / 2 - 7);
-        }
+        const orgRatio = d.maxOrg ? d.org / d.maxOrg : 0;
+        ctx.fillStyle = orgRatio > 0.5 ? '#4ac46a' : '#e0c040';
+        ctx.fillRect(s[0] - w / 2, s[1] - h / 2 - 5, w * orgRatio, 3);
+        ctx.fillStyle = engaged ? '#ff7777' : '#d4a843';
+        ctx.font = 'bold 10px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText((engaged ? '⚔ ' : '') + d.count, s[0], s[1] + h / 2 + 12);
       });
     });
 
@@ -4995,9 +5163,11 @@ class MultiplayerManager {
   static isHost = false;
   static playerId = null;
   static connected = false;
+  static remoteCountries = {};
 
   static init() {
     MultiplayerManager.playerId = 'p' + Math.random().toString(36).substring(2, 8);
+    MultiplayerManager.remoteCountries = {};
     MultiplayerManager.render();
   }
 
@@ -5028,12 +5198,13 @@ class MultiplayerManager {
     MultiplayerManager.roomId = roomId;
     MultiplayerManager.roomHash = MultiplayerManager.hashPassword(passInput ? passInput.value : '');
     MultiplayerManager.isHost = true;
+    MultiplayerManager.remoteCountries = {};
     MultiplayerManager.setStatus('ルーム作成中...', false);
     MultiplayerManager.peer = new Peer('hoi4game-' + roomId, { debug: 1 });
 
     MultiplayerManager.peer.on('open', (id) => {
       MultiplayerManager.connected = true;
-      MultiplayerManager.setStatus('ホス���開始 (ID: ' + id + ')', true);
+      MultiplayerManager.setStatus('ホスト開始 (ID: ' + id + ')', true);
       document.getElementById('mp-indicator').textContent = '👥 ホスト';
       GameUI.notify('ルーム作成完了！ID: ' + roomId);
       MultiplayerManager.updatePlayerList();
@@ -5049,7 +5220,10 @@ class MultiplayerManager {
       });
       conn.on('data', (data) => MultiplayerManager.onData(data, peerId));
       conn.on('close', () => {
+        const country = MultiplayerManager.remoteCountries[peerId];
         delete MultiplayerManager.connections[peerId];
+        delete MultiplayerManager.remoteCountries[peerId];
+        MultiplayerManager.handleDisconnect(peerId, country);
         MultiplayerManager.setStatus('プレイヤー切断: ' + peerId, false);
         MultiplayerManager.updatePlayerList();
       });
@@ -5068,6 +5242,7 @@ class MultiplayerManager {
     MultiplayerManager.joinPassword = passInput ? passInput.value : '';
     MultiplayerManager.roomId = roomId;
     MultiplayerManager.isHost = false;
+    MultiplayerManager.remoteCountries = {};
     MultiplayerManager.setStatus('接続中...', false);
     MultiplayerManager.peer = new Peer({ debug: 1 });
 
@@ -5083,7 +5258,10 @@ class MultiplayerManager {
       });
       conn.on('data', (data) => MultiplayerManager.onData(data, conn.peer));
       conn.on('close', () => {
+        const country = MultiplayerManager.remoteCountries[conn.peer];
         delete MultiplayerManager.connections[conn.peer];
+        delete MultiplayerManager.remoteCountries[conn.peer];
+        MultiplayerManager.handleDisconnect(conn.peer, country);
         MultiplayerManager.setStatus('ホストから切断されました', false);
         document.getElementById('mp-indicator').textContent = '👥 単独';
       });
@@ -5094,9 +5272,33 @@ class MultiplayerManager {
     });
   }
 
+  static handleDisconnect(peerId, country) {
+    const strategy = CoreEngine.gameState.strategy;
+    const disconnectedCountry = country || MultiplayerManager.remoteCountries[peerId] || strategy?.peers?.[peerId];
+    delete MultiplayerManager.remoteCountries[peerId];
+    if (disconnectedCountry && disconnectedCountry !== CoreEngine.gameState.country &&
+        typeof AIManager !== 'undefined' && AIManager.takeoverCountry) {
+      AIManager.takeoverCountry(disconnectedCountry, '接続切断');
+    }
+    if (strategy?.peers) delete strategy.peers[peerId];
+    if (disconnectedCountry && strategy?.publicCountries) delete strategy.publicCountries[disconnectedCountry];
+
+    if (!MultiplayerManager.isHost) {
+      MultiplayerManager.connected = false;
+      MultiplayerManager.roomId = null;
+      MultiplayerManager.remoteCountries = {};
+      const speed = CoreEngine.gameState.speed;
+      if (speed > 0) CoreEngine.remoteSetSpeed(speed);
+      MultiplayerManager.setStatus('ホスト切断: ローカル進行に切り替えました', false);
+      const indicator = document.getElementById('mp-indicator');
+      if (indicator) indicator.textContent = '👥 単独';
+    }
+  }
+
   static disconnect() {
     Object.values(MultiplayerManager.connections).forEach(conn => conn.close());
     MultiplayerManager.connections = {};
+    MultiplayerManager.remoteCountries = {};
     if (MultiplayerManager.peer) { MultiplayerManager.peer.destroy(); MultiplayerManager.peer = null; }
     MultiplayerManager.connected = false;
     MultiplayerManager.setStatus('切断しました', false);
@@ -5174,7 +5376,10 @@ class MultiplayerManager {
         break;
       case 'sync':
         if(MultiplayerManager.isHost || fromPeer!==MultiplayerManager.roomId)return;
-        if (data.state) CoreEngine.applySyncState(data.state);
+        if (data.state) {
+          CoreEngine.applySyncState(data.state);
+          if (data.state.country) MultiplayerManager.remoteCountries[fromPeer] = data.state.country;
+        }
         if (data.date) CoreEngine.gameState.date = new Date(data.date);
         CoreEngine.updateCalendar();
         CoreEngine.renderStats();
@@ -5184,8 +5389,11 @@ class MultiplayerManager {
         if(MultiplayerManager.isHost || fromPeer!==MultiplayerManager.roomId)return;
         const date=new Date(data.date),s=CoreEngine.gameState;
         if(!Number.isFinite(date.getTime()) || date<=s.date)return;
-        // Host is the only clock; advance the local country's systems once per received day.
-        while(s.date<date)CoreEngine.tick(true);
+        // Host is the only clock. A single packet represents one synced day update.
+        s.date = date;
+        s.politicalPower += (s.cardModifiers?.politicalPowerGain || 24) / 24;
+        s.manpower = (s.manpower || 0) + (typeof PoliticsManager !== 'undefined' ? PoliticsManager.dailyManpowerGain() / 24 : 0);
+        CoreEngine.renderStats();
         CoreEngine.updateCalendar();break;
       }
       case 'speed':
@@ -6380,6 +6588,8 @@ class StartScreen {
 async function initGame() {
   CoreEngine.init();
   CoreEngine.updateCalendar();
+  await window.l10n?.loadGameData(CoreEngine.gameState.country || 'GER');
+  if (typeof WarSystems !== 'undefined') WarSystems.patchNames();
   CoreEngine.registerTickCallback(() => BattleManager.onTick());          // 戦闘進行
   CoreEngine.registerTickCallback(() => BattleManager.maybeEnemyOffensive()); // 敵軍の偶発侵攻
   MapRenderer.init();            // 全画面操作マップ (hoi4-history公式データ) — 非同期で読み込み
