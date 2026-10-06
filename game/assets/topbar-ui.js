@@ -5,6 +5,7 @@ const TopbarUI = {
     { key: 'stab', icon: 'stability', label: '安定度', value: s => Number(s.stability).toFixed(1) + '%', gauge: s => s.stability, tone: 'green' },
     { key: 'ws', icon: 'warSupport', label: '戦争協力度', value: s => Number(s.warSupport).toFixed(1) + '%', gauge: s => s.warSupport, tone: 'amber' },
     { key: 'mp', icon: 'manpower', label: '人的資源', value: s => (s.manpower / 1000).toFixed(0) + 'K' },
+    { key: 'xp', icon: 'armyXp', label: '経験値', value: s => '陸' + Math.floor(s.armyExperience || 0) + ' / 海' + Math.floor(s.navyExperience || 0) + ' / 空' + Math.floor(s.airExperience || 0) },
     { key: 'fac', icon: 'factories', label: '民需 / 軍需', value: s => s.civilianFactories + 'C / ' + s.militaryFactories + 'M' },
     { key: 'fuel', icon: 'fuel', label: '燃料', value: s => Math.floor(s.fuel) + '/' + s.maxFuel, gauge: s => s.maxFuel > 0 ? s.fuel / s.maxFuel * 100 : 0, tone: 'amber' },
     { key: 'convoy', icon: 'convoys', label: '輸送船', value: s => s.convoys }

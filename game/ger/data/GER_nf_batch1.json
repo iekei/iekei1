@@ -22,23 +22,33 @@
   {
     "id": "GER_atlantikwall",
     "title": "大西洋の壁",
+    "loc_key": "GER_atlantikwall",
+    "country": "GER",
     "x": 50,
     "y": 310,
     "cost": 70,
     "effect": "西ヨーロッパを征服した今、我々は大西洋を越えてくる猛攻撃に対して地歩を固めなければならない。ヨーロッパ沿岸の巨大な要塞ネットワークは、莫大な防御力として設えられるだろう。",
     "prerequisites": [
       "GER_west_wall"
+    ],
+    "mutually_exclusive": [
+      "GER_ostwall"
     ]
   },
   {
     "id": "GER_ostwall",
     "title": "東の壁",
+    "loc_key": "GER_ostwall",
+    "country": "GER",
     "x": 350,
     "y": 310,
     "cost": 70,
     "effect": "東部で多大な有利を得た今、形勢が一変しても敵軍を抑えられるように準備をしなければならない。我々は長距離な要塞線を、黒海からドニエプル川に沿ってバルト海まで建設する必要がある。",
     "prerequisites": [
       "GER_west_wall"
+    ],
+    "mutually_exclusive": [
+      "GER_atlantikwall"
     ]
   },
   {

@@ -1,7 +1,13 @@
 'use strict';
 
 // -----------------------------------------------------------------------------
-// 1. NFRewardLoader: GitHubからParadox形式の達成報酬データを取得・パースするローダー
+// NFRewardLoader: GitHubからParadox形式の達成報酬データを取得・パースするローダー
+//
+// 表示フォーマットと実行処理は game/assets/hoi4-effects-config.js が一元管理する。
+// このローダーは外部データの取得・正規化のみを担い、未定義キーや複雑なネスト形式は
+// すべて共通フォーマッター (HOI4EffectsConfig.formatEffect / applyEffect) へ渡す。
+// 外部データが未読み込みの場合でも、HOI4EffectsConfig.buildRewardsFromFocus による
+// フォールバック定義でUI表示・状態更新が動作する。
 // -----------------------------------------------------------------------------
 window.NFRewardLoader = {
   API: 'https://api.github.com/repos/cbrzeczysz/hoi4-history/git/trees/main?recursive=1',
@@ -19,9 +25,10 @@ window.NFRewardLoader = {
       const rewards = await this.load(country);
       return focuses.map(focus => {
         const id = focus.id || focus.focus_id;
-        return focus.completion_rewards?.length || !rewards.has(id)
-          ? focus
-          : { ...focus, completion_rewards: rewards.get(id) };
+        // 既存の completion_rewards を優先し、外部データが無ければフォールバック生成。
+        if (focus.completion_rewards?.length) return focus;
+        if (!rewards.has(id)) return focus;
+        return { ...focus, completion_rewards: rewards.get(id) };
       });
     } catch (error) {
       console.warn('[NFRewardLoader] 達成報酬の外部読み込みをスキップ:', error.message);
@@ -35,14 +42,13 @@ window.NFRewardLoader = {
     if (!response.ok) throw new Error(`GitHub tree HTTP ${response.status}`);
     const tree = await response.json();
     const names = this.countryFiles[country] || [];
-    
-    // 対象ファイルをフィルタリング
-    const files = (tree.tree || []).filter(item => 
-      item.type === 'blob' && 
-      /common\/national_focus\/.+\.(txt|json)$/i.test(item.path) && 
+
+    const files = (tree.tree || []).filter(item =>
+      item.type === 'blob' &&
+      /common\/national_focus\/.+\.(txt|json)$/i.test(item.path) &&
       names.some(name => item.path.toLowerCase().includes(name))
     );
-    
+
     const merged = new Map();
     for (const file of files) {
       const textResponse = await fetch(this.RAW + file.path);
@@ -54,10 +60,7 @@ window.NFRewardLoader = {
   },
 
   parse(text, output) {
-    // 1. コメント(# 以降)をすべて除去
     const source = text.replace(/#[^\r\n]*/g, '');
-    
-    // 2. focus = { ... } または shared_focus = { ... } を探索
     const focusPattern = /(?:focus|shared_focus)\s*=\s*\{/g;
     let match;
 
@@ -65,15 +68,12 @@ window.NFRewardLoader = {
       const open = source.indexOf('{', match.index);
       const end = this.blockEnd(source, open);
       if (end < 0) break;
-
       const body = source.slice(open + 1, end);
 
-      // 3. ブロック内から id を抽出 (例: id = GER_rhineland)
       const idMatch = /(?:^|\s)id\s*=\s*([A-Za-z0-9_:.-]+)/.exec(body);
       if (!idMatch) continue;
       const focusId = idMatch[1];
 
-      // 4. ブロック内から completion_reward を抽出
       const rewardMatch = /(?:^|\s)completion_reward\s*=\s*\{/.exec(body);
       if (rewardMatch) {
         const rewardOpen = body.indexOf('{', rewardMatch.index);
@@ -96,37 +96,84 @@ window.NFRewardLoader = {
     return -1;
   },
 
+  // 再帰的なブロック解析でネストした { building = bunker level = 3 } を正しく読み取る。
   parseBlock(block) {
     const rewards = [];
-    // タブや複数改行を単一のスペースに正規化
-    const normalized = block.replace(/\s+/g, ' ').trim();
-    
-    const regex = /([a-zA-Z0-9_]+)\s*=\s*({[^}]+}|[^{} ]+)/g;
-    let match;
-
-    while ((match = regex.exec(normalized))) {
-      const type = match[1];
-      const raw = match[2].trim();
-
-      if (raw.startsWith('{')) {
-        const reward = { type };
-        const innerRegex = /([a-zA-Z0-9_]+)\s*=\s*([^{} ]+)/g;
-        let innerMatch;
-        while ((innerMatch = innerRegex.exec(raw))) {
-          reward[innerMatch[1]] = this.scalar(innerMatch[2]);
+    const tokens = this.tokenize(block);
+    let i = 0;
+    while (i < tokens.length) {
+      const type = tokens[i];
+      if (!/^[a-zA-Z0-9_]+$/.test(type)) { i += 1; continue; }
+      // 次のトークンが "=" なら値ペア、そうでなければフラグ型効果
+      if (tokens[i + 1] === '=') {
+        const raw = tokens[i + 2];
+        if (raw === '{') {
+          // ネストブロックを丸ごと抽出して共通フォーマッターへ渡せる形に正規化
+          const inner = this.extractBlock(tokens, i + 2);
+          const reward = { type };
+          this.parseInnerBlock(inner, reward);
+          // building = { building = bunker level = 3 } → add_building_construction へ正規化
+          if (type === 'building' && reward.building) reward.type = 'add_building_construction';
+          rewards.push(reward);
+          i = inner.endIndex + 1; // ブロック終端 "}" の次へ
+        } else {
+          const scalar = this.scalar(raw);
+          // add_ideas = idea_name → { type, idea }
+          if (type === 'add_ideas' || type === 'remove_ideas') rewards.push({ type, idea: scalar });
+          else rewards.push({ type, value: scalar });
+          i += 3;
         }
-        // Paradoxの building = { building = bunker level = 3 } は、
-        // 表示・実行側で扱いやすい共通の建設エフェクトへ正規化する。
-        if (type === 'building' && reward.building) reward.type = 'add_building_construction';
-        rewards.push(reward);
       } else {
-        rewards.push({ 
-          type, 
-          [type === 'add_ideas' ? 'idea' : 'value']: this.scalar(raw.replace(/[{}]/g, '').trim()) 
-        });
+        // フラグ型 (例: set_country_flag = なしで単独) は内部制御キーとして無視される
+        i += 1;
       }
     }
     return rewards;
+  },
+
+  // ブロック内の "key = value" を reward オブジェクトへ格納。
+  parseInnerBlock(inner, reward) {
+    const tokens = inner.tokens;
+    let i = 0;
+    while (i < tokens.length) {
+      const key = tokens[i];
+      if (tokens[i + 1] === '=') {
+        const val = tokens[i + 2];
+        if (val === '{') {
+          // さらにネストしている場合は文字列化して保持 (フォーマッターが解釈)
+          const nested = this.extractBlock(tokens, i + 2);
+          reward[key] = nested.tokens.join(' ');
+          i = nested.endIndex + 1;
+        } else {
+          reward[key] = this.scalar(val);
+          i += 3;
+        }
+      } else { i += 1; }
+    }
+  },
+
+  // 字句解析: ブロック・文字列リテラル・識別子・数値・記号をトークン分割。
+  tokenize(text) {
+    const tokens = [];
+    const re = /"([^"]*)"|'([^']*)'|([{}=])|([^\s{}=]+)/g;
+    let m;
+    while ((m = re.exec(text))) {
+      if (m[1] !== undefined) tokens.push(m[1]);
+      else if (m[2] !== undefined) tokens.push(m[2]);
+      else if (m[3] !== undefined) tokens.push(m[3]);
+      else tokens.push(m[4]);
+    }
+    return tokens;
+  },
+
+  // "{" の位置から対応する "}" までのトークン列を抽出。
+  extractBlock(tokens, openIndex) {
+    let depth = 0;
+    for (let j = openIndex; j < tokens.length; j += 1) {
+      if (tokens[j] === '{') depth += 1;
+      else if (tokens[j] === '}') { depth -= 1; if (depth === 0) return { tokens: tokens.slice(openIndex + 1, j), endIndex: j }; }
+    }
+    return { tokens: tokens.slice(openIndex + 1), endIndex: tokens.length - 1 };
   },
 
   scalar(value) {
@@ -136,154 +183,31 @@ window.NFRewardLoader = {
 };
 
 // -----------------------------------------------------------------------------
-// 2. formatCompletionReward: パースした報酬を日本語のツールチップテキストに変換
+// formatCompletionReward: 報酬1件を日本語テキストへ変換 (共通フォーマッターへ委譲)
 // -----------------------------------------------------------------------------
 window.formatCompletionReward = function rewardText(reward) {
   if (!reward || !reward.type) return '';
-  const configured = window.HOI4EffectsConfig?.formatEffect?.(reward);
-  if (configured) return configured.text;
+  // 内部制御キーは表示しない
+  const ignore = window.HOI4EffectsConfig?.ignoreTypes;
+  if (ignore && ignore.has(reward.type)) return null;
+  if (/^[A-Z]{3}$/.test(reward.type) || /^[0-9]+$/.test(reward.type)) return null;
 
-
-  // 内部システムフラグを除外
-  const ignoreTypes = new Set([
-    'if', 'limit', 'else', 'elseif', 'random', 'random_list', 'every_other_country',
-    'set_global_flag', 'clr_global_flag', 'set_country_flag', 'clr_country_flag', 'set_state_flag',
-    'custom_effect_tooltip', 'hidden_effect', 'mark_focus_tree_layout_dirty', 'effect_tooltip',
-    'sound_effect', 'log', 'set_rule', 'save_event_target_as'
-  ]);
-
-  if (ignoreTypes.has(reward.type) || /^[A-Z]{3}$/.test(reward.type) || /^[0-9]+$/.test(reward.type)) {
-    return null;
-  }
-
-  // Paradox Effectの日本語翻訳辞書
- // Paradox Effectの日本語翻訳辞書（拡張版）
-  const labels = {
-    // --- 政治・国家パラメータ ---
-    add_political_power: '政治力',
-    add_stability: '安定度',
-    add_war_support: '戦争協力度',
-    add_command_power: '指揮力',
-    add_popularity: '政党支持率',
-    set_party_popularity: '政党支持率を変更',
-    set_politics: '政治体制の変更',
-    retire_country_leader: '国家指導者の引退',
-    create_country_leader: '新しい国家指導者',
-    add_country_leader_trait: '指導者特性を追加',
-    remove_country_leader_trait: '指導者特性を削除',
-    add_ideas: '国家精神を追加',
-    remove_ideas: '国家精神を削除',
-    swap_ideas: '国家精神の変更',
-    add_timed_idea: '期間限定の国家精神',
-    add_named_threat: '国際緊張度',
-    add_threat: '国際緊張度',
-
-    // --- 軍事・経験値・部隊 ---
-    add_army_experience: '陸軍経験値',
-    army_experience: '陸軍経験値',
-    add_navy_experience: '海軍経験値',
-    navy_experience: '海軍経験値',
-    add_air_experience: '空軍経験値',
-    air_experience: '空軍経験値',
-    add_manpower: '人的資源',
-    load_oob: '部隊の展開',
-    create_unit: '師団の編成',
-    add_ace: 'エースパイロット',
-    create_corps_commander: '軍団長を生成',
-    create_field_marshal: '元帥を生成',
-    create_navy_leader: '提督を生成',
-    add_corps_commander_role: '将軍職の付与',
-    add_field_marshal_role: '元帥職の付与',
-
-    // --- 研究・技術・ドクトリン ---
-    add_research_slot: '研究スロット',
-    set_research_slots: '研究スロット数を設定',
-    add_tech_bonus: '研究ボーナス',
-    add_doctrine_cost_reduction: 'ドクトリン割引',
-    set_technology: '技術を獲得',
-    give_technology: '技術の供与',
-
-    // --- 外交・領土・戦争 ---
-    create_wargoal: '開戦事由を作成',
-    declare_war_on: '宣戦布告',
-    add_state_claim: '州の請求権',
-    add_state_core: '中核州を追加',
-    remove_state_core: '中核州を削除',
-    puppet: '傀儡国化',
-    annex_country: '併合',
-    white_peace: '白紙和平',
-    create_faction: '陣���の設立',
-    add_to_faction: '陣営に参加',
-    remove_from_faction: '陣営から離脱',
-    dismantle_faction: '陣営の解散',
-    leave_faction: '陣営を離脱',
-    give_guarantee: '独立保証',
-    send_equipment: '装備の供与',
-    may_provoke_hostility: '敵対的行動の解禁',
-
-    // --- 建設・経済・資源 ---
-    add_offsite_building: 'オフサイト工場',
-    add_extra_state_shared_building_slots: '追加建築スロット',
-    add_building_construction: '建設',
-    add_resource: '資源を追加',
-    add_equipment_to_stockpile: '備蓄に装備を追加',
-
-    // 施設タイプ（building指定用）
-    industrial_complex: '民需工場',
-    arms_factory: '軍需工場',
-    dockyard: '造船所',
-    synthetic_refinery: '人造石油施設',
-    infrastructure: 'インフラ',
-    air_base: '空軍基地',
-    naval_base: '海軍基地',
-    bunker: '要塞',
-    coastal_bunker: '沿岸要塞',
-    anti_air_building: '対空砲',
-    radar_station: 'レーダー基地',
-    fuel_silo: '燃料サイロ',
-    nuclear_reactor: '原子炉',
-    rocket_site: 'ロケット発射場',
-
-    // --- スコープ・イベント ---
-    random_owned_controlled_state: 'ランダムな支配州',
-    every_owned_state: 'すべての所有州',
-    random_neighbor_state: '隣接するランダムな州',
-    country_event: '国家イベントが発生',
-    news_event: 'ニュースイベントが発生'
-  };
-  
-  if (reward.type === 'add_tech_bonus') {
-    const category = reward.category || '全般';
-    const bonus = reward.bonus ? ` ${(Number(reward.bonus) * 100).toFixed(0)}%` : '';
-    const uses = reward.uses ? `（${reward.uses}回分）` : '';
-    return `・研究ボーナス: ${category}${bonus}${uses}`;
-  }
-
-  let label = labels[reward.type];
-  if (!label) {
-    label = reward.type.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-  }
-
-  let value = reward.value ?? reward.idea ?? reward.amount ?? reward.target ?? reward.building ?? '';
-
-  if (typeof value === 'number' && Math.abs(value) < 1 && value !== 0) {
-    return `・${label}: ${value >= 0 ? '+' : ''}${(value * 100).toFixed(2)}%`;
-  }
-  if (typeof value === 'number') {
-    return `・${label}: ${value >= 0 ? '+' : ''}${value}`;
-  }
-
-  return value ? `・${label}: ${value}` : `・${label}`;
+  const formatted = window.HOI4EffectsConfig?.formatEffect?.(reward);
+  return formatted ? formatted.text : '';
 };
 
 // -----------------------------------------------------------------------------
-// 3. 描画用ヘルパー: 報酬配列からツールチップ用HTMLを生成
+// 描画用ヘルパー: 報酬配列からツールチップ用HTMLを生成 (色付きHoI4風)
 // -----------------------------------------------------------------------------
-window.generateTooltipHTML = function(rewards) {
+window.generateTooltipHTML = function (rewards) {
   if (!Array.isArray(rewards)) return '';
-  const formattedLines = rewards.map(r => window.formatCompletionReward(r)).filter(Boolean);
-  return formattedLines.length > 0 ? `【達成報酬】<br>` + formattedLines.join('<br>') : '';
+  const fmt = window.HOI4EffectsConfig?.formatEffect || window.formatEffect;
+  const lines = rewards.map(r => fmt(r)).filter(Boolean);
+  if (!lines.length) return '';
+  return '【達成報酬】<br>' + lines.map(line => {
+    const cls = line.color === '#ef4444' ? 'negative' : 'positive';
+    return `<span class="tt-reward ${cls}" style="color:${line.color || '#22c55e'}">${line.text}</span>`;
+  }).join('<br>');
 };
 
-// モジュールの準備完了フラグ
 window.NFRewardLoaderReady = true;

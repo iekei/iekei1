@@ -69,6 +69,9 @@ const TopbarIcons = {
     TopbarIcons.fuel = emblem(
       '<path d="M9 4h14v3l3 2v19H6V9l3-2z"/><path d="M12 4v3h8V4M9 12l14 12M23 12L9 24" fill="none" stroke="#655535"/><path d="M16 11c-1 3-4 5-4 7a4 4 0 008 0c0-2-3-4-4-7" fill="#d6bc7f"/>'
     );
+    TopbarIcons.armyXp = emblem(
+      '<path d="M16 4l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z" fill="url(#metal)"/><path d="M13 14l3 3 5-6" fill="none" stroke="#ece0b3" stroke-width="1.5"/>'
+    );
     TopbarIcons.convoys = emblem(
       '<path d="M2 22l28-3-5 9H7zM9 21v-6h13v5M13 15V9h4v6M20 15v-5h3v5"/><path d="M15 9V4l8 3h-8"/><path d="M3 30l4-1 4 1 5-1 5 1 5-1 4 1" fill="none" stroke="#aab7aa"/>'
     );
