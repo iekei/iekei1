@@ -1156,6 +1156,12 @@ class CoreEngine {
     politicalPower: 100,
     stability: 70,
     warSupport: 50,
+    armyExperience: 0,
+    navyExperience: 0,
+    airExperience: 0,
+    buildings: {},
+    annexedCountries: [],
+    occupiedCountries: [],
     manpower: 1000000,
     resources: {
       oil: 50, coal: 80, steel: 100, tungsten: 20, chromium: 10, aluminum: 40, rubber: 5
@@ -1222,7 +1228,7 @@ class CoreEngine {
       // トップバー必須アイコンを事前読み込み (常に表示されるため)
       const essentialIcons = [];
       if (typeof TopbarIcons !== 'undefined') {
-        ['politicalPower','stability','warSupport','manpower','factories','fuel','convoys'].forEach(k => {
+        ['politicalPower','stability','warSupport','manpower','armyXp','factories','fuel','convoys'].forEach(k => {
           const u = TopbarIcons.get(k); if (u) essentialIcons.push(u);
         });
         Object.keys(TopbarIcons.menu).forEach(k => {
@@ -1282,6 +1288,14 @@ class CoreEngine {
         rows: ['現在値: <b>' + Math.floor(s.manpower).toLocaleString() + '</b>',
                '徴兵法律: <b>' + (law ? law.name : '志願兵制') + '</b>',
                '用途: 師団の徴兵 (装備と共に消費)'] };
+    },
+    xp: () => {
+      const s = CoreEngine.gameState;
+      return { title: '軍事経験値 (Military XP)',
+        rows: ['陸軍経験値: <b>' + Math.floor(s.armyExperience || 0) + '</b>',
+               '海軍経験値: <b>' + Math.floor(s.navyExperience || 0) + '</b>',
+               '空軍経験値: <b>' + Math.floor(s.airExperience || 0) + '</b>',
+               '用途: 装備設計・師団テンプレート・軍事改革'] };
     },
     fac: () => {
       const s = CoreEngine.gameState;
@@ -1385,7 +1399,7 @@ class CoreEngine {
   d.setHours(d.getHours() + 1);
   
   const hourly = CoreEngine.gameState.cardModifiers.politicalPowerGain / 24;
-  CoreEngine.gameState.politicalPower = Math.min(999, CoreEngine.gameState.politicalPower + hourly);
+  CoreEngine.gameState.politicalPower = CoreEngine.gameState.politicalPower + hourly;
     CoreEngine.gameState.fuel = Math.min(CoreEngine.gameState.maxFuel,
       CoreEngine.gameState.fuel + CoreEngine.gameState.resources.oil * 0.1 / 24);
     // 徴兵法律に応じた人的資源の蓄積
@@ -1619,7 +1633,7 @@ class FocusTreeManager {
     FocusTreeManager.activeFocus = null;
     FocusTreeManager.focusProgress = 0;
     FocusTreeManager.applyFocusEffect(f);
-    const completionRewards = FocusTreeManager.normalizeCompletionRewards(f);
+    const completionRewards = FocusTreeManager.getCompletionRewards(f);
     window.dispatchEvent(new CustomEvent('nf-reward-debug', { detail: { message: `completion_reward 適用: ${f.title || id}`, data: { focusId: id, rewards: completionRewards, rewardCount: completionRewards.length } } }));
     if (window.NationalFocusManager && typeof NationalFocusManager.applyCompletionRewards === 'function') {
       NationalFocusManager.applyCompletionRewards(completionRewards);

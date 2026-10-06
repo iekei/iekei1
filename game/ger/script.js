@@ -11,7 +11,13 @@ const gameStats = {
   stability: 85,
   warSupport: 60,
   aggression: 42,
-  politicalPower: 120
+  politicalPower: 120,
+  armyExperience: 0,
+  navyExperience: 0,
+  airExperience: 0,
+  buildings: {},
+  annexedCountries: [],
+  occupiedCountries: []
 };
 
 let allFocuses = [];
@@ -129,13 +135,26 @@ function applyCompletionRewards(rewards) {
     politicalPower: gameStats.politicalPower,
     stability: gameStats.stability,
     warSupport: gameStats.warSupport,
-    worldTension: gameStats.aggression
+    worldTension: gameStats.aggression,
+    armyExperience: gameStats.armyExperience,
+    navyExperience: gameStats.navyExperience,
+    airExperience: gameStats.airExperience,
+    buildings: gameStats.buildings,
+    annexedCountries: gameStats.annexedCountries,
+    occupiedCountries: gameStats.occupiedCountries,
+    country: 'GER'
   };
   rewards.forEach(r => apply(state, r));
   gameStats.politicalPower = state.politicalPower;
   gameStats.stability = state.stability;
   gameStats.warSupport = state.warSupport;
   gameStats.aggression = state.worldTension;
+  gameStats.armyExperience = state.armyExperience;
+  gameStats.navyExperience = state.navyExperience;
+  gameStats.airExperience = state.airExperience;
+  gameStats.buildings = state.buildings;
+  gameStats.annexedCountries = state.annexedCountries;
+  gameStats.occupiedCountries = state.occupiedCountries;
   updateStatusBarUI();
 }
 
@@ -375,7 +394,9 @@ function updateStatusBarUI() {
   document.getElementById('val-stability').textContent = `${Math.min(100, Math.max(0, gameStats.stability))} / 100`;
   document.getElementById('val-war-support').textContent = `${Math.min(100, Math.max(0, gameStats.warSupport))} / 100`;
   document.getElementById('val-aggression').textContent = `${Math.min(100, Math.max(0, gameStats.aggression))} / 100`;
-  document.getElementById('val-pp').textContent = `${Math.min(100, Math.max(0, gameStats.politicalPower))} / 100`;
+  document.getElementById('val-pp').textContent = `${Math.max(0, Math.floor(gameStats.politicalPower))}`;
+  const xpEl = document.getElementById('val-xp');
+  if (xpEl) xpEl.textContent = `陸${Math.floor(gameStats.armyExperience)} / 海${Math.floor(gameStats.navyExperience)} / 空${Math.floor(gameStats.airExperience)}`;
 }
 
 const tooltip = document.getElementById('nf-tooltip');
