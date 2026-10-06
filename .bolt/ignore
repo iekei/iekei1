@@ -1,9 +1,16 @@
-# 一旦すべてを無視対象にする
-/*
+# 3ヶ月前・3週間前などの古いフォルダを除外
+/about/
+/blog/
+/chat/
+/hoi/
+/ikei1/
+/lineup/
+/lineup_src/
+/math/
+/server/
+/.github/
 
-# 必要なフォルダ・ファイルだけ例外として読み込む
-!/game/
-!/nginx.base44.conf
-
-# 設定ファイルを配置している .bolt フォルダ自体も保持
-!/.bolt/
+# ルート直下にある古いファイルを除外
+/index.html
+/script.js
+/sidebar.html
