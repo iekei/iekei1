@@ -159,8 +159,25 @@ const ResearchI18n = {
     return best.name;
   },
 
+  localizedText(keys, country) {
+    const l10n = window.l10n;
+    if (!l10n) return null;
+    for (const key of keys.filter(Boolean)) {
+      const text = l10n.t(key, country);
+      if (text && text !== key) return text;
+    }
+    return null;
+  },
+
   // ---- 技術タイトルを日本語化 ----
   translateTitle(tech, category, country) {
+    const localized = ResearchI18n.localizedText([
+      tech.loc_key,
+      tech.localization_key,
+      tech.id
+    ], country);
+    if (localized) return localized;
+
     // 歩兵装備系は国別の兵器名を使用
     if (category === 'infantry' && /infantry_weapons\d*/.test(tech.id || '')) {
       const year = tech.year || 1936;
@@ -191,10 +208,17 @@ const ResearchI18n = {
     if (!Array.isArray(techData)) return [];
     return techData.map(tech => {
       const translated = ResearchI18n.translateTitle(tech, category, country);
+      const locKey = tech.loc_key || tech.localization_key || tech.id;
+      const description = ResearchI18n.localizedText([
+        tech.desc_key,
+        locKey && locKey + '_desc',
+        tech.id && tech.id + '_desc'
+      ], country) || tech.desc || tech.description || '';
       const firepower = ResearchI18n.calcFirepower(tech, category);
       return {
         ...tech,
         title: translated,
+        desc: description,
         originalTitle: tech.title,
         firepower,
         effects: (tech.effects || []).map(eff => {

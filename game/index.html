@@ -926,6 +926,7 @@
 <script src="assets/image-loader.js"></script>
 <script src="assets/topbar-icons.js"></script>
 <script src="assets/topbar-ui.js"></script>
+<script src="assets/localization-manager.js"></script>
   <script src="assets/research-icons.js"></script>
   <script src="assets/hoi4-effects-config.js"></script>
   <script src="assets/nf-reward-loader.js"></script>
@@ -1477,23 +1478,193 @@ class CoreEngine {
 class FocusTreeManager {
   static focuses = [];
   static focusMap = {};
-  static completedFocuses = new Set();
-  static activeFocus = null;
-  static focusProgress = 0;
-  static focusDaysTotal = 0;
+  static currentCountry = 'GER';
+  static countryStates = Object.create(null);
+  static exclusiveGroupById = Object.create(null);
+  static tickRegistered = false;
   static autocomplete = false;
   static noChecks = false;
 
+  static createCountryState() {
+    return {
+      completed: new Set(),
+      locked: new Set(),
+      exclusiveChoices: Object.create(null),
+      activeFocus: null,
+      focusProgress: 0,
+      focusDaysTotal: 0
+    };
+  }
+
+  static stateFor(country = FocusTreeManager.currentCountry) {
+    if (!FocusTreeManager.countryStates[country]) {
+      FocusTreeManager.countryStates[country] = FocusTreeManager.createCountryState();
+    }
+    return FocusTreeManager.countryStates[country];
+  }
+
+  // Keep existing callers working while storing each country's progress separately.
+  static get completedFocuses() { return FocusTreeManager.stateFor().completed; }
+  static set completedFocuses(value) { FocusTreeManager.stateFor().completed = value instanceof Set ? value : new Set(value || []); }
+  static get lockedFocuses() { return FocusTreeManager.stateFor().locked; }
+  static get activeFocus() { return FocusTreeManager.stateFor().activeFocus; }
+  static set activeFocus(value) { FocusTreeManager.stateFor().activeFocus = value || null; }
+  static get focusProgress() { return FocusTreeManager.stateFor().focusProgress; }
+  static set focusProgress(value) { FocusTreeManager.stateFor().focusProgress = Number(value) || 0; }
+  static get focusDaysTotal() { return FocusTreeManager.stateFor().focusDaysTotal; }
+  static set focusDaysTotal(value) { FocusTreeManager.stateFor().focusDaysTotal = Number(value) || 0; }
+
   static async init(country) {
-    const rawFocuses = await DataFetcher.fetchFocusTree(country);
+    const selectedCountry = country || CoreEngine.gameState.country || 'GER';
+    await window.l10n?.loadGameData(selectedCountry);
+    const countryChanged = FocusTreeManager.currentCountry !== selectedCountry;
+    FocusTreeManager.currentCountry = selectedCountry;
+    FocusTreeManager.stateFor(selectedCountry);
+    if (countryChanged) {
+      FocusTreeManager.focuses = [];
+      FocusTreeManager.focusMap = {};
+    }
+    const rawFocuses = await DataFetcher.fetchFocusTree(selectedCountry);
     const enrichedFocuses = window.NFRewardLoader
-      ? await window.NFRewardLoader.enrich(country || 'GER', rawFocuses)
+      ? await window.NFRewardLoader.enrich(selectedCountry, rawFocuses)
       : rawFocuses;
+    if (FocusTreeManager.currentCountry !== selectedCountry) return;
     FocusTreeManager.focuses = enrichedFocuses;
     FocusTreeManager.focusMap = {};
     FocusTreeManager.focuses.forEach(f => { FocusTreeManager.focusMap[f.id] = f; });
+    FocusTreeManager.buildExclusiveGroups();
+    FocusTreeManager.restoreLegacyBranchChoice(selectedCountry);
     FocusTreeManager.render();
-    CoreEngine.registerTickCallback(() => FocusTreeManager.onTick());
+    if (!FocusTreeManager.tickRegistered) {
+      CoreEngine.registerTickCallback(() => FocusTreeManager.onTick());
+      FocusTreeManager.tickRegistered = true;
+    }
+  }
+
+  static buildExclusiveGroups() {
+    const graph = new Map(FocusTreeManager.focuses.map(f => [f.id, new Set()]));
+    FocusTreeManager.focuses.forEach(f => {
+      (f.mutually_exclusive || []).forEach(id => {
+        if (!graph.has(id)) return;
+        graph.get(f.id).add(id);
+        graph.get(id).add(f.id);
+      });
+    });
+
+    FocusTreeManager.exclusiveGroupById = Object.create(null);
+    const visited = new Set();
+    graph.forEach((neighbors, id) => {
+      if (visited.has(id) || !neighbors.size) return;
+      const pending = [id];
+      const members = [];
+      while (pending.length) {
+        const current = pending.pop();
+        if (visited.has(current)) continue;
+        visited.add(current);
+        members.push(current);
+        graph.get(current).forEach(other => pending.push(other));
+      }
+      const groupId = members.sort().join('|');
+      members.forEach(member => { FocusTreeManager.exclusiveGroupById[member] = groupId; });
+    });
+  }
+
+  static restoreLegacyBranchChoice(country) {
+    const state = FocusTreeManager.stateFor(country);
+    FocusTreeManager.focuses.forEach(f => {
+      const groupId = FocusTreeManager.exclusiveGroupById[f.id];
+      if (!groupId || state.exclusiveChoices[groupId]) return;
+      if (state.completed.has(f.id) || state.activeFocus === f.id) {
+        FocusTreeManager.chooseExclusiveBranch(f, state);
+      }
+    });
+  }
+
+  static chooseExclusiveBranch(f, state = FocusTreeManager.stateFor()) {
+    const groupId = FocusTreeManager.exclusiveGroupById[f.id];
+    if (!groupId) return true;
+    const chosen = state.exclusiveChoices[groupId];
+    if (chosen && chosen !== f.id) return false;
+    state.exclusiveChoices[groupId] = f.id;
+    groupId.split('|').forEach(id => {
+      if (id !== f.id) state.locked.add(id);
+    });
+    return true;
+  }
+
+  static clearExclusiveBranch(f, state = FocusTreeManager.stateFor()) {
+    const groupId = FocusTreeManager.exclusiveGroupById[f.id];
+    if (!groupId || state.exclusiveChoices[groupId] !== f.id) return;
+    const members = groupId.split('|');
+    if (members.some(id => state.completed.has(id))) return;
+    delete state.exclusiveChoices[groupId];
+    members.forEach(id => state.locked.delete(id));
+  }
+
+  static getFocusBlockReason(f) {
+    const state = FocusTreeManager.stateFor();
+    if (state.completed.has(f.id)) return 'この方針は既に完了しています。';
+    if (state.locked.has(f.id)) {
+      const groupId = FocusTreeManager.exclusiveGroupById[f.id];
+      const chosen = groupId && state.exclusiveChoices[groupId];
+      const selected = chosen && FocusTreeManager.focusMap[chosen];
+      return selected
+        ? '「' + FocusTreeManager.localizedTitle(selected) + '」を選択したため、この方針は選択できません。'
+        : '排他関係にある方針が選択されています。';
+    }
+    const missing = (f.prerequisites || []).filter(id => !state.completed.has(id));
+    if (missing.length) return '前提条件を満たしていません。';
+    return null;
+  }
+
+  static serializeStates() {
+    return Object.fromEntries(Object.entries(FocusTreeManager.countryStates).map(([country, state]) => [country, {
+      completed: [...state.completed],
+      locked: [...state.locked],
+      exclusiveChoices: { ...state.exclusiveChoices },
+      activeFocus: state.activeFocus,
+      progress: state.focusProgress,
+      total: state.focusDaysTotal
+    }]));
+  }
+
+  static restoreStates(savedStates, activeCountry) {
+    FocusTreeManager.countryStates = Object.create(null);
+    Object.entries(savedStates || {}).forEach(([country, saved]) => {
+      const state = FocusTreeManager.createCountryState();
+      state.completed = new Set(saved.completed || []);
+      state.locked = new Set(saved.locked || []);
+      state.exclusiveChoices = Object.assign(Object.create(null), saved.exclusiveChoices || {});
+      state.activeFocus = saved.activeFocus || null;
+      state.focusProgress = Number(saved.progress) || 0;
+      state.focusDaysTotal = Number(saved.total) || 0;
+      FocusTreeManager.countryStates[country] = state;
+    });
+    FocusTreeManager.currentCountry = activeCountry || 'GER';
+    FocusTreeManager.stateFor(FocusTreeManager.currentCountry);
+  }
+
+  static localizedValue(key, country = FocusTreeManager.currentCountry) {
+    if (!key || !window.l10n) return null;
+    const value = window.l10n.t(key, country);
+    return value && value !== key ? value : null;
+  }
+
+  static localizedTitle(f) {
+    const country = f.country || FocusTreeManager.currentCountry;
+    const localized = FocusTreeManager.localizedValue(f.loc_key || f.id, country);
+    if (localized) return localized;
+    const fallback = f.title || f.name || f.id || '国家方針';
+    return window.l10n ? window.l10n.resolve(fallback, country) : fallback;
+  }
+
+  static localizedDescription(f) {
+    const country = f.country || FocusTreeManager.currentCountry;
+    const key = f.desc_key || ((f.loc_key || f.id) + '_desc');
+    const localized = FocusTreeManager.localizedValue(key, country);
+    if (localized) return localized;
+    const fallback = f.effect || '';
+    return window.l10n ? window.l10n.resolve(fallback, country) : fallback;
   }
 
   static render() {
@@ -1553,7 +1724,7 @@ class FocusTreeManager {
 
       const iconUrl = DataFetcher.getFocusIconUrl(f.id);
       const iconHtml = '<img src="' + iconUrl + '" onerror="this.style.display=\'none\'" alt="">';
-      const displayTitle = f.title || f.name || f.id || '国家方針';
+      const displayTitle = FocusTreeManager.localizedTitle(f);
       const titleShort = displayTitle.length > 12 ? displayTitle.substring(0, 11) + '…' : displayTitle;
 
       const node = document.createElement('div');
@@ -1561,7 +1732,7 @@ class FocusTreeManager {
       node.style.left = f.x + 'px';
       node.style.top = f.y + 'px';
       node.innerHTML = iconHtml +
-        '<div class="fn-title">' + titleShort + '</div>' +
+        '<div class="fn-title">' + GameTools.escape(titleShort) + '</div>' +
         '<div class="fn-cost">📅' + (f.cost || 70) + '日</div>' +
         progressHtml;
   node.addEventListener('click', () => FocusTreeManager.selectFocus(f.id));
@@ -1578,13 +1749,16 @@ class FocusTreeManager {
   }
 
   static isFocusAvailable(f) {
-    if (FocusTreeManager.completedFocuses.has(f.id)) return false;
+    const state = FocusTreeManager.stateFor();
+    if (state.completed.has(f.id) || state.locked.has(f.id)) return false;
+    const groupId = FocusTreeManager.exclusiveGroupById[f.id];
+    if (groupId && state.exclusiveChoices[groupId] && state.exclusiveChoices[groupId] !== f.id) return false;
     if (FocusTreeManager.noChecks || FocusTreeManager.autocomplete) return true;
     if (!f.prerequisites || f.prerequisites.length === 0) return true;
-    return f.prerequisites.every(prereqId => FocusTreeManager.completedFocuses.has(prereqId));
+    return f.prerequisites.every(prereqId => state.completed.has(prereqId));
   }
 
-  static selectFocus(id) {
+  static selectFocus(id, fromRemote = false) {
     const f = FocusTreeManager.focusMap[id];
     if (!f) return;
     if (FocusTreeManager.completedFocuses.has(id)) {
@@ -1592,26 +1766,33 @@ class FocusTreeManager {
       return;
     }
     if (FocusTreeManager.activeFocus === id) {
+      if (fromRemote) return;
       FocusTreeManager.activeFocus = null;
       FocusTreeManager.focusProgress = 0;
-      CoreEngine.log('国家方針「' + f.title + '」を中断しました。');
+      FocusTreeManager.clearExclusiveBranch(f);
+      CoreEngine.log('国家方針「' + FocusTreeManager.localizedTitle(f) + '」を中断しました。');
       FocusTreeManager.render();
       return;
     }
     if (!FocusTreeManager.isFocusAvailable(f)) {
-      GameUI.notify('前提条件を満たしていません。', 'alert');
+      GameUI.notify(FocusTreeManager.getFocusBlockReason(f) || 'この方針は選択できません。', 'alert');
       return;
     }
     if (FocusTreeManager.autocomplete) {
+      FocusTreeManager.chooseExclusiveBranch(f);
       FocusTreeManager.completeFocus(id);
+      return;
+    }
+    if (!FocusTreeManager.chooseExclusiveBranch(f)) {
+      GameUI.notify(FocusTreeManager.getFocusBlockReason(f) || '排他関係にある方針が選択されています。', 'alert');
       return;
     }
     FocusTreeManager.activeFocus = id;
     FocusTreeManager.focusDaysTotal = f.cost || 70;
     FocusTreeManager.focusProgress = 0;
-    CoreEngine.log('国家方針「' + f.title + '」を開始しました。');
+    CoreEngine.log('国家方針「' + FocusTreeManager.localizedTitle(f) + '」を開始しました。');
     FocusTreeManager.render();
-    MultiplayerManager.broadcast({ type: 'focus_select', focusId: id });
+    if (!fromRemote) MultiplayerManager.broadcast({ type: 'focus_select', country: FocusTreeManager.currentCountry, focusId: id });
   }
 
   static onTick() {
@@ -1626,23 +1807,26 @@ class FocusTreeManager {
     }
   }
 
-  static completeFocus(id) {
+  static completeFocus(id, fromRemote = false) {
     const f = FocusTreeManager.focusMap[id];
     if (!f) return;
+    const state = FocusTreeManager.stateFor();
+    if (state.completed.has(id) || (state.activeFocus && state.activeFocus !== id)) return;
+    if (!FocusTreeManager.isFocusAvailable(f) || !FocusTreeManager.chooseExclusiveBranch(f, state)) return;
     FocusTreeManager.completedFocuses.add(id);
     FocusTreeManager.activeFocus = null;
     FocusTreeManager.focusProgress = 0;
     FocusTreeManager.applyFocusEffect(f);
     const completionRewards = FocusTreeManager.getCompletionRewards(f);
-    window.dispatchEvent(new CustomEvent('nf-reward-debug', { detail: { message: `completion_reward 適用: ${f.title || id}`, data: { focusId: id, rewards: completionRewards, rewardCount: completionRewards.length } } }));
+    window.dispatchEvent(new CustomEvent('nf-reward-debug', { detail: { message: `completion_reward 適用: ${FocusTreeManager.localizedTitle(f)}`, data: { focusId: id, rewards: completionRewards, rewardCount: completionRewards.length } } }));
     if (window.NationalFocusManager && typeof NationalFocusManager.applyCompletionRewards === 'function') {
       NationalFocusManager.applyCompletionRewards(completionRewards);
     }
     DecisionManager.onFocus(f);
-    CoreEngine.log('国家方針「' + f.title + '」が完了しました！');
-    GameUI.notify('方針完了: ' + f.title, 'success');
+    CoreEngine.log('国家方針「' + FocusTreeManager.localizedTitle(f) + '」が完了しました！');
+    GameUI.notify('方針完了: ' + FocusTreeManager.localizedTitle(f), 'success');
     FocusTreeManager.render();
-    MultiplayerManager.broadcast({ type: 'focus_complete', focusId: id });
+    if (!fromRemote) MultiplayerManager.broadcast({ type: 'focus_complete', country: FocusTreeManager.currentCountry, focusId: id });
   }
 
   static applyFocusEffect(f) {
@@ -1694,7 +1878,7 @@ class FocusTreeManager {
   static showTooltip(f, e) {
     const tt = document.getElementById('focus-tooltip');
     if (!tt || !f) return;
-    tt.querySelector('.tt-title').textContent = f.title || f.name || f.id;
+    tt.querySelector('.tt-title').textContent = FocusTreeManager.localizedTitle(f);
     tt.querySelector('.tt-time').textContent = '必要日数: ' + (f.cost || 70) + '日';
     const rewards = FocusTreeManager.getCompletionRewards(f);
     // 共通フォーマッターが null を返した (内部制御キー・未定義スキップ) 報酬は表示から除外する。
@@ -1705,7 +1889,7 @@ class FocusTreeManager {
       const line = typeof result === 'string' ? { text: result, color: undefined } : result;
       return { line, reward };
     }).filter(Boolean);
-    const effect = f.effect || '';
+    const effect = FocusTreeManager.localizedDescription(f);
     tt.querySelector('.tt-effect').innerHTML =
       (effect ? '<span class="tt-effect-description">' + GameTools.escape(effect) + '</span>' : '') +
       (pairs.length ? '<span class="tt-effect-label">完了報酬</span>' + pairs.map(({ line, reward }) => '<span class="tt-reward ' + FocusTreeManager.rewardClass(reward) + '"' + (line.color ? ' style="color:' + line.color + '"' : '') + '>' + GameTools.escape(line.text) + '</span>').join('') : '<span class="tt-effect-description">完了報酬なし</span>');
@@ -5009,11 +5193,12 @@ class MultiplayerManager {
         CoreEngine.remoteSetSpeed(data.speed);
         break;
       case 'focus_select':
-        FocusTreeManager.activeFocus = data.focusId;
-        FocusTreeManager.render();
+        if (data.country && data.country !== FocusTreeManager.currentCountry) return;
+        FocusTreeManager.selectFocus(data.focusId, true);
         break;
       case 'focus_complete':
-        FocusTreeManager.completeFocus(data.focusId);
+        if (data.country && data.country !== FocusTreeManager.currentCountry) return;
+        FocusTreeManager.completeFocus(data.focusId, true);
         break;
       case 'research_start': {
         const rsTech = ResearchManager.findTech(data.techId);
@@ -5473,6 +5658,7 @@ class ResearchManager {
   static currentCategory = 'infantry';
 
   static async init(country) {
+    await window.l10n?.loadGameData(country || CoreEngine.gameState.country || 'GER');
     const rawTechData = await DataFetcher.fetchAllTech(country);
     // 日本語化・火力付与・年代順ソート & 1936年以前の技術を研究済みに
     const processed = ResearchI18n.processAll(rawTechData, country);
@@ -5899,15 +6085,17 @@ class SaveLoadManager {
   static collect() {
     const gs = CoreEngine.gameState;
     return {
-      version: 4,
+      version: 5,
       strategy: StrategyGame.collect(),
       savedAt: new Date().toISOString(),
       core: { ...gs, date: gs.date.toISOString() },
       focus: {
+        country: gs.country,
         completed: [...FocusTreeManager.completedFocuses],
         activeFocus: FocusTreeManager.activeFocus,
         progress: FocusTreeManager.focusProgress,
-        total: FocusTreeManager.focusDaysTotal
+        total: FocusTreeManager.focusDaysTotal,
+        byCountry: FocusTreeManager.serializeStates()
       },
       research: {
         researched: [...ResearchManager.researchedTech],
@@ -5951,10 +6139,19 @@ class SaveLoadManager {
       else if (k in gs) gs[k] = v;
     });
     if (data.focus) {
-      FocusTreeManager.completedFocuses = new Set(data.focus.completed || []);
-      FocusTreeManager.activeFocus = data.focus.activeFocus || null;
-      FocusTreeManager.focusProgress = data.focus.progress || 0;
-      FocusTreeManager.focusDaysTotal = data.focus.total || 0;
+      if (data.focus.byCountry) {
+        FocusTreeManager.restoreStates(data.focus.byCountry, gs.country);
+      } else {
+        FocusTreeManager.restoreStates({
+          [data.focus.country || gs.country]: {
+            completed: data.focus.completed || [],
+            activeFocus: data.focus.activeFocus || null,
+            progress: data.focus.progress || 0,
+            total: data.focus.total || 0
+          }
+        }, gs.country);
+      }
+      FocusTreeManager.init(gs.country);
     }
     if (data.research && ResearchManager.techData && Object.keys(ResearchManager.techData).length > 0) {
       ResearchManager.researchedTech = new Set(data.research.researched || []);

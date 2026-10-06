@@ -34,8 +34,10 @@
       // 例: this.dictionaries.get('japanese').get('GER_rhineland') -> "ラインラント進駐"
       this.dictionaries = new Map();
       this.currentLanguage = 'japanese';
-      // 国別キャッシュ: country -> Map<key, text>（読み込み済みの国別ファイル）
+      // 国別辞書: language -> country -> Map<key, text>
       this.countryDictionaries = new Map();
+      this.loadedBaseLanguages = new Set();
+      this.loadedCountryLanguages = new Set();
     }
 
     // ---- 言語の切替 ----
@@ -49,8 +51,8 @@
     }
 
     // ---- 国別辞書を取得 ----
-    countryDict(country) {
-      return this.countryDictionaries.get(country) || new Map();
+    countryDict(country, language = this.currentLanguage) {
+      return this.countryDictionaries.get(language)?.get(country) || new Map();
     }
 
     // ==========================================================
@@ -61,7 +63,7 @@
     parseYml(ymlText, country) {
       if (!ymlText || typeof ymlText !== 'string') return;
 
-      const lines = ymlText.split(/\r?\n/);
+      const lines = ymlText.replace(/^\uFEFF/, '').split(/\r?\n/);
       let currentLang = null;
 
       for (const rawLine of lines) {
@@ -97,10 +99,10 @@
 
         // 国別辞書へも格納（指定時のみ）
         if (country) {
-          if (!this.countryDictionaries.has(country)) {
-            this.countryDictionaries.set(country, new Map());
-          }
-          this.countryDictionaries.get(country).set(key, text);
+          if (!this.countryDictionaries.has(lang)) this.countryDictionaries.set(lang, new Map());
+          const countries = this.countryDictionaries.get(lang);
+          if (!countries.has(country)) countries.set(country, new Map());
+          countries.get(country).set(key, text);
         }
       }
     }
@@ -124,6 +126,28 @@
       }
     }
 
+    async loadGameData(country) {
+      const language = this.currentLanguage;
+      if (!this.loadedBaseLanguages.has(language)) {
+        await this.load([
+          `data/localisation/${language}/focus_l_${language}.yml`,
+          `data/localisation/${language}/research_l_${language}.yml`
+        ]);
+        this.loadedBaseLanguages.add(language);
+      }
+
+      if (country) {
+        const cacheKey = `${language}:${country}`;
+        if (!this.loadedCountryLanguages.has(cacheKey)) {
+          await this.load(
+            `${country.toLowerCase()}/data/localisation/${country}_focuses_l_${language}.yml`,
+            country
+          );
+          this.loadedCountryLanguages.add(cacheKey);
+        }
+      }
+    }
+
     // ==========================================================
     // キーからテキストを取得
     // ==========================================================
@@ -133,8 +157,8 @@
       if (!key) return '';
       const k = String(key);
       // 国別辞書を優先
-      if (country && this.countryDictionaries.has(country)) {
-        const c = this.countryDictionaries.get(country).get(k);
+      if (country) {
+        const c = this.countryDict(country).get(k);
         if (c) return c;
       }
       // 共通辞書

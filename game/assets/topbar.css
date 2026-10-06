@@ -27,7 +27,7 @@
 #top-bar .stats-group { gap: 10px; min-width: 0; }
 #stats-icons {
   display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-columns: repeat(8, minmax(0, 1fr));
   gap: 1px;
   flex: 1;
   min-width: 0;
@@ -135,6 +135,8 @@
 @media (max-width: 1200px) {
   #top-bar { height: auto; min-height: 112px; grid-template-columns: 1fr auto; gap: 6px 14px; }
   #top-bar .stats-group { grid-column: 1 / -1; }
+  #stats-icons { display: flex; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: thin; }
+  #top-bar .stat-item { flex: 0 0 112px; }
   #top-bar .time-control-group { flex-direction: row; align-items: center; }
   #top-bar #calendar-display { min-width: 140px; }
   #top-bar .speed-buttons { min-width: 170px; }
@@ -142,8 +144,6 @@
 @media (max-width: 768px) {
   #top-bar { padding: 6px 8px; gap: 6px; grid-template-columns: 1fr; }
   #top-bar .stats-group { gap: 6px; }
-  #stats-icons { display: flex; overflow-x: auto; scrollbar-width: thin; }
-  #top-bar .stat-item { flex: 0 0 auto; min-width: 91px; }
   #top-bar .stat-icon { width: 24px; }
   #top-bar .stat-val { font-size: 12px; }
   #top-bar .time-control-group { gap: 8px; }
