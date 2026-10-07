@@ -1440,7 +1440,7 @@ class CoreEngine {
 
   static addPoliticalPower(amount) {
     const s = CoreEngine.gameState;
-    s.politicalPower = Math.round(Math.max(0, Math.min(999, (Number(s.politicalPower) || 0) + (Number(amount) || 0))) * 1e6) / 1e6;
+    s.politicalPower = Math.max(0, Math.min(999, (Number(s.politicalPower) || 0) + (Number(amount) || 0)));
   }
 
   static accruePoliticalPowerHour() {
@@ -1484,7 +1484,7 @@ class CoreEngine {
     if (!state) return;
     const s = CoreEngine.gameState;
     if (state.country && state.country !== s.country) return;
-    if (state.pp !== undefined) s.politicalPower = state.pp;
+    if (state.pp !== undefined) s.politicalPower = Math.max(0, Math.min(999, Number(state.pp) || 0));
     if (state.stab !== undefined) s.stability = state.stab;
     if (state.ws !== undefined) s.warSupport = state.ws;
     if (state.mp !== undefined) s.manpower = state.mp;
@@ -6547,6 +6547,7 @@ class SaveLoadManager {
     });
     // 旧セーブの初期値24は誤った補正値なので、基本+1/日に移行します。
     if (gs.cardModifiers.politicalPowerGain === 24) gs.cardModifiers.politicalPowerGain = 0;
+    gs.politicalPower = Math.max(0, Math.min(999, Number(gs.politicalPower) || 0));
     if (data.focus) {
       if (data.focus.byCountry) {
         FocusTreeManager.restoreStates(data.focus.byCountry, gs.country);

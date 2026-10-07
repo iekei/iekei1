@@ -193,7 +193,8 @@
     const value = numericValue(reward);
     switch (reward.type) {
       case 'add_political_power':
-        gameState.politicalPower = (gameState.politicalPower || 0) + (Number.isFinite(value) ? value : 0); break;
+        gameState.politicalPower = Math.max(0, Math.min(999,
+          (Number(gameState.politicalPower) || 0) + (Number.isFinite(value) ? value : 0))); break;
       case 'add_stability':
         gameState.stability = Math.max(0, Math.min(100, (gameState.stability || 0) + (Number.isFinite(value) ? value : 0))); break;
       case 'add_war_support':

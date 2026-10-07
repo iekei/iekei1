@@ -15,7 +15,7 @@ function fixture() {
   const ctx=vm.createContext(sandbox);
   const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
   const inline=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(m=>m[1]).filter(s=>s.trim()).join('\n');
-  for (const file of ['asset-registry','game-asset-data','game-visuals']) vm.runInContext(fs.readFileSync(path.join(root,'assets',file+'.js'),'utf8'),ctx,{filename:file+'.js'});
+  for (const file of ['asset-registry','game-asset-data','game-visuals','hoi4-effects-config']) vm.runInContext(fs.readFileSync(path.join(root,'assets',file+'.js'),'utf8'),ctx,{filename:file+'.js'});
   vm.runInContext(inline,ctx,{filename:'index.html:inline'});
   for(const name of ['battle','news','ai','training','dlc','strategy','war-systems'])vm.runInContext(fs.readFileSync(path.join(root,name+'.js'),'utf8'),ctx,{filename:name+'.js'});
   vm.runInContext(fs.readFileSync(path.join(root,'assets/strategy-systems.js'),'utf8'),ctx,{filename:'strategy-systems.js'});
@@ -211,7 +211,7 @@ test('construction costs advance in game days rather than hourly ticks',()=>{
   const {run}=fixture();
   run(`ConstructionManager.selectedStateId='1';ConstructionManager.enqueue('arms_factory');
     for(let i=0;i<24;i++)ConstructionManager.onTick()`);
-  assert.equal(run('ConstructionManager.queue[0].progress'),1);
+  assert.ok(Math.abs(run('ConstructionManager.queue[0].progress')-1)<1e-9);
   run('for(let i=0;i<359*24;i++)ConstructionManager.onTick()');
   assert.equal(run('CoreEngine.gameState.militaryFactories'),16);
 });
@@ -235,10 +235,12 @@ test('political power earns one point per day by default, honors daily modifiers
   const {run}=fixture();
   assert.equal(run('CoreEngine.gameState.cardModifiers.politicalPowerGain'),0);
   run('CoreEngine.gameState.politicalPower=0;for(let i=0;i<24;i++)CoreEngine.accruePoliticalPowerHour()');
-  assert.equal(run('CoreEngine.gameState.politicalPower'),1);
+  assert.ok(Math.abs(run('CoreEngine.gameState.politicalPower')-1)<1e-9);
   run('CoreEngine.gameState.cardModifiers.politicalPowerGain=.5;for(let i=0;i<24;i++)CoreEngine.accruePoliticalPowerHour()');
-  assert.equal(run('CoreEngine.gameState.politicalPower'),2.5);
+  assert.ok(Math.abs(run('CoreEngine.gameState.politicalPower')-2.5)<1e-9);
   run('CoreEngine.gameState.politicalPower=998.99;for(let i=0;i<24;i++)CoreEngine.accruePoliticalPowerHour()');
+  assert.equal(run('CoreEngine.gameState.politicalPower'),999);
+  run(`HOI4EffectsConfig.applyEffect(CoreEngine.gameState,{type:'add_political_power',value:100})`);
   assert.equal(run('CoreEngine.gameState.politicalPower'),999);
 });
 test('division assignment modal can select all eligible divisions or a deterministic half',()=>{
@@ -433,7 +435,7 @@ test('AI fronts take a single adjacent province and cannot jump to unconnected t
 });
 test('multiplayer clients follow host ticks once and keep their own economy and focus',()=>{
   const {run}=fixture();run(`MultiplayerManager.connected=true;MultiplayerManager.isHost=false;MultiplayerManager.roomId='host';CoreEngine.gameState.speed=1;CoreEngine.gameState.paused=false;globalThis.startDate=CoreEngine.gameState.date.getTime();globalThis.nextDate=new Date(startDate+86400000).toISOString();globalThis.ppBefore=CoreEngine.gameState.politicalPower;MultiplayerManager.onData({type:'tick',date:nextDate,state:{country:'FRA',pp:0}},'host')`);
-  assert.equal(run('CoreEngine.gameState.date.getTime()'),run('startDate+86400000'));assert.equal(run('CoreEngine.gameState.politicalPower'),run('ppBefore+1/24'));
+  assert.equal(run('CoreEngine.gameState.date.getTime()'),run('startDate+86400000'));assert.ok(Math.abs(run('CoreEngine.gameState.politicalPower')-run('ppBefore+1/24'))<1e-9);
   run(`MultiplayerManager.onData({type:'tick',date:nextDate},'host');CoreEngine.tick()`);assert.equal(run('CoreEngine.gameState.date.getTime()'),run('startDate+86400000'));
 });
 test('paused asynchronous map startup populates target countries and country switches rebuild them',()=>{
