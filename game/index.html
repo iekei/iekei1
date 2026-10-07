@@ -135,6 +135,7 @@
     .focus-progress-fill { height: 100%; background: var(--text-gold); transition: width 0.3s; }
     #focus-tooltip {
       position: fixed; z-index: 1000; width: min(310px, calc(100vw - 20px));
+      max-height: calc(100vh - 16px); overflow: auto; box-sizing: border-box;
       background: rgba(18,22,26,.97); border: 1px solid rgba(212,168,67,.65);
       border-radius: 3px; padding: 11px 12px; font-size: 12px; pointer-events: none;
       box-shadow: 0 7px 24px rgba(0,0,0,.65), inset 0 0 0 1px rgba(58,68,77,.55);
@@ -1694,6 +1695,102 @@ class FocusTreeManager {
     return window.l10n ? window.l10n.resolve(fallback, country) : fallback;
   }
 
+  static routeConnections(focuses, focusMap, position, nodeWidth, nodeHeight) {
+    const edges = [];
+    const seen = new Set();
+    focuses.forEach(focus => (focus.prerequisites || []).forEach(id => {
+      const parent = focusMap[id];
+      const key = id + '>' + focus.id;
+      if (parent && !seen.has(key)) {
+        seen.add(key);
+        const from = position(parent), to = position(focus);
+        const vertical = to.y >= from.y + nodeHeight + 8;
+        const side = !vertical && to.x >= from.x + nodeWidth + 8 ? 'right' : 'left';
+        edges.push({ parent, focus, from, to, vertical, side });
+      }
+    }));
+    edges.sort((a, b) => a.parent.id.localeCompare(b.parent.id) || a.focus.id.localeCompare(b.focus.id));
+
+    const groups = (keyForEdge) => {
+      const result = new Map();
+      edges.forEach(edge => {
+        const key = keyForEdge(edge);
+        if (key === null) return;
+        if (!result.has(key)) result.set(key, []);
+        result.get(key).push(edge);
+      });
+      return result;
+    };
+    const outputGroups = groups(edge => edge.parent.id + ':' + (edge.vertical ? 'bottom' : edge.side));
+    const inputGroups = groups(edge => edge.focus.id + ':' + (edge.vertical ? 'top' : (edge.side === 'right' ? 'left' : 'right')));
+    const usedX = new Set(), usedY = new Set();
+    const reserve = (used, low, high, index, count) => {
+      const span = Math.max(0, high - low);
+      const ideal = low + span * (index + 1) / (count + 1);
+      for (let step = 0; step <= Math.ceil(span); step++) {
+        for (const direction of step ? [1, -1] : [1]) {
+          const value = ideal + direction * step * 2;
+          const key = value.toFixed(3);
+          if (value >= low && value <= high && !used.has(key)) {
+            used.add(key);
+            return value;
+          }
+        }
+      }
+      return ideal + (index + 1) * 0.001;
+    };
+    const assignPorts = (portGroups, isSource) => {
+      portGroups.forEach(group => group.forEach((edge, index) => {
+        const node = isSource ? edge.from : edge.to;
+        const side = edge.vertical
+          ? (isSource ? 'bottom' : 'top')
+          : (isSource ? edge.side : edge.side === 'right' ? 'left' : 'right');
+        const endpoint = isSource ? 'start' : 'end';
+        if (side === 'top' || side === 'bottom') {
+          const x = reserve(usedX, node.x + 8, node.x + nodeWidth - 8, index, group.length);
+          edge[endpoint] = {
+            x, y: node.y + (side === 'bottom' ? nodeHeight : 0)
+          };
+        } else {
+          const y = reserve(usedY, node.y + 8, node.y + nodeHeight - 8, index, group.length);
+          edge[endpoint] = {
+            x: node.x + (side === 'right' ? nodeWidth : 0), y
+          };
+        }
+      }));
+    };
+    assignPorts(outputGroups, true);
+    assignPorts(inputGroups, false);
+
+    const verticalGroups = groups(edge => edge.vertical ? edge.start.y + ':' + edge.end.y : null);
+    verticalGroups.forEach(group => group.forEach((edge, index) => {
+      const low = edge.start.y + 3, high = edge.end.y - 3;
+      edge.laneY = reserve(usedY, low, Math.max(low, high), index, group.length);
+    }));
+    const horizontalGroups = groups(edge => edge.vertical ? null
+      : Math.min(edge.start.x, edge.end.x) + ':' + Math.max(edge.start.x, edge.end.x));
+    horizontalGroups.forEach(group => group.forEach((edge, index) => {
+      if (edge.vertical) return;
+      const rightward = edge.side === 'right';
+      const low = rightward ? edge.start.x + 4 : edge.end.x + 4;
+      const high = rightward ? edge.end.x - 4 : edge.start.x - 4;
+      edge.laneX = reserve(usedX, low, Math.max(low, high), index, group.length);
+    }));
+
+    return edges.map(edge => {
+      const { start, end } = edge;
+      let path;
+      if (edge.vertical) {
+        path = 'M' + start.x + ',' + start.y + ' L' + start.x + ',' + edge.laneY +
+          ' L' + end.x + ',' + edge.laneY + ' L' + end.x + ',' + end.y;
+      } else {
+        path = 'M' + start.x + ',' + start.y + ' L' + edge.laneX + ',' + start.y +
+          ' L' + edge.laneX + ',' + end.y + ' L' + end.x + ',' + end.y;
+      }
+      return { path, parentId: edge.parent.id };
+    });
+  }
+
   static setZoom(value) {
     const next = Math.max(0.4, Math.min(1.5, Number(value) || 1));
     if (next === FocusTreeManager.zoom) return;
@@ -1717,6 +1814,7 @@ class FocusTreeManager {
     const svg = document.getElementById('focus-svg-lines');
     const content = document.getElementById('focus-tree-content');
     const viewport = document.getElementById('focus-tree-viewport');
+    FocusTreeManager.hideTooltip();
     container.innerHTML = '';
     svg.innerHTML = '';
 
@@ -1739,38 +1837,14 @@ class FocusTreeManager {
       height: Math.max(1, maxY - minY + nodeHeight + margin * 2)
     };
 
-    // ノードの実寸に合わせ、前提方針のカード端同士を直角線で接続する。
-    let svgContent = '';
-    FocusTreeManager.focuses.forEach(f => {
-      if (f.prerequisites) {
-        f.prerequisites.forEach(prereqId => {
-          const pre = FocusTreeManager.focusMap[prereqId];
-          if (pre) {
-            const from = position(pre), to = position(f);
-            const isDone = FocusTreeManager.completedFocuses.has(prereqId);
-            const color = isDone ? '#4ac46a' : '#3a4a5a';
-            let path;
-            if (to.y >= from.y + nodeHeight) {
-              const midY = (from.y + nodeHeight + to.y) / 2;
-              path = 'M' + (from.x + nodeWidth / 2) + ',' + (from.y + nodeHeight) +
-                ' L' + (from.x + nodeWidth / 2) + ',' + midY + ' L' + (to.x + nodeWidth / 2) + ',' + midY +
-                ' L' + (to.x + nodeWidth / 2) + ',' + to.y;
-            } else if (to.x >= from.x + nodeWidth) {
-              const midX = (from.x + nodeWidth + to.x) / 2;
-              path = 'M' + (from.x + nodeWidth) + ',' + (from.y + nodeHeight / 2) +
-                ' L' + midX + ',' + (from.y + nodeHeight / 2) + ' L' + midX + ',' + (to.y + nodeHeight / 2) +
-                ' L' + to.x + ',' + (to.y + nodeHeight / 2);
-            } else {
-              const midX = (from.x + to.x + nodeWidth) / 2;
-              path = 'M' + from.x + ',' + (from.y + nodeHeight / 2) +
-                ' L' + midX + ',' + (from.y + nodeHeight / 2) + ' L' + midX + ',' + (to.y + nodeHeight / 2) +
-                ' L' + (to.x + nodeWidth) + ',' + (to.y + nodeHeight / 2);
-            }
-            svgContent += '<path d="' + path + '" stroke="' + color + '" stroke-width="2" fill="none" opacity="0.65"/>';
-          }
-        });
-      }
-    });
+    // 接続ごとに専用のカードポートと直角レーンを割り当て、線の重複を防ぐ。
+    const routes = FocusTreeManager.routeConnections(
+      FocusTreeManager.focuses, FocusTreeManager.focusMap, position, nodeWidth, nodeHeight
+    );
+    const svgContent = routes.map(route => {
+      const color = FocusTreeManager.completedFocuses.has(route.parentId) ? '#4ac46a' : '#3a4a5a';
+      return '<path d="' + route.path + '" stroke="' + color + '" stroke-width="2" fill="none" opacity="0.65"/>';
+    }).join('');
     svg.innerHTML = svgContent;
     svg.setAttribute('width', String(focusBounds.width));
     svg.setAttribute('height', String(focusBounds.height));
@@ -1814,10 +1888,9 @@ class FocusTreeManager {
   node.addEventListener('click', () => FocusTreeManager.selectFocus(f.id));
   node.setAttribute('tabindex', '0');
   node.setAttribute('aria-label', displayTitle);
-  node.addEventListener('mouseenter', (e) => FocusTreeManager.showTooltip(f, e));
-  node.addEventListener('pointerover', (e) => FocusTreeManager.showTooltip(f, e));
-  node.addEventListener('mousemove', (e) => FocusTreeManager.moveTooltip(e));
-  node.addEventListener('mouseleave', () => FocusTreeManager.hideTooltip());
+  node.addEventListener('pointerenter', (e) => FocusTreeManager.showTooltip(f, e));
+  node.addEventListener('pointermove', (e) => FocusTreeManager.moveTooltip(e));
+  node.addEventListener('pointerleave', () => FocusTreeManager.hideTooltip());
   node.addEventListener('focusin', (e) => FocusTreeManager.showTooltip(f, e));
   node.addEventListener('focusout', () => FocusTreeManager.hideTooltip());
   container.appendChild(node);

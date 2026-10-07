@@ -5,10 +5,28 @@ const fs=require('node:fs');
 const vm=require('node:vm');
 const path=require('node:path');
 const root=path.resolve(__dirname,'..');
+function assertNoSharedSegments(paths) {
+  const segments=paths.flatMap((path,route)=> {
+    const points=[...path.matchAll(/[ML](-?[\d.]+),(-?[\d.]+)/g)].map(match=>[Number(match[1]),Number(match[2])]);
+    return points.slice(1).map((point,index)=>({route,a:points[index],b:point}));
+  }).filter(segment=>segment.a[0]===segment.b[0]||segment.a[1]===segment.b[1]);
+  for(let i=0;i<segments.length;i++)for(let j=i+1;j<segments.length;j++) {
+    const a=segments[i],b=segments[j];
+    if(a.route===b.route)continue;
+    if(a.a[0]===a.b[0]&&b.a[0]===b.b[0]&&a.a[0]===b.a[0]) {
+      assert.ok(Math.min(Math.max(a.a[1],a.b[1]),Math.max(b.a[1],b.b[1]))-
+        Math.max(Math.min(a.a[1],a.b[1]),Math.min(b.a[1],b.b[1]))<=0,'vertical segments overlap');
+    }
+    if(a.a[1]===a.b[1]&&b.a[1]===b.b[1]&&a.a[1]===b.a[1]) {
+      assert.ok(Math.min(Math.max(a.a[0],a.b[0]),Math.max(b.a[0],b.b[0]))-
+        Math.max(Math.min(a.a[0],a.b[0]),Math.min(b.a[0],b.b[0]))<=0,'horizontal segments overlap');
+    }
+  }
+}
 function fixture() {
   const nodes=new Map(),storage=new Map();
-  const node=id=>{if(!nodes.has(id))nodes.set(id,{innerHTML:'',textContent:'',value:'',style:{},dataset:{},children:[],clientWidth:800,clientHeight:600,scrollLeft:0,scrollTop:0,classList:{add(){},remove(){},toggle(){},contains(){return true;}},appendChild(child){this.children.push(child);},replaceChildren(){this.children=[];},addEventListener(){},setAttribute(){},querySelectorAll(){return[];},querySelector(sel){return node(id+sel);}});return nodes.get(id);};
-  const sandbox={TopbarUI:{render(){}},console,Date,Math,crypto:require('node:crypto').webcrypto,setInterval(){return 1;},clearInterval(){},setTimeout(){},requestAnimationFrame(){},
+  const node=id=>{if(!nodes.has(id))nodes.set(id,{innerHTML:'',textContent:'',value:'',style:{},dataset:{},children:[],listeners:{},offsetWidth:300,offsetHeight:260,clientWidth:800,clientHeight:600,scrollLeft:0,scrollTop:0,classList:{added:[],removed:[],add(name){this.added.push(name);},remove(name){this.removed.push(name);},toggle(){},contains(){return true;}},appendChild(child){this.children.push(child);},replaceChildren(){this.children=[];},addEventListener(name,handler){this.listeners[name]=handler;},setAttribute(){},querySelectorAll(){return[];},querySelector(sel){return node(id+sel);}});return nodes.get(id);};
+  const sandbox={TopbarUI:{render(){}},console,Date,Math,innerWidth:1280,innerHeight:800,crypto:require('node:crypto').webcrypto,setInterval(){return 1;},clearInterval(){},setTimeout(){},requestAnimationFrame(){},
     document:{createTextNode:text=>({textContent:text}),getElementById:node,querySelectorAll(selector){return selector==='input[name="move-division"]'?sandbox.selectionInputs:[];},querySelector(){return null;},createElement(){return node(Math.random());},addEventListener(){},head:{appendChild(){}},body:{appendChild(){}}},
     localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v),removeItem:k=>storage.delete(k)}};
   sandbox.structuredClone=structuredClone;sandbox.selectionInputs=[];sandbox.window=sandbox;sandbox.addEventListener=()=>{};
@@ -230,6 +248,47 @@ test('focus tree uses card-edge orthogonal connections, expands to its data boun
   assert.equal(run('FocusTreeManager.zoom'),.8);
   assert.equal(run('Number.parseInt(document.getElementById("focus-tree-viewport").style.height)'),263);
   assert.match(run('FocusTreeManager.render.toString()'),/focus-tree-content/);
+});
+test('focus routes use distinct endpoints and never share a horizontal or vertical segment',()=>{
+  const {run}=fixture();
+  run(`globalThis.routeNodes=[
+    {id:'root',x:0,y:0,prerequisites:[]},
+    {id:'left',x:260,y:0,prerequisites:['root']},
+    {id:'right',x:520,y:0,prerequisites:['root']},
+    {id:'leftNext',x:260,y:180,prerequisites:['left','right']},
+    {id:'rightNext',x:520,y:180,prerequisites:['left','right']}
+  ];globalThis.routePositions=f=>({x:f.x,y:f.y});
+    globalThis.routes=FocusTreeManager.routeConnections(routeNodes,Object.fromEntries(routeNodes.map(f=>[f.id,f])),routePositions,140,78)`);
+  const routes=JSON.parse(run('JSON.stringify(routes.map(route=>route.path))'));
+  assert.equal(routes.length,6);
+  assertNoSharedSegments(routes);
+});
+test('no focus-tree dependency paths overlap across any playable country dataset',()=>{
+  const {run}=fixture();
+  for(const tag of ['ger','sov','jap','usa','eng','fra','ita']) {
+    const files=fs.readdirSync(path.join(root,tag,'data')).filter(file=>/_nf_batch\d+\.json$/.test(file));
+    const focuses=files.flatMap(file=>JSON.parse(fs.readFileSync(path.join(root,tag,'data',file),'utf8')));
+    const serialized=JSON.stringify(focuses);
+    const routes=JSON.parse(run(`(()=>{const nodes=${serialized};const byId=Object.fromEntries(nodes.map(f=>[f.id,f]));
+      return JSON.stringify(FocusTreeManager.routeConnections(nodes,byId,f=>({x:Number(f.x)||0,y:Number(f.y)||0}),140,78).map(route=>route.path))})()`));
+    assertNoSharedSegments(routes);
+  }
+});
+test('focus descriptions appear on hover, follow the pointer, and hide on leave',()=>{
+  const {run,node}=fixture();
+  run(`FocusTreeManager.focuses=[{id:'hover-focus',title:'Hovered focus',x:0,y:0,cost:30,effect:'説明の確認',prerequisites:[]}];
+    FocusTreeManager.focusMap={'hover-focus':FocusTreeManager.focuses[0]};FocusTreeManager.render()`);
+  const focus=node('focus-nodes').children[0],tooltip=node('focus-tooltip');
+  assert.equal(typeof focus.listeners.pointerenter,'function');
+  assert.equal(typeof focus.listeners.pointerleave,'function');
+  focus.listeners.pointerenter({clientX:1200,clientY:760});
+  assert.ok(tooltip.classList.removed.includes('hidden'));
+  assert.equal(node('focus-tooltip.tt-title').textContent,'Hovered focus');
+  assert.match(node('focus-tooltip.tt-effect').innerHTML,/説明の確認/);
+  assert.ok(Number.parseFloat(tooltip.style.left)+tooltip.offsetWidth<=1280);
+  assert.ok(Number.parseFloat(tooltip.style.top)+tooltip.offsetHeight<=800);
+  focus.listeners.pointerleave();
+  assert.ok(tooltip.classList.added.includes('hidden'));
 });
 test('political power earns one point per day by default, honors daily modifiers, and is capped',()=>{
   const {run}=fixture();
