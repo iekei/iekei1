@@ -7,7 +7,7 @@ const path=require('node:path');
 const root=path.resolve(__dirname,'..');
 function fixture() {
   const nodes=new Map(),storage=new Map();
-  const node=id=>{if(!nodes.has(id))nodes.set(id,{innerHTML:'',textContent:'',value:'',style:{},dataset:{},classList:{add(){},remove(){},toggle(){},contains(){return true;}},appendChild(){},replaceChildren(){},addEventListener(){},querySelectorAll(){return[];},querySelector(sel){return node(id+sel);}});return nodes.get(id);};
+  const node=id=>{if(!nodes.has(id))nodes.set(id,{innerHTML:'',textContent:'',value:'',style:{},dataset:{},classList:{add(){},remove(){},toggle(){},contains(){return true;}},appendChild(){},replaceChildren(){},addEventListener(){},setAttribute(){},querySelectorAll(){return[];},querySelector(sel){return node(id+sel);}});return nodes.get(id);};
   const sandbox={TopbarUI:{render(){}},console,Date,Math,crypto:require('node:crypto').webcrypto,setInterval(){return 1;},clearInterval(){},setTimeout(){},requestAnimationFrame(){},
     document:{createTextNode:text=>({textContent:text}),getElementById:node,querySelectorAll(){return[];},querySelector(){return null;},createElement(){return node(Math.random());},addEventListener(){},head:{appendChild(){}},body:{appendChild(){}}},
     localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v),removeItem:k=>storage.delete(k)}};
@@ -18,6 +18,7 @@ function fixture() {
   for (const file of ['asset-registry','game-asset-data','game-visuals']) vm.runInContext(fs.readFileSync(path.join(root,'assets',file+'.js'),'utf8'),ctx,{filename:file+'.js'});
   vm.runInContext(inline,ctx,{filename:'index.html:inline'});
   for(const name of ['battle','news','ai','training','dlc','strategy','war-systems'])vm.runInContext(fs.readFileSync(path.join(root,name+'.js'),'utf8'),ctx,{filename:name+'.js'});
+  vm.runInContext(fs.readFileSync(path.join(root,'assets/strategy-systems.js'),'utf8'),ctx,{filename:'strategy-systems.js'});
   const run=source=>vm.runInContext(source,ctx);
   run(`
     StrategyGame.prepare();IntelOperations.ensure();DLC.ensureState();
@@ -118,6 +119,112 @@ test('production slots are shared, consume weekly real resources and stop cleanl
   const before=run('CoreEngine.gameState.resources.chromium');run('for(let i=0;i<7;i++)ProductionManager.tick()');assert.ok(Math.abs(run('CoreEngine.gameState.resources.chromium')-(before-10))<1e-8);
   run('CoreEngine.gameState.resources.chromium=0');const stock=run('ProductionManager.account("GER").stock.tank');run('ProductionManager.tick()');assert.equal(run('ProductionManager.account("GER").stock.tank'),stock);
   assert.equal(run('ProductionManager.allocate("tank",NaN)'),false);
+});
+test('convoys are integer inventory produced only by dockyards and shortage is reported',()=>{
+  const {run}=fixture();
+  run('ProductionManager.account("GER").stock.convoys=18.9;ProductionManager.ensure()');
+  assert.equal(run('CoreEngine.gameState.convoys'),18);
+  assert.equal(run('ProductionManager.CATALOG.convoys.pool'),'dockyard');
+  run('CoreEngine.gameState.dockyards=2;CoreEngine.gameState.militaryFactories=100');
+  assert.equal(run('ProductionManager.allocate("convoys",3)'),false);
+  assert.equal(run('ProductionManager.allocate("convoys",2)'),true);
+  run('ProductionManager.account("GER").stock.convoys=4;ProductionManager.syncLocal()');
+  assert.equal(run('ConvoyManager.checkShortage()'),1);
+  assert.equal(run('TradeManager.import("steel","鋼鉄",1)'),false);
+  assert.equal(run('CoreEngine.gameState.convoys'),4);
+});
+test('army routes require war or explicit military access for every foreign province',()=>{
+  const {run}=fixture();
+  run('MapRenderer.states["2"].owner="DEN";CoreEngine.gameState.atWar=["POL"];');
+  assert.equal(run('OffensivePlanner.path(1,5).length'),0);
+  run('CoreEngine.gameState.militaryAccess={DEN:true};');
+  assert.equal(run('OffensivePlanner.path(1,5).length'),5);
+  run('CoreEngine.gameState.militaryAccess.DEN=false;');
+  assert.equal(run('OffensivePlanner.path(1,5).length'),0);
+});
+test('construction is coastal-gated for dockyards and processes only the queue head',()=>{
+  const {run}=fixture();
+  run('ConstructionManager.selectedStateId="1";MapRenderer.provinces.p[1][4]=0;');
+  run('ConstructionManager.enqueue("dockyard")');
+  assert.equal(run('ConstructionManager.queue.length'),0);
+  run(`MapRenderer.provinces.p[1][4]=1;ConstructionManager.enqueue("dockyard");
+    ConstructionManager.queue.push({stateId:"1",building:"air_base",progress:0,factories:1,cost:240});
+    ConstructionManager.onTick()`);
+  assert.ok(run('ConstructionManager.queue[0].progress')>0);
+  assert.equal(run('ConstructionManager.queue[1].progress'),0);
+});
+test('all playable nations receive multiple exclusive branches and Japanese routes lock immediately',()=>{
+  const {run}=fixture();
+  run(`StrategySystems.patchFocusTree()`);
+  for(const tag of ['GER','SOV','JAP','USA','ENG','FRA','ITA']) {
+    const ids=run(`(()=>{
+      FocusTreeManager.currentCountry='${tag}';
+      FocusTreeManager.focuses=[{id:'${tag}_root',title:'Root',x:100,y:100,prerequisites:[]}];
+      FocusTreeManager.focusMap={'${tag}_root':FocusTreeManager.focuses[0]};
+      FocusTreeManager.countryStates['${tag}']=FocusTreeManager.createCountryState();
+      StrategySystems.addExclusiveBranches();
+      return FocusTreeManager.focuses.filter(f=>f.id.startsWith('${tag.toLowerCase()}_exclusive_') || f.id.startsWith('jap_kodoha_')).map(f=>f.id);
+    })()`);
+    assert.equal(ids.length,6,`${tag} has three exclusive choices`);
+    for(const id of ids) {
+      assert.equal(run(`FocusTreeManager.focusMap['${id}'].prerequisites.join(',')`),`${tag}_root`);
+      assert.ok(run(`FocusTreeManager.focusMap['${id}'].exclusiveWith.length>0`));
+    }
+  }
+  run(`FocusTreeManager.currentCountry='JAP';FocusTreeManager.focuses=[];FocusTreeManager.focusMap={};
+    FocusTreeManager.countryStates.JAP=FocusTreeManager.createCountryState();StrategySystems.addExclusiveBranches()`);
+  run(`FocusTreeManager.selectFocus('jap_kodoha_support');`);
+  assert.equal(run(`FocusTreeManager.stateFor('JAP').activeFocus`),'jap_kodoha_support');
+  assert.equal(run(`FocusTreeManager.stateFor('JAP').locked.has('jap_kodoha_purge')`),true);
+  run(`FocusTreeManager.selectFocus('jap_kodoha_support');`);
+  assert.equal(run(`FocusTreeManager.stateFor('JAP').locked.has('jap_kodoha_purge')`),true);
+  run(`FocusTreeManager.selectFocus('jap_kodoha_purge');`);
+  assert.equal(run(`FocusTreeManager.stateFor('JAP').activeFocus`),null);
+});
+test('facility experts generate points every sixty game days and projects consume points',()=>{
+  const {run}=fixture();
+  run(`StrategySystems.ensureState();MapRenderer.states['1'].b.land_experiment_facility=1;
+    StrategySystems.facilityCompleted('land_experiment_facility','1');
+    CoreEngine.gameState.politicalPower=300;StrategySystems.hireScientist('land');
+    CoreEngine.gameState.labState.lastTickDay=GameTools.day();
+    CoreEngine.gameState.date.setDate(CoreEngine.gameState.date.getDate()+60);
+    StrategySystems.tick()`);
+  assert.equal(run('CoreEngine.gameState.labState.points.land'),10);
+  run(`CoreEngine.gameState.labState.points.land=20;StrategySystems.unlockProject('land_prototype')`);
+  assert.equal(run('CoreEngine.gameState.labState.points.land'),0);
+  assert.equal(run(`CoreEngine.gameState.labState.unlockedProjects.includes('land_prototype')`),true);
+});
+test('strategy feature initialization wires every named game-state surface and equipment shortage lowers strength',()=>{
+  const {run}=fixture();
+  run('StrategySystems.init()');
+  for(const key of ['countryState','diplomacyState','unitState','productionState','constructionQueue','labState','designerState','focusTreeState']) {
+    assert.equal(run(`Object.prototype.hasOwnProperty.call(CoreEngine.gameState,'${key}')`),true,key);
+  }
+  run(`CoreEngine.gameState.strategy.readinessDay=null;
+    ProductionManager.account('GER').stock.infantry=0;
+    ArmyRoster.all().forEach(division=>division.equipmentStrength=100);
+    TrainingManager.onTick()`);
+  assert.ok(run('ArmyRoster.all()[0].equipmentStrength')<100);
+});
+test('designed equipment needs a production line and stocked inventory before recruitment',()=>{
+  const {run}=fixture();
+  run(`StrategySystems.ensureState();StrategySystems.patchEquipmentNeeds();
+    StrategySystems.registerDesign({id:'design-test',cat:'tank',name:'試製戦車',modules:{}});
+    StrategySystems.selectDesign('tank','design_design-test')`);
+  assert.equal(run(`ProductionManager.CATALOG['design_design-test'].pool`),'military');
+  assert.equal(run(`TrainingManager.equipmentNeedsFor({armor:1})['design_design-test']`),350,run(`JSON.stringify({selected:CoreEngine.gameState.designerState.selectedByCategory,needs:TrainingManager.equipmentNeedsFor({armor:1})})`));
+  assert.equal(run(`ProductionManager.canConsume(TrainingManager.equipmentNeedsFor({armor:1}))`),false);
+  run(`ProductionManager.account('GER').stock['design_design-test']=350`);
+  assert.equal(run(`ProductionManager.canConsume(TrainingManager.equipmentNeedsFor({armor:1}))`),true);
+});
+test('research replacement preserves allocated factories and production progress',()=>{
+  const {run}=fixture();
+  run(`CoreEngine.gameState.strategy.production=[{type:'infantry',factories:3,progress:.75,produced:12,priority:4}];
+    StrategySystems.upgradeProduction({old:'infantry',next:'infantry_2',name:'歩兵装備 II',rate:12,resources:{steel:8}})`);
+  assert.equal(run(`CoreEngine.gameState.strategy.production[0].type`),'infantry_2');
+  assert.equal(run(`CoreEngine.gameState.strategy.production[0].factories`),3);
+  assert.equal(run(`CoreEngine.gameState.strategy.production[0].progress`),0.75);
+  assert.equal(run(`CoreEngine.gameState.strategy.production[0].priority`),4);
 });
 test('imports scale by ten and lease factories; new factories require completed construction',()=>{
   const {run}=fixture();const before=run('CoreEngine.gameState.resources.tungsten');assert.equal(run('TradeManager.import("tungsten","タングステン",2)'),true);assert.equal(run('CoreEngine.gameState.resources.tungsten'),before+20);

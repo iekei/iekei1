@@ -419,10 +419,7 @@ class EquipmentDesigner {
     const performance = EquipmentDesigner.performance(cat);
     const design = { id: 'd' + Date.now(), cat: cat, name: hull.name + ' ' + (d.slots.map(s => { const o = s.options.find(o => o.id === draft.modules[s.id]); return o ? o.name : ''; }).filter(Boolean).join('/')), modules: { ...draft.modules }, stats: mods, performance, cost: cost };
     EquipmentDesigner.designs.push(design);
-    // 設計採用 → 兵器バフ (戦闘力に反映)
-    if (cat === 'tank') gs.cardModifiers.armorBreakthrough += 3 + Math.floor(cost / 10);
-    if (cat === 'plane') gs.cardModifiers.armorSpeed += 3 + Math.floor(cost / 10);
-    if (cat === 'ship') gs.convoys += 20;
+    // 設計の採用だけでは戦力・在庫に反映せず、生産後の装備として配備する。
     CoreEngine.log('🛠️ ' + d.label + '設計完了: ' + design.name + ' (-' + cost + ' XP)');
     GameUI.notify('設計完了: ' + design.name, 'success');
     MultiplayerManager.broadcast({ type: 'design', design: design });

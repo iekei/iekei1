@@ -702,6 +702,7 @@
   <link rel="stylesheet" href="assets/topbar.css">
   <link rel="stylesheet" href="assets/research-tree.css">
   <link rel="stylesheet" href="assets/equipment-designer.css">
+  <link rel="stylesheet" href="assets/strategy-systems.css">
   <link rel="stylesheet" href="assets/war-systems.css">
   </head>
 <body>
@@ -1414,9 +1415,6 @@ class CoreEngine {
       const navalBases = states.reduce((sum, st) => sum + (st.b && st.b.naval_base ? st.b.naval_base : 0), 0);
       CoreEngine.gameState.airSupremacy = Math.min(100, Math.max(0, (CoreEngine.gameState.airSupremacy || 0) + airBases * 0.04 + (CoreEngine.gameState.planes || 0) * 0.0007));
       CoreEngine.gameState.navalSupremacy = Math.min(100, Math.max(0, (CoreEngine.gameState.navalSupremacy || 0) + navalBases * 0.05 + (CoreEngine.gameState.ships || 0) * 0.0013));
-      if (navalBases > 0 && (CoreEngine.gameState.convoys || 0) < 1000) {
-        CoreEngine.gameState.convoys = (CoreEngine.gameState.convoys || 0) + 0.05;
-      }
     }
 
     CoreEngine.tickCallbacks.forEach(cb => {
@@ -1740,6 +1738,7 @@ class FocusTreeManager {
 
       const node = document.createElement('div');
       node.className = cls;
+      node.dataset.focusId = f.id;
       node.style.left = f.x + 'px';
       node.style.top = f.y + 'px';
       node.innerHTML = iconHtml +
@@ -1780,7 +1779,6 @@ class FocusTreeManager {
       if (fromRemote) return;
       FocusTreeManager.activeFocus = null;
       FocusTreeManager.focusProgress = 0;
-      FocusTreeManager.clearExclusiveBranch(f);
       CoreEngine.log('国家方針「' + FocusTreeManager.localizedTitle(f) + '」を中断しました。');
       FocusTreeManager.render();
       return;
@@ -3780,11 +3778,13 @@ class BattlePlanManager {
 
   static applyConvoyDamage(enemyTag, pressure = 1) {
     const gs = CoreEngine.gameState;
-    const current = Number(gs.convoys || 0);
+    const stock = ProductionManager.account(gs.country).stock;
+    const current = Math.max(0, Math.floor(Number(stock.convoys ?? gs.convoys) || 0));
     if (current <= 0) return 0;
     const base = 4 + Math.max(0, 30 - (gs.navalSupremacy || 0) * 0.35) * Number(pressure || 1);
     const loss = Math.min(current, Math.max(1, Math.round(base * (enemyTag ? 1.15 : 0.75))));
-    gs.convoys = Math.max(0, current - loss);
+    stock.convoys = Math.max(0, current - loss);
+    ProductionManager.syncLocal();
     return loss;
   }
 
@@ -3903,7 +3903,11 @@ class BattlePlanManager {
     gs.xp[unit.type === 'navy' ? 'navy' : 'air'] += 15;
     if (unit.type === 'navy') {
       if (unit.mission === 'patrol') gs.navalSupremacy = Math.min(100, (gs.navalSupremacy || 0) + 20);
-      if (unit.mission === 'escort') gs.convoys = (gs.convoys || 0) + 30;
+      if (unit.mission === 'escort') {
+        const stock = ProductionManager.account(gs.country).stock;
+        stock.convoys = Math.max(0, Math.floor(Number(stock.convoys) || 0)) + 30;
+        ProductionManager.syncLocal();
+      }
       if (unit.mission === 'strike') gs.warSupport = Math.min(100, gs.warSupport + 2);
     } else {
       if (unit.mission === 'air_sup') gs.airSupremacy = Math.min(100, (gs.airSupremacy || 0) + 25);
@@ -3948,7 +3952,7 @@ class BattlePlanManager {
   static divisionMarkers() {
     const markers = new Map();
     BattlePlanManager.armies.forEach(army => army.divisions.forEach(division => {
-      const pid = division.pid || army.positionPid || MapRenderer.provinceAt(division.x, division.y);
+      const pid = (army.executing ? army.positionPid : division.pid) || army.positionPid || MapRenderer.provinceAt(division.x, division.y);
       if (!pid) return;
       const center = MapRenderer.provCentroid.get(Number(pid)) || [division.x || 0, division.y || 0];
       if (!markers.has(pid)) {
@@ -4063,6 +4067,54 @@ class BattlePlanManager {
         ctx.font = 'bold 10px sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText((engaged ? '⚔ ' : '') + d.count, s[0], s[1] + h / 2 + 12);
+      });
+      // 各師団の国籍・名称・戦力・組織力を個別表示する。
+      const provinces = new Map();
+      BattlePlanManager.armies.forEach(group => group.divisions.forEach(division => {
+        const pid = (group.executing ? group.positionPid : division.pid) || group.positionPid || MapRenderer.provinceAt(division.x, division.y);
+        if (!pid) return;
+        if (!provinces.has(pid)) provinces.set(pid, []);
+        provinces.get(pid).push({ division, group });
+      }));
+      provinces.forEach((units, pid) => {
+        const center = MapRenderer.provCentroid.get(Number(pid));
+        if (!center) return;
+        const point = worldToScreen(center[0], center[1]);
+        units.forEach(({ division, group }, index) => {
+          const column = index % 2, row = Math.floor(index / 2);
+          const x = point[0] + (column ? 47 : -47);
+          const y = point[1] + 27 + row * 32;
+          if (x < -46 || y < -22 || x > ctx.canvas.width + 46 || y > ctx.canvas.height + 22) return;
+          const width = 88, height = 27;
+          const equipment = Math.max(0, Math.min(100, Number(division.equipmentStrength ?? 100)));
+          const org = Math.max(0, Math.min(100, 100 * (Number(division.org) || 0) / Math.max(1, Number(division.maxOrg) || 60)));
+          const country = CoreEngine.gameState.country;
+          const color = DataFetcher.countryColor(country).join(',');
+          ctx.fillStyle = 'rgba(10,14,16,.92)';
+          ctx.fillRect(x - width / 2, y - height / 2, width, height);
+          ctx.strokeStyle = group.id === BattlePlanManager.selectedArmyId ? '#d4a843' : 'rgba(' + color + ',.9)';
+          ctx.lineWidth = 1.5;
+          ctx.strokeRect(x - width / 2, y - height / 2, width, height);
+          ctx.textAlign = 'left';
+          ctx.font = 'bold 8px sans-serif';
+          ctx.fillStyle = '#e5c274';
+          const icons = { infantry: '✚', artillery: '✹', armor: '▣', tank: '▣', cavalry: '♞', mountaineer: '▲', marine: '⚓', paratrooper: '✈' };
+          ctx.fillText((icons[division.type] || '✚') + country, x - width / 2 + 3, y - 7);
+          ctx.fillStyle = '#e5e8e8';
+          ctx.font = '8px sans-serif';
+          const name = String(division.name || '師団 ' + division.id);
+          ctx.fillText(name.length > 13 ? name.slice(0, 12) + '…' : name, x - width / 2 + 24, y - 7);
+          ctx.fillStyle = '#242a2c';
+          ctx.fillText('戦', x - width / 2 + 3, y);
+          ctx.fillRect(x - width / 2 + 12, y - 3, width - 15, 3);
+          ctx.fillStyle = equipment < 50 ? '#d45a4a' : '#caa64d';
+          ctx.fillRect(x - width / 2 + 12, y - 3, (width - 15) * equipment / 100, 3);
+          ctx.fillStyle = '#242a2c';
+          ctx.fillText('組', x - width / 2 + 3, y + 5);
+          ctx.fillRect(x - width / 2 + 12, y + 2, width - 15, 3);
+          ctx.fillStyle = org < 50 ? '#d8a83d' : '#4ac46a';
+          ctx.fillRect(x - width / 2 + 12, y + 2, (width - 15) * org / 100, 3);
+        });
       });
     });
 
@@ -4211,7 +4263,11 @@ class ConstructionManager {
     { id: 'land_fort', name: '陸軍要塞', icon: '🛡️', cost: 250, max: 5 },
     { id: 'coastal_bunker', name: '沿岸要塞', icon: '🌊', cost: 250, max: 5 },
     { id: 'supply_hub', name: '補給ハブ', icon: '📦', cost: 400, max: 3 },
-    { id: 'nuclear_reactor', name: '原子炉', icon: '☢️', cost: 600, max: 1 }
+    { id: 'nuclear_reactor', name: '原子炉', icon: '☢️', cost: 600, max: 1 },
+    { id: 'land_experiment_facility', name: '陸軍実験施設', icon: '🧪', cost: 500, max: 3 },
+    { id: 'naval_experiment_facility', name: '海軍実験施設', icon: '⚓', cost: 500, max: 3 },
+    { id: 'air_experiment_facility', name: '航空実験施設', icon: '✈️', cost: 500, max: 3 },
+    { id: 'nuclear_experiment_facility', name: '原子力実験施設', icon: '☢️', cost: 800, max: 2 }
   ];
   static queue = [];  // {stateId, building, progress, factories}
   static selectedStateId = null;
@@ -4256,11 +4312,14 @@ class ConstructionManager {
         ConstructionManager.BUILDINGS.forEach(b => {
           const level = (st.b && st.b[b.id]) || 0;
           const maxL = ConstructionManager.maxLevel(b);
+          const isCoastal = st.isCoastal === true || (st.provinces || []).some(pid => !!MapRenderer.provinces?.p?.[pid]?.[4]);
+          const coastalBlocked = b.id === 'dockyard' && !isCoastal;
           html += '<div class="con-building-row">' +
             '<span class="cb-name">' + b.icon + ' ' + b.name + '</span>' +
             '<span class="cb-level">Lv.' + level + '/' + maxL + '</span>' +
             '<button class="con-build-btn" onclick="ConstructionManager.enqueue(\'' + b.id + '\')" ' +
-            (level >= maxL ? 'disabled' : '') + '>建設 (' + b.cost + '日)</button></div>';
+            (level >= maxL || coastalBlocked ? 'disabled title="造船所は沿岸州にのみ建設できます。"' : '') + '>建設 (' + b.cost + '日)</button></div>';
+          if (coastalBlocked) html += '<div class="rule-note">造船所は沿岸州にのみ建設できます。</div>';
         });
       }
       html += '</div>';
@@ -4302,6 +4361,10 @@ class ConstructionManager {
     if (st.owner !== s.country) { GameUI.notify('自国の州のみ建設可能です。', 'alert'); return; }
     const b = ConstructionManager.BUILDINGS.find(x => x.id === buildingId);
     if (!b) return;
+    if (b.id === 'dockyard' && !(st.isCoastal === true || (st.provinces || []).some(pid => !!MapRenderer.provinces?.p?.[pid]?.[4]))) {
+      GameUI.notify('造船所は沿岸州にのみ建設できます。', 'alert');
+      return;
+    }
     if (!st.b) st.b = {};
     const level = st.b[b.id] || 0;
     if (level >= ConstructionManager.maxLevel(b)) { GameUI.notify('最大レベルに達しています。', 'alert'); return; }
@@ -4330,13 +4393,13 @@ class ConstructionManager {
   static onTick() {
     if (!MapRenderer.ready) return;
     let changed = false;
-    ConstructionManager.queue.forEach(q => {
+    const q = ConstructionManager.queue[0];
+    if (q) {
       const stOwner = MapRenderer.states[q.stateId]?.owner;
       if (stOwner !== CoreEngine.gameState.country) return;
       const buildDef = ConstructionManager.BUILDINGS.find(b => b.id === q.building);
       q.cost = q.cost || buildDef?.cost || 360;
-      const before = ConstructionManager.queue.slice(0, ConstructionManager.queue.indexOf(q)).reduce((n,x)=>n+x.factories,0);
-      q.progress += Math.max(0, Math.min(q.factories, FactoryBudget.availableCivilian() - before));
+      q.progress += Math.max(0, Math.min(q.factories, FactoryBudget.availableCivilian()));
       if (q.progress >= q.cost) {
         const st = MapRenderer.states[q.stateId];
         const b = ConstructionManager.BUILDINGS.find(x => x.id === q.building);
@@ -4349,6 +4412,7 @@ class ConstructionManager {
           if (q.building === 'nuclear_reactor') s.nuclearReactorLevel++;
           if (q.building === 'supply_hub') st.supply = (st.supply || 0) + 4;
           if (q.building === 'infrastructure') st.supply = (st.supply || 0) + 1;
+          if (q.building.endsWith('_experiment_facility')) window.StrategySystems?.facilityCompleted(q.building, q.stateId);
           CoreEngine.log(st.name + 'の' + (b ? b.name : q.building) + 'が完成しました！');
           GameUI.notify('🏗️ 建設完了: ' + st.name + ' ' + (b ? b.name : ''), 'success');
           CoreEngine.renderStats();
@@ -4358,7 +4422,7 @@ class ConstructionManager {
         q.done = true;
         changed = true;
       }
-    });
+    }
     ConstructionManager.queue = ConstructionManager.queue.filter(q => !q.done);
     if (changed && WindowManager.isOpen('construction')) ConstructionManager.render();
   }
@@ -6648,5 +6712,6 @@ window.addEventListener('DOMContentLoaded', () => StartScreen.show());
   <script src="strategy.js?v=artwork-2"></script>
   <script src="assets/technology-resolver.js"></script>
   <script src="assets/equipment-designer.js"></script>
+  <script src="assets/strategy-systems.js"></script>
   </body>
 </html>

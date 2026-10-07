@@ -40,6 +40,7 @@ class StrategyGame {
   }
   static init() {
     StrategyGame.prepare();
+    if (window.StrategySystems) StrategySystems.init();
     GameTools.window('production', '⚙️ 装備生産', () => ProductionManager.render());
     GameTools.window('decisions', '📜 ディシジョン', () => DecisionManager.render());
     IntelligenceManager.ensure();
@@ -73,7 +74,7 @@ class StrategyGame {
     } else if (e.key === 'Enter' && NewsManager.showing) { e.preventDefault(); NewsManager.react(); }
   }
   static tick() {
-    DecisionManager.tick(); MarketManager.tick();
+    DecisionManager.tick(); MarketManager.tick(); ConvoyManager.tick();
     if (WindowManager.isOpen('production')) ProductionManager.render();
     if (WindowManager.isOpen('decisions')) DecisionManager.render();
     StrategyGame.publish();
@@ -181,7 +182,13 @@ class OffensivePlanner {
   static path(start, goal, country = CoreEngine.gameState.country, ownOnly=false) {
     start = Number(start); goal = Number(goal);
     const prev = new Map([[goal,null]]), queue = [goal];
-    const canPass = pid => { const o = MapRenderer.ownerOf(pid); return OffensivePlanner.isLand(pid) && (o===country || (!ownOnly&&CoreEngine.gameState.atWar.includes(o))); };
+  const canPass = pid => {
+    const owner = MapRenderer.ownerOf(pid);
+    const state = CoreEngine.gameState;
+    const hasMilitaryAccess = state.militaryAccess?.[owner] === true;
+    const isAtWar = state.atWar?.includes(owner) === true;
+    return OffensivePlanner.isLand(pid) && (owner === country || (!ownOnly && (hasMilitaryAccess || isAtWar)));
+  };
     if (!canPass(start) || !canPass(goal)) return [];
     for (let i=0; i<queue.length && !prev.has(start); i++) {
       for (const next of MapRenderer.provNeighbors.get(queue[i]) || []) {
@@ -239,6 +246,7 @@ class OffensivePlanner {
     }
     const owner=MapRenderer.ownerOf(pid);
     if (owner===s.country) { army.status='行軍'; return; }
+    if (s.militaryAccess?.[owner] === true && !s.atWar.includes(owner)) { army.status='通過'; return; }
     if (!s.atWar.includes(owner)) { army.executing=false; army.status='中立国の前で停止'; return; }
     army.status='戦闘';
     BattleManager.startOffensive(army,pid,MapRenderer.stateOf(pid));
@@ -254,13 +262,15 @@ class OffensivePlanner {
     army.divisions.forEach(d=>{d.org=Math.min(d.maxOrg,d.org+(army.executing?2:3));});
     if (!army.executing) return; // Occupied ground is held; never return to the old base.
     // 行軍中: 自国領プロヴィンスを通過する際にルートを進める (1マスずつ)
-    if (army.status==='行軍' && army.route?.length) {
+    if ((army.status==='行軍' || army.status==='通過') && army.route?.length) {
       const next=army.route[0];
-      if (MapRenderer.ownerOf(next)===CoreEngine.gameState.country) {
+      const owner=MapRenderer.ownerOf(next);
+      const canMove=owner===CoreEngine.gameState.country || CoreEngine.gameState.militaryAccess?.[owner]===true;
+      if (canMove) {
         army.route.shift();
         OffensivePlanner.hold(army,next);
         // 前線を更新 (自国領が拡大したため)
-        OffensivePlanner.updateFrontline(army);
+        if (owner===CoreEngine.gameState.country) OffensivePlanner.updateFrontline(army);
       }
     }
     OffensivePlanner.next(army);
@@ -520,6 +530,7 @@ class ProductionManager {
     tank:{name:'戦車',rate:1,resources:{steel:14,tungsten:5,chromium:10},pool:'military'},
     fighter:{name:'戦闘機',rate:.5,resources:{aluminum:10,rubber:3},pool:'military'},
     transport:{name:'輸送機',rate:.2,resources:{aluminum:12,rubber:3},pool:'military'},
+    convoys:{name:'輸送船',rate:1/14,resources:{steel:5},pool:'dockyard'},
     destroyer:{name:'駆逐艦',rate:1/60,resources:{steel:10,chromium:2},pool:'dockyard'},
     submarine:{name:'潜水艦',rate:1/45,resources:{steel:7,chromium:2},pool:'dockyard'},
     battleship:{name:'戦艦',rate:1/240,resources:{steel:18,chromium:7},pool:'dockyard'}
@@ -529,7 +540,9 @@ class ProductionManager {
     s.strategy.production ||= [];
     const a=ProductionManager.account(s.country);
     a.civilian=s.civilianFactories;a.military=s.militaryFactories;a.dockyards=s.dockyards;a.construction=ConstructionManager.queue.reduce((n,q)=>n+q.factories,0);
-    if (!a.initialized) {a.stock.infantry=s.equipment??2500;a.stock.fighter=s.planes||50;a.stock.destroyer=s.ships||20;a.stock.artillery=100;a.stock.tank=40;a.initialized=true;}
+    if (a.stock.convoys === undefined) a.stock.convoys = Math.max(0, Math.floor(Number(s.convoys) || 0));
+    if (!a.initialized) {a.stock.infantry=s.equipment??2500;a.stock.fighter=s.planes||50;a.stock.destroyer=s.ships||20;a.stock.artillery=100;a.stock.tank=40;a.stock.convoys=Math.floor(Number(s.convoys)||0);a.initialized=true;}
+    Object.keys(a.stock).forEach(type => { a.stock[type] = Math.max(0, Math.floor(Number(a.stock[type]) || 0)); });
     ProductionManager.syncLocal();
   }
   static account(tag) {
@@ -575,6 +588,7 @@ class ProductionManager {
     s.equipment=(a.stock.infantry||0)+(a.stock.rifle_old||0);
     s.planes=(a.stock.fighter||0)+(a.stock.transport||0);
     s.ships=(a.stock.destroyer||0)+(a.stock.submarine||0)+(a.stock.battleship||0);
+    s.convoys=Math.max(0,Math.floor(Number(a.stock.convoys)||0));
   }
   static canConsume(needs) {
     const stock=ProductionManager.account(CoreEngine.gameState.country).stock;
@@ -589,7 +603,10 @@ class ProductionManager {
   static render() {
     const el=document.getElementById('production-content');if(!el||!CoreEngine.gameState.strategy||GameTools.editing('production-content'))return;
     const s=CoreEngine.gameState,stock=ProductionManager.account(s.country).stock,law=PoliticsManager.currentLaw('economy');
-    let html='<h3>⚙️ 装備生産</h3><p>軍需工場 '+s.militaryFactories+' / 造船所 '+s.dockyards+'。資源は実数を消費します。追加工場は「建設」で完成させてください。</p><div class="production-table">';
+    const convoyShortage=ConvoyManager.checkShortage();
+    let html='<h3>⚙️ 装備生産</h3><p>軍需工場 '+s.militaryFactories+' / 造船所 '+s.dockyards+'。輸送船は造船所でのみ建造できます。資源は実数を消費します。追加工場は「建設」で完成させてください。</p>';
+    if(convoyShortage)html+='<p class="convoy-warning" role="alert">⚠ 輸送船不足: 必要 '+Math.max(5,Math.floor(Number(s.strategy.convoyDemand)||0))+' / 保有 '+Math.floor(Number(s.convoys)||0)+'。輸入と補給に支障があり、安定度が低下します。</p>';
+    html+='<div class="production-table">';
     Object.entries(ProductionManager.CATALOG).forEach(([type,d])=>{
       const line=s.strategy.production.find(l=>l.type===type),n=line?.factories||0,rate=d.rate*n*(1+(law.factoryOutput||0));
       html+='<div class="production-row"><b>'+d.name+(type==='battleship'&&ProductionManager.treatyLimited()?'（条約制限）':'')+'</b><span>在庫 '+Math.floor(stock[type]||0)+'</span><label>'+ (d.pool==='dockyard'?'造船所':'軍需工場')+' <input type="number" min="0" max="'+ProductionManager.capacity(d.pool)+'" value="'+n+'" onchange="ProductionManager.allocate(\''+type+'\',this.value)"></label><span>'+rate.toFixed(2)+'/日・'+(rate*7).toFixed(2)+'/週</span><small>週の消費: '+Object.entries(d.resources).map(([k,v])=>(ResourceManager.TRADE_RESOURCES.find(r=>r.id===k)?.name||k)+' '+(v*n).toFixed(1)).join(' / ')+(line?.shortage?.length?' — 資源不足で停止':'')+'</small></div>';
@@ -601,9 +618,10 @@ class TradeManager {
     const s=CoreEngine.gameState,n=GameTools.integer(value??document.getElementById('import-'+type)?.value??8,1,100);
     if(!ResourceManager.TRADE_RESOURCES.some(r=>r.id===type)||n===null)return false;
     const factories=Math.ceil(n/8);
-    if(ProductionManager.freeCivilian()<factories || s.convoys<5){GameUI.notify('空き民需工場または輸送船が不足しています。','alert');return false;}
+    if(ProductionManager.freeCivilian()<factories){GameUI.notify('空き民需工場が不足しています。','alert');return false;}
+    if(!ConvoyManager.consumeForTrade(5))return false;
     s.strategy.tradeLeases ||= [];s.strategy.tradeLeases.push({factories,expires:GameTools.day()+7});
-    s.convoys-=5;s.resources[type]=(s.resources[type]||0)+n*10;
+    s.resources[type]=(s.resources[type]||0)+n*10;
     CoreEngine.log(name+'を '+n+'口 = '+n*10+' 輸入しました（民需工場を7日間使用）。');TradeManager.render();return true;
   }
   static export(type,name) {
@@ -614,6 +632,49 @@ class TradeManager {
     const el=document.getElementById('trade-content');if(!el||!CoreEngine.gameState.strategy)return;
     const s=CoreEngine.gameState;
     el.innerHTML='<h3>資源・貿易</h3><p>1口 = 資源10。2口の輸入なら20増加します。生産の消費量は実数です。空き民需工場: '+FactoryBudget.availableCivilian()+'</p>'+ResourceManager.TRADE_RESOURCES.map(r=>'<div class="trade-row"><span>'+r.name+' 在庫 '+(s.resources[r.id]||0).toFixed(1)+'</span><label>輸入口数 <input id="import-'+r.id+'" type="number" min="1" max="100" value="8"></label>'+GameTools.button('輸入（8口につき工場1・7日間）',"ResourceManager.importResource('"+r.id+"','"+r.name+"')")+GameTools.button('100を輸出（政治力5）',"ResourceManager.exportResource('"+r.id+"','"+r.name+"')",s.resources[r.id]<100)+'</div>').join('');
+  }
+}
+
+class ConvoyManager {
+  static shortageNotified = false;
+  static consumeForTrade(amount) {
+    const stock = ProductionManager.account(CoreEngine.gameState.country).stock;
+    const count = Math.max(0, Math.floor(Number(amount) || 0));
+    const available = Math.max(0, Math.floor(Number(stock.convoys) || 0));
+    if (available < count) {
+      ConvoyManager.checkShortage();
+      return false;
+    }
+    stock.convoys = available - count;
+    ProductionManager.syncLocal();
+    ConvoyManager.shortageNotified = false;
+    return true;
+  }
+  static checkShortage() {
+    const s = CoreEngine.gameState;
+    const available = Math.max(0, Math.floor(Number(s.convoys) || 0));
+    const demand = Math.max(5, Math.floor(Number(s.strategy?.convoyDemand) || 0));
+    const shortage = Math.max(0, demand - available);
+    s.strategy.convoyShortage = shortage;
+    if (shortage > 0 && !ConvoyManager.shortageNotified) {
+      GameUI.notify('輸送船が不足しています（不足 ' + shortage + '隻）。輸入と補給に影響します。', 'alert');
+      ConvoyManager.shortageNotified = true;
+    } else if (!shortage) {
+      ConvoyManager.shortageNotified = false;
+    }
+    return shortage;
+  }
+  static tick() {
+    const s = CoreEngine.gameState;
+    s.convoys = Math.max(0, Math.floor(Number(s.convoys) || 0));
+    const shortage = ConvoyManager.checkShortage();
+    if (shortage > 0) {
+      const day = GameTools.day();
+      if (s.strategy.convoyPenaltyDay !== day) {
+        s.strategy.convoyPenaltyDay = day;
+        s.stability = Math.max(0, s.stability - (s.convoys === 0 ? 0.02 : 0.005));
+      }
+    }
   }
 }
 

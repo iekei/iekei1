@@ -1,0 +1,30 @@
+.focus-node { background: linear-gradient(145deg, #25332f, #121b1a); border-color: #53665e; color: #d9e2d9; }
+.focus-node.available { border-color: #68a77b; }
+.focus-node.active { border-color: #d4a843; }
+.focus-node.locked { border-color: #8d4545; }
+.focus-state-badge { display: block; margin-top: 3px; color: #b5c5bc; font-size: 9px; }
+.focus-node.locked .focus-state-badge { color: #f07878; }
+.focus-meta { display: block; margin-top: 3px; color: #9fb0a8; font-size: 8px; line-height: 1.3; }
+.lab-summary, .lab-projects, .lab-scientists { margin: 10px 0; padding: 12px; background: #17211f; border: 1px solid #465950; }
+.lab-summary h3, .lab-projects h3, .lab-scientists h3 { margin: 0 0 8px; color: #d4b45b; }
+.lab-summary > p, .design-equipment-choice > p { margin: 6px 0 10px; color: #a7b5ae; font-size: 11px; }
+.lab-points, .lab-project, .lab-scientist { display: grid; grid-template-columns: minmax(120px, 1fr) auto auto auto; align-items: center; gap: 8px; margin-top: 6px; padding: 8px; border: 1px solid #384941; background: #101815; }
+.lab-points strong { color: #e5c36a; font-size: 18px; }
+.lab-points span, .lab-project span, .lab-scientist span { color: #a1b1a8; font-size: 10px; }
+.lab-points button, .lab-project button { background: #293a32; border: 1px solid #6f8878; color: #dce8dc; padding: 5px 8px; cursor: pointer; }
+.lab-points button:disabled, .lab-project button:disabled { opacity: .45; cursor: not-allowed; }
+.lab-project { grid-template-columns: 1fr auto auto; }
+.lab-scientist { grid-template-columns: 1fr auto; }
+.lab-scientist progress { grid-column: 1 / 2; width: 100%; accent-color: #75ac7c; }
+.lab-scientist select, .design-equipment-choice select { min-width: 160px; background: #101815; border: 1px solid #52645a; color: #dce8dc; padding: 5px; }
+.design-equipment-choice { margin-top: 10px; padding: 10px; background: #16211d; border: 1px solid #496154; color: #cbd8ce; }
+.design-equipment-choice label { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin: 5px 0; }
+.design-equipment-choice select { flex: 1; max-width: 360px; }
+.designer-preview img { object-fit: contain; }
+.convoy-warning { padding: 8px 10px; margin: 8px 0; border: 1px solid #a34c45; background: #351b1a; color: #ffaaa0; font-size: 12px; }
+@media (max-width: 700px) {
+  .lab-points, .lab-project { grid-template-columns: 1fr 1fr; }
+  .lab-scientist { grid-template-columns: 1fr; }
+  .lab-scientist progress { grid-column: auto; }
+  .design-equipment-choice label { align-items: stretch; flex-direction: column; }
+}
