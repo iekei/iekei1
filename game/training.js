@@ -11,7 +11,8 @@
 
 class TrainingManager {
   static nextId = 1;
-  static targetArmyId = null;   // 徴兵した師団の配備先軍集団 (null = 自動配備)
+  static targetArmyId = null;
+  static trainingStateId = null;
 
   // 大隊1個あたりの装備ロードアウト。徴兵・補充で同じ表を使う。
   static BATTALION_EQUIPMENT = {
@@ -29,6 +30,32 @@ class TrainingManager {
     CoreEngine.registerTickCallback(() => TrainingManager.onTick());
     TrainingManager.renderQueue();
     CoreEngine.log('📋 徴兵・訓練システム: 師団は徴兵と訓練でのみ増えます');
+  }
+
+  static availableTrainingStates() {
+    const player=CoreEngine.gameState.country;
+    return Object.entries(MapRenderer.states||{}).filter(([,state])=>
+      state.provinces?.some(pid=>OffensivePlanner.isLand(pid)&&MapRenderer.ownerOf(pid)===player));
+  }
+
+  static trainingProvince(stateId) {
+    const state=MapRenderer.states?.[stateId],player=CoreEngine.gameState.country;
+    if(!state) return null;
+    const owned=state.provinces.filter(pid=>OffensivePlanner.isLand(pid)&&MapRenderer.ownerOf(pid)===player);
+    if(!owned.length) return null;
+    const victoryPoint=Object.entries(state.vp||{})
+      .map(([pid,value])=>[Number(pid),Number(value)||0])
+      .filter(([pid])=>owned.includes(pid))
+      .sort((a,b)=>b[1]-a[1])[0]?.[0];
+    return victoryPoint||owned[0];
+  }
+
+  static fallbackTrainingProvince() {
+    const capital=ArmyRoster.capitalProvince();
+    if(capital&&MapRenderer.ownerOf(capital)===CoreEngine.gameState.country) return capital;
+    const capitalCenter=capital&&MapRenderer.provCentroid.get(Number(capital));
+    return OffensivePlanner.nearest(capitalCenter||[MapRenderer.mapW/2,MapRenderer.mapH/2],
+      pid=>MapRenderer.ownerOf(pid)===CoreEngine.gameState.country);
   }
 
   // ---- 現在の師団テンプレート (DivisionDesigner の5×5グリッド) から必要量を算出 ----
@@ -67,6 +94,11 @@ class TrainingManager {
     if (!req) { GameUI.notify('先に師団編成エディターで大隊を配置してください。', 'alert'); return; }
     if (['ranger','mountaineer','paratrooper','marine'].some(k => req.comp[k]) && ArmyRoster.specialCount() >= 5) { GameUI.notify('特殊部隊は全軍で5師団までです（訓練中を含みます）。', 'alert'); return; }
     if (TrainingManager.queue.length >= 10) { GameUI.notify('徴兵キューが満杯です。', 'alert'); return; }
+    const selectedState=document.getElementById('recruit-training-state')?.value||
+      TrainingManager.trainingStateId||MapRenderer.stateOf(ArmyRoster.capitalProvince())||
+      TrainingManager.availableTrainingStates()[0]?.[0];
+    const trainingPid=TrainingManager.trainingProvince(String(selectedState||''));
+    if(!trainingPid) {GameUI.notify('自国が支配する訓練地点を選択してください。','alert');return;}
     const order = {
       id: TrainingManager.nextId++,
       name: '新編師団 #' + TrainingManager.nextId,
@@ -75,7 +107,8 @@ class TrainingManager {
       trainDays: req.trainDays,
       phase: 'gathering',   // gathering (資源待ち) → training (訓練中)
       progress: 0,
-      targetArmyId: TrainingManager.targetArmyId   // 配備先軍集団
+      targetArmyId: TrainingManager.targetArmyId,
+      trainingStateId: String(selectedState)
     };
     TrainingManager.queue.push(order);
     CoreEngine.log('📝 ' + order.name + 'を徴兵リストに追加 (兵員 ' + (req.manpowerNeed / 10000) + '万 / 兵器 ' + req.equipNeed + ' / 訓練約' + req.trainDays + '日)');
@@ -115,11 +148,15 @@ class TrainingManager {
           o.done = true;
           s.divisions = (s.divisions || 0) + 1;
           const a = (BattlePlanManager.armies || []).find(x => x.id === o.targetArmyId);
+          const spawnPid=TrainingManager.trainingProvince(o.trainingStateId)||
+            TrainingManager.fallbackTrainingProvince();
+          const spawnCenter=MapRenderer.provCentroid.get(Number(spawnPid))||[0,0];
           const division = {
             id: s.strategy.nextDivisionId++, name: o.name, comp: o.comp,
             org: 30, maxOrg: 60, equipmentStrength: 100,
             equipmentNeeds: TrainingManager.equipmentNeedsFor(o.comp), type: Object.keys(o.comp)[0],
-            x: a?.base[0] || 0, y: a?.base[1] || 0, pid: a?.positionPid
+            x: a?.base[0] ?? spawnCenter[0], y: a?.base[1] ?? spawnCenter[1],
+            pid: a?.positionPid || Number(spawnPid)
           };
           if (a && !a.executing) a.divisions.push(division);
           else s.strategy.reserves.push(division);
@@ -175,7 +212,8 @@ class TrainingManager {
     TrainingManager.queue.forEach(o => {
       html += '<div class="con-queue-item"><div class="cq-top"><span>' + (o.phase === 'gathering' ? '⏳ 資源待ち' : '🎓 訓練中') + ' — ' + o.name + ' (大隊' + o.count + ')</span>' +
         '<button class="army-btn abort" onclick="TrainingManager.cancel(' + o.id + ')">✕ 取消</button></div>' +
-        '<div style="font-size:11px;color:var(--text-secondary);margin-top:2px;">' +
+        '<div style="font-size:11px;color:var(--text-secondary);margin-top:2px;">訓練地点: ' +
+        GameTools.escape(MapRenderer.states[o.trainingStateId]?.name||'指定州')+' — ' +
         (o.phase === 'gathering'
           ? '兵員 ' + Math.floor(s.manpower).toLocaleString() + ' / ' + Math.floor(o.manpowerNeed).toLocaleString() + ' — 兵器 ' + Math.floor(s.equipment || 0) + ' / ' + o.equipmentNeed
           : '訓練 ' + o.progress + ' / ' + o.trainDays + '日 (あと' + (o.trainDays - o.progress) + '日)') + '</div>' +

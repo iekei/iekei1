@@ -408,12 +408,35 @@ class OffensivePlanner {
 class ArmyRoster {
   static frontTool=false;
   static airdropTool=false;
+  static moveTool=false;
   static all() { return [...(CoreEngine.gameState.strategy?.reserves||[]),...BattlePlanManager.armies.flatMap(a=>a.divisions)]; }
+  static capitalProvince(country=CoreEngine.gameState.country) {
+    const preferred={GER:'Brandenburg',SOV:'Moscow Area',JAP:'Japan',USA:'Maryland',ENG:'Greater London Area',FRA:'Ile de France',ITA:'Italy'};
+    const states=Object.entries(MapRenderer.states||{});
+    const capital=states.find(([,state])=>state.name===preferred[country]);
+    if(capital) {
+      const [sid,state]=capital;
+      const vp=Object.entries(state.vp||{}).sort((a,b)=>Number(b[1])-Number(a[1]))[0]?.[0];
+      const pid=vp?Number(vp):state.provinces?.find(OffensivePlanner.isLand);
+      if(pid&&OffensivePlanner.isLand(pid)) return pid;
+      const center=MapRenderer.stateCenter.get(sid);
+      if(center) return OffensivePlanner.nearest(center,p=>MapRenderer.stateOf(p)===sid);
+    }
+    const home=states.filter(([,state])=>state.owner===country);
+    const highest=home.sort((a,b)=>{
+      const score=state=>Object.values(state.vp||{}).reduce((sum,value)=>sum+Number(value||0),0);
+      return score(b[1])-score(a[1]);
+    })[0];
+    const vp=highest&&Number(Object.entries(highest[1].vp||{}).sort((a,b)=>Number(b[1])-Number(a[1]))[0]?.[0]);
+    if(vp&&OffensivePlanner.isLand(vp)) return vp;
+    return highest?.[1].provinces?.find(pid=>OffensivePlanner.isLand(pid)) ||
+      OffensivePlanner.nearest([MapRenderer.mapW/2,MapRenderer.mapH/2],p=>MapRenderer.ownerOf(p)===country);
+  }
   static initialize() {
     const s=CoreEngine.gameState;
     StrategyGame.prepare();
     if (BattlePlanManager.armies.length) return;
-    const base=OffensivePlanner.nearest([MapRenderer.mapW/2,MapRenderer.mapH/2],p=>MapRenderer.ownerOf(p)===s.country);
+    const base=ArmyRoster.capitalProvince(s.country);
     const c=MapRenderer.provCentroid.get(base)||[0,0];
     BattlePlanManager.armies=[{id:1,name:'第1軍集団',base:c.slice(),positionPid:base,divisions:[],frontline:null,arrow:null,executing:false,progress:0}];
     if (!s.strategy.reserves.length) s.strategy.reserves=Array.from({length:s.divisions},(_,i)=>{
@@ -427,7 +450,37 @@ class ArmyRoster {
     return ArmyRoster.all().filter(d=>isSpecial(d.comp)).length+(CoreEngine.gameState.recruitQueue||[]).filter(o=>!o.done && isSpecial(o.comp)).length;
   }
   static install() { document.getElementById('army-panel').classList.add('army-dock'); }
-  static toggleFront() { ArmyRoster.frontTool=!ArmyRoster.frontTool; ArmyRoster.airdropTool=false; ArmyRoster.render(); }
+  static toggleFront() { ArmyRoster.frontTool=!ArmyRoster.frontTool; ArmyRoster.airdropTool=false;ArmyRoster.moveTool=false; ArmyRoster.render(); }
+  static toggleMove() {
+    const army=BattlePlanManager.selectedArmy();
+    if(!army||army.executing||(!ArmyRoster.moveTool&&!army.divisions.length)) return;
+    ArmyRoster.moveTool=!ArmyRoster.moveTool;
+    ArmyRoster.frontTool=false;ArmyRoster.airdropTool=false;
+    BattlePlanManager.invasionMode=false;BattlePlanManager.arrowTool=false;
+    if(ArmyRoster.moveTool) GameUI.notify('移動先の自国領または占領地をクリックしてください。');
+    ArmyRoster.render();
+  }
+  static moveTo(pid) {
+    const army=BattlePlanManager.selectedArmy(),country=CoreEngine.gameState.country;
+    if(!army||army.executing||!army.divisions.length) {GameUI.notify('師団を配属した待機中の軍集団を選択してください。','alert');return false;}
+    if(!OffensivePlanner.isLand(pid)||MapRenderer.ownerOf(pid)!==country) {
+      GameUI.notify('移動先は自国領または占領地の陸上プロヴィンスを選択してください。','alert');return false;
+    }
+    let start=army.positionPid||army.divisions.find(division=>division.pid)?.pid;
+    if(!start||MapRenderer.ownerOf(start)!==country)
+      start=OffensivePlanner.nearest(army.base,province=>MapRenderer.ownerOf(province)===country);
+    const route=start?OffensivePlanner.path(start,pid,country,true):[];
+    if(!route.length) {GameUI.notify('自国領・占領地を通る移動経路がありません。','alert');return false;}
+    army.positionPid=Number(start);army.route=route.slice(1);army.goalPid=Number(pid);
+    army.frontEnemy=null;army.executing=true;army.progress=0;army.status='行軍';
+    ArmyRoster.moveTool=false;
+    if(!army.route.length) {
+      army.executing=false;army.status='目標地点で待機';army.progress=100;
+      OffensivePlanner.hold(army,Number(pid));
+    }
+    ArmyRoster.render();MapRenderer.renderPanel?.();
+    return true;
+  }
   static placeFront(pid) {
     const player=CoreEngine.gameState.country;
     const neighbors=MapRenderer.provNeighbors.get(pid)||new Set();
@@ -500,8 +553,9 @@ class ArmyRoster {
       html+='</div>';
     } else {
       html+=GameTools.button('＋軍集団','BattlePlanManager.addArmy()')+GameTools.button('師団を配属 ('+CoreEngine.gameState.strategy.reserves.length+' 未所属)','ArmyRoster.assignModal()');
-      html+=GameTools.button(ArmyRoster.frontTool?'前線指定中…':'前線を引く','ArmyRoster.toggleFront()')+GameTools.button(BattlePlanManager.arrowTool?'攻撃線指定中…':'攻撃線を引く','BattlePlanManager.arrowTool=!BattlePlanManager.arrowTool;ArmyRoster.frontTool=false;BattlePlanManager.renderPanel()');
-      html+=GameTools.button('強襲上陸','BattlePlanManager.toggleInvasion()')+GameTools.button('空挺降下','ArmyRoster.airdropTool=!ArmyRoster.airdropTool;ArmyRoster.frontTool=false;ArmyRoster.render()');
+      html+=GameTools.button(ArmyRoster.moveTool?'移動先をクリック…':'移動','ArmyRoster.toggleMove()',!BattlePlanManager.selectedArmy()||BattlePlanManager.selectedArmy().executing||(!ArmyRoster.moveTool&&!BattlePlanManager.selectedArmy().divisions.length));
+      html+=GameTools.button(ArmyRoster.frontTool?'前線指定中…':'前線を引く','ArmyRoster.toggleFront()')+GameTools.button(BattlePlanManager.arrowTool?'攻撃線指定中…':'攻撃線を引く','BattlePlanManager.arrowTool=!BattlePlanManager.arrowTool;ArmyRoster.frontTool=false;ArmyRoster.moveTool=false;BattlePlanManager.renderPanel()');
+      html+=GameTools.button('強襲上陸','BattlePlanManager.toggleInvasion()')+GameTools.button('空挺降下','ArmyRoster.airdropTool=!ArmyRoster.airdropTool;ArmyRoster.frontTool=false;ArmyRoster.moveTool=false;ArmyRoster.render()');
       html+='<span>Space: 時間停止/再開　Enter: ニュースを閉じる</span></div><div class="army-strip">';
       BattlePlanManager.armies.forEach(a=>{
         const card=GameTools.card(a.general?.id,CoreEngine.gameState.country),org=a.divisions.reduce((n,d)=>n+d.org,0)/Math.max(1,a.divisions.length);
@@ -524,17 +578,32 @@ class FactoryBudget {
 }
 class ProductionManager {
   static CATALOG={
-    infantry:{name:'歩兵装備',rate:10,resources:{steel:7},pool:'military'},
-    rifle_old:{name:'旧式歩兵装備',rate:6,resources:{steel:5},pool:'military'},
-    artillery:{name:'野砲',rate:2,resources:{steel:10,tungsten:3},pool:'military'},
-    tank:{name:'戦車',rate:1,resources:{steel:14,tungsten:5,chromium:10},pool:'military'},
-    fighter:{name:'戦闘機',rate:.5,resources:{aluminum:10,rubber:3},pool:'military'},
-    transport:{name:'輸送機',rate:.2,resources:{aluminum:12,rubber:3},pool:'military'},
+    infantry:{name:'歩兵装備',rate:10,resources:{steel:7},pool:'military',technology:'infantry_weapons'},
+    rifle_old:{name:'旧式歩兵装備',rate:6,resources:{steel:5},pool:'military',technology:'infantry_weapons'},
+    artillery:{name:'野砲',rate:2,resources:{steel:10,tungsten:3},pool:'military',technology:'gw_artillery'},
+    support_equipment:{name:'支援装備',rate:4,resources:{steel:4},pool:'military',technology:'tech_support'},
+    tank:{name:'戦車',rate:1,resources:{steel:14,tungsten:5,chromium:10},pool:'military',technology:'gwtank_chassis'},
+    fighter:{name:'戦闘機',rate:.5,resources:{aluminum:10,rubber:3},pool:'military',technology:'iw_small_airframe'},
+    transport:{name:'輸送機',rate:.2,resources:{aluminum:12,rubber:3},pool:'military',technology:'iw_medium_airframe'},
+    infantry_2:{name:'歩兵装備 II',rate:12,resources:{steel:8},pool:'military',technology:'improved_infantry_weapons'},
+    artillery_2:{name:'改良型野砲',rate:2.4,resources:{steel:12,tungsten:3},pool:'military',technology:'artillery1'},
+    tank_2:{name:'改良型戦車',rate:1.2,resources:{steel:15,tungsten:5,chromium:10},pool:'military',technology:'basic_medium_tank_chassis'},
+    fighter_2:{name:'改良型戦闘機',rate:.6,resources:{aluminum:11,rubber:3},pool:'military',technology:'basic_small_airframe'},
     convoys:{name:'輸送船',rate:1/14,resources:{steel:5},pool:'dockyard'},
-    destroyer:{name:'駆逐艦',rate:1/60,resources:{steel:10,chromium:2},pool:'dockyard'},
-    submarine:{name:'潜水艦',rate:1/45,resources:{steel:7,chromium:2},pool:'dockyard'},
-    battleship:{name:'戦艦',rate:1/240,resources:{steel:18,chromium:7},pool:'dockyard'}
+    destroyer:{name:'駆逐艦',rate:1/60,resources:{steel:10,chromium:2},pool:'dockyard',technology:'early_ship_hull_light'},
+    submarine:{name:'潜水艦',rate:1/45,resources:{steel:7,chromium:2},pool:'dockyard',technology:'early_ship_hull_submarine'},
+    battleship:{name:'戦艦',rate:1/240,resources:{steel:18,chromium:7},pool:'dockyard',technology:'early_ship_hull_heavy'}
   };
+  static STOCK_GROUPS={infantry:['infantry_2','infantry','rifle_old'],artillery:['artillery_2','artillery'],tank:['tank_2','tank'],fighter:['fighter_2','fighter']};
+  static ICONS={infantry:'⚔',rifle_old:'⚔',infantry_2:'⚔',support_equipment:'✚',artillery:'✹',artillery_2:'✹',tank:'▣',tank_2:'▣',fighter:'✈',fighter_2:'✈',transport:'✈',convoys:'⚓',destroyer:'⚓',submarine:'◉',battleship:'♜'};
+  static category(type) {
+    if(ProductionManager.CATALOG[type]?.pool==='dockyard') return '艦艇';
+    if(type.includes('fighter')||type.includes('transport')) return '航空機';
+    if(type.includes('tank')) return '戦車';
+    if(type.includes('artillery')) return '砲兵装備';
+    if(type.includes('support')) return '支援装備';
+    return '歩兵装備';
+  }
   static ensure() {
     const s=CoreEngine.gameState;if(!s.strategy) return;
     s.strategy.production ||= [];
@@ -542,7 +611,7 @@ class ProductionManager {
     a.civilian=s.civilianFactories;a.military=s.militaryFactories;a.dockyards=s.dockyards;a.construction=ConstructionManager.queue.reduce((n,q)=>n+q.factories,0);
     if (a.stock.convoys === undefined) a.stock.convoys = Math.max(0, Math.floor(Number(s.convoys) || 0));
     if (!a.initialized) {a.stock.infantry=s.equipment??2500;a.stock.fighter=s.planes||50;a.stock.destroyer=s.ships||20;a.stock.artillery=100;a.stock.tank=40;a.stock.convoys=Math.floor(Number(s.convoys)||0);a.initialized=true;}
-    Object.keys(a.stock).forEach(type => { a.stock[type] = Math.max(0, Math.floor(Number(a.stock[type]) || 0)); });
+    Object.keys(ProductionManager.CATALOG).forEach(type => {a.stock[type]=Math.max(0,Math.floor(Number(a.stock[type])||0));});
     ProductionManager.syncLocal();
   }
   static account(tag) {
@@ -557,8 +626,46 @@ class ProductionManager {
   }
   static treatyLimited() {return ['JAP','USA','ENG','FRA','ITA'].includes(CoreEngine.gameState.country)&&!CoreEngine.gameState.strategy.navalTreatyBroken;}
   static capacity(pool) { const s=CoreEngine.gameState;return Math.max(0,Math.floor(pool==='dockyard'?s.dockyards:s.militaryFactories)); }
+  static isUnlocked(type) {
+    const def=ProductionManager.CATALOG[type];
+    if(!def) return false;
+    if(!def.technology) return true;
+    const researched=typeof ResearchManager!=='undefined'?ResearchManager.researchedTech:null;
+    if(!researched) return false;
+    const technologies=Array.isArray(def.technology)?def.technology:[def.technology];
+    if(technologies.some(id=>researched.has(id))) return true;
+    return Object.values(ResearchManager.techData||{}).flat().some(tech=>
+      researched.has(tech.id)&&(tech.effects||[]).some(effect=>technologies.some(id=>String(effect).includes(id))||String(effect).includes(type)));
+  }
+  static availableItems() {
+    const active=new Set((CoreEngine.gameState.strategy?.production||[]).map(line=>line.type));
+    return Object.entries(ProductionManager.CATALOG).filter(([type])=>
+      !active.has(type)&&ProductionManager.isUnlocked(type));
+  }
+  static addLine(type) {
+    if(!ProductionManager.CATALOG[type]||!ProductionManager.isUnlocked(type)) {
+      GameUI.notify('未研究の装備は生産ラインに追加できません。','alert');return false;
+    }
+    if(CoreEngine.gameState.strategy.production.some(line=>line.type===type)) return false;
+    CoreEngine.gameState.strategy.production.push({type,factories:0,progress:0,produced:0,priority:0});
+    ProductionManager.render();StrategyGame.publish();return true;
+  }
+  static removeLine(type) {
+    const lines=CoreEngine.gameState.strategy.production;
+    const index=lines.findIndex(line=>line.type===type);
+    if(index<0) return false;
+    lines.splice(index,1);ProductionManager.render();StrategyGame.publish();return true;
+  }
+  static adjustFactories(type,delta) {
+    const line=CoreEngine.gameState.strategy.production.find(item=>item.type===type);
+    if(!line) return false;
+    return ProductionManager.allocate(type,Math.max(0,(Number(line.factories)||0)+Number(delta||0)));
+  }
+  static inventoryTypes(type) {
+    return ProductionManager.STOCK_GROUPS[type]||[type];
+  }
   static allocate(type,value) {
-    const def=ProductionManager.CATALOG[type],n=GameTools.integer(value,0,200);if(!def||n===null) return false;
+    const def=ProductionManager.CATALOG[type],n=GameTools.integer(value,0,Math.max(200,ProductionManager.capacity(def?.pool)));if(!def||n===null) return false;
     if(n>0 && type==='battleship' && ProductionManager.treatyLimited()){GameUI.notify('大型艦の生産にはディシジョンで海軍軍縮条約を破棄してください。','alert');ProductionManager.render();return false;}
     const lines=CoreEngine.gameState.strategy.production;
     const others=lines.filter(l=>l.type!==type&&ProductionManager.CATALOG[l.type]?.pool===def.pool).reduce((t,l)=>t+l.factories,0);
@@ -582,35 +689,88 @@ class ProductionManager {
       const whole=Math.floor(line.progress+1e-9);line.progress-=whole;line.produced=(line.produced||0)+whole;a.stock[line.type]=(a.stock[line.type]||0)+whole;
     }
     ProductionManager.syncLocal();
+    if(WindowManager.isOpen('production')) ProductionManager.render();
   }
   static syncLocal() {
     const s=CoreEngine.gameState,a=ProductionManager.account(s.country);
-    s.equipment=(a.stock.infantry||0)+(a.stock.rifle_old||0);
-    s.planes=(a.stock.fighter||0)+(a.stock.transport||0);
+    s.equipment=ProductionManager.inventoryTypes('infantry').reduce((sum,type)=>sum+(a.stock[type]||0),0);
+    s.planes=ProductionManager.inventoryTypes('fighter').reduce((sum,type)=>sum+(a.stock[type]||0),0)+(a.stock.transport||0);
     s.ships=(a.stock.destroyer||0)+(a.stock.submarine||0)+(a.stock.battleship||0);
     s.convoys=Math.max(0,Math.floor(Number(a.stock.convoys)||0));
   }
   static canConsume(needs) {
     const stock=ProductionManager.account(CoreEngine.gameState.country).stock;
-    return Object.entries(needs).every(([k,n])=>(k==='infantry'?(stock.infantry||0)+(stock.rifle_old||0):(stock[k]||0))>=n);
+    return Object.entries(needs).every(([k,n])=>ProductionManager.inventoryTypes(k).reduce((sum,type)=>sum+(stock[type]||0),0)>=n);
   }
   static consume(needs) {
     if (!ProductionManager.canConsume(needs))return false;
     const stock=ProductionManager.account(CoreEngine.gameState.country).stock;
-    Object.entries(needs).forEach(([k,n])=>{if(k==='infantry'){const old=Math.min(stock.rifle_old||0,n);stock.rifle_old-=old;stock.infantry-=n-old;}else stock[k]-=n;});
+    Object.entries(needs).forEach(([k,amount])=>{
+      let remaining=amount;
+      ProductionManager.inventoryTypes(k).forEach(type=>{
+        const used=Math.min(stock[type]||0,remaining);
+        stock[type]-=used;remaining-=used;
+      });
+    });
     ProductionManager.syncLocal();return true;
   }
   static render() {
     const el=document.getElementById('production-content');if(!el||!CoreEngine.gameState.strategy||GameTools.editing('production-content'))return;
     const s=CoreEngine.gameState,stock=ProductionManager.account(s.country).stock,law=PoliticsManager.currentLaw('economy');
     const convoyShortage=ConvoyManager.checkShortage();
-    let html='<h3>⚙️ 装備生産</h3><p>軍需工場 '+s.militaryFactories+' / 造船所 '+s.dockyards+'。輸送船は造船所でのみ建造できます。資源は実数を消費します。追加工場は「建設」で完成させてください。</p>';
+    const production=s.strategy.production;
+    const assigned={military:0,dockyard:0},dailyResources={};
+    production.forEach(line=>{
+      const def=ProductionManager.CATALOG[line.type];if(!def)return;
+      assigned[def.pool]+=Math.max(0,Number(line.factories)||0);
+      Object.entries(def.resources).forEach(([resource,amount])=>
+        dailyResources[resource]=(dailyResources[resource]||0)+amount*(Number(line.factories)||0)/7);
+    });
+    const factoryTotal=ProductionManager.capacity('military'),dockyardTotal=ProductionManager.capacity('dockyard');
+    const resourceNames={steel:['鋼鉄','⛓'],rubber:['ゴム','◉'],oil:['石油','🛢'],tungsten:['タングステン','◆'],chromium:['クロム','⬟'],aluminum:['アルミ','▰']};
+    let html='<section class="production-header"><div><h3>⚙️ 装備生産</h3><p>工場と造船所をラインに割り当てて、装備を生産します。</p></div>'+
+      '<div class="production-factory-summary"><span>🏭 軍需工場 <b>'+assigned.military+' / '+factoryTotal+'</b></span><span>⚓ 造船所 <b>'+assigned.dockyard+' / '+dockyardTotal+'</b></span></div></section>';
     if(convoyShortage)html+='<p class="convoy-warning" role="alert">⚠ 輸送船不足: 必要 '+Math.max(5,Math.floor(Number(s.strategy.convoyDemand)||0))+' / 保有 '+Math.floor(Number(s.convoys)||0)+'。輸入と補給に支障があり、安定度が低下します。</p>';
-    html+='<div class="production-table">';
-    Object.entries(ProductionManager.CATALOG).forEach(([type,d])=>{
-      const line=s.strategy.production.find(l=>l.type===type),n=line?.factories||0,rate=d.rate*n*(1+(law.factoryOutput||0));
-      html+='<div class="production-row"><b>'+d.name+(type==='battleship'&&ProductionManager.treatyLimited()?'（条約制限）':'')+'</b><span>在庫 '+Math.floor(stock[type]||0)+'</span><label>'+ (d.pool==='dockyard'?'造船所':'軍需工場')+' <input type="number" min="0" max="'+ProductionManager.capacity(d.pool)+'" value="'+n+'" onchange="ProductionManager.allocate(\''+type+'\',this.value)"></label><span>'+rate.toFixed(2)+'/日・'+(rate*7).toFixed(2)+'/週</span><small>週の消費: '+Object.entries(d.resources).map(([k,v])=>(ResourceManager.TRADE_RESOURCES.find(r=>r.id===k)?.name||k)+' '+(v*n).toFixed(1)).join(' / ')+(line?.shortage?.length?' — 資源不足で停止':'')+'</small></div>';
-    });el.innerHTML=html+'</div>';
+    const resources=['steel','rubber','oil','tungsten','chromium','aluminum'];
+    html+='<div class="production-resources"><h4>資源状況</h4><div class="production-resource-grid">'+(resources.length?resources.map(id=>{
+      const amount=dailyResources[id]||0,inventory=Math.max(0,Number(s.resources[id])||0);
+      const percent=amount>0?Math.min(100,inventory/(amount*30)*100):100;
+      const [name,icon]=resourceNames[id]||[id,'◆'];
+      return '<div class="production-resource '+(inventory<amount?'is-short':'')+'" title="'+name+'：在庫 '+inventory.toFixed(1)+' / 日 '+amount.toFixed(2)+' 消費"><span>'+icon+' '+name+'</span><b>'+inventory.toFixed(1)+'</b><div class="production-resource-meter"><i style="width:'+percent+'%"></i></div><small>必要 '+amount.toFixed(2)+'/日</small></div>';
+    }).join(''):'<span class="production-empty">稼働中のラインはありません</span>')+'</div></div>';
+    const available=ProductionManager.availableItems();
+    html+='<div class="production-add"><label for="production-add-item">生産可能な装備</label><select id="production-add-item">'+
+      (available.length?available.map(([type,def])=>'<option value="'+GameTools.escape(type)+'">'+GameTools.escape(def.name)+' — '+ProductionManager.category(type)+'</option>').join(''):'<option value="">追加可能な研究済み装備はありません</option>')+
+      '</select>'+GameTools.button('＋ 生産ラインを追加',"ProductionManager.addLine(document.getElementById('production-add-item').value)",!available.length)+'</div>';
+    html+='<div class="production-lines">';
+    if(!production.length) html+='<p class="production-empty">生産ラインがありません。研究済み装備を選んで追加してください。</p>';
+    production.forEach(line=>{
+      const type=line.type,def=ProductionManager.CATALOG[type];if(!def)return;
+      const n=Math.max(0,Number(line.factories)||0),rate=def.rate*n*(1+(law.factoryOutput||0));
+      const total=ProductionManager.capacity(def.pool),poolName=def.pool==='dockyard'?'造船所':'軍需工場';
+      const cellCount=Math.min(n,24),grid=Array.from({length:cellCount},()=>'<i aria-hidden="true"></i>').join('');
+      const cost=Object.entries(def.resources).map(([id,value])=>{
+        const [name,icon]=resourceNames[id]||[id,'◆'];
+        return '<span class="'+((Number(s.resources[id])||0)<value*n/7?'is-short':'')+'" title="'+name+'">'+icon+' '+name+' '+(value*n/7).toFixed(2)+'/日</span>';
+      }).join('');
+      const resourceShortage=Object.entries(def.resources).some(([id,value])=>
+        (Number(s.resources[id])||0)+1e-9<value*n/7);
+      const isStopped=resourceShortage||(!n)|| (type==='battleship'&&ProductionManager.treatyLimited());
+      html+='<article class="production-card"><div class="production-item"><span class="production-icon">'+(ProductionManager.ICONS[type]||'⚙')+'</span><div><strong>'+GameTools.escape(def.name)+(type==='battleship'&&ProductionManager.treatyLimited()?'（条約制限）':'')+'</strong><small>'+ (def.pool==='dockyard'?'海軍装備':'陸軍・航空装備')+' · 在庫 '+Math.floor(stock[type]||0)+'</small></div></div>'+
+        '<div class="production-output"><b class="'+(isStopped?'is-short':'')+'">'+rate.toFixed(2)+'/日</b><small>'+ProductionManager.category(type)+' · '+ (rate*7).toFixed(2)+'/週 · '+Math.floor(line.produced||0)+' 生産済</small><div class="production-progress"><i style="width:'+Math.min(100,(Number(line.progress)||0)*10)+'%"></i></div></div>'+
+        '<div class="production-allocation"><div class="production-allocation-label"><span>'+poolName+' <b>'+n+' / '+total+'</b></span><span class="factory-grid">'+grid+(n>24?'<em>+'+(n-24)+'</em>':'')+'</span></div><div class="production-adjust">'+
+        GameTools.button('−10',"ProductionManager.adjustFactories('"+GameTools.escape(type)+"',-10)",n===0)+
+        GameTools.button('−5',"ProductionManager.adjustFactories('"+GameTools.escape(type)+"',-5)",n===0)+
+        GameTools.button('−',"ProductionManager.adjustFactories('"+GameTools.escape(type)+"',-1)",n===0)+
+        '<output>'+n+'</output>'+
+        GameTools.button('+',"ProductionManager.adjustFactories('"+GameTools.escape(type)+"',1)",n>=total)+
+        GameTools.button('+5',"ProductionManager.adjustFactories('"+GameTools.escape(type)+"',5)",n>=total)+
+        GameTools.button('+10',"ProductionManager.adjustFactories('"+GameTools.escape(type)+"',10)",n>=total)+'</div></div>'+
+        '<div class="production-costs">'+cost+(resourceShortage?'<strong role="status">資源不足で停止</strong>':'')+'</div>'+
+        GameTools.button('🗑 削除',"ProductionManager.removeLine('"+GameTools.escape(type)+"')")+'</article>';
+    });
+    html+='</div><p class="production-footnote">輸送船は造船所のみで生産します。工場割当ては同じ工場プール内で共有され、資源不足のラインは停止します。</p>';
+    el.innerHTML=html;
   }
 }
 class TradeManager {

@@ -2965,6 +2965,10 @@ class MapRenderer {
     }
     const owner = MapRenderer.ownerOf(pid);
     const player = CoreEngine.gameState.country;
+    if (ArmyRoster.moveTool) {
+      if (ArmyRoster.moveTo(pid)) MapRenderer.selectProvince(pid);
+      return;
+    }
     if (ArmyRoster.frontTool) { ArmyRoster.placeFront(pid); return; }
     if (ArmyRoster.airdropTool) { ArmyRoster.airdrop(pid); return; }
     MapRenderer.selectProvince(pid);
@@ -3231,6 +3235,7 @@ class BattlePlanManager {
 
   static setForce(f) {
     BattlePlanManager.activeForce = f;
+    if (f !== 'army') ArmyRoster.moveTool = false;
     if (f === 'army' && !BattlePlanManager.selectedArmyId) BattlePlanManager.selectedArmyId = (BattlePlanManager.armies[0] || {}).id || null;
     if (f !== 'army') {
       const units = f === 'navy' ? BattlePlanManager.navy : BattlePlanManager.air;
@@ -3964,6 +3969,14 @@ class BattlePlanManager {
       marker.maxOrg += Number(division.maxOrg) || 0;
       marker.selected ||= army.id === BattlePlanManager.selectedArmyId;
     }));
+    (CoreEngine.gameState.strategy?.reserves||[]).forEach(division=>{
+      const pid=division.pid||MapRenderer.provinceAt(division.x,division.y);
+      if(!pid)return;
+      const center=MapRenderer.provCentroid.get(Number(pid))||[division.x||0,division.y||0];
+      if(!markers.has(pid))markers.set(pid,{pid:Number(pid),x:center[0],y:center[1],count:0,org:0,maxOrg:0,selected:false});
+      const marker=markers.get(pid);
+      marker.count++;marker.org+=Number(division.org)||0;marker.maxOrg+=Number(division.maxOrg)||0;
+    });
     return [...markers.values()];
   }
 
@@ -4076,6 +4089,12 @@ class BattlePlanManager {
         if (!provinces.has(pid)) provinces.set(pid, []);
         provinces.get(pid).push({ division, group });
       }));
+      (CoreEngine.gameState.strategy?.reserves||[]).forEach(division=>{
+        const pid=division.pid||MapRenderer.provinceAt(division.x,division.y);
+        if(!pid)return;
+        if(!provinces.has(pid))provinces.set(pid,[]);
+        provinces.get(pid).push({division,group:{id:-1}});
+      });
       provinces.forEach((units, pid) => {
         const center = MapRenderer.provCentroid.get(Number(pid));
         if (!center) return;
@@ -4314,12 +4333,15 @@ class ConstructionManager {
           const maxL = ConstructionManager.maxLevel(b);
           const isCoastal = st.isCoastal === true || (st.provinces || []).some(pid => !!MapRenderer.provinces?.p?.[pid]?.[4]);
           const coastalBlocked = b.id === 'dockyard' && !isCoastal;
+          const reactorBlocked = b.id === 'nuclear_reactor' && !window.StrategySystems?.canBuildNuclearReactor?.();
+          const blockedTitle = reactorBlocked ? '原子力実験施設で「原子炉研究」を完了してください。' : '造船所は沿岸州にのみ建設できます。';
           html += '<div class="con-building-row">' +
             '<span class="cb-name">' + b.icon + ' ' + b.name + '</span>' +
             '<span class="cb-level">Lv.' + level + '/' + maxL + '</span>' +
             '<button class="con-build-btn" onclick="ConstructionManager.enqueue(\'' + b.id + '\')" ' +
-            (level >= maxL || coastalBlocked ? 'disabled title="造船所は沿岸州にのみ建設できます。"' : '') + '>建設 (' + b.cost + '日)</button></div>';
+            (level >= maxL || coastalBlocked || reactorBlocked ? 'disabled title="' + blockedTitle + '"' : '') + '>建設 (' + b.cost + '日)</button></div>';
           if (coastalBlocked) html += '<div class="rule-note">造船所は沿岸州にのみ建設できます。</div>';
+          if (reactorBlocked) html += '<div class="rule-note">原子力実験施設を建設し、「原子炉研究」計画を完了すると建設できます。</div>';
         });
       }
       html += '</div>';
@@ -4361,6 +4383,11 @@ class ConstructionManager {
     if (st.owner !== s.country) { GameUI.notify('自国の州のみ建設可能です。', 'alert'); return; }
     const b = ConstructionManager.BUILDINGS.find(x => x.id === buildingId);
     if (!b) return;
+    if (buildingId === 'nuclear_reactor' && !window.StrategySystems?.canBuildNuclearReactor?.()) {
+      GameUI.notify('原子力実験施設で「原子炉研究」を完了してから建設してください。', 'alert');
+      ConstructionManager.render();
+      return;
+    }
     if (b.id === 'dockyard' && !(st.isCoastal === true || (st.provinces || []).some(pid => !!MapRenderer.provinces?.p?.[pid]?.[4]))) {
       GameUI.notify('造船所は沿岸州にのみ建設できます。', 'alert');
       return;
@@ -4395,6 +4422,13 @@ class ConstructionManager {
     let changed = false;
     const q = ConstructionManager.queue[0];
     if (q) {
+      if (q.building === 'nuclear_reactor' && !window.StrategySystems?.canBuildNuclearReactor?.()) {
+        if (!q.researchGateNotified) {
+          GameUI.notify('原子炉の建設は「原子炉研究」が完了するまで保留されます。', 'alert');
+          q.researchGateNotified = true;
+        }
+        return;
+      }
       const stOwner = MapRenderer.states[q.stateId]?.owner;
       if (stOwner !== CoreEngine.gameState.country) return;
       const buildDef = ConstructionManager.BUILDINGS.find(b => b.id === q.building);
@@ -4996,11 +5030,20 @@ class DivisionDesigner {
       '<div class="division-stat-row"><span>機甲速度ボーナス</span><span>' + (CoreEngine.gameState.cardModifiers.armorSpeed > 0 ? '+' : '') + (CoreEngine.gameState.cardModifiers.armorSpeed * 100) + '%</span></div>' +
       '<div class="division-stat-row"><span>歩兵防御ボーナス</span><span>' + (CoreEngine.gameState.cardModifiers.infantryDefense > 0 ? '+' : '') + (CoreEngine.gameState.cardModifiers.infantryDefense * 100) + '%</span></div>' +
       '<div class="division-stat-row"><span>訓練期間</span><span style="color:var(--accent-blue);">' + ((typeof TrainingManager !== 'undefined' && TrainingManager.requirements()) ? TrainingManager.requirements().trainDays + '日 (約' + Math.round(TrainingManager.requirements().trainDays / 30) + 'ヶ月)' : '編成してください') + '</span></div>' +
-      '</div>' +
+      '</div>';
+    const trainingStates=TrainingManager.availableTrainingStates();
+    const capitalState=String(MapRenderer.stateOf(ArmyRoster.capitalProvince())||'');
+    if(!trainingStates.some(([id])=>id===TrainingManager.trainingStateId))
+      TrainingManager.trainingStateId=trainingStates.some(([id])=>id===capitalState)?capitalState:(trainingStates[0]?.[0]||'');
+    html +=
       '<div style="margin-top:10px;">' +
+      '<label style="font-size:12px;color:var(--text-secondary);margin-right:6px;">訓練地点:</label>' +
+      '<select id="recruit-training-state" onchange="TrainingManager.trainingStateId=this.value" style="background:var(--bg-panel);border:1px solid var(--border-mil);color:var(--text-primary);border-radius:4px;padding:4px 8px;font-size:12px;">' +
+      trainingStates.map(([id,state])=>'<option value="'+id+'"'+(id===TrainingManager.trainingStateId?' selected':'')+'>'+GameTools.escape(state.name||('州'+id))+'</option>').join('') +
+      '</select><br>' +
       '<label style="font-size:12px;color:var(--text-secondary);margin-right:6px;">配備先軍集団:</label>' +
       '<select id="recruit-target-army" style="background:var(--bg-panel);border:1px solid var(--border-mil);color:var(--text-primary);border-radius:4px;padding:4px 8px;font-size:12px;" onchange="TrainingManager.targetArmyId = this.value ? parseInt(this.value) : null">' +
-      '<option value="">自動配�� (最も師団の少ない軍集団)</option>' +
+      '<option value="">未所属師団として配備</option>' +
       (BattlePlanManager.armies || []).map(a => '<option value="' + a.id + '"' + (TrainingManager.targetArmyId === a.id ? ' selected' : '') + '>' + a.name + ' (師団' + a.divisions.length + ')</option>').join('') +
       '</select><br>' +
       '<button class="sp-btn" onclick="TrainingManager.recruit()">📝 この編成で徴兵 (兵員・兵器が揃い次第訓練開始)</button></div>' +
@@ -5945,6 +5988,7 @@ class ResearchManager {
     ResearchManager.renderSlots();
     ResearchManager.render();
     CoreEngine.registerTickCallback(() => ResearchManager.onTick());
+    ProductionManager.render();
   }
 
   static renderTabs() {

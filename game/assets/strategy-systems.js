@@ -4,10 +4,26 @@
 class StrategySystems {
   static installed = false;
   static SCIENTISTS = {
-    land: ['陸軍戦術家', '装甲技術者'],
-    naval: ['造船技師', '海軍戦術家'],
-    air: ['航空技術者', '飛行試験員'],
-    nuclear: ['原子核物理学者', '核化学者']
+    land: [
+      { name: 'フェルディナント・ポルシェ', expertise: '戦車設計', skill: 3 },
+      { name: 'ハインツ・グデーリアン', expertise: '機甲戦術', skill: 2 },
+      { name: '陸軍技術主任', expertise: '陸上兵器', skill: 1 }
+    ],
+    naval: [
+      { name: 'エーリヒ・レーダー', expertise: '艦隊運用', skill: 3 },
+      { name: '造船技師', expertise: '艦艇設計', skill: 2 },
+      { name: '海軍技術主任', expertise: '海軍兵器', skill: 1 }
+    ],
+    air: [
+      { name: '航空技術主任', expertise: '航空機設計', skill: 3 },
+      { name: '飛行試験主任', expertise: '飛行試験', skill: 2 },
+      { name: '航空研究員', expertise: '航空工学', skill: 1 }
+    ],
+    nuclear: [
+      { name: 'J・ロバート・オッペンハイマー', expertise: '原子核物理学', skill: 3 },
+      { name: 'エンリコ・フェルミ', expertise: '核物理学', skill: 2 },
+      { name: '原子力研究員', expertise: '核化学', skill: 1 }
+    ]
   };
   static FACILITIES = {
     land_experiment_facility: 'land',
@@ -19,7 +35,8 @@ class StrategySystems {
     { id: 'land_prototype', field: 'land', title: '次世代陸軍装備計画', cost: 20, technology: 'special_land_prototype' },
     { id: 'naval_prototype', field: 'naval', title: '先進艦艇試作計画', cost: 20, technology: 'special_naval_prototype' },
     { id: 'air_prototype', field: 'air', title: '高性能航空機計画', cost: 20, technology: 'special_air_prototype' },
-    { id: 'nuclear_program', field: 'nuclear', title: '原子力研究計画', cost: 40, technology: 'special_nuclear_program' }
+    { id: 'nuclear_reactor_research', field: 'nuclear', title: '原子炉研究', cost: 20, technology: 'special_nuclear_reactor' },
+    { id: 'nuclear_program', field: 'nuclear', title: '原子力研究計画', cost: 40, technology: 'special_nuclear_program', requires: 'nuclear_reactor_research' }
   ];
 
   static ensureState() {
@@ -92,6 +109,10 @@ class StrategySystems {
     StrategySystems.renderLabs();
   }
 
+  static canBuildNuclearReactor() {
+    return StrategySystems.ensureState().unlockedProjects.includes('nuclear_reactor_research');
+  }
+
   static ownedFacilities(field) {
     const lab = StrategySystems.ensureState();
     return Object.entries(lab.facilities).flatMap(([stateId, counts]) => {
@@ -119,11 +140,18 @@ class StrategySystems {
       return false;
     }
     CoreEngine.gameState.politicalPower -= cost;
-    const names = StrategySystems.SCIENTISTS[field];
-    const used = new Set(lab.scientists.map(person => person.name));
-    const name = names.find(candidate => !used.has(candidate)) || names[lab.scientists.length % names.length] + ' ' + (lab.scientists.length + 1);
-    lab.scientists.push({ id: 'scientist-' + Date.now() + '-' + lab.scientists.length, name, field, stateId: facility.stateId, facilityId: facility.id, days: 0 });
-    GameUI.notify(name + 'を' + facility.name + 'の施設に配属しました。', 'success');
+    const candidates = StrategySystems.SCIENTISTS[field];
+    const used = new Set(lab.scientists.filter(person => person.field === field).map(person => person.name));
+    const scientist = candidates.find(candidate => !used.has(candidate.name));
+    if (!scientist) {
+      GameUI.notify('この分野の科学者候補は全員雇用済みです。', 'alert');
+      return false;
+    }
+    lab.scientists.push({
+      id: 'scientist-' + Date.now() + '-' + lab.scientists.length,
+      ...scientist, field, stateId: facility.stateId, facilityId: facility.id, days: 0
+    });
+    GameUI.notify(scientist.name + '（' + scientist.expertise + '）を' + facility.name + 'に配属しました。', 'success');
     StrategySystems.renderLabs();
     return true;
   }
@@ -156,11 +184,16 @@ class StrategySystems {
       GameUI.notify('実験ポイントが不足しています。', 'alert');
       return false;
     }
+    if (project.requires && !lab.unlockedProjects.includes(project.requires)) {
+      GameUI.notify('先に必要な研究計画を完了してください。', 'alert');
+      return false;
+    }
     lab.points[project.field] -= project.cost;
     lab.unlockedProjects.push(projectId);
     ResearchManager.researchedTech.add(project.technology);
     GameUI.notify('特別研究計画を解除しました: ' + project.title, 'success');
     StrategySystems.renderLabs();
+    if (WindowManager.isOpen('construction')) ConstructionManager.render();
     return true;
   }
 
@@ -175,11 +208,14 @@ class StrategySystems {
     if (!elapsed) return;
     lab.lastTickDay = day;
     lab.scientists.forEach(person => {
+      const facility=StrategySystems.ownedFacilities(person.field).find(item=>item.id===person.facilityId);
+      if(!facility) return;
       person.days = Math.max(0, Number(person.days) || 0) + elapsed;
       while (person.days >= 60) {
         person.days -= 60;
-        lab.points[person.field] = (lab.points[person.field] || 0) + 10;
-        CoreEngine.log(person.name + 'の実験により' + person.field + '実験ポイント+10');
+        const points = Math.max(1, Math.floor(Number(person.skill) || 1)) * 10;
+        lab.points[person.field] = (lab.points[person.field] || 0) + points;
+        CoreEngine.log(person.name + 'の実験により' + person.field + '実験ポイント+' + points);
       }
     });
     if (WindowManager.isOpen('labs')) StrategySystems.renderLabs();
@@ -192,16 +228,25 @@ class StrategySystems {
     const lab = StrategySystems.ensureState();
     const labels = { land: '陸軍', naval: '海軍', air: '航空', nuclear: '原子力' };
     const fields = Object.keys(labels);
-    let html = '<section class="lab-summary"><h3>🧪 実験施設・科学者</h3><p>各専門施設に対応する科学者を配属すると、ゲーム内時間60日ごとに実験ポイントを10獲得します。</p>';
-    html += fields.map(field => '<div class="lab-points"><b>' + labels[field] + '実験ポイント</b><strong>' + Math.floor(lab.points[field] || 0) + '</strong><span>施設 ' + StrategySystems.ownedFacilities(field).length + ' / 科学者 ' + lab.scientists.filter(person => person.field === field).length + '</span>' + GameTools.button('専門科学者を雇用（政治力' + (field === 'nuclear' ? 100 : 60) + '）', "StrategySystems.hireScientist('" + field + "')", StrategySystems.ownedFacilities(field).length <= lab.scientists.filter(person => person.field === field).length) + '</div>').join('');
+    let html = '<section class="lab-summary"><h3>🧪 実験施設・科学者</h3><p>専門科学者を配属すると、60日ごとにスキルレベル×10の実験ポイントを獲得します。研究員の候補は各分野で異なります。</p>';
+    html += fields.map(field => {
+      const facilities=StrategySystems.ownedFacilities(field);
+      const scientists=lab.scientists.filter(person=>person.field===field);
+      const availableScientist=StrategySystems.SCIENTISTS[field].some(candidate=>!scientists.some(person=>person.name===candidate.name));
+      return '<div class="lab-points"><b>' + labels[field] + '実験ポイント</b><strong>' + Math.floor(lab.points[field] || 0) + '</strong><span>施設 ' + facilities.length + ' / 科学者 ' + scientists.length + ' · 次回 ' + scientists.reduce((sum,person)=>sum+Math.max(0,60-(Number(person.days)||0)),0) + '日以内</span>' + GameTools.button('専門科学者を雇用（政治力' + (field === 'nuclear' ? 100 : 60) + '）', "StrategySystems.hireScientist('" + field + "')", facilities.length <= scientists.length || !availableScientist) + '</div>';
+    }).join('');
     html += '</section><section class="lab-projects"><h3>📐 特別研究計画</h3>';
-    html += StrategySystems.PROJECTS.map(project => '<article class="lab-project"><b>' + project.title + '</b><span>必要 ' + project.cost + ' pt / ' + labels[project.field] + '</span>' + GameTools.button(lab.unlockedProjects.includes(project.id) ? '解除済み' : 'ポイントを消費して解除', "StrategySystems.unlockProject('" + project.id + "')", lab.unlockedProjects.includes(project.id) || (lab.points[project.field] || 0) < project.cost) + '</article>').join('');
+    html += StrategySystems.PROJECTS.map(project => {
+      const locked=project.requires&&!lab.unlockedProjects.includes(project.requires);
+      return '<article class="lab-project"><b>' + project.title + '</b><span>必要 ' + project.cost + ' pt / ' + labels[project.field] + (locked?' · 前提研究が必要':'') + '</span>' + GameTools.button(lab.unlockedProjects.includes(project.id) ? '解除済み' : 'ポイントを消費して解除', "StrategySystems.unlockProject('" + project.id + "')", lab.unlockedProjects.includes(project.id) || locked || (lab.points[project.field] || 0) < project.cost) + '</article>';
+    }).join('');
     html += '</section><section class="lab-scientists"><h3>所属科学者</h3>';
     html += lab.scientists.length ? lab.scientists.map(person => {
       const facilities = StrategySystems.ownedFacilities(person.field);
       const assignedFacility = facilities.find(item => item.id === person.facilityId) || facilities.find(item => item.stateId === String(person.stateId));
       const progress = Math.floor((Number(person.days) || 0) / 60 * 100);
-      return '<article class="lab-scientist"><b>' + person.name + ' · ' + labels[person.field] + '</b><span>次回獲得まで ' + Math.max(0, 60 - (Number(person.days) || 0)) + '日</span><progress max="100" value="' + progress + '"></progress><select aria-label="科学者の配属施設" onchange="StrategySystems.assignScientist(\'' + person.id + '\',this.value)">' + facilities.map(item => '<option value="' + item.id + '"' + (assignedFacility?.id === item.id ? ' selected' : '') + '>' + item.name + ' (' + (item.index + 1) + '号)</option>').join('') + '</select></article>';
+      const rate=Math.max(1,Math.floor(Number(person.skill)||1))*10;
+      return '<article class="lab-scientist"><b>' + person.name + ' · ' + labels[person.field] + ' · Lv.' + (person.skill||1) + ' · ' + person.expertise + '</b><span>次回獲得まで ' + Math.max(0, 60 - (Number(person.days) || 0)) + '日 / 次回 +' + rate + ' pt</span><progress max="100" value="' + progress + '"></progress><select aria-label="科学者の配属施設" onchange="StrategySystems.assignScientist(\'' + person.id + '\',this.value)">' + facilities.map(item => '<option value="' + item.id + '"' + (assignedFacility?.id === item.id ? ' selected' : '') + '>' + item.name + ' (' + (item.index + 1) + '号)</option>').join('') + '</select></article>';
     }).join('') : '<p>対応施設を建設し、専門科学者を雇用してください。</p>';
     el.innerHTML = html + '</section>';
   }

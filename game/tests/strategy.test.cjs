@@ -120,6 +120,33 @@ test('production slots are shared, consume weekly real resources and stop cleanl
   run('CoreEngine.gameState.resources.chromium=0');const stock=run('ProductionManager.account("GER").stock.tank');run('ProductionManager.tick()');assert.equal(run('ProductionManager.account("GER").stock.tank'),stock);
   assert.equal(run('ProductionManager.allocate("tank",NaN)'),false);
 });
+test('production panel adds only unlocked equipment and adjusts/removes factory-assigned lines',()=>{
+  const {run,node}=fixture();
+  assert.equal(run(`ProductionManager.isUnlocked('infantry_2')`),false);
+  run(`ResearchManager.researchedTech.add('improved_infantry_weapons')`);
+  assert.equal(run(`ProductionManager.isUnlocked('infantry_2')`),true);
+  assert.equal(run(`ProductionManager.addLine('infantry_2')`),true);
+  assert.equal(run(`ProductionManager.adjustFactories('infantry_2',5)`),true);
+  assert.equal(run(`CoreEngine.gameState.strategy.production[0].factories`),5);
+  run(`ProductionManager.render()`);
+  assert.match(node('production-content').innerHTML,/生産ラインを追加/);
+  assert.match(node('production-content').innerHTML,/軍需工場/);
+  assert.equal(run(`ProductionManager.removeLine('infantry_2')`),true);
+  assert.equal(run(`CoreEngine.gameState.strategy.production.length`),0);
+});
+test('new-game divisions start on the capital VP province for every playable country',()=>{
+  const {run}=fixture();
+  run(`globalThis.capitals={GER:'Brandenburg',SOV:'Moscow Area',JAP:'Japan',USA:'Maryland',ENG:'Greater London Area',FRA:'Ile de France',ITA:'Italy'};
+    for(const [country,name] of Object.entries(capitals)){
+      const pid=70+Object.keys(capitals).indexOf(country);
+      MapRenderer.provinces.p[pid]=[0,0,0,0,0,0];MapRenderer.provCentroid.set(pid,[pid,0]);
+      MapRenderer.provToState.set(pid,String(pid));MapRenderer.states={[pid]:{name,owner:country,provinces:[pid],vp:{[pid]:10}}};
+      CoreEngine.gameState.country=country;CoreEngine.gameState.divisions=2;
+      CoreEngine.gameState.strategy.reserves=[];BattlePlanManager.armies=[];ArmyRoster.initialize();
+      if(BattlePlanManager.armies[0].positionPid!==pid||CoreEngine.gameState.strategy.reserves.some(d=>d.pid!==pid))throw new Error(country+' capital placement failed');
+    }`);
+  assert.equal(run(`CoreEngine.gameState.strategy.reserves.every(d=>d.pid===76)`),true);
+});
 test('convoys are integer inventory produced only by dockyards and shortage is reported',()=>{
   const {run}=fixture();
   run('ProductionManager.account("GER").stock.convoys=18.9;ProductionManager.ensure()');
@@ -141,6 +168,17 @@ test('army routes require war or explicit military access for every foreign prov
   assert.equal(run('OffensivePlanner.path(1,5).length'),5);
   run('CoreEngine.gameState.militaryAccess.DEN=false;');
   assert.equal(run('OffensivePlanner.path(1,5).length'),0);
+});
+test('strategic move command follows owned land provinces and halts at the selected destination',()=>{
+  const {run}=fixture();
+  run(`MapRenderer.states['2'].owner='GER';MapRenderer.states['3'].owner='GER';
+    BattlePlanManager.armies[0].positionPid=1;BattlePlanManager.armies[0].base=[10,0]`);
+  assert.equal(run(`ArmyRoster.moveTo(6)`),true);
+  assert.equal(run(`BattlePlanManager.armies[0].executing`),true);
+  run(`for(let i=0;i<5;i++)OffensivePlanner.tickArmy(BattlePlanManager.armies[0])`);
+  assert.equal(run(`BattlePlanManager.armies[0].positionPid`),6);
+  assert.equal(run(`BattlePlanManager.armies[0].executing`),false);
+  assert.equal(run(`BattlePlanManager.armies[0].status`),'目標到達・駐留');
 });
 test('construction is coastal-gated for dockyards and processes only the queue head',()=>{
   const {run}=fixture();
@@ -187,12 +225,36 @@ test('facility experts generate points every sixty game days and projects consum
     StrategySystems.facilityCompleted('land_experiment_facility','1');
     CoreEngine.gameState.politicalPower=300;StrategySystems.hireScientist('land');
     CoreEngine.gameState.labState.lastTickDay=GameTools.day();
-    CoreEngine.gameState.date.setDate(CoreEngine.gameState.date.getDate()+60);
+    CoreEngine.gameState.date.setDate(CoreEngine.gameState.date.getDate()+30);
     StrategySystems.tick()`);
-  assert.equal(run('CoreEngine.gameState.labState.points.land'),10);
+  assert.equal(run('CoreEngine.gameState.labState.points.land'),0);
+  run(`CoreEngine.gameState.date.setDate(CoreEngine.gameState.date.getDate()+30);StrategySystems.tick()`);
+  assert.equal(run('CoreEngine.gameState.labState.points.land'),30);
   run(`CoreEngine.gameState.labState.points.land=20;StrategySystems.unlockProject('land_prototype')`);
   assert.equal(run('CoreEngine.gameState.labState.points.land'),0);
   assert.equal(run(`CoreEngine.gameState.labState.unlockedProjects.includes('land_prototype')`),true);
+});
+test('nuclear reactors remain locked until the nuclear lab completes reactor research',()=>{
+  const {run}=fixture();
+  run(`ConstructionManager.selectedStateId='1';
+    CoreEngine.gameState.politicalPower=500;
+    MapRenderer.states['1'].b.nuclear_experiment_facility=1;
+    StrategySystems.facilityCompleted('nuclear_experiment_facility','1')`);
+  assert.equal(run(`StrategySystems.canBuildNuclearReactor()`),false);
+  run(`ConstructionManager.enqueue('nuclear_reactor')`);
+  assert.equal(run(`ConstructionManager.queue.length`),0);
+  run(`ConstructionManager.render()`);
+  assert.match(run(`document.getElementById('construction-content').innerHTML`),/原子力実験施設で「原子炉研究」を完了/);
+  run(`StrategySystems.hireScientist('nuclear');
+    CoreEngine.gameState.labState.lastTickDay=GameTools.day();
+    CoreEngine.gameState.date.setDate(CoreEngine.gameState.date.getDate()+30);StrategySystems.tick()`);
+  assert.equal(run(`CoreEngine.gameState.labState.points.nuclear`),0);
+  run(`CoreEngine.gameState.date.setDate(CoreEngine.gameState.date.getDate()+30);StrategySystems.tick()`);
+  assert.equal(run(`CoreEngine.gameState.labState.points.nuclear`),30);
+  run(`StrategySystems.unlockProject('nuclear_reactor_research')`);
+  assert.equal(run(`StrategySystems.canBuildNuclearReactor()`),true);
+  run(`ConstructionManager.enqueue('nuclear_reactor')`);
+  assert.equal(run(`ConstructionManager.queue[0].building`),'nuclear_reactor');
 });
 test('strategy feature initialization wires every named game-state surface and equipment shortage lowers strength',()=>{
   const {run}=fixture();
@@ -260,6 +322,19 @@ test('intelligence requires preparation, network and a successful dial/typewrite
 test('five special divisions includes reserves and training reservations',()=>{
   const {run}=fixture();run('BattlePlanManager.armies=[];CoreEngine.gameState.strategy.reserves=[];DivisionDesigner.grid[0][0]=DivisionDesigner.availableBattalions.find(b=>b.id==="ranger")');
   run('for(let i=0;i<6;i++)TrainingManager.recruit()');assert.equal(run('TrainingManager.queue.length'),5);assert.equal(run('ArmyRoster.specialCount()'),5);
+});
+test('trained reserve divisions deploy at the selected owned training province',()=>{
+  const {run}=fixture();
+  run(`MapRenderer.states['1'].vp={2:5};MapRenderer.provCentroid.set(2,[20,0]);
+    DivisionDesigner.grid=Array.from({length:5},()=>Array(5).fill(null));
+    DivisionDesigner.grid[0][0]={id:'infantry'};
+    TrainingManager.trainingStateId='1';TrainingManager.targetArmyId=null;
+    CoreEngine.gameState.manpower=50000;TrainingManager.recruit();
+    TrainingManager.queue[0].phase='training';TrainingManager.queue[0].progress=59;
+    TrainingManager.queue[0].trainDays=60;`);
+  run(`TrainingManager.onTick()`);
+  assert.equal(run(`CoreEngine.gameState.strategy.reserves.at(-1).pid`),2);
+  assert.equal(run(`CoreEngine.gameState.strategy.reserves.at(-1).x`),20);
 });
 test('save/load restores occupied provinces, armies, production, market escrow and preparation',()=>{
   const {run}=fixture();run('OffensivePlanner.capture(3,"GER");ProductionManager.allocate("tank",2);MarketManager.process("list",{type:"infantry",quantity:100},"GER");IntelOperations.target("POL").network=55;CoreEngine.gameState.speed=3;CoreEngine.gameState.paused=false;globalThis.saved=JSON.parse(JSON.stringify(SaveLoadManager.collect()))');
