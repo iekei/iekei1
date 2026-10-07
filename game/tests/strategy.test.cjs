@@ -7,11 +7,11 @@ const path=require('node:path');
 const root=path.resolve(__dirname,'..');
 function fixture() {
   const nodes=new Map(),storage=new Map();
-  const node=id=>{if(!nodes.has(id))nodes.set(id,{innerHTML:'',textContent:'',value:'',style:{},dataset:{},classList:{add(){},remove(){},toggle(){},contains(){return true;}},appendChild(){},replaceChildren(){},addEventListener(){},setAttribute(){},querySelectorAll(){return[];},querySelector(sel){return node(id+sel);}});return nodes.get(id);};
+  const node=id=>{if(!nodes.has(id))nodes.set(id,{innerHTML:'',textContent:'',value:'',style:{},dataset:{},children:[],clientWidth:800,clientHeight:600,scrollLeft:0,scrollTop:0,classList:{add(){},remove(){},toggle(){},contains(){return true;}},appendChild(child){this.children.push(child);},replaceChildren(){this.children=[];},addEventListener(){},setAttribute(){},querySelectorAll(){return[];},querySelector(sel){return node(id+sel);}});return nodes.get(id);};
   const sandbox={TopbarUI:{render(){}},console,Date,Math,crypto:require('node:crypto').webcrypto,setInterval(){return 1;},clearInterval(){},setTimeout(){},requestAnimationFrame(){},
-    document:{createTextNode:text=>({textContent:text}),getElementById:node,querySelectorAll(){return[];},querySelector(){return null;},createElement(){return node(Math.random());},addEventListener(){},head:{appendChild(){}},body:{appendChild(){}}},
+    document:{createTextNode:text=>({textContent:text}),getElementById:node,querySelectorAll(selector){return selector==='input[name="move-division"]'?sandbox.selectionInputs:[];},querySelector(){return null;},createElement(){return node(Math.random());},addEventListener(){},head:{appendChild(){}},body:{appendChild(){}}},
     localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v),removeItem:k=>storage.delete(k)}};
-  sandbox.structuredClone=structuredClone;sandbox.window=sandbox;sandbox.addEventListener=()=>{};
+  sandbox.structuredClone=structuredClone;sandbox.selectionInputs=[];sandbox.window=sandbox;sandbox.addEventListener=()=>{};
   const ctx=vm.createContext(sandbox);
   const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
   const inline=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(m=>m[1]).filter(s=>s.trim()).join('\n');
@@ -33,9 +33,9 @@ function fixture() {
     MapRenderer.provinceAt=(x,y)=>{
       const mapW=MapRenderer.mapW||1, mapH=MapRenderer.mapH||1;
       const rawX=Math.floor(x), rawY=Math.floor(y);
+      if(rawY<0||rawY>=mapH)return null;
       const wx=((rawX % mapW)+mapW)%mapW;
-      const wy=((rawY % mapH)+mapH)%mapH;
-      return MapRenderer.idMap ? MapRenderer.idMap[wy * mapW + wx] ?? null : Math.round(x/10);
+      return MapRenderer.idMap ? MapRenderer.idMap[rawY * mapW + wx] ?? null : Math.round(x/10);
     };
     const army={id:1,name:'Test Army',base:[10,0],positionPid:1,divisions:Array.from({length:8},(_,i)=>({id:i+1,org:60,maxOrg:60,x:10,y:0,comp:{infantry:6}})),frontline:[[20,0]],arrow:{from:[20,0],to:[60,0]},executing:false};
     BattlePlanManager.armies=[army];BattlePlanManager.selectedArmyId=1;
@@ -56,11 +56,20 @@ test('offensive occupies adjacent provinces one by one, holds gains and continue
   run('for(let i=0;i<100;i++)OffensivePlanner.tickArmy(BattlePlanManager.armies[0])');assert.equal(run('BattlePlanManager.armies[0].base[0]'),60);
 });
 
-test('map wrapping handles offscreen coordinates and convoy losses scale with naval pressure',()=>{
+test('map wraps horizontally only and convoy losses scale with naval pressure',()=>{
   const {run}=fixture();
   run(`MapRenderer.mapW=3;MapRenderer.mapH=2;MapRenderer.idMap = new Uint16Array([10,11,12,20,21,22]);`);
   assert.equal(run('MapRenderer.provinceAt(4, 1)'), 21);
-  assert.equal(run('MapRenderer.provinceAt(3, 2)'), 10);
+  assert.equal(run('MapRenderer.provinceAt(3, 2)'), null);
+  assert.equal(run('MapRenderer.provinceAt(0, -1)'), null);
+  run('MapRenderer.cam={x:0,y:10,scale:2};');
+  assert.equal(run('MapRenderer.worldToScreen(0,10)[1]'),30);
+  run('MapRenderer.canvas={width:1440,height:1000};MapRenderer.mapH=2;MapRenderer.cam={x:0,y:900,scale:2};MapRenderer.clampCameraY()');
+  assert.equal(run('MapRenderer.cam.y'),498);
+  run('MapRenderer.cam.scale=600;MapRenderer.cam.y=900;MapRenderer.clampCameraY()');
+  assert.equal(run('MapRenderer.cam.y'),0);
+  run('MapRenderer.cam.y=-900;MapRenderer.clampCameraY()');
+  assert.equal(run('MapRenderer.cam.y'),-200);
   run('CoreEngine.gameState.convoys = 100; CoreEngine.gameState.navalSupremacy = 60;');
   assert.equal(run('typeof BattlePlanManager.applyConvoyDamage'), 'function');
   const before = run('CoreEngine.gameState.convoys');
@@ -79,6 +88,13 @@ test('division counters aggregate armies at province centers',()=>{
   assert.equal(markers.length,2);
   assert.deepEqual(markers[0],{pid:3,x:31,y:17,count:3,org:135,maxOrg:180,selected:true});
   assert.deepEqual(markers[1],{pid:4,x:43,y:19,count:1,org:50,maxOrg:60,selected:false});
+});
+test('division markers scale down when zoomed out and up when zoomed in within readable bounds',()=>{
+  const {run}=fixture();
+  const scales=JSON.parse(run(`JSON.stringify([1,2.5,5].map(scale=>{MapRenderer.cam.scale=scale;return BattlePlanManager.unitMarkerScale()}))`));
+  assert.ok(scales[0]<scales[1]);
+  assert.ok(scales[1]<scales[2]);
+  assert.ok(scales.every(scale=>scale>=0.7&&scale<=1.2));
 });
 test('map labels use localized state names for non-VP land and Japanese IDs for sea',()=>{
   const {run,node}=fixture();
@@ -191,6 +207,53 @@ test('construction is coastal-gated for dockyards and processes only the queue h
   assert.ok(run('ConstructionManager.queue[0].progress')>0);
   assert.equal(run('ConstructionManager.queue[1].progress'),0);
 });
+test('construction costs advance in game days rather than hourly ticks',()=>{
+  const {run}=fixture();
+  run(`ConstructionManager.selectedStateId='1';ConstructionManager.enqueue('arms_factory');
+    for(let i=0;i<24;i++)ConstructionManager.onTick()`);
+  assert.equal(run('ConstructionManager.queue[0].progress'),1);
+  run('for(let i=0;i<359*24;i++)ConstructionManager.onTick()');
+  assert.equal(run('CoreEngine.gameState.militaryFactories'),16);
+});
+test('focus tree uses card-edge orthogonal connections, expands to its data bounds and supports zoom without images',()=>{
+  const {run,node}=fixture();
+  run(`FocusTreeManager.focuses=[
+    {id:'root',title:'Root',x:100,y:100,prerequisites:[]},
+    {id:'child',title:'Child',x:300,y:250,prerequisites:['root']}
+  ];FocusTreeManager.focusMap=Object.fromEntries(FocusTreeManager.focuses.map(f=>[f.id,f]));
+    FocusTreeManager.countryStates.GER=FocusTreeManager.createCountryState();FocusTreeManager.render()`);
+  assert.equal(node('focus-nodes').children.length,2);
+  assert.ok(node('focus-svg-lines').innerHTML.includes('M120,128 L120,164 L320,164 L320,200'));
+  assert.ok(!node('focus-nodes').children.some(child=>/<img\\b/i.test(child.innerHTML)));
+  assert.equal(run('Number.parseInt(document.getElementById("focus-tree-viewport").style.height)'),328);
+  run('FocusTreeManager.setZoom(.8)');
+  assert.equal(run('FocusTreeManager.zoom'),.8);
+  assert.equal(run('Number.parseInt(document.getElementById("focus-tree-viewport").style.height)'),263);
+  assert.match(run('FocusTreeManager.render.toString()'),/focus-tree-content/);
+});
+test('political power earns one point per day by default, honors daily modifiers, and is capped',()=>{
+  const {run}=fixture();
+  assert.equal(run('CoreEngine.gameState.cardModifiers.politicalPowerGain'),0);
+  run('CoreEngine.gameState.politicalPower=0;for(let i=0;i<24;i++)CoreEngine.accruePoliticalPowerHour()');
+  assert.equal(run('CoreEngine.gameState.politicalPower'),1);
+  run('CoreEngine.gameState.cardModifiers.politicalPowerGain=.5;for(let i=0;i<24;i++)CoreEngine.accruePoliticalPowerHour()');
+  assert.equal(run('CoreEngine.gameState.politicalPower'),2.5);
+  run('CoreEngine.gameState.politicalPower=998.99;for(let i=0;i<24;i++)CoreEngine.accruePoliticalPowerHour()');
+  assert.equal(run('CoreEngine.gameState.politicalPower'),999);
+});
+test('division assignment modal can select all eligible divisions or a deterministic half',()=>{
+  const {run,node}=fixture();
+  run(`ArmyRoster.assignModal()`);
+  assert.match(node('generic-modal-body').innerHTML,/全選択/);
+  assert.match(node('generic-modal-body').innerHTML,/半数を選択/);
+  run(`selectionInputs=[
+    {disabled:false,checked:false},{disabled:false,checked:false},{disabled:true,checked:false},
+    {disabled:false,checked:false},{disabled:false,checked:false},{disabled:false,checked:false}
+  ];ArmyRoster.selectAvailable(true)`);
+  assert.deepEqual(JSON.parse(run('JSON.stringify(selectionInputs.map(input=>input.checked))')),[true,true,false,true,false,false]);
+  run('ArmyRoster.selectAvailable(false)');
+  assert.deepEqual(JSON.parse(run('JSON.stringify(selectionInputs.map(input=>input.checked))')),[true,true,false,true,true,true]);
+});
 test('all playable nations receive multiple exclusive branches and Japanese routes lock immediately',()=>{
   const {run}=fixture();
   run(`StrategySystems.patchFocusTree()`);
@@ -291,7 +354,7 @@ test('research replacement preserves allocated factories and production progress
 test('imports scale by ten and lease factories; new factories require completed construction',()=>{
   const {run}=fixture();const before=run('CoreEngine.gameState.resources.tungsten');assert.equal(run('TradeManager.import("tungsten","タングステン",2)'),true);assert.equal(run('CoreEngine.gameState.resources.tungsten'),before+20);
   const factories=run('CoreEngine.gameState.militaryFactories');run('ConstructionManager.selectedStateId="1";ConstructionManager.enqueue("arms_factory")');assert.equal(run('CoreEngine.gameState.militaryFactories'),factories);
-  run('for(let i=0;i<360;i++)ConstructionManager.onTick()');assert.equal(run('CoreEngine.gameState.militaryFactories'),factories+1);
+  run('for(let i=0;i<360*24;i++)ConstructionManager.onTick()');assert.equal(run('CoreEngine.gameState.militaryFactories'),factories+1);
 });
 test('market escrow conserves inventory and only a purchase creates a temporary factory payment',()=>{
   const {run}=fixture();const original=run('ProductionManager.account("GER").stock.infantry');
@@ -338,8 +401,9 @@ test('trained reserve divisions deploy at the selected owned training province',
 });
 test('save/load restores occupied provinces, armies, production, market escrow and preparation',()=>{
   const {run}=fixture();run('OffensivePlanner.capture(3,"GER");ProductionManager.allocate("tank",2);MarketManager.process("list",{type:"infantry",quantity:100},"GER");IntelOperations.target("POL").network=55;CoreEngine.gameState.speed=3;CoreEngine.gameState.paused=false;globalThis.saved=JSON.parse(JSON.stringify(SaveLoadManager.collect()))');
-  run('CoreEngine.gameState.strategy.provinceOwners={};BattlePlanManager.armies=[];CoreEngine.gameState.strategy.offers=[];CoreEngine.gameState.strategy.production=[];SaveLoadManager.apply(saved)');
+  run('saved.core.cardModifiers.politicalPowerGain=24;CoreEngine.gameState.strategy.provinceOwners={};BattlePlanManager.armies=[];CoreEngine.gameState.strategy.offers=[];CoreEngine.gameState.strategy.production=[];SaveLoadManager.apply(saved)');
   assert.equal(run('CoreEngine.gameState.speed'),0);assert.equal(run('CoreEngine.gameState.paused'),true);assert.equal(run('MapRenderer.ownerOf(3)'),'GER');assert.equal(run('BattlePlanManager.armies.length'),1);assert.equal(run('CoreEngine.gameState.strategy.offers[0].remaining'),100);assert.equal(run('CoreEngine.gameState.strategy.production[0].factories'),2);assert.equal(run('IntelOperations.target("POL").network'),55);
+  assert.equal(run('CoreEngine.gameState.cardModifiers.politicalPowerGain'),0);
 });
 test('stale multiplayer economy updates cannot restore escrow and clients cannot alter another country',()=>{
   const {run}=fixture();run(`MultiplayerManager.isHost=true;globalThis.packet={type:'strategy_public',country:'FRA',economy:structuredClone(ProductionManager.account('FRA')),divisions:[],navy:[]};packet.economy.stock.infantry=200;StrategyGame.onMessage(packet,'peer-fra')`);
@@ -369,7 +433,7 @@ test('AI fronts take a single adjacent province and cannot jump to unconnected t
 });
 test('multiplayer clients follow host ticks once and keep their own economy and focus',()=>{
   const {run}=fixture();run(`MultiplayerManager.connected=true;MultiplayerManager.isHost=false;MultiplayerManager.roomId='host';CoreEngine.gameState.speed=1;CoreEngine.gameState.paused=false;globalThis.startDate=CoreEngine.gameState.date.getTime();globalThis.nextDate=new Date(startDate+86400000).toISOString();globalThis.ppBefore=CoreEngine.gameState.politicalPower;MultiplayerManager.onData({type:'tick',date:nextDate,state:{country:'FRA',pp:0}},'host')`);
-  assert.equal(run('CoreEngine.gameState.date.getTime()'),run('startDate+86400000'));assert.equal(run('CoreEngine.gameState.politicalPower'),run('ppBefore+1'));
+  assert.equal(run('CoreEngine.gameState.date.getTime()'),run('startDate+86400000'));assert.equal(run('CoreEngine.gameState.politicalPower'),run('ppBefore+1/24'));
   run(`MultiplayerManager.onData({type:'tick',date:nextDate},'host');CoreEngine.tick()`);assert.equal(run('CoreEngine.gameState.date.getTime()'),run('startDate+86400000'));
 });
 test('paused asynchronous map startup populates target countries and country switches rebuild them',()=>{

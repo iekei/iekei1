@@ -492,7 +492,9 @@ class ArmyRoster {
   }
   static assignModal() {
     const target=BattlePlanManager.selectedArmy(); if (!target) return;
-    let html='<p>配属する師団を選択してください。作戦中の軍集団への移動はできません。</p><div class="division-picker">';
+    let html='<p>配属する師団を選択してください。作戦中の軍集団への移動はできません。</p>' +
+      '<div class="division-picker-tools">'+GameTools.button('全選択','ArmyRoster.selectAvailable(false)')+
+      GameTools.button('半数を選択','ArmyRoster.selectAvailable(true)')+'</div><div class="division-picker">';
     const reserves=CoreEngine.gameState.strategy.reserves;
     [{name:'未所属',divisions:reserves},...BattlePlanManager.armies].forEach(a=>{
       html+='<h4>'+a.name+' ('+a.divisions.length+')</h4>';
@@ -500,6 +502,11 @@ class ArmyRoster {
     });
     html+='</div>'+GameTools.button('選択した師団を '+target.name+' に配属','ArmyRoster.moveSelected('+target.id+')',target.executing);
     GameUI.openModal('師団の配属',html);
+  }
+  static selectAvailable(half=false) {
+    const inputs=[...document.querySelectorAll('input[name="move-division"]')].filter(input=>!input.disabled);
+    const limit=half?Math.ceil(inputs.length/2):inputs.length;
+    inputs.forEach((input,index)=>{input.checked=index<limit;});
   }
   static moveSelected(targetId) {
     const ids=[...document.querySelectorAll('input[name="move-division"]:checked')].map(e=>Number(e.value));

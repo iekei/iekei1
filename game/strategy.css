@@ -22,6 +22,7 @@
 .market-form { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .rule-note { color: var(--text-secondary); font-size: 11px; margin-top: 5px; }
 .division-picker { max-height: 380px; overflow: auto; padding: 10px; }
+.division-picker-tools { display: flex; gap: 6px; padding: 8px 10px 0; }
 .division-picker label { display: inline-flex; gap: 6px; width: 160px; padding: 6px; }
 .division-picker h4 { color: var(--text-gold); border-bottom: 1px solid var(--border-mil); padding: 8px; }
 .foreign-portrait { display: flex; align-items: center; gap: 18px; padding-bottom: 12px; }

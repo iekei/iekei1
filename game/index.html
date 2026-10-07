@@ -112,10 +112,13 @@
       width: 100%; height: 100%; overflow: auto; position: relative;
       background: radial-gradient(ellipse at center, #111820 0%, #0a0c0f 100%);
     }
-    #focus-tree-viewport { position: relative; min-width: 2400px; min-height: 1200px; }
-    #focus-svg-lines { position: absolute; top: 0; left: 0; width: auto; height: auto; overflow: visible; pointer-events: none; }
+    #focus-tree-zoom-controls { position: sticky; top: 8px; right: 10px; z-index: 20; display: flex; justify-content: flex-end; gap: 4px; height: 0; padding-right: 10px; }
+    #focus-tree-zoom-controls button { min-width: 32px; padding: 4px 8px; color: var(--text-gold); background: #172019; border: 1px solid var(--border-mil); cursor: pointer; }
+    #focus-tree-viewport { position: relative; }
+    #focus-tree-content { position: absolute; top: 0; left: 0; transform-origin: top left; }
+    #focus-svg-lines { position: absolute; top: 0; left: 0; overflow: visible; pointer-events: none; }
     .focus-node {
-      position: absolute; width: 120px; padding: 6px; border-radius: 6px;
+      position: absolute; box-sizing: border-box; width: 140px; height: 78px; padding: 6px; border-radius: 6px;
       background: var(--bg-panel-light); border: 2px solid var(--border-mil);
       cursor: pointer; transition: all 0.2s; text-align: center;
     }
@@ -124,9 +127,8 @@
     .focus-node.active { border-color: var(--text-gold); box-shadow: 0 0 12px rgba(212,168,67,0.5); }
     .focus-node.completed { background: #1a2a1a; border-color: var(--accent-green); opacity: 0.7; }
     .focus-node.locked { opacity: 0.4; cursor: not-allowed; }
-    .focus-node img { width: 48px; height: 48px; object-fit: contain; margin: 0 auto; display: block; }
-    .focus-node .fn-title { font-size: 10px; line-height: 1.2; margin-top: 4px; color: var(--text-primary); }
-    .focus-node .fn-cost { font-size: 9px; color: var(--text-gold); margin-top: 2px; }
+    .focus-node .fn-title { font-size: 10px; line-height: 1.2; margin-top: 5px; color: var(--text-primary); }
+    .focus-node .fn-cost { font-size: 9px; color: var(--text-gold); margin-top: 6px; }
     .focus-progress-bar {
       width: 100%; height: 3px; background: #333; border-radius: 2px; margin-top: 4px; overflow: hidden;
     }
@@ -817,9 +819,16 @@
   <div id="window-templates">
     <div class="window-template pane-fill" id="tpl-focus" data-title="🌲 国家方針" data-w="900" data-h="640">
       <div id="focus-tree-container">
+        <div id="focus-tree-zoom-controls" aria-label="国家方針ツリーの拡大縮小">
+          <button type="button" onclick="FocusTreeManager.setZoom(FocusTreeManager.zoom - 0.1)" aria-label="縮小">−</button>
+          <button type="button" onclick="FocusTreeManager.setZoom(1)" aria-label="標準倍率">100%</button>
+          <button type="button" onclick="FocusTreeManager.setZoom(FocusTreeManager.zoom + 0.1)" aria-label="拡大">＋</button>
+        </div>
         <div id="focus-tree-viewport">
-          <svg id="focus-svg-lines"></svg>
-          <div id="focus-nodes"></div>
+          <div id="focus-tree-content">
+            <svg id="focus-svg-lines"></svg>
+            <div id="focus-nodes"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -1190,7 +1199,7 @@ class CoreEngine {
     convoys: 100,
     researchSlots: 3,
     cardModifiers: {
-      politicalPowerGain: 24,
+      politicalPowerGain: 0,
       stabilityBonus: 0,
       specialProjectSpeed: 0,
       facilityCostReduction: 0,
@@ -1398,10 +1407,8 @@ class CoreEngine {
   static tick(remote=false) {
     if ((!remote&&CoreEngine.gameState.paused) || (MultiplayerManager.connected&&!MultiplayerManager.isHost&&!remote)) return;
     const d = CoreEngine.gameState.date;
-  d.setHours(d.getHours() + 1);
-  
-  const hourly = CoreEngine.gameState.cardModifiers.politicalPowerGain / 24;
-  CoreEngine.gameState.politicalPower = CoreEngine.gameState.politicalPower + hourly;
+    d.setHours(d.getHours() + 1);
+    CoreEngine.accruePoliticalPowerHour();
     CoreEngine.gameState.fuel = Math.min(CoreEngine.gameState.maxFuel,
       CoreEngine.gameState.fuel + CoreEngine.gameState.resources.oil * 0.1 / 24);
     // 徴兵法律に応じた人的資源の蓄積
@@ -1429,6 +1436,16 @@ class CoreEngine {
       date: CoreEngine.gameState.date.toISOString(),
       state: CoreEngine.getSyncState()
     });
+  }
+
+  static addPoliticalPower(amount) {
+    const s = CoreEngine.gameState;
+    s.politicalPower = Math.round(Math.max(0, Math.min(999, (Number(s.politicalPower) || 0) + (Number(amount) || 0))) * 1e6) / 1e6;
+  }
+
+  static accruePoliticalPowerHour() {
+    const bonus = Number(CoreEngine.gameState.cardModifiers?.politicalPowerGain) || 0;
+    CoreEngine.addPoliticalPower(Math.max(0, 1 + bonus) / 24);
   }
 
   static registerTickCallback(cb) { CoreEngine.tickCallbacks.push(cb); }
@@ -1493,6 +1510,7 @@ class FocusTreeManager {
   static tickRegistered = false;
   static autocomplete = false;
   static noChecks = false;
+  static zoom = 1;
 
   static createCountryState() {
     return {
@@ -1676,9 +1694,29 @@ class FocusTreeManager {
     return window.l10n ? window.l10n.resolve(fallback, country) : fallback;
   }
 
+  static setZoom(value) {
+    const next = Math.max(0.4, Math.min(1.5, Number(value) || 1));
+    if (next === FocusTreeManager.zoom) return;
+    const container = document.getElementById('focus-tree-container');
+    const viewport = document.getElementById('focus-tree-viewport');
+    const oldZoom = FocusTreeManager.zoom;
+    const centerX = container && viewport ? (container.scrollLeft + container.clientWidth / 2) / oldZoom : 0;
+    const centerY = container && viewport ? (container.scrollTop + container.clientHeight / 2) / oldZoom : 0;
+    FocusTreeManager.zoom = next;
+    FocusTreeManager.render();
+    if (container && viewport) {
+      container.scrollLeft = Math.max(0, centerX * next - container.clientWidth / 2);
+      container.scrollTop = Math.max(0, centerY * next - container.clientHeight / 2);
+    }
+    const reset = document.querySelector('#focus-tree-zoom-controls button:nth-child(2)');
+    if (reset) reset.textContent = Math.round(next * 100) + '%';
+  }
+
   static render() {
     const container = document.getElementById('focus-nodes');
     const svg = document.getElementById('focus-svg-lines');
+    const content = document.getElementById('focus-tree-content');
+    const viewport = document.getElementById('focus-tree-viewport');
     container.innerHTML = '';
     svg.innerHTML = '';
 
@@ -1687,33 +1725,62 @@ class FocusTreeManager {
       return;
     }
 
-    // Draw connection lines
+    const nodeWidth = 140, nodeHeight = 78, margin = 50;
+    const minX = Math.min(...FocusTreeManager.focuses.map(f => Number(f.x) || 0));
+    const minY = Math.min(...FocusTreeManager.focuses.map(f => Number(f.y) || 0));
+    const maxX = Math.max(...FocusTreeManager.focuses.map(f => Number(f.x) || 0));
+    const maxY = Math.max(...FocusTreeManager.focuses.map(f => Number(f.y) || 0));
+    const position = f => ({
+      x: (Number(f.x) || 0) - minX + margin,
+      y: (Number(f.y) || 0) - minY + margin
+    });
+    const focusBounds = {
+      width: Math.max(1, maxX - minX + nodeWidth + margin * 2),
+      height: Math.max(1, maxY - minY + nodeHeight + margin * 2)
+    };
+
+    // ノードの実寸に合わせ、前提方針のカード端同士を直角線で接続する。
     let svgContent = '';
     FocusTreeManager.focuses.forEach(f => {
       if (f.prerequisites) {
         f.prerequisites.forEach(prereqId => {
           const pre = FocusTreeManager.focusMap[prereqId];
           if (pre) {
-            const x1 = pre.x + 60, y1 = pre.y + 35;
-            const x2 = f.x + 60, y2 = f.y + 35;
+            const from = position(pre), to = position(f);
             const isDone = FocusTreeManager.completedFocuses.has(prereqId);
             const color = isDone ? '#4ac46a' : '#3a4a5a';
-            // 直角接続線 (曲線禁止): 垂直→水平→垂直 のみで結ぶ
-            const midY = (y1 + y2) / 2;
-            svgContent += '<path d="M' + x1 + ',' + y1 + ' L' + x1 + ',' + midY + ' L' + x2 + ',' + midY + ' L' + x2 + ',' + y2 + '" stroke="' + color + '" stroke-width="2" fill="none" opacity="0.5"/>';
+            let path;
+            if (to.y >= from.y + nodeHeight) {
+              const midY = (from.y + nodeHeight + to.y) / 2;
+              path = 'M' + (from.x + nodeWidth / 2) + ',' + (from.y + nodeHeight) +
+                ' L' + (from.x + nodeWidth / 2) + ',' + midY + ' L' + (to.x + nodeWidth / 2) + ',' + midY +
+                ' L' + (to.x + nodeWidth / 2) + ',' + to.y;
+            } else if (to.x >= from.x + nodeWidth) {
+              const midX = (from.x + nodeWidth + to.x) / 2;
+              path = 'M' + (from.x + nodeWidth) + ',' + (from.y + nodeHeight / 2) +
+                ' L' + midX + ',' + (from.y + nodeHeight / 2) + ' L' + midX + ',' + (to.y + nodeHeight / 2) +
+                ' L' + to.x + ',' + (to.y + nodeHeight / 2);
+            } else {
+              const midX = (from.x + to.x + nodeWidth) / 2;
+              path = 'M' + from.x + ',' + (from.y + nodeHeight / 2) +
+                ' L' + midX + ',' + (from.y + nodeHeight / 2) + ' L' + midX + ',' + (to.y + nodeHeight / 2) +
+                ' L' + (to.x + nodeWidth) + ',' + (to.y + nodeHeight / 2);
+            }
+            svgContent += '<path d="' + path + '" stroke="' + color + '" stroke-width="2" fill="none" opacity="0.65"/>';
           }
         });
       }
     });
     svg.innerHTML = svgContent;
-    const focusBounds = FocusTreeManager.focuses.reduce((bounds, focus) => ({
-      width: Math.max(bounds.width, Number(focus.x || 0) + 190),
-      height: Math.max(bounds.height, Number(focus.y || 0) + 130)
-    }), { width: 2400, height: 1200 });
     svg.setAttribute('width', String(focusBounds.width));
     svg.setAttribute('height', String(focusBounds.height));
     svg.style.width = focusBounds.width + 'px';
     svg.style.height = focusBounds.height + 'px';
+    content.style.width = focusBounds.width + 'px';
+    content.style.height = focusBounds.height + 'px';
+    content.style.transform = 'scale(' + FocusTreeManager.zoom + ')';
+    viewport.style.width = Math.ceil(focusBounds.width * FocusTreeManager.zoom) + 'px';
+    viewport.style.height = Math.ceil(focusBounds.height * FocusTreeManager.zoom) + 'px';
 
     // Draw focus nodes
     FocusTreeManager.focuses.forEach(f => {
@@ -1731,17 +1798,16 @@ class FocusTreeManager {
         ? '<div class="focus-progress-bar"><div class="focus-progress-fill" style="width:' + (FocusTreeManager.focusProgress/FocusTreeManager.focusDaysTotal*100) + '%"></div></div>'
         : '';
 
-      const iconUrl = DataFetcher.getFocusIconUrl(f.id);
-      const iconHtml = '<img src="' + iconUrl + '" onerror="this.style.display=\'none\'" alt="">';
       const displayTitle = FocusTreeManager.localizedTitle(f);
       const titleShort = displayTitle.length > 12 ? displayTitle.substring(0, 11) + '…' : displayTitle;
 
       const node = document.createElement('div');
       node.className = cls;
       node.dataset.focusId = f.id;
-      node.style.left = f.x + 'px';
-      node.style.top = f.y + 'px';
-      node.innerHTML = iconHtml +
+      const nodePosition = position(f);
+      node.style.left = nodePosition.x + 'px';
+      node.style.top = nodePosition.y + 'px';
+      node.innerHTML =
         '<div class="fn-title">' + GameTools.escape(titleShort) + '</div>' +
         '<div class="fn-cost">📅' + (f.cost || 70) + '日</div>' +
         progressHtml;
@@ -1842,7 +1908,7 @@ class FocusTreeManager {
     if (!f.effect) return;
     const s = CoreEngine.gameState;
     const ppMatch = f.effect.match(/政治力[:：]\s*\+?(\d+)/);
-    if (ppMatch) s.politicalPower += parseInt(ppMatch[1]);
+    if (ppMatch) CoreEngine.addPoliticalPower(parseInt(ppMatch[1]));
     const stabMatch = f.effect.match(/安定度[:：]\s*\+?(\d+)/);
     if (stabMatch) s.stability = Math.min(100, s.stability + parseInt(stabMatch[1]));
     const wsMatch = f.effect.match(/戦争協力度[:：]\s*\+?(\d+)/);
@@ -2571,9 +2637,9 @@ class MapRenderer {
   static provinceAt(wx, wy) {
     if (!MapRenderer.idMap || !MapRenderer.mapW || !MapRenderer.mapH) return null;
     const rawX = Math.floor(wx), rawY = Math.floor(wy);
+    if (!Number.isFinite(rawY) || rawY < 0 || rawY >= MapRenderer.mapH) return null;
     const x = ((rawX % MapRenderer.mapW) + MapRenderer.mapW) % MapRenderer.mapW;
-    const y = ((rawY % MapRenderer.mapH) + MapRenderer.mapH) % MapRenderer.mapH;
-    return MapRenderer.idMap[y * MapRenderer.mapW + x] ?? null;
+    return MapRenderer.idMap[rawY * MapRenderer.mapW + x] ?? null;
   }
 
   static centerOn(tag) {
@@ -2594,6 +2660,7 @@ class MapRenderer {
     MapRenderer.cam.scale = scale;
     MapRenderer.cam.x = cw / 2 - cx * scale;
     MapRenderer.cam.y = ch / 2 - cy * scale;
+    MapRenderer.clampCameraY();
   }
 
   static setupModeToolbar() {
@@ -2829,6 +2896,17 @@ class MapRenderer {
     if (!MapRenderer.canvas) return;
     MapRenderer.canvas.width = MapRenderer.canvas.offsetWidth;
     MapRenderer.canvas.height = MapRenderer.canvas.offsetHeight;
+    MapRenderer.clampCameraY();
+  }
+
+  static clampCameraY() {
+    const cam = MapRenderer.cam;
+    if (!MapRenderer.canvas || !MapRenderer.mapH || !Number.isFinite(cam.scale) || cam.scale <= 0) return;
+    const mapHeight = MapRenderer.mapH * cam.scale;
+    const screenHeight = MapRenderer.canvas.height;
+    cam.y = mapHeight <= screenHeight
+      ? (screenHeight - mapHeight) / 2
+      : Math.max(screenHeight - mapHeight, Math.min(0, cam.y));
   }
 
   static setupInteraction() {
@@ -2857,6 +2935,7 @@ class MapRenderer {
         const dx = e.clientX - lx, dy = e.clientY - ly;
         moved += Math.abs(dx) + Math.abs(dy);
         MapRenderer.cam.x += dx; MapRenderer.cam.y += dy;
+        MapRenderer.clampCameraY();
         lx = e.clientX; ly = e.clientY;
       } else if ((rightDown || BattlePlanManager.dragMode === 'arrow') && BattlePlanManager.dragMode) {
         rightMoved += Math.abs(e.movementX || 0) + Math.abs(e.movementY || 0);
@@ -2898,6 +2977,7 @@ class MapRenderer {
       cam.scale = Math.max(MapRenderer.MIN_SCALE, Math.min(MapRenderer.MAX_SCALE, cam.scale * factor));
       cam.x = e.offsetX - wx * cam.scale;
       cam.y = e.offsetY - wy * cam.scale;
+      MapRenderer.clampCameraY();
     }, { passive: false });
 
     // ---- タッチパネル操作: 1本指ドラッグ=マップ移動 / 2本指=ピンチズーム&移動 / タップ=左クリック ----
@@ -2928,11 +3008,13 @@ class MapRenderer {
         cam.scale = Math.max(MapRenderer.MIN_SCALE, Math.min(MapRenderer.MAX_SCALE, pinchBaseScale * (d / pinchBaseDist)));
         cam.x = midX - pinchWorldPt[0] * cam.scale;
         cam.y = midY - pinchWorldPt[1] * cam.scale;
+        MapRenderer.clampCameraY();
       } else if (touchPan && e.touches.length === 1) {
         const t = e.touches[0];
         const dx = t.clientX - touchLastX, dy = t.clientY - touchLastY;
         touchMoved += Math.abs(dx) + Math.abs(dy);
         MapRenderer.cam.x += dx; MapRenderer.cam.y += dy;
+        MapRenderer.clampCameraY();
         touchLastX = t.clientX; touchLastY = t.clientY;
       }
     }, { passive: false });
@@ -2990,7 +3072,7 @@ class MapRenderer {
       return centered + Math.round((center - centered) / period) * period;
     };
     const sx = wrapAxis(wx, MapRenderer.mapW, MapRenderer.canvas ? MapRenderer.canvas.width : 0, cam.x);
-    const sy = wrapAxis(wy, MapRenderer.mapH, MapRenderer.canvas ? MapRenderer.canvas.height : 0, cam.y);
+    const sy = wy * cam.scale + cam.y;
     return [sx, sy];
   }
 
@@ -3980,9 +4062,14 @@ class BattlePlanManager {
     return [...markers.values()];
   }
 
+  static unitMarkerScale() {
+    return Math.max(0.7,Math.min(1.2,Math.sqrt(Math.max(0.1,MapRenderer.cam.scale)/2.5)));
+  }
+
   // ---- Canvasオーバーレイ描画: 前線・矢印・師団 ----
   static drawOverlay(ctx, cam, worldToScreen) {
     if (!MapRenderer.ready) return;
+    const markerScale=BattlePlanManager.unitMarkerScale();
     const drawPolyline = (pts, color, width, dash) => {
       if (!pts || pts.length < 2) return;
       ctx.strokeStyle = color;
@@ -4048,7 +4135,7 @@ class BattlePlanManager {
         const selected = d.selected;
         const pid = d.pid;
         const engaged = BattleManager.battles.some(battle => Number(battle.provId) === Number(pid));
-        const w = 16, h = 13;
+        const w = 13*markerScale, h = 10*markerScale;
         if (engaged) {
           ctx.save();
           ctx.strokeStyle = '#e05555';
@@ -4056,7 +4143,7 @@ class BattlePlanManager {
           ctx.shadowBlur = 8;
           ctx.lineWidth = 2;
           ctx.beginPath();
-          ctx.arc(s[0], s[1], 15 + Math.sin(Date.now() / 180) * 2, 0, Math.PI * 2);
+          ctx.arc(s[0], s[1], 12*markerScale + Math.sin(Date.now() / 180) * markerScale, 0, Math.PI * 2);
           ctx.stroke();
           ctx.restore();
         }
@@ -4064,7 +4151,7 @@ class BattlePlanManager {
         ctx.fillStyle = selected ? 'rgba(212,168,67,0.95)' : 'rgba(90,110,140,0.92)';
         ctx.fillRect(s[0] - w / 2, s[1] - h / 2, w, h);
         ctx.strokeStyle = '#0a0c0f';
-        ctx.lineWidth = 1;
+        ctx.lineWidth = Math.max(0.7,markerScale);
         ctx.strokeRect(s[0] - w / 2, s[1] - h / 2, w, h);
         ctx.beginPath();
         ctx.moveTo(s[0] - w / 2, s[1] - h / 2); ctx.lineTo(s[0] + w / 2, s[1] + h / 2);
@@ -4072,14 +4159,14 @@ class BattlePlanManager {
         ctx.stroke();
         // 組織力バー
         ctx.fillStyle = '#222';
-        ctx.fillRect(s[0] - w / 2, s[1] - h / 2 - 5, w, 3);
+        ctx.fillRect(s[0] - w / 2, s[1] - h / 2 - 4*markerScale, w, 2*markerScale);
         const orgRatio = d.maxOrg ? d.org / d.maxOrg : 0;
         ctx.fillStyle = orgRatio > 0.5 ? '#4ac46a' : '#e0c040';
-        ctx.fillRect(s[0] - w / 2, s[1] - h / 2 - 5, w * orgRatio, 3);
+        ctx.fillRect(s[0] - w / 2, s[1] - h / 2 - 4*markerScale, w * orgRatio, 2*markerScale);
         ctx.fillStyle = engaged ? '#ff7777' : '#d4a843';
-        ctx.font = 'bold 10px sans-serif';
+        ctx.font = 'bold '+Math.max(7,8*markerScale)+'px sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText((engaged ? '⚔ ' : '') + d.count, s[0], s[1] + h / 2 + 12);
+        ctx.fillText((engaged ? '⚔ ' : '') + d.count, s[0], s[1] + h / 2 + 9*markerScale);
       });
       // 各師団の国籍・名称・戦力・組織力を個別表示する。
       const provinces = new Map();
@@ -4100,11 +4187,11 @@ class BattlePlanManager {
         if (!center) return;
         const point = worldToScreen(center[0], center[1]);
         units.forEach(({ division, group }, index) => {
+          const width = 58*markerScale, height = 19*markerScale;
           const column = index % 2, row = Math.floor(index / 2);
-          const x = point[0] + (column ? 47 : -47);
-          const y = point[1] + 27 + row * 32;
-          if (x < -46 || y < -22 || x > ctx.canvas.width + 46 || y > ctx.canvas.height + 22) return;
-          const width = 88, height = 27;
+          const x = point[0] + (column ? 1 : -1) * width * 0.62;
+          const y = point[1] + height*0.65 + row * height*1.15;
+          if (x < -width || y < -height || x > ctx.canvas.width + width || y > ctx.canvas.height + height) return;
           const equipment = Math.max(0, Math.min(100, Number(division.equipmentStrength ?? 100)));
           const org = Math.max(0, Math.min(100, 100 * (Number(division.org) || 0) / Math.max(1, Number(division.maxOrg) || 60)));
           const country = CoreEngine.gameState.country;
@@ -4112,27 +4199,28 @@ class BattlePlanManager {
           ctx.fillStyle = 'rgba(10,14,16,.92)';
           ctx.fillRect(x - width / 2, y - height / 2, width, height);
           ctx.strokeStyle = group.id === BattlePlanManager.selectedArmyId ? '#d4a843' : 'rgba(' + color + ',.9)';
-          ctx.lineWidth = 1.5;
+          ctx.lineWidth = Math.max(0.7,1.1*markerScale);
           ctx.strokeRect(x - width / 2, y - height / 2, width, height);
           ctx.textAlign = 'left';
-          ctx.font = 'bold 8px sans-serif';
+          ctx.font = 'bold '+Math.max(6,7*markerScale)+'px sans-serif';
           ctx.fillStyle = '#e5c274';
           const icons = { infantry: '✚', artillery: '✹', armor: '▣', tank: '▣', cavalry: '♞', mountaineer: '▲', marine: '⚓', paratrooper: '✈' };
-          ctx.fillText((icons[division.type] || '✚') + country, x - width / 2 + 3, y - 7);
+          ctx.fillText((icons[division.type] || '✚') + country, x - width / 2 + 2*markerScale, y - 5*markerScale);
           ctx.fillStyle = '#e5e8e8';
-          ctx.font = '8px sans-serif';
+          ctx.font = Math.max(6,7*markerScale)+'px sans-serif';
           const name = String(division.name || '師団 ' + division.id);
-          ctx.fillText(name.length > 13 ? name.slice(0, 12) + '…' : name, x - width / 2 + 24, y - 7);
+          const nameLimit=Math.max(3,Math.floor(8*markerScale));
+          ctx.fillText(name.length > nameLimit ? name.slice(0, nameLimit-1) + '…' : name, x - width / 2 + 17*markerScale, y - 5*markerScale);
           ctx.fillStyle = '#242a2c';
-          ctx.fillText('戦', x - width / 2 + 3, y);
-          ctx.fillRect(x - width / 2 + 12, y - 3, width - 15, 3);
+          ctx.fillText('戦', x - width / 2 + 2*markerScale, y);
+          ctx.fillRect(x - width / 2 + 9*markerScale, y - 2*markerScale, width - 11*markerScale, 2*markerScale);
           ctx.fillStyle = equipment < 50 ? '#d45a4a' : '#caa64d';
-          ctx.fillRect(x - width / 2 + 12, y - 3, (width - 15) * equipment / 100, 3);
+          ctx.fillRect(x - width / 2 + 9*markerScale, y - 2*markerScale, (width - 11*markerScale) * equipment / 100, 2*markerScale);
           ctx.fillStyle = '#242a2c';
-          ctx.fillText('組', x - width / 2 + 3, y + 5);
-          ctx.fillRect(x - width / 2 + 12, y + 2, width - 15, 3);
+          ctx.fillText('組', x - width / 2 + 2*markerScale, y + 4*markerScale);
+          ctx.fillRect(x - width / 2 + 9*markerScale, y + 3*markerScale, width - 11*markerScale, 2*markerScale);
           ctx.fillStyle = org < 50 ? '#d8a83d' : '#4ac46a';
-          ctx.fillRect(x - width / 2 + 12, y + 2, (width - 15) * org / 100, 3);
+          ctx.fillRect(x - width / 2 + 9*markerScale, y + 3*markerScale, (width - 11*markerScale) * org / 100, 2*markerScale);
         });
       });
     });
@@ -4223,7 +4311,7 @@ class BattlePlanManager {
       enemyDivs.forEach(ed => {
         const s = worldToScreen(ed.x, ed.y);
         if (s[0] < -30 || s[1] < -30 || s[0] > ctx.canvas.width + 30 || s[1] > ctx.canvas.height + 30) return;
-        const w = 16, h = 13;
+        const w = 13*markerScale, h = 10*markerScale;
         ctx.fillStyle = 'rgba(196,74,74,0.92)';
         ctx.fillRect(s[0] - w / 2, s[1] - h / 2, w, h);
         ctx.strokeStyle = '#0a0c0f';
@@ -4235,12 +4323,13 @@ class BattlePlanManager {
         ctx.stroke();
         // 師団数ラベル
         ctx.fillStyle = 'rgba(0,0,0,0.75)';
-        ctx.fillRect(s[0] - 12, s[1] + h / 2 + 1, 24, 11);
+        const labelWidth=24*markerScale,labelHeight=10*markerScale;
+        ctx.fillRect(s[0] - labelWidth/2, s[1] + h / 2 + markerScale, labelWidth, labelHeight);
         ctx.fillStyle = '#e05555';
-        ctx.font = 'bold 9px sans-serif';
+        ctx.font = 'bold '+Math.max(6,8*markerScale)+'px sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText(ed.count + '師団', s[0], s[1] + h / 2 + 9);
-        if(ed.mission){ctx.fillStyle='#e5c274';ctx.fillText(ed.tag+' '+ed.mission,s[0],s[1]-h/2-5);}
+        ctx.fillText(ed.count + '師団', s[0], s[1] + h / 2 + 8*markerScale);
+        if(ed.mission){ctx.fillStyle='#e5c274';ctx.fillText(ed.tag+' '+ed.mission,s[0],s[1]-h/2-4*markerScale);}
       });
     }
 
@@ -4433,8 +4522,10 @@ class ConstructionManager {
       if (stOwner !== CoreEngine.gameState.country) return;
       const buildDef = ConstructionManager.BUILDINGS.find(b => b.id === q.building);
       q.cost = q.cost || buildDef?.cost || 360;
-      q.progress += Math.max(0, Math.min(q.factories, FactoryBudget.availableCivilian()));
-      if (q.progress >= q.cost) {
+      // 建設費用・進捗は日単位。ゲーム時計の1時間tickでは工場数の1/24だけ加算します。
+      q.progress += Math.max(0, Math.min(q.factories, FactoryBudget.availableCivilian())) / 24;
+      if (q.progress >= q.cost || q.cost - q.progress < 1e-9) {
+        q.progress = q.cost;
         const st = MapRenderer.states[q.stateId];
         const b = ConstructionManager.BUILDINGS.find(x => x.id === q.building);
         if (st) {
@@ -5174,7 +5265,7 @@ class CheatConsole {
         break;
       case 'pp':
         var ppVal = parseInt(parts[1]) || 100;
-        s.politicalPower += ppVal;
+        CoreEngine.addPoliticalPower(ppVal);
         CheatConsole.output('政治力 +' + ppVal + ' (現在: ' + Math.floor(s.politicalPower) + ')');
         CoreEngine.renderStats();
         break;
@@ -5496,9 +5587,9 @@ class MultiplayerManager {
         if(MultiplayerManager.isHost || fromPeer!==MultiplayerManager.roomId)return;
         const date=new Date(data.date),s=CoreEngine.gameState;
         if(!Number.isFinite(date.getTime()) || date<=s.date)return;
-        // Host is the only clock. A single packet represents one synced day update.
+        // ホストの各ゲーム時間tickを同期し、ホストと同じ日次収入を積み上げます。
         s.date = date;
-        s.politicalPower += (s.cardModifiers?.politicalPowerGain || 24) / 24;
+        CoreEngine.accruePoliticalPowerHour();
         s.manpower = (s.manpower || 0) + (typeof PoliticsManager !== 'undefined' ? PoliticsManager.dailyManpowerGain() / 24 : 0);
         CoreEngine.renderStats();
         CoreEngine.updateCalendar();break;
@@ -6454,6 +6545,8 @@ class SaveLoadManager {
       else if (k === 'cardModifiers') gs.cardModifiers = { ...gs.cardModifiers, ...v };
       else if (k in gs) gs[k] = v;
     });
+    // 旧セーブの初期値24は誤った補正値なので、基本+1/日に移行します。
+    if (gs.cardModifiers.politicalPowerGain === 24) gs.cardModifiers.politicalPowerGain = 0;
     if (data.focus) {
       if (data.focus.byCountry) {
         FocusTreeManager.restoreStates(data.focus.byCountry, gs.country);
