@@ -49,7 +49,7 @@ const leaders = [
   name: "ニコライ・クズネツォフ",
   rank: "SSR",
   desc: "ソ連海軍人民委員として、第二次世界大戦期のソ連海軍を率いた提督。",
-  imgUrl: "data/image/icon/soviet.png",
+  imgUrl: "../../assets/leaders/kuznetsov.png",
   cutinUrl: null,
   color: "#CC0000"
 },
@@ -59,7 +59,7 @@ const leaders = [
   name: "パーヴェル・ルィチャゴフ",
   rank: "SR",
   desc: "ソ連空軍の指揮官としてスペイン内戦や第二次世界大戦前夜の航空戦力に関わった。",
-  imgUrl: "data/image/icon/soviet.png",
+  imgUrl: "../../assets/leaders/rychagov.jpg",
   cutinUrl: null,
   color: "#CC0000"
 },
@@ -92,6 +92,39 @@ const leaders = [
   imgUrl: "data/image/sov/ordzhonikidze.png",
   cutinUrl: null,
   color: "#B8860B" 
+ },
+ {
+  id: "zhukov",
+  type: "general",
+  category: "army",
+  name: "ゲオルギー・ジューコフ",
+  rank: "SSR",
+  desc: "モスクワ防衛戦やスターリングラード攻防戦など、独ソ戦の主要作戦でソ連軍を指揮した元帥。",
+  imgUrl: "../../assets/leaders/zhukov.jpg",
+  cutinUrl: null,
+  color: "#CC0000"
+ },
+ {
+  id: "konev",
+  type: "general",
+  category: "army",
+  name: "イワン・コーネフ",
+  rank: "SSR",
+  desc: "ウクライナ解放やベルリン攻略に参加したソ連軍元帥。第二次世界大戦期に複数の方面軍を指揮した。",
+  imgUrl: "../../assets/leaders/konev.jpg",
+  cutinUrl: null,
+  color: "#CC0000"
+ },
+ {
+  id: "vasilevsky",
+  type: "general",
+  category: "army",
+  name: "アレクサンドル・ヴァシレフスキー",
+  rank: "SSR",
+  desc: "赤軍参謀本部で独ソ戦の作戦立案を担い、後に極東ソ連軍の対日作戦も指揮した元帥。",
+  imgUrl: "../../assets/leaders/vasilevsky.jpg",
+  cutinUrl: null,
+  color: "#CC0000"
  }
 ]; 
 

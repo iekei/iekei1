@@ -191,7 +191,7 @@ const leaders = [
     name: "エーリヒ・レーダー",
     rank: "SSR",
     desc: "ドイツ海軍総司令官として、戦艦と潜水艦を中心とする海軍戦力の整備を指揮した。",
-    imgUrl: "data/image/icon/nazi.png",
+    imgUrl: "../../assets/leaders/raeder.jpg",
     cutinUrl: null,
     color: "#ffd700"
   },

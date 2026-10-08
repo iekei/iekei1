@@ -1,6 +1,6 @@
 /* ==========================================================
  * multigacha.js — 10連ガチャ（11連目SSR確定枠）共通モジュール
- * 全カードパック (GER / JAP / SOV / WORLD) から読み込まれる。
+ * 全国家のカードパック (GER / JAP / SOV / ITA / ENG / USA / FRA) から読み込まれる。
  * 依存: 各パックscript.jsのグローバル `leaders` / `unlockCard`、
  *       quiz.jsの window.CardShop (コイン管理)
  * 仕様:

@@ -5,7 +5,7 @@
       "force": "army",
       "title": "機動戦",
       "description": "機動部隊による突破と迅速な再編を重視する陸軍教義。",
-      "icon": "assets/doctrine/land/Mobile Warfare.png",
+      "icon": "assets/doctrine/land/Mobile_Warfare.png",
       "effects": {
         "orgRecovery": 0.12,
         "softAttack": 0.04,
@@ -19,7 +19,7 @@
       "force": "army",
       "title": "優勢火力",
       "description": "砲兵と統合火力による攻撃力および防御力を高める。",
-      "icon": "assets/doctrine/land/Fire Concentration.png",
+      "icon": "assets/doctrine/land/Fire_Concentration.png",
       "effects": {
         "orgRecovery": 0.04,
         "softAttack": 0.12,
@@ -33,7 +33,7 @@
       "force": "army",
       "title": "浸透戦術",
       "description": "柔軟な防御と浸透攻撃で歩兵部隊の持久力を高める。",
-      "icon": "assets/doctrine/land/Infiltration Tactics.png",
+      "icon": "assets/doctrine/land/Infiltration_Tactics.png",
       "effects": {
         "orgRecovery": 0.1,
         "softAttack": 0.08,
@@ -47,7 +47,7 @@
       "force": "navy",
       "title": "艦隊決戦",
       "description": "主力艦の火力と空母航空隊の発艦能力を高める。",
-      "icon": "assets/doctrine/naval/Line of Battle.png",
+      "icon": "assets/doctrine/naval/Line_of_Battle.png",
       "effects": {
         "visibility": -0.08,
         "fleetAttack": 0.15,
@@ -61,7 +61,7 @@
       "force": "navy",
       "title": "通商破壊",
       "description": "潜水艦による通商破壊と海上哨戒を重視する。",
-      "icon": "assets/doctrine/naval/Raider Patrols.png",
+      "icon": "assets/doctrine/naval/Raider_Patrols.png",
       "effects": {
         "visibility": -0.15,
         "fleetAttack": 0.03,
@@ -89,7 +89,7 @@
       "force": "air",
       "title": "戦場支援",
       "description": "制空権と近接航空支援によって地上部隊を援護する。",
-      "icon": "assets/doctrine/air/Pinpoint Strikes.png",
+      "icon": "assets/doctrine/air/Pinpoint_Strikes.png",
       "effects": {
         "airSuperiority": 0.12,
         "casDamage": 0.15,
@@ -117,7 +117,7 @@
       "force": "air",
       "title": "作戦機動",
       "description": "損失を抑えた航空戦と全天候の作戦継続を目指す。",
-      "icon": "assets/doctrine/air/Operational Integrity.png",
+      "icon": "assets/doctrine/air/Operational_Integrity.png",
       "effects": {
         "airSuperiority": 0.08,
         "casDamage": 0.07,

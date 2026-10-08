@@ -118,7 +118,7 @@ const leaders = [
     name: "岩本徹三",
     rank: "SSR",
     desc: "太平洋戦争期に多くの空戦を経験した日本海軍の戦闘機搭乗員。",
-    imgUrl: "data/image/icon/jap.png",
+    imgUrl: "../../assets/leaders/iwamoto.jpg",
     cutinUrl: null,
     color: "#ffd700"
   },
