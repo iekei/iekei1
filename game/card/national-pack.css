@@ -1,0 +1,251 @@
+* {
+  box-sizing: border-box;
+}
+
+body.national-pack {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  overflow-x: hidden;
+  color: #fff;
+  font-family: 'Helvetica Neue', Arial, 'ヒラギノ角ゴ Pro W3', sans-serif;
+  background:
+    radial-gradient(circle at 50% 35%, color-mix(in srgb, var(--nation-color) 45%, #111) 0, #101116 68%);
+}
+
+.national-pack #canvas-container {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+.national-pack #ui-layer {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px;
+  pointer-events: none;
+}
+
+.national-pack #top-bar,
+.national-pack #center-area,
+.national-pack #result-container {
+  pointer-events: auto;
+}
+
+.national-pack #top-bar {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.national-pack #coin-display-wrapper,
+.national-pack #light-btn,
+.national-pack #zukan-btn,
+.national-pack #purchase-btn,
+.national-pack #reset-btn,
+.national-pack .nation-back-link {
+  border: 1px solid #ffffff66;
+  border-radius: 24px;
+  padding: 10px 16px;
+  color: white;
+  background: #161923eF;
+  font-weight: 700;
+}
+
+.national-pack #coin-display-wrapper {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.national-pack button {
+  cursor: pointer;
+}
+
+.national-pack button:disabled {
+  cursor: not-allowed;
+  opacity: .55;
+}
+
+.national-pack #center-area {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  width: min(100%, 480px);
+  margin: auto;
+  padding: 20px;
+  text-align: center;
+  text-shadow: 0 2px 8px #000;
+}
+
+.national-pack #instruction {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.national-pack #purchase-btn {
+  border-color: var(--nation-color);
+  background: var(--nation-color);
+  color: #fff;
+  font-size: 1.05rem;
+}
+
+.national-pack #result-container {
+  width: 100%;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.national-pack #result-text {
+  margin: 12px auto;
+}
+
+.national-pack .drawn-card {
+  display: inline-flex;
+  position: relative;
+  width: min(220px, 70vw);
+  min-height: 300px;
+  flex-direction: column;
+  overflow: hidden;
+  border: 8px solid var(--card-frame-color);
+  border-radius: 16px;
+  background: #15151b;
+  box-shadow: 0 0 22px color-mix(in srgb, var(--card-frame-color) 65%, transparent);
+  cursor: pointer;
+  text-align: center;
+}
+
+.national-pack .drawn-card img {
+  width: 100%;
+  height: 210px;
+  object-fit: cover;
+}
+
+.national-pack .drawn-card strong {
+  padding: 10px 8px 3px;
+}
+
+.national-pack .drawn-card small {
+  padding: 0 8px 10px;
+  color: #ddd;
+}
+
+.national-pack .drawn-category {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 2px solid white;
+  border-radius: 50%;
+  background: var(--card-frame-color);
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.national-pack #zukan-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  background: #000b;
+}
+
+.national-pack .zukan-content {
+  display: flex;
+  width: min(92vw, 720px);
+  max-height: 86vh;
+  flex-direction: column;
+  padding: 18px;
+  border: 2px solid var(--nation-color);
+  border-radius: 14px;
+  background: #171820;
+}
+
+.national-pack .zukan-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.national-pack #zukan-close-btn {
+  border: 0;
+  color: white;
+  background: transparent;
+  font-size: 2rem;
+}
+
+.national-pack .zukan-grid {
+  display: grid;
+  overflow: auto;
+  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+  gap: 12px;
+}
+
+.national-pack .zukan-card {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 2 / 3;
+  border: 3px solid var(--card-frame-color);
+  border-radius: 8px;
+  background: #111;
+  cursor: pointer;
+}
+
+.national-pack .zukan-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.national-pack .zukan-card.locked img {
+  filter: brightness(.2) grayscale(1);
+}
+
+.national-pack .card-info,
+.national-pack .lock-label {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 5px 3px;
+  color: white;
+  background: #000d;
+  font-size: .72rem;
+}
+
+.national-pack #result-container {
+  min-height: 80px;
+}
+
+.national-pack .nation-back-link {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  text-decoration: none;
+  pointer-events: auto;
+}
+
+@media (max-width: 520px) {
+  .national-pack #top-bar {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .national-pack .nation-back-link {
+    position: static;
+    order: -1;
+  }
+}

@@ -68,6 +68,13 @@ function executeDebugCommand(cmd) {
     localStorage.removeItem('ger_unlocked_cards');
     localStorage.removeItem('jap_unlocked_cards');
     localStorage.removeItem('sov_unlocked_cards');
+    localStorage.removeItem('ita_unlocked_cards');
+    localStorage.removeItem('eng_unlocked_cards');
+    localStorage.removeItem('usa_unlocked_cards');
+    localStorage.removeItem('fra_unlocked_cards');
+    ['ger', 'jap', 'sov', 'ita', 'eng', 'usa', 'fra'].forEach(function(nation) {
+      localStorage.removeItem(nation + '_gacha_pity');
+    });
     localStorage.removeItem('world_unlocked_cards');
     localStorage.removeItem('world_wiki_cache_v1');
     updateCoinDisplay();
@@ -274,7 +281,7 @@ function executeDebugCommand(cmd) {
     img.style.display = card.imgUrl ? 'block' : 'none';
     img.onerror = function() { img.style.display = 'none'; };
 
-    name.textContent = card.rank + ' ' + card.name;
+    name.textContent = (window.CardFrames ? window.CardFrames.labelOf(card) + ' ' : '') + card.rank + ' ' + card.name;
     name.style.color = card.color || '#fff';
 
     var eraEl = modal.querySelector('.card-detail-era');
@@ -300,6 +307,7 @@ function executeDebugCommand(cmd) {
 
     modal.style.display = 'flex';
   }
+  window.openCardDetail = openCardDetail;
 
   // ===== Quiz System =====
   async function startQuiz(card, mode) {

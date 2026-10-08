@@ -38,8 +38,8 @@
   }
   function randomSSR() {
     var ssr = leaders.filter(function (l) { return l.rank === 'SSR'; });
-    var pool = ssr.length > 0 ? ssr : leaders;
-    return pool[Math.floor(Math.random() * pool.length)];
+    if (!ssr.length) throw new Error('SSRカードが登録されていないため10連ガチャを実行できません');
+    return ssr[Math.floor(Math.random() * ssr.length)];
   }
 
   /** 単発1回の抽選 (pity天井を適用) */
@@ -61,8 +61,7 @@
     var results = [];
     for (var i = 0; i < 10; i++) results.push(drawSingle());
     // --- 11連目: 最高レアリティ (SSR) 確定枠 ---
-    var guaranteed = randomSSR();
-    guaranteed.__guaranteed = true;
+    var guaranteed = Object.assign({}, randomSSR(), { __guaranteed: true });
     results.push(guaranteed);
     setPity(0); // 確定枠で天井リセット
     return results;
@@ -91,6 +90,12 @@
       '<button id="multigacha-close" style="padding:10px 22px;border:none;border-radius:20px;background:#555;color:#fff;font-weight:bold;cursor:pointer;">閉じる</button>' +
       '</div>';
     document.body.appendChild(ov);
+    ov.querySelector('#multigacha-grid').addEventListener('click', function (event) {
+      var card = event.target.closest('[data-card-id]');
+      if (!card || typeof window.openCardDetail !== 'function') return;
+      var leader = leaders.find(function (item) { return item.id === card.dataset.cardId; });
+      if (leader) window.openCardDetail(leader);
+    });
     ov.querySelector('#multigacha-close').addEventListener('click', function () { ov.style.display = 'none'; });
     ov.querySelector('#multigacha-again').addEventListener('click', function () { runTenPull(); });
     return ov;
@@ -99,13 +104,20 @@
   function cardHTML(leader, idx, total) {
     var st = RANK_STYLE[leader.rank] || RANK_STYLE.R;
     var guaranteed = !!leader.__guaranteed;
+    var frameColor = window.CardFrames
+      ? window.CardFrames.colorOf(leader)
+      : st.border;
+    var category = window.CardFrames
+      ? window.CardFrames.labelOf(leader)
+      : '';
     var img = leader.imgUrl
       ? '<img src="' + leader.imgUrl + '" style="width:100%;height:120px;object-fit:cover;border-radius:6px 6px 0 0;" onerror="this.style.display=\'none\'">'
       : '';
-    return '<div style="width:150px;background:' + st.bg + ';border:2px solid ' + (guaranteed ? '#ffd700' : st.border) + ';' +
+    return '<div data-card-id="' + leader.id + '" style="width:150px;background:' + st.bg + ';border:3px solid ' + frameColor + ';' +
       (guaranteed ? 'box-shadow:0 0 14px rgba(255,215,0,0.6);' : '') +
       'border-radius:8px;overflow:hidden;text-align:center;position:relative;">' +
       (guaranteed ? '<div style="position:absolute;top:4px;right:4px;background:#ffd700;color:#222;font-size:10px;font-weight:bold;padding:2px 6px;border-radius:8px;">🎯 SSR確定枠</div>' : '') +
+      (category ? '<div style="position:absolute;top:4px;left:4px;width:28px;height:28px;border:2px solid #fff;border-radius:50%;background:' + frameColor + ';color:#fff;font-weight:bold;line-height:24px;">' + category + '</div>' : '') +
       '<div style="height:120px;background:#000;">' + img + '</div>' +
       '<div style="padding:6px 4px;">' +
       '<div style="color:#fff;font-size:12px;font-weight:bold;line-height:1.3;min-height:31px;">' + leader.name + '</div>' +

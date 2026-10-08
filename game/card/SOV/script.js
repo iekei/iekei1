@@ -33,6 +33,7 @@ const leaders = [
 },
 { 
   id: "tukhachevsky",
+  type: "general",
  
   name: "ミハイル・トゥハチェフスキー", 
   rank: "SSR", 
@@ -41,6 +42,26 @@ const leaders = [
   cutinUrl: "data/image/cut/tukhachevsky.png",
   cutinOffset: "center 10%",
   color: "#4B5320" 
+},
+{
+  id: "kuznetsov",
+  type: "navy",
+  name: "ニコライ・クズネツォフ",
+  rank: "SSR",
+  desc: "ソ連海軍人民委員として、第二次世界大戦期のソ連海軍を率いた提督。",
+  imgUrl: "data/image/icon/soviet.png",
+  cutinUrl: null,
+  color: "#CC0000"
+},
+{
+  id: "rychagov",
+  type: "air",
+  name: "パーヴェル・ルィチャゴフ",
+  rank: "SR",
+  desc: "ソ連空軍の指揮官としてスペイン内戦や第二次世界大戦前夜の航空戦力に関わった。",
+  imgUrl: "data/image/icon/soviet.png",
+  cutinUrl: null,
+  color: "#CC0000"
 },
 { 
   id: "yezhov",
@@ -301,26 +322,11 @@ function createCardTexture(leader, callback) {
     }
     ctx.restore();
 
-    ctx.strokeStyle = leader.color;
+    ctx.strokeStyle = window.CardFrames.colorOf(leader);
     ctx.lineWidth = 4;
     drawRoundedRect(ctx, imgX, imgY, imgW, imgH, radius);
     ctx.stroke();
-
-    ctx.lineWidth = 14;
-    ctx.strokeStyle = leader.color;
-    drawRoundedRect(ctx, 12, 12, canvas.width - 24, canvas.height - 24, 28);
-    ctx.stroke();
-
-    ctx.fillStyle = leader.color;
-    ctx.beginPath();
-    ctx.arc(65, 65, 34, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.fillStyle = leader.color === '#d4af37' ? '#000000' : '#ffffff';
-    ctx.font = 'bold 28px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(leader.rank, 65, 65);
+    window.CardFrames.draw(ctx, leader);
 
     const textAreaX = 35, textAreaY = 545, textAreaW = 442, textAreaH = 185;
     ctx.fillStyle = 'rgba(25, 5, 5, 0.92)';
@@ -669,7 +675,7 @@ function renderZukan() {
     cardEl.className = `zukan-card ${isUnlocked ? 'unlocked' : 'locked'}`;
 
     if (isUnlocked) {
-      cardEl.style.borderColor = leader.color;
+      cardEl.style.borderColor = window.CardFrames.colorOf(leader);
       cardEl.innerHTML = `
         <img src="${leader.imgUrl}" alt="${leader.name}">
         <div class="card-info" style="border-top:2px solid ${leader.color}">
@@ -682,6 +688,7 @@ function renderZukan() {
         <div class="lock-label">未獲得</div>
       `;
     }
+    window.CardFrames.decorateZukan(cardEl, leader);
     zukanGrid.appendChild(cardEl);
   });
 }

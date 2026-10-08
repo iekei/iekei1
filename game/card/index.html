@@ -79,6 +79,19 @@
 
     .pack-world .pack-title { color: #ffd700; }
 
+    .pack-ita {
+      background: #173b28;
+      border: 4px solid #25834a;
+    }
+
+    .pack-eng, .pack-usa, .pack-fra {
+      background: #132743;
+      border: 4px solid #2878c7;
+    }
+
+    .pack-ita .pack-title, .pack-eng .pack-title,
+    .pack-usa .pack-title, .pack-fra .pack-title { color: #fff; }
+
     .pack-icon-emoji {
       font-size: 90px;
       height: 110px;
@@ -118,6 +131,11 @@
     .pack-ger .btn-open { background: #111; color: #fff; }
     .pack-sov .btn-open { background: #ffd700; color: #8b0000; }
     .pack-world .btn-open { background: #ffd700; color: #101c33; }
+    .pack-ita .btn-open { background: #25834a; color: #fff; }
+    .pack-eng .btn-open, .pack-usa .btn-open, .pack-fra .btn-open {
+      background: #2878c7;
+      color: #fff;
+    }
   </style>
 </head>
 <body>
@@ -140,6 +158,30 @@
     <a href="./SOV/index.html" class="pack-card pack-sov">
       <div class="pack-title">ソビエト連邦<br>パック</div>
       <img src="./SOV/data/image/icon/soviet.png" alt="SOV Icon" class="pack-icon" onerror="this.style.display='none'">
+      <div class="btn-open">開封する</div>
+    </a>
+
+    <a href="./ITA/index.html" class="pack-card pack-ita">
+      <div class="pack-title">イタリア王国<br>パック</div>
+      <img src="../assets/flags/ITA_fascism.png" alt="Italy Icon" class="pack-icon">
+      <div class="btn-open">開封する</div>
+    </a>
+
+    <a href="./ENG/index.html" class="pack-card pack-eng">
+      <div class="pack-title">イギリス<br>パック</div>
+      <img src="../assets/flags/ENG_democratic.png" alt="United Kingdom Icon" class="pack-icon">
+      <div class="btn-open">開封する</div>
+    </a>
+
+    <a href="./USA/index.html" class="pack-card pack-usa">
+      <div class="pack-title">アメリカ合衆国<br>パック</div>
+      <img src="../assets/flags/USA_democratic.png" alt="United States Icon" class="pack-icon">
+      <div class="btn-open">開封する</div>
+    </a>
+
+    <a href="./FRA/index.html" class="pack-card pack-fra">
+      <div class="pack-title">フランス<br>パック</div>
+      <img src="../assets/flags/FRA_democratic.png" alt="France Icon" class="pack-icon">
       <div class="btn-open">開封する</div>
     </a>
 

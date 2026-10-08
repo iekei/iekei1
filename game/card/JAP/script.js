@@ -74,7 +74,7 @@ const leaders = [
 //将軍
 { 
     id: "yamamoto",
-    type: "general",
+  type: "navy",
     name: "山本五十六", 
     rank: "SSR", 
     desc: "1936年当時は海軍航空本部技術部長（海軍中将）。航空主兵論を強力に推進し、後に連合艦隊司令長官を務めた不世出の提督。", 
@@ -111,6 +111,16 @@ const leaders = [
     imgUrl: "data/image/jap/anami.png",
     cutinUrl: null,
     color: "#c0c0c0" 
+  },
+  {
+    id: "iwamoto",
+    type: "air",
+    name: "岩本徹三",
+    rank: "SSR",
+    desc: "太平洋戦争期に多くの空戦を経験した日本海軍の戦闘機搭乗員。",
+    imgUrl: "data/image/icon/jap.png",
+    cutinUrl: null,
+    color: "#ffd700"
   },
     // --- 【資源カード】 ---
   { 
@@ -404,26 +414,11 @@ function createCardTexture(leader, callback) {
     }
     ctx.restore();
 
-    ctx.strokeStyle = leader.color;
+    ctx.strokeStyle = window.CardFrames.colorOf(leader);
     ctx.lineWidth = 4;
     drawRoundedRect(ctx, imgX, imgY, imgW, imgH, radius);
     ctx.stroke();
-
-    ctx.lineWidth = 14;
-    ctx.strokeStyle = leader.color;
-    drawRoundedRect(ctx, 12, 12, canvas.width - 24, canvas.height - 24, 28);
-    ctx.stroke();
-
-    ctx.fillStyle = leader.color;
-    ctx.beginPath();
-    ctx.arc(65, 65, 34, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 28px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(leader.rank, 65, 65);
+    window.CardFrames.draw(ctx, leader);
 
     const textAreaX = 35, textAreaY = 545, textAreaW = 442, textAreaH = 185;
     ctx.fillStyle = 'rgba(20, 10, 10, 0.9)';
@@ -772,7 +767,7 @@ function renderZukan() {
     cardEl.className = `zukan-card ${isUnlocked ? 'unlocked' : 'locked'}`;
 
     if (isUnlocked) {
-      cardEl.style.borderColor = leader.color;
+      cardEl.style.borderColor = window.CardFrames.colorOf(leader);
       cardEl.innerHTML = `
         <img src="${leader.imgUrl}" alt="${leader.name}">
         <div class="card-info" style="border-top:2px solid ${leader.color}">
@@ -785,6 +780,7 @@ function renderZukan() {
         <div class="lock-label">未獲得</div>
       `;
     }
+    window.CardFrames.decorateZukan(cardEl, leader);
     zukanGrid.appendChild(cardEl);
   });
 }

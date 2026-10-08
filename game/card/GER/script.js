@@ -175,6 +175,7 @@ const leaders = [
   { 
     id: "kesselring",
     type: "general",
+    category: "air",
     name: "アルベルト・ケッセルリンク", 
     rank: "SSR", 
     desc: "1936年当時は初代空軍参謀長。元は陸軍砲兵将校であり、統合軍的視点から陸空協同戦術を育成した。", 
@@ -183,6 +184,16 @@ const leaders = [
     cutinUrl: "data/image/cut/kesselring.png",
     cutinOffset: "center 35%",
     color: "#ffd700" 
+  },
+  {
+    id: "raeder",
+    type: "navy",
+    name: "エーリヒ・レーダー",
+    rank: "SSR",
+    desc: "ドイツ海軍総司令官として、戦艦と潜水艦を中心とする海軍戦力の整備を指揮した。",
+    imgUrl: "data/image/icon/nazi.png",
+    cutinUrl: null,
+    color: "#ffd700"
   },
     // --- 【資源カード】 ---
   { 
@@ -476,26 +487,11 @@ function createCardTexture(leader, callback) {
     }
     ctx.restore();
 
-    ctx.strokeStyle = leader.color;
+    ctx.strokeStyle = window.CardFrames.colorOf(leader);
     ctx.lineWidth = 4;
     drawRoundedRect(ctx, imgX, imgY, imgW, imgH, radius);
     ctx.stroke();
-
-    ctx.lineWidth = 14;
-    ctx.strokeStyle = leader.color;
-    drawRoundedRect(ctx, 12, 12, canvas.width - 24, canvas.height - 24, 28);
-    ctx.stroke();
-
-    ctx.fillStyle = leader.color;
-    ctx.beginPath();
-    ctx.arc(65, 65, 34, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 28px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(leader.rank, 65, 65);
+    window.CardFrames.draw(ctx, leader);
 
     const textAreaX = 35, textAreaY = 545, textAreaW = 442, textAreaH = 185;
     ctx.fillStyle = 'rgba(20, 10, 10, 0.9)';
@@ -844,7 +840,7 @@ function renderZukan() {
     cardEl.className = `zukan-card ${isUnlocked ? 'unlocked' : 'locked'}`;
 
     if (isUnlocked) {
-      cardEl.style.borderColor = leader.color;
+      cardEl.style.borderColor = window.CardFrames.colorOf(leader);
       cardEl.innerHTML = `
         <img src="${leader.imgUrl}" alt="${leader.name}">
         <div class="card-info" style="border-top:2px solid ${leader.color}">
@@ -857,6 +853,7 @@ function renderZukan() {
         <div class="lock-label">未獲得</div>
       `;
     }
+    window.CardFrames.decorateZukan(cardEl, leader);
     zukanGrid.appendChild(cardEl);
   });
 }
