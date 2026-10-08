@@ -1,0 +1,130 @@
+{
+  "doctrines": [
+    {
+      "id": "land_mobile",
+      "force": "army",
+      "title": "機動戦",
+      "description": "機動部隊による突破と迅速な再編を重視する陸軍教義。",
+      "icon": "assets/doctrine/land.svg",
+      "effects": {
+        "orgRecovery": 0.12,
+        "softAttack": 0.04,
+        "hardAttack": 0.08,
+        "breakthrough": 0.12,
+        "defense": 0.02
+      }
+    },
+    {
+      "id": "land_firepower",
+      "force": "army",
+      "title": "優勢火力",
+      "description": "砲兵と統合火力による攻撃力および防御力を高める。",
+      "icon": "assets/doctrine/land.svg",
+      "effects": {
+        "orgRecovery": 0.04,
+        "softAttack": 0.12,
+        "hardAttack": 0.06,
+        "breakthrough": 0.04,
+        "defense": 0.1
+      }
+    },
+    {
+      "id": "land_infiltration",
+      "force": "army",
+      "title": "浸透戦術",
+      "description": "柔軟な防御と浸透攻撃で歩兵部隊の持久力を高める。",
+      "icon": "assets/doctrine/land.svg",
+      "effects": {
+        "orgRecovery": 0.1,
+        "softAttack": 0.08,
+        "hardAttack": 0.02,
+        "breakthrough": 0.06,
+        "defense": 0.12
+      }
+    },
+    {
+      "id": "naval_fleet",
+      "force": "navy",
+      "title": "艦隊決戦",
+      "description": "主力艦の火力と空母航空隊の発艦能力を高める。",
+      "icon": "assets/doctrine/navy.svg",
+      "effects": {
+        "visibility": -0.08,
+        "fleetAttack": 0.15,
+        "submarineAttack": 0.02,
+        "antiSubmarine": 0.04,
+        "carrierSortie": 0.12
+      }
+    },
+    {
+      "id": "naval_trade_interdiction",
+      "force": "navy",
+      "title": "通商破壊",
+      "description": "潜水艦による通商破壊と海上哨戒を重視する。",
+      "icon": "assets/doctrine/navy.svg",
+      "effects": {
+        "visibility": -0.15,
+        "fleetAttack": 0.03,
+        "submarineAttack": 0.16,
+        "antiSubmarine": 0.08,
+        "carrierSortie": 0.02
+      }
+    },
+    {
+      "id": "naval_convoy_escort",
+      "force": "navy",
+      "title": "船団護衛",
+      "description": "対潜哨戒と護衛任務を強化し、艦隊の発見率を下げる。",
+      "icon": "assets/doctrine/navy.svg",
+      "effects": {
+        "visibility": -0.12,
+        "fleetAttack": 0.04,
+        "submarineAttack": 0.03,
+        "antiSubmarine": 0.16,
+        "carrierSortie": 0.04
+      }
+    },
+    {
+      "id": "air_battlefield_support",
+      "force": "air",
+      "title": "戦場支援",
+      "description": "制空権と近接航空支援によって地上部隊を援護する。",
+      "icon": "assets/doctrine/air.svg",
+      "effects": {
+        "airSuperiority": 0.12,
+        "casDamage": 0.15,
+        "bombingAccuracy": 0.03,
+        "dogfightEvasion": 0.05,
+        "allWeather": 0.04
+      }
+    },
+    {
+      "id": "air_strategic_destruction",
+      "force": "air",
+      "title": "戦略破壊",
+      "description": "精密爆撃と全天候運用で敵後方への打撃力を高める。",
+      "icon": "assets/doctrine/air.svg",
+      "effects": {
+        "airSuperiority": 0.04,
+        "casDamage": 0.03,
+        "bombingAccuracy": 0.16,
+        "dogfightEvasion": 0.04,
+        "allWeather": 0.12
+      }
+    },
+    {
+      "id": "air_operational_integrity",
+      "force": "air",
+      "title": "作戦機動",
+      "description": "損失を抑えた航空戦と全天候の作戦継続を目指す。",
+      "icon": "assets/doctrine/air.svg",
+      "effects": {
+        "airSuperiority": 0.08,
+        "casDamage": 0.07,
+        "bombingAccuracy": 0.06,
+        "dogfightEvasion": 0.14,
+        "allWeather": 0.1
+      }
+    }
+  ]
+}

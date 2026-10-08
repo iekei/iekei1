@@ -460,10 +460,13 @@ class StrategySystems {
     design.productionType = type;
     const catalog = ProductionManager.CATALOG;
     const category = design.cat;
+    const costMultiplier = Math.max(1, Number(design.productionCostMultiplier) || 1);
+    const resources = category === 'ship' ? { steel: 12, chromium: 3 } :
+      category === 'plane' ? { aluminum: 10, rubber: 3 } : { steel: 14, tungsten: 5, chromium: 8 };
     catalog[type] = {
       name: design.name,
-      rate: category === 'ship' ? 1 / 80 : category === 'plane' ? 0.35 : 0.5,
-      resources: category === 'ship' ? { steel: 12, chromium: 3 } : category === 'plane' ? { aluminum: 10, rubber: 3 } : { steel: 14, tungsten: 5, chromium: 8 },
+      rate: (category === 'ship' ? 1 / 80 : category === 'plane' ? 0.35 : 0.5) / costMultiplier,
+      resources: Object.fromEntries(Object.entries(resources).map(([key, value]) => [key, value * costMultiplier])),
       pool: category === 'ship' ? 'dockyard' : 'military',
       designId: design.id,
       designCategory: category

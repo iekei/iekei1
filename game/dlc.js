@@ -353,7 +353,7 @@ class EquipmentDesigner {
   { id: 'engine', name: 'エンジン', options: [{ id: 'e1', name: '標準エンジン', cost: 10, weight: 2, power: 14, engineCapacity: 3, requires: 'aircraft_engine_1' }, { id: 'e2', name: '高出力エンジン', cost: 18, weight: 3, power: 24, engineCapacity: 6, requires: 'aircraft_engine_2' }] },
   { id: 'weapon', name: '武装', options: [{ id: 'mg', name: '機銃強化', cost: 10, weight: 1, attack: 12, role: '制空', requires: 'fighter_weapons_1' }, { id: 'rocket', name: 'ロケット弾', cost: 16, weight: 2, attack: 18, role: '対地攻撃', requires: 'air_ground_support' }, { id: 'torpedo', name: '航空魚雷', cost: 18, weight: 3, attack: 21, role: '対艦攻撃', requires: 'naval_strike_technology' }] },
   { id: 'armor', name: '防弾', options: [{ id: 'plate', name: '防弾鋼板', cost: 10, weight: 2, defense: 12 }, { id: 'none3', name: 'なし', cost: 0, weight: 0 }] },
-  { id: 'fuel', name: '燃料タンク', options: [{ id: 'long', name: '増槽', cost: 12, weight: 2, defense: 3, role: '長距離' }, { id: 'none4', name: '標準燃料', cost: 0, weight: 0 }] }
+  { id: 'fuel', name: '燃料タンク', options: [{ id: 'drop_tank', name: '増槽（Drop Tank）', cost: 12, weight: 2, defense: 3, role: '航続距離 +90% / 機動性 -10%' }, { id: 'none4', name: '標準燃料', cost: 0, weight: 0 }] }
   ]}
   };
 

@@ -1,0 +1,29 @@
+{
+  "description": "雇用済み指揮官カードのカテゴリ・能力値のデータ構造例です。",
+  "cards": [
+    {
+      "id": "sample_army_leader",
+      "country": "GER",
+      "type": "army_leader",
+      "name": "陸軍指揮官サンプル",
+      "rank": "SR",
+      "stats": { "attack": 8, "defense": 5, "skill": 6 }
+    },
+    {
+      "id": "sample_navy_leader",
+      "country": "JAP",
+      "type": "navy_leader",
+      "name": "海軍指揮官サンプル",
+      "rank": "SR",
+      "stats": { "attack": 6, "defense": 7, "skill": 8 }
+    },
+    {
+      "id": "sample_air_leader",
+      "country": "GER",
+      "type": "air_leader",
+      "name": "空軍指揮官サンプル",
+      "rank": "R",
+      "stats": { "attack": 6, "defense": 5, "skill": 7 }
+    }
+  ]
+}

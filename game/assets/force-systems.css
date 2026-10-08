@@ -1,0 +1,27 @@
+.force-doctrine-toolbar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.force-doctrine-toolbar label { display: flex; align-items: center; gap: 6px; }
+.force-doctrine-toolbar select { padding: 5px 8px; }
+.force-doctrine-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 10px; }
+.force-doctrine-card { display: flex; gap: 12px; padding: 12px; border: 1px solid var(--border-mil); background: var(--bg-panel-light); }
+.force-doctrine-card.selected { border-color: var(--text-gold); box-shadow: 0 0 0 1px var(--text-gold); }
+.force-doctrine-card > img { width: 52px; height: 52px; flex: 0 0 52px; }
+.force-doctrine-card h3 { color: var(--text-gold); margin-bottom: 5px; }
+.force-doctrine-card p, .force-help, .force-empty { color: var(--text-secondary); line-height: 1.5; margin-bottom: 10px; }
+.force-doctrine-effects { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 10px; margin: 8px 0; font-size: 11px; }
+.force-doctrine-effects b { color: var(--accent-green); }
+.force-card-list { display: grid; gap: 6px; }
+.force-card-option { display: flex; justify-content: space-between; gap: 12px; padding: 9px; text-align: left; }
+.force-card-option span { color: var(--text-secondary); }
+.force-commander-current { display: flex; justify-content: space-between; align-items: center; margin: 8px 0; padding: 8px; background: var(--bg-panel-light); }
+.subject-table-wrap { overflow-x: auto; }
+.subject-table { border-collapse: collapse; width: 100%; }
+.subject-table th, .subject-table td { border-bottom: 1px solid var(--border-mil); padding: 9px 10px; text-align: left; white-space: nowrap; }
+.subject-table .country-flag { width: 30px; height: 20px; object-fit: cover; }
+.subject-progress { display: inline-block; width: min(180px, 30vw); height: 10px; margin-right: 7px; background: var(--bg-dark); vertical-align: middle; }
+.subject-progress i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent-orange), var(--accent-green)); }
+.air-wing-control select { max-width: 130px; }
+@media (max-width: 700px) {
+  .force-card-option { flex-direction: column; }
+  .force-doctrine-grid { grid-template-columns: 1fr; }
+  .subject-table th, .subject-table td { padding: 7px 6px; font-size: 11px; }
+}

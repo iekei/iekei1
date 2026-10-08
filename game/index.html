@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="referrer" content="no-referrer">
   <title>Hearts of Iron IV × 将軍カードゲーム</title>
+  <link rel="stylesheet" href="assets/force-systems.css">
   <!-- Tailwind CSS (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- PeerJS for P2P multiplayer -->
@@ -1254,9 +1255,10 @@ class CoreEngine {
     CoreEngine.renderStats();
     document.querySelectorAll('.speed-btn[data-speed]').forEach(btn => {
       btn.addEventListener('click', () => {
-        // マルチプレイ中はホストのみが速度を変更可能
-        if (MultiplayerManager.connected && !MultiplayerManager.isHost) {
-          GameUI.notify('⚠️ マルチプレイ中はホストのみが速度を変更できます。', 'alert');
+        if (MultiplayerTimeManager && MultiplayerManager.connected && !MultiplayerManager.isHost) {
+          const speed = parseInt(btn.dataset.speed);
+          if (speed === 0) MultiplayerTimeManager.requestPauseToggle();
+          else MultiplayerTimeManager.requestSpeed(speed);
           return;
         }
         CoreEngine.setSpeed(parseInt(btn.dataset.speed));
@@ -1369,7 +1371,6 @@ class CoreEngine {
   static setSpeed(speed) {
     if (!Number.isInteger(speed) || speed < 0 || speed > 5) return;
     if (speed > 0 && (NewsManager.showing || IntelOperations.challenge)) return;
-    // マルチプレイ中はホストのみが速度を変更可能
     if (MultiplayerManager.connected && !MultiplayerManager.isHost) {
       GameUI.notify('⚠️ マルチプレイ中はホストのみが速度を変更できます。', 'alert');
       CoreEngine.updateSpeedUI();
@@ -3655,7 +3656,7 @@ class BattlePlanManager {
       return false;
     }
     if (unit.type === 'air' && !BattlePlanManager.airTargetInRange(unit, wp)) {
-      GameUI.notify('指定した空域はこの航空隊の航続距離外です。', 'alert');
+      GameUI.notify('射程外: 兵器設計で増槽を装着するか、前線基地へ移転してください', 'alert');
       return false;
     }
     unit.zone = { pid: pid, x: wp[0], y: wp[1], mission: BattlePlanManager.activeMission[unit.type] };
@@ -5632,6 +5633,9 @@ class MultiplayerManager {
           MultiplayerManager.setStatus('プレイヤー接続: ' + fromPeer, true);
           MultiplayerManager.updatePlayerList();
           if (conn) conn.send({ type: 'sync', state: CoreEngine.getSyncState(), date: CoreEngine.gameState.date.toISOString() });
+          if (conn && typeof MultiplayerTimeManager !== 'undefined') {
+            conn.send({ type: 'TIME_SYNC_TICK', ...MultiplayerTimeManager.state() });
+          }
           GameUI.notify('プレイヤーが参加しました: ' + fromPeer, 'success');
         } else {
           MultiplayerManager.setStatus('パスワード不一致のため接続を拒否: ' + fromPeer, false);
@@ -6882,11 +6886,18 @@ async function initGame() {
   TrainingManager.init();       // 徴兵・訓練 (師団は徴兵→訓練でのみ増える)
   CheatConsole.init();
   MultiplayerManager.init();
+  MultiplayerTimeManager.init();
   UniqueNationSystems.init();
   if (typeof NewsManager !== 'undefined') NewsManager.init();   // ニュースイベント (世界の出来事を報道)
   if (typeof AIManager !== 'undefined') AIManager.init();       // 非プレイヤー国のAI自動操作 (史実準拠)
   if (typeof DLC !== 'undefined') DLC.onGameStart();   // 全DLC拡張 (ドクトリン/兵器設計/諜報/MIO・国際市場/講和会議/将軍特性)
   StrategyGame.init();
+  try {
+    await ForceSystems.init();
+  } catch (error) {
+    console.error('Force systems initialization failed:', error);
+    GameUI.notify('ドクトリン・指揮官・占領管理を初期化できません: ' + error.message, 'alert');
+  }
   CardSystem.deck.forEach(card => CardSystem.applyModifiers(card.id));
 
   // ── タブ別動的画像ロード登録 (ImageLoader) ──
@@ -6924,5 +6935,7 @@ window.addEventListener('DOMContentLoaded', () => StartScreen.show());
   <script src="assets/technology-resolver.js"></script>
   <script src="assets/equipment-designer.js"></script>
   <script src="assets/strategy-systems.js"></script>
+  <script src="assets/force-systems.js"></script>
+  <script src="assets/MultiplayerTimeManager.js"></script>
   </body>
 </html>

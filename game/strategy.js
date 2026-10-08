@@ -82,6 +82,7 @@ class StrategyGame {
   static collect() {
     return { armies: BattlePlanManager.armies, navy: BattlePlanManager.navy, air: BattlePlanManager.air,
       selectedArmy: BattlePlanManager.selectedArmyId, battles: BattleManager.battles,
+      forceSystems: CoreEngine.gameState.forceSystems || null,
       construction: ConstructionManager.queue,
       owners: MapRenderer.states ? Object.fromEntries(Object.entries(MapRenderer.states).map(([id,st])=>[id,st.owner])) : {} };
   }
@@ -94,6 +95,7 @@ class StrategyGame {
     if (Array.isArray(data.armies)) BattlePlanManager.armies = data.armies;
     if (data.navy) BattlePlanManager.navy = data.navy;
     if (data.air) BattlePlanManager.air = data.air;
+    if (data.forceSystems) CoreEngine.gameState.forceSystems = data.forceSystems;
     BattlePlanManager.selectedArmyId = data.selectedArmy || BattlePlanManager.armies[0]?.id;
     BattleManager.battles = data.battles || [];
     BattleManager.nextId = Math.max(0, ...BattleManager.battles.map(b => b.id)) + 1;
@@ -106,6 +108,7 @@ class StrategyGame {
     NewsManager.queue = []; NewsManager.showing = false; NewsManager._wasSpeed = null;
     const overlay = document.getElementById('news-popup-overlay'); if (overlay) overlay.style.display = 'none';
     MapRenderer.invalidateModes(); DiplomacyManager.rebuildCountries(); ProductionManager.ensure(); ArmyRoster.render();
+    if (window.ForceSystems?.initialized) ForceSystems.initializeGroups();
     ProductionManager.render(); IntelligenceManager.render(); DecisionManager.render();
   }
   static publish() {
@@ -547,13 +550,16 @@ class ArmyRoster {
         const otherAssigned=isAir?BattlePlanManager.air.filter(other=>other.id!==u.id).reduce((sum,other)=>sum+(Number(other.aircraftCount)||0),0):0;
         const maxAssigned=isAir?Math.max(0,Math.floor(Number(CoreEngine.gameState.planes)||0)-otherAssigned):0;
         const airbases=isAir?BattlePlanManager.ownedAirbases():[];
+        const aircraftDesigns=isAir?EquipmentDesigner.designs.filter(design=>design.cat==='plane'):[];
         const airControls=isAir
           ? '<label class="air-wing-control">基地 <select onchange="BattlePlanManager.assignAirbase(\''+u.id+'\',this.value)"><option value="">未配備</option>'+airbases.map(([id,state])=>'<option value="'+id+'"'+(String(id)===u.baseStateId?' selected':'')+'>'+GameTools.escape(state.name||('州'+id))+' ('+state.b.air_base+')</option>').join('')+'</select></label>'+
             '<label class="air-wing-control">航空機 <input type="number" min="0" max="'+maxAssigned+'" value="'+assigned+'" onchange="BattlePlanManager.setAirWingAircraft(\''+u.id+'\',this.value)"></label>'+
+            '<label class="air-wing-control">機体設計 <select onchange="ForceSystems.setAircraftDesign(\''+u.id+'\',this.value)"><option value="">標準設計</option>'+aircraftDesigns.map(design=>'<option value="'+GameTools.escape(design.id)+'"'+(design.id===u.designId?' selected':'')+'>'+GameTools.escape(design.name)+(design.modules?.fuel==='drop_tank'||design.modules?.fuel==='long'?'（増槽）':'')+'</option>').join('')+'</select></label>'+
             '<small class="air-wing-range">航続距離 '+BattlePlanManager.airRange(u)+' / '+(BattlePlanManager.airWingReady(u)?'配備可能':'基地・機体未配備')+'</small>'
           : '';
         html+='<div class="army-tile">'+GameTools.button(u.name,"BattlePlanManager.selectUnit('"+u.id+"')")+
-          '<div class="army-tile-info"><p>'+Math.floor((isAir?assigned:CoreEngine.gameState.ships/Math.max(1,list.length)))+' / '+GameTools.escape(u.mission)+'</p>'+airControls+
+          '<div class="army-tile-info"><p>'+Math.floor((isAir?assigned:CoreEngine.gameState.ships/Math.max(1,list.length)))+' / '+GameTools.escape(u.mission)+'</p>'+
+          GameTools.button('指揮官: '+GameTools.escape(u.commander?.name||'未配置'),"BattlePlanManager.assignForceCommander('"+u.type+"','"+u.id+"')")+airControls+
           GameTools.button(u.executing?'中止':'任務開始',"BattlePlanManager."+(u.executing?'abort':'execute')+"('"+u.id+"')",isAir&&!BattlePlanManager.airWingReady(u))+
           '<select onchange="BattlePlanManager.selectUnit(\''+u.id+'\');BattlePlanManager.setMission(this.value)">'+BattlePlanManager.missions[u.type].map(m=>'<option value="'+m.id+'"'+(m.id===u.mission?' selected':'')+'>'+m.label+'</option>').join('')+'</select></div></div>';
       });

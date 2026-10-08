@@ -37,9 +37,10 @@ function fixture() {
   vm.runInContext(inline,ctx,{filename:'index.html:inline'});
   for(const name of ['battle','news','ai','training','dlc','strategy','war-systems'])vm.runInContext(fs.readFileSync(path.join(root,name+'.js'),'utf8'),ctx,{filename:name+'.js'});
   vm.runInContext(fs.readFileSync(path.join(root,'assets/strategy-systems.js'),'utf8'),ctx,{filename:'strategy-systems.js'});
+  vm.runInContext(fs.readFileSync(path.join(root,'assets/MultiplayerTimeManager.js'),'utf8'),ctx,{filename:'MultiplayerTimeManager.js'});
   const run=source=>vm.runInContext(source,ctx);
   run(`
-    StrategyGame.prepare();IntelOperations.ensure();DLC.ensureState();
+    MultiplayerTimeManager.init();StrategyGame.prepare();IntelOperations.ensure();DLC.ensureState();
     AIManager.state={focus:{},wars:[],doneEvents:[],spyDay:0};
     DiplomacyManager.countries=['POL','SOV','FRA','FIN','CHI','DEN'].map(id=>({id,name:id}));
     MapRenderer.ready=true;MapRenderer.canvas={width:1440,height:1000};MapRenderer.mapW=100;MapRenderer.mapH=100;
@@ -496,6 +497,45 @@ test('multiplayer clients follow host ticks once and keep their own economy and 
   const {run}=fixture();run(`MultiplayerManager.connected=true;MultiplayerManager.isHost=false;MultiplayerManager.roomId='host';CoreEngine.gameState.speed=1;CoreEngine.gameState.paused=false;globalThis.startDate=CoreEngine.gameState.date.getTime();globalThis.nextDate=new Date(startDate+86400000).toISOString();globalThis.ppBefore=CoreEngine.gameState.politicalPower;MultiplayerManager.onData({type:'tick',date:nextDate,state:{country:'FRA',pp:0}},'host')`);
   assert.equal(run('CoreEngine.gameState.date.getTime()'),run('startDate+86400000'));assert.ok(Math.abs(run('CoreEngine.gameState.politicalPower')-run('ppBefore+1/24'))<1e-9);
   run(`MultiplayerManager.onData({type:'tick',date:nextDate},'host');CoreEngine.tick()`);assert.equal(run('CoreEngine.gameState.date.getTime()'),run('startDate+86400000'));
+});
+test('multiplayer time sync catches up missing hourly ticks without starting a client timer',()=>{
+  const {run}=fixture();
+  run(`MultiplayerManager.connected=true;MultiplayerManager.isHost=false;MultiplayerManager.roomId='host';
+    CoreEngine.gameState.speed=1;CoreEngine.gameState.paused=false;
+    globalThis.startDate=CoreEngine.gameState.date.getTime();globalThis.ppBefore=CoreEngine.gameState.politicalPower;
+    globalThis.targetTick=MultiplayerTimeManager.currentTick+3;
+    globalThis.targetDate=new Date(startDate+3*3600000).toISOString();
+    MultiplayerTimeManager.receive({type:'TIME_SYNC_TICK',currentTick:targetTick,gameSpeed:2,
+      isPaused:false,timestamp:Date.now(),date:targetDate},'host')`);
+  assert.equal(run('MultiplayerTimeManager.currentTick'),run('targetTick'));
+  assert.equal(run('CoreEngine.gameState.date.toISOString()'),run('targetDate'));
+  assert.ok(run('CoreEngine.gameState.politicalPower') > run('ppBefore'));
+  assert.equal(run('CoreEngine.timer'),null);
+  run(`MultiplayerTimeManager.receive({type:'TIME_SYNC_TICK',currentTick:targetTick-1,gameSpeed:2,
+    isPaused:false,timestamp:Date.now(),date:new Date(startDate).toISOString()},'host')`);
+  assert.equal(run('CoreEngine.gameState.date.toISOString()'),run('targetDate'));
+  run('CoreEngine.tick()');
+  assert.equal(run('CoreEngine.gameState.date.toISOString()'),run('targetDate'));
+});
+test('multiplayer pause and speed requests require authenticated peers and are host-authoritative',()=>{
+  const {run}=fixture();
+  run(`MultiplayerManager.connected=true;MultiplayerManager.isHost=true;MultiplayerManager.roomId='room';
+    CoreEngine.gameState.speed=1;CoreEngine.gameState.paused=false;
+    globalThis.sent=[];MultiplayerManager.connections.peer={authOk:false,send:data=>sent.push(data)};
+    globalThis.unauthorized=MultiplayerTimeManager.receiveRequest({type:'REQUEST_PAUSE_TOGGLE',isPaused:true},'peer')`);
+  assert.equal(run('unauthorized'),false);
+  assert.equal(run('CoreEngine.gameState.paused'),false);
+  run(`MultiplayerManager.connections.peer.authOk=true;
+    MultiplayerTimeManager.receiveRequest({type:'REQUEST_PAUSE_TOGGLE',isPaused:true},'peer')`);
+  assert.equal(run('CoreEngine.gameState.paused'),true);
+  assert.ok(run(`sent.some(message=>message.type==='BROADCAST_PAUSE_STATE'&&message.isPaused)`));
+  run(`MultiplayerTimeManager.receiveRequest({type:'UPDATE_GAME_SPEED',gameSpeed:3},'peer')`);
+  assert.ok(run(`sent.some(message=>message.type==='UPDATE_GAME_SPEED'&&message.gameSpeed===3)`));
+
+  run(`MultiplayerManager.isHost=false;MultiplayerManager.roomId='host';
+    MultiplayerManager.connections.host={open:true,send:data=>sent.push(data)};
+    CoreEngine.setSpeed(4)`);
+  assert.ok(run(`sent.some(message=>message.type==='UPDATE_GAME_SPEED'&&message.gameSpeed===4)`));
 });
 test('paused asynchronous map startup populates target countries and country switches rebuild them',()=>{
   const {run}=fixture();run(`DiplomacyManager.countries=[];DiplomacyManager._ownerSig='';StrategyGame.onMapReady()`);assert.equal(run(`WarGoals.validTarget('SOV')`),true);
