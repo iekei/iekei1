@@ -1,0 +1,20 @@
+{
+ "name": "ゲルト・フォン・ルントシュテット",
+ "nameEn": "Rundstedt",
+ "nation": "GER",
+ "nationality": "german",
+ "rarity": "epic",
+ "portrait": "game/card/GER/data/image/army/rundstedt.png",
+ "traits": [
+  "cavalry_officer"
+ ],
+ "stats": {
+  "attack": 1,
+  "defense": 1,
+  "planning": 1,
+  "logistics": 1
+ },
+ "quote": "",
+ "id": "rundstedt",
+ "branch": "army"
+}

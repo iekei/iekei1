@@ -1,0 +1,12 @@
+{
+ "name": "ポルシェ",
+ "nation": "GER",
+ "mioType": "armor",
+ "monogram": "P",
+ "level": 1,
+ "xp": 0,
+ "traits": [],
+ "quote": "",
+ "id": "porsche",
+ "branch": "mio"
+}

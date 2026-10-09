@@ -1,0 +1,20 @@
+{
+ "name": "ヴャチェスラフ・モロトフ",
+ "nameEn": "Molotov",
+ "nation": "SOV",
+ "nationality": "soviet",
+ "rarity": "rare",
+ "portrait": "game/card/SOV/data/image/sov/molotov.png",
+ "traits": [
+  "organizer"
+ ],
+ "stats": {
+  "attack": 1,
+  "defense": 1,
+  "planning": 1,
+  "logistics": 1
+ },
+ "quote": "",
+ "id": "molotov",
+ "branch": "army"
+}

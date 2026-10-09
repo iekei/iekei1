@@ -1,0 +1,21 @@
+{
+ "name": "山本五十六",
+ "nameEn": "Yamamoto",
+ "nation": "JAP",
+ "nationality": "japanese",
+ "rarity": "legendary",
+ "portrait": "game/card/JAP/data/image/jap/yamamoto.png",
+ "traits": [
+  "naval_commander",
+  "fleet_logistics"
+ ],
+ "stats": {
+  "attack": 1,
+  "defense": 1,
+  "maneuver": 1,
+  "coordination": 1
+ },
+ "quote": "",
+ "id": "yamamoto",
+ "branch": "navy"
+}

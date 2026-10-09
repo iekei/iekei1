@@ -1,0 +1,20 @@
+{
+ "name": "ヤン・チェルニャク",
+ "nameEn": "Chernyak",
+ "nation": "SOV",
+ "nationality": "soviet",
+ "rarity": "rare",
+ "portrait": "game/assets/operatives/portrait_SOV_yan_chernyak_result.png",
+ "traits": [
+  "strategic_bomber_expert"
+ ],
+ "stats": {
+  "attack": 1,
+  "defense": 1,
+  "speed": 1,
+  "agility": 1
+ },
+ "quote": "",
+ "id": "chernyak",
+ "branch": "air"
+}

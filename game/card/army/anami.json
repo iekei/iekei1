@@ -1,0 +1,20 @@
+{
+ "name": "阿南惟幾",
+ "nameEn": "Anami",
+ "nation": "JAP",
+ "nationality": "japanese",
+ "rarity": "rare",
+ "portrait": "game/card/JAP/data/image/jap/anami.png",
+ "traits": [
+  "infantry_officer"
+ ],
+ "stats": {
+  "attack": 1,
+  "defense": 1,
+  "planning": 1,
+  "logistics": 1
+ },
+ "quote": "",
+ "id": "anami",
+ "branch": "army"
+}

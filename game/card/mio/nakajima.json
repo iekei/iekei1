@@ -1,0 +1,12 @@
+{
+ "name": "中島飛行機",
+ "nation": "JAP",
+ "mioType": "air",
+ "monogram": "N",
+ "level": 1,
+ "xp": 0,
+ "traits": [],
+ "quote": "",
+ "id": "nakajima",
+ "branch": "mio"
+}

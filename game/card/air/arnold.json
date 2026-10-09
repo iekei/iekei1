@@ -1,0 +1,20 @@
+{
+ "name": "ヘンリー・アーノルド",
+ "nameEn": "Arnold",
+ "nation": "USA",
+ "nationality": "american",
+ "rarity": "legendary",
+ "portrait": "",
+ "traits": [
+  "strategic_bomber_expert"
+ ],
+ "stats": {
+  "attack": 1,
+  "defense": 1,
+  "speed": 1,
+  "agility": 1
+ },
+ "quote": "",
+ "id": "arnold",
+ "branch": "air"
+}

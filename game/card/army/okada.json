@@ -1,0 +1,20 @@
+{
+ "name": "岡田啓介",
+ "nameEn": "Okada",
+ "nation": "JAP",
+ "nationality": "japanese",
+ "rarity": "rare",
+ "portrait": "game/card/JAP/data/image/jap/okada.png",
+ "traits": [
+  "naval_commander"
+ ],
+ "stats": {
+  "attack": 1,
+  "defense": 1,
+  "planning": 1,
+  "logistics": 1
+ },
+ "quote": "",
+ "id": "okada",
+ "branch": "army"
+}

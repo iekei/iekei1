@@ -1,0 +1,21 @@
+{
+ "name": "ヒュー・ダウディング",
+ "nameEn": "Dowding",
+ "nation": "ENG",
+ "nationality": "british",
+ "rarity": "legendary",
+ "portrait": "game/assets/leaders/churchill.jpg",
+ "traits": [
+  "air_commander",
+  "fighter_general"
+ ],
+ "stats": {
+  "attack": 1,
+  "defense": 1,
+  "speed": 1,
+  "agility": 1
+ },
+ "quote": "",
+ "id": "dowding",
+ "branch": "air"
+}

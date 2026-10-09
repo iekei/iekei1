@@ -1,0 +1,20 @@
+{
+ "name": "板垣征四郎",
+ "nameEn": "Itagaki",
+ "nation": "JAP",
+ "nationality": "japanese",
+ "rarity": "rare",
+ "portrait": "game/card/JAP/data/image/jap/itagaki.png",
+ "traits": [
+  "infantry_officer"
+ ],
+ "stats": {
+  "attack": 1,
+  "defense": 1,
+  "planning": 1,
+  "logistics": 1
+ },
+ "quote": "",
+ "id": "itagaki",
+ "branch": "army"
+}

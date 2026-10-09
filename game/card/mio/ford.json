@@ -1,0 +1,12 @@
+{
+ "name": "フォード",
+ "nation": "USA",
+ "mioType": "industry",
+ "monogram": "F",
+ "level": 1,
+ "xp": 0,
+ "traits": [],
+ "quote": "",
+ "id": "ford",
+ "branch": "mio"
+}

@@ -1,0 +1,20 @@
+{
+ "name": "ハインツ・グデーリアン",
+ "nameEn": "Guderian",
+ "nation": "GER",
+ "nationality": "german",
+ "rarity": "legendary",
+ "portrait": "game/card/GER/data/image/army/guderian.png",
+ "traits": [
+  "armor_officer"
+ ],
+ "stats": {
+  "attack": 1,
+  "defense": 1,
+  "planning": 1,
+  "logistics": 1
+ },
+ "quote": "",
+ "id": "guderian",
+ "branch": "army"
+}

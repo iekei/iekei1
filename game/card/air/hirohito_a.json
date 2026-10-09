@@ -1,0 +1,20 @@
+{
+ "name": "昭和天皇（大元帥）",
+ "nameEn": "Hirohito A",
+ "nation": "JAP",
+ "nationality": "japanese",
+ "rarity": "epic",
+ "portrait": "game/card/JAP/data/image/cut/hirohito.png",
+ "traits": [
+  "air_commander"
+ ],
+ "stats": {
+  "attack": 1,
+  "defense": 1,
+  "speed": 1,
+  "agility": 1
+ },
+ "quote": "",
+ "id": "hirohito_a",
+ "branch": "air"
+}

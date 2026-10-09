@@ -1,0 +1,12 @@
+{
+ "name": "三菱重工業",
+ "nation": "JAP",
+ "mioType": "air",
+ "monogram": "三",
+ "level": 1,
+ "xp": 0,
+ "traits": [],
+ "quote": "",
+ "id": "mitsubishi",
+ "branch": "mio"
+}
