@@ -1,1 +1,23 @@
-game/assets/
+# --- 大容量フォルダの除外 ---
+assets/
+public/assets/
+src/assets/
+
+# --- 特定の拡張子を一括除外（画像・動画・音声など） ---
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.mp4
+*.webm
+*.mp3
+
+# --- ビルド成果物やログファイル ---
+dist/
+build/
+*.log
+
+# --- 例外処理（特定のファイルだけは読み込みたい場合） ---
+# 例: assets フォルダは除外するが、logo.png だけは例外として読み込む
+# !assets/logo.png
