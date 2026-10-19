@@ -1,0 +1,12 @@
+{
+ "name": "ルノー",
+ "nation": "FRA",
+ "mioType": "armor",
+ "monogram": "R",
+ "level": 1,
+ "xp": 0,
+ "traits": [],
+ "quote": "",
+ "id": "renault",
+ "branch": "mio"
+}

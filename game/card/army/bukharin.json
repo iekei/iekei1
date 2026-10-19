@@ -1,0 +1,20 @@
+{
+ "name": "ニコライ・ブハーリン",
+ "nameEn": "Bukharin",
+ "nation": "SOV",
+ "nationality": "soviet",
+ "rarity": "rare",
+ "portrait": "game/card/SOV/data/image/sov/bukharin.png",
+ "traits": [
+  "infantry_officer"
+ ],
+ "stats": {
+  "attack": 1,
+  "defense": 1,
+  "planning": 1,
+  "logistics": 1
+ },
+ "quote": "",
+ "id": "bukharin",
+ "branch": "army"
+}

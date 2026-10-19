@@ -1,0 +1,65 @@
+{
+ "branches": {
+  "army": [
+   "game/card/army/anami.json",
+   "game/card/army/bock.json",
+   "game/card/army/bukharin.json",
+   "game/card/army/guderian.json",
+   "game/card/army/ishiwara.json",
+   "game/card/army/itagaki.json",
+   "game/card/army/kesselring.json",
+   "game/card/army/kluge.json",
+   "game/card/army/leeb.json",
+   "game/card/army/list.json",
+   "game/card/army/mazaki.json",
+   "game/card/army/molotov.json",
+   "game/card/army/mstein.json",
+   "game/card/army/okada.json",
+   "game/card/army/rommel.json",
+   "game/card/army/rundstedt.json",
+   "game/card/army/stalin_j.json",
+   "game/card/army/tojo.json",
+   "game/card/army/trotsky.json",
+   "game/card/army/tukhachevsky.json",
+   "game/card/army/yamashita.json"
+  ],
+  "navy": [
+   "game/card/navy/cunningham.json",
+   "game/card/navy/cunningham_uk.json",
+   "game/card/navy/dönitz.json",
+   "game/card/navy/kuznetsov.json",
+   "game/card/navy/okada_n.json",
+   "game/card/navy/pound.json",
+   "game/card/navy/raeder.json",
+   "game/card/navy/yamamoto.json"
+  ],
+  "air": [
+   "game/card/air/arnold.json",
+   "game/card/air/chernyak.json",
+   "game/card/air/dowding.json",
+   "game/card/air/hartmann.json",
+   "game/card/air/hirohito_a.json",
+   "game/card/air/kesselring_a.json",
+   "game/card/air/tedder.json",
+   "game/card/air/yamamoto_a.json"
+  ],
+  "mio": [
+   "game/card/mio/bethlehem_steel.json",
+   "game/card/mio/blohm_voss.json",
+   "game/card/mio/boeing.json",
+   "game/card/mio/fiat.json",
+   "game/card/mio/ford.json",
+   "game/card/mio/ig_farben.json",
+   "game/card/mio/krupp.json",
+   "game/card/mio/messerschmitt.json",
+   "game/card/mio/mitsubishi.json",
+   "game/card/mio/nakajima.json",
+   "game/card/mio/porsche.json",
+   "game/card/mio/renault.json",
+   "game/card/mio/supermarine.json",
+   "game/card/mio/tupolev.json",
+   "game/card/mio/uralmash.json",
+   "game/card/mio/vickers.json"
+  ]
+ }
+}

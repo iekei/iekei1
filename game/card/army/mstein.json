@@ -1,0 +1,21 @@
+{
+ "name": "エーリッヒ・フォン・マンシュタイン",
+ "nameEn": "Mstein",
+ "nation": "GER",
+ "nationality": "german",
+ "rarity": "legendary",
+ "portrait": "game/card/GER/data/image/army/mstein.png",
+ "traits": [
+  "organizer",
+  "armor_officer"
+ ],
+ "stats": {
+  "attack": 1,
+  "defense": 1,
+  "planning": 1,
+  "logistics": 1
+ },
+ "quote": "",
+ "id": "mstein",
+ "branch": "army"
+}

@@ -61,3 +61,12 @@ docker compose -f docker-compose.base44.yml up -d
 - `assets/topbar-ui.js` owns the seven status instruments and tooltip presentation; CoreEngine still owns values/explanations. Render updates text/gauges without replacing the instruments, so keyboard focus survives daily ticks. Order: political power, stability, war support, manpower, factories, fuel, convoys.
 - Status explanations support mouseover/mouseout, focus, Escape, and touch/click; world tension retains its diplomacy action. Small screens scroll the instruments rather than reordering or hiding them. `assets/topbar.css` overrides the theme only for the topbar and existing navigation icons.
 - Existing focus-tree icons still request missing GitHub raw images. These image errors are not topbar script failures; check loaded inline status images, nonempty `#game-root`, and the absence of script errors separately.
+
+## HOI4風大戦略ゲーム（hoi4.html）
+
+- エントリはリポジトリルートの `hoi4.html`（アセットは厳密に `game/assets/...`・`game/card/...` を参照するため、ページはルートに置く）。
+- ES6 Modules のみで構成（`game/js/` 以下）、ビルド不要。デザインシステムは `game/css/steel-ui.css`。
+- ローカライズ辞書は `game/locales/ja.json`。**研究技術名（全294件）は `game/eng/tec/data/tech_*.json` から自動生成**しており、辞書を手編集で更新する場合は `/tmp/gen_data.py` 相当のルールで再生成すること（現行ジェネレータはセッションスクリプト）。
+- 指揮官カードは `game/card/{army,navy,air,mio}/*.json` + `game/card/manifest.json` で管理。
+- マルチプレイ時間同期サーバー: `node server/timesync-server.js 8787`（依存パッケージなしの簡易WebSocketリレー。`server/package.json` は ESM なので import 構文を使うこと）。
+- 起動: `python3 -m http.server 8000`（ルートから）→ `/hoi4.html`。マルチプレイは `?mp=host&room=xxx` / `?mp=client&room=xxx`。

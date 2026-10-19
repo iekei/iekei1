@@ -1,0 +1,21 @@
+{
+ "name": "ニコライ・クズネツォフ",
+ "nameEn": "Kuznetsov",
+ "nation": "SOV",
+ "nationality": "soviet",
+ "rarity": "epic",
+ "portrait": "game/assets/leaders/kuznetsov.png",
+ "traits": [
+  "naval_commander",
+  "escort_specialist"
+ ],
+ "stats": {
+  "attack": 1,
+  "defense": 1,
+  "maneuver": 1,
+  "coordination": 1
+ },
+ "quote": "",
+ "id": "kuznetsov",
+ "branch": "navy"
+}

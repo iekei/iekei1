@@ -1,0 +1,20 @@
+{
+ "name": "東條英機",
+ "nameEn": "Tojo",
+ "nation": "JAP",
+ "nationality": "japanese",
+ "rarity": "epic",
+ "portrait": "game/card/JAP/data/image/jap/tojo.png",
+ "traits": [
+  "infantry_officer"
+ ],
+ "stats": {
+  "attack": 1,
+  "defense": 1,
+  "planning": 1,
+  "logistics": 1
+ },
+ "quote": "",
+ "id": "tojo",
+ "branch": "army"
+}

@@ -1,0 +1,12 @@
+{
+ "name": "フィアット",
+ "nation": "ITA",
+ "mioType": "industry",
+ "monogram": "F",
+ "level": 1,
+ "xp": 0,
+ "traits": [],
+ "quote": "",
+ "id": "fiat",
+ "branch": "mio"
+}

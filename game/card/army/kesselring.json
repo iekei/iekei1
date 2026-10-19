@@ -1,0 +1,20 @@
+{
+ "name": "アルベルト・ケッセルリング",
+ "nameEn": "Kesselring",
+ "nation": "GER",
+ "nationality": "german",
+ "rarity": "epic",
+ "portrait": "game/card/GER/data/image/army/kesselring.png",
+ "traits": [
+  "air_commander"
+ ],
+ "stats": {
+  "attack": 1,
+  "defense": 1,
+  "planning": 1,
+  "logistics": 1
+ },
+ "quote": "",
+ "id": "kesselring",
+ "branch": "army"
+}

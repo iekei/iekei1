@@ -1,0 +1,20 @@
+{
+ "name": "石原莞爾",
+ "nameEn": "Ishiwara",
+ "nation": "JAP",
+ "nationality": "japanese",
+ "rarity": "epic",
+ "portrait": "game/card/JAP/data/image/jap/ishiwara.png",
+ "traits": [
+  "organizer"
+ ],
+ "stats": {
+  "attack": 1,
+  "defense": 1,
+  "planning": 1,
+  "logistics": 1
+ },
+ "quote": "",
+ "id": "ishiwara",
+ "branch": "army"
+}
