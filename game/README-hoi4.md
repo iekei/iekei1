@@ -109,3 +109,15 @@ cd /tmp/uitest && node --experimental-vm-modules e2e.mjs
 # 時間同期テスト（実WebSocketサーバー使用）
 node server/timesync-server.js 8787
 ```
+
+## 更新履歴
+
+### 2026-10-09 — HOI4風 UIシステム一式 (a1399a0)
+- `hoi4.html` エントリページ追加（`game/` 配下の厳密パス参照）
+- `game/css/steel-ui.css` 重厚スチールフレーム デザインシステム
+- `game/js/ui/topbar.js` トップバー（政治力・安定度・戦争協力度・徴兵可能人口・工場数・燃料・装備充足率・輸送船／指揮力・XP・核弾頭）+ キーボードショートカット
+- `game/locales/ja.json` 日本語ローカライズ（全294研究技術名）
+- 研究 / MIO / 師団設計 (5×5+1×5) / 兵器設計+増槽 / 戦闘シミュレーター / 生産・貿易 / ドクトリン・諜報・外交・政治 / 指揮官カード53枚 / マルチプレイ時間同期
+- `server/timesync-server.js` WebSocketリレー
+
+Ref: arena/d5009569-iekei1 (#46) と同内容を a1399a0 ブランチからPR化
