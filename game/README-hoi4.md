@@ -7,7 +7,8 @@ Hearts of Iron IV 風の大規模戦略Webゲーム。Vanilla HTML5 / CSS3 / ES6
 ```bash
 # 静的サーバー（リポジトリルートから）
 python3 -m http.server 8000
-# → http://localhost:8000/hoi4.html
+# → http://localhost:8000/hoi4.html          HOI4 単独
+# → http://localhost:8000/game/              将軍カードゲーム（H で HOI4 画面）
 
 # マルチプレイ時間同期サーバー（別ターミナル）
 node server/timesync-server.js 8787
@@ -15,6 +16,42 @@ node server/timesync-server.js 8787
 
 エントリページは **リポジトリルートの `hoi4.html`**。すべてのアセットは厳密なパス
 `game/assets/...`・`game/card/...`・`game/locales/ja.json` を参照する。
+
+## 将軍カードゲーム（`game/index.html`）から HOI4 画面を開く
+
+`game/index.html` に **「HOI4 大戦略」全画面レイヤー**を統合済み。カードゲームを
+遊びながら、同じタブで HOI4 風の研究・生産・外交・戦闘画面へ切り替えられる。
+
+| 起動方法 | 場所 |
+| --- | --- |
+| **H キー** | カードゲームのどこからでも（入力欄・IME 変換中を除く） |
+| ナビゲーションレール | 「HOI4 大戦略」ボタン（`H` バッジ付き） |
+| スタート画面 | 「🧭 HOI4 大戦略画面を開く（H）」 |
+| 直接 URL | `game/index.html?screen=hoi4`（開いた状態で起動） |
+
+- **Esc** または右上の「閉じる」でカードゲームへ戻る。HOI4 側の上部メニューにも
+  「← 将軍カードゲーム」ボタンが出る（`?embed=1` のときだけ）。
+- 選択中の国家タグが `?nation=GER` として引き継がれる（`GER/USA/ENG/SOV/JAP/ITA/FRA`）。
+- iframe は初回オープンまで読み込まない。閉じても破棄しないため、HOI4 側の
+  研究・生産などの状態は保持されたまま即座に再表示できる。
+- 閉じている間は HOI4 の時間進行を自動で一時停止する（再表示で再開。
+  ユーザーが自分で一時停止していた場合はそのまま）。
+- `game/index.html?screen=hoi4` のように URL でも開ける。開閉時は `screen` パラメータだけを
+  `history.replaceState` で付け外しする（他のクエリは保持）。
+
+### なぜ iframe なのか
+
+`hoi4.html` は `game/css/steel-ui.css` で `html` / `body` / `button` / `*` などの
+グローバルスタイルを所有している。これをカードゲームの DOM に直接読み込むと
+既存 UI の CSS を上書きしてしまうため、DOM・CSS・タイマーを完全に分離し、
+`postMessage` で可視状態と「戻る」だけを連携している。
+
+| ファイル | 役割 |
+| --- | --- |
+| `game/hoi4-screen.js` | 全画面レイヤー / 遅延 iframe / H・Esc / inert / URL 同期 / 国家引き継ぎ |
+| `game/css/hoi4-screen.css` | スチール調クローム・ローディング・フッター・起動ボタン |
+| `game/js/ui/embed.js` | `?embed=1` 時の親ページ連携（可視状態で時間停止 / Esc / ready 通知） |
+| `game/js/ui/topbar.js` | 埋め込み時のみ「← 将軍カードゲーム」ボタンをメニュー末尾に追加 |
 
 ## 操作方法（HOI4準拠キーボードショートカット）
 
@@ -38,7 +75,10 @@ node server/timesync-server.js 8787
 ```
 hoi4.html                     エントリページ（リポジトリルート）
 game/
+  index.html                  将軍カードゲーム本体（HOI4 画面の起動元 / ?screen=hoi4）
+  hoi4-screen.js              HOI4 全画面レイヤー（H・Esc・遅延iframe・国家引き継ぎ）
   css/steel-ui.css            重厚スチールフレーム デザインシステム
+  css/hoi4-screen.css         game/index.html 側の全画面クローム / 起動ボタン
   locales/ja.json             日本語ローカライズ辞書（hoidesigner.com準拠・全294技術名収録）
   js/
     i18n.js                   辞書ロード / data-i18n DOM適用 / techName等の日本語解決
@@ -56,7 +96,7 @@ game/
     diplomacy.js              外交（プロファイル/政治力消費アクション）
     politics.js               政治（法律/閣僚/占領度統合タイマー/併合）
     data/                     nations / battalions / equipment / mios / doctrines / operatives / cards
-    ui/                       topbar.js / modal.js / screens.js / screens2.js / map.js
+    ui/                       topbar.js / modal.js / screens.js / screens2.js / map.js / embed.js
 server/timesync-server.js     マルチプレイ時間同期 WebSocket サーバー（依存なし）
 ```
 
@@ -109,3 +149,24 @@ cd /tmp/uitest && node --experimental-vm-modules e2e.mjs
 # 時間同期テスト（実WebSocketサーバー使用）
 node server/timesync-server.js 8787
 ```
+
+## 更新履歴
+
+### 2026-10-20 — game/index.html への HOI4 画面移植
+- `game/hoi4-screen.js` + `game/css/hoi4-screen.css`: 将軍カードゲームから
+  `../hoi4.html` を全画面表示するレイヤー（H キー / ナビ / スタート画面 / `?screen=hoi4`）
+- 国家タグ引き継ぎ (`?nation=`)、遅延 iframe、閉じても状態保持、背景 `inert` 化、
+  フォーカス返却、Esc・別タブリンク・読み込み失敗フォールバック
+- `game/js/ui/embed.js`: `?embed=1` 時の親ページ連携。閉じている間は HOI4 の時間を自動停止
+- `game/js/ui/topbar.js`: 埋め込み時のみ「← 将軍カードゲーム」ボタンを追加
+- `game/index.html`: ナビレール / スタート画面に HOI4 起動ボタン、操作方法に追記
+
+### 2026-10-09 — HOI4風 UIシステム一式 (a1399a0)
+- `hoi4.html` エントリページ追加（`game/` 配下の厳密パス参照）
+- `game/css/steel-ui.css` 重厚スチールフレーム デザインシステム
+- `game/js/ui/topbar.js` トップバー（政治力・安定度・戦争協力度・徴兵可能人口・工場数・燃料・装備充足率・輸送船／指揮力・XP・核弾頭）+ キーボードショートカット
+- `game/locales/ja.json` 日本語ローカライズ（全294研究技術名）
+- 研究 / MIO / 師団設計 (5×5+1×5) / 兵器設計+増槽 / 戦闘シミュレーター / 生産・貿易 / ドクトリン・諜報・外交・政治 / 指揮官カード53枚 / マルチプレイ時間同期
+- `server/timesync-server.js` WebSocketリレー
+
+Ref: arena/d5009569-iekei1 (#46) と同内容を a1399a0 ブランチからPR化

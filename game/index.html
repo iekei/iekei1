@@ -708,6 +708,8 @@
   <link rel="stylesheet" href="assets/equipment-designer.css">
   <link rel="stylesheet" href="assets/strategy-systems.css">
   <link rel="stylesheet" href="assets/war-systems.css">
+  <!-- HOI4 大戦略 全画面レイヤー (../hoi4.html を iframe で表示) -->
+  <link rel="stylesheet" href="css/hoi4-screen.css">
   </head>
 <body>
 <!-- ==================== START SCREEN (Scenario / Nation Select) ==================== -->
@@ -717,6 +719,8 @@
     <p class="start-sub">シナリオ: 1936年1月1日 — プレイする国家を選択してください</p>
     <div class="start-nation-grid" id="start-nation-grid"></div>
     <button id="start-game-btn" onclick="StartScreen.start()" disabled>国家を選択してください</button>
+    <button id="start-hoi4-btn" type="button" data-open-hoi4 aria-keyshortcuts="H">🧭 HOI4 大戦略画面を開く（H）</button>
+    <span class="start-hoi4-note">将軍カードゲームを始めなくても、HOI4風の研究・生産・外交・戦闘画面を先に確認できます</span>
   </div>
 </div>
 
@@ -731,6 +735,7 @@
       <li><strong>チャット:</strong> マルチプレイ画面の全体／陣営タブを切替</li>
       <li><strong>研究:</strong> 技術ノードをクリックして詳細を確認し、研究を開始</li>
       <li><strong>時間:</strong> 上部の一時停止・速度ボタンで進行を変更</li>
+      <li><strong>HOI4 大戦略:</strong> ナビの「HOI4 大戦略」または <strong>H</strong> キーで HOI4風フル画面を起動（<strong>Esc</strong> で戻る）</li>
     </ul>
   </aside>
   <!-- ==================== TOP BAR ==================== -->
@@ -780,6 +785,13 @@
     <button class="win-btn" data-tab="multiplayer" onclick="GameUI.switchTab('multiplayer')"><img class="win-btn-icon" data-menu-icon="multiplayer" alt=""> マルチ</button>
     <button class="win-btn" data-tab="nation" onclick="GameUI.switchTab('nation')"><img class="win-btn-icon" data-menu-icon="nation" alt=""> 固有システム</button>
     <button class="win-btn" data-tab="winsave" onclick="GameUI.switchTab('winsave')"><img class="win-btn-icon" data-menu-icon="winsave" alt=""> セーブ/ロード</button>
+    <button class="win-btn win-btn-hoi4" type="button" data-open-hoi4 aria-keyshortcuts="H" title="HOI4風の大戦略画面を全画面で開く (H)">
+      <svg class="win-btn-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round">
+        <path d="M12 2.6 20.2 7v10L12 21.4 3.8 17V7Z"/>
+        <path d="m12 6.4 1.5 3.2 3.5.5-2.5 2.4.6 3.5-3.1-1.7-3.1 1.7.6-3.5L7 10.1l3.5-.5Z" fill="currentColor" stroke="none"/>
+      </svg>
+      HOI4 大戦略 <span class="win-btn-kbd" aria-hidden="true">H</span>
+    </button>
     <button class="win-btn" onclick="WindowManager.closeAll()"><img class="win-btn-icon" data-menu-icon="map" alt=""> マップ画面</button>
   </nav>
 
@@ -6937,5 +6949,7 @@ window.addEventListener('DOMContentLoaded', () => StartScreen.show());
   <script src="assets/strategy-systems.js"></script>
   <script src="assets/force-systems.js"></script>
   <script src="assets/MultiplayerTimeManager.js"></script>
+  <!-- ==================== HOI4 大戦略 全画面レイヤー (../hoi4.html / H キー) ==================== -->
+  <script src="hoi4-screen.js"></script>
   </body>
 </html>

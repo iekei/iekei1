@@ -70,3 +70,11 @@ docker compose -f docker-compose.base44.yml up -d
 - 指揮官カードは `game/card/{army,navy,air,mio}/*.json` + `game/card/manifest.json` で管理。
 - マルチプレイ時間同期サーバー: `node server/timesync-server.js 8787`（依存パッケージなしの簡易WebSocketリレー。`server/package.json` は ESM なので import 構文を使うこと）。
 - 起動: `python3 -m http.server 8000`（ルートから）→ `/hoi4.html`。マルチプレイは `?mp=host&room=xxx` / `?mp=client&room=xxx`。
+- **`game/index.html` への統合**: 将軍カードゲームの「HOI4 大戦略」は `../hoi4.html` を
+  iframe で全画面表示する（`game/hoi4-screen.js` / `game/css/hoi4-screen.css`）。
+  起動は H キー・ナビレール・スタート画面・`?screen=hoi4`。Esc で戻る。
+  iframe は初回オープンまで読み込まず、閉じても破棄しない（状態保持）。閉じている間は
+  `?embed=1` の `game/js/ui/embed.js` が親からの `postMessage` を受けて時間を一時停止する。
+  埋め込み時は `game/js/ui/topbar.js` が「← 将軍カードゲーム」ボタンを追加する。
+  `steel-ui.css` はグローバル CSS（`html`/`body`/`button`）を所有するため、直接読み込まず
+  iframe で分離するのが前提。レイヤーのスタイルは `game/index.html` の既存 UI と衝突させない。
