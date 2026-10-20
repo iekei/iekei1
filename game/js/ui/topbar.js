@@ -118,6 +118,20 @@ export class TopBar {
       row2.appendChild(btn);
     }
 
+    // 埋め込み時（game/index.html の HOI4 大戦略レイヤー）だけ、
+    // カードゲームへ戻るボタンをメニュー末尾に追加する。
+    if (document.documentElement.classList.contains('hoi4-embedded')) {
+      const back = el('button', 'tb-menu-btn tb-back-to-cards');
+      back.type = 'button';
+      back.title = '将軍カードゲームに戻る (Esc)';
+      back.appendChild(el('span', 'tb-back-arrow', '←'));
+      back.appendChild(el('span', '', '将軍カードゲーム'));
+      back.addEventListener('click', () => {
+        try { window.parent.postMessage({ type: 'hoi4:close' }, '*'); } catch { /* 親なし */ }
+      });
+      row2.appendChild(back);
+    }
+
     this.root.appendChild(row1);
     this.root.appendChild(row2);
   }

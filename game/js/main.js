@@ -22,11 +22,16 @@ import { PoliticsManager } from './politics.js';
 import { CardLibrary } from './data/cards.js';
 import { TopBar } from './ui/topbar.js';
 import { ModalManager } from './ui/modal.js';
+import { initEmbedBridge } from './ui/embed.js';
 import { MapView } from './ui/map.js';
 import { PoliticsPanel, renderResearchScreen, renderTradeScreen, renderProductionScreen, renderConstructionScreen, renderLogisticsScreen, renderDecisionsScreen } from './ui/screens.js';
 import { renderDeploymentScreen, renderDoctrineScreen, renderIntelScreen, renderDiplomacyScreen } from './ui/screens2.js';
 
 async function boot() {
+  // 0. game/index.html の HOI4 全画面レイヤーに埋め込まれている場合のブリッジ
+  //    （?embed=1。単独起動時は何もしない）
+  const embedded = initEmbedBridge();
+
   // 1. ローカライズ辞書
   await I18N.init('game/locales/ja.json');
 
@@ -151,6 +156,8 @@ async function boot() {
 
   // デバッグ用に公開
   window.GAME = { state, engine, research, mio, economy, doctrine, intel, diplomacy, politics, modals, topbar, mapView, cards, sync, I18N };
+  // 埋め込み元（game/index.html）へ読み込み完了を通知（ローディング解除）
+  if (embedded) window.dispatchEvent(new CustomEvent('hoi4:ready'));
   console.log('%c 大戦略ゲーム 起動完了（?mp=host&room=xxx でマルチプレイ時間同期）', 'color:#e6c268;font-size:14px');
 }
 

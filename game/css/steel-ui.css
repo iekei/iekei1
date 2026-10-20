@@ -392,6 +392,25 @@ button { font-family: var(--jp-font); cursor: pointer; }
 .tb-menu-btn.disabled { opacity: .4; cursor: default; }
 .tb-menu-btn.disabled:hover { box-shadow: 0 3px 0 #0d1013; color: #c4cdd5; }
 
+/* 埋め込み時（game/index.html の HOI4 画面）: 将軍カードゲームへ戻る */
+.tb-menu-btn.tb-back-to-cards {
+  margin-left: 8px;
+  color: var(--gold);
+  border-color: var(--gold-dim);
+  background: linear-gradient(180deg, #2f2b1e, #1b1913 60%, #12110d);
+}
+.tb-menu-btn.tb-back-to-cards:hover {
+  color: #f6e2a8;
+  border-color: var(--gold);
+  box-shadow: 0 3px 0 #0d1013, 0 0 12px rgba(230, 194, 104, .3), inset 0 1px 0 rgba(255, 255, 255, .18);
+}
+.tb-menu-btn .tb-back-arrow {
+  font-family: var(--jp-font);
+  font-size: 15px;
+  line-height: 1;
+  color: var(--gold);
+}
+
 /* ============================================================ モーダル */
 
 #modal-layer { position: fixed; inset: 0; z-index: 100; pointer-events: none; }
