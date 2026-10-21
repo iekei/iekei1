@@ -769,8 +769,8 @@ table.mil-table tr:hover td { background: rgba(255, 255, 255, .03); }
 /* ============================================================ 国家選択画面 */
 .nation-select {
   position: fixed; inset: 0; z-index: 2000;
-  /* 半透明のダーク背景：ゲーム本体がうっすら見えるため「真っ暗」にならない */
-  background: radial-gradient(ellipse at 40% 30%, rgba(29,36,43,0.85) 0%, rgba(16,20,25,0.9) 55%, rgba(10,13,16,0.95) 100%);
+  /* 半透明のダーク背景（かなり薄め：ゲーム本体がはっきり見える） */
+  background: radial-gradient(ellipse at 40% 30%, rgba(29,36,43,0.35) 0%, rgba(16,20,25,0.45) 55%, rgba(10,13,16,0.55) 100%);
   color: var(--text); display: flex; flex-direction: column; height: 100vh; overflow-y: auto;
   font-family: var(--jp-font);
 }
