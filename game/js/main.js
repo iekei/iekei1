@@ -23,9 +23,18 @@ import { CardLibrary } from './data/cards.js';
 import { TopBar } from './ui/topbar.js';
 import { ModalManager } from './ui/modal.js';
 import { initEmbedBridge } from './ui/embed.js';
-import { MapView } from './ui/map.js';
+import { MapEngine } from './map-engine.js';
+import { EffectEngine } from './effects.js';
+import { NationalFocusManager } from './national-focus.js';
+import { AirNavalManager } from './air-naval.js';
+import { GachaManager, PACKS } from './gacha.js';
+import { PeaceConferenceManager } from './peace-conference.js';
+import { NukeManager } from './nukes.js';
+import { SpecialProjectManager } from './special-projects.js';
 import { PoliticsPanel, renderResearchScreen, renderTradeScreen, renderProductionScreen, renderConstructionScreen, renderLogisticsScreen, renderDecisionsScreen } from './ui/screens.js';
 import { renderDeploymentScreen, renderDoctrineScreen, renderIntelScreen, renderDiplomacyScreen } from './ui/screens2.js';
+import { renderFocusScreen, renderAirNavalScreen, renderGachaScreen, renderPeaceScreen, renderSpecialScreen, renderNukeScreen } from './ui/screens3.js';
+import { NationSelect } from './nation-select.js';
 
 async function boot() {
   // 0. game/index.html の HOI4 全画面レイヤーに埋め込まれている場合のブリッジ
@@ -35,10 +44,39 @@ async function boot() {
   // 1. ローカライズ辞書
   await I18N.init('game/locales/ja.json');
 
-  // 2. ゲーム状態（プレイヤー: ドイツで開始。?nation=USA 等で変更可）
+  // パラメータ
   const params = new URLSearchParams(location.search);
+
+  // 1.5 国家選択画面（?nation= で直接指定時はスキップ）
+  const directTag = params.get('nation') || null;
+  let selectedTag = directTag;
+  let mpMode = 'local';
+  let room = 'default';
+  const gameRoot = document.getElementById('game-root');
+  if (!directTag) {
+    // 国家選択オーバーレイを表示（ゲーム本体は背景で待機）
+    gameRoot.style.filter = 'blur(2px) brightness(.55)';
+    gameRoot.style.pointerEvents = 'none';
+    const ns = new NationSelect({
+      onSelect: (tag, mp) => { selectedTag = tag; mpMode = mp.mode; room = mp.room; },
+      container: document.body,
+    });
+    ns.mount();
+    await new Promise((resolve) => {
+      const check = setInterval(() => {
+        if (selectedTag !== null) { clearInterval(check); resolve(); }
+      }, 50);
+    });
+    ns.unmount();
+    gameRoot.style.filter = '';
+    gameRoot.style.pointerEvents = '';
+  }
+
+  // 2. ゲーム状態（選択国家で開始。既定はドイツ）
   const state = new GameState();
-  if (params.get('nation') && state.nation) state.changePlayer(params.get('nation'));
+  if (selectedTag) state.changePlayer(selectedTag);
+  // マルチプレイ設定を状態に保存（TopBar のホスト専用時間制御などで参照）
+  state.multiplayer = { mode: mpMode, room };
 
   // 3. カード・研究データ
   const cards = await new CardLibrary().load();
@@ -56,11 +94,17 @@ async function boot() {
   state._politicsMgr = politics;
   const designer = { current: null }; //師団テンプレート編集中（DivisionTemplate を保持）
   const equipDesigner = new EquipmentDesigner(state);
+  const effectEngine = new EffectEngine(state);
+  const focusMgr = new NationalFocusManager(state, effectEngine);
+  await focusMgr.load(state.playerTag);
+  const gacha = new GachaManager(state, cards);
+  const peace = new PeaceConferenceManager(state, diplomacy, effectEngine);
+  const special = new SpecialProjectManager(state);
+  await special.load();
 
   // 5. 時間エンジン + マルチプレイ時間同期
   const engine = new TimeEngine(state);
-  const mpMode = params.get('mp') || 'local';
-  const room = params.get('room') || 'default';
+  // mpMode / room は 1.5 の国家選択画面（または URL パラメータ）で決定済み
   const sync = new TimeSync(engine, { mode: mpMode, room, wsUrl: params.get('ws') || undefined });
   if (sync.isMultiplayer) {
     sync.connect();
@@ -77,11 +121,23 @@ async function boot() {
   const politicsPanel = new PoliticsPanel(state);
   const topbar = new TopBar(state, modals, politicsPanel);
   topbar.mount(document.getElementById('topbar'));
-  const mapView = new MapView(state);
+  const mapEngine = new MapEngine(state, document.getElementById('map-svg'));
+
+  const airNaval = new AirNavalManager(state, mapEngine);
+  const nukes = new NukeManager(state, airNaval, effectEngine, mapEngine);
+
+  // 州クリックでその国の外交ウィンドウを開く
+  mapEngine.onProvinceClick = (provinceId) => {
+    const p = mapEngine.byId[provinceId];
+    if (!p || p.tag === state.playerTag) return;
+    diplomacy.select(p.tag);
+    modals.toggle('diplomacy', {});
+  };
 
   const ctx = {
     state, research, mio, economy, doctrine, intel, diplomacy, politics,
-    cards, designer, equipDesigner, modals, mapView,
+    cards, designer, equipDesigner, modals, mapEngine,
+    effectEngine, focusMgr, airNaval, gacha, peace, special, nukes,
     onTickScreens: [],
   };
 
@@ -97,6 +153,11 @@ async function boot() {
     logistics:    { title: I18N.t('menu.logistics'),    width: '',       render: renderLogisticsScreen(ctx) },
     doctrine:     { title: I18N.t('menu.doctrine'),     width: 'wide',   render: renderDoctrineScreen(ctx) },
     diplomacy:    { title: I18N.t('menu.diplomacy'),    width: 'wide',   render: renderDiplomacyScreen(ctx) },
+    focus:        { title: I18N.t('menu.focus'),        width: 'wide',   render: renderFocusScreen(ctx) },
+    airnaval:     { title: I18N.t('menu.airnaval'),     width: 'wide',   render: renderAirNavalScreen(ctx) },
+    gacha:        { title: I18N.t('menu.gacha'),        width: '',       render: renderGachaScreen(ctx) },
+    special:      { title: I18N.t('menu.special'),      width: '',       render: renderSpecialScreen(ctx) },
+    nukes:        { title: I18N.t('menu.nukes'),        width: '',       render: renderNukeScreen(ctx) },
   };
   // トップバーから開くときはレジストリ経由
   const origToggle = modals.toggle.bind(modals);
@@ -110,7 +171,15 @@ async function boot() {
   state.bus.on('modal-opened', syncMenu);
   state.bus.on('modal-closed', syncMenu);
   const _origOpen = modals.open.bind(modals);
-  modals.open = (id, opts) => { const r = _origOpen(id, opts); state.bus.emit('modal-opened', id); return r; };
+  modals.open = (id, opts) => {
+    if (id === 'peace') {
+      const surrendered = [...state.surrendered];
+      if (surrendered.length) peace.open(surrendered[0]);
+    }
+    const r = _origOpen(id, opts);
+    state.bus.emit('modal-opened', id);
+    return r;
+  };
   const _origClose = modals.close.bind(modals);
   modals.close = (id) => { _origClose(id); state.bus.emit('modal-closed', id); };
 
@@ -120,18 +189,26 @@ async function boot() {
     economy.tick(hours);
     politics.tick(hours);
     intel.tick(hours);
+    focusMgr.tick(st.playerTag, hours);
+    special.tick(st.playerTag, hours);
     for (const b of ['land', 'naval', 'air']) doctrine.tick(b, hours);
     research.syncPlayerState();
     // 画面の定期再描画（開いている画面のみ）
     for (const fn of ctx.onTickScreens) fn(hours);
     // トップバー・マップ更新
     topbar.update(economy);
-    mapView.update();
+    mapEngine.update();
   });
 
-  // 一時停止/速度変更をエンジンへ反映
-  state.bus.on('speed-changed', (sp) => { engine.setSpeed(sp); syncHostState(); });
-  state.bus.on('pause-changed', (paused) => { paused ? engine.pause() : engine.resume(); syncHostState(); });
+  // 一時停止/速度変更をエンジンへ反映（ホストのみ。クライアントは HOST からの同期に従う）
+  state.bus.on('speed-changed', (sp) => {
+    if (state.multiplayer?.mode === 'client') return;
+    engine.setSpeed(sp); syncHostState();
+  });
+  state.bus.on('pause-changed', (paused) => {
+    if (state.multiplayer?.mode === 'client') return;
+    paused ? engine.pause() : engine.resume(); syncHostState();
+  });
   function syncHostState() {
     if (sync.mode === 'host') sync._send({ type: 'TIME_SYNC_STATE', paused: state.paused, speed: state.speed });
   }
@@ -140,7 +217,7 @@ async function boot() {
   state.bus.on('player-changed', () => {
     research.syncPlayerState();
     topbar.update(economy);
-    mapView._updateCapital();
+    mapEngine.update();
     politicsPanel.render();
   });
 
@@ -151,11 +228,11 @@ async function boot() {
 
   // 9. 初期描画 & 時間開始
   topbar.update(economy);
-  mapView.update();
+  mapEngine.update();
   engine.start();
 
   // デバッグ用に公開
-  window.GAME = { state, engine, research, mio, economy, doctrine, intel, diplomacy, politics, modals, topbar, mapView, cards, sync, I18N };
+  window.GAME = { state, engine, research, mio, economy, doctrine, intel, diplomacy, politics, modals, topbar, mapEngine, effectEngine, focusMgr, airNaval, gacha, peace, special, nukes, cards, sync, I18N };
   // 埋め込み元（game/index.html）へ読み込み完了を通知（ローディング解除）
   if (embedded) window.dispatchEvent(new CustomEvent('hoi4:ready'));
   console.log('%c 大戦略ゲーム 起動完了（?mp=host&room=xxx でマルチプレイ時間同期）', 'color:#e6c268;font-size:14px');

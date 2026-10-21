@@ -800,7 +800,8 @@ function renderDiplomacyScreen(ctx) {
   return (body) => {
     const { state, diplomacy } = ctx;
     body.innerHTML = '';
-    let selected = diplomacy.others()[0];
+    let selected = diplomacy._selected || diplomacy.others()[0];
+    diplomacy._selected = null;
     const main = el('div', 'row');
     main.style.alignItems = 'flex-start';
     main.style.gap = '14px';

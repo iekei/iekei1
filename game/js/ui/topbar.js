@@ -19,6 +19,11 @@ export const MENU_ITEMS = [
   { id: 'intel',        key: 'W', shift: true,  icon: `${MENU}/Intelligence_button_transparent.png`, labelKey: 'menu.intel' },
   { id: 'research',     key: 'W', shift: false, icon: `${MENU}/Research_button_transparent.png`,     labelKey: 'menu.research' },
   { id: null,           key: 'E', shift: false, icon: null,                                          labelKey: 'menu.dummy', dummy: true },
+  { id: 'focus',        key: 'F', shift: false, icon: null,                                          labelKey: 'menu.focus' },
+  { id: 'airnaval',     key: 'A', shift: false, icon: null,                                          labelKey: 'menu.airnaval' },
+  { id: 'gacha',        key: 'G', shift: false, icon: null,                                          labelKey: 'menu.gacha' },
+  { id: 'special',      key: 'S', shift: false, icon: null,                                          labelKey: 'menu.special' },
+  { id: 'nukes',        key: 'N', shift: false, icon: null,                                          labelKey: 'menu.nukes' },
   { id: 'trade',        key: 'R', shift: false, icon: `${MENU}/Trade_button_transparent.png`,        labelKey: 'menu.trade' },
   { id: 'construction', key: 'T', shift: false, icon: `${MENU}/Construction_button_transparent.png`, labelKey: 'menu.construction' },
   { id: 'production',   key: 'Y', shift: false, icon: `${MENU}/Production_button_transparent.png`,   labelKey: 'menu.production' },
@@ -91,11 +96,13 @@ export class TopBar {
     const pauseBtn = el('button', '', I18N.t('topbar.speed_pause'));
     pauseBtn.title = I18N.t('topbar.speed_hint');
     pauseBtn.addEventListener('click', () => this._onTogglePause(pauseBtn));
+    if (this.state.multiplayer?.mode === 'client') pauseBtn.disabled = true;
     speeds.appendChild(pauseBtn);
     this.speedBtns = {};
     for (const sp of [1, 2, 3, 4, 5]) {
       const b = el('button', sp === s.speed ? 'active' : '', I18N.t(`topbar.speed_${sp}`));
       b.addEventListener('click', () => this._onSpeed(sp));
+      if (this.state.multiplayer?.mode === 'client') b.disabled = true;
       speeds.appendChild(b);
       this.speedBtns[sp] = b;
     }
@@ -181,6 +188,8 @@ export class TopBar {
   }
 
   _onSpeed(sp) {
+    // クライアントは時間変更不可（ホストのみ制御）
+    if (this.state.multiplayer?.mode === 'client') return;
     this.state.speed = sp;
     this.state.paused = false;
     this._syncSpeedUI();
@@ -188,6 +197,8 @@ export class TopBar {
   }
 
   _onTogglePause(btn) {
+    // クライアントは時間変更不可（ホストのみ制御）
+    if (this.state.multiplayer?.mode === 'client') return;
     this.state.paused = !this.state.paused;
     this._syncSpeedUI();
     this.state.bus.emit('pause-changed', this.state.paused);

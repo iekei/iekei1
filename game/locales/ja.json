@@ -78,7 +78,12 @@
   "key_deployment": "U",
   "key_logistics": "I",
   "key_doctrine": "Shift+E",
-  "key_politics": "Q"
+  "key_politics": "Q",
+  "focus": "国家方針",
+  "airnaval": "空軍・海軍",
+  "gacha": "カードガチャ",
+  "special": "特別研究",
+  "nukes": "核攻撃"
  },
  "resources": {
   "oil": "石油",
