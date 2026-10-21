@@ -17,7 +17,7 @@ import { I18N } from './i18n.js';
 import { NATIONS, MAJORS } from './data/nations.js';
 
 const ORDER = ['GER', 'SOV', 'USA', 'ENG', 'JAP', 'ITA', 'FRA'];
-const AUTO_START_SECONDS = 3;
+const AUTO_START_SECONDS = 2;
 
 /** 各国の歴史的背景説明（ローカライズ辞書に無い分を補完） */
 const HISTORY = {

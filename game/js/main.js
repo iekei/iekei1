@@ -37,6 +37,16 @@ import { renderFocusScreen, renderAirNavalScreen, renderGachaScreen, renderPeace
 import { NationSelect } from './nation-select.js';
 
 async function boot() {
+  // ゲーム本体を即座に可視化（オーバーレイル除去の保証）
+  const gameRoot = document.getElementById('game-root');
+  if (gameRoot) {
+    gameRoot.style.filter = '';
+    gameRoot.style.display = '';
+    gameRoot.style.visibility = 'visible';
+    gameRoot.style.pointerEvents = '';
+    gameRoot.style.opacity = '1';
+  }
+
   // 0. game/index.html の HOI4 全画面レイヤーに埋め込まれている場合のブリッジ
   //    （?embed=1。単独起動時は何もしない）
   const embedded = initEmbedBridge();
