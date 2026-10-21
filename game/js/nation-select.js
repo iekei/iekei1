@@ -7,6 +7,9 @@
  *
  * マルチプレイ: ローカル / ホスト / クライアント のモード選択と部屋コード入力。
  * ホストのみが時間変更（一時停止・倍速）を制御できる。
+ *
+ * 画面が真っ暗に固定されるのを防ぐため、オーバーレイは半透明のダーク背景にし、
+ * 操作がなければ一定時間後に既定国家（ドイツ）で自動開始する。
  */
 
 import { el, img } from './util.js';
@@ -14,6 +17,7 @@ import { I18N } from './i18n.js';
 import { NATIONS, MAJORS } from './data/nations.js';
 
 const ORDER = ['GER', 'SOV', 'USA', 'ENG', 'JAP', 'ITA', 'FRA'];
+const AUTO_START_SECONDS = 3;
 
 /** 各国の歴史的背景説明（ローカライズ辞書に無い分を補完） */
 const HISTORY = {
@@ -34,20 +38,21 @@ export class NationSelect {
     this.mpMode = 'local';
     this.room = 'default';
     this.root = null;
+    this._timer = null;
   }
 
   mount() {
     if (!this.container) return;
-    // NOTE: this.container.innerHTML = '' は絶対に行わない。
-    // document.body を指定された場合、#game-root / #topbar / #map-view など
-    // ゲーム本体まで消去されて真っ暗になる。固定オーバーレイとして末尾に追加するだけにする。
+    // 固定オーバーレイとして document.body の末尾に追加するだけ。
+    // game-root / topbar / map-view などゲーム本体は消さない。
     this.root = el('div', 'nation-select');
     this.root.innerHTML = this._html();
     this.container.appendChild(this.root);
 
     this._bind();
-    // デフォルトでドイツを選択状態に
+    // デフォルトでドイツを選択状態に（自動開始用）
     this._select(ORDER[0]);
+    this._startAutoStartCountdown();
   }
 
   _html() {
@@ -73,7 +78,8 @@ export class NationSelect {
 
       <div class="ns-grid" id="ns-grid"></div>
       <div class="ns-footer">
-        <button class="steel-btn primary ns-start" id="ns-start" disabled>ゲーム開始</button>
+        <button class="steel-btn primary ns-start" id="ns-start">ゲーム開始</button>
+        <span class="ns-autostart" id="ns-autostart">3秒後に自動開始</span>
         <span class="ns-hint">キーボードショートカット: Q 政治 / W 研究 / R 貿易 / T 建設 / Y 生産 / U 展開 / I 政治パネル / E ドクトリン</span>
       </div>
     `;
@@ -93,21 +99,24 @@ export class NationSelect {
         this.mpMode = r.value;
         this.room = roomInput.value.trim() || 'default';
         updateRoomInput();
+        this._restartAutoStartCountdown();
       });
     });
     roomInput.addEventListener('input', () => {
       this.room = roomInput.value.trim() || 'default';
+      this._restartAutoStartCountdown();
     });
     updateRoomInput();
 
     for (const tag of ORDER) {
       const nat = NATIONS[tag];
       const card = this._makeCard(tag, nat);
-      card.addEventListener('click', () => this._select(tag));
+      card.addEventListener('click', () => { this._select(tag); this._restartAutoStartCountdown(); });
       grid.appendChild(card);
     }
 
     startBtn.addEventListener('click', () => {
+      this._stopAutoStartCountdown();
       if (this.selectedTag) {
         this.room = roomInput.value.trim() || 'default';
         this.onSelect(this.selectedTag, { mode: this.mpMode, room: this.room });
@@ -157,9 +166,41 @@ export class NationSelect {
     btn.textContent = `${nat.name} でゲーム開始`;
   }
 
+  _startAutoStartCountdown() {
+    this._stopAutoStartCountdown();
+    let remaining = AUTO_START_SECONDS;
+    const autostart = this.root.querySelector('#ns-autostart');
+    const update = () => {
+      if (autostart) autostart.textContent = `${remaining}秒後に自動開始`;
+      remaining -= 1;
+      if (remaining < 0) {
+        this._stopAutoStartCountdown();
+        this._autoStart();
+      }
+    };
+    update();
+    this._timer = setInterval(update, 1000);
+  }
+
+  _restartAutoStartCountdown() {
+    this._startAutoStartCountdown();
+  }
+
+  _stopAutoStartCountdown() {
+    if (this._timer) { clearInterval(this._timer); this._timer = null; }
+  }
+
+  _autoStart() {
+    const startBtn = this.root.querySelector('#ns-start');
+    if (startBtn && !startBtn.disabled && this.selectedTag) {
+      startBtn.click();
+    }
+  }
+
   unmount() {
+    this._stopAutoStartCountdown();
     if (this.root && this.root.parentNode) this.root.parentNode.removeChild(this.root);
-    // ゲーム本体のスタイルをクリア（nation-select 側では触らない。main.js 側で行う）
+    this.root = null;
   }
 }
 
