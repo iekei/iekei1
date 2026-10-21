@@ -54,24 +54,21 @@ async function boot() {
   let room = 'default';
   const gameRoot = document.getElementById('game-root');
   if (!directTag) {
-    // 軽く明度を下げるだけ（オーバーレイで隠蔽するため、pointerEvents は本体に触れない。
-    // 重い blur/brightness(.55) だと、オーバーレイが閉じられない際に画面が真っ暗に見えるため回避）
-    gameRoot.style.filter = 'brightness(.75)';
     const ns = new NationSelect({
       onSelect: (tag, mp) => { selectedTag = tag; mpMode = mp.mode; room = mp.room; },
       container: document.body,
     });
     ns.mount();
     try {
-      // 20秒でタイムアウト：オーバーレイ操作不能時でもデフォルト国家(ドイツ)で続行し、
-      // 画面が永遠に真っ暗・固定されるのを防ぐ
+      // オーバーレイが操作不能でも自動開始（nation-select 側でカウントダウン済み）。
+      // 保険として 10 秒でタイムアウトし、必ずデフォルト国家(ドイツ)で続行。
       await Promise.race([
         new Promise((resolve) => {
           const t = setInterval(() => {
             if (selectedTag !== null) { clearInterval(t); resolve(); }
           }, 50);
         }),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('nation-select timeout')), 20000))
+        new Promise((_, reject) => setTimeout(() => reject(new Error('nation-select timeout')), 10000))
       ]);
     } catch (e) {
       selectedTag = selectedTag || 'GER';
@@ -79,10 +76,19 @@ async function boot() {
       room = 'default';
       console.warn('[nation-select] フォールバック: デフォルト国家(ドイツ)で開始', e);
     } finally {
+      // オーバーレイを確実に除去し、ゲーム本体の見た目を戻す（真っ暗固定防止）
       ns.unmount();
       gameRoot.style.filter = '';
       gameRoot.style.pointerEvents = '';
     }
+  }
+
+  // ゲーム本体を常に可視化（オーバーレイ残滓やCSSで暗くならないよう保証）
+  if (gameRoot) {
+    gameRoot.style.filter = '';
+    gameRoot.style.display = '';
+    gameRoot.style.visibility = '';
+    gameRoot.style.pointerEvents = '';
   }
 
   // 2. ゲーム状態（選択国家で開始。既定はドイツ）
@@ -253,5 +259,15 @@ async function boot() {
 
 boot().catch((e) => {
   console.error(e);
+  // 起動失敗時もオーバーレイを除去し game-root を可視化（真っ暗固定防止）
+  const nsRoot = document.querySelector('.nation-select');
+  if (nsRoot) nsRoot.remove();
+  const gameRoot = document.getElementById('game-root');
+  if (gameRoot) {
+    gameRoot.style.filter = '';
+    gameRoot.style.display = '';
+    gameRoot.style.visibility = '';
+    gameRoot.style.pointerEvents = '';
+  }
   document.body.insertAdjacentHTML('beforeend', `<div style="color:#d05038;padding:20px;font-family:monospace">起動エラー: ${e.message}<br>${e.stack || ''}</div>`);
 });
