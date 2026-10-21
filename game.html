@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  <title>大戦略 HOI4-Style Grand Strategy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="game/css/steel-ui.css">
+</head>
+<body>
+  <div id="game-root">
+    <!-- 最上段ステータスバー ＋ 2段目メインメニュー（TopBarが構築） -->
+    <header id="topbar"></header>
+
+    <!-- マップビュー（戦略マップ＋航空射程可視化） -->
+    <main id="map-view">
+      <svg id="map-svg" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice"></svg>
+      <div id="map-hud-top"></div>
+      <div id="map-legend"></div>
+    </main>
+
+    <!-- モーダルウィンドウ層 -->
+    <div id="modal-layer"></div>
+
+    <!-- 自国政治スライドパネル -->
+    <aside id="politics-panel" class="steel-slide"></aside>
+    <div id="politics-scrim" class="hidden"></div>
+
+    <!-- トースト通知 -->
+    <div id="toast-layer"></div>
+
+    <!-- 世界時間・マルチプレイ接続状態 -->
+    <div id="mp-badge" class="hidden"></div>
+  </div>
+  <script type="module" src="game/js/main.js"></script>
+</body>
+</html>
