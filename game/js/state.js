@@ -97,6 +97,44 @@ export class GameState {
 
     // 戦争
     this.atWarWith = new Set();
+    // 戦争目標（正当化中 / 完成）
+    this.warGoals = {}; // tag -> { justified: boolean, at: string, wargoalType: string }
+    // 陣営
+    this.faction = null; // 'axis' | 'allies' | 'comintern' | null
+    this.factions = {
+      axis: { leader: 'GER', members: ['GER', 'ITA'], name: '枢軸国' },
+      allies: { leader: 'ENG', members: ['ENG', 'FRA', 'USA'], name: '連合国' },
+      comintern: { leader: 'SOV', members: ['SOV'], name: 'コミンテルン' },
+    };
+    this.worldTension = 0; // 世界緊張度 0..100
+
+    // 空軍・海軍部隊（マップ展開用）
+    this.airForces = [];   // {id, baseProvince, type:'fighter'|'cas'|'strategic_bomber'|'transport', count, region, mission}
+    this.navalForces = []; // {id, region, type:'fleet'|'task_force'|'convoy', ships:[], mission:'patrol'|'strike'|'escort'|'raiding'}
+
+    // 陸上戦闘表示用
+    this.frontlines = [];     // [{provinceId, side:'attacker'|'defender'}]
+    this.offensiveLines = []; // [{fromProvince, toProvince}]
+    this.combatBubbles = [];  // [{id, province, attacker, defender, advantage:'green'|'yellow'|'red', hp}]
+    this.paratrooperRoutes = []; // [{id, from, to, transportCount, airSupremacyOk}]
+    this.navalInvasionRoutes = []; // [{id, fromPort, toProvince, navalSupremacyOk}]
+
+    // 核開発状態
+    this.nuclearResearched = false;
+
+    // マップ上の師団配置
+    this.divisions = []; // {id, provinceId, type:'infantry'|'armor'|'artillery'|'paratrooper'|'marine', name, org, hp, maxOrg, maxHp, supply:0-1, command:0-1, templateId}
+
+    // 国家方針（National Focus）
+    this.focus = {
+      active: null,        // {focusId, tag, progressDays, startDate}
+      progress: {},        // tag -> { focusId -> progressDays }
+      completed: {},       // tag -> Set<focusId>
+    };
+
+    // 講和・戦勝点
+    this.warScore = {};    // tag -> 戦勝点
+    this.surrendered = new Set(); // 降伏国タグ
 
     // ユニット数（概算）
     this.units = { army: 96, navy: 62, air: 1200 };

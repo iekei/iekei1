@@ -95,7 +95,41 @@ export class ResearchManager {
     if (!node) return 0;
     const nation = this.state.nation && tag === this.state.playerTag ? this.state.nation : null;
     const bonus = (nation?.researchBonus?.[node.category]) ?? 1.0;
-    return Math.round(node.research_time * bonus);
+    let days = Math.round(node.research_time * bonus);
+
+    // ── 先取りペナルティ ──
+    // 史実の年代(node.year)より早く研究を開始すると、年数差に応じて研究日数が増加
+    // 1年早いごとに +10% （最大 +200%）
+    try {
+      const stateYear = this.state && this.state.date && this.state.date.y ? this.state.date.y : 1936;
+      const yearDiff = node.year - stateYear;
+      if (yearDiff > 0) {
+        const penalty = 1 + Math.min(2.0, yearDiff * 0.10);
+        days = Math.round(days * penalty);
+      }
+    } catch { /* state 未準備時は無視 */ }
+
+    return days;
+  }
+
+  /** 研究に要する総日数を人間向け表示（先取りペナルティ含む内訳を返す） */
+  researchDaysBreakdown(techId, tag) {
+    const node = this.nodes[techId];
+    if (!node) return { base: 0, nationPct: 100, aheadPct: 100, total: 0 };
+    const nation = this.state.nation && tag === this.state.playerTag ? this.state.nation : null;
+    const nationBonus = (nation?.researchBonus?.[node.category]) ?? 1.0;
+    const base = Math.round(node.research_time * nationBonus);
+    let total = base;
+    let aheadPct = 100;
+    try {
+      const stateYear = this.state && this.state.date && this.state.date.y ? this.state.date.y : 1936;
+      const yearDiff = node.year - stateYear;
+      if (yearDiff > 0) {
+        aheadPct = Math.round((1 + Math.min(2.0, yearDiff * 0.10)) * 100);
+        total = Math.round(base * (aheadPct / 100));
+      }
+    } catch {}
+    return { base, nationPct: Math.round(nationBonus * 100), aheadPct, total };
   }
 
   /** 前提充足チェック */
