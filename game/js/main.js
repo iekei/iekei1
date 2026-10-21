@@ -54,22 +54,35 @@ async function boot() {
   let room = 'default';
   const gameRoot = document.getElementById('game-root');
   if (!directTag) {
-    // 国家選択オーバーレイを表示（ゲーム本体は背景で待機）
-    gameRoot.style.filter = 'blur(2px) brightness(.55)';
-    gameRoot.style.pointerEvents = 'none';
+    // 軽く明度を下げるだけ（オーバーレイで隠蔽するため、pointerEvents は本体に触れない。
+    // 重い blur/brightness(.55) だと、オーバーレイが閉じられない際に画面が真っ暗に見えるため回避）
+    gameRoot.style.filter = 'brightness(.75)';
     const ns = new NationSelect({
       onSelect: (tag, mp) => { selectedTag = tag; mpMode = mp.mode; room = mp.room; },
       container: document.body,
     });
     ns.mount();
-    await new Promise((resolve) => {
-      const check = setInterval(() => {
-        if (selectedTag !== null) { clearInterval(check); resolve(); }
-      }, 50);
-    });
-    ns.unmount();
-    gameRoot.style.filter = '';
-    gameRoot.style.pointerEvents = '';
+    try {
+      // 20秒でタイムアウト：オーバーレイ操作不能時でもデフォルト国家(ドイツ)で続行し、
+      // 画面が永遠に真っ暗・固定されるのを防ぐ
+      await Promise.race([
+        new Promise((resolve) => {
+          const t = setInterval(() => {
+            if (selectedTag !== null) { clearInterval(t); resolve(); }
+          }, 50);
+        }),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('nation-select timeout')), 20000))
+      ]);
+    } catch (e) {
+      selectedTag = selectedTag || 'GER';
+      mpMode = 'local';
+      room = 'default';
+      console.warn('[nation-select] フォールバック: デフォルト国家(ドイツ)で開始', e);
+    } finally {
+      ns.unmount();
+      gameRoot.style.filter = '';
+      gameRoot.style.pointerEvents = '';
+    }
   }
 
   // 2. ゲーム状態（選択国家で開始。既定はドイツ）
