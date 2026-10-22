@@ -8,6 +8,13 @@
     "effect": "インドには何百万もの人々が住んでいる。彼らと衝突する前にその事実に向き合う必要がある。",
     "prerequisites": [
       "USA_war_plan_red"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 56
+      }
     ]
   },
   {
@@ -19,6 +26,13 @@
     "effect": "太平洋において、オーストラリアとニュージーランドは彼らの祖国の助けとなるかもしれない。イギリスに対処するあらゆる計画には、彼の国の植民地も含まれなければならない。",
     "prerequisites": [
       "USA_war_plan_red"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 41
+      }
     ]
   },
   {
@@ -30,6 +44,13 @@
     "effect": "ヨーロッパにおける展開がしばしば隠しているが、我々が介入の準備をしなければならない独自の問題をアジアは有している。",
     "prerequisites": [
       "USA_war_plans_division"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 85
+      }
     ]
   },
   {
@@ -41,6 +62,13 @@
     "effect": "日本の帝国主義的野望より脅威なものはない。アジアに、太平洋に勢力を伸ばそうとする彼らは我々の勢力圏との対立に向かうだろう。",
     "prerequisites": [
       "USA_intervention_in_asia"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 69
+      }
     ]
   },
   {
@@ -52,6 +80,13 @@
     "effect": "中国は一世代以上にわたって内戦状態にある。いつ我々が介入しなければならないほど状況が悪化するかについては断言できない。",
     "prerequisites": [
       "USA_intervention_in_asia"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 73
+      }
     ]
   },
   {
@@ -64,6 +99,13 @@
     "prerequisites": [
       "USA_war_plan_yellow",
       "USA_war_plan_orange"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 55
+      }
     ]
   },
   {
@@ -73,7 +115,23 @@
     "y": 50,
     "cost": 70,
     "effect": "工業化された戦争の時代において、我々の偉大な国家の資源を最大限に活用できる行政機関を有しなければならない。",
-    "prerequisites": []
+    "prerequisites": [],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 125
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 2
+      },
+      {
+        "type": "add_army_experience",
+        "value": 20
+      }
+    ]
   },
   {
     "id": "USA_selective_training_act",
@@ -84,6 +142,17 @@
     "effect": "戦時においてすら、歴史的に合衆国は徴兵制を採用することに遅れてきた。我々はもはやこのような驕りを許容することは出来ない。",
     "prerequisites": [
       "USA_war_department"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 92
+      },
+      {
+        "type": "add_manpower",
+        "value": 7500
+      }
     ]
   },
   {
@@ -95,6 +164,13 @@
     "effect": "敵戦線後方の友好的でない地域での作戦は世界紛争のきっかけになる可能性がある。そのような任務に対応するコマンドー部隊の組織は将来の戦争に必須と言えるだろう。",
     "prerequisites": [
       "USA_selective_training_act"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 78
+      }
     ]
   },
   {
@@ -106,6 +182,23 @@
     "effect": "予算の制約によって、我々は軍事的な発展を遠くから観察することを強いられてきた。さて、ついに我々はいくつかの理論を実践で試すことができる。",
     "prerequisites": [
       "USA_selective_training_act"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 65
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "陸軍",
+        "bonus": 0.5,
+        "uses": 1
+      },
+      {
+        "type": "add_army_experience",
+        "value": 10
+      }
     ]
   }
 ]

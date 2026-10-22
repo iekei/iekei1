@@ -35,6 +35,8 @@ import { PoliticsPanel, renderResearchScreen, renderTradeScreen, renderProductio
 import { renderDeploymentScreen, renderDoctrineScreen, renderIntelScreen, renderDiplomacyScreen } from './ui/screens2.js';
 import { renderFocusScreen, renderAirNavalScreen, renderGachaScreen, renderPeaceScreen, renderSpecialScreen, renderNukeScreen } from './ui/screens3.js';
 import { NationSelect } from './nation-select.js';
+import { BattlePlanManager } from './battle-plan.js';
+import { installBattlePlanUI } from './ui/battle-plan-ui.js';
 
 async function boot() {
   // ゲーム本体を即座に可視化（オーバーレイル除去の保証）
@@ -119,13 +121,18 @@ async function boot() {
   // 4. 各マネージャ
   const economy = new EconomyManager(state, mio);
   const doctrine = new DoctrineManager(state);
+  state._doctrineMgr = doctrine;
   const intel = new IntelManager(state);
   const diplomacy = new DiplomacyManager(state);
   const politics = new PoliticsManager(state);
   state._politicsMgr = politics;
   const designer = { current: null }; //師団テンプレート編集中（DivisionTemplate を保持）
-  const equipDesigner = new EquipmentDesigner(state);
+  const equipDesigner = new EquipmentDesigner(state, research);
+  state._researchMgr = research;
   const effectEngine = new EffectEngine(state);
+  // 作戦計画（前線 / 攻撃線 / 計画準備ボーナス）
+  const battlePlan = new BattlePlanManager(state, doctrine);
+  state.ensureDivisions(state.playerTag, 8);
   const focusMgr = new NationalFocusManager(state, effectEngine);
   await focusMgr.load(state.playerTag);
   const gacha = new GachaManager(state, cards);
@@ -158,6 +165,10 @@ async function boot() {
   const nukes = new NukeManager(state, airNaval, effectEngine, mapEngine);
 
   // 州クリックでその国の外交ウィンドウを開く
+  // マップ上の作戦計画UI（前線ドラッグ・攻撃線・実行ボタン）
+  const battlePlanUI = installBattlePlanUI({ mapEngine, battlePlan, state, doctrine, modals });
+  mapEngine.battlePlan = battlePlan;
+
   mapEngine.onProvinceClick = (provinceId) => {
     const p = mapEngine.byId[provinceId];
     if (!p || p.tag === state.playerTag) return;
@@ -169,6 +180,7 @@ async function boot() {
     state, research, mio, economy, doctrine, intel, diplomacy, politics,
     cards, designer, equipDesigner, modals, mapEngine,
     effectEngine, focusMgr, airNaval, gacha, peace, special, nukes,
+    battlePlan, battlePlanUI,
     onTickScreens: [],
   };
 
@@ -223,6 +235,7 @@ async function boot() {
     focusMgr.tick(st.playerTag, hours);
     special.tick(st.playerTag, hours);
     for (const b of ['land', 'naval', 'air']) doctrine.tick(b, hours);
+    battlePlan.tick(hours);
     research.syncPlayerState();
     // 画面の定期再描画（開いている画面のみ）
     for (const fn of ctx.onTickScreens) fn(hours);
@@ -247,10 +260,35 @@ async function boot() {
   // 国家変更時
   state.bus.on('player-changed', () => {
     research.syncPlayerState();
+    state.ensureDivisions(state.playerTag, 8);
+    if (!battlePlan.plans().length) {
+      const p = battlePlan.createPlan({ name: '第1軍集団 作戦計画' });
+      battlePlanUI.planId = p.id;
+      battlePlanUI.render();
+    }
     topbar.update(economy);
     mapEngine.update();
     politicsPanel.render();
   });
+
+  // 国家方針の完了報酬（completion_reward）
+  state.bus.on('focus-completed', ({ node }) => {
+    if (node?.reward_description) toast(`国家方針「${node.title}」完了：${node.reward_description}`, 'good');
+    mapEngine.refreshProvinceColors();
+    mapEngine.update();
+  });
+  // 研究ボーナス獲得（国家方針など）
+  state.bus.on('research-bonus-added', () => {
+    topbar.update(economy);
+  });
+  // 作戦計画による占領
+  state.bus.on('province-captured', ({ planId }) => {
+    mapEngine.refreshProvinceColors();
+    mapEngine.renderBattlePlans();
+    if (battlePlanUI.planId === planId) battlePlanUI.render();
+  });
+  state.bus.on('battle-started', () => mapEngine.renderCombatBubbles());
+  state.bus.on('battle-lost', () => mapEngine.renderCombatBubbles());
 
   // 8. 通知系
   state.bus.on('ship-completed', ({ item }) => toast(`${item.name} の建造が完了しました`, 'good'));
@@ -263,7 +301,7 @@ async function boot() {
   engine.start();
 
   // デバッグ用に公開
-  window.GAME = { state, engine, research, mio, economy, doctrine, intel, diplomacy, politics, modals, topbar, mapEngine, effectEngine, focusMgr, airNaval, gacha, peace, special, nukes, cards, sync, I18N };
+  window.GAME = { state, engine, research, mio, economy, doctrine, intel, diplomacy, politics, modals, topbar, mapEngine, effectEngine, focusMgr, airNaval, gacha, peace, special, nukes, cards, sync, I18N, battlePlan, battlePlanUI, equipDesigner };
   // 埋め込み元（game/index.html）へ読み込み完了を通知（ローディング解除）
   if (embedded) window.dispatchEvent(new CustomEvent('hoi4:ready'));
   console.log('%c 大戦略ゲーム 起動完了（?mp=host&room=xxx でマルチプレイ時間同期）', 'color:#e6c268;font-size:14px');

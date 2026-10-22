@@ -4,11 +4,29 @@
     "title": "東部の開発",
     "x": 800,
     "y": 440,
-    "cost": 35,
+    "cost": 70,
     "effect": "ウラル山脈を越えた極東地域には、未開発の資源と産業開発の為の広大な土地がある。我々はより大きな計画に動力を与えられるようそれらを準備しなければならない。",
     "prerequisites": [
       "SOV_national_specialists",
       "SOV_foreign_experts"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 50
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -16,11 +34,29 @@
     "title": "ウラルの開発",
     "x": 1100,
     "y": 440,
-    "cost": 35,
+    "cost": 70,
     "effect": "我が国に対する最大の脅威はおそらくヨーロッパの国から訪れるだろう。ウラル山脈を越えた地域を開発することで、最長距離を走る爆撃機でも到達が困難な産業能力を確保できる。",
     "prerequisites": [
       "SOV_national_specialists",
       "SOV_foreign_experts"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 46
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "空軍",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -33,6 +69,24 @@
     "prerequisites": [
       "SOV_eastern_development",
       "SOV_develop_the_urals"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 54
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -40,10 +94,23 @@
     "title": "国立科学アカデミー",
     "x": 950,
     "y": 960,
-    "cost": 35,
+    "cost": 70,
     "effect": "同盟国にも国家の研究能力を高めるため、我が国の科学アカデミーに倣った同様の研究所を設立するように奨励すべきである。",
     "prerequisites": [
       "SOV_the_ussr_academy_of_sciences"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 41
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -56,6 +123,19 @@
     "prerequisites": [
       "SOV_fourth_five_year_plan",
       "SOV_national_academies_of_sciences"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 51
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -68,6 +148,13 @@
     "prerequisites": [
       "SOV_fourth_five_year_plan",
       "SOV_national_academies_of_sciences"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 43
+      }
     ]
   },
   {
@@ -75,9 +162,16 @@
     "title": "極地飛行",
     "x": 1700,
     "y": 50,
-    "cost": 35,
+    "cost": 70,
     "effect": "我が国の最も勇敢なる飛行士たちは、北極を横断する大胆な航路が可能であることを証明しようとしている。航空戦の計画にこの予期せぬ近道を用いることで、敵を奇襲することが可能となるやもしれない。",
-    "prerequisites": []
+    "prerequisites": [],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 115
+      }
+    ]
   },
   {
     "id": "SOV_expand_the_aircraft_industry",
@@ -88,6 +182,22 @@
     "effect": "来る戦争では、我々の空軍は最新装備を備えた敵に対して空を確保しなければならないだろう。同等の航空機を持つだけでなく、十分な数を確実に確保しなければならない。",
     "prerequisites": [
       "SOV_transpolar_flights"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 90
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 2
+      },
+      {
+        "type": "add_air_experience",
+        "value": 20
+      }
     ]
   },
   {
@@ -99,6 +209,22 @@
     "effect": "世界で最も優れた飛行機でも、でこぼこの滑走路から離陸したり雨漏りのする小屋で整備したらすぐに使い物にならなくなるだろう。最良のパフォーマンスを発揮するためには最良のインフラが必要である。",
     "prerequisites": [
       "SOV_expand_the_aircraft_industry"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 80
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_air_experience",
+        "value": 30
+      }
     ]
   },
   {
@@ -106,10 +232,26 @@
     "title": "航空機工場の統合",
     "x": 1250,
     "y": 570,
-    "cost": 35,
+    "cost": 70,
     "effect": "設計局間の競争は、常に向上しようとする自然な動機を得られる一方で、重複した作業に資源を浪費することにもなりかねない。このような無駄をなくすために設計局を統合するべきだ。",
     "prerequisites": [
       "SOV_modernize_aircraft_facilities"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 58
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_air_experience",
+        "value": 28
+      }
     ]
   }
 ]

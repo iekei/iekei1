@@ -9,6 +9,13 @@
     "prerequisites": [
       "ITA_anglo_italian_pact",
       "ITA_franco_italian_pact"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 47
+      }
     ]
   },
   {
@@ -21,6 +28,13 @@
     "prerequisites": [
       "ITA_dino_grandi_focus",
       "ITA_consolidate_power"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 51
+      }
     ]
   },
   {
@@ -33,6 +47,13 @@
     "prerequisites": [
       "ITA_reorganize_the_party",
       "ITA_purge_the_party"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 50
+      }
     ]
   },
   {
@@ -44,6 +65,18 @@
     "effect": "旧政権のもとで経済はひどく停滞していたが、国家ファシスト党が復活したことで、この重大な問題に取り組む準備が整った！今なら、経済を再活性化させる能力のある人間を任命できる。",
     "prerequisites": [
       "ITA_reorganize_the_party"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -55,6 +88,18 @@
     "effect": "経済が蘇ったことで、我々の注意を産業に向け、大規模な改革を行えるだけの資源が手に入った。産業が高効率になるほど、我らの軍により素早く装備を届けられるようになるのは間違いない。",
     "prerequisites": [
       "ITA_economic_reforms"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -67,6 +112,13 @@
     "prerequisites": [
       "ITA_meritocracy",
       "ITA_improve_the_industries"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      }
     ]
   },
   {
@@ -74,10 +126,17 @@
     "title": "イタリアの君主制",
     "x": 15800,
     "y": 830,
-    "cost": 35,
+    "cost": 70,
     "effect": "ヴィットーリオ・エマヌエーレは、イタリア政治の戸をファシズムに開いてはならなかった。この過ちを正し、ファシストたちを政府の脇役にまわす時だ。",
     "prerequisites": [
       "ITA_depose_mussolini"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 42
+      }
     ]
   },
   {
@@ -89,6 +148,18 @@
     "effect": "我々は生産ラインの需要に応えるためにも、資源採取産業を拡大しなければならない。原材料の不足で軍事生産が危うくなることは避けなければならない。",
     "prerequisites": [
       "ITA_monarchia_d_italia"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 54
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -100,6 +171,13 @@
     "effect": "我々はファシスト政権が使用した以前の企業の概念を、新しい政府の必要性に合わせて適応させなければならない。",
     "prerequisites": [
       "ITA_extraction_industry"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      }
     ]
   },
   {
@@ -111,6 +189,23 @@
     "effect": "戦争が差し迫っており、軍のニーズに応えるために強固な軍需産業が必要だ。",
     "prerequisites": [
       "ITA_extraction_industry"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 1
+      }
     ]
   }
 ]

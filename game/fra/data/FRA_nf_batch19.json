@@ -8,6 +8,17 @@
     "effect": "重戦闘機は脆弱な爆撃機を護衛する必要がある。このためにはより重い兵装と長い航続距離を必要とし幾ばくか速度を犠牲にする必要がある。",
     "prerequisites": [
       "FRA_fighter_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 62
+      },
+      {
+        "type": "add_air_experience",
+        "value": 12
+      }
     ]
   },
   {
@@ -19,6 +30,23 @@
     "effect": "航空支援は防御能力、攻撃能力のどちらにおいても重要である。もし我々が開発に注力するならより素早く正確な爆撃機は全ての陸戦において優勢に立つことができるだろう。",
     "prerequisites": [
       "FRA_air_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 89
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "空軍",
+        "bonus": 0.5,
+        "uses": 1
+      },
+      {
+        "type": "add_air_experience",
+        "value": 19
+      }
     ]
   },
   {
@@ -31,6 +59,23 @@
     "prerequisites": [
       "FRA_fighter_focus",
       "FRA_bomber_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 68
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "空軍",
+        "bonus": 0.5,
+        "uses": 1
+      },
+      {
+        "type": "add_air_experience",
+        "value": 18
+      }
     ]
   },
   {
@@ -42,6 +87,23 @@
     "effect": "最新の重爆撃機は、単独で小規模な空中戦を行うための武装が施されている。もし、エンジニアが最新技術の開発に集中することが許可されれば、敵の生産施設をより効率的に破壊することができるであろう。",
     "prerequisites": [
       "FRA_bomber_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 63
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "空軍",
+        "bonus": 0.5,
+        "uses": 1
+      },
+      {
+        "type": "add_air_experience",
+        "value": 13
+      }
     ]
   },
   {
@@ -53,6 +115,24 @@
     "effect": "艦船は航空機に対して非常に脆弱である事が判明している。この技術を改良し続け敵の対抗策よりも先を行くべきである。",
     "prerequisites": [
       "FRA_bomber_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 62
+      },
+      {
+        "type": "add_building_construction",
+        "building": "dockyard",
+        "level": 1
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "空軍",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   }
 ]

@@ -8,6 +8,13 @@
     "effect": "そもそも英国の共産主義は常にクレムリンの指示に従ってきた。そのようにやってきたことが今では論理的だということだけではなく、必要であるということでもある。赤軍と我が海軍の間にマルクスの言葉を深く、幅広く広めていき、誰も我々を止めることはできない。",
     "prerequisites": [
       "ENG_for_the_good_of_the_revolution"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 55
+      }
     ]
   },
   {
@@ -19,6 +26,13 @@
     "effect": "ファシズムは労働運動にとって主要な脅威となる。我々はこのヨーロッパに巣食う害虫を取り除いてやらねばならない。",
     "prerequisites": [
       "ENG_follow_moscow"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 57
+      }
     ]
   },
   {
@@ -30,6 +44,13 @@
     "effect": "戦争の火蓋が落とされた時、我が国の盟邦であるソビエトに第二戦線の戦端を開いてもらえば我々の助けとなるだろう。そのための準備を今から始めねばならない。",
     "prerequisites": [
       "ENG_tackle_fascism"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 42
+      }
     ]
   },
   {
@@ -41,6 +62,13 @@
     "effect": "資本主義は労働運動にとっては仇敵であり、海の向こうでそれが繁栄し続けているのを黙って見過ごすわけにはいかない。",
     "prerequisites": [
       "ENG_follow_moscow"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      }
     ]
   },
   {
@@ -52,6 +80,18 @@
     "effect": "北米への侵攻は生易しいものではない。革命軍が直接米国海岸に展開する前に、必要な期間侵攻軍を収容できるようバミューダに拠点を築き上げなければならない。",
     "prerequisites": [
       "ENG_tackle_capitalism"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 55
+      },
+      {
+        "type": "create_wargoal",
+        "target": "USA",
+        "wargoal": "annex_everything"
+      }
     ]
   },
   {
@@ -63,6 +103,13 @@
     "effect": "アメリカ人は自らの夢を－－仲間と価値観を共有できるのであれば、誰しもアメリカで「成功」できるという夢を－－語るのが好きだ。自己の利益のために他人を犠牲にすることは非難されるべき行為であるといえる。我々はアメリカ人をこの愚かな考え方から解放し、彼らの夢を跡形も残らないように粉砕するのだ。",
     "prerequisites": [
       "ENG_bermuda_invasion_launch_point"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 47
+      }
     ]
   },
   {
@@ -74,6 +121,19 @@
     "effect": "我々は同盟における自らの優位性の恩恵を得るために、技術的知識の交換を調整していかねばならない。これが労働者闘争における唯一の勝利へ至る道である。",
     "prerequisites": [
       "ENG_follow_moscow"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 44
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -86,6 +146,13 @@
     "prerequisites": [
       "ENG_the_one_true_revolution",
       "ENG_preparing_the_second_front"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 60
+      }
     ]
   },
   {
@@ -99,6 +166,18 @@
       "ENG_soviet_cooperation",
       "ENG_liberate_the_home_of_marx",
       "ENG_crush_the_dream"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 48
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   }
 ]

@@ -9,6 +9,17 @@
     "prerequisites": [
       "ITA_standardization",
       "ITA_specialization"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 57
+      },
+      {
+        "type": "add_air_experience",
+        "value": 27
+      }
     ]
   },
   {
@@ -21,6 +32,17 @@
     "prerequisites": [
       "ITA_standardization",
       "ITA_specialization"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      },
+      {
+        "type": "add_air_experience",
+        "value": 29
+      }
     ]
   },
   {
@@ -32,6 +54,23 @@
     "effect": "戦闘時にさまざまな役割を果たせる機体を開発することで、製造コストや乗組員の訓練時間を大幅に削減することができる。このような汎用性の高い機体の設計に、早速技術者を投入してこう。",
     "prerequisites": [
       "ITA_specialization"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 45
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "陸軍",
+        "bonus": 0.5,
+        "uses": 1
+      },
+      {
+        "type": "add_air_experience",
+        "value": 15
+      }
     ]
   },
   {
@@ -46,6 +85,23 @@
       "ITA_long_range_aircraft",
       "ITA_fighter_designs",
       "ITA_bomber_designs"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 55
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "陸軍",
+        "bonus": 0.5,
+        "uses": 1
+      },
+      {
+        "type": "add_air_experience",
+        "value": 25
+      }
     ]
   },
   {
@@ -53,9 +109,25 @@
     "title": "海軍戦力投射",
     "x": 6800,
     "y": 50,
-    "cost": 35,
+    "cost": 70,
     "effect": "先祖の遺志を継いで、地中海におけるイタリアの優位性を他のどの海軍よりも維持できるような強力な海軍を発展させるために、必要な産業を確保しなければならない。",
-    "prerequisites": []
+    "prerequisites": [],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 111
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 2
+      },
+      {
+        "type": "add_navy_experience",
+        "value": 11
+      }
+    ]
   },
   {
     "id": "ITA_intensify_torpedo_manufacturing",
@@ -66,6 +138,18 @@
     "effect": "イタリアの魚雷は、世界有数の信頼度を誇る。元々フィウーメで生まれたものなので、工場もそちらにあるのだが、ナポリにもやはり魚雷製造工場が存在する。我が国には、この超強力な海軍兵器の使用頻度を上げられる良き土台が、既に整っているのだ。",
     "prerequisites": [
       "ITA_naval_power_projection"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 92
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 2
+      }
     ]
   },
   {
@@ -73,10 +157,31 @@
     "title": "海軍施設の拡張",
     "x": 6800,
     "y": 180,
-    "cost": 35,
+    "cost": 70,
     "effect": "一流の海軍を作り上げるものは、何も強力な戦艦隊だけではない。港や造船所などの支えなくして、海軍は成り立たない。海軍インフラに予め投資しておけば、戦争が始まった時に備えて海軍の拠点を確保できるし、また新設や修理も可能となる。",
     "prerequisites": [
       "ITA_naval_power_projection"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 92
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 2
+      },
+      {
+        "type": "add_building_construction",
+        "building": "dockyard",
+        "level": 1
+      },
+      {
+        "type": "add_navy_experience",
+        "value": 22
+      }
     ]
   },
   {
@@ -84,10 +189,17 @@
     "title": "OTOの艦砲",
     "x": 7100,
     "y": 180,
-    "cost": 35,
+    "cost": 70,
     "effect": "イタリアは主力艦の大砲の製造を、アンサルド社やオデーロ・テルニ・オルランド社に頼っている状態だ。これらの企業の生産能力に集中的に投資することで、世界が羨む戦艦を生み出せるようになるだろう。",
     "prerequisites": [
       "ITA_naval_power_projection"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 80
+      }
     ]
   },
   {
@@ -99,6 +211,17 @@
     "effect": "海外の領土にある港の機能を向上させることで、我が国の海軍に強力な足場を用意してやれる。拡大して行く帝国の防衛もしやすくなるし、敵の交易路で待ち受けて威嚇することも可能だ。",
     "prerequisites": [
       "ITA_expand_naval_facilities"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 76
+      },
+      {
+        "type": "add_navy_experience",
+        "value": 26
+      }
     ]
   },
   {
@@ -110,6 +233,13 @@
     "effect": "イタリアは広範囲に及ぶ海外線の他、本土と離れている島々にも数多くの港が存在している。沿岸民兵部隊を再編成し、沿岸防衛に投資することで、侵略者共に重い代償を支払わせてやれるだろう。",
     "prerequisites": [
       "ITA_expand_naval_facilities"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 65
+      }
     ]
   }
 ]

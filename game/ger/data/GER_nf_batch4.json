@@ -8,6 +8,13 @@
     "effect": "トルコは我々とソ連の間で板挟みに遭い、機能不全に陥っている。もし圧力をかければ、トルコ人は我らの意志を汲み、傀儡国家となるだろう。条約では、トルコ東部はソ連が獲得することになっている。だが、もし彼らが要求を拒絶すれば、戦争に突入するだろう。",
     "prerequisites": [
       "GER_soviet_ally"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 47
+      }
     ]
   },
   {
@@ -17,7 +24,14 @@
     "y": 50,
     "cost": 70,
     "effect": "先の大戦が終結して以来ラインラントは非武装地帯となっていたが、もはやこの屈辱は続かないだろう！ドイツは主権国家であり、自国のどこにでも軍隊を動かせるのだ！",
-    "prerequisites": []
+    "prerequisites": [],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 113
+      }
+    ]
   },
   {
     "id": "GER_japan_friend",
@@ -28,6 +42,13 @@
     "effect": "我々は長い間中国と親密な関係を持っていた。しかし、代わりに我々の同類である日本の武士道と団結することで我々はより野望に近づくことができるのかもしれない。たとえそれが中国を狼に差し出すことを意味していても……",
     "prerequisites": [
       "GER_rhineland"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 90
+      }
     ]
   },
   {
@@ -39,6 +60,13 @@
     "effect": "我々の中国との昔からの友情を深めよう。それは日本を遠ざけることになるが、日本をただの東のイタリアでないとするなら何だと言うのだ？",
     "prerequisites": [
       "GER_rhineland"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 97
+      }
     ]
   },
   {
@@ -50,6 +78,27 @@
     "effect": "我が国の鋼鉄は質が悪い。しかし、兵器を動かすには、最高品質の材料が必要だ。幸いにも、北の[SWE.GetName]は理想的なパートナーである。高品質な資源が手に入り、中立国家であり、さらには我々の未来の計画が実現した際、大きな面倒を起こすように思えない。",
     "prerequisites": [
       "GER_rhineland"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 95
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 2
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 2
+      },
+      {
+        "type": "add_world_tension",
+        "value": 4
+      }
     ]
   },
   {
@@ -61,6 +110,17 @@
     "effect": "世界各国の国際問題における共産主義者のインターナショナルによる干渉は、国際平和と社会の幸福を脅かすのみならず、社会平和に対する脅威である！非共産主義国に協定への署名を依頼し、共産主義の脅威を確実に封じ込めるべきだ。",
     "prerequisites": [
       "GER_rhineland"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 97
+      },
+      {
+        "type": "add_world_tension",
+        "value": 5
+      }
     ]
   },
   {
@@ -72,6 +132,22 @@
     "effect": "我々は防共協定をもう一歩推し進め、参加国に包囲網への加入を依頼することが可能である。署名国がソ連との戦争に突入した場合、全ての署名国も宣戦しなけばならない。",
     "prerequisites": [
       "GER_anti_comitern_pact"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 74
+      },
+      {
+        "type": "create_wargoal",
+        "target": "SOV",
+        "wargoal": "annex_everything"
+      },
+      {
+        "type": "add_world_tension",
+        "value": 5
+      }
     ]
   },
   {
@@ -83,6 +159,22 @@
     "effect": "ソビエト連邦との正しき戦争に備えることをドイツ人、そして全世界に促すプロパガンダへ注力できる。",
     "prerequisites": [
       "GER_anti_comitern_pact"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 80
+      },
+      {
+        "type": "create_wargoal",
+        "target": "SOV",
+        "wargoal": "annex_everything"
+      },
+      {
+        "type": "add_stability",
+        "value": 7
+      }
     ]
   },
   {
@@ -95,6 +187,13 @@
     "prerequisites": [
       "GER_ussr_war_goal",
       "GER_italy_ally"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      }
     ]
   },
   {
@@ -106,6 +205,19 @@
     "effect": "オーストリアとのアンシュルス、もしくは同盟の結成とはドイツ人民の永年の悲願である。ヴェルサイユ条約によって禁じられていたが、遂に夢を叶える時が来た。我々の輝かしい天命をオーストリア人と共に抱き、未来への可能性をもたらそうではないか！",
     "prerequisites": [
       "GER_rhineland"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 96
+      },
+      {
+        "type": "annex_country",
+        "country": [
+          "AUS"
+        ]
+      }
     ]
   }
 ]

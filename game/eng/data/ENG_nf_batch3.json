@@ -8,6 +8,23 @@
     "effect": "ジュリオ・ドゥーエが絶えず言っていたように、「爆撃機は常に通り抜ける！」。レーダー技術と対空防御のみでは不十分であり、より優れた爆撃機の開発を優先すべきだろう。",
     "prerequisites": [
       "air_rearmament_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 44
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "空軍",
+        "bonus": 0.5,
+        "uses": 1
+      },
+      {
+        "type": "add_air_experience",
+        "value": 14
+      }
     ]
   },
   {
@@ -19,6 +36,13 @@
     "effect": "[Root.GetCoastalCommandDesc]",
     "prerequisites": [
       "air_rearmament_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 54
+      }
     ]
   },
   {
@@ -32,6 +56,22 @@
       "fighter_command_focus",
       "bomber_command_focus",
       "coastal_command_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 44
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_air_experience",
+        "value": 14
+      }
     ]
   },
   {
@@ -43,6 +83,23 @@
     "effect": "航空機のプロペラエンジンがジェットエンジンに置き換わることは疑いの余地が無い。その潜在性は高く、イギリスはこの研究において他国への遅れを許してはならない。",
     "prerequisites": [
       "aircraft_production_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 55
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "空軍",
+        "bonus": 0.5,
+        "uses": 1
+      },
+      {
+        "type": "add_air_experience",
+        "value": 25
+      }
     ]
   },
   {
@@ -54,6 +111,22 @@
     "effect": "[Root.GetNavalRearmamentDesc]",
     "prerequisites": [
       "general_rearmament_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 69
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 1
+      },
+      {
+        "type": "add_navy_experience",
+        "value": 19
+      }
     ]
   },
   {
@@ -65,6 +138,19 @@
     "effect": "機雷技術者は、磁場、音及びその他の反応により活性化する新しいタイプが次の戦争で重要な役割を果たす可能性が高いと助言している。今回、これらの掃海手法を研究するために海軍に特別反非接触委員会（Anti-Non-Contact Committee）を設置することで、船舶の安全のみならず、その検討過程において我が軍の機雷技術の進展にも貢献することだろう。",
     "prerequisites": [
       "naval_rearmament_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 43
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "海軍",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -77,6 +163,22 @@
     "prerequisites": [
       "naval_rearmament_focus",
       "uk_service_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 41
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 1
+      },
+      {
+        "type": "add_stability",
+        "value": 6
+      }
     ]
   },
   {
@@ -88,6 +190,13 @@
     "effect": "現代の戦艦は確かに圧倒的な力を有するが、艦隊の保護に必要な駆逐艦の役割を無視してはならないだろう。",
     "prerequisites": [
       "naval_rearmament_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      }
     ]
   },
   {
@@ -99,6 +208,24 @@
     "effect": "大西洋は我々の生命線だ。脆弱な船舶輸送が水平線の上下にわたって餌食になることを払拭させねばならない。最良の兵器と探知装備による護衛を確保するために、対潜水艦戦の分野における最新技術の開発に注力する。",
     "prerequisites": [
       "uk_destroyer_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 50
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 1
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "海軍",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -110,6 +237,13 @@
     "effect": "輸送船団は生命線であり、いくら増強してもしすぎるということはない。船団を護衛し、失われた船団を補うために早急に全力を尽くす必要がある。",
     "prerequisites": [
       "uk_destroyer_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 45
+      }
     ]
   }
 ]

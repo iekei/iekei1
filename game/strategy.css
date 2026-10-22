@@ -83,3 +83,9 @@
 .production-footnote { margin: 9px 0; }
 @media (max-width: 900px) { .production-card { grid-template-columns: minmax(145px, 1fr) minmax(100px, .7fr) minmax(185px, 1fr); } .production-costs { grid-column: 1 / 3; } }
 @media (max-width: 600px) { .production-card { grid-template-columns: 1fr; gap: 8px; } .production-costs { grid-column: auto; } .production-factory-summary { width: 100%; } }
+
+/* 作戦計画の準備ボーナス (Planning Bonus) 表示 */
+.army-tile-info .army-planning { margin: 2px 0 4px; color: var(--text-secondary); font-size: 10px; }
+.army-tile-info .army-planning b { color: #7ec850; }
+.army-tile-info .army-planning i { display: block; height: 4px; margin-top: 2px; background: #202a20; border: 1px solid var(--border-mil); border-radius: 2px; overflow: hidden; }
+.army-tile-info .army-planning em { display: block; height: 100%; background: linear-gradient(90deg, #4a8f5e, #7ec850); }

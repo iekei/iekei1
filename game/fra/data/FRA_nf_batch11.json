@@ -8,6 +8,19 @@
     "effect": "万人の平等、目標は明確である。フランス政治に資本主義的利害は必要ない。共産主義組織を拡大させる環境の整備は喫緊の課題だ。",
     "prerequisites": [
       "FRA_form_the_popular_front"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 88
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -19,6 +32,21 @@
     "effect": "我々はようやく機能する政府を持つことができた。今こそ軍を強化し、フランスのために戦う準備をする時だ。",
     "prerequisites": [
       "FRA_leftist_rhetoric"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 61
+      },
+      {
+        "type": "add_war_support",
+        "value": 10
+      },
+      {
+        "type": "add_manpower",
+        "value": 7500
+      }
     ]
   },
   {
@@ -30,6 +58,13 @@
     "effect": "振り向く場所全てに敵がいる現状、強力な同盟者を得る事で立場を強化する必要がある。コミンテルンとの連帯は既に強固なものとなりつつあり、その大義に殉ずる時が来たようだ。",
     "prerequisites": [
       "FRA_national_mobilization"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 46
+      }
     ]
   },
   {
@@ -41,6 +76,13 @@
     "effect": "肥え太った銀行家と権力に餓えた煽動家どもは世界にその血にまみれた手を着々と伸ばしている。自由な人間は刻一刻と奴隷へ貶められ、世界は個人の欲望が生み出した危機にますます沈みつつある。フランスの理想が今ほど求められている時は無いであろう！人類は我々を必要とし、我々は人類を一つにせねばならないのだ！",
     "prerequisites": [
       "FRA_national_mobilization"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 57
+      }
     ]
   },
   {
@@ -50,7 +92,18 @@
     "y": 50,
     "cost": 70,
     "effect": "政治情勢は日に日に過激になっている。左派は共産主義者と手を組もうと密かに企んでいる。今求められているのは強く、安定した指導者である。",
-    "prerequisites": []
+    "prerequisites": [],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 116
+      },
+      {
+        "type": "add_stability",
+        "value": 8
+      }
+    ]
   },
   {
     "id": "FRA_laissez_faire",
@@ -61,6 +114,18 @@
     "effect": "共産主義者は、わが国の経済構造のやや過激な方法での再構築について、表立って語っている。その構造というのは、重労働をする人から権利ある財産を搾取するというものだ。これに対して、我々は自由という単純な概念を対置させよう。直接経済は、常に、赤いテープで首を絞めてくる極左の悪夢に優るだろう。",
     "prerequisites": [
       "FRA_revive_the_national_bloc"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 89
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 2
+      }
     ]
   },
   {
@@ -73,6 +138,13 @@
     "prerequisites": [
       "FRA_laissez_faire",
       "FRA_agricultural_protectionism"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 61
+      }
     ]
   },
   {
@@ -84,6 +156,13 @@
     "effect": "共和派が予言した混沌と激闘に直面した時、他の党派と同盟を結ぶ必要がある\nだろう。たとえ何者かが批判するとしても。",
     "prerequisites": [
       "FRA_protect_the_rights_of_man"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 58
+      }
     ]
   },
   {
@@ -96,6 +175,18 @@
     "prerequisites": [
       "FRA_freedom_front",
       "FRA_promote_entrepeneurship"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 42
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -107,6 +198,18 @@
     "effect": "世界経済に対し、従来の生産方式はますます適さないものになってきている。我々の農家を保護する施策を講じなければ、海外から輸入される大量生産の食料品に対して競争力を維持することができず、大規模な危機に直面することになるだろう。",
     "prerequisites": [
       "FRA_revive_the_national_bloc"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 81
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 2
+      }
     ]
   }
 ]

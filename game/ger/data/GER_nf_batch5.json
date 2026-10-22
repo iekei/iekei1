@@ -8,6 +8,19 @@
     "effect": "先の大戦ではポーランドの復活とメーメルのリトアニア移譲という形で、ドイツ東部の領土を大幅に失う結果となった。我々は最後通牒を両国に送るが、おそらくポーランドは単なる文書ごときには屈しないだろう。",
     "prerequisites": [
       "GER_anschluss"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 76
+      },
+      {
+        "type": "annex_country",
+        "country": [
+          "LIT"
+        ]
+      }
     ]
   },
   {
@@ -19,6 +32,18 @@
     "effect": "ダンツィヒはドイツの地であった、ダンツィヒはドイツの地であり続けた、そしてこれからも、ダンツィヒはドイツの地である！ポーランドがこの地域を割譲しないならば、我々はドイツ国民に、避けられない戦いへの準備をさせるだろう。ダンツィヒ及び周囲の地域はドイツに戻ってくるのだ！",
     "prerequisites": [
       "GER_demand_memel"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 60
+      },
+      {
+        "type": "create_wargoal",
+        "target": "POL",
+        "wargoal": "annex_everything"
+      }
     ]
   },
   {
@@ -26,10 +51,26 @@
     "title": "ヴェーザー演習作戦",
     "x": 4550,
     "y": 1090,
-    "cost": 28,
+    "cost": 70,
     "effect": "ノルウェーは戦略的要衝であり、我が国のスウェーデンからの鉄鋼輸入を阻もうとする敵国の格好の餌食である。この地域に敵が拠点を築くリスクは放置できない。ノルウェー侵攻の出撃拠点を確保する手始めに、デンマークへ進駐する必要がある。",
     "prerequisites": [
       "GER_danzig_or_war"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 57
+      },
+      {
+        "type": "create_wargoal",
+        "target": "DEN",
+        "wargoal": "annex_everything"
+      },
+      {
+        "type": "add_army_experience",
+        "value": 22
+      }
     ]
   },
   {
@@ -37,11 +78,23 @@
     "title": "マジノ線迂回",
     "x": 4250,
     "y": 1090,
-    "cost": 28,
+    "cost": 70,
     "effect": "フランスに対して戦術的優位を確保するならば、我々は四方から攻撃できるようにする必要があるだろう。一度いくつかの障害物を排除すれば、我々は北部から攻撃を行える。彼らはそれを予測してはいまい。",
     "prerequisites": [
       "GER_danzig_or_war",
       "GER_poland_friend"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 53
+      },
+      {
+        "type": "add_building_construction",
+        "building": "bunker",
+        "level": 2
+      }
     ]
   },
   {
@@ -53,6 +106,18 @@
     "effect": "チェコ人とスロヴァキア人は勤勉で優秀な人々である。我が国の領土的野心が彼らと衝突するという事実は極めて不幸なことであるが、征服よりもむしろ友情を追求するのは決して手遅れではない。",
     "prerequisites": [
       "GER_anschluss"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 71
+      },
+      {
+        "type": "create_wargoal",
+        "target": "CZE",
+        "wargoal": "annex_everything"
+      }
     ]
   },
   {
@@ -64,6 +129,19 @@
     "effect": "ヴェルサイユ条約によってもたらされた最悪な不当の一つが、ズデーテンラント・ドイツ人の運命であった。チェコがどのような異議を唱えようが、彼らを我が国の保護下に置かなくてはならない。",
     "prerequisites": [
       "GER_anschluss"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 61
+      },
+      {
+        "type": "annex_country",
+        "country": [
+          "CZE"
+        ]
+      }
     ]
   },
   {
@@ -75,6 +153,13 @@
     "effect": "ハンガリー人は先の大戦によって最も多くを失った人々だった。オーストリア＝ハンガリー帝国の崩壊のなかで、多くのハンガリー人が先祖代々の地域ではあったものの、今や外国となった土地に取り残された。ハンガリーとの関係を改善し、いくらかのチェコスロヴァキア領を与えることは可能である。",
     "prerequisites": [
       "GER_demand_sudetenland"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 53
+      }
     ]
   },
   {
@@ -86,6 +171,13 @@
     "effect": "かつてのチェコ人の土地を、適切に統治できる者達によって分割する時が来ている。東方にスロヴァキア人の傀儡国家を建国することも考慮すべきだろう。",
     "prerequisites": [
       "GER_first_vienna_award"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 41
+      }
     ]
   },
   {
@@ -98,6 +190,13 @@
     "prerequisites": [
       "GER_czech_friend",
       "GER_end_of_czechoslovakia"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 53
+      }
     ]
   },
   {
@@ -109,6 +208,17 @@
     "effect": "イタリア人は信用に値しないかもしれない。それは先の大戦からも明らかだ。しかし、ムッソリーニと彼の率いるファシズム運動はイタリアにまだ希望を託せることを示している。間違いなく、ドイツがイタリアとの同盟から得られるのは利益だけだ、そうだろう？",
     "prerequisites": [
       "GER_second_vienna_award"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 42
+      },
+      {
+        "type": "add_world_tension",
+        "value": 2
+      }
     ]
   }
 ]

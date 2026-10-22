@@ -9,6 +9,18 @@
     "prerequisites": [
       "SOV_reorganize_the_pc_of_heavy_industry",
       "SOV_shift_to_armaments_production"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -16,10 +28,17 @@
     "title": "合成ゴム",
     "x": 200,
     "y": 830,
-    "cost": 35,
+    "cost": 70,
     "effect": "外国産のゴムの輸入に頼れなくなる日が来るかもしれない。その日が来た時、国内生産でゴムの需要を満たせるように準備をしなければならない。",
     "prerequisites": [
       "SOV_steel_casting_industry"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 54
+      }
     ]
   },
   {
@@ -27,10 +46,22 @@
     "title": "石油生産",
     "x": 500,
     "y": 830,
-    "cost": 35,
+    "cost": 70,
     "effect": "産業の発展と軍事の近代化のための次の論理的なステップは自動車化の拡大である。これは大量の潤滑油や燃料を必要とするだろう。幸いなことに我が国には豊富な石油資源があるため、必要な産業を発展させることでこの目的のために使用することが出来る。",
     "prerequisites": [
       "SOV_steel_casting_industry"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -38,11 +69,33 @@
     "title": "復興と開発",
     "x": 350,
     "y": 1090,
-    "cost": 35,
+    "cost": 70,
     "effect": "戦争が終わった今、我々は安心して産業の発展に戻り、国民の生活を向上させることが出来る。",
     "prerequisites": [
       "SOV_industrial_modernization",
       "SOV_optimize_production_lines"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 47
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      },
+      {
+        "type": "add_stability",
+        "value": 9
+      }
     ]
   },
   {
@@ -54,6 +107,13 @@
     "effect": "戦後の混乱が完全に収束するまでにはまだ時間がかかるが、適切な目標を設定することで、今からでも生産性の向上を図ることが出来る。",
     "prerequisites": [
       "SOV_restoration_and_development"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 47
+      }
     ]
   },
   {
@@ -65,6 +125,18 @@
     "effect": "戦争によって、協力関係を改善し、友好国やパートナーの経済発展を図る必要があることが判明した。そのため、我々は両国間の貿易と経済発展を調整するための組織を設立する。",
     "prerequisites": [
       "SOV_fourth_five_year_plan"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 51
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -76,6 +148,18 @@
     "effect": "我々の商品に新たな市場へのアクセスを与え、貿易の障壁が少ない状態で経済に必要な資源を得ることができれば、経済の成長はより容易になる。我々はこれを推進するための組織を作るべきだろう。",
     "prerequisites": [
       "SOV_fourth_five_year_plan"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 48
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -88,6 +172,24 @@
     "prerequisites": [
       "SOV_fourth_five_year_plan",
       "SOV_national_academies_of_sciences"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 42
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -95,10 +197,22 @@
     "title": "国内の専門家",
     "x": 800,
     "y": 310,
-    "cost": 35,
+    "cost": 70,
     "effect": "我々の経済発展は国のことをよく知る者たちが中心となって進めなければならない。外国人は我が国に関する知識を得るのに長い時間がかかり、さらに悪いことに－－その知識を持って帰ってしまうだろう。",
     "prerequisites": [
       "SOV_finish_the_five_year_plan"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 62
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -106,10 +220,22 @@
     "title": "国外の専門家",
     "x": 1100,
     "y": 310,
-    "cost": 35,
+    "cost": 70,
     "effect": "世界には我が国の経済を改善するために多くのことを教授できる専門家がたくさんいる。ありがたいことに彼らの多くは資本家であり、したがって買うことが出来る。",
     "prerequisites": [
       "SOV_finish_the_five_year_plan"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 71
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   }
 ]

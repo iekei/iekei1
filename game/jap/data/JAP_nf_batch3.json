@@ -8,6 +8,18 @@
     "effect": "[Root.GetNameDefCap]は資源に乏しいが、隣国はそうではない。その穴埋めをしなければならないが、それを正当化する為の理由が必要だ。その口実は主戦派の士官たちが用意してくれるだろう、その後は陛下がいかに戦争に懐疑的であったとしても、開戦に同意せざるを得まい。",
     "prerequisites": [
       "JAP_greater_east_asian_co_prosperity_sphere"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 60
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -19,6 +31,13 @@
     "effect": "中国の抵抗運動は諦めが悪く手に負えないことが分かっている。本土平定に向けて全力で取り組まなくてはならない。",
     "prerequisites": [
       "JAP_intervene_in_china"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 44
+      }
     ]
   },
   {
@@ -30,6 +49,24 @@
     "effect": "中国に眠る豊富な資源を開発し、それを手に出来れば次の戦争への大事な糧になるだろう。",
     "prerequisites": [
       "JAP_secure_china"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 50
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -42,6 +79,18 @@
     "prerequisites": [
       "JAP_greater_east_asian_co_prosperity_sphere",
       "JAP_sign_tripartite_pact"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 43
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -53,6 +102,17 @@
     "effect": "北の守りを確固たるものにすることができれば心置きなく南に進出できる。速やかに[SOV.GetNameDef]との交渉を進めたほうが良いだろう。",
     "prerequisites": [
       "JAP_strike_south_doctrine"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 42
+      },
+      {
+        "type": "add_world_tension",
+        "value": 4
+      }
     ]
   },
   {
@@ -64,6 +124,13 @@
     "effect": "フィリピンは我々の真の目標への望まざる障害である。我々は一旦、彼の地を捨ておくべきだろう。",
     "prerequisites": [
       "JAP_non_aggression_pact_with_the_soviet_union"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 45
+      }
     ]
   },
   {
@@ -75,6 +142,13 @@
     "effect": "フィリピンは我々の真の目標への礎となる重要な拠点である。将来的に彼の地を確保する軍事作戦を立案するべきだろう。",
     "prerequisites": [
       "JAP_non_aggression_pact_with_the_soviet_union"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 58
+      }
     ]
   },
   {
@@ -87,6 +161,23 @@
     "prerequisites": [
       "JAP_secure_the_philippines",
       "JAP_bypass_the_philippines"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 60
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "create_wargoal",
+        "target": "INS",
+        "wargoal": "annex_everything"
+      }
     ]
   },
   {
@@ -98,6 +189,22 @@
     "effect": "シャムは、我々の来るべき西洋列強との戦争の中で我々の補給にとって重要な場所に位置している。シャムを我々の側につけることで、マラヤと東インド諸島の占領を容易にすることができるだろう。",
     "prerequisites": [
       "JAP_strike_south_doctrine"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 43
+      },
+      {
+        "type": "create_wargoal",
+        "target": "RAJ",
+        "wargoal": "annex_everything"
+      },
+      {
+        "type": "add_world_tension",
+        "value": 2
+      }
     ]
   },
   {
@@ -110,6 +217,24 @@
     "prerequisites": [
       "JAP_strike_on_the_southern_resource_area",
       "JAP_coal_liquification"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   }
 ]

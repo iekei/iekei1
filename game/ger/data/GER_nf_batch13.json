@@ -8,6 +8,17 @@
     "effect": "ヨーロッパの中心から離れたフィンランド人はアカどもと単独で直面する危険性がある。しかし、そうなるには及ばない。彼らに共産主義の脅威に対する保護と同盟を提供するべきだ。",
     "prerequisites": [
       "GER_scandinavian_membership"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 48
+      },
+      {
+        "type": "add_world_tension",
+        "value": 3
+      }
     ]
   },
   {
@@ -21,6 +32,13 @@
       "GER_baltic_membership",
       "GER_polish_membership",
       "GER_finnish_membership"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 47
+      }
     ]
   },
   {
@@ -32,6 +50,19 @@
     "effect": "圧政者や権威主義体制が破られた今、国から逃げた科学者達にとって、帰国し、もう一度故郷で働くことが魅力的なものとなるよう試みることができる。",
     "prerequisites": [
       "GER_the_monarchy_compromise"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 56
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -44,6 +75,19 @@
     "prerequisites": [
       "GER_reverse_the_brain_drain",
       "GER_central_european_alliance"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 57
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -56,6 +100,18 @@
     "prerequisites": [
       "GER_shared_rd_programs",
       "GER_scandinavian_membership"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 56
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 1
+      }
     ]
   },
   {
@@ -67,6 +123,19 @@
     "effect": "全ての国家は独自の工場管理や機器整備の方法が存在する。他の同盟諸国との間でこの情報を広めるために技術班を送ることで互いに習得することが可能となる。",
     "prerequisites": [
       "GER_shared_rd_programs"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 60
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   }
 ]

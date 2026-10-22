@@ -4,10 +4,17 @@
     "title": "レーニンの正統なる後継者",
     "x": 7100,
     "y": 1350,
-    "cost": 35,
+    "cost": 70,
     "effect": "スターリン同志は常にレーニンの最も親しき仲間であり、最も信頼された弟子だった。レーニンの教えの最も忠実な信奉者として、彼が共産主義に向かって国家を導くという重責を継承し、不可避の万国労働者革命に備えるのは当然のことである。",
     "prerequisites": [
       "SOV_stalins_cult_of_personality"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 44
+      }
     ]
   },
   {
@@ -19,6 +26,19 @@
     "effect": "紛れもなく存命の者で最も聡明な人物であるスターリン同志は、我が国を新たな科学的発展で高みへと導き、全人類の進歩を飛躍的に前進させるだろう。",
     "prerequisites": [
       "SOV_inheritor_of_the_mantle_of_lenin"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -26,10 +46,17 @@
     "title": "レーニンの忠実なる従者",
     "x": 7400,
     "y": 1350,
-    "cost": 35,
+    "cost": 70,
     "effect": "レーニンは、世界史における最大の課題を我々に託した。それは、全ての人々が真に平等な社会、すなわち抑圧も苦しみも物質的な欠乏もない社会を築くことである。この構想を遂行するのに、同志スターリン以上の人物はいないだろう。彼はレーニンと常に歩みをともにし、今では革命でなされた約束を果たす用意が出来ている。",
     "prerequisites": [
       "SOV_stalins_cult_of_personality"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 47
+      }
     ]
   },
   {
@@ -41,6 +68,19 @@
     "effect": "同志スターリンの私生活や幼少期について、非現実的でひどく誇張された記述を発表する風潮がある。いくら善意から出たものであってもこれらの記述は反革命的であり、ソビエト人民の精神に英雄崇拝を植え付けようとするものであり、同志スターリンの理論を精力的に研究することを単なる盲目的な偶像崇拝に置き換えようとするものである。",
     "prerequisites": [
       "SOV_the_faithful_servant_of_lenin"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 50
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -48,11 +88,18 @@
     "title": "党と人民の指導者",
     "x": 7250,
     "y": 1480,
-    "cost": 35,
+    "cost": 70,
     "effect": "スターリン同志はその勤勉さと技量で過酷な仕事を遂行し、党と人民の双方から率直かつ完全な支持を享受している。虚栄心や自画自賛の兆しは、彼には無縁である。おそらく彼は生きている人間の中で最も謙虚な人だ。",
     "prerequisites": [
       "SOV_inheritor_of_the_mantle_of_lenin",
       "SOV_the_faithful_servant_of_lenin"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 57
+      }
     ]
   },
   {
@@ -60,11 +107,24 @@
     "title": "偉大なる司令官",
     "x": 7100,
     "y": 1610,
-    "cost": 35,
+    "cost": 70,
     "effect": "スターリン同志の軍事理論と指導者としての業績は枚挙にいとまがない。裏切り者のトロツキーは赤軍を創設したかもしれないが、それを労働者階級の功績を守る実際的な力に変えたのはスターリン同志だった。",
     "prerequisites": [
       "SOV_inheritor_of_the_mantle_of_lenin",
       "SOV_leader_of_the_party_and_the_people"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 54
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -72,11 +132,18 @@
     "title": "共産主義の建築家",
     "x": 7400,
     "y": 1610,
-    "cost": 35,
+    "cost": 70,
     "effect": "スターリン同志の革命の理想への揺るぎなき決意によって、彼は一国で社会主義を築くという課題を見ることができた。社会主義の構築に向けた作業が順調に進めば、彼は次の大きな一歩に向かうことができる。それは社会主義から完全なる共産主義への移行である。",
     "prerequisites": [
       "SOV_the_faithful_servant_of_lenin",
       "SOV_leader_of_the_party_and_the_people"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 42
+      }
     ]
   },
   {
@@ -89,6 +156,17 @@
     "prerequisites": [
       "SOV_great_commander",
       "SOV_architect_of_communism"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 56
+      },
+      {
+        "type": "add_stability",
+        "value": 9
+      }
     ]
   },
   {
@@ -100,6 +178,13 @@
     "effect": "国を統治して正しき道へ領導するには複雑なことが多い、故に選択肢は公然と議論されなければならない。しかし一度決定が下されたのならば、その決定を無条件に支持することが全政治局員と全党の義務だ。",
     "prerequisites": [
       "SOV_stalins_cult_of_personality"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 46
+      }
     ]
   },
   {
@@ -111,6 +196,18 @@
     "effect": "共産主義の建設には幾度とない挑戦と障害が立ちはだかるだろう。同志スターリンと共に政治局が団結し立ち上がることで、我々は共産主義の建設への第一歩を踏み出すことができる。",
     "prerequisites": [
       "SOV_freedom_of_debate_unity_of_action"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   }
 ]

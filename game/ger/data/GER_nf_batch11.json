@@ -8,6 +8,13 @@
     "effect": "もし先の大戦から学ぶものがあるとすれば、それは東の外側にある我々の領土への攻撃の準備をしておかねばならないということである。これらの領土を取り戻し、侵略に備えて強化しておかねばならない。",
     "prerequisites": [
       "GER_return_of_the_kaiser"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 56
+      }
     ]
   },
   {
@@ -20,6 +27,18 @@
     "prerequisites": [
       "GER_see_to_the_eastern_front",
       "GER_bulwark_against_bolshevism"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 56
+      },
+      {
+        "type": "create_wargoal",
+        "target": "POL",
+        "wargoal": "annex_everything"
+      }
     ]
   },
   {
@@ -31,6 +50,18 @@
     "effect": "バルト三国は数十年前まではロシア帝国の一部だったが、これはソビエトがもう一度彼らを併合しようとするかもしれない理由として妥当である。これを防ぎ、ソビエト進行の際には軍事的支援を行わなければならない。",
     "prerequisites": [
       "GER_see_to_the_eastern_front"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 45
+      },
+      {
+        "type": "create_wargoal",
+        "target": "SOV",
+        "wargoal": "annex_everything"
+      }
     ]
   },
   {
@@ -42,6 +73,18 @@
     "effect": "フィンランド人はソビエトとの最前線にいる。彼らに共産主義者の脅威に対する保証を提供し、またいくらかの細やかな産業援助を与える。",
     "prerequisites": [
       "GER_safeguard_the_baltic"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -54,6 +97,13 @@
     "prerequisites": [
       "GER_support_the_finns",
       "GER_danzig_for_guarantees"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 43
+      }
     ]
   },
   {
@@ -65,6 +115,17 @@
     "effect": "共産主義との軍事的紛争に備えるためには、反共軍協約の全ての加盟国に、ソビエトの侵略に対する軍事的支援を求める追加条項への同意を呼びかけなければならない。すでに多くの方法でお互いに約束しているため、これは公式化以上のものではない。",
     "prerequisites": [
       "GER_anti_comintern_pact_unaligned"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 45
+      },
+      {
+        "type": "add_world_tension",
+        "value": 6
+      }
     ]
   },
   {
@@ -77,6 +138,13 @@
     "prerequisites": [
       "GER_anti_soviet_pact_unaligned",
       "GER_carte_blanche_for_alsace_and_french_colonies"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 52
+      }
     ]
   },
   {
@@ -88,6 +156,13 @@
     "effect": "共産主義の砦がまだ残っている。スペインの共産主義者をはじめとして、全ての共産主義者が根絶されたことを確認しなければならない。",
     "prerequisites": [
       "GER_tackle_the_communist_threat"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 48
+      }
     ]
   },
   {
@@ -99,6 +174,13 @@
     "effect": "自由選挙制を再開することにより民主主義の理想への復帰を目指す。選挙は近い将来に実施されることになるだろう。",
     "prerequisites": [
       "GER_secure_the_new_state"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 60
+      }
     ]
   },
   {
@@ -110,6 +192,13 @@
     "effect": "ナチスの圧政からの自由のために戦った軍が王党派に傾倒していることが明らかになった。彼らを満足させ、国家のとる道を確実にするため、我々は妥協し、王室を戻さなければならない。 ",
     "prerequisites": [
       "GER_reestablish_free_elections"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      }
     ]
   }
 ]

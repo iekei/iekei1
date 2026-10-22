@@ -40,6 +40,15 @@
     annex_country: { label: '国家を併合', unit: '', valueKey: 'country' },
     annex_target: { label: '対象国を占領', unit: '', valueKey: 'country' },
     occupy_country: { label: '国家を占領', unit: '', valueKey: 'country' },
+    create_wargoal: { label: '戦争目標', unit: '', valueKey: 'country' },
+    add_wargoal: { label: '戦争目標', unit: '', valueKey: 'country' },
+    give_wargoal: { label: '戦争目標', unit: '', valueKey: 'country' },
+    casus_belli: { label: '宣戦事由', unit: '', valueKey: 'country' },
+    add_opinion: { label: '関係改善', unit: '', valueKey: 'country' },
+    add_civilian_factory: { label: '民需工場', unit: '', signed: true },
+    add_military_factory: { label: '軍需工場', unit: '', signed: true },
+    add_dockyard: { label: '海軍造船所', unit: '', signed: true },
+    add_research_bonus: { label: '研究ボーナス', unit: '', valueKey: 'category' },
     add_world_tension: { label: '世界の緊張度', unit: '%', signed: true },
     add_named_threat: { label: '国際緊張度', unit: '%', signed: true },
     add_threat: { label: '国際緊張度', unit: '%', signed: true }
@@ -60,7 +69,9 @@
     bunker: '陸軍要塞', coastal_bunker: '沿岸要塞', anti_air_building: '対空砲',
     radar_station: 'レーダー基地', fuel_silo: '燃料サイロ', nuclear_reactor: '原子炉',
     rocket_site: 'ロケット発射場',
-    add_opinion_modifier: '関係改善補正',
+    add_opinion_modifier: '関係改善補正', create_wargoal: '戦争目標', add_wargoal: '戦争目標',
+    casus_belli: '宣戦事由', add_opinion: '関係改善', add_civilian_factory: '民需工場',
+    add_military_factory: '軍需工場', add_dockyard: '海軍造船所', add_research_bonus: '研究ボーナス',
     set_country_flag: '国家フラグを設定', clr_country_flag: '国家フラグを解除',
     set_global_flag: '世界フラグを設定',
     building: '建設', level: 'レベル', state: '州', states: '州', owner: '所有者',
@@ -122,8 +133,8 @@
 
     const definition = definitions[reward.type];
 
-    // Research bonus: ・研究ボーナス: 陸軍 100% (2回分)
-    if (definition && definition.valueKey === 'category') {
+    // Research bonus: ・研究ボーナス: 陸軍 50% (1回分)
+    if (definition && (definition.valueKey === 'category' && /tech_bonus|research_bonus/.test(reward.type))) {
       const bonus = Number(reward.bonus);
       const pct = Number.isFinite(bonus) ? ` ${Math.round(bonus * 100)}%` : '';
       const uses = reward.uses ? `（${reward.uses}回分）` : '';
@@ -148,7 +159,7 @@
       return { text: `・${label}${lvlText}を建設${statePart}${regionPart}`, color: level < 0 ? '#ef4444' : '#22c55e' };
     }
 
-    // Country annex/occupy: ・国家を併合: オーストリア
+    // Country-scoped effects (annex / wargoal / opinion)
     if (definition && definition.valueKey === 'country') {
       const targets = reward.country || reward.targetCountry || reward.countries || reward.targets;
       const list = (Array.isArray(targets) ? targets : [targets]).filter(Boolean);
@@ -222,12 +233,40 @@
       case 'add_offsite_building': {
         const building = reward.building || reward.type;
         const level = Number(reward.level ?? reward.value ?? reward.amount ?? 1);
+        const amount = Number.isFinite(level) ? level : 0;
         gameState.buildings = gameState.buildings || {};
-        gameState.buildings[building] = (gameState.buildings[building] || 0) + (Number.isFinite(level) ? level : 0);
-        if (building === 'bunker') gameState.landFortLevel = (gameState.landFortLevel || 0) + (Number.isFinite(level) ? level : 0);
-        if (building === 'coastal_bunker') gameState.coastalFortLevel = (gameState.coastalFortLevel || 0) + (Number.isFinite(level) ? level : 0);
+        gameState.buildings[building] = (gameState.buildings[building] || 0) + amount;
+        // 施設は実際の生産能力にも反映する (国家方針の「民需工場+2」等)。
+        if (building === 'industrial_complex' || building === 'civ_factory') {
+          gameState.civilianFactories = Math.max(0, (Number(gameState.civilianFactories) || 0) + amount);
+        } else if (building === 'arms_factory') {
+          gameState.militaryFactories = Math.max(0, (Number(gameState.militaryFactories) || 0) + amount);
+        } else if (building === 'dockyard') {
+          gameState.dockyards = Math.max(0, (Number(gameState.dockyards) || 0) + amount);
+        } else if (building === 'bunker') {
+          gameState.landFortLevel = (gameState.landFortLevel || 0) + amount;
+        } else if (building === 'coastal_bunker') {
+          gameState.coastalFortLevel = (gameState.coastalFortLevel || 0) + amount;
+        }
+        const production = global.ProductionManager;
+        if (production && typeof production.ensure === 'function') {
+          try { production.ensure(); } catch (e) { /* 生産管理が未初期化の場合は無視 */ }
+        }
         break;
       }
+      case 'add_civilian_factory':
+        gameState.civilianFactories = Math.max(0, (Number(gameState.civilianFactories) || 0) + (Number.isFinite(value) ? value : 0)); break;
+      case 'add_military_factory':
+        gameState.militaryFactories = Math.max(0, (Number(gameState.militaryFactories) || 0) + (Number.isFinite(value) ? value : 0)); break;
+      case 'add_dockyard':
+        gameState.dockyards = Math.max(0, (Number(gameState.dockyards) || 0) + (Number.isFinite(value) ? value : 0)); break;
+      case 'create_wargoal':
+      case 'add_wargoal':
+      case 'give_wargoal':
+      case 'casus_belli':
+        grantWarGoal(gameState, reward); break;
+      case 'add_opinion':
+        grantOpinion(gameState, reward); break;
       case 'annex_country':
       case 'annex_target':
       case 'occupy_country':
@@ -239,11 +278,52 @@
       case 'add_threat':
         gameState.worldTension = Math.max(0, Math.min(100, (gameState.worldTension || 0) + (Number.isFinite(value) ? value : 0))); break;
       case 'add_tech_bonus':
+      case 'add_research_bonus': {
         gameState.techBonuses = Array.isArray(gameState.techBonuses) ? gameState.techBonuses : [];
-        gameState.techBonuses.push({ category: reward.category, bonus: reward.bonus, uses: reward.uses }); break;
+        const bonus = Number(reward.bonus ?? reward.value ?? 0.5);
+        gameState.techBonuses.push({
+          category: reward.category || '全般',
+          bonus: Number.isFinite(bonus) ? bonus : 0.5,
+          uses: Number(reward.uses) || 1
+        });
+        break;
+      }
       default: break;
     }
     return gameState;
+  }
+
+  // War goal / casus belli: HOI4 の create_wargoal に相当。
+  // WarGoals.grant() が使えるならそちらに委譲し、正当化済み戦争目標として登録する。
+  function grantWarGoal(gameState, reward) {
+    const raw = reward.target || reward.country || reward.targetCountry || reward.countries || reward.targets;
+    const targetTags = (Array.isArray(raw) ? raw : [raw]).filter(Boolean);
+    const days = Number(reward.days || reward.duration) || 120;
+    targetTags.forEach(tag => {
+      if (tag === gameState.country) return;
+      const warGoals = global.WarGoals;
+      if (warGoals && typeof warGoals.grant === 'function') {
+        warGoals.grant(tag, 'focus', days);
+        return;
+      }
+      gameState.justified = gameState.justified || {};
+      gameState.justified[tag] = true;
+      if (gameState.strategy) {
+        gameState.strategy.warGoals = gameState.strategy.warGoals || {};
+        gameState.strategy.warGoals[tag] = { source: 'focus', expires: 99999, type: reward.wargoal || 'annex_everything' };
+      }
+    });
+  }
+
+  function grantOpinion(gameState, reward) {
+    const raw = reward.target || reward.country || reward.targetCountry || reward.countries;
+    const targetTags = (Array.isArray(raw) ? raw : [raw]).filter(Boolean);
+    const value = numericValue(reward);
+    const diplomacy = global.DiplomacyManager;
+    targetTags.forEach(tag => {
+      const entry = diplomacy?.countries?.find(c => c.id === tag);
+      if (entry) entry.relation = Math.max(-100, Math.min(100, (Number(entry.relation) || 0) + (Number.isFinite(value) ? value : 0)));
+    });
   }
 
   // Annex transfers all states to the player; occupy marks control without ownership.
@@ -252,10 +332,16 @@
     const targetTags = (Array.isArray(targets) ? targets : [targets]).filter(Boolean);
     if (!targetTags.length) return;
 
-    const states = global.MapRenderer && global.MapRenderer.states;
-    if (states && typeof global.MapRenderer.captureState === 'function') {
-      Object.entries(states).forEach(([stateId, state]) => {
-        if (state && targetTags.includes(state.owner)) global.MapRenderer.captureState(stateId, gameState.country);
+    // 併合は既存の effect engine / MapRenderer のハンドラに委譲する。
+    const engine = global.effectEngine;
+    const map = global.MapRenderer;
+    if (!occupyOnly && typeof engine?.annexCountry === 'function') {
+      targetTags.forEach(tag => engine.annexCountry(tag));
+    } else if (!occupyOnly && typeof map?.annexCountry === 'function') {
+      targetTags.forEach(tag => map.annexCountry(tag));
+    } else if (map?.states && typeof map.captureState === 'function') {
+      Object.entries(map.states).forEach(([stateId, state]) => {
+        if (state && targetTags.includes(state.owner)) map.captureState(stateId, gameState.country);
       });
     }
 

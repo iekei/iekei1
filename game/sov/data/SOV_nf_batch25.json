@@ -4,10 +4,17 @@
     "title": "ハルヒン・ゴル紛争の終結",
     "x": 15500,
     "y": 700,
-    "cost": 35,
+    "cost": 70,
     "effect": "日本との国境紛争はもう長く続いている。もし日本政府が承認済みの国境を尊重するとは思えないのなら、その政府を交換する必要がある。",
     "prerequisites": [
       "SOV_prepare_a_war_with_japan"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      }
     ]
   },
   {
@@ -15,10 +22,17 @@
     "title": "クリル諸島の回復",
     "x": 15800,
     "y": 700,
-    "cost": 35,
+    "cost": 70,
     "effect": "クリル諸島は1905年の災厄で失われた。我が国が素早く激しく痛打を与えれば、島々を回復しつつ紛争を激化させる価値がない状況を日本に提示することができる。",
     "prerequisites": [
       "SOV_prepare_a_war_with_japan"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 46
+      }
     ]
   },
   {
@@ -30,6 +44,18 @@
     "effect": "日本との関係は常に厄介事の連続だった。しかしいまやより大きな餌がぶら下がっている。日本に自然資源が絶望的に欠乏していることを利用し、日本を我々に盲従させることができるかもしれない……奴らの時代錯誤的な封建体制はどの道まもなく崩壊するだろう。",
     "prerequisites": [
       "SOV_the_comintern"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 80
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -41,6 +67,13 @@
     "effect": "彼我の間で最後に残った論点は中国情勢である。我々のこの地域における国益は限定的なものであり、勢力圏に関する合意によって日本の支持を獲得することができるなら、躊躇なくそうするべきである。",
     "prerequisites": [
       "SOV_reconcile_japan"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      }
     ]
   },
   {
@@ -52,6 +85,22 @@
     "effect": "日本は経済成長を加速させるため更なる拡大を望んでいる。その拡張を可能な限り遠くに向けさせ、強力な海軍力の支援を得ることが我が国最大の利益だ。共にあれば、我々は世界の舞台からアメリカを退場させることが可能となろう！",
     "prerequisites": [
       "SOV_reconcile_japan"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 46
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_world_tension",
+        "value": 6
+      }
     ]
   },
   {
@@ -59,9 +108,16 @@
     "title": "打たるれど、敗れたらず",
     "x": 17450,
     "y": 50,
-    "cost": 35,
+    "cost": 70,
     "effect": "共産主義者どもがかつて誇り高かったこの国を危険な道へと導いているのは明らかだ。遅かれ早かれ国境の国々が現在の政権の弱点を見つけ襲いかかるだろう。もし我々が愛する祖国を救うならば、権力から共産主義者を放逐せねばならない！",
-    "prerequisites": []
+    "prerequisites": [],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 129
+      }
+    ]
   },
   {
     "id": "SOV_unification_of_the_exiles",
@@ -72,6 +128,13 @@
     "effect": "革命と内戦の終結後、多くの人々が新政権の言う「正義」より亡命することを選択した。彼らは今でもロシアが再び自由を取り戻すことを夢見ているが、そのロシアの政治体制については二の次であるようだ。国家が必要とする政府を設立する前に我々はこの国の権力を掌握する必要があるが、それは共に行えば良いだろう。",
     "prerequisites": [
       "SOV_beaten_but_not_defeated"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 86
+      }
     ]
   },
   {
@@ -79,10 +142,17 @@
     "title": "女性ファシズム運動",
     "x": 16550,
     "y": 310,
-    "cost": 35,
+    "cost": 70,
     "effect": "女の役割とは、当然ながら、夫に安住の家と戦いのための家族を提供することである、だが多くの男は、自身が国家と国民に対してどのような義務を負っているかを忘れている。献身的な女の中には、夫に何が危機に瀕しているのかを思い出させ、やるべきことをやるよう促すのに役立つ者もいるだろう。",
     "prerequisites": [
       "SOV_unification_of_the_exiles"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 64
+      }
     ]
   },
   {
@@ -90,10 +160,17 @@
     "title": "真のツァーリ",
     "x": 16850,
     "y": 310,
-    "cost": 35,
+    "cost": 70,
     "effect": "ロシア人は常に強力な指導者を必要としてきた。さもなくば、兄弟が相争い息子が父と争うほどにまで人々はますます引き裂かれることとなるだろう。しかし、かつてのツァーリはこの役割に適しておらず、貧弱で優柔不断であった。これからは、課せられた重責に応えることができるツァーリが必要となるだろう。",
     "prerequisites": [
       "SOV_unification_of_the_exiles"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 63
+      }
     ]
   },
   {
@@ -101,10 +178,21 @@
     "title": "国民の統一",
     "x": 17150,
     "y": 310,
-    "cost": 35,
+    "cost": 70,
     "effect": "来たる戦争を生き延びるためには、我々の分裂を容認することはできない。政治的見解にいかなる違いがあれ、結局は皆ロシア人なのだ。",
     "prerequisites": [
       "SOV_unification_of_the_exiles"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 60
+      },
+      {
+        "type": "add_stability",
+        "value": 8
+      }
     ]
   }
 ]

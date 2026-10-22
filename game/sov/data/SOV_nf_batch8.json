@@ -4,11 +4,18 @@
     "title": "命の道",
     "x": 4700,
     "y": 700,
-    "cost": 35,
+    "cost": 70,
     "effect": "いくつかの都市が包囲下で脅かされている、そうした場所の戦闘部隊が必要としている支援を与えることに専念すべきだ、いかなる犠牲を払おうとも。",
     "prerequisites": [
       "SOV_leningrad_polytechnical_institute",
       "SOV_move_industry_to_the_urals"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 57
+      }
     ]
   },
   {
@@ -20,6 +27,26 @@
     "effect": "ヨーロッパの政治地理学的な最近の変化により、我が国の西部国境はより西へ移動した。古い要塞化計画はどれも時代遅れだ。反撃するための軍隊を動員できるようになるまで、敵の攻撃を遅延させる新たな国境に沿った新要塞線を作らなければならない。",
     "prerequisites": [
       "SOV_military_engineering_university"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 65
+      },
+      {
+        "type": "add_building_construction",
+        "building": "bunker",
+        "level": 2
+      },
+      {
+        "type": "add_war_support",
+        "value": 10
+      },
+      {
+        "type": "add_manpower",
+        "value": 12500
+      }
     ]
   },
   {
@@ -31,6 +58,23 @@
     "effect": "我が国の西部国境は全体を強化するには長大すぎる。だが敵の攻撃が予測可能な地域に要塞の一式を集中建設することは可能であり、そこでなら大兵力をもって敵を簡単に反撃することができる。",
     "prerequisites": [
       "SOV_military_engineering_university"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 64
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_building_construction",
+        "building": "bunker",
+        "level": 2
+      }
     ]
   },
   {
@@ -38,12 +82,19 @@
     "title": "モスクワの防衛",
     "x": 4850,
     "y": 440,
-    "cost": 35,
+    "cost": 70,
     "effect": "敵はモスクワの前門に立っている。この地こそ我々が立ち向かい奴らを後退させ敗北せしめる場所だ、ナポレオンの時と同様に！",
     "prerequisites": [
       "SOV_move_industry_to_the_urals",
       "SOV_improve_the_stalin_line",
       "SOV_the_molotov_line"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 58
+      }
     ]
   },
   {
@@ -56,6 +107,24 @@
     "prerequisites": [
       "SOV_improve_the_stalin_line",
       "SOV_the_molotov_line"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 48
+      },
+      {
+        "type": "add_building_construction",
+        "building": "bunker",
+        "level": 2
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -63,10 +132,23 @@
     "title": "白海・バルト運河の保護",
     "x": 5450,
     "y": 440,
-    "cost": 35,
+    "cost": 70,
     "effect": "バルト海と白海の間の運河は現代工学の驚異であり、敵の手に落ちることは許されない。",
     "prerequisites": [
       "SOV_military_engineering_university"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 62
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -78,6 +160,18 @@
     "effect": "日本はソ満国境の侵犯を絶えず行なっている。奴らを永遠に抑止すべく、東方辺境の防御を固めねばならない。",
     "prerequisites": [
       "SOV_military_engineering_university"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 76
+      },
+      {
+        "type": "add_building_construction",
+        "building": "bunker",
+        "level": 2
+      }
     ]
   },
   {
@@ -85,10 +179,17 @@
     "title": "コサック部隊の復活",
     "x": 5750,
     "y": 180,
-    "cost": 35,
+    "cost": 70,
     "effect": "いざというとき、母国は誰が国を守るために働きたいかなどと詳細は尋ねない。侵略者に対して武器を持つ意思のある者は誰でも歓迎され、その能力の限り登用されることになる。",
     "prerequisites": [
       "SOV_strengthen_the_mobilization_plan"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 81
+      }
     ]
   },
   {
@@ -96,10 +197,25 @@
     "title": "結束第一",
     "x": 6050,
     "y": 180,
-    "cost": 35,
+    "cost": 70,
     "effect": "この状況で我々が最も必要なことは水準を下げることだ。軍隊で働きたい者は誰でも歓迎しよう、しかし、彼らは既存の部隊で任務を遂行し、適切な軍事基準に沿った訓練を受けることになる。",
     "prerequisites": [
       "SOV_strengthen_the_mobilization_plan"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 85
+      },
+      {
+        "type": "add_army_experience",
+        "value": 10
+      },
+      {
+        "type": "add_stability",
+        "value": 10
+      }
     ]
   },
   {
@@ -112,6 +228,17 @@
     "prerequisites": [
       "SOV_restore_cossack_units",
       "SOV_cohesion_first"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 79
+      },
+      {
+        "type": "add_army_experience",
+        "value": 24
+      }
     ]
   }
 ]

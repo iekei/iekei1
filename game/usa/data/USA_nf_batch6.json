@@ -8,6 +8,13 @@
     "effect": "一部の人々は我が国に対し、我が国の財産と我が国の若者の血を他所の国の戦争に投入したいそうだ。我々はこんな戦争屋共に煽動されてはならない。その代わりにただ一つだけ、金言を掲げて生きよう、「アメリカ・ファースト」と－－他所は全て二の次だ。",
     "prerequisites": [
       "USA_reestablish_the_gold_standard"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 97
+      }
     ]
   },
   {
@@ -19,6 +26,13 @@
     "effect": "中国は戦争で荒廃している。我々は中国からの移民を制限する措置を講じなければならない。そう、難民の波に溺れないために。",
     "prerequisites": [
       "USA_america_first"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 80
+      }
     ]
   },
   {
@@ -31,6 +45,13 @@
     "prerequisites": [
       "USA_extend_the_chinese_exclusion_acts",
       "USA_labour_management_relations_act"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 50
+      }
     ]
   },
   {
@@ -42,6 +63,13 @@
     "effect": "選挙は民主主義にとって最も重要な要素である。誰が有権者であるかを確認するべきではない、などという要求は全く以て理に適わない。あるいはもしかすると、自由な選挙を求める人々はより邪悪な動機を持っていて、不正投票によって民主主義の手続きを覆そうと思っているのかも知れない……",
     "prerequisites": [
       "USA_empower_the_huac"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      }
     ]
   },
   {
@@ -53,6 +81,17 @@
     "effect": "世界における然るべき地位へと我々の国家を取り戻し、明白なる運命を主張するためには、より根本的な再編が必要である。銀シャツ隊（Silver Shirts）がこれらの実現の助けとなるだろう。",
     "prerequisites": [
       "USA_america_first"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 66
+      },
+      {
+        "type": "add_world_tension",
+        "value": 6
+      }
     ]
   },
   {
@@ -64,6 +103,18 @@
     "effect": "迅速な経済回復と持続可能な繁栄を、着実に実行するための鍵となるのは、自由闊達な市場だけでなく、官民が事業を連携できる、慎重に舵をとった政治プログラムにある。",
     "prerequisites": [
       "USA_ally_with_the_silver_shirts"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 44
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -75,6 +126,24 @@
     "effect": "テネシー川流域開発公社（TVA、Tennessee Valley Authority）は民間の競争を追い払い、テネシー州とその周辺地域の土木事業を牛耳るために設立された。民間の分野がもっと良い結果を出すと証明された事業を、わざわざ政府がやる必要はないだろう。",
     "prerequisites": [
       "USA_national_prosperity_program"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 55
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -86,6 +155,13 @@
     "effect": "景気循環として全く当たり前のことである金融市場の適正化に続き、前政権は金融活動に対し極めて不条理な成約を設けた。善意によるものであることは疑わないにしても、一連の成約は善の面にくらべて、明らかに悪の面が強すぎる。",
     "prerequisites": [
       "USA_national_prosperity_program"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 45
+      }
     ]
   },
   {
@@ -98,6 +174,13 @@
     "prerequisites": [
       "USA_privatize_the_TVA",
       "USA_de_regulate_the_banking_sector"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      }
     ]
   },
   {
@@ -109,6 +192,13 @@
     "effect": "一部の州政府と軍の忠誠心について、いくつかの非常に由々しき報告が挙がっている。我々は海外からの支援を探す必要があるかもしれない。",
     "prerequisites": [
       "USA_ally_with_the_silver_shirts"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 55
+      }
     ]
   }
 ]

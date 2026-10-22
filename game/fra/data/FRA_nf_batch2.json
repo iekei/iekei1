@@ -8,6 +8,13 @@
     "effect": "シリアは、欧州やアフリカで戦争が起こった場合に、物資供給源として最適の位置にある。工業力を高めることはその地域で我々の地位を支えることにもなる。",
     "prerequisites": [
       "FRA_invest_in_the_colonies"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 62
+      }
     ]
   },
   {
@@ -22,6 +29,18 @@
       "FRA_invest_in_west_africa",
       "FRA_invest_in_indochina",
       "FRA_invest_in_syria"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 43
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -33,6 +52,19 @@
     "effect": "有望な若者の精神は至る所に存在する。彼らに研究設備を提供する必要がある。技術の進歩によって、最も必要とするものを得ることができるだろう。",
     "prerequisites": [
       "FRA_industrial_expansion"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 45
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -44,6 +76,19 @@
     "effect": "有望な若い知性はどこにでも現れている。彼らに研究を行う施設を提供する必要がある。技術の進歩により、最も必要としている所の強みを得ることができる。",
     "prerequisites": [
       "FRA_colonial_industry"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 48
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -55,6 +100,17 @@
     "effect": "大英帝国は相互に助け合う国々からなる、精巧に調整された組織である。わが国とその植民地に同じことができないと、誰が言えようか。",
     "prerequisites": [
       "FRA_colonial_industry"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 57
+      },
+      {
+        "type": "add_world_tension",
+        "value": 2
+      }
     ]
   },
   {
@@ -64,7 +120,19 @@
     "y": 50,
     "cost": 70,
     "effect": "フォッシュ将軍の予期した20年の停戦は急速に終わりを迎え、世界は今後数年のうちに戦争へ発展する可能性が高まっている。我々はそれに備えなければならない。",
-    "prerequisites": []
+    "prerequisites": [],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 116
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 2
+      }
+    ]
   },
   {
     "id": "FRA_defensive_focus",
@@ -75,6 +143,13 @@
     "effect": "このような時代では、防衛力を強化することが最善である。脅威がある場合、領土内で対処できるように敵をおびき寄せましょう。我々には軍隊を指揮するのに最適な候補者がおり、後は命令しさえすればよい。",
     "prerequisites": [
       "FRA_begin_rearmament"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 82
+      }
     ]
   },
   {
@@ -86,6 +161,18 @@
     "effect": "先の大戦から得られた教訓は単純かつ残酷なものだ。すなわち、兵士たちが照門越しに殺しあう時代は終わったのだ。今日、蹂躙とは遠距離から最も現代的な兵器を用いて、大規模に行われるものである。",
     "prerequisites": [
       "FRA_defensive_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 76
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 1
+      }
     ]
   },
   {
@@ -97,6 +184,13 @@
     "effect": "戦いは無秩序なものだと主張する者もいるが、連中はマヌケだ。戦いとは、全体計画に基づいて適切な道具を整然と使用する行為に他ならない。よく計画を練れば、敵の意図など歴史上の小話となったも同然だ。",
     "prerequisites": [
       "FRA_defensive_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 67
+      }
     ]
   },
   {
@@ -108,6 +202,23 @@
     "effect": "既にある要塞と同じく重要なのは、より効率的に建設する方法を見つけることだ。マジノ線は敵軍への強力な抑止力となっており、そのような防衛施設をさらに構築できるだろう。",
     "prerequisites": [
       "FRA_methodical_battle"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 43
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_building_construction",
+        "building": "bunker",
+        "level": 2
+      }
     ]
   }
 ]

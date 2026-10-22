@@ -9,6 +9,13 @@
     "prerequisites": [
       "GER_fan_the_prussian_militarism",
       "GER_a_new_and_better_germany"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      }
     ]
   },
   {
@@ -20,6 +27,13 @@
     "effect": "カイザーライヒにはカイザーが必要であり、ヴィルヘルム2世陛下は亡命先のオランダにて未だ健在だ。西方の民主主義者がどう思うかはさておき、我々は陛下の追放を解除し、再び帝位へと返り咲くのだ。",
     "prerequisites": [
       "GER_revive_the_kaiserreich"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 56
+      }
     ]
   },
   {
@@ -32,6 +46,13 @@
     "prerequisites": [
       "GER_return_of_the_kaiser",
       "GER_naval_effort"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 42
+      }
     ]
   },
   {
@@ -43,6 +64,17 @@
     "effect": "西方への挑戦に支障をきたさないよう、かつて栄華を誇った大洋艦隊を再建するべく海軍の増強措置を要求する。",
     "prerequisites": [
       "GER_focus_on_the_true_enemy"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 44
+      },
+      {
+        "type": "add_navy_experience",
+        "value": 14
+      }
     ]
   },
   {
@@ -50,10 +82,17 @@
     "title": "我々の陽の当たる場所",
     "x": 6050,
     "y": 960,
-    "cost": 35,
+    "cost": 70,
     "effect": "ドイツ帝国は再び陽の当たる場所をつかみ取る権利を求めることを、皆に知らしめるのだ！我等が臣民が日陰で恥辱に耐え忍ぶことは最早ない。",
     "prerequisites": [
       "GER_rebuild_the_high_seas_fleet"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 52
+      }
     ]
   },
   {
@@ -65,6 +104,13 @@
     "effect": "英国海軍と同等の規模になるまで何年もかかるだろう。故に品質で勝る必要がある。わが国の船は海を渡る最も現代的で強力なものになる！",
     "prerequisites": [
       "GER_our_place_in_the_sun"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 51
+      }
     ]
   },
   {
@@ -76,6 +122,13 @@
     "effect": "前大戦では英国の非道な海上封鎖が行われた。同じ間違いを起こしてはならない。今度は、より長い期間をかけ、来る封鎖に向け国民を備えさせよう。",
     "prerequisites": [
       "GER_our_place_in_the_sun"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 41
+      }
     ]
   },
   {
@@ -87,6 +140,13 @@
     "effect": "あまりにも長い間行われてきた西欧諸国の植民地主義による独占を粉砕する時が来た。",
     "prerequisites": [
       "GER_prepare_for_the_next_blockade"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 47
+      }
     ]
   },
   {
@@ -94,10 +154,22 @@
     "title": "シュリーフェン再び",
     "x": 5900,
     "y": 1480,
-    "cost": 28,
+    "cost": 70,
     "effect": "マジノ線は迂回する必要がある。我々は勝利するための迅速な一撃を加えるべく、再びベルギーとルクセンブルクを横切るのだ。",
     "prerequisites": [
       "GER_break_the_anglo_french_colonial_hegemony"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 45
+      },
+      {
+        "type": "add_building_construction",
+        "building": "bunker",
+        "level": 2
+      }
     ]
   },
   {
@@ -111,6 +183,23 @@
       "GER_break_the_anglo_french_colonial_hegemony",
       "GER_plan_z",
       "GER_modular_construction"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      },
+      {
+        "type": "add_building_construction",
+        "building": "dockyard",
+        "level": 1
+      },
+      {
+        "type": "create_wargoal",
+        "target": "ENG",
+        "wargoal": "annex_everything"
+      }
     ]
   }
 ]

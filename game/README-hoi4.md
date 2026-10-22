@@ -79,6 +79,8 @@ game/
   hoi4-screen.js              HOI4 全画面レイヤー（H・Esc・遅延iframe・国家引き継ぎ）
   css/steel-ui.css            重厚スチールフレーム デザインシステム
   css/hoi4-screen.css         game/index.html 側の全画面クローム / 起動ボタン
+  css/systems.css             作戦計画パネル / 兵器設計 / ドクトリンツリーのスタイル
+  README-systems.md           4大システム（作戦計画/方針報酬/兵器設計/ドクトリン）の実装ノート
   locales/ja.json             日本語ローカライズ辞書（hoidesigner.com準拠・全294技術名収録）
   js/
     i18n.js                   辞書ロード / data-i18n DOM適用 / techName等の日本語解決
@@ -89,14 +91,17 @@ game/
     mio.js                    MIOマネージャ（アサイン/レベル/XP/特性ツリー）
     economy.js                生産ライン・貿易・燃料・建設キュー
     division.js               DivisionTemplate（5×5＋1×5 全ステータスリアルタイム再計算）
-    designers.js              戦車/艦艇/航空機設計（増槽システム含む）
+    designers.js              戦車/艦艇/航空機設計（研究アンロック/スロット上限/増槽システム含む）
+    battle-plan.js            作戦計画（前線/攻撃線/経路探索/計画準備/自動進軍・戦闘）
+    effects.js                国家方針 completion_reward のエフェクトエンジン（併合/研究ボーナス/精神/XP等）
     combat.js                 戦闘シミュレーター（1時間Tick/ダイスロール/地形ペナルティ）
     doctrine.js               ドクトリン（陸海空/XP/相互排他ルート/軍集団割当）
     intel.js                 諜報機関（諜報員カード/任務タイマー）
     diplomacy.js              外交（プロファイル/政治力消費アクション）
     politics.js               政治（法律/閣僚/占領度統合タイマー/併合）
-    data/                     nations / battalions / equipment / mios / doctrines / operatives / cards
-    ui/                       topbar.js / modal.js / screens.js / screens2.js / map.js / embed.js
+    data/                     nations / battalions / equipment / mios / doctrines / major-focuses / operatives / cards
+    ui/                       topbar.js / modal.js / screens.js / screens2.js / screens3.js / map.js / embed.js
+                              battle-plan-ui.js / designer-ui.js / doctrine-ui.js
 server/timesync-server.js     マルチプレイ時間同期 WebSocket サーバー（依存なし）
 ```
 
@@ -151,6 +156,18 @@ node server/timesync-server.js 8787
 ```
 
 ## 更新履歴
+
+### 2026-10-22 — 4大システム（作戦計画 / 国家方針報酬 / 兵器設計 / ドクトリン）
+- `js/battle-plan.js` + `js/ui/battle-plan-ui.js`: 前線ドラッグ設定・攻撃線（Dijkstra 経路）・
+  計画準備ボーナス・計画実行による自動進軍/戦闘/占領。`map-engine.js` に前線ポリラインと矢印描画
+- `js/effects.js`: `completion_reward` のエフェクトエンジン（併合・傀儡・宣戦事由・研究ボーナス・
+  国家的精神・XP）。`js/data/major-focuses.js`: 7カ国×9ノード（計63）に史実寄りの報酬
+- `js/data/equipment.js` + `js/designers.js` + `js/ui/designer-ui.js`: 車体/船体/機体＋モジュール設計。
+  研究完了でモジュール解禁、ドラッグ＆ドロップ/クリック装着、スロット上限、ステータス差分表示
+- `js/data/doctrines.js` + `js/doctrine.js` + `js/ui/doctrine-ui.js`: 陸海空42ノード/10ルート。
+  XP消費・ルート排他・ツリーSVG配線・`game/assets/doctrine/` のPNGアイコン表示
+- `game/tests/systems.test.mjs`: 上記4システムの回帰テスト17件
+- 詳細は `README-systems.md` を参照
 
 ### 2026-10-20 — game/index.html への HOI4 画面移植
 - `game/hoi4-screen.js` + `game/css/hoi4-screen.css`: 将軍カードゲームから

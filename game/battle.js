@@ -30,6 +30,9 @@ class BattleManager {
     const st = MapRenderer.states[targetStateId];
     const pos = MapRenderer.provCentroid.get(targetPid) ||
       MapRenderer.stateCenter.get(String(targetStateId)) || army.base.slice();
+    // 計画準備ボーナス: 前線で蓄積した値をこの戦闘に適用する。
+    const planning = typeof PlanningBonus !== 'undefined' ? PlanningBonus.of(army) : 0;
+    const profile = BattleManager.attackProfile(army);
     const b = {
       id: BattleManager.nextId++,
       kind: 'offensive',
@@ -41,9 +44,10 @@ class BattleManager {
       invasion: !!options.invasion, airdrop: !!options.airdrop,
       attackerArmyId: army.id,
       // プレイヤー視点の優勢度 (-1 〜 +1)
-      advantage: BattleManager.calcOffensiveAdvantage(army, st),
-      softAttack: BattleManager.attackProfile(army).soft,
-      hardAttack: BattleManager.attackProfile(army).hard,
+      advantage: Math.max(-1, Math.min(1, BattleManager.calcOffensiveAdvantage(army, st) + planning * 0.25)),
+      planning,
+      softAttack: profile.soft * (1 + planning),
+      hardAttack: profile.hard * (1 + planning),
       defense: BattleManager.defenseProfile(st).defense,
       breakthrough: BattleManager.defenseProfile(st).breakthrough,
       hitChance: 0.2,
@@ -96,24 +100,36 @@ class BattleManager {
     return b;
   }
 
+  // 陸軍ドクトリンのグローバル補正 (DoctrineManager.bonuses('land'))
+  // 例: 優勢火力ルート取得済みなら 対人攻撃 +15% / 防御 +5%。
+  static doctrineBonus(key) {
+    const manager = typeof DoctrineManager !== 'undefined' ? DoctrineManager : window.DoctrineManager;
+    if (!manager || typeof manager.modifier !== 'function') return 0;
+    try { return Number(manager.modifier('land', key)) || 0; } catch (e) { return 0; }
+  }
+
   static attackProfile(army) {
     const count = Math.max(1, army?.divisions?.length || 1);
     const tech = BattleManager.totalFirepower();
     const mods = CoreEngine.gameState.cardModifiers || {};
-    const soft = count * (35 + tech * 0.55 + (mods.softAttack || 0));
-    const hard = count * (12 + tech * 0.25 + (mods.hardAttack || mods.armorBreakthrough || 0));
+    const soft = count * (35 + tech * 0.55 + (mods.softAttack || 0)) * (1 + BattleManager.doctrineBonus('soft'));
+    const hard = count * (12 + tech * 0.25 + (mods.hardAttack || mods.armorBreakthrough || 0)) * (1 + BattleManager.doctrineBonus('hard'));
     return { soft, hard };
   }
 
   static defenseProfile(st) {
     const fort = st && st.b ? (st.b.fort || 0) * 8 : 0;
     const supply = (st && st.supply ? st.supply : 0) * 1.5;
-    return { defense: 50 + fort + supply, breakthrough: 35 + fort * 0.5 };
+    const defenseMod = 1 + BattleManager.doctrineBonus('defense') + BattleManager.doctrineBonus('entrench') * 0.5;
+    const breakMod = 1 + BattleManager.doctrineBonus('breakthrough');
+    return { defense: (50 + fort + supply) * defenseMod, breakthrough: (35 + fort * 0.5) * breakMod };
   }
 
   static calcOffensiveAdvantage(army, st) {
     // HOI4式の火力対防御比較。防御を超えた射撃は命中率を倍化する。
-    const org = army.divisions.reduce((s, d) => s + d.org, 0) / Math.max(1, army.divisions.length);
+    // 陸軍ドクトリンの組織力補正 (org) は実効組織力を押し上げる。
+    const orgBonus = 1 + BattleManager.doctrineBonus('org');
+    const org = army.divisions.reduce((s, d) => s + d.org, 0) / Math.max(1, army.divisions.length) * orgBonus;
     const attack = BattleManager.attackProfile(army);
     const defensive = BattleManager.defenseProfile(st);
     const ratio = (attack.soft + attack.hard * 0.6) / Math.max(1, defensive.defense + defensive.breakthrough);
@@ -155,8 +171,9 @@ class BattleManager {
       const d = stateCenter ? Math.hypot(u.zone.x - stateCenter[0], u.zone.y - stateCenter[1]) : Infinity;
       if (d > 220) return;
       if (u.type === 'air') {
-        if (u.mission === 'ground') bonus += 0.15;        // 対地攻撃 = 近接航空支援
-        else if (u.mission === 'air_sup') bonus += 0.05;  // 制空 = 航空優勢
+        const airDoctrine = typeof DoctrineManager !== 'undefined' ? DoctrineManager.modifier('air', 'groundAttack') : 0;
+        if (u.mission === 'ground') bonus += 0.15 * (1 + airDoctrine);   // 対地攻撃 = 近接航空支援
+        else if (u.mission === 'air_sup') bonus += 0.05 * (1 + airDoctrine * 0.5);  // 制空 = 航空優勢
         else if (u.mission === 'strategic') bonus += 0.05;
       } else {
         if (u.mission === 'strike' || u.mission === 'shore') bonus += 0.10;  // 艦砲射撃/海上攻撃
@@ -179,7 +196,7 @@ class BattleManager {
   static serialize(b) {
     return { id: b.id, kind: b.kind, stateId: b.stateId, provId: b.provId, x: b.x, y: b.y,
       attacker: b.attacker, defender: b.defender, advantage: b.advantage,
-      progress: b.progress, totalDays: b.totalDays, attackerArmyId: b.attackerArmyId, invasion: b.invasion, airdrop: b.airdrop, preparation:b.preparation };
+      progress: b.progress, totalDays: b.totalDays, attackerArmyId: b.attackerArmyId, invasion: b.invasion, airdrop: b.airdrop, preparation:b.preparation, planning:b.planning || 0 };
   }
 
   static deserialize(data) {
@@ -198,7 +215,9 @@ class BattleManager {
       const exceeded = attackValue > defenseValue;
       b.hitChance = exceeded ? 0.4 : 0.2;
       b.damage = Math.max(0, attackValue / defenseValue) * b.hitChance * 2;
-      b.progress += (1 / (b.totalDays * 24)) * Math.max(0.55, Math.min(2.5, b.damage));
+      b.progress += (1 / (b.totalDays * 24)) * Math.max(0.55, Math.min(2.5, b.damage)) * (1 + (Number(b.planning) || 0));
+      // 計画準備は戦闘中に徐々に消費される (HOI4 と同じ減衰)
+      if (b.planning > 0) b.planning = Math.max(0, b.planning - (typeof PlanningBonus !== 'undefined' ? PlanningBonus.DECAY_PER_DAY : 0.05) / 4);
       // 火力優勢が戦況の揺らぎより強く反映される
       b.advantage = Math.max(-1, Math.min(1, b.advantage + (b.damage - 0.35) * 0.025 + (Math.random() - 0.5) * 0.012));
       if (b.progress >= 1) resolved.push(b);
@@ -369,6 +388,7 @@ class BattleManager {
         BattleManager.statusLabel(b) + '</span> (' + Math.round(Math.abs(b.advantage) * 100) + '%)</div>' +
         '<div class="bt-line">火力: <b>' + Math.round(b.softAttack || 0) + '</b> / 対甲 <b>' + Math.round(b.hardAttack || 0) + '</b> vs 防御 <b>' + Math.round(b.defense || 0) + '</b></div>' +
         '<div class="bt-line">命中率: <b style="color:' + (b.hitChance >= 0.4 ? '#4ac46a' : '#e0c040') + '">' + Math.round((b.hitChance || 0.2) * 100) + '%</b>　ダメージ指数: <b>' + (b.damage || 0).toFixed(2) + '</b></div>' +
+        ((Number(b.planning) || 0) > 0 ? '<div class="bt-line">計画準備ボーナス: <b style="color:#4ac46a">+' + Math.round(Number(b.planning) * 100) + '%</b></div>' : '') +
         '<div class="bt-line">残り約 <span style="color:var(--text-gold);font-weight:bold;">' + BattleManager.daysLeft(b) + '</span> 日で決着予定</div>' +
         '<div class="bt-line" style="color:var(--text-secondary);font-size:10px;">' +
         (b.kind === 'offensive' ? '勝てば占領 / 負ければ逆に占領される' : '勝てば防衛成功 / 負ければ占領される') + '</div>';

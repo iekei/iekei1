@@ -6,7 +6,24 @@
     "y": 50,
     "cost": 70,
     "effect": "国家の再軍備、及び究極の自給自足に備えるべく、大規模な計画が必要である。これは次の4年以内に達成されるべきであろう。",
-    "prerequisites": []
+    "prerequisites": [],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 110
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 3
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 2
+      }
+    ]
   },
   {
     "id": "GER_west_wall",
@@ -17,6 +34,22 @@
     "effect": "西の壁（ヴェストヴァル）はフランスの誇るマジノ線と並行して走る要塞線であり、先の大戦におけるジークフリート線と同様の立地に構築された。この防備を強化することでより少人数での国境維持が可能となり、起こりうる東方での軍事行動に転用できる師団が増えるだろう。",
     "prerequisites": [
       "GER_four_year_plan"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 86
+      },
+      {
+        "type": "add_building_construction",
+        "building": "bunker",
+        "level": 3
+      },
+      {
+        "type": "add_army_experience",
+        "value": 11
+      }
     ]
   },
   {
@@ -33,6 +66,18 @@
     ],
     "mutually_exclusive": [
       "GER_ostwall"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 72
+      },
+      {
+        "type": "add_building_construction",
+        "building": "coastal_bunker",
+        "level": 2
+      }
     ]
   },
   {
@@ -49,6 +94,23 @@
     ],
     "mutually_exclusive": [
       "GER_atlantikwall"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 62
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_building_construction",
+        "building": "bunker",
+        "level": 2
+      }
     ]
   },
   {
@@ -60,6 +122,18 @@
     "effect": "ドイツが真に偉大であるためには、自給自足でなければならない。我々は資源をより有効に活用し、建設の効率を上げる必要がある。",
     "prerequisites": [
       "GER_four_year_plan"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 85
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 2
+      }
     ]
   },
   {
@@ -71,6 +145,18 @@
     "effect": "私的資本主義者のかすかな影響を取り除かなければならない。したがって、鉱業および鉄鋼部門の成長を監督するために支配下に産業複合企業を形成し、これを軍事産業の支えとしなければならない。",
     "prerequisites": [
       "GER_autarky"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 70
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -82,6 +168,18 @@
     "effect": "我が国は市民が貯蓄制度を通じて将来の「国民車」を購入することを可能にする。そして、最終的にこれらの自動車の生産に貢献するだろう工場の建設に資金を提供する。",
     "prerequisites": [
       "GER_hermann_goring_werke"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -93,6 +191,13 @@
     "effect": "ドイツには石油が不足しているため、合成石油の分野で努力を重ねなければならない。",
     "prerequisites": [
       "GER_autarky"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 63
+      }
     ]
   },
   {
@@ -104,6 +209,13 @@
     "effect": "大規模な自動車化と航空兵力には大量のゴムが必要だが、我が国では産出しない。ゴムを合成的に生成する方法を改善する必要がある。",
     "prerequisites": [
       "GER_coal_liquidization"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 55
+      }
     ]
   },
   {
@@ -116,6 +228,19 @@
     "prerequisites": [
       "GER_kdf_wagen",
       "GER_synthetic_rubber"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 54
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   }
 ]

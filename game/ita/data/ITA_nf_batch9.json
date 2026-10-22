@@ -8,6 +8,17 @@
     "effect": "地中海の澄んだ水に、大型の潜水艦を進水させるのは危険が伴う。小型の短距離型で、見つかりにくい船を使ったほうが、地中海で生き延びられる確率が高まる上、シチリア海峡をはじめとする重要な難所の哨戒もしやくなるだろう。",
     "prerequisites": [
       "ITA_incrociatori_leggeri"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      },
+      {
+        "type": "add_navy_experience",
+        "value": 19
+      }
     ]
   },
   {
@@ -15,10 +26,25 @@
     "title": "護衛駆逐艦",
     "x": 6500,
     "y": 570,
-    "cost": 35,
+    "cost": 70,
     "effect": "[GetAppropriateRegiaMarinaNsName]の主要任務の一つは、イタリア、北アフリカ、そして地中海の島々の間の海上交通路を守ることだ。対潜水艦の戦闘に特化した小型の駆逐艦をつくったり、隊員たちに有効な訓練を施したりすれば、今後海外の部隊へのより安定的な物資の提供が可能になるだろう。",
     "prerequisites": [
       "ITA_incrociatori_leggeri"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 54
+      },
+      {
+        "type": "add_army_experience",
+        "value": 19
+      },
+      {
+        "type": "add_stability",
+        "value": 10
+      }
     ]
   },
   {
@@ -26,11 +52,24 @@
     "title": "対潜車両視察団",
     "x": 6800,
     "y": 570,
-    "cost": 35,
+    "cost": 70,
     "effect": "マリアンティソムを対潜兵装の指揮艦として編成すると、護衛艦の統率力が向上し、敵の潜水艦と優利に戦える技術革新をもたらしてくれるだろう。",
     "prerequisites": [
       "ITA_incrociatori_leggeri",
       "ITA_incrociatori_pesanti"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "海軍",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -38,10 +77,17 @@
     "title": "戦艦",
     "x": 7100,
     "y": 570,
-    "cost": 35,
+    "cost": 70,
     "effect": "リットリオ級の戦艦は高速かつ高火力な主力艦だ。この艦を増産し、より効率的な運用を目指して戦略方針を見直せば、戦線での結果は大幅に改善されるだろう。",
     "prerequisites": [
       "ITA_incrociatori_pesanti"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 44
+      }
     ]
   },
   {
@@ -53,6 +99,13 @@
     "effect": "ここ十年の間で、ルイージ・ガニョットのような革新的な設計者たちが様々な空母のデザインを生み出してきた。この知識と現在の高速定期船ローマの船体（ただしより強力なエンジンに取り替えたもの）を利用すれば、実戦投入可能な空母を一から作りよりも早く手にすることができる。",
     "prerequisites": [
       "ITA_incrociatori_pesanti"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 52
+      }
     ]
   },
   {
@@ -64,6 +117,18 @@
     "effect": "本物の空母の方がずっと優秀ではあるものの、手早く空母を入手したいなら手抜きも必要だ。現存するレックスやコンテ・ディ・サヴォイアといった客船を改造すれば、簡単に艦隊への航空支援を用意できる。",
     "prerequisites": [
       "ITA_incrociatori_pesanti"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 44
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -77,6 +142,17 @@
       "ITA_ispettorato_dei_mezzi_antisommergibili",
       "ITA_cacciatorpediniere_di_scorta",
       "ITA_navi_da_battaglia"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 42
+      },
+      {
+        "type": "add_navy_experience",
+        "value": 12
+      }
     ]
   },
   {
@@ -84,26 +160,61 @@
     "title": "アビシニアの失態",
     "x": 11150,
     "y": 50,
-    "cost": 35,
+    "cost": 70,
     "effect": "エチオピアへの侵攻は悲惨な結果に終わった。またもや、エチオピア軍の突破に失敗したイタリア軍の情けない姿を見ることになってしまった。かつてのアドワのように、我々は敗北したのだ。これほどの大敗がイタリアにおけるファシズムの未来に何をもたらすかは誰にもわからない。",
-    "prerequisites": []
+    "prerequisites": [],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 127
+      },
+      {
+        "type": "create_wargoal",
+        "target": "ETH",
+        "wargoal": "annex_everything"
+      }
+    ]
   },
   {
     "id": "ITA_solid_progress",
     "title": "確固たる進捗",
     "x": 11450,
     "y": 50,
-    "cost": 35,
+    "cost": 70,
     "effect": "エチオピアでの作戦は順調に進んでいる。戦線を過度に押し上げたり、エチオピア軍の反撃にあうこともなかった。まだ勝利を手にしたわけではないが、それも時間の問題だ。",
-    "prerequisites": []
+    "prerequisites": [],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 112
+      }
+    ]
   },
   {
     "id": "ITA_struggle_in_ethiopia",
     "title": "エチオピアでの闘い",
     "x": 11750,
     "y": 50,
-    "cost": 35,
+    "cost": 70,
     "effect": "エチオピアの状況は大きく予定から遅れている。しかし、この程度のささいな失敗で士気を下げることはできない。イタリアの兵器とファシズムが勝利するのだ――どんな犠牲を払おうとも。",
-    "prerequisites": []
+    "prerequisites": [],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 118
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 2
+      },
+      {
+        "type": "add_war_support",
+        "value": 6
+      }
+    ]
   }
 ]

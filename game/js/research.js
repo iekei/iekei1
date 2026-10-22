@@ -97,6 +97,15 @@ export class ResearchManager {
     const bonus = (nation?.researchBonus?.[node.category]) ?? 1.0;
     let days = Math.round(node.research_time * bonus);
 
+    // ── 国家方針などの研究ボーナス（研究時間 -X%）──
+    const rb = this.state.findResearchBonus?.(techId, node.category) || null;
+    if (rb) days = Math.max(1, Math.round(days * (1 - rb.reduction)));
+
+    // ── 国家的精神による研究速度補正（researchSpeed）──
+    const spiritSpeed = this.state.getModifier?.('researchSpeed') || 0;
+    if (spiritSpeed) days = Math.max(1, Math.round(days * (1 + spiritSpeed)));
+
+
     // ── 先取りペナルティ ──
     // 史実の年代(node.year)より早く研究を開始すると、年数差に応じて研究日数が増加
     // 1年早いごとに +10% （最大 +200%）
@@ -115,7 +124,7 @@ export class ResearchManager {
   /** 研究に要する総日数を人間向け表示（先取りペナルティ含む内訳を返す） */
   researchDaysBreakdown(techId, tag) {
     const node = this.nodes[techId];
-    if (!node) return { base: 0, nationPct: 100, aheadPct: 100, total: 0 };
+    if (!node) return { base: 0, nationPct: 100, aheadPct: 100, total: 0, bonusPct: 0, bonusLabel: '' };
     const nation = this.state.nation && tag === this.state.playerTag ? this.state.nation : null;
     const nationBonus = (nation?.researchBonus?.[node.category]) ?? 1.0;
     const base = Math.round(node.research_time * nationBonus);
@@ -129,7 +138,18 @@ export class ResearchManager {
         total = Math.round(base * (aheadPct / 100));
       }
     } catch {}
-    return { base, nationPct: Math.round(nationBonus * 100), aheadPct, total };
+    // 国家方針などの研究ボーナス
+    let bonusPct = 0, bonusLabel = '';
+    const rb = this.state.findResearchBonus?.(techId, node.category) || null;
+    if (rb) {
+      bonusPct = Math.round(rb.reduction * 100);
+      bonusLabel = rb.label || '研究ボーナス';
+      total = Math.max(1, Math.round(total * (1 - rb.reduction)));
+    }
+    // 国家的精神による研究速度補正
+    const spiritSpeed = this.state.getModifier?.('researchSpeed') || 0;
+    if (spiritSpeed) total = Math.max(1, Math.round(total * (1 + spiritSpeed)));
+    return { base, nationPct: Math.round(nationBonus * 100), aheadPct, total, bonusPct, bonusLabel, spiritSpeed };
   }
 
   /** 前提充足チェック */
@@ -205,6 +225,10 @@ export class ResearchManager {
   _complete(tag, slot, a) {
     const prog = this.progressFor(tag);
     prog.researched.add(a.techId);
+    // 研究ボーナスを1回消費（技研の成果を使い切る）
+    const node0 = this.nodes[a.techId];
+    const used = this.state.findResearchBonus?.(a.techId, node0?.category);
+    if (used) this.state.consumeResearchBonus?.(used.id);
     prog.active[slot] = null;
     const node = this.nodes[a.techId];
     const name = I18N.techName(a.techId, node.title);

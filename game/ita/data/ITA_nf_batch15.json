@@ -9,6 +9,13 @@
     "prerequisites": [
       "ITA_reorganize_regio_esercito",
       "ITA_reinforce_regia_aeronautica"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 44
+      }
     ]
   },
   {
@@ -20,6 +27,17 @@
     "effect": "王国陸軍を王国空軍に支援させることで、イタリア軍はその力を見せつけてきた。だがまだ進歩の余地は残されている！この協力関係をさらに深めれば、戦場の敵を殲滅し、イタリアに永久の栄光をもたらすことができるだろう！",
     "prerequisites": [
       "ITA_compagnie_auto_avio_sahariane"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 56
+      },
+      {
+        "type": "add_air_experience",
+        "value": 26
+      }
     ]
   },
   {
@@ -32,6 +50,18 @@
     "prerequisites": [
       "ITA_italo_balbo_focus",
       "ITA_stop_the_squandering"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 47
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -39,10 +69,22 @@
     "title": "トリポリの石油",
     "x": 13250,
     "y": 1220,
-    "cost": 35,
+    "cost": 70,
     "effect": "リビアで金を掘り当てた。すなわち石油だ！我々はトリポリ近くの砂漠で巨大な油田を発見した。この機会を逃すわけにはいかない。イタリアの栄光のため、この資源を搾り尽くすべきだ！",
     "prerequisites": [
       "ITA_the_fourth_shore"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 54
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -50,10 +92,22 @@
     "title": "トリポリの鋼鉄",
     "x": 13550,
     "y": 1220,
-    "cost": 35,
+    "cost": 70,
     "effect": "どうやらトリポリ近くの砂漠には大量の鉄が埋まっていて、我々に採掘されて加工されるのを待っているようだ。近場に製鉄所を建設することで、この鉄を利用して、栄えある我らの軍をさらに強化できるかもしれない！",
     "prerequisites": [
       "ITA_the_fourth_shore"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -66,6 +120,13 @@
     "prerequisites": [
       "ITA_steel_in_tripoli",
       "ITA_oil_in_tripoli"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 51
+      }
     ]
   },
   {
@@ -78,6 +139,13 @@
     "prerequisites": [
       "ITA_dino_grandi_focus",
       "ITA_monarchia_d_italia"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 48
+      }
     ]
   },
   {
@@ -85,10 +153,21 @@
     "title": "英伊条約に署名",
     "x": 14750,
     "y": 1090,
-    "cost": 35,
+    "cost": 70,
     "effect": "イギリスとの軍事協力は大きく我々に功を奏した。不可侵条約も同様だ。この条約により、アフリカの我々の土地の大部分を確保しながら、他のことに注意を向けることができる。",
     "prerequisites": [
       "ITA_seek_british_military_cooperation"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 45
+      },
+      {
+        "type": "add_world_tension",
+        "value": 2
+      }
     ]
   },
   {
@@ -101,6 +180,17 @@
     "prerequisites": [
       "ITA_dino_grandi_focus",
       "ITA_monarchia_d_italia"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 47
+      },
+      {
+        "type": "add_world_tension",
+        "value": 3
+      }
     ]
   },
   {
@@ -108,10 +198,21 @@
     "title": "仏伊条約に署名",
     "x": 15050,
     "y": 1090,
-    "cost": 35,
+    "cost": 70,
     "effect": "フランスとの軍事協力は我々にとって非常に価値あるものとなった。それは不可侵条約も同じだ。ヨーロッパの西側だけでなく、アフリカの我々の土地の大部分を確保できる。これのおかげで、我々は別のことに注力できる。",
     "prerequisites": [
       "ITA_invite_france_to_military_partnership"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      },
+      {
+        "type": "add_world_tension",
+        "value": 2
+      }
     ]
   }
 ]

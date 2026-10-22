@@ -4,10 +4,17 @@
     "title": "ドイツとの軍事協力",
     "x": 18050,
     "y": 830,
-    "cost": 35,
+    "cost": 70,
     "effect": "$ITA_german_millitary_cooperation_desc$",
     "prerequisites": [
       "ITA_pact_of_steel"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 44
+      }
     ]
   },
   {
@@ -15,10 +22,17 @@
     "title": "海の狼",
     "x": 17900,
     "y": 960,
-    "cost": 35,
+    "cost": 70,
     "effect": "$ITA_sea_wolves_desc$",
     "prerequisites": [
       "ITA_german_military_cooperation"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 43
+      }
     ]
   },
   {
@@ -26,10 +40,17 @@
     "title": "$secret_weapons$",
     "x": 18200,
     "y": 960,
-    "cost": 35,
+    "cost": 70,
     "effect": "$secret_weapons_desc$",
     "prerequisites": [
       "ITA_german_military_cooperation"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      }
     ]
   },
   {
@@ -37,10 +58,21 @@
     "title": "ドイツとの条約",
     "x": 18350,
     "y": 830,
-    "cost": 35,
+    "cost": 70,
     "effect": "$ITA_german_rd_treaty_desc$",
     "prerequisites": [
       "ITA_pact_of_steel"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 45
+      },
+      {
+        "type": "add_world_tension",
+        "value": 3
+      }
     ]
   },
   {
@@ -48,11 +80,23 @@
     "title": "フランス領の支配権を要求",
     "x": 18500,
     "y": 960,
-    "cost": 35,
+    "cost": 70,
     "effect": "$ITA_claims_on_france_desc$",
     "prerequisites": [
       "ITA_pact_of_steel",
       "ITA_italian_irredentism"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 48
+      },
+      {
+        "type": "create_wargoal",
+        "target": "FRA",
+        "wargoal": "annex_everything"
+      }
     ]
   },
   {
@@ -65,6 +109,13 @@
     "prerequisites": [
       "ITA_potential_allies_in_the_balkans",
       "ITA_balkan_ambition"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      }
     ]
   },
   {
@@ -77,6 +128,13 @@
     "prerequisites": [
       "ITA_pact_of_steel",
       "ITA_italy_first"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 57
+      }
     ]
   },
   {
@@ -89,6 +147,13 @@
     "prerequisites": [
       "ITA_pact_of_steel",
       "ITA_italy_first"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      }
     ]
   },
   {
@@ -100,6 +165,13 @@
     "effect": "$ITA_go_after_france_desc$",
     "prerequisites": [
       "ITA_italian_irredentism"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 54
+      }
     ]
   },
   {
@@ -112,6 +184,13 @@
     "prerequisites": [
       "ITA_war_with_france",
       "ITA_request_control_of_french_territories"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 52
+      }
     ]
   }
 ]

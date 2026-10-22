@@ -8,6 +8,13 @@
     "effect": "進歩の行進に対する一番の脅威は、反動的なファシズムの拡散である。我々はこの脅威に立ち向かう意思のある万国ともにこれに立ち向かわなければならない。さもなくば、我々の誰一人とて明日はないだろう。",
     "prerequisites": [
       "FRA_constitutional_convention"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 44
+      }
     ]
   },
   {
@@ -19,6 +26,13 @@
     "effect": "全てのファシスト政権が行う最初の一歩は、批評家と、国のあるべき別の姿を提唱できる人々の追放である。しかし、これらの人々は祖国が解放されるまでに備えるため、亡命政府を組織している。",
     "prerequisites": [
       "FRA_anti_fascist_coalition"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 50
+      }
     ]
   },
   {
@@ -30,6 +44,13 @@
     "effect": "フランスは長きにわたってバルカン諸国と手を携えることで、欧州中央との力を相殺を追求してきた。この繋がりは今だ存在する。近年失効されたものだとしても。",
     "prerequisites": [
       "FRA_invite_anti_fascist_emigrants"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 53
+      }
     ]
   },
   {
@@ -42,6 +63,13 @@
     "prerequisites": [
       "FRA_reconnect_to_the_balkans",
       "FRA_host_the_german_exiles"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 60
+      }
     ]
   },
   {
@@ -54,6 +82,13 @@
     "prerequisites": [
       "FRA_constitutional_convention",
       "FRA_destroy_the_counter_revolution"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 50
+      }
     ]
   },
   {
@@ -65,6 +100,13 @@
     "effect": "ある社会主義国が外国侵略者による脅威にさらされるということは、全社会主義国が脅威にさらされるということだ。同志たちが命をかけて戦っている間、座視などしてはならない。",
     "prerequisites": [
       "FRA_loyalty_to_moscow"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 52
+      }
     ]
   },
   {
@@ -76,6 +118,13 @@
     "effect": "マルクスとエンゲルスの故郷であるドイツは、かつて共産主義思想と実践の中心地だった。ナチスが権力を握ると多くのドイツ人共産主義者が逃げ延びた。彼らに家を与えれば、解放された領土でより効果的な政府を彼らが組織するのを手助けすることができる。",
     "prerequisites": [
       "FRA_league_of_french_bolshevist_volunteers"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      }
     ]
   },
   {
@@ -87,6 +136,13 @@
     "effect": "中途半端な革命は全く革命ではない。行動が完了し、新しい政治システムが安全になるまで我々は立ち止まってはならない。どんな代償を支払っても。",
     "prerequisites": [
       "FRA_force_the_issue"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      }
     ]
   },
   {
@@ -98,6 +154,13 @@
     "effect": "今でさえも、一部のフランス人は一瞬でも弱さを見せれば裏切る準備をしている。我々はそうはさせず、彼らに先手を打つ。",
     "prerequisites": [
       "FRA_revolution_to_the_utmost"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 50
+      }
     ]
   },
   {
@@ -109,6 +172,13 @@
     "effect": "フランス人は常に古い秩序を根絶させ、新たな秩序を育む情熱を持っている。これは落胆すべきことではない。",
     "prerequisites": [
       "FRA_destroy_the_counter_revolution"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 41
+      }
     ]
   }
 ]

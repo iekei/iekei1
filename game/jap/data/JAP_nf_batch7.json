@@ -8,6 +8,17 @@
     "effect": "他のアジア諸国との同盟を締結することによって、我々の新たな生活様式をいかなる潜在的な脅威からも断固として守り切ることができるようになるだろう。",
     "prerequisites": [
       "JAP_the_showa_constitution"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 46
+      },
+      {
+        "type": "add_world_tension",
+        "value": 3
+      }
     ]
   },
   {
@@ -19,6 +30,17 @@
     "effect": "我が国にとっての最高の機会は、先の大戦の折の同盟の中に眠っている。古き同盟を再び立ち上げ、民主主義を守るために[ENG.GetNameDef]と共に立ち上がるのだ。",
     "prerequisites": [
       "JAP_the_showa_constitution"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      },
+      {
+        "type": "add_world_tension",
+        "value": 6
+      }
     ]
   },
   {
@@ -31,6 +53,13 @@
     "prerequisites": [
       "JAP_west_pacific_treaty_organization",
       "JAP_rekindle_the_old_alliance"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 58
+      }
     ]
   },
   {
@@ -42,6 +71,13 @@
     "effect": "民主主義の原則は共産主義とは相容れないものである。我々はこのイデオロギーに断固として立ち向かい、我々自身と我々を頼りにしてくれている者達の両方を守らなければならない。",
     "prerequisites": [
       "JAP_pacific_guardian"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 43
+      }
     ]
   },
   {
@@ -53,6 +89,13 @@
     "effect": "例え我々は直接争いには巻き込まれていないとしても、どこであれ共産主義とは戦わなくてはならない。我々と同じ主義を掲げる者を支援するためにこれらの事態には代わりに義勇兵を送るだろう。",
     "prerequisites": [
       "JAP_anti_communist_bulwark"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      }
     ]
   },
   {
@@ -64,6 +107,13 @@
     "effect": "我々は朝鮮半島をしばしの間、支配してきた。しかし朝鮮人の民族自決問題の圧力が次第に高まっている。朝鮮人の自決権を拒否しながら、どうして民主主義の理想に忠実であると主張することができるだろうか？",
     "prerequisites": [
       "JAP_pacific_guardian"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 54
+      }
     ]
   },
   {
@@ -75,6 +125,13 @@
     "effect": "満州は未だに独裁主義の支配下であり、植民地支配の醜悪な遺物の支配下に置かれている。この状況を改善し、この地域を正当な中国の支配下に戻さなくてはならない。",
     "prerequisites": [
       "JAP_the_korean_question"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      }
     ]
   },
   {
@@ -87,6 +144,24 @@
     "prerequisites": [
       "JAP_liberate_manchuria",
       "JAP_anti_communist_volunteers"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 53
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 1
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -98,6 +173,13 @@
     "effect": "民族自決の気運はアジアへとさらに広まっていかなくてはならない。[USA.GetNameDefCap]はフィリピンの支配を未だ続けている。フィリピンの人々の民主的な権利を尊重するよう、彼の国へ圧力をかけなければならない。",
     "prerequisites": [
       "JAP_liberate_manchuria"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 47
+      }
     ]
   },
   {
@@ -107,6 +189,18 @@
     "y": 50,
     "cost": 70,
     "effect": "我々の列島には利用可能な土地が少ないが、大陸はそうではない。我々が本土に建てられないものを、代わりに大陸に建造することができる。[MAN.GetNameDef]における大規模な工業化計画を開始しよう。",
-    "prerequisites": []
+    "prerequisites": [],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 128
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 3
+      }
+    ]
   }
 ]

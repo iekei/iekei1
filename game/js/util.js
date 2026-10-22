@@ -103,8 +103,9 @@ export function deepMerge(base, ...overs) {
   return out;
 }
 
-/**簡易トースト通知 */
+/**簡易トースト通知（DOM が無い環境＝テストでは何もしない） */
 export function toast(message, kind = 'info') {
+  if (typeof document === 'undefined') return;
   const layer = $('#toast-layer');
   if (!layer) return;
   const t = el('div', `toast ${kind}`, message);

@@ -8,6 +8,18 @@
     "effect": "アルプスを防衛線で覆う新しい計画が完了すれば、イタリア人がそう簡単に国境を越えることはない。対応と陣地の強化をする猶予ができた。",
     "prerequisites": [
       "FRA_fortification_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 50
+      },
+      {
+        "type": "add_building_construction",
+        "building": "bunker",
+        "level": 2
+      }
     ]
   },
   {
@@ -19,6 +31,18 @@
     "effect": "ベルギーが自分達の土地を守ることに期待は出来ない。もし敵軍の通行を許せば、我が国にとり厄介な事となるだろう。マジノ線の延長は敵軍をフランスに踏み入れさせないために重要不可欠だ。",
     "prerequisites": [
       "FRA_alpine_forts"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 60
+      },
+      {
+        "type": "add_building_construction",
+        "building": "bunker",
+        "level": 2
+      }
     ]
   },
   {
@@ -30,6 +54,17 @@
     "effect": "戦える全ての男女は武器を取れ。大量生産はコストを低下させる。ライフルを全国民の手に渡そうではないか。",
     "prerequisites": [
       "FRA_firepower_kills"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 48
+      },
+      {
+        "type": "add_stability",
+        "value": 7
+      }
     ]
   },
   {
@@ -41,6 +76,13 @@
     "effect": "砲兵は特定の地点に火力を集中させるための単独で強力な部隊だ。一度の斉射によって敵戦線を弱体化させ、必要とあらば道を切り開くであろう。",
     "prerequisites": [
       "FRA_infantry_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 48
+      }
     ]
   },
   {
@@ -52,6 +94,17 @@
     "effect": "戦闘車両がフランス軍を勝利に導く。戦場を支配するために、強力な戦車が必要だ！",
     "prerequisites": [
       "FRA_artillery_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 54
+      },
+      {
+        "type": "add_army_experience",
+        "value": 19
+      }
     ]
   },
   {
@@ -63,6 +116,17 @@
     "effect": "ド・ゴールという名の積極的な将校が、新たな種類の師団を提案した。その師団は歩兵戦車と中戦車によって強力に装甲化され、協同した一体戦術を行うものである。",
     "prerequisites": [
       "FRA_heavy_armor_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 41
+      },
+      {
+        "type": "add_army_experience",
+        "value": 6
+      }
     ]
   },
   {
@@ -75,6 +139,17 @@
     "prerequisites": [
       "FRA_firepower_kills",
       "FRA_methodical_battle"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 57
+      },
+      {
+        "type": "add_army_experience",
+        "value": 22
+      }
     ]
   },
   {
@@ -86,6 +161,13 @@
     "effect": "将来的には、一般兵士が己の限界に直面するような地域で戦争が行われることがますます増えるだろう。このような条件下で任務を果たせる、より有能で新しい部隊を編成しなければ。",
     "prerequisites": [
       "FRA_infantry_tanks"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 53
+      }
     ]
   },
   {
@@ -97,6 +179,18 @@
     "effect": "海岸線が鉄壁の防衛線であった時代は終わった。将来的には、敵がどこに居ようと戦えなければならないし、どんな敵を相手にしても上陸地点を確保できなければなら\nない。",
     "prerequisites": [
       "FRA_special_forces"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 47
+      },
+      {
+        "type": "add_building_construction",
+        "building": "coastal_bunker",
+        "level": 2
+      }
     ]
   },
   {
@@ -108,6 +202,13 @@
     "effect": "我々は敵が国境へ進出するのを黙認することはできない。また、戦火の中にある同盟国を放って置くこともできない。軍よ準備せよ！ガムランが適任だ。",
     "prerequisites": [
       "FRA_begin_rearmament"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 92
+      }
     ]
   }
 ]

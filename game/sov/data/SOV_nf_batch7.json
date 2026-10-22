@@ -8,6 +8,17 @@
     "effect": "軍隊では多くの場合、航空機、火砲、戦車が特に注目を集め、パレードでも最もよく映えるが、一般的な兵士は自身の銃の品質と軍靴の履き心地を気に掛けている。これらの物を少なくとも戦闘機や重榴弾砲と同程度には重要であることを認めるべきだ。",
     "prerequisites": [
       "SOV_pc_of_mechanical_engineering"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 74
+      },
+      {
+        "type": "add_army_experience",
+        "value": 19
+      }
     ]
   },
   {
@@ -19,6 +30,19 @@
     "effect": "今日の戦争では、適切な場所で科学的に火力を適用することによって勝利する。砲の改良だけでなく、より効果的な運用方法に対しても力を注ぐべきだ。",
     "prerequisites": [
       "SOV_superior_war_machines"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 54
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -30,6 +54,13 @@
     "effect": "地味な迫撃砲が、部隊の間接的火力支援の主要形態へと急速になりつつある。したがって、あらゆる規模の迫撃砲をできるだけ多く生産し、それを唯一の目的とする政府機関を設立するよう努めなければならない。",
     "prerequisites": [
       "SOV_pc_of_mechanical_engineering"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 78
+      }
     ]
   },
   {
@@ -41,6 +72,23 @@
     "effect": "我が国は長大な距離を跨いでいるため、工場から工場へ従属部品を輸送することは非現実的だ。その様なことはせず、戦車工場を上から鋼鉄が入り下から完成した戦車が出る様な垂直的な統合をする。",
     "prerequisites": [
       "SOV_the_means_to_wage_war"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 43
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "陸軍",
+        "bonus": 0.5,
+        "uses": 1
+      },
+      {
+        "type": "add_army_experience",
+        "value": 8
+      }
     ]
   },
   {
@@ -48,12 +96,33 @@
     "title": "戦車および軍需品工場の統合",
     "x": 4100,
     "y": 570,
-    "cost": 35,
+    "cost": 70,
     "effect": "戦車と火砲は経済の規模を生かした大量生産に最も適しているだろう。したがって、これを利用するために戦車と資材生産場の統合を強制しなければならない。",
     "prerequisites": [
       "SOV_development_of_tankograd",
       "SOV_pc_of_mortar_armament",
       "SOV_soviet_artillery"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 45
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 1
+      },
+      {
+        "type": "add_army_experience",
+        "value": 10
+      }
     ]
   },
   {
@@ -61,20 +130,62 @@
     "title": "動員計画の強化",
     "x": 5900,
     "y": 50,
-    "cost": 35,
+    "cost": 70,
     "effect": "我が国の最大の軍事的利点は常に広大な国土とそこに住まう人々の数だった。しかし、兵士を前線に送り込むということになると、この二者は互いに足を引っ張り合う可能性がある。戦争が起こった場合、迅速に戦力を集中させることができるよう、動員計画を絶えず改善し更新しなければならない。",
-    "prerequisites": []
+    "prerequisites": [],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 117
+      },
+      {
+        "type": "add_war_support",
+        "value": 10
+      },
+      {
+        "type": "add_manpower",
+        "value": 12500
+      }
+    ]
   },
   {
     "id": "SOV_military_engineering_university",
     "title": "軍事工学大学",
     "x": 5150,
     "y": 180,
-    "cost": 35,
+    "cost": 70,
     "effect": "戦車や航空機の開発によって塹壕戦の終結が宣言されてはいるが、軍事工学が現代の戦場にまだ存在することは明らかである。現代的な野戦築城を建設する現代的方法を研究する機関を設立すべきだ。",
     "prerequisites": [
       "SOV_found_the_pcdi",
       "SOV_strengthen_the_mobilization_plan"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 88
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 2
+      },
+      {
+        "type": "add_building_construction",
+        "building": "bunker",
+        "level": 3
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "陸軍",
+        "bonus": 0.5,
+        "uses": 1
+      },
+      {
+        "type": "add_army_experience",
+        "value": 13
+      }
     ]
   },
   {
@@ -87,6 +198,24 @@
     "prerequisites": [
       "SOV_the_means_to_wage_war",
       "SOV_military_engineering_university"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -98,6 +227,24 @@
     "effect": "他の国々の科学者たちが宇宙最大の基本相互作用を、新たな兵器に変換する開発方法に懸命に取り組んでいることは分かっている。我々は後ろを歩いているが、彼らの仕事を利用すれば我々は前進することができ、また破壊の平等を確保することもできる。",
     "prerequisites": [
       "SOV_leningrad_polytechnical_institute"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 56
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 1
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -109,6 +256,18 @@
     "effect": "戦争が勃発し、祖国が脅威にさらされている。わが軍は一歩も譲らず最後の一弾まで戦うつもりであるが、我らに相対する戦力を考えるとそれで十分であるとは言い切れない。工場が制圧される前に安全な場所に避難させなければならない。",
     "prerequisites": [
       "SOV_military_engineering_university"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 60
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   }
 ]

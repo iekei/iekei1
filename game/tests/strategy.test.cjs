@@ -592,3 +592,84 @@ test('client continues locally after host disconnects',()=>{
   assert.equal(run('CoreEngine.gameState.paused'),false);
   assert.equal(run('AIManager.state.focus.SOV !== undefined'),true);
 });
+
+test('planning bonus accumulates on a battle plan, caps via doctrine and decays while executing',()=>{
+  const {run}=fixture();
+  run('BattlePlanManager.armies[0].planning=0;BattlePlanManager.armies[0].executing=false');
+  const cap=run('PlanningBonus.cap()');
+  assert.ok(cap>=0.3&&cap<=0.6);
+  run('PlanningBonus.tick(BattlePlanManager.armies[0])');
+  const afterOne=run('BattlePlanManager.armies[0].planning');
+  assert.ok(afterOne>0&&afterOne<cap,'one day of planning is a partial bonus');
+  run('for(let i=0;i<200;i++)PlanningBonus.tick(BattlePlanManager.armies[0])');
+  assert.equal(run('BattlePlanManager.armies[0].planning'),cap,'planning is capped');
+  // 実行中は減衰し、攻撃力に反映される
+  run('BattlePlanManager.armies[0].executing=true;PlanningBonus.tick(BattlePlanManager.armies[0])');
+  assert.ok(run('BattlePlanManager.armies[0].planning')<cap,'executing plan decays the bonus');
+  run('BattlePlanManager.armies[0].executing=false');
+  // 前線を解除すると 0 に戻る
+  run('BattlePlanManager.clearFront(1)');
+  assert.equal(run('BattlePlanManager.armies[0].planning'),0);
+});
+
+test('planned offensive applies the preparation bonus to combat power',()=>{
+  const {run}=fixture();
+  run('BattlePlanManager.armies[0].planning=0');
+  run('OffensivePlanner.execute(1);OffensivePlanner.tickArmy(BattlePlanManager.armies[0])');
+  assert.equal(run('BattleManager.battles.length'),1);
+  const base=run('BattleManager.battles[0].softAttack');
+  assert.equal(run('BattleManager.battles[0].planning'),0);
+  run('BattlePlanManager.abort(1)');
+  run('BattlePlanManager.armies[0].planning=0.25;BattlePlanManager.armies[0].executing=false');
+  run('OffensivePlanner.execute(1);OffensivePlanner.tickArmy(BattlePlanManager.armies[0])');
+  assert.equal(run('BattleManager.battles.length'),1);
+  const boosted=run('BattleManager.battles[0].softAttack');
+  assert.ok(boosted>base,'planning bonus increases soft attack');
+  assert.equal(run('BattleManager.battles[0].planning'),0.25);
+});
+
+test('frontline assignment deploys divisions along the front',()=>{
+  const {run}=fixture();
+  run('BattlePlanManager.armies[0].frontline=[[20,0],[20,0],[20,0]];BattlePlanManager.armies[0].executing=false');
+  assert.equal(run('OffensivePlanner.deployAlongFront(BattlePlanManager.armies[0])'),true);
+  assert.equal(run('BattlePlanManager.armies[0].divisions.every(d=>MapRenderer.ownerOf(d.pid)==="GER")'),true);
+  assert.ok(run('new Set(BattlePlanManager.armies[0].divisions.map(d=>d.pid)).size')>=1);
+});
+
+test('focus completion rewards grant political power, factories, war goals and research bonuses',()=>{
+  const {run}=fixture();
+  const beforePP=run('CoreEngine.gameState.politicalPower');
+  const beforeCiv=run('CoreEngine.gameState.civilianFactories');
+  run(`FocusTreeManager.applyCompletionRewards([
+    {type:'add_political_power',value:120},
+    {type:'add_building_construction',building:'industrial_complex',level:2},
+    {type:'add_building_construction',building:'arms_factory',level:1},
+    {type:'create_wargoal',target:'POL'}
+  ])`);
+  assert.equal(run('CoreEngine.gameState.politicalPower'),beforePP+120);
+  assert.equal(run('CoreEngine.gameState.civilianFactories'),beforeCiv+2);
+  assert.equal(run('CoreEngine.gameState.militaryFactories'),16);
+  assert.equal(run('CoreEngine.gameState.justified.POL'),true);
+  assert.equal(run('CoreEngine.gameState.strategy.warGoals.POL.source'),'focus');
+
+  // 研究ボーナス 50% は次の該当研究の所要日数を半分にする
+  run(`CoreEngine.gameState.techBonuses=[{category:'陸軍',bonus:0.5,uses:1}]`);
+  assert.equal(run(`ResearchManager.techCategoryOf({id:'artillery1'})`),'陸軍');
+  const bonus=run(`ResearchManager.takeTechBonus({id:'artillery1'})`);
+  assert.equal(bonus.bonus,0.5);
+  assert.equal(run('CoreEngine.gameState.techBonuses.length'),0);
+
+  // 方針データの completion_rewards は表示用フォーマッタで日本語化される
+  run(`FocusTreeManager.focusMap.test_focus={id:'test_focus',title:'テスト方針',cost:70,completion_rewards:[{type:'add_political_power',value:120}]}`);
+  assert.equal(run('FocusTreeManager.getCompletionRewards(FocusTreeManager.focusMap.test_focus).length'),1);
+  assert.match(run(`HOI4EffectsConfig.formatEffect({type:'add_political_power',value:120}).text`),/政治力.*120/);
+});
+
+test('army roster shows the planning bonus readout and execute button',()=>{
+  const {run,node}=fixture();
+  run('BattlePlanManager.armies[0].planning=0.18;ArmyRoster.render()');
+  const html=node('army-panel').innerHTML;
+  assert.match(html,/計画準備/);
+  assert.match(html,/\+18%/);
+  assert.match(html,/計画実行/);
+});

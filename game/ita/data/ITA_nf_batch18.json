@@ -4,11 +4,18 @@
     "title": "黒シャツ隊の解散",
     "x": 16400,
     "y": 1090,
-    "cost": 35,
+    "cost": 70,
     "effect": "黒シャツ隊はファシズムに奉仕する非常に危険な組織である。よって、彼らのファシスト政権と同様、彼らも消滅する時が来たのだ。活動中の部隊をすべて直ちに解散させる。",
     "prerequisites": [
       "ITA_power_to_the_king",
       "ITA_revoke_the_acerbo_law"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      }
     ]
   },
   {
@@ -16,10 +23,17 @@
     "title": "黒シャツ隊の活用",
     "x": 16700,
     "y": 1090,
-    "cost": 35,
+    "cost": 70,
     "effect": "黒シャツ隊は歴史的にファシスト政権とドゥーチェに忠実だったが、もし我々が彼らの組織がこの新しい政権で活躍する余地があることを示せば、我々の利益のために彼らを利用することができるかもしれない。結局、この2つの体制にそんなに大きな違いがあるのだろうか？",
     "prerequisites": [
       "ITA_power_to_the_king"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 55
+      }
     ]
   },
   {
@@ -32,6 +46,13 @@
     "prerequisites": [
       "ITA_disband_the_blackshirts",
       "ITA_utilize_the_blackshirts"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 47
+      }
     ]
   },
   {
@@ -39,11 +60,18 @@
     "title": "イタリア王国の栄光",
     "x": 16250,
     "y": 1350,
-    "cost": 35,
+    "cost": 70,
     "effect": "王制は時代遅れの政治システムだと主張する人々は、高貴で堅固な手のもとに、謙虚な国家が世界最大の権力の1つになることを理解できない愚か者だ。\n王様万歳！",
     "prerequisites": [
       "ITA_expand_the_royal_guard",
       "ITA_democratic_king"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 44
+      }
     ]
   },
   {
@@ -56,6 +84,17 @@
     "prerequisites": [
       "ITA_expand_the_royal_guard",
       "ITA_utilize_the_blackshirts"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 53
+      },
+      {
+        "type": "add_army_experience",
+        "value": 18
+      }
     ]
   },
   {
@@ -63,10 +102,21 @@
     "title": "ローマ教皇の支援の要請",
     "x": 17000,
     "y": 1090,
-    "cost": 35,
+    "cost": 70,
     "effect": "我が国の社会的そして政治的安定の高まりに対処するためには、歴史的にイタリア国民に大きな影響力を及ぼしてきた教会に寄り添うことが必要だ。ローマ法王の承認と支持を求めて歩み寄る必要がある。",
     "prerequisites": [
       "ITA_power_to_the_king"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 55
+      },
+      {
+        "type": "add_stability",
+        "value": 8
+      }
     ]
   },
   {
@@ -74,10 +124,17 @@
     "title": "教会の諜報員",
     "x": 17000,
     "y": 1220,
-    "cost": 35,
+    "cost": 70,
     "effect": "教会は世界中に数え切れないほどの代表者がいる。もしバチカンを味方につけることができれば、教会の使者という完璧な隠れ蓑を持った新しい諜報員を自由に使うことができ、情報網を向上させることができる。",
     "prerequisites": [
       "ITA_seek_papal_support"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 51
+      }
     ]
   },
   {
@@ -85,10 +142,21 @@
     "title": "教皇制度の強化",
     "x": 17000,
     "y": 1350,
-    "cost": 35,
+    "cost": 70,
     "effect": "イタリア社会におけるローマ法王の影響力が大変強い事は明らかだ。国家の安定を維持するためには、イタリア王国の中で教会に力を与えるしかない。",
     "prerequisites": [
       "ITA_agents_of_the_church"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 52
+      },
+      {
+        "type": "add_stability",
+        "value": 8
+      }
     ]
   },
   {
@@ -102,6 +170,13 @@
       "ITA_gloria_al_regno_d_italia",
       "ITA_crush_opposition",
       "ITA_strengthen_the_papacy"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 46
+      }
     ]
   },
   {
@@ -109,12 +184,19 @@
     "title": "我らが海",
     "x": 20750,
     "y": 1610,
-    "cost": 35,
+    "cost": 70,
     "effect": "かつて、古代ローマは海軍の力のもって、初めてカルタゴを降した。イタリアが地中海の覇権を握るには、海軍への投資が不可欠だ。そうなれば、再びここを「Mare Nostrum」（我らが海）と呼べるようになるだろう。",
     "prerequisites": [
       "ITA_setting_course",
       "ITA_strengthen_the_regime",
       "ITA_blackshirt_loyalty"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      }
     ]
   }
 ]

@@ -8,6 +8,13 @@
     "effect": "この国を担う時が来た。万事順調に行けば、無血クーデターの最大の障害を取り除くこともできるだろう。だが事が上手くいかなければ、我が国のために戦う必要があるだろう。",
     "prerequisites": [
       "SOV_dissent_in_the_party"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 50
+      }
     ]
   },
   {
@@ -19,6 +26,13 @@
     "effect": "我らの統治を完全に受け入れていない党員が未だ少数ながら存在している。他の党員の秩序を保つため彼らを見せしめにする必要がある。",
     "prerequisites": [
       "SOV_coup_detat"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 60
+      }
     ]
   },
   {
@@ -30,6 +44,18 @@
     "effect": "正統派マルクス主義は革命の可能性を産業労働者に求めているが、我が国で多数を占めているのは明らかに農民である。我々は数百万の農民を教育し彼らの階級意識を発達させる必要がある。そうすることで、彼らは革命が攻撃にさらされた時進んでそれを守ろうとするだろう。",
     "prerequisites": [
       "SOV_coup_detat"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 43
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -41,6 +67,13 @@
     "effect": "巨大な集団農場は、官僚主義的かつスターリン主義的な巨人症の典型例だ。奴らは農民を労働の成果から遠ざけ、実質的に農民を畑の工業労働者に変えた。同時に生産量は大幅に減少し、食糧生産の途絶は既に大惨事をもたらしている。我々は早急にこの愚行を覆す必要がある。",
     "prerequisites": [
       "SOV_coup_detat"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 56
+      }
     ]
   },
   {
@@ -52,6 +85,13 @@
     "effect": "スターリンは何よりも忠誠心を重んじた。その結果、政権で働いている人たちは、トラブルに巻き込まれる可能性のある自発性や独立した考えをあまり示さない。そのため新たな価値観を植え付けるか、あるいはすでに持っている人物に置き換える必要がある。",
     "prerequisites": [
       "SOV_curtailment_of_the_collective_farms"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 55
+      }
     ]
   },
   {
@@ -63,6 +103,19 @@
     "effect": "マルクス主義の革命論は19世紀には正確であったが、20世紀の現実では理論の見直しが必要だ。革命が起こるのは必ずしも先進国ではない以上、アプローチを調整しなければならない。",
     "prerequisites": [
       "SOV_curtailment_of_the_collective_farms"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 57
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -74,6 +127,18 @@
     "effect": "社会主義社会を建設する前に、基礎を作り、経済をさらに発展させなければならない。革命初期には新経済政策を実施し、自由市場の仕組みによって経済を成長させていた。しかし、この政策は実を結ぶ前に撤回されてしまった。より良い社会の実現に向けて、この中断されたプロセスを再開しなければならない。",
     "prerequisites": [
       "SOV_curtailment_of_the_collective_farms"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -85,6 +150,18 @@
     "effect": "ネップに欠点はあれど、多くの成功を収めていることは明らかだ。完全な社会主義社会に移行可能になるまで依然として長い道のりではあるが、現在では更に堅実な形での経済計画を進めることができる。特に加盟国と同盟国の能力を考慮した経済政策を立案し、より相互依存的な経済を構築すべきだ。",
     "prerequisites": [
       "SOV_back_to_the_nep"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -96,6 +173,24 @@
     "effect": "スターリンが重工業にのみ注力したために、多くの分野は大幅に開発途上のままである、我々の計画においてこの分野を無視することはできない。他の分野の近代化や機械化を可能にするためには、それを支える産業基盤が必要なのだ。",
     "prerequisites": [
       "SOV_back_to_the_nep"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 57
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -107,6 +202,13 @@
     "effect": "資本主義の下では、労働組合は労働者の基本的な人権を保証し、工場主からの搾取を回避するために存在している。新体制の下では、これらは明らかに不要である、したがって、労働組合の役割は、生産の最適化を目的とした労働者の組織化に移行しなければならない。",
     "prerequisites": [
       "SOV_back_to_the_nep"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 50
+      }
     ]
   }
 ]

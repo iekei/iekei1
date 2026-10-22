@@ -9,6 +9,13 @@
     "prerequisites": [
       "SOV_administrative_reforms",
       "SOV_a_new_theory_of_revolution"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 55
+      }
     ]
   },
   {
@@ -21,6 +28,13 @@
     "prerequisites": [
       "SOV_incorporate_local_organizations",
       "SOV_international_revolutionary_marxist_centre"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 50
+      }
     ]
   },
   {
@@ -32,6 +46,17 @@
     "effect": "国民の総力を結集した努力によって、我々は内戦による破壊から立ち直ることができた。国家再建のその速さは労働者の技能と献身の象徴として永久に残るだろう。",
     "prerequisites": [
       "SOV_for_the_common_good"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      },
+      {
+        "type": "add_stability",
+        "value": 5
+      }
     ]
   },
   {
@@ -43,6 +68,19 @@
     "effect": "人間は自身の運命に何の影響も及ぼさず、自身の人生は完全に物質的要因で決まると考えるマルクス主義の理論家がいる。これは明らかに間違っており、労働者階級に対するブルジョワ的な見方を示している。人間は単なる臓器の集合体ではなく、主体的な存在として扱われるべきだ。",
     "prerequisites": [
       "SOV_victory_over_devastation"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 58
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -56,6 +94,17 @@
       "SOV_a_new_theory_of_revolution",
       "SOV_administrative_reforms",
       "SOV_planned_economy"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 58
+      },
+      {
+        "type": "add_world_tension",
+        "value": 6
+      }
     ]
   },
   {
@@ -67,6 +116,18 @@
     "effect": "新経済政策への移行に伴い、消費財生産への移行が顕著になったが、その代償として工業化の速度が全体的に遅れている。長期的に競争力を維持するために、経済をより持続可能な様式に移行する必要がある。",
     "prerequisites": [
       "SOV_paced_industrialization"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 54
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -78,6 +139,13 @@
     "effect": "反動勢力は未だ存在しており、我々が成し遂げたすべてを覆す日を待ち望んでいる。我々と同盟国は、この脅威に対して絶えず警戒し、革命を守るため万が一にも闘争に備えなければならない。",
     "prerequisites": [
       "SOV_international_revolutionary_marxist_centre"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 48
+      }
     ]
   },
   {
@@ -89,6 +157,18 @@
     "effect": "ソビエトの政府制度、ソビエトの経済、ソビエトの社会は、それまでの制度に比べてあらゆる面で圧倒的に優れていることは明らかだ。それまでの旧態依然とした制度が世界の他の地域に残っていたとしても、それに異議を唱える人は必ずおり、それを活用すべきだ。",
     "prerequisites": [
       "SOV_the_enemies_of_the_people"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 58
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -101,6 +181,13 @@
     "prerequisites": [
       "SOV_the_left_opposition",
       "SOV_the_right_opposition"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 63
+      }
     ]
   },
   {
@@ -108,11 +195,18 @@
     "title": "軍へ注意を逸らす",
     "x": 10250,
     "y": 310,
-    "cost": 35,
+    "cost": 70,
     "effect": "もしスターリンに軍が不満を感じていると思い込ませれば、奴は我々の代わりに彼らを攻撃するだろう。そして最終的に軍は本当に奴に対して不満を感じることになるだろう……",
     "prerequisites": [
       "SOV_the_left_opposition",
       "SOV_the_right_opposition"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 76
+      }
     ]
   }
 ]

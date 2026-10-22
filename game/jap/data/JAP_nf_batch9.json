@@ -8,6 +8,13 @@
     "effect": "我が軍の兵士は獰猛で勇敢である。しかし、より深く前進させるにはそれを支援する強力な砲兵が必要だ。",
     "prerequisites": [
       "JAP_supremacy_of_technology"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 56
+      }
     ]
   },
   {
@@ -19,6 +26,23 @@
     "effect": "他国は既に機甲師団の威力を知っている。我々が遅れを取るわけにはいかず、より先進的でより強力な装甲部隊編成を開発しなければならない。そうすることで敵を激しく、そして素早く攻撃することができるようになる。",
     "prerequisites": [
       "JAP_supremacy_of_technology"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 46
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "陸軍",
+        "bonus": 0.5,
+        "uses": 1
+      },
+      {
+        "type": "add_army_experience",
+        "value": 11
+      }
     ]
   },
   {
@@ -31,6 +55,17 @@
     "prerequisites": [
       "JAP_supremacy_of_technology",
       "JAP_supremacy_of_will"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 56
+      },
+      {
+        "type": "add_army_experience",
+        "value": 21
+      }
     ]
   },
   {
@@ -42,6 +77,22 @@
     "effect": "軍の拡張という我々の目標を達成するために、我々は戦術を訓練する能力に長けた将官の技能を使わなければならない。",
     "prerequisites": [
       "JAP_army_expansion_law"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 98
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 2
+      },
+      {
+        "type": "add_army_experience",
+        "value": 23
+      }
     ]
   },
   {
@@ -53,6 +104,18 @@
     "effect": "最新の武器であろうと凄烈な兵士が扱わなければ役に立たず、凄烈さは単なる岩ですら殺人的な兵器に変化させる。",
     "prerequisites": [
       "JAP_army_expansion"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 66
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 1
+      }
     ]
   },
   {
@@ -65,6 +128,17 @@
     "prerequisites": [
       "JAP_army_expansion_law",
       "JAP_new_naval_estimates"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 85
+      },
+      {
+        "type": "add_air_experience",
+        "value": 15
+      }
     ]
   },
   {
@@ -76,6 +150,13 @@
     "effect": "太平洋の戦域では交戦するまでの距離は広大であり、より航続距離の長い機体が必要である。",
     "prerequisites": [
       "JAP_fighter_modernization"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 70
+      }
     ]
   },
   {
@@ -87,6 +168,13 @@
     "effect": "もし敵機が到来してきたときに張り合うことができなければ、航続性能だけ高くても役に立たない。敵に決して負けないために機動性の優れた機体を生産しなくてはならない。",
     "prerequisites": [
       "JAP_fighter_modernization"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 70
+      }
     ]
   },
   {
@@ -99,6 +187,19 @@
     "prerequisites": [
       "JAP_first_air_fleet",
       "JAP_agility_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 48
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "空軍",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -111,6 +212,17 @@
     "prerequisites": [
       "JAP_range_focus",
       "JAP_agility_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 44
+      },
+      {
+        "type": "add_air_experience",
+        "value": 14
+      }
     ]
   }
 ]

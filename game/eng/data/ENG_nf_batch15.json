@@ -8,6 +8,13 @@
     "effect": "我々の再武装への努力は労働組合との衝突により絶えず損なわれている。彼らと悪戦苦闘するより彼らと協力することを選べばよりスムーズに推移することになるだろう。",
     "prerequisites": [
       "ENG_a_change_in_course"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 83
+      }
     ]
   },
   {
@@ -15,11 +22,18 @@
     "title": "自治領確保の動き",
     "x": 9350,
     "y": 50,
-    "cost": 35,
+    "cost": 70,
     "effect": "各自治領は我々のイデオロギーの変化に不信の念を抱いている。彼らは言い聞かせてもウェストミンスターとの関係を再考することはないだろう。外交関係に過度の緊張が走る前に、迅速な行動により政権交代を強いることができるかもしれない。",
     "prerequisites": [
       "ENG_organize_the_blackshirts",
       "ENG_concessions_to_the_trade_unions"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 74
+      }
     ]
   },
   {
@@ -31,6 +45,23 @@
     "effect": "単に出生が異なるという理由で他の人間よりも尊いという考え方には悩まされる。皇族が有する莫大な富は我々には刺激が強すぎ、軍備増強と産業育成に費やした方がはるかに有益である。おそらくそれは一石二鳥の解決策であろう。",
     "prerequisites": [
       "ENG_concessions_to_the_trade_unions"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 68
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 1
+      }
     ]
   },
   {
@@ -42,6 +73,13 @@
     "effect": "労働者は立ち上がって上流階級による抑圧を打破するに違いない。我々は彼らに呼応し、会社を国有化する。",
     "prerequisites": [
       "ENG_concessions_to_the_trade_unions"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 69
+      }
     ]
   },
   {
@@ -54,6 +92,13 @@
     "prerequisites": [
       "ENG_the_fate_of_the_royal_family",
       "ENG_eliminate_the_upper_class"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      }
     ]
   },
   {
@@ -65,6 +110,13 @@
     "effect": "我々はクレムリンにつくのではなく、共産主義に対し独自の協力を行う。英国は世界において後塵を拝することなく、クレムリンに貸しを作るわけでもない。これまでも、これからも。",
     "prerequisites": [
       "ENG_for_the_good_of_the_revolution"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 58
+      }
     ]
   },
   {
@@ -76,6 +128,13 @@
     "effect": "世界の諸国家に倣い我々は今こそ脱植民地化を進めるべきだ。そして我々はこの道理に分別を見出さぬ者に分別というものを教え込むために最後通牒を送りつけるだろう。",
     "prerequisites": [
       "ENG_the_british_communist_alternative"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      }
     ]
   },
   {
@@ -87,6 +146,13 @@
     "effect": "共産主義はイギリス海峡を渡って各国に伝播した。我々は彼らに手を差し伸べ、遠方のモスクワよりもはるかに近い指導と援助を与える。",
     "prerequisites": [
       "ENG_the_british_communist_alternative"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 46
+      }
     ]
   },
   {
@@ -99,6 +165,13 @@
     "prerequisites": [
       "ENG_enforce_decolonization",
       "ENG_reach_out_across_the_channel"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 42
+      }
     ]
   },
   {
@@ -111,6 +184,13 @@
     "prerequisites": [
       "ENG_enforce_decolonization",
       "ENG_reach_out_across_the_channel"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 58
+      }
     ]
   }
 ]

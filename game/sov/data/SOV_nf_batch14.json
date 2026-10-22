@@ -4,11 +4,18 @@
     "title": "点火",
     "x": 8600,
     "y": 830,
-    "cost": 35,
+    "cost": 70,
     "effect": "時は来た。圧制者に反旗を翻そう。新たな革命が始まるのだ！",
     "prerequisites": [
       "SOV_approach_tukhachevsky",
       "SOV_approach_primakov"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      }
     ]
   },
   {
@@ -21,6 +28,13 @@
     "prerequisites": [
       "SOV_left_opposition_coup",
       "SOV_funds_for_the_cause"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 56
+      }
     ]
   },
   {
@@ -32,6 +46,13 @@
     "effect": "労働者階級の真の解放に向けて長い道のりを歩み始めた今、エリートによる政府を別の政府に替える誘惑に陥ってはならない。連邦政府は常に、労働者の、労働者による、労働者のための真の政府であるべきだ。",
     "prerequisites": [
       "SOV_left_opposition_coup"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      }
     ]
   },
   {
@@ -43,6 +64,13 @@
     "effect": "スターリンに怒りを抱いている者は他にも数多くいる。我々が支配を固めつつある間に、これらの者が反革命的細胞を形成し始めるのを許すと、すぐさま再び内戦に突入するだろう。",
     "prerequisites": [
       "SOV_left_opposition_coup"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      }
     ]
   },
   {
@@ -54,6 +82,13 @@
     "effect": "何が起ころうとも、赤軍の生みの親はいつだって$SOV_lev_trotsky$だ。今こそ彼を元の地位へと復帰させ、生まれ変わって回復した赤軍を率いて戦いに臨むべき時だ。",
     "prerequisites": [
       "SOV_long_live_the_workers_government"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 42
+      }
     ]
   },
   {
@@ -65,6 +100,13 @@
     "effect": "何年にもわたるスターリン主義の支配は、人民の革命熱意を失わせた。労働者たちは革命が起こるだろうと聞かされていた、いつかは、と。これが事実ではないことを我々は知った。現在の国際的な発展水準の中で、さほど発展していない他国で革命は燃え上がるべきだ。そして我々が、その火付け役となる。",
     "prerequisites": [
       "SOV_long_live_the_workers_government"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 41
+      }
     ]
   },
   {
@@ -77,6 +119,19 @@
     "prerequisites": [
       "SOV_left_opposition_coup",
       "SOV_committee_in_exile"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 44
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -89,6 +144,13 @@
     "prerequisites": [
       "SOV_the_builder_of_the_red_army",
       "SOV_reigniting_the_revolutionary_spirit"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 47
+      }
     ]
   },
   {
@@ -101,6 +163,13 @@
     "prerequisites": [
       "SOV_the_builder_of_the_red_army",
       "SOV_reigniting_the_revolutionary_spirit"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 45
+      }
     ]
   },
   {
@@ -113,6 +182,18 @@
     "prerequisites": [
       "SOV_the_builder_of_the_red_army",
       "SOV_reigniting_the_revolutionary_spirit"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 55
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   }
 ]

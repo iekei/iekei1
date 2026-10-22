@@ -9,6 +9,18 @@
     "prerequisites": [
       "ITA_italy_first",
       "ITA_italian_irredentism"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 52
+      },
+      {
+        "type": "create_wargoal",
+        "target": "ENG",
+        "wargoal": "annex_everything"
+      }
     ]
   },
   {
@@ -16,10 +28,22 @@
     "title": "ギリシャとの交戦",
     "x": 18950,
     "y": 1090,
-    "cost": 35,
+    "cost": 70,
     "effect": "ギリシャなくして大帝国の設立を語ることができるであろうか？容易い目標な筈である…",
     "prerequisites": [
       "ITA_italian_irredentism"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      },
+      {
+        "type": "create_wargoal",
+        "target": "GRE",
+        "wargoal": "annex_everything"
+      }
     ]
   },
   {
@@ -31,6 +55,13 @@
     "effect": "$ITA_greece_friend_desc$",
     "prerequisites": [
       "ITA_italy_first"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 50
+      }
     ]
   },
   {
@@ -38,11 +69,23 @@
     "title": "トルコへの請求",
     "x": 18950,
     "y": 1220,
-    "cost": 35,
+    "cost": 70,
     "effect": "$ITA_claims_on_turkey_desc$",
     "prerequisites": [
       "ITA_war_with_greece",
       "ITA_befriend_greece"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      },
+      {
+        "type": "create_wargoal",
+        "target": "TUR",
+        "wargoal": "annex_everything"
+      }
     ]
   },
   {
@@ -55,6 +98,13 @@
     "prerequisites": [
       "ITA_war_with_greece",
       "ITA_befriend_greece"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 44
+      }
     ]
   },
   {
@@ -62,10 +112,17 @@
     "title": "イタリア義勇軍団",
     "x": 19550,
     "y": 570,
-    "cost": 35,
+    "cost": 70,
     "effect": "$ITA_support_nationalist_spain_desc$",
     "prerequisites": [
       "ITA_foreign_affairs"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 56
+      }
     ]
   },
   {
@@ -73,11 +130,22 @@
     "title": "西伊同盟",
     "x": 19400,
     "y": 830,
-    "cost": 35,
+    "cost": 70,
     "effect": "$ITA_spanish_italian_faction_desc$",
     "prerequisites": [
       "ITA_corpo_di_truppe_volontarie",
       "ITA_italy_first"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      },
+      {
+        "type": "add_world_tension",
+        "value": 3
+      }
     ]
   },
   {
@@ -85,10 +153,17 @@
     "title": "バレアレス諸島の要求",
     "x": 19700,
     "y": 830,
-    "cost": 35,
+    "cost": 70,
     "effect": "$ITA_demand_balearic_islands_desc$",
     "prerequisites": [
       "ITA_corpo_di_truppe_volontarie"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 56
+      }
     ]
   },
   {
@@ -96,11 +171,18 @@
     "title": "ポルトガルとの友好",
     "x": 19550,
     "y": 960,
-    "cost": 35,
+    "cost": 70,
     "effect": "$ITA_portugal_friend_desc$",
     "prerequisites": [
       "ITA_spanish_italian_alliance",
       "ITA_demand_balearic_islands_bba"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      }
     ]
   },
   {
@@ -108,8 +190,15 @@
     "title": "イタリア解放戦争",
     "x": 350,
     "y": 50,
-    "cost": 35,
+    "cost": 70,
     "effect": "ファシストに対抗し、彼らの病んだ政権を打倒する時が来た！イタリア全土の反ファシストのパルチザンは、この国家解放戦争で戦い、命を捧げる用意がある！",
-    "prerequisites": []
+    "prerequisites": [],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 117
+      }
+    ]
   }
 ]

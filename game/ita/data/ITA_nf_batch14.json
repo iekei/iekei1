@@ -9,6 +9,13 @@
     "prerequisites": [
       "ITA_italo_balbo_focus",
       "ITA_dino_grandi_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 45
+      }
     ]
   },
   {
@@ -16,11 +23,18 @@
     "title": "党の粛清",
     "x": 13850,
     "y": 1090,
-    "cost": 35,
+    "cost": 70,
     "effect": "旧政権の復活を心から望んでいる者たちがいるという噂を耳にした。追放されて権力の座を奪われたにもかかわらず、ムッソリーニの影はいまだ政府や人々の心の中に潜んでいる。我々は自身の力を示し、我々ではなくかつての首領を信奉している輩を政党から追い出さなければならない。",
     "prerequisites": [
       "ITA_consolidate_power",
       "ITA_stop_the_squandering"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 48
+      }
     ]
   },
   {
@@ -28,10 +42,17 @@
     "title": "ムッソリーニの運命",
     "x": 13850,
     "y": 1220,
-    "cost": 35,
+    "cost": 70,
     "effect": "ムッソリーニは自宅軟禁中であるものの、奴の存在感が消えない限り、我らに真の前進はあり得ないだろう。我々は党内で絶対的権力を持つ地位を確保した。ならば、かつての首領の運命を決める時だ！",
     "prerequisites": [
       "ITA_purge_the_party"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 43
+      }
     ]
   },
   {
@@ -43,6 +64,17 @@
     "effect": "ここまでにわかってきたことは、国と国民に対して一人の人間が与えることのできる影響力だ。これをうまく利用できないだろうか。国営放送チャンネルを使えば、我らの新たな首領を、イタリアを統一できる優秀な指導者であると宣伝できる。国民たちに、彼らが信ずるべき神聖かつ伝説的人物を与えてやるのだ！",
     "prerequisites": [
       "ITA_the_fate_of_mussolini"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 55
+      },
+      {
+        "type": "add_stability",
+        "value": 8
+      }
     ]
   },
   {
@@ -54,6 +86,17 @@
     "effect": "黒シャツ隊は、長きにわたりイタリアのファシズムにおける特別な地位を守ってきた。民衆を鼓舞したいなら、まずはその組織の忠誠心を得るのがいいだろう。陸軍の活躍を通じて、栄えある新首領の神聖なイメージを広めるのに大いに役立つからだ。だが効果はそれだけじゃない。",
     "prerequisites": [
       "ITA_divino_duce"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 56
+      },
+      {
+        "type": "add_army_experience",
+        "value": 21
+      }
     ]
   },
   {
@@ -65,6 +108,17 @@
     "effect": "昨今の政党内のいざこざにより、ファシズムの思想を一個人に結びつけるのが難しいということがわかってきた。我々はファシズムがより大きな概念であると宣伝することに集中すべきだろう。一個人の命を超越した、人々を結束させる思想であると。",
     "prerequisites": [
       "ITA_the_fate_of_mussolini"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 46
+      },
+      {
+        "type": "add_stability",
+        "value": 8
+      }
     ]
   },
   {
@@ -76,6 +130,17 @@
     "effect": "我々以外のイデオロギーが、あちこちで崩壊を起こし、衰退していっている。どうやら、数々の不穏な出来事をその回復力をもって生き延び、なお繁栄したのはファシズムだけのようだ。他の国にもこの安定性を与えてやるのが我々の義務だろう。奴らにこの暗黒の時代を導く光をもたらしてやるのだ！",
     "prerequisites": [
       "ITA_a_greater_purpose"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 50
+      },
+      {
+        "type": "add_stability",
+        "value": 6
+      }
     ]
   },
   {
@@ -87,6 +152,13 @@
     "effect": "世界が戦争によって荒らされた今、我らの覇権のもと、あらゆる国と文化を鼓舞し、統一しなければならない。ファシズムと[ROOT.GetNameDefCap]がもたらす恩恵を示してやる必要がある。我々が先導を切って、明るい未来へ導いてやらなければならないのだ！",
     "prerequisites": [
       "ITA_spreading_the_eagles_wings"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 53
+      }
     ]
   },
   {
@@ -99,6 +171,22 @@
     "prerequisites": [
       "ITA_italo_balbo_focus",
       "ITA_stop_the_squandering"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 43
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_army_experience",
+        "value": 8
+      }
     ]
   },
   {
@@ -111,6 +199,22 @@
     "prerequisites": [
       "ITA_italo_balbo_focus",
       "ITA_stop_the_squandering"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_air_experience",
+        "value": 29
+      }
     ]
   }
 ]
