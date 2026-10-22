@@ -1,3 +1,9 @@
+// XP は 1日 +0.2 と小数で増えるため、小数第1位まで表示する
+const formatExperience = value => {
+  const n = Math.round((Number(value) || 0) * 10) / 10;
+  return Number.isInteger(n) ? String(n) : n.toFixed(1);
+};
+
 /** Topbar presentation only. Values and tooltip explanations stay in CoreEngine. */
 const TopbarUI = {
   stats: [
@@ -5,7 +11,10 @@ const TopbarUI = {
     { key: 'stab', icon: 'stability', label: '安定度', value: s => Number(s.stability).toFixed(1) + '%', gauge: s => s.stability, tone: 'green' },
     { key: 'ws', icon: 'warSupport', label: '戦争協力度', value: s => Number(s.warSupport).toFixed(1) + '%', gauge: s => s.warSupport, tone: 'amber' },
     { key: 'mp', icon: 'manpower', label: '人的資源', value: s => (s.manpower / 1000).toFixed(0) + 'K' },
-    { key: 'xp', icon: 'armyXp', label: '経験値', value: s => '陸' + Math.floor(s.armyExperience || 0) + ' / 海' + Math.floor(s.navyExperience || 0) + ' / 空' + Math.floor(s.airExperience || 0) },
+    { key: 'xp', icon: 'armyXp', label: '経験値', value: s => {
+      const xp = s.xp || { army: s.armyExperience, navy: s.navyExperience, air: s.airExperience };
+      return '陸' + formatExperience(xp.army) + ' / 海' + formatExperience(xp.navy) + ' / 空' + formatExperience(xp.air);
+    } },
     { key: 'fac', icon: 'factories', label: '民需 / 軍需', value: s => s.civilianFactories + 'C / ' + s.militaryFactories + 'M' },
     { key: 'fuel', icon: 'fuel', label: '燃料', value: s => Math.floor(s.fuel) + '/' + s.maxFuel, gauge: s => s.maxFuel > 0 ? s.fuel / s.maxFuel * 100 : 0, tone: 'amber' },
     { key: 'convoy', icon: 'convoys', label: '輸送船', value: s => s.convoys }

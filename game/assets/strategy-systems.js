@@ -555,6 +555,9 @@ class StrategySystems {
   static updateDesigner() {
     const content = document.getElementById('designer-content');
     if (!content) return;
+    // 新しいHOI4風デザイナー (assets/equipment-designer.js) が描画済みなら、
+    // 旧ブループリント選択UIは重複するため挿入しない。
+    if (content.querySelector('.eqd')) return;
     StrategySystems.ensureState();
     const designer = CoreEngine.gameState.designerState;
     let controls = document.getElementById('design-equipment-choice');

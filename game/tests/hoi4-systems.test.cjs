@@ -300,3 +300,103 @@ test('doctrine exclusive fork groups allow only one of the two tier-2 nodes', ()
   // anyRequires: true は「いずれか1つ」で解禁 (分岐のどちらを選んでも先へ進める)
   assert.equal(manager.unlock('land_blitz_3'), true);
 });
+
+test('equipment designer enforces mandatory slots, size limits and XP spending', () => {
+  const techs = knownTechIds();
+  const notified = [];
+  const sandbox = loadScripts(['dlc.js', 'assets/equipment-designer.js'], {
+    document: {
+      getElementById: () => null,
+      createElement: () => ({ style: {}, appendChild: () => {} }),
+      head: { appendChild: () => {} }
+    },
+    GameUI: { notify: (message, type) => notified.push({ message, type }) },
+    CoreEngine: {
+      gameState: { xp: { army: 100, navy: 100, air: 100 }, country: 'GER', date: new Date(1941, 0, 1) },
+      log: () => {}
+    },
+    MultiplayerManager: { broadcast: () => {} }
+  });
+  const Designer = sandbox.window.EquipmentDesigner;
+  sandbox.ResearchManager = { researchedTech: new Set(techs) };
+
+  // 必須スロットは初期状態で自動装着され、空にはできない
+  Designer.setCategory('tank');
+  assert.ok(Designer.draft.tank.modules.gun, 'main gun is pre-installed');
+  assert.ok(Designer.draft.tank.modules.engine, 'engine is pre-installed');
+  assert.equal(Designer.pickModule('gun', ''), false);
+  assert.match(notified[notified.length - 1].message, /必須スロット/);
+
+  // 小型機体には大型爆弾を積めない / 中型機体なら積める
+  Designer.setCategory('plane');
+  Designer.pickHull('fighter');
+  assert.equal(Designer.pickModule('weapon', 'heavy_bomb'), false);
+  assert.match(notified[notified.length - 1].message, /小型機体には大型爆弾/);
+  Designer.pickHull('bomber');
+  assert.equal(Designer.pickModule('weapon', 'heavy_bomb'), true);
+  assert.equal(Designer.validation('plane').valid, true);
+
+  // 保存で対応する軍種の XP を消費する / XP 不足なら保存できない
+  const before = sandbox.CoreEngine.gameState.xp.air;
+  const design = Designer.saveDesign();
+  assert.ok(design && design.id);
+  assert.equal(sandbox.CoreEngine.gameState.xp.air, before - 20);
+  sandbox.CoreEngine.gameState.xp.air = 0;
+  assert.equal(Designer.saveDesign(), null);
+  assert.match(notified[notified.length - 1].message, /XPが不足/);
+});
+
+test('military XP accrues at exactly +0.2 per day per service', () => {
+  const sandbox = loadScripts(['dlc.js'], {
+    document: {
+      getElementById: () => null,
+      createElement: () => ({ style: {}, appendChild: () => {} }),
+      head: { appendChild: () => {} }
+    },
+    GameUI: { notify: () => {}, switchTab: () => {} },
+    WindowManager: { topWindow: () => null },
+    CoreEngine: {
+      gameState: {
+        date: new Date(1936, 0, 1),
+        xp: { army: 0, navy: 0, air: 0 },
+        atWar: [],
+        country: 'GER',
+        cardModifiers: {}
+      },
+      log: () => {},
+      registerTickCallback: () => {}
+    },
+    MultiplayerManager: { broadcast: () => {} }
+  });
+  const DLC = sandbox.window.DLC;
+  assert.ok(DLC, 'DLC must be exposed for inspection');
+  assert.equal(DLC.XP_PER_DAY, 0.2);
+
+  // 1時間Tick × 24 = ちょうど 1日 +0.2 XP（平時）
+  const gs = { date: new Date(1936, 0, 1, 0), xp: { army: 0, navy: 0, air: 0 }, atWar: [] };
+  for (let hour = 0; hour < 24; hour++) {
+    gs.date = new Date(1936, 0, 1, hour);
+    DLC.accrueExperienceXP(gs);
+  }
+  for (const key of ['army', 'navy', 'air']) {
+    assert.ok(Math.abs(gs.xp[key] - 0.2) < 1e-9, key + ' XP after one day: ' + gs.xp[key]);
+  }
+
+  // 同じ時刻の再Tickでは二重加算しない
+  const before = gs.xp.army;
+  DLC.accrueExperienceXP(gs);
+  assert.equal(gs.xp.army, before);
+
+  // 戦時でも増加量は 1日 +0.2 のまま
+  for (let hour = 0; hour < 24; hour++) {
+    gs.date = new Date(1936, 0, 2, hour);
+    gs.atWar = ['SOV'];
+    DLC.accrueExperienceXP(gs);
+  }
+  assert.ok(Math.abs(gs.xp.army - 0.4) < 1e-9, 'wartime rate stays 0.2/day: ' + gs.xp.army);
+
+  // トップバー表示用の旧フィールドも同期される
+  assert.equal(gs.armyExperience, gs.xp.army);
+  assert.equal(gs.navyExperience, gs.xp.navy);
+  assert.equal(gs.airExperience, gs.xp.air);
+});

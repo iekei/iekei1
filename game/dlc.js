@@ -173,7 +173,7 @@ class DLC {
     // ウィンドウテンプレート
     const defs = [
       { tab: 'doctrine', title: '📜 陸海空ドクトリン', w: 820, h: 620 },
-      { tab: 'designer', title: '🛠️ 兵器モジュール設計', w: 900, h: 620 },
+      { tab: 'designer', title: '🛠️ 兵器設計 / Equipment Designer', w: 1180, h: 760 },
       { tab: 'intel', title: '🕵️ 諜報機関 (La Résistance)', w: 780, h: 600 },
       { tab: 'mio', title: '🏭 軍需産業組織・国際市場', w: 860, h: 600 },
       { tab: 'peace', title: '🕊️ 講和会議', w: 780, h: 560 },
@@ -237,11 +237,35 @@ class DLC {
     GeneralTraitManager.render();
   }
 
+  // 陸海空XPの基本増加量（1日あたり / 各軍種）
+  static XP_PER_DAY = 0.2;
+
+  // XP は 0.2 刻みで貯まるため、小数第1位まで表示する
+  static fmtXp(value) {
+    const n = Math.round((Number(value) || 0) * 10) / 10;
+    return Number.isInteger(n) ? String(n) : n.toFixed(1);
+  }
+
+  // Tickは1時間単位なので、1日ぶんを24分割して加算する（端数はそのまま保持）
+  static accrueExperienceXP(gs) {
+    if (!gs || !gs.xp) return 0;
+    // 同じ時刻で二重に加算しない（手動Tick・マルチプレイ同期の重複対策）
+    const stamp = gs.date instanceof Date ? gs.date.getTime() : null;
+    if (stamp !== null && DLC._lastXpStamp === stamp) return 0;
+    DLC._lastXpStamp = stamp;
+    const perHour = DLC.XP_PER_DAY / 24;
+    ['army', 'navy', 'air'].forEach(k => {
+      gs.xp[k] = Math.min(9999, (Number(gs.xp[k]) || 0) + perHour);
+      // トップバー表示用の旧フィールドにも同期（国家方針報酬は両方を更新している）
+      gs[k + 'Experience'] = gs.xp[k];
+    });
+    return perHour;
+  }
+
   static onTick() {
     const gs = CoreEngine.gameState;
-    // 陸海空XP: 平時+0.8/日, 戦時+2.0/日
-    const rate = (gs.atWar && gs.atWar.length) ? 2.0 : 0.8;
-    ['army', 'navy', 'air'].forEach(k => { gs.xp[k] = Math.min(9999, (gs.xp[k] || 0) + rate); });
+    // 陸海空XP: 各軍種 1日 +0.2 XP
+    DLC.accrueExperienceXP(gs);
     IntelligenceManager.onTick();
     MIOManager.onTick();
     // 開いているウィンドウの再描画 (スロットル)
@@ -487,7 +511,7 @@ class DoctrineManager {
     let html = '<div class="dlc-section"><div class="doctrine-tabs">';
     Object.entries(DoctrineManager.data().branches).forEach(([key, value]) => {
       html += '<button class="research-tab' + (key === service ? ' active' : '') + '" onclick="DoctrineManager.setService(\'' + key + '\')">' +
-        value.label + ' <span style="color:var(--text-gold)">' + Math.floor(gs.xp[value.xpKey] || 0) + ' XP</span></button>';
+        value.label + ' <span style="color:var(--text-gold)">' + DLC.fmtXp(gs.xp[value.xpKey]) + ' XP</span></button>';
     });
     html += '</div>';
     html += '<p class="doctrine-hint">ルート（系統）は相互排他です。最初のノードを取得した系統に<b>永久に固定</b>され、他の系統はロックされます。ノードは XP で解禁します。</p>';
@@ -663,7 +687,9 @@ class EquipmentDesigner {
       ] },
       { id: 'torp', name: '魚雷', options: [
         { id: 'none', name: '装備なし', cost: 0, weight: 0 },
-        { id: 'tub', name: '魚雷発射管', cost: 12, weight: 3, attack: 16, requires: ['early_ship_hull_submarine'] }
+        { id: 'tub', name: '53cm 三連装魚雷発射管', cost: 12, weight: 3, attack: 16, requires: ['early_ship_hull_submarine'] },
+        { id: 'tub2', name: '53cm 四連装魚雷発射管', cost: 20, weight: 4, attack: 24, requires: ['improved_fire_control_system'] },
+        { id: 'tub3', name: '61cm 酸素魚雷発射管', cost: 32, weight: 5, attack: 34, requires: ['advanced_fire_control_system'] }
       ] },
       { id: 'armor', name: '装甲', options: [
         { id: 'light', name: '軽装甲', cost: 8, weight: 6, armor: 8, requires: ['armor_tech_1'] },
@@ -794,7 +820,7 @@ class EquipmentDesigner {
     const draft = EquipmentDesigner.draft[cat];
     let html = '<div class="dlc-section"><div style="display:flex;gap:4px;margin-bottom:8px;">';
     Object.entries(EquipmentDesigner.DATA).forEach(([k, v]) => {
-      html += '<button class="research-tab' + (k === cat ? ' active' : '') + '" onclick="EquipmentDesigner.setCategory(\'' + k + '\')">' + v.label + ' <span style="color:var(--text-gold)">' + Math.floor(gs.xp[v.xpKey]) + 'XP</span></button>';
+      html += '<button class="research-tab' + (k === cat ? ' active' : '') + '" onclick="EquipmentDesigner.setCategory(\'' + k + '\')">' + v.label + ' <span style="color:var(--text-gold)">' + DLC.fmtXp(gs.xp[v.xpKey]) + 'XP</span></button>';
     });
     html += '</div></div>';
 
@@ -1394,7 +1420,7 @@ class GeneralTraitManager {
     if (!el) return;
     const gs = CoreEngine.gameState;
     const gens = GeneralTraitManager.generals();
-    let html = '<div class="dlc-section"><h3>将軍の選択 (陸軍XP: ' + Math.floor(gs.xp.army) + ')</h3>';
+    let html = '<div class="dlc-section"><h3>将軍の選択 (陸軍XP: ' + DLC.fmtXp(gs.xp.army) + ')</h3>';
     if (gens.length === 0) html += '<span style="color:var(--text-secondary);font-size:11px;">将軍がいません。カードを雇用するか軍集団を編成してください。</span>';
     gens.forEach(g => {
       html += '<button class="research-tab' + (GeneralTraitManager.selected === g.id ? ' active' : '') + '" onclick="GeneralTraitManager.select(\'' + g.id + '\')">' + g.name + '</button> ';
@@ -1431,3 +1457,6 @@ class GeneralTraitManager {
 
   static select(id) { GeneralTraitManager.selected = id; GeneralTraitManager.render(); }
 }
+
+// デバッグ・テスト用（classic script のグローバルレキシカル束縛は window から辿れないため）
+if (typeof window !== 'undefined') window.DLC = DLC;

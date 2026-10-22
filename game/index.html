@@ -705,7 +705,7 @@
   <link rel="stylesheet" href="assets/game-visuals.css?v=artwork-3">
   <link rel="stylesheet" href="assets/topbar.css">
   <link rel="stylesheet" href="assets/research-tree.css">
-  <link rel="stylesheet" href="assets/equipment-designer.css">
+  <link rel="stylesheet" href="assets/equipment-designer.css?v=xp-1">
   <link rel="stylesheet" href="assets/strategy-systems.css">
   <link rel="stylesheet" href="assets/war-systems.css">
   <!-- HOI4 大戦略 全画面レイヤー (../hoi4.html を iframe で表示) -->
@@ -949,7 +949,7 @@
 <script src="assets/game-visuals.js?v=artwork-2"></script>
 <script src="assets/image-loader.js"></script>
 <script src="assets/topbar-icons.js"></script>
-<script src="assets/topbar-ui.js"></script>
+<script src="assets/topbar-ui.js?v=xp-1"></script>
 <script src="assets/localization-manager.js"></script>
   <script src="assets/research-icons.js"></script>
   <script src="assets/hoi4-effects-config.js"></script>
@@ -1317,10 +1317,16 @@ class CoreEngine {
     },
     xp: () => {
       const s = CoreEngine.gameState;
+      const fmtXp = value => {
+        const n = Math.round((Number(value) || 0) * 10) / 10;
+        return Number.isInteger(n) ? String(n) : n.toFixed(1);
+      };
+      const xp = s.xp || { army: s.armyExperience, navy: s.navyExperience, air: s.airExperience };
       return { title: '軍事経験値 (Military XP)',
-        rows: ['陸軍経験値: <b>' + Math.floor(s.armyExperience || 0) + '</b>',
-               '海軍経験値: <b>' + Math.floor(s.navyExperience || 0) + '</b>',
-               '空軍経験値: <b>' + Math.floor(s.airExperience || 0) + '</b>',
+        rows: ['陸軍経験値: <b>' + fmtXp(xp.army) + '</b>',
+               '海軍経験値: <b>' + fmtXp(xp.navy) + '</b>',
+               '空軍経験値: <b>' + fmtXp(xp.air) + '</b>',
+               '増加: 各軍種 <b>+0.2 XP / 日</b>',
                '用途: 装備設計・師団テンプレート・軍事改革'] };
     },
     fac: () => {
@@ -4110,7 +4116,9 @@ class BattlePlanManager {
   // 海軍/空軍ミッション完了時の効果
   static completeForceMission(unit) {
     const gs = CoreEngine.gameState;
-    gs.xp[unit.type === 'navy' ? 'navy' : 'air'] += 15;
+    // ミッション完了報酬は控えめに（基本増加は1日 +0.2 XP）
+    const xpKey = unit.type === 'navy' ? 'navy' : 'air';
+    gs.xp[xpKey] = Math.min(9999, (Number(gs.xp[xpKey]) || 0) + 1);
     if (unit.type === 'navy') {
       if (unit.mission === 'patrol') gs.navalSupremacy = Math.min(100, (gs.navalSupremacy || 0) + 20);
       if (unit.mission === 'escort') {
@@ -4124,8 +4132,8 @@ class BattlePlanManager {
       if (unit.mission === 'ground') gs.warSupport = Math.min(100, gs.warSupport + 3);
       if (unit.mission === 'patrol') gs.airSupremacy = Math.min(100, (gs.airSupremacy || 0) + 10);
     }
-    CoreEngine.log('🏆 ' + unit.name + 'のミッシ��ン完了: ' + unit.mission);
-    GameUI.notify('ミッション完了！ XP+15', 'success');
+    CoreEngine.log('🏆 ' + unit.name + 'のミッション完了: ' + unit.mission);
+    GameUI.notify('ミッション完了！ XP+1', 'success');
     MultiplayerManager.broadcast({ type: 'force_complete', force: unit.type, id: unit.id, mission: unit.mission });
   }
 
@@ -4149,7 +4157,7 @@ class BattlePlanManager {
         }
       }
     });
-    if (BattlePlanManager.armies.some(a => a.executing) && gs.xp) gs.xp.army += 0.5;
+    // 陸軍XPは DLC.onTick の 1日 +0.2 XP に一本化（以前は攻勢中に毎時 +0.5 していた）
     BattlePlanManager.renderPanelThrottled();
   }
 
@@ -7010,11 +7018,11 @@ window.addEventListener('DOMContentLoaded', () => StartScreen.show());
 <script src="training.js"></script>
 <!-- ==================== DLC拡張モジュール (ドクトリン/兵器設計/諜報/MIO・国際市場/講和会議/将軍特性) ==================== -->
 <script src="assets/doctrine-data.js"></script>
-<script src="dlc.js?v=artwork-3"></script>
+<script src="dlc.js?v=xp-1"></script>
   <script src="strategy.js?v=artwork-2"></script>
   <script src="assets/technology-resolver.js"></script>
-  <script src="assets/equipment-designer.js"></script>
-  <script src="assets/strategy-systems.js"></script>
+  <script src="assets/equipment-designer.js?v=xp-1"></script>
+  <script src="assets/strategy-systems.js?v=designer-2"></script>
   <script src="assets/force-systems.js"></script>
   <script src="assets/MultiplayerTimeManager.js"></script>
   <!-- ==================== HOI4 大戦略 全画面レイヤー (../hoi4.html / H キー) ==================== -->
