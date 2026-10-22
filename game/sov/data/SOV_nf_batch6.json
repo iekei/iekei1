@@ -8,6 +8,13 @@
     "effect": "我々は敵が来るのを黙って待つことなどできない。何処であろうと主導権を握り敵を攻撃すべきだ。",
     "prerequisites": [
       "SOV_surface_warfare"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 58
+      }
     ]
   },
   {
@@ -20,6 +27,17 @@
     "prerequisites": [
       "SOV_surface_warfare",
       "SOV_submarine_warfare"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 45
+      },
+      {
+        "type": "add_navy_experience",
+        "value": 15
+      }
     ]
   },
   {
@@ -32,6 +50,18 @@
     "prerequisites": [
       "SOV_surface_warfare",
       "SOV_submarine_warfare"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 57
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -43,6 +73,19 @@
     "effect": "海軍基地から主要航路までは距離があるため、現在の潜水艦が豊かな狩場に到達するのは難しい。敵に最も痛打を与えられる所を攻撃できるように、より長射程の潜水艦を開発すべきだ。",
     "prerequisites": [
       "SOV_submarine_warfare"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 53
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "海軍",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -55,6 +98,17 @@
     "prerequisites": [
       "SOV_expand_shipbuilding_plants",
       "SOV_an_oceangoing_navy"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 50
+      },
+      {
+        "type": "add_army_experience",
+        "value": 15
+      }
     ]
   },
   {
@@ -68,6 +122,17 @@
       "SOV_increase_aircraft_production",
       "SOV_intensify_pilot_training_program",
       "SOV_advanced_maneuvers"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 60
+      },
+      {
+        "type": "add_air_experience",
+        "value": 30
+      }
     ]
   },
   {
@@ -79,6 +144,17 @@
     "effect": "[GetNavalInfantryDesc]",
     "prerequisites": [
       "SOV_advanced_maneuvers"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      },
+      {
+        "type": "add_navy_experience",
+        "value": 10
+      }
     ]
   },
   {
@@ -86,9 +162,16 @@
     "title": "[GetFoundThePcdiName]",
     "x": 4850,
     "y": 50,
-    "cost": 35,
+    "cost": 70,
     "effect": "[GetFoundThePcdiDesc]",
-    "prerequisites": []
+    "prerequisites": [],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 121
+      }
+    ]
   },
   {
     "id": "SOV_pc_of_mechanical_engineering",
@@ -99,6 +182,18 @@
     "effect": "我々の産業は大型で複雑な工作機械や重機の製造が可能となり、これらの製造計画を調整するために新しい政府組織の設立が求められている。",
     "prerequisites": [
       "SOV_found_the_pcdi"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 92
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 2
+      }
     ]
   },
   {
@@ -110,6 +205,27 @@
     "effect": "戦車や装甲戦闘車両はこの十年間で大きく発展した。大量に生産と供給が可能な大規模な軍需産業によって、我々は優れた車輌を作り、敵に対して大量に使用することができる。",
     "prerequisites": [
       "SOV_pc_of_mechanical_engineering"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 66
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 1
+      },
+      {
+        "type": "add_army_experience",
+        "value": 11
+      }
     ]
   }
 ]

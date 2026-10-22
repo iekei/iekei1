@@ -8,6 +8,13 @@
     "effect": "イタリアは強力な国家となりうる潜在力を秘めている。ムッソリーニの強力な指導力のおかげで全イタリア国民は団結し、正しい主張のために戦う準備ができている。その主張を我らも取り入れよう。",
     "prerequisites": [
       "FRA_army_of_aggression"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      }
     ]
   },
   {
@@ -19,6 +26,13 @@
     "effect": "中央ヨーロッパに誕生した[GER.GetAdjective]の民主主義同盟は、我々が新たに手に入れた地位を脅かしている。連中がより強固になる前に手を打つ必要があるだろう。",
     "prerequisites": [
       "FRA_woo_italy"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 43
+      }
     ]
   },
   {
@@ -30,6 +44,13 @@
     "effect": "ドイツは有力国として見なされつつある。彼らのより良い未来への構想は我らの利益とも合致できるものである。彼らを支援すべきであり、混乱が収まった時にはフランスはヨーロッパにおける我らの当然の取り分を得ることができるだろう。",
     "prerequisites": [
       "FRA_army_of_aggression"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 43
+      }
     ]
   },
   {
@@ -41,6 +62,17 @@
     "effect": "国家が混乱の最中にあるため、人々は強い指導者を求めている。共和主義がフランス国民の期待を裏切ったことが判明したことで、我が国本来の支配者が帰還するときが来たのである。とはいえ、まず最初に君主制復古のための地盤を築かねばならない。",
     "prerequisites": [
       "FRA_utilize_the_leagues"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 78
+      },
+      {
+        "type": "add_stability",
+        "value": 5
+      }
     ]
   },
   {
@@ -52,6 +84,13 @@
     "effect": "共和主義者による憲法は、常に暫定措置として制定されたものであって、それがあまりにも長い間存続を許されてきたのである。今すぐこれを改正して、君主が戻ることができるようにしようではないか。",
     "prerequisites": [
       "FRA_the_council_of_rambouillet"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      }
     ]
   },
   {
@@ -63,6 +102,13 @@
     "effect": "フランス王室の当主もその後継者も、特別な許可を得ずにフランス国内に立ち入ることは禁止されている。君主制の帰還という大きな勝利を勝ち取るその前に、まずはこの小さくも鬱陶しい障害を排除しなければならない。",
     "prerequisites": [
       "FRA_revise_the_constitution"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      }
     ]
   },
   {
@@ -74,6 +120,13 @@
     "effect": "オルレアン家は、フランス王党派の者たちの間で相当の支持を集めている。オルレアン家を悪しざまに言う者たちの中には別の王位継承者を望んでいるものもいるようだが、オルレアン家の王位継承者によってこの国が平和裏に統一されるだろうことはまず間違い無いだろう。",
     "prerequisites": [
       "FRA_repeal_the_law_of_exile"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 58
+      }
     ]
   },
   {
@@ -85,6 +138,13 @@
     "effect": "共和派の報道機関が、王室による統治の正統性に対する根拠のないキャンペーンを展開し始めるようなことが起きるその前に、民衆の個人としての権利を尊重し確固たる保障を与えることで、そういった報道機関の立場をなくしてやる必要がある。",
     "prerequisites": [
       "FRA_orleanist_restoration"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 53
+      }
     ]
   },
   {
@@ -96,6 +156,13 @@
     "effect": "王は生まれながらにして強大な権力を持たされているものではあるが、決して歴史に残ってきたような暴君や絶対的な支配者のように思われてはならない。むしろ、現代の君主は法を尊び、そのように不法に奪取しようとする輩から権力を守る最前線でなくてはならないのである。",
     "prerequisites": [
       "FRA_orleanist_restoration"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 44
+      }
     ]
   },
   {
@@ -108,6 +175,13 @@
     "prerequisites": [
       "FRA_guarantee_the_constitution",
       "FRA_the_first_citizen_of_the_state"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      }
     ]
   }
 ]

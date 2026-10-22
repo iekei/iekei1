@@ -9,6 +9,17 @@
     "prerequisites": [
       "SOV_military_reorganization",
       "SOV_lessons_of_war"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 43
+      },
+      {
+        "type": "add_war_support",
+        "value": 6
+      }
     ]
   },
   {
@@ -21,6 +32,18 @@
     "prerequisites": [
       "SOV_military_reorganization",
       "SOV_lessons_of_war"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 50
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -34,6 +57,13 @@
       "SOV_keep_commissars_organization",
       "SOV_swap_to_political_advisors",
       "SOV_adjoined_battle_priests"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 53
+      }
     ]
   },
   {
@@ -47,6 +77,13 @@
       "SOV_keep_commissars_organization",
       "SOV_swap_to_political_advisors",
       "SOV_adjoined_battle_priests"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      }
     ]
   },
   {
@@ -54,19 +91,44 @@
     "title": "マルクス・レーニン主義の道",
     "x": 8300,
     "y": 50,
-    "cost": 35,
+    "cost": 70,
     "effect": "マルクス、エンゲルス、レーニンの無謬の教えにより、我が国は最も深刻な後進国から技術的、産業的な平等を成し遂げた。今、方針を転換するのは非常に愚かなことであろう。労働者解放の不屈の旗は、常に前進している！",
-    "prerequisites": []
+    "prerequisites": [],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 114
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 2
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
+    ]
   },
   {
     "id": "SOV_the_centre",
     "title": "中央",
     "x": 7100,
     "y": 180,
-    "cost": 35,
+    "cost": 70,
     "effect": "スターリン同志は我が国最高の闘士だった。我らは革命の未来を彼の手に委ねるべきだ。",
     "prerequisites": [
       "SOV_the_path_of_marxism_leninism"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 88
+      }
     ]
   },
   {
@@ -74,10 +136,23 @@
     "title": "一国社会主義論",
     "x": 6950,
     "y": 310,
-    "cost": 35,
+    "cost": 70,
     "effect": "世界革命は今なお我々の究極的な目標であり、実際に必然のものであると科学的に証明されている。しかし、我々の敗北によって世界の他地域での労働者の解放が遅れるのを避けるためにも、まず我が国の社会主義の安全を確保しなければならない。",
     "prerequisites": [
       "SOV_the_centre"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 74
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -89,6 +164,13 @@
     "effect": "1924年憲法は、内戦後の国家を組織しようとする優れた試みであり、その目的を果たしてきた。だが新たな憲法は必要だ。まず我々は、スターリン同志が連邦を強く安全に保つためのたゆまぬ努力と、その非凡な才能と知恵が共産主義の大義を前進させるのに貢献したことを称えたい。",
     "prerequisites": [
       "SOV_the_centre"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 76
+      }
     ]
   },
   {
@@ -96,10 +178,17 @@
     "title": "ジノヴィエフ・テロリスト本部",
     "x": 7250,
     "y": 440,
-    "cost": 35,
+    "cost": 70,
     "effect": "1934年の同志キーロフの暗殺は、同志スターリンと連邦全体に対し明らかに陰謀を企てている党員がいることを指し示している。我々はすでに複数人の共謀者の自白を得ており、さらに複数の人々の関与が疑われる。このジノヴィエフ派の陰謀は間違いなくトロツキーか西側の工作員が組織したものであり、また共に実行している可能性もある。この陰謀が広がる前に、癌のように切除する必要がある。",
     "prerequisites": [
       "SOV_the_stalin_constitution"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 53
+      }
     ]
   },
   {
@@ -111,6 +200,13 @@
     "effect": "テロリストのジノヴィエフとその協力者たちの自白に衝撃を受けて、我々は他の党員の忠誠心を問わねばならない。政治局の各局員の立場を知っておくことは不可欠だ。",
     "prerequisites": [
       "SOV_the_zinovyevite_terrorist_center"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 43
+      }
     ]
   }
 ]

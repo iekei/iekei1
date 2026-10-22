@@ -4,10 +4,22 @@
     "title": "アルバニアの油",
     "x": 17000,
     "y": 830,
-    "cost": 35,
+    "cost": 70,
     "effect": "我々が国を完全掌握した今こそ、アルバニアの旧石油利権で使っていた旧式の装置を強力な石油採掘産業へと転換する時だ。",
     "prerequisites": [
       "ITA_albanian_occupation"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 42
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -15,10 +27,17 @@
     "title": "アルバニアの領土回復主義を支持",
     "x": 17300,
     "y": 830,
-    "cost": 35,
+    "cost": 70,
     "effect": "イタリアのアルバニア支配を正当化するよう努めなければならない。コソボやエピルス地域、そしてそれ以上の地域でアルバニア人の領土回復主義を支援することは、確実に地元住民から大きな公的支援を得ることになり、我々の影響範囲をさらに拡大させる機会になるだろう。",
     "prerequisites": [
       "ITA_albanian_occupation"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 55
+      }
     ]
   },
   {
@@ -26,10 +45,17 @@
     "title": "[GetAppropriateAlbanianFascistMilitiaName]",
     "x": 17300,
     "y": 960,
-    "cost": 35,
+    "cost": 70,
     "effect": "アルバニアにイタリア黒シャツ隊の新しい派閥を作り、国内のイタリア人入植者だけでなく、アルバニア人の志願者も必ず採用するようにしよう。",
     "prerequisites": [
       "ITA_support_albanian_irredentism"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      }
     ]
   },
   {
@@ -37,11 +63,18 @@
     "title": "オーストリアの独立を保障",
     "x": 17600,
     "y": 700,
-    "cost": 35,
+    "cost": 70,
     "effect": "オーストリアに対するドイツの干渉は、イタリア国家とヨーロッパの権力の均衡に対する大きな脅威であり、容認することはできない。我々はオーストリアの独立を保証し、ドイツが同国に影響を与えようとするあらゆる外交工作に反対する。",
     "prerequisites": [
       "ITA_potential_allies_in_the_balkans",
       "ITA_balkan_ambition"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 42
+      }
     ]
   },
   {
@@ -53,6 +86,13 @@
     "effect": "ドイツに反対することで、イタリアとドイツの政権間の断絶を切望している旧協商国に対して権力を得る事ができた。この状況を利用して、先の大戦後に奪われた植民地時代の財産を取り戻さなければならない。",
     "prerequisites": [
       "ITA_guarantee_austrian_independence"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 56
+      }
     ]
   },
   {
@@ -64,6 +104,13 @@
     "effect": "イタリアに領土利権が認められた。イタリアとフランスをストレーザ戦線という軍事同盟に参加させる手続きを開始する時だ。",
     "prerequisites": [
       "ITA_negotiate_italian_claims"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 43
+      }
     ]
   },
   {
@@ -71,10 +118,23 @@
     "title": "共同軍事計画",
     "x": 17300,
     "y": 1090,
-    "cost": 35,
+    "cost": 70,
     "effect": "イタリアと新しい同盟国は密接な関係があるため、軍事と科学の両分野において協力を促進する必要がある。",
     "prerequisites": [
       "ITA_ratify_the_stresa_front"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 55
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -86,6 +146,13 @@
     "effect": "この同盟で、イタリアが果たすべき地中海の最高海洋国家という役割を確立しよう。この目標を達成するための次の重要なステップは、バルカンでの優位性を確保することだ。",
     "prerequisites": [
       "ITA_ratify_the_stresa_front"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 41
+      }
     ]
   },
   {
@@ -97,6 +164,13 @@
     "effect": "新興のソビエト連邦が、わが国のみならず、西洋列強すべての利益に脅威を与えていることは周知の事実だ。黒海という最も豊かな地域へのアクセスを否定することで、この国の拡張能力を麻痺させよう。",
     "prerequisites": [
       "ITA_italys_destiny"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 52
+      }
     ]
   },
   {
@@ -104,11 +178,22 @@
     "title": "鋼鉄条約",
     "x": 18500,
     "y": 700,
-    "cost": 35,
+    "cost": 70,
     "effect": "我々とナチス・ドイツとの関係はイデオロギー的な差異や衝突している目的によって複雑な状態にある。ドイツのオーストリアとバルカン半島に対する野心をドゥーチェは極めて警戒している。しかし、現実とは変化するものだ……",
     "prerequisites": [
       "ITA_potential_allies_in_the_balkans",
       "ITA_balkan_ambition"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 42
+      },
+      {
+        "type": "add_world_tension",
+        "value": 4
+      }
     ]
   }
 ]

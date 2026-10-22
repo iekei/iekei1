@@ -4,10 +4,17 @@
     "title": "信じ、従い、戦う",
     "x": 11900,
     "y": 830,
-    "cost": 35,
+    "cost": 70,
     "effect": "政党は単純な原則を元に作られたものだ。一つ、権力を掌握するためには、それが可能であると信じていなければならない。二つ、権力を掌握するためには、責任者に従わなければならない。三つ、権力を掌握するためには、戦わなければならない。そして、権利を掌握することが、その名に値する政治運動の唯一にして真の目的だ。",
     "prerequisites": [
       "ITA_ministero_della_cultura_popolare"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      }
     ]
   },
   {
@@ -19,6 +26,13 @@
     "effect": "戦争がいつも名誉なこととは限らない。一般人は前線での戦いに気が向いているのかもしれないが、国内戦線も同じ様に重要だ。国内のレジスタンスの根絶も同様に行わなければならない。",
     "prerequisites": [
       "ITA_believe_obey_fight"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 50
+      }
     ]
   },
   {
@@ -30,6 +44,13 @@
     "effect": "現代の戦争では、国民全体が戦争に関わることが多い。これはつまり、もはや前線だけが戦闘の起きる場所ではないということを意味する。戦闘部隊を利用し、兵站線を確保する準備をしておかなければならない。",
     "prerequisites": [
       "ITA_banda_carita"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 46
+      }
     ]
   },
   {
@@ -37,11 +58,18 @@
     "title": "治安維持民兵",
     "x": 12350,
     "y": 830,
-    "cost": 35,
+    "cost": 70,
     "effect": "後方の守りに前線の部隊を充ててしまうと、優秀な兵士を無駄にすることになる。敵との戦闘により多くの兵士を割けるよう、殿を守る専用の部隊を編成するべきだ。",
     "prerequisites": [
       "ITA_culto_del_duce",
       "ITA_convene_the_grand_council"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 54
+      }
     ]
   },
   {
@@ -53,6 +81,13 @@
     "effect": "黒シャツ隊は、先の大戦の襲撃部隊の誇り高き伝説を受け継いでいる。この部隊を軍に統合すれば、戦闘における攻撃力は一気に向上するだろう。",
     "prerequisites": [
       "ITA_security_militias"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 52
+      }
     ]
   },
   {
@@ -64,6 +99,17 @@
     "effect": "英国陸軍は旧政権のやり方に縛られ過ぎている。それに幾度となく、不穏なほどにファシズムへの熱意に欠ける行動を取ってきた。すべての師団を我らの忠実な黒シャツ隊で構成しなければならないのは明白だ。",
     "prerequisites": [
       "ITA_security_militias"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 52
+      },
+      {
+        "type": "add_army_experience",
+        "value": 17
+      }
     ]
   },
   {
@@ -76,6 +122,17 @@
     "prerequisites": [
       "ITA_battaglioni_d_assalto",
       "ITA_strengthen_the_blackshirts"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 51
+      },
+      {
+        "type": "add_manpower",
+        "value": 22500
+      }
     ]
   },
   {
@@ -83,12 +140,19 @@
     "title": "大イタリアを目指して",
     "x": 11450,
     "y": 1740,
-    "cost": 35,
+    "cost": 70,
     "effect": "イタリア領土回復主義は、第一次世界大戦後、イタリア国民が連合国から受けた裏切りの当然の結果である。本来であればイタリアは地中海を完全に支配すべきであり、そのためには国境を広げる必要がある。",
     "prerequisites": [
       "ITA_strengthen_the_regime",
       "ITA_blackshirt_loyalty",
       "ITA_setting_course"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      }
     ]
   },
   {
@@ -101,6 +165,13 @@
     "prerequisites": [
       "ITA_towards_a_greater_italy",
       "ITA_devotion"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      }
     ]
   },
   {
@@ -113,6 +184,13 @@
     "prerequisites": [
       "ITA_towards_a_greater_italy",
       "ITA_devotion"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 48
+      }
     ]
   }
 ]

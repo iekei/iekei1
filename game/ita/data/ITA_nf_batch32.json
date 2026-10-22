@@ -9,6 +9,23 @@
     "prerequisites": [
       "ITA_cooperatives_for_intensive_exploitation",
       "ITA_the_italian_confederation"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 58
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "陸軍",
+        "bonus": 0.5,
+        "uses": 1
+      },
+      {
+        "type": "add_army_experience",
+        "value": 23
+      }
     ]
   },
   {
@@ -20,6 +37,17 @@
     "effect": "アフリカでの軍事作戦では、非正規部隊が主要戦力となる。現地で新兵を調達することで数を増やし、部隊が受ける訓練の質を向上させることが必須だ。",
     "prerequisites": [
       "ITA_the_fight_overseas"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 52
+      },
+      {
+        "type": "add_army_experience",
+        "value": 17
+      }
     ]
   },
   {
@@ -31,6 +59,13 @@
     "effect": "ついに、アフリカの人々が永遠の自由を獲得し、彼らを抑圧する各国の政府と完全に決別する時がやってきた！",
     "prerequisites": [
       "ITA_the_fight_overseas"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 44
+      }
     ]
   },
   {
@@ -42,6 +77,17 @@
     "effect": "アフリカ現地の部隊で構成された正規師団は、守備隊や予備軍としてばかりでなく、他の師団が四苦八苦するような過酷な地形での軍事作戦においても、様々な役割を非常に効率的に果たせることが証明された。",
     "prerequisites": [
       "ITA_the_fight_overseas"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 50
+      },
+      {
+        "type": "add_army_experience",
+        "value": 15
+      }
     ]
   }
 ]

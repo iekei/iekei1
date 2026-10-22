@@ -8,6 +8,13 @@
     "effect": "[GetAppropriateRussianGovernmentIdeologyDesc]",
     "prerequisites": [
       "ITA_defend_the_land"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 41
+      }
     ]
   },
   {
@@ -19,6 +26,13 @@
     "effect": "イタリアには我らの理想のために戦おうという、勇敢な農民達が数多くいる。彼らがいれば、より多くの赤シャツ隊を形成し、我が国の部隊の地位を今より強固なものにできるはずだ。",
     "prerequisites": [
       "ITA_defend_the_land"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 52
+      }
     ]
   },
   {
@@ -31,6 +45,13 @@
     "prerequisites": [
       "ITA_combined_research_effort",
       "ITA_raise_the_peoples"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 48
+      }
     ]
   },
   {
@@ -38,10 +59,17 @@
     "title": "イタリア社会主義",
     "x": 9200,
     "y": 960,
-    "cost": 35,
+    "cost": 70,
     "effect": "我々の前には社会主義への道が開かれている。今こそ、確固たる意志を持ってこの道を進み、我らが国境の内に公正なる社会を作り上げるのだ。そして国境の向こうには、イタリア共和国に相応しい国際的地位を築こうではないか。",
     "prerequisites": [
       "ITA_the_italian_republic"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 50
+      }
     ]
   },
   {
@@ -49,10 +77,22 @@
     "title": "マフィアとの協力",
     "x": 8750,
     "y": 1090,
-    "cost": 35,
+    "cost": 70,
     "effect": "内戦中に急増したマフィア組織はいずれも、縄張りの中で営まれている民間および国家事業の業績を改善する機会を提供してくれる可能性がある。ただし、そのためには彼らに所定の特権を与えたり、それなりの譲歩をすることが求められるだろう。",
     "prerequisites": [
       "ITA_italian_socialism"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 57
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -64,6 +104,13 @@
     "effect": "我々と協定を結んでいるマフィアファミリーが、イタリア国内のみならず海外でもその影響力を増してきている。ここは、彼らと仕事をしている工作員達を資本主義大国に送り込み、各ファミリーの事業が我々の利益になる形で成功するように導くべきだ。",
     "prerequisites": [
       "ITA_cooperate_with_the_mafia"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      }
     ]
   },
   {
@@ -75,6 +122,17 @@
     "effect": "イタリアのプロレタリア階級は、大きな可能性を秘めている。労働組合に国家の労働人口を管理し、最適化するための手段と権限をしっかりと与えてやるべきだ。",
     "prerequisites": [
       "ITA_italian_socialism"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 50
+      },
+      {
+        "type": "add_manpower",
+        "value": 5000
+      }
     ]
   },
   {
@@ -86,6 +144,13 @@
     "effect": "いよいよ、主要生産ラインの拡張と近代化を実施するべき時がやってきた。これにより、我々の部隊に必要な物資と装備の供給が可能になり、引き続きその能力を余すところなく発揮しながら活動してもらえることだろう。",
     "prerequisites": [
       "ITA_empower_the_unions"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 43
+      }
     ]
   },
   {
@@ -93,10 +158,17 @@
     "title": "共和国の指導権",
     "x": 9350,
     "y": 1090,
-    "cost": 35,
+    "cost": 70,
     "effect": "生まれたばかりのイタリア共和国を人々が望む社会主義へと導くには、適切な政党と政治指導者を選定しなくてはならない。フェルッチョ・パッリとイヴァノエ・ボノーミは、どちらも申し分ない候補であり、この任務を遂行できる十分な器を備えている。",
     "prerequisites": [
       "ITA_italian_socialism"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      }
     ]
   },
   {
@@ -108,6 +180,19 @@
     "effect": "かつてのファシスト政権は、無数のイタリア市民を亡命へと追いやった。そこには偉大な哲学者、知識人、科学者などが含まれる。そろそろ、こうした亡命者達に祖国に帰還する機会を与えてやるべきだろう。",
     "prerequisites": [
       "ITA_the_republics_leadership"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 53
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   }
 ]

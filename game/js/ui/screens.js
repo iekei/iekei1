@@ -178,6 +178,14 @@ export function renderResearchScreen(ctx) {
       d.style.flex = '0 0 auto';
       d.innerHTML = `<h4>${I18N.techName(n.id, n.title)}（${n.year}年）</h4>`;
       d.appendChild(el('div', 'dim small', I18N.t('research.days_total', { days: research.researchDays(n.id, nation) })));
+      // 適用中の研究ボーナス（国家方針 completion_reward など）を明示
+      const bd = research.researchDaysBreakdown?.(n.id, nation);
+      if (bd?.bonusPct) {
+        d.appendChild(el('div', 'small good mt4', `研究ボーナス -${bd.bonusPct}%（${bd.bonusLabel}）適用中`));
+      }
+      if (bd?.spiritSpeed) {
+        d.appendChild(el('div', 'small mt4', `国家的精神による研究速度補正 ${bd.spiritSpeed > 0 ? '+' : ''}${Math.round(bd.spiritSpeed * 100)}%`));
+      }
       d.appendChild(el('div', 'small mt8', I18N.techDesc(n.id)));
       const btnRow = el('div', 'row mt8');
       if (!done && !researching) {

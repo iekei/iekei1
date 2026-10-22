@@ -172,6 +172,76 @@ class StrategyGame {
   static privateEvents=new Set(['focus_select','focus_complete','research_start','research_complete','sp_hire','sp_phase','card_hire','battle_front','battle_arrow','battle_start','battle_end','force_zone','recruit_add','army_general']);
 }
 
+// ==========================================================
+// PlanningBonus — 作戦計画の準備ボーナス (HOI4 の "Planning Bonus")
+// ----------------------------------------------------------
+// 前線と攻撃線 (作戦計画) に師団を配属した状態で日数が経過すると、
+// 計画準備が最大 +30% (ドクトリンで最大 +60%) まで蓄積する。
+// 作戦を実行すると攻撃力に上乗せされ、実行中は徐々に減衰する。
+// 前線・攻撃線を引き直した場合は 0 にリセットされる (計画の作り直し)。
+// ==========================================================
+class PlanningBonus {
+  static BASE_CAP = 0.30;        // 基本上限 +30%
+  static MAX_CAP = 0.60;         // ドクトリン込みの上限 +60%
+  static GAIN_PER_DAY = 0.02;    // 2%/日 (HOI4 基本値)
+  static DECAY_PER_DAY = 0.05;   // 実行中の減衰 5%/日
+
+  static landModifier(key) {
+    const manager = typeof DoctrineManager !== 'undefined' ? DoctrineManager : null;
+    if (!manager || typeof manager.modifier !== 'function') return 0;
+    try { return Number(manager.modifier('land', key)) || 0; } catch (e) { return 0; }
+  }
+
+  // 上限: 基本30% + ドクトリン(maxPlanning) + 国家補正。60%でクランプ。
+  static cap() {
+    const mods = CoreEngine.gameState?.cardModifiers || {};
+    const total = PlanningBonus.BASE_CAP + PlanningBonus.landModifier('maxPlanning') + Number(mods.planningBonusMax || 0);
+    return Math.max(0, Math.min(PlanningBonus.MAX_CAP, total));
+  }
+
+  static rate() {
+    return PlanningBonus.GAIN_PER_DAY * (1 + PlanningBonus.landModifier('planningSpeed'));
+  }
+
+  static of(army) { return Math.max(0, Number(army?.planning) || 0); }
+
+  static reset(army) {
+    if (!army) return 0;
+    army.planning = 0;
+    army.planningDays = 0;
+    return 0;
+  }
+
+  // 毎ゲーム日: 計画準備の蓄積 / 減衰
+  static tick(army) {
+    if (!army) return 0;
+    const cap = PlanningBonus.cap();
+    let value = PlanningBonus.of(army);
+    if (army.executing) {
+      value = Math.max(0, value - PlanningBonus.DECAY_PER_DAY);
+    } else if (army.frontline && army.frontline.length && army.divisions && army.divisions.length) {
+      // 前線 + 攻撃線が揃っているほど計画が進む (攻撃線なしは 60% の速度)
+      const planned = army.arrow && army.chain ? 1 : 0.6;
+      value = Math.min(cap, value + PlanningBonus.rate() * planned);
+      army.planningDays = Math.max(0, Math.floor(Number(army.planningDays) || 0)) + 1;
+    } else {
+      // 計画が解除されたら準備は失われる
+      value = 0;
+      army.planningDays = 0;
+    }
+    army.planning = Math.round(value * 10000) / 10000;
+    army.planningCap = cap;
+    return army.planning;
+  }
+
+  // 攻撃力への倍率 (1 + 計画準備)
+  static attackMultiplier(army) { return 1 + PlanningBonus.of(army); }
+
+  static label(army) {
+    return '+' + Math.round(PlanningBonus.of(army) * 100) + '%';
+  }
+}
+
 class OffensivePlanner {
   static isLand(pid) { const pd = MapRenderer.provinces?.p[pid]; return !!pd && MapRenderer.provinces.types[pd[3]] === 'land'; }
   static nearest(point, predicate = () => true) {
@@ -253,6 +323,32 @@ class OffensivePlanner {
     if (!s.atWar.includes(owner)) { army.executing=false; army.status='中立国の前で停止'; return; }
     army.status='戦闘';
     BattleManager.startOffensive(army,pid,MapRenderer.stateOf(pid));
+  }
+  // ---- 前線への自動配備: 師団を前線プロヴィンスへ均等に配置する ----
+  // HOI4 の前線 (front line) に師団が自動で並ぶ挙動を再現する。
+  static deployAlongFront(army) {
+    if (!army || army.executing || !army.frontline || !army.frontline.length || !army.divisions.length) return false;
+    const player = CoreEngine.gameState.country;
+    const pids = [];
+    army.frontline.forEach(point => {
+      const pid = MapRenderer.provinceAt(point[0], point[1]);
+      const own = pid && MapRenderer.ownerOf(pid) === player && OffensivePlanner.isLand(pid);
+      const target = own ? pid : OffensivePlanner.nearest(point, p => MapRenderer.ownerOf(p) === player);
+      if (target && !pids.includes(target)) pids.push(target);
+    });
+    if (!pids.length) return false;
+    army.divisions.forEach((division, index) => {
+      const pid = pids[index % pids.length];
+      const center = MapRenderer.provCentroid.get(pid);
+      if (!center) return;
+      const slot = Math.floor(index / pids.length);
+      division.pid = pid;
+      division.x = center[0] + ((slot % 5) - 2) * 3;
+      division.y = center[1] + ((Math.floor(slot / 5) % 5) - 2) * 3;
+    });
+    army.positionPid = pids[0];
+    army.deployedPids = pids;
+    return true;
   }
   static hold(army,pid) {
     const c=MapRenderer.provCentroid.get(pid); if (!c) return;
@@ -476,6 +572,7 @@ class ArmyRoster {
     if(!route.length) {GameUI.notify('自国領・占領地を通る移動経路がありません。','alert');return false;}
     army.positionPid=Number(start);army.route=route.slice(1);army.goalPid=Number(pid);
     army.frontEnemy=null;army.executing=true;army.progress=0;army.status='行軍';
+    if (typeof PlanningBonus !== 'undefined') PlanningBonus.reset(army);
     ArmyRoster.moveTool=false;
     if(!army.route.length) {
       army.executing=false;army.status='目標地点で待機';army.progress=100;
@@ -525,6 +622,11 @@ class ArmyRoster {
     CoreEngine.gameState.strategy.reserves=sources[0].divisions;
     (target?target.divisions:CoreEngine.gameState.strategy.reserves).push(...moved);
     if(target){const pid=target.positionPid||OffensivePlanner.nearest(target.base,p=>MapRenderer.ownerOf(p)===CoreEngine.gameState.country);if(pid)OffensivePlanner.hold(target,pid);}
+    // 師団の配属変更は計画準備をリセットし、前線へ再配備する (HOI4 と同じ)
+    if (target && moved.length) {
+      if (typeof PlanningBonus !== 'undefined') PlanningBonus.reset(target);
+      OffensivePlanner.deployAlongFront(target);
+    }
     return moved.length>0;
   }
   static airdrop(pid) {
@@ -572,7 +674,8 @@ class ArmyRoster {
       html+='<span>Space: 時間停止/再開　Enter: ニュースを閉じる</span></div><div class="army-strip">';
       BattlePlanManager.armies.forEach(a=>{
         const card=GameTools.card(a.general?.id,CoreEngine.gameState.country),org=a.divisions.reduce((n,d)=>n+d.org,0)/Math.max(1,a.divisions.length);
-        html+='<div class="army-tile'+(a.id===BattlePlanManager.selectedArmyId?' selected':'')+'"><button class="army-portrait" onclick="BattlePlanManager.selectArmy('+a.id+')">'+GameTools.portrait(card,a.general?.name||'将軍未配置')+'<strong>'+a.divisions.length+' 師団</strong></button><div class="army-tile-info"><b>'+a.name+'</b><p>'+GameTools.escape(a.general?.name||'将軍未配置')+'</p><p>'+GameTools.escape(a.status||'待機')+' / 組織力 '+Math.round(org)+'</p>'+GameTools.button('将軍','BattlePlanManager.assignGeneral('+a.id+')')+GameTools.button(a.executing?'中止':'作戦開始','BattlePlanManager.'+(a.executing?'abort':'execute')+'('+a.id+')',!a.executing&&(!a.arrow||!a.divisions.length))+GameTools.button('未所属へ','ArmyRoster.transfer(BattlePlanManager.armies.find(a=>a.id==='+a.id+').divisions.map(d=>d.id),0);ArmyRoster.render()',a.executing)+'</div></div>';
+        html+='<div class="army-tile'+(a.id===BattlePlanManager.selectedArmyId?' selected':'')+'"><button class="army-portrait" onclick="BattlePlanManager.selectArmy('+a.id+')">'+GameTools.portrait(card,a.general?.name||'将軍未配置')+'<strong>'+a.divisions.length+' 師団</strong></button><div class="army-tile-info"><b>'+a.name+'</b><p>'+GameTools.escape(a.general?.name||'将軍未配置')+'</p><p>'+GameTools.escape(a.status||'待機')+' / 組織力 '+Math.round(org)+'</p>'+
+          (typeof PlanningBonus!=='undefined'?'<p class="army-planning" title="前線と攻撃線に配属された師団は時間経過で計画準備ボーナスを蓄積します">計画準備 <b>'+PlanningBonus.label(a)+'</b> / 上限 +'+Math.round(PlanningBonus.cap()*100)+'%<i><em style="width:'+Math.round(Math.min(1,PlanningBonus.of(a)/Math.max(0.01,PlanningBonus.cap()))*100)+'%"></em></i></p>':'')+GameTools.button('将軍','BattlePlanManager.assignGeneral('+a.id+')')+GameTools.button(a.executing?'中止':'計画実行','BattlePlanManager.'+(a.executing?'abort':'execute')+'('+a.id+')',!a.executing&&(!a.arrow||!a.divisions.length))+GameTools.button('未所属へ','ArmyRoster.transfer(BattlePlanManager.armies.find(a=>a.id==='+a.id+').divisions.map(d=>d.id),0);ArmyRoster.render()',a.executing)+'</div></div>';
       }); html+='</div>';
     }
     el.innerHTML=html;

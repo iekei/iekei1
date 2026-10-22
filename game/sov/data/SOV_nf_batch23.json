@@ -4,10 +4,17 @@
     "title": "バルト諸国の民族自決を尊重",
     "x": 14000,
     "y": 440,
-    "cost": 35,
+    "cost": 70,
     "effect": "あらゆる人民は民主的な方法で自らの問題は自らで解決できるようにすべきだ。無論、西側のブルジョワ民主主義国の大半においては、この過程はすぐに巨額のカネによって歪められる。我々はエストニア、ラトビア、リトアニアの労働者が自国政府において公正な代表権を有することを保障する。",
     "prerequisites": [
       "SOV_baltic_security"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 42
+      }
     ]
   },
   {
@@ -19,6 +26,13 @@
     "effect": "バルト諸国はかつてロシアの不可分の一部であった。かの国々の人民は、自らを搾取から守ることのできる大国の保護を必要としている。もしバルト諸国がこれらの条件に同意しないのならば、我らによる保護を確実なものとするため武力に訴えざるを得ないかもしれない。",
     "prerequisites": [
       "SOV_baltic_security"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 58
+      }
     ]
   },
   {
@@ -31,6 +45,13 @@
     "prerequisites": [
       "SOV_respect_baltic_self_determination",
       "SOV_claims_in_baltic"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 51
+      }
     ]
   },
   {
@@ -42,6 +63,13 @@
     "effect": "最後に残る北部国境の脅威はスカンディナヴィア半島の諸政府だ。平和共存には相互信頼が必要だが、イデオロギーが合わない政府は信頼できないという事実を連中に痛感させるべきだ。",
     "prerequisites": [
       "SOV_secure_leningrad"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 45
+      }
     ]
   },
   {
@@ -54,6 +82,18 @@
     "prerequisites": [
       "SOV_respect_baltic_self_determination",
       "SOV_claims_in_baltic"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 53
+      },
+      {
+        "type": "create_wargoal",
+        "target": "POL",
+        "wargoal": "annex_everything"
+      }
     ]
   },
   {
@@ -65,6 +105,18 @@
     "effect": "ポーランド東部領域への権利が回復したことをもって、ポーランドが新たな分割を免れるためには自ら平和的に領土を手渡すしか無いのだということをはっきりさせておく必要があるだろう。",
     "prerequisites": [
       "SOV_claims_on_poland"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 48
+      },
+      {
+        "type": "create_wargoal",
+        "target": "POL",
+        "wargoal": "annex_everything"
+      }
     ]
   },
   {
@@ -76,6 +128,13 @@
     "effect": "単純に東部ポーランドを奪取することも可能だが、むしろこれを通じてポーランドが我々のコミンテルンに参加するならばそちらのほうがより望ましいといえる。この要求に対して我々は何らかの見返りをポーランドに与える必要があるだろうが、もし我々が東部ドイツを与えると約束するならば、彼らもきっと興味をもつはずだ。",
     "prerequisites": [
       "SOV_claims_on_poland"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 43
+      }
     ]
   },
   {
@@ -87,6 +146,23 @@
     "effect": "1918年にルーマニア人は恥知らずにも我々の内紛に乗じて、ベッサラビアを併合した。今こそ我が国に合法的に属する土地を占有していることを奴らに思い出させる時だ、そして奴らが正しい国境線への回復を望まぬのなら、軍事的手段を通して奴らを強制的に追い出すまでだ。",
     "prerequisites": [
       "SOV_claims_on_poland"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 60
+      },
+      {
+        "type": "add_building_construction",
+        "building": "bunker",
+        "level": 2
+      },
+      {
+        "type": "create_wargoal",
+        "target": "ROM",
+        "wargoal": "annex_everything"
+      }
     ]
   },
   {
@@ -98,6 +174,13 @@
     "effect": "過去の経験によれば、周辺諸国は我々が見せたあらゆる弱点を利用するであろう。ヨーロッパで戦争が起こりつつある今、疑わしい忠誠心のある隣人を持つことなどできない。バルカンと小アジアの国々は、我々と共存するか、我々と敵対するかを選択しなければならない。",
     "prerequisites": [
       "SOV_claim_on_bessarabia"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 50
+      }
     ]
   },
   {
@@ -109,6 +192,13 @@
     "effect": "バルカン半島と小アジアの諸国は強力な同盟国となりうる。もし彼らと同盟できれば、彼らのイデオロギー的視点は我々のものとより近似するだろう。",
     "prerequisites": [
       "SOV_claim_on_bessarabia"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 45
+      }
     ]
   }
 ]

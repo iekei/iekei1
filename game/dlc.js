@@ -105,6 +105,7 @@ class DLC {
     if (!gs.xp) gs.xp = { army: 20, navy: 20, air: 20 };
     if (gs.equipment === undefined) gs.equipment = 600;
     if (!gs.doctrine) gs.doctrine = [];
+    if (!gs.doctrineRoutes || typeof gs.doctrineRoutes !== 'object') gs.doctrineRoutes = {};
     if (!gs.intel) gs.intel = { agency: null, level: 0, spies: 0, op: null };
     if (!gs.puppets) gs.puppets = [];
   }
@@ -138,6 +139,34 @@ class DLC {
       .dlc-xpbar { height: 6px; background: #333; border-radius: 3px; overflow: hidden; margin: 4px 0; }
       .dlc-xpbar-fill { height: 100%; background: var(--text-gold); }
       .dlc-badge { display: inline-block; background: var(--accent-green); color: #fff; border-radius: 10px; padding: 2px 8px; font-size: 10px; }
+      .dlc-badge.negative { background: var(--accent-red, #b03a3a); }
+      /* ---- ドクトリンツリー (assets/doctrine-data.js) ---- */
+      .doctrine-tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+      .doctrine-hint { font-size: 11px; color: var(--text-secondary); margin: 6px 0 10px; line-height: 1.6; }
+      .doctrine-routes { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+      .doctrine-route-card { position: relative; width: 190px; padding: 8px 10px; border-radius: 8px; background: var(--bg-panel-light); border: 1px solid var(--border-mil); border-top: 3px solid var(--route-color, #5e9ec7); font-size: 11px; }
+      .doctrine-route-card img { position: absolute; right: 6px; top: 6px; width: 34px; height: 26px; object-fit: contain; opacity: .85; }
+      .doctrine-route-card .dr-name { font-weight: 700; font-size: 12px; color: var(--text-gold); padding-right: 40px; }
+      .doctrine-route-card .dr-desc { color: var(--text-secondary); margin: 4px 0 6px; line-height: 1.5; min-height: 32px; }
+      .doctrine-route-card.chosen { border-color: var(--accent-green); box-shadow: inset 0 0 0 1px rgba(74,196,106,.35); }
+      .doctrine-route-card.locked { opacity: .45; }
+      .doctrine-route-card .dr-state { font-size: 10px; color: var(--accent-green); font-weight: 700; }
+      .doctrine-canvas { position: relative; overflow: auto; max-height: 430px; background: radial-gradient(ellipse at center, #111820 0%, #0a0c0f 100%); border: 1px solid var(--border-mil); border-radius: 6px; }
+      .doctrine-viewport { position: relative; }
+      .doctrine-lines { position: absolute; top: 0; left: 0; pointer-events: none; }
+      .doctrine-node { position: absolute; display: flex; align-items: center; gap: 6px; padding: 6px; box-sizing: border-box; border-radius: 7px; background: var(--bg-panel-light); border: 2px solid var(--border-mil); cursor: pointer; transition: border-color .15s, transform .15s; }
+      .doctrine-node:hover { border-color: var(--accent-blue); transform: scale(1.02); z-index: 10; }
+      .doctrine-node .dn-icon { width: 40px; height: 32px; object-fit: contain; flex: 0 0 40px; background: #0c1116; border-radius: 4px; }
+      .doctrine-node .dn-icon.placeholder { display: flex; align-items: center; justify-content: center; font-size: 16px; }
+      .doctrine-node .dn-body { flex: 1; min-width: 0; }
+      .doctrine-node .dn-title { font-size: 11px; font-weight: 700; line-height: 1.25; color: var(--text-primary); }
+      .doctrine-node .dn-effect { font-size: 9px; line-height: 1.3; color: var(--text-secondary); margin-top: 2px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+      .doctrine-node .dn-cost { font-size: 10px; color: var(--text-gold); margin-top: 2px; }
+      .doctrine-node.unlocked { background: #16241a; border-color: var(--accent-green); }
+      .doctrine-node.unlocked .dn-cost { color: var(--accent-green); }
+      .doctrine-node.selectable { border-color: #4a8f5e; box-shadow: 0 0 6px rgba(74,196,106,.25); }
+      .doctrine-node.locked { opacity: .42; cursor: not-allowed; }
+      .doctrine-bonus-list { display: flex; gap: 6px; flex-wrap: wrap; }
     `;
     document.head.appendChild(style);
 
@@ -229,7 +258,7 @@ class DLC {
   static collect() {
     const gs = CoreEngine.gameState;
     return {
-      xp: gs.xp, equipment: gs.equipment, doctrine: gs.doctrine,
+      xp: gs.xp, equipment: gs.equipment, doctrine: gs.doctrine, doctrineRoutes: gs.doctrineRoutes,
       intel: gs.intel, puppets: gs.puppets,
       designs: EquipmentDesigner.designs,
       mio: MIOManager.state,
@@ -243,6 +272,7 @@ class DLC {
     if (data.xp) gs.xp = data.xp;
     if (data.equipment !== undefined) gs.equipment = data.equipment;
     if (data.doctrine) gs.doctrine = data.doctrine;
+    if (data.doctrineRoutes) gs.doctrineRoutes = data.doctrineRoutes;
     if (data.intel) gs.intel = data.intel;
     if (data.puppets) gs.puppets = data.puppets;
     if (data.designs) EquipmentDesigner.designs = data.designs;
@@ -255,73 +285,308 @@ class DLC {
 // 1. DoctrineManager — 陸/海/空ドクトリン
 // ==========================================================
 class DoctrineManager {
-  static service = 'land';   // land | sea | air
-  static branchIdx = 0;
+  static service = 'land';          // land | naval | air
+  static NODE_W = 190;
+  static NODE_H = 96;
+  static COL_GAP = 42;
+  static ROW_GAP = 30;
 
-  static unlock(node, branch, service) {
-    const gs = CoreEngine.gameState;
-    if (gs.doctrine.includes(node.id)) return;
-    const okReq = node.req.every(r => gs.doctrine.includes(r));
-    if (!okReq) { GameUI.notify('前提ドクトリンが未習得です。', 'alert'); return; }
-    if (gs.xp[branch.xpKey] < node.cost) { GameUI.notify('XPが不足しています (' + node.cost + ' XP必要)。', 'alert'); return; }
-    gs.xp[branch.xpKey] -= node.cost;
-    gs.doctrine.push(node.id);
-    Object.entries(node.eff).forEach(([k, v]) => {
-      gs.cardModifiers[k] = (gs.cardModifiers[k] || 0) + v;
+  // ---- データソース: assets/doctrine-data.js (42ノード) ----
+  // 未読み込み時は旧 DLC_DOCTRINES を同じ構造へ変換してフォールバックする。
+  static _data = null;
+
+  static data() {
+    if (DoctrineManager._data) return DoctrineManager._data;
+    if (typeof window !== 'undefined' && window.DOCTRINE_DATA?.branches) {
+      DoctrineManager._data = window.DOCTRINE_DATA;
+      return DoctrineManager._data;
+    }
+    const branches = {};
+    Object.entries(DLC_DOCTRINES || {}).forEach(([key, svc]) => {
+      const routes = svc.branches.map(branch => ({ id: branch.id, name: branch.name, desc: '', icon: '', color: '#5e9ec7' }));
+      const nodes = svc.branches.flatMap(branch => branch.nodes.map(node => ({
+        id: node.id, name: node.name, desc: '', route: branch.id,
+        tier: Math.round((node.y || 0) / 100), icon: '', cost: node.cost,
+        requires: node.req || [], effects: node.eff || {}
+      })));
+      branches[key] = { label: svc.label, xpKey: svc.xpKey, routes, nodes };
     });
-    CoreEngine.log('📜 ドクトリン習得: ' + node.name + ' (-' + node.cost + ' XP)');
-    GameUI.notify('ドクトリン習得: ' + node.name, 'success');
-    MultiplayerManager.broadcast({ type: 'doctrine', id: node.id });
-    DoctrineManager.render();
+    DoctrineManager._data = { branches, effectLabels: {} };
+    return DoctrineManager._data;
   }
 
+  static branch(service = DoctrineManager.service) {
+    return DoctrineManager.data().branches[service] || DoctrineManager.data().branches.land;
+  }
+
+  static nodes(service = DoctrineManager.service) {
+    return DoctrineManager.branch(service).nodes || [];
+  }
+
+  static node(id) {
+    for (const service of Object.keys(DoctrineManager.data().branches)) {
+      const found = DoctrineManager.nodes(service).find(node => node.id === id);
+      if (found) return found;
+    }
+    return null;
+  }
+
+  static xpKey(service = DoctrineManager.service) {
+    return DoctrineManager.branch(service).xpKey;
+  }
+
+  static ensure() {
+    const gs = CoreEngine.gameState;
+    if (!Array.isArray(gs.doctrine)) gs.doctrine = [];
+    if (!gs.doctrineRoutes || typeof gs.doctrineRoutes !== 'object') gs.doctrineRoutes = {};
+    return gs;
+  }
+
+  static owned(id) { return DoctrineManager.ensure().doctrine.includes(id); }
+
+  // ---- ルート排他: 一度ルートを選ぶと他ルートは永久ロック (HOI4 仕様) ----
+  static chosenRoute(service = DoctrineManager.service) {
+    return DoctrineManager.ensure().doctrineRoutes[service] || null;
+  }
+
+  static routeLocked(routeId, service = DoctrineManager.service) {
+    const chosen = DoctrineManager.chosenRoute(service);
+    return !!chosen && chosen !== routeId;
+  }
+
+  static isRouteComplete(routeId, service = DoctrineManager.service) {
+    return DoctrineManager.nodes(service).filter(node => node.route === routeId)
+      .every(node => DoctrineManager.owned(node.id));
+  }
+
+  // ---- 前提判定 ----
+  static requiresMet(node) {
+    const requires = node.requires || [];
+    if (!requires.length) return true;
+    const owned = requires.filter(id => DoctrineManager.owned(id));
+    return node.anyRequires ? owned.length > 0 : owned.length === requires.length;
+  }
+
+  // 同一グループ (同時取得不可の分岐) に取得済みノードがあるか
+  static groupTaken(node) {
+    if (!node.group) return false;
+    return DoctrineManager.nodes(DoctrineManager.service)
+      .some(other => other.id !== node.id && other.group === node.group && DoctrineManager.owned(other.id));
+  }
+
+  static canUnlock(node) {
+    if (!node || DoctrineManager.owned(node.id)) return false;
+    if (DoctrineManager.routeLocked(node.route)) return false;
+    if (!DoctrineManager.requiresMet(node)) return false;
+    if (DoctrineManager.groupTaken(node)) return false;
+    return Number(CoreEngine.gameState.xp[DoctrineManager.xpKey()] || 0) >= Number(node.cost || 0);
+  }
+
+  static statusOf(node) {
+    if (DoctrineManager.owned(node.id)) return 'unlocked';
+    if (DoctrineManager.routeLocked(node.route)) return 'locked';
+    if (DoctrineManager.groupTaken(node)) return 'locked';
+    if (!DoctrineManager.requiresMet(node)) return 'locked';
+    return 'selectable';
+  }
+
+  // ---- XP を消費して解禁 ----
+  static unlock(nodeOrId) {
+    DoctrineManager.ensure();
+    const gs = CoreEngine.gameState;
+    const node = typeof nodeOrId === 'string' ? DoctrineManager.node(nodeOrId) : nodeOrId;
+    if (!node) return false;
+    const service = Object.keys(DoctrineManager.data().branches)
+      .find(key => DoctrineManager.nodes(key).some(item => item.id === node.id)) || DoctrineManager.service;
+    if (DoctrineManager.owned(node.id)) return false;
+    if (DoctrineManager.routeLocked(node.route, service)) {
+      GameUI.notify('この系統は選択済みのルートと排他的です。', 'alert');
+      return false;
+    }
+    if (!DoctrineManager.requiresMet(node)) { GameUI.notify('前提ドクトリンが未習得です。', 'alert'); return false; }
+    if (DoctrineManager.groupTaken(node)) { GameUI.notify('同じ分岐の別ドクトリンを取得済みです。', 'alert'); return false; }
+    const key = DoctrineManager.xpKey(service);
+    const cost = Number(node.cost || 0);
+    if (Number(gs.xp[key] || 0) < cost) {
+      GameUI.notify('XPが不足しています (' + cost + ' XP必要)。', 'alert');
+      return false;
+    }
+    gs.xp[key] = Number(gs.xp[key] || 0) - cost;
+    gs.doctrine.push(node.id);
+    // 最初のノード取得でルートを確定 (以後、他ルートは永久ロック)
+    if (!gs.doctrineRoutes[service]) gs.doctrineRoutes[service] = node.route;
+    CoreEngine.log('📜 ドクトリン習得: ' + node.name + ' (-' + cost + ' XP)');
+    GameUI.notify('ドクトリン習得: ' + node.name, 'success');
+    MultiplayerManager.broadcast({ type: 'doctrine', id: node.id, service, route: gs.doctrineRoutes[service] });
+    DoctrineManager.render();
+    return true;
+  }
+
+  // ルートを先に確定させる (HOI4 の doctrine tree 選択と同じ不可逆操作)
+  static chooseRoute(routeId, service = DoctrineManager.service) {
+    const gs = DoctrineManager.ensure();
+    const chosen = gs.doctrineRoutes[service];
+    if (chosen && chosen !== routeId) { GameUI.notify('ルートは変更できません。', 'alert'); return false; }
+    if (chosen === routeId) return true;
+    gs.doctrineRoutes[service] = routeId;
+    const route = DoctrineManager.branch(service).routes.find(item => item.id === routeId);
+    CoreEngine.log('📜 ドクトリン系統を選択: ' + (route ? route.name : routeId) + ' (他系統はロックされます)');
+    GameUI.notify('ドクトリン系統を選択: ' + (route ? route.name : routeId), 'success');
+    MultiplayerManager.broadcast({ type: 'doctrine_route', service, route: routeId });
+    DoctrineManager.render();
+    return true;
+  }
+
+  // ---- 効果集計 ----
+  static bonuses(service = DoctrineManager.service) {
+    const totals = {};
+    DoctrineManager.ensure().doctrine.forEach(id => {
+      const node = DoctrineManager.node(id);
+      if (!node) return;
+      const nodeService = Object.keys(DoctrineManager.data().branches)
+        .find(key => DoctrineManager.nodes(key).some(item => item.id === id));
+      if (service && nodeService !== service) return;
+      Object.entries(node.effects || {}).forEach(([key, value]) => {
+        totals[key] = (totals[key] || 0) + Number(value || 0);
+      });
+    });
+    return totals;
+  }
+
+  // 戦闘計算から参照される補正値 (乗算用)
+  static modifier(service, key) {
+    return Number(DoctrineManager.bonuses(service)[key] || 0);
+  }
+
+  // 互換 API (game/js/combat.js などが参照する名前)
+  static effects(service = 'land') { return DoctrineManager.bonuses(service); }
+
+  static effectText(node) {
+    const labels = DoctrineManager.data().effectLabels || {};
+    const parts = Object.entries(node.effects || {}).map(([key, value]) => {
+      const label = labels[key] || key;
+      const abs = Math.abs(Number(value));
+      const shown = abs < 1 ? (value > 0 ? '+' : '') + Math.round(value * 100) + '%' : (value > 0 ? '+' : '') + value;
+      return label + ' ' + shown;
+    });
+    return parts.join(' / ') || '効果なし';
+  }
+
+  // ---- 描画 ----
   static render() {
     const el = document.getElementById('doctrine-content');
     if (!el) return;
+    DoctrineManager.ensure();
     const gs = CoreEngine.gameState;
-    const svc = DLC_DOCTRINES[DoctrineManager.service];
-    // タブ
-    let html = '<div class="dlc-section"><div style="display:flex;gap:4px;margin-bottom:8px;">';
-    Object.entries(DLC_DOCTRINES).forEach(([key, s]) => {
-      html += '<button class="research-tab' + (key === DoctrineManager.service ? ' active' : '') + '" onclick="DoctrineManager.setService(\'' + key + '\')">' + s.label + ' <span style="color:var(--text-gold)">' + Math.floor(gs.xp[s.xpKey]) + 'XP</span></button>';
-    });
-    html += '</div>';
-    // 分岐選択
-    svc.branches.forEach((br, i) => {
-      html += '<button class="research-tab' + (i === DoctrineManager.branchIdx ? ' active' : '') + '" onclick="DoctrineManager.setBranch(' + i + ')">' + br.name + '</button> ';
-    });
-    html += '</div>';
+    const service = DoctrineManager.service;
+    const branch = DoctrineManager.branch(service);
+    const nodes = DoctrineManager.nodes(service);
+    const routes = branch.routes || [];
+    const chosen = DoctrineManager.chosenRoute(service);
 
-    // ツリー (直線のみで描画)
-    const br = svc.branches[DoctrineManager.branchIdx] || svc.branches[0];
-    html += '<div class="dlc-section"><div class="dlc-tree-canvas" style="height:360px;"><div class="dlc-tree-viewport" style="width:340px;height:270px;">';
+    let html = '<div class="dlc-section"><div class="doctrine-tabs">';
+    Object.entries(DoctrineManager.data().branches).forEach(([key, value]) => {
+      html += '<button class="research-tab' + (key === service ? ' active' : '') + '" onclick="DoctrineManager.setService(\'' + key + '\')">' +
+        value.label + ' <span style="color:var(--text-gold)">' + Math.floor(gs.xp[value.xpKey] || 0) + ' XP</span></button>';
+    });
+    html += '</div>';
+    html += '<p class="doctrine-hint">ルート（系統）は相互排他です。最初のノードを取得した系統に<b>永久に固定</b>され、他の系統はロックされます。ノードは XP で解禁します。</p>';
+
+    // ルート選択カード
+    html += '<div class="doctrine-routes">';
+    routes.forEach(route => {
+      const isChosen = chosen === route.id;
+      const locked = !!chosen && !isChosen;
+      const complete = DoctrineManager.isRouteComplete(route.id, service);
+      html += '<div class="doctrine-route-card' + (isChosen ? ' chosen' : '') + (locked ? ' locked' : '') + '" style="--route-color:' + (route.color || '#5e9ec7') + '">' +
+        (route.icon ? '<img src="' + route.icon + '" alt="">' : '') +
+        '<div class="dr-name">' + GameTools.escape(route.name) + (complete ? ' ✅' : '') + '</div>' +
+        '<div class="dr-desc">' + GameTools.escape(route.desc || '') + '</div>' +
+        (isChosen
+          ? '<span class="dr-state">選択中</span>'
+          : locked
+            ? '<span class="dr-state">ロック</span>'
+            : '<button class="dlc-btn" onclick="DoctrineManager.chooseRoute(\'' + route.id + '\')">この系統を選択</button>') +
+        '</div>';
+    });
+    html += '</div></div>';
+
+    // ツリー本体 (ルート = 列 / tier = 行)
+    const colW = DoctrineManager.NODE_W + DoctrineManager.COL_GAP;
+    const rowH = DoctrineManager.NODE_H + DoctrineManager.ROW_GAP;
+    const maxTier = Math.max(0, ...nodes.map(node => Number(node.tier) || 0));
+    const width = routes.length * colW + DoctrineManager.COL_GAP;
+    const height = (maxTier + 1) * rowH + DoctrineManager.ROW_GAP;
+    const routeIndex = {};
+    routes.forEach((route, index) => { routeIndex[route.id] = index; });
+
+    const posOf = node => ({
+      x: DoctrineManager.COL_GAP + (routeIndex[node.route] ?? 0) * colW,
+      y: DoctrineManager.ROW_GAP + (Number(node.tier) || 0) * rowH
+    });
+
+    // 接続線: 必ず「親の下端 → 子の上端」を水平/垂直のみで結ぶ (曲線は使わない)
     let lines = '';
-    br.nodes.forEach(n => n.req.forEach(r => {
-      const pre = br.nodes.find(x => x.id === r);
-      if (pre) lines += '<path d="' + dlcOrthoPath(pre.x + 65, pre.y + 38, n.x + 65, n.y + 10) + '" stroke="' + (gs.doctrine.includes(r) ? '#4ac46a' : '#3a4a5a') + '" stroke-width="2" fill="none" opacity="0.7"/>';
-    }));
-    html += '<svg class="dlc-svg-lines" width="340" height="270">' + lines + '</svg>';
-    br.nodes.forEach(n => {
-      const unlocked = gs.doctrine.includes(n.id);
-      const selectable = !unlocked && n.req.every(r => gs.doctrine.includes(r));
-      let cls = 'dlc-node' + (unlocked ? ' unlocked' : selectable ? ' selectable' : ' locked');
-      html += '<div class="' + cls + '" style="left:' + n.x + 'px;top:' + n.y + 'px;" onclick="DoctrineManager.unlock(' + 'DLC_DOCTRINES.' + DoctrineManager.service + '.branches[' + DoctrineManager.branchIdx + '].nodes[' + br.nodes.indexOf(n) + '], DLC_DOCTRINES.' + DoctrineManager.service + '.branches[' + DoctrineManager.branchIdx + '], \'' + DoctrineManager.service + '\')">' +
-        '<div class="dn-title">' + n.name + '</div>' +
-        '<div class="dn-cost">' + (unlocked ? '✅ 習得済' : n.cost + ' XP') + '</div></div>';
+    nodes.forEach(node => {
+      const to = posOf(node);
+      (node.requires || []).forEach(requiredId => {
+        const parent = nodes.find(item => item.id === requiredId);
+        if (!parent) return;
+        const from = posOf(parent);
+        const x1 = from.x + DoctrineManager.NODE_W / 2;
+        const y1 = from.y + DoctrineManager.NODE_H;
+        const x2 = to.x + DoctrineManager.NODE_W / 2;
+        const y2 = to.y;
+        let d;
+        if (Math.abs(x1 - x2) < 0.5) {
+          d = 'M' + x1 + ',' + y1 + ' L' + x2 + ',' + y2;
+        } else {
+          const midY = (y1 + y2) / 2;
+          d = 'M' + x1 + ',' + y1 + ' L' + x1 + ',' + midY + ' L' + x2 + ',' + midY + ' L' + x2 + ',' + y2;
+        }
+        const active = DoctrineManager.owned(requiredId);
+        lines += '<path d="' + d + '" stroke="' + (active ? '#4ac46a' : '#3a4a5a') + '" stroke-width="2" fill="none" opacity="' + (active ? '0.9' : '0.55') + '"/>';
+      });
+    });
+
+    html += '<div class="dlc-section"><div class="doctrine-canvas"><div class="doctrine-viewport" style="width:' + width + 'px;height:' + height + 'px;">';
+    html += '<svg class="doctrine-lines" width="' + width + '" height="' + height + '">' + lines + '</svg>';
+    nodes.forEach(node => {
+      const pos = posOf(node);
+      const status = DoctrineManager.statusOf(node);
+      const item = node;
+      const title = (item.desc ? item.desc + '\n' : '') + DoctrineManager.effectText(item) +
+        (status === 'locked' && DoctrineManager.routeLocked(item.route) ? '\n※ 他の系統を選択済みのため取得不可' : '');
+      html += '<div class="doctrine-node ' + status + '" style="left:' + pos.x + 'px;top:' + pos.y + 'px;width:' + DoctrineManager.NODE_W + 'px;height:' + DoctrineManager.NODE_H + 'px;"' +
+        ' title="' + GameTools.escape(title) + '" onclick="DoctrineManager.unlock(\'' + item.id + '\')">' +
+        (item.icon ? '<img class="dn-icon" src="' + item.icon + '" alt="">' : '<span class="dn-icon placeholder">📜</span>') +
+        '<div class="dn-body"><div class="dn-title">' + GameTools.escape(item.name || item.id) + '</div>' +
+        '<div class="dn-effect">' + GameTools.escape(DoctrineManager.effectText(item)) + '</div>' +
+        '<div class="dn-cost">' + (status === 'unlocked' ? '✅ 習得済' : item.cost + ' XP') + '</div></div>' +
+        '</div>';
     });
     html += '</div></div></div>';
 
-    // 効果説明
-    html += '<div class="dlc-section"><h3>習得済み効果</h3>';
-    const done = br.nodes.filter(n => gs.doctrine.includes(n.id));
-    html += done.length ? done.map(n => '<span class="dlc-badge">' + n.name + '</span> ').join('') : '<span style="color:var(--text-secondary);font-size:11px;">まだありません</span>';
+    // 取得済みボーナス一覧
+    const bonuses = DoctrineManager.bonuses(service);
+    const labels = DoctrineManager.data().effectLabels || {};
+    const entries = Object.entries(bonuses).filter(([, value]) => Number(value) !== 0);
+    html += '<div class="dlc-section"><h3>' + branch.label + 'ドクトリン補正 (グローバル)</h3>';
+    html += entries.length
+      ? '<div class="doctrine-bonus-list">' + entries.map(([key, value]) => {
+        const abs = Math.abs(Number(value));
+        const shown = abs < 1 ? (value > 0 ? '+' : '') + Math.round(value * 100) + '%' : (value > 0 ? '+' : '') + value;
+        return '<span class="dlc-badge' + (value < 0 ? ' negative' : '') + '">' + GameTools.escape(labels[key] || key) + ' ' + shown + '</span>';
+      }).join('') + '</div>'
+      : '<span style="color:var(--text-secondary);font-size:11px;">まだ習得していません。XPを消費してドクトリンを解禁してください。</span>';
     html += '</div>';
+
     el.innerHTML = html;
   }
 
-  static setService(k) { DoctrineManager.service = k; DoctrineManager.branchIdx = 0; DoctrineManager.render(); }
-  static setBranch(i) { DoctrineManager.branchIdx = i; DoctrineManager.render(); }
+  static setService(k) { DoctrineManager.service = k; DoctrineManager.render(); }
 }
+if (typeof window !== 'undefined') window.DoctrineManager = DoctrineManager;
 
 // ==========================================================
 // 2. EquipmentDesigner — 兵器モジュール設計 (戦車/艦船/航空機)
@@ -331,30 +596,116 @@ class EquipmentDesigner {
   static category = 'tank';
   static draft = { tank: { hull: null, modules: {} }, ship: { hull: null, modules: {} }, plane: { hull: null, modules: {} } };
 
+  // ---- 設計データ: 車体/船体/機体 + モジュール ----
+  // requires は実際の技術 ID (ger/tec/data 等に存在するもの) を指定する。
+  // 未研究のモジュールはドロップダウンで選択できず、🔒 と必要技術が表示される。
   static DATA = {
-  tank: { label: '戦車', xpKey: 'army', hulls: [
-  { id: 'lt', name: '軽戦車車体', cost: 10, capacity: 3, weight: 8, baseSpeed: 42 }, { id: 'mt', name: '中戦車車体', cost: 20, capacity: 5, weight: 18, baseSpeed: 32 }, { id: 'ht', name: '重戦車車体', cost: 30, capacity: 7, weight: 32, baseSpeed: 24 }],
-  slots: [
-  { id: 'gun', name: '主砲', options: [{ id: 'how', name: '榴弾砲', cost: 15, weight: 3, attack: 15, role: '歩兵支援' }, { id: 'at', name: '対戦車砲', cost: 15, weight: 4, attack: 17, role: '対戦車' }, { id: 'aa', name: '高射砲', cost: 12, weight: 2, attack: 10, role: '対空' }] },
-  { id: 'armor', name: '装甲', options: [{ id: 'steel', name: '均質鋼板', cost: 10, weight: 5, defense: 12 }, { id: 'slope', name: '傾斜装甲', cost: 18, weight: 4, defense: 16 }] },
-  { id: 'engine', name: 'エンジン', options: [{ id: 'gas', name: 'ガソリン 400馬力', cost: 10, weight: 2, power: 12, engineCapacity: 3 }, { id: 'diesel', name: 'ディーゼル 550馬力', cost: 14, weight: 3, power: 18, engineCapacity: 5 }] }
-  ]},
-  ship: { label: '艦船', xpKey: 'navy', hulls: [
-  { id: 'dd', name: '駆逐艦船体', cost: 10, capacity: 4, weight: 12, baseSpeed: 34 }, { id: 'cl', name: '巡洋艦船体', cost: 20, capacity: 6, weight: 24, baseSpeed: 28 }, { id: 'bb', name: '戦艦船体', cost: 35, capacity: 9, weight: 48, baseSpeed: 22 }, { id: 'cv', name: '空母船体', cost: 40, capacity: 8, weight: 42, baseSpeed: 25 }],
-  slots: [
-  { id: 'gun', name: '主砲', options: [{ id: 'lgun', name: '大口径主砲', cost: 18, weight: 5, attack: 20, role: '対艦' }, { id: 'aa', name: '対空機銃', cost: 10, weight: 2, attack: 11, role: '対空' }] },
-  { id: 'torp', name: '魚雷', options: [{ id: 'tub', name: '魚雷発射管', cost: 12, weight: 3, attack: 16, role: '対艦雷撃' }, { id: 'none', name: '装備なし', cost: 0, weight: 0 }] },
-  { id: 'radar', name: '電装', options: [{ id: 'radar', name: 'レーダー', cost: 20, weight: 1, attack: 4, defense: 8, role: '索敵' }, { id: 'none2', name: '装備なし', cost: 0, weight: 0 }] },
-  { id: 'engine', name: '機関', options: [{ id: 'steam', name: '蒸気タービン', cost: 14, weight: 4, power: 16, engineCapacity: 6 }, { id: 'diesel', name: '艦用ディーゼル', cost: 12, weight: 3, power: 11, engineCapacity: 5 }] }
-  ]},
-  plane: { label: '航空機', xpKey: 'air', hulls: [
-  { id: 'fighter', name: '戦闘機機体', cost: 10, capacity: 3, weight: 4, baseSpeed: 520, requires: 'aircraft_technology' }, { id: 'bomber', name: '爆撃機機体', cost: 20, capacity: 6, weight: 9, baseSpeed: 410, requires: 'air_bomber_technology' }, { id: 'carrier', name: '艦上機機体', cost: 18, capacity: 4, weight: 6, baseSpeed: 460, requires: 'carrier_technology' }],
-  slots: [
-  { id: 'engine', name: 'エンジン', options: [{ id: 'e1', name: '標準エンジン', cost: 10, weight: 2, power: 14, engineCapacity: 3, requires: 'aircraft_engine_1' }, { id: 'e2', name: '高出力エンジン', cost: 18, weight: 3, power: 24, engineCapacity: 6, requires: 'aircraft_engine_2' }] },
-  { id: 'weapon', name: '武装', options: [{ id: 'mg', name: '機銃強化', cost: 10, weight: 1, attack: 12, role: '制空', requires: 'fighter_weapons_1' }, { id: 'rocket', name: 'ロケット弾', cost: 16, weight: 2, attack: 18, role: '対地攻撃', requires: 'air_ground_support' }, { id: 'torpedo', name: '航空魚雷', cost: 18, weight: 3, attack: 21, role: '対艦攻撃', requires: 'naval_strike_technology' }] },
-  { id: 'armor', name: '防弾', options: [{ id: 'plate', name: '防弾鋼板', cost: 10, weight: 2, defense: 12 }, { id: 'none3', name: 'なし', cost: 0, weight: 0 }] },
-  { id: 'fuel', name: '燃料タンク', options: [{ id: 'drop_tank', name: '増槽（Drop Tank）', cost: 12, weight: 2, defense: 3, role: '航続距離 +90% / 機動性 -10%' }, { id: 'none4', name: '標準燃料', cost: 0, weight: 0 }] }
-  ]}
+    tank: { label: '戦車', xpKey: 'army', hulls: [
+      { id: 'lt', name: '軽戦車車体', cost: 10, capacity: 3, weight: 8, baseSpeed: 42, requires: ['basic_light_tank_chassis'] },
+      { id: 'mt', name: '中戦車車体', cost: 20, capacity: 5, weight: 18, baseSpeed: 32, requires: ['basic_medium_tank_chassis'] },
+      { id: 'ht', name: '重戦車車体', cost: 30, capacity: 7, weight: 32, baseSpeed: 24, requires: ['basic_heavy_tank_chassis'] },
+      { id: 'ilt', name: '改良軽戦車車体', cost: 16, capacity: 4, weight: 10, baseSpeed: 48, requires: ['improved_light_tank_chassis'] },
+      { id: 'imt', name: '改良中戦車車体', cost: 26, capacity: 6, weight: 20, baseSpeed: 38, requires: ['improved_medium_tank_chassis'] },
+      { id: 'iht', name: '改良重戦車車体', cost: 38, capacity: 8, weight: 34, baseSpeed: 27, requires: ['improved_heavy_tank_chassis'] },
+      { id: 'amt', name: '先進中戦車車体', cost: 34, capacity: 7, weight: 22, baseSpeed: 42, requires: ['advanced_medium_tank_chassis'] },
+      { id: 'mbt', name: '主力戦車車体', cost: 46, capacity: 9, weight: 30, baseSpeed: 40, requires: ['main_battle_tank_chassis'] },
+      { id: 'sht', name: '超重戦車車体', cost: 55, capacity: 12, weight: 60, baseSpeed: 18, requires: ['super_heavy_tank_chassis'] }
+    ], slots: [
+      { id: 'gun', name: '主砲', options: [
+        { id: 'how', name: '榴弾砲', cost: 8, weight: 3, power: 4, soft: 12, hard: 6, piercing: 20, requires: ['artillery1'] },
+        { id: 'at', name: '対戦車砲', cost: 10, weight: 4, power: 3, soft: 7, hard: 18, piercing: 45, requires: ['artillery2'] },
+        { id: 'long', name: '長砲身砲', cost: 14, weight: 5, power: 4, soft: 10, hard: 22, piercing: 60, requires: ['artillery3'] },
+        { id: 'heavy', name: '重榴弾砲', cost: 18, weight: 7, power: 5, soft: 20, hard: 12, piercing: 55, requires: ['artillery5'] }
+      ] },
+      { id: 'turret', name: '砲塔', options: [
+        { id: 'std', name: '標準砲塔', cost: 5, weight: 4, power: 2, soft: 2, armor: 2 },
+        { id: 'large', name: '大型砲塔', cost: 10, weight: 7, power: 3, soft: 4, hard: 2, reliability: -2 },
+        { id: 'oscillating', name: '揺動砲塔', cost: 12, weight: 6, power: 4, hard: 4, reliability: 2, requires: ['armor_tech_2'] }
+      ] },
+      { id: 'armor', name: '装甲', options: [
+        { id: 'steel', name: '均質鋼板', cost: 8, weight: 5, armor: 12, requires: ['armor_tech_1'] },
+        { id: 'slope', name: '傾斜装甲', cost: 12, weight: 4, armor: 18, reliability: -2, requires: ['armor_tech_2'] },
+        { id: 'welded', name: '溶接装甲', cost: 16, weight: 3, armor: 24, requires: ['armor_tech_3'] },
+        { id: 'composite', name: '複合装甲', cost: 22, weight: 3, armor: 32, reliability: 3, requires: ['armor_tech_4'] }
+      ] },
+      { id: 'engine', name: 'エンジン', options: [
+        { id: 'gas', name: 'ガソリン 400馬力', cost: 8, weight: 2, power: 12, engineCapacity: 3, speed: 4, requires: ['engine_tech_1'] },
+        { id: 'diesel', name: 'ディーゼル 550馬力', cost: 12, weight: 3, power: 18, engineCapacity: 5, speed: 6, reliability: 2, requires: ['engine_tech_2'] },
+        { id: 'high', name: '高出力 700馬力', cost: 18, weight: 3, power: 26, engineCapacity: 7, speed: 9, reliability: -2, requires: ['engine_tech_3'] },
+        { id: 'turbine', name: 'ガスタービン', cost: 26, weight: 4, power: 36, engineCapacity: 9, speed: 14, reliability: -4, requires: ['engine_tech_4'] }
+      ] },
+      { id: 'radio', name: '無線', options: [
+        { id: 'none', name: '装備なし', cost: 0, weight: 0 },
+        { id: 'radio1', name: '無線機', cost: 5, weight: 1, soft: 2, reliability: 3, requires: ['radio'] },
+        { id: 'radio2', name: '改良無線機', cost: 8, weight: 1, soft: 3, hard: 2, reliability: 4, requires: ['improved_radio'] }
+      ] },
+      { id: 'suspension', name: '足回り', options: [
+        { id: 'bogie', name: 'ボギー式', cost: 4, weight: 3, speed: 2, reliability: 1 },
+        { id: 'torsion', name: 'トーションバー', cost: 8, weight: 2, speed: 4, reliability: -1, requires: ['engine_tech_2'] }
+      ] }
+    ] },
+    ship: { label: '艦船', xpKey: 'navy', hulls: [
+      { id: 'dd', name: '駆逐艦船体', cost: 10, capacity: 4, weight: 12, baseSpeed: 34, requires: ['early_ship_hull_light'] },
+      { id: 'cl', name: '巡洋艦船体', cost: 20, capacity: 6, weight: 24, baseSpeed: 28, requires: ['early_ship_hull_cruiser'] },
+      { id: 'bb', name: '戦艦船体', cost: 35, capacity: 9, weight: 48, baseSpeed: 22, requires: ['early_ship_hull_heavy'] },
+      { id: 'cv', name: '空母船体', cost: 40, capacity: 8, weight: 42, baseSpeed: 25, requires: ['early_ship_hull_carrier'] },
+      { id: 'ss', name: '潜水艦船体', cost: 16, capacity: 3, weight: 10, baseSpeed: 18, requires: ['early_ship_hull_submarine'] },
+      { id: 'dd2', name: '改良駆逐艦船体', cost: 16, capacity: 5, weight: 13, baseSpeed: 38, requires: ['improved_ship_hull_light'] },
+      { id: 'cl2', name: '改良巡洋艦船体', cost: 26, capacity: 7, weight: 26, baseSpeed: 32, requires: ['improved_ship_hull_cruiser'] },
+      { id: 'bb2', name: '改良戦艦船体', cost: 44, capacity: 10, weight: 52, baseSpeed: 26, requires: ['improved_ship_hull_heavy'] },
+      { id: 'cv2', name: '改良空母船体', cost: 48, capacity: 9, weight: 45, baseSpeed: 29, requires: ['improved_ship_hull_carrier'] },
+      { id: 'ss2', name: '改良潜水艦船体', cost: 22, capacity: 4, weight: 11, baseSpeed: 21, requires: ['improved_ship_hull_submarine'] }
+    ], slots: [
+      { id: 'gun', name: '主砲', options: [
+        { id: 'lgun', name: '大口径主砲', cost: 18, weight: 5, power: 4, attack: 22, requires: ['artillery3'] },
+        { id: 'ddgun', name: '中口径主砲', cost: 10, weight: 3, power: 2, attack: 12, requires: ['artillery1'] },
+        { id: 'aa', name: '対空機銃', cost: 8, weight: 2, attack: 8, defense: 6, requires: ['artillery1'] }
+      ] },
+      { id: 'torp', name: '魚雷', options: [
+        { id: 'none', name: '装備なし', cost: 0, weight: 0 },
+        { id: 'tub', name: '魚雷発射管', cost: 12, weight: 3, attack: 16, requires: ['early_ship_hull_submarine'] }
+      ] },
+      { id: 'armor', name: '装甲', options: [
+        { id: 'light', name: '軽装甲', cost: 8, weight: 6, armor: 8, requires: ['armor_tech_1'] },
+        { id: 'heavy', name: '重装甲', cost: 18, weight: 14, armor: 20, speed: -4, requires: ['armor_tech_3'] }
+      ] },
+      { id: 'radar', name: '電装', options: [
+        { id: 'none', name: '装備なし', cost: 0, weight: 0 },
+        { id: 'radar', name: 'レーダー', cost: 10, weight: 1, attack: 4, defense: 6, reliability: 3, requires: ['radio'] },
+        { id: 'radar2', name: '改良レーダー', cost: 16, weight: 1, attack: 6, defense: 10, reliability: 5, requires: ['improved_radio'] }
+      ] },
+      { id: 'engine', name: '機関', options: [
+        { id: 'steam', name: '蒸気タービン', cost: 12, weight: 4, power: 16, engineCapacity: 5, speed: 2, requires: ['engines_1'] },
+        { id: 'diesel', name: '艦用ディーゼル', cost: 16, weight: 3, power: 22, engineCapacity: 7, speed: 4, requires: ['engines_3'] }
+      ] }
+    ] },
+    plane: { label: '航空機', xpKey: 'air', hulls: [
+      { id: 'fighter', name: '戦闘機機体', cost: 10, capacity: 3, weight: 4, baseSpeed: 520, requires: ['iw_small_airframe'] },
+      { id: 'fighter2', name: '改良戦闘機機体', cost: 16, capacity: 3, weight: 4, baseSpeed: 570, requires: ['basic_small_airframe'] },
+      { id: 'fighter3', name: '先進戦闘機機体', cost: 24, capacity: 4, weight: 4, baseSpeed: 640, requires: ['improved_small_airframe'] },
+      { id: 'cas', name: '近接航空支援機機体', cost: 18, capacity: 4, weight: 6, baseSpeed: 460, requires: ['iw_medium_airframe'] },
+      { id: 'bomber', name: '戦術爆撃機機体', cost: 22, capacity: 5, weight: 9, baseSpeed: 410, requires: ['basic_medium_airframe'] },
+      { id: 'strategic', name: '戦略爆撃機機体', cost: 34, capacity: 6, weight: 16, baseSpeed: 380, requires: ['basic_large_airframe'] },
+      { id: 'naval', name: '艦上攻撃機機体', cost: 20, capacity: 4, weight: 7, baseSpeed: 450, requires: ['improved_medium_airframe'] }
+    ], slots: [
+      { id: 'engine', name: 'エンジン', options: [
+        { id: 'e1', name: '標準エンジン', cost: 8, weight: 2, power: 14, engineCapacity: 3, speed: 4, requires: ['engine_tech_1'] },
+        { id: 'e2', name: '高出力エンジン', cost: 14, weight: 3, power: 24, engineCapacity: 6, speed: 8, reliability: -2, requires: ['engine_tech_2'] },
+        { id: 'e3', name: 'ターボ過給エンジン', cost: 20, weight: 3, power: 32, engineCapacity: 8, speed: 12, reliability: -3, requires: ['engine_tech_3'] }
+      ] },
+      { id: 'weapon', name: '武装', options: [
+        { id: 'mg', name: '機銃強化', cost: 8, weight: 1, soft: 8, attack: 10, requires: ['improved_infantry_weapons'] },
+        { id: 'cannon', name: '機関砲', cost: 14, weight: 2, soft: 6, hard: 12, attack: 16, requires: ['artillery2'] },
+        { id: 'bomb', name: '通常爆弾', cost: 12, weight: 3, soft: 16, hard: 6, requires: ['early_bombs'] },
+        { id: 'heavy_bomb', name: '大型爆弾', cost: 20, weight: 5, soft: 24, hard: 10, requires: ['heavy_bombs'] },
+        { id: 'torpedo', name: '航空魚雷', cost: 18, weight: 3, attack: 24, requires: ['air_torpedoe_1'] }
+      ] },
+      { id: 'fuel', name: '燃料タンク / 防弾', options: [
+        { id: 'none', name: '標準燃料', cost: 0, weight: 0 },
+        { id: 'plate', name: '防弾鋼板', cost: 8, weight: 2, defense: 12, reliability: -2, requires: ['aircraft_construction'] },
+        { id: 'drop_tank', name: '増槽（航続距離 +90% / 機動性 -10%）', cost: 10, weight: 2, defense: 2 }
+      ] }
+    ] }
   };
 
   static cost(cat) {

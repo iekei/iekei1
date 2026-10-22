@@ -8,6 +8,19 @@
     "effect": "研究スロットを1つ追加する。",
     "prerequisites": [
       "uk_industrial_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 58
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -19,6 +32,18 @@
     "effect": "[Root.GetGeneralRearmamentDesc]",
     "prerequisites": [
       "limited_rearmament_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 85
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 2
+      }
     ]
   },
   {
@@ -30,6 +55,17 @@
     "effect": "デヴィッド・スターリングという将校が、小規模のコマンドー部隊が敵前線の後方で嫌がらせをすることで多大なダメージをもたらす可能性があるという考えを思いついた。「Air Service」と命名することは、敵が空挺部隊に対して防御しなければならないと信じさせるという追加の利益もある。このアイデアにはメリットがあるかもしれない。",
     "prerequisites": [
       "general_rearmament_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 65
+      },
+      {
+        "type": "add_army_experience",
+        "value": 10
+      }
     ]
   },
   {
@@ -41,6 +77,23 @@
     "effect": "敵領土における初期の空挺作戦で成功を収めた今、未来がパラシュート連隊にあることは明白だ。専用の訓練施設と装備があれば、この新技術を全体の戦略に取り入れられるだろう。",
     "prerequisites": [
       "ENG_special_air_service"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 45
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "陸軍",
+        "bonus": 0.5,
+        "uses": 1
+      },
+      {
+        "type": "add_army_experience",
+        "value": 10
+      }
     ]
   },
   {
@@ -52,6 +105,13 @@
     "effect": "[Root.GetRoyalOrdnanceFactoriesDesc]",
     "prerequisites": [
       "uk_industrial_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 52
+      }
     ]
   },
   {
@@ -63,6 +123,13 @@
     "effect": "[Root.GetBSACompanyDesc]",
     "prerequisites": [
       "royal_ordinance_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      }
     ]
   },
   {
@@ -75,6 +142,29 @@
     "prerequisites": [
       "royal_ordinance_focus",
       "maud_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 1
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -86,6 +176,22 @@
     "effect": "[Root.GetAirRearmamentDesc]",
     "prerequisites": [
       "general_rearmament_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 64
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 1
+      },
+      {
+        "type": "add_air_experience",
+        "value": 14
+      }
     ]
   },
   {
@@ -98,6 +204,13 @@
     "prerequisites": [
       "air_rearmament_focus",
       "naval_rearmament_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      }
     ]
   },
   {
@@ -109,6 +222,23 @@
     "effect": "我々の最優先事項は領空を支配することだ！軍事研究に於いて戦闘機開発より優先されるべきものはそれほど多く存在はしない。",
     "prerequisites": [
       "air_rearmament_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 52
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "空軍",
+        "bonus": 0.5,
+        "uses": 1
+      },
+      {
+        "type": "add_air_experience",
+        "value": 22
+      }
     ]
   }
 ]

@@ -9,6 +9,19 @@
     "prerequisites": [
       "SOV_the_ussr_academy_of_sciences",
       "SOV_merge_aircraft_plants"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 47
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "空軍",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -20,6 +33,22 @@
     "effect": "最近は安全性に注力しすぎているため、新型機の生産数に悪影響を及ぼし始めている。我々は非常に安全で有能な空軍を維持しつつ、過剰な安全システムを排除することでかなりの資源を節約することが出来る。",
     "prerequisites": [
       "SOV_expand_the_aircraft_industry"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 65
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_air_experience",
+        "value": 15
+      }
     ]
   },
   {
@@ -31,6 +60,17 @@
     "effect": "訓練を始める前に新米操縦士が飛行機を見たことがないとなると、余計に訓練費用がかかる。しかし、多くの若者は飛行機の操縦に魅了されており、ある程度の支援を得て航空機操縦の基本をあらかじめ知ることが出来れば、空中戦の細かな部分を極めて迅速に習得して非常に優秀な操縦士へと成長する可能性がある。",
     "prerequisites": [
       "SOV_transpolar_flights"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 98
+      },
+      {
+        "type": "add_army_experience",
+        "value": 23
+      }
     ]
   },
   {
@@ -42,6 +82,13 @@
     "effect": "過去に、空を飛ぶことは男性の領域であると社会的後方分子に宣言されていた。しかし、世界中の女性はこれを無視し、自らが男性の同僚と全く同じくらい優秀であることを示した。我々は彼女達の中から最も優柔な操縦士を選ぶため、飛行に挑戦するよう女性たちに奨励すべきだ。",
     "prerequisites": [
       "SOV_foster_flying_clubs"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 65
+      }
     ]
   },
   {
@@ -53,6 +100,13 @@
     "effect": "[GetRaskovasAviationGroupDesc]",
     "prerequisites": [
       "SOV_women_in_aviation"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 54
+      }
     ]
   },
   {
@@ -64,6 +118,23 @@
     "effect": "競争力を保つためには、空軍はいかなる状況でも飛んで戦わなければならない。これを達成する最善の方法は、操縦士を最高水準にまで訓練することだ。不足している数や技術的な知識は完璧な技能で埋め合わせる。",
     "prerequisites": [
       "SOV_foster_flying_clubs"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 79
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "陸軍",
+        "bonus": 0.5,
+        "uses": 1
+      },
+      {
+        "type": "add_air_experience",
+        "value": 29
+      }
     ]
   },
   {
@@ -76,6 +147,17 @@
     "prerequisites": [
       "SOV_expand_the_aircraft_industry",
       "SOV_foster_flying_clubs"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 69
+      },
+      {
+        "type": "add_air_experience",
+        "value": 19
+      }
     ]
   },
   {
@@ -88,6 +170,17 @@
     "prerequisites": [
       "SOV_increase_aircraft_production",
       "SOV_intensify_pilot_training_program"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 57
+      },
+      {
+        "type": "add_air_experience",
+        "value": 27
+      }
     ]
   },
   {
@@ -100,6 +193,23 @@
     "prerequisites": [
       "SOV_increase_aircraft_production",
       "SOV_intensify_pilot_training_program"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 42
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "陸軍",
+        "bonus": 0.5,
+        "uses": 1
+      },
+      {
+        "type": "add_air_experience",
+        "value": 12
+      }
     ]
   },
   {
@@ -112,6 +222,18 @@
     "prerequisites": [
       "SOV_ground_support",
       "SOV_long_range_aircraft"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 52
+      },
+      {
+        "type": "add_building_construction",
+        "building": "bunker",
+        "level": 2
+      }
     ]
   }
 ]

@@ -9,6 +9,28 @@
     "prerequisites": [
       "JAP_range_focus",
       "JAP_bomber_modernization"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 44
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "空軍",
+        "bonus": 0.5,
+        "uses": 1
+      },
+      {
+        "type": "add_air_experience",
+        "value": 14
+      }
     ]
   },
   {
@@ -21,6 +43,33 @@
     "prerequisites": [
       "JAP_agility_focus",
       "JAP_the_zero"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 58
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 1
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "陸軍",
+        "bonus": 0.5,
+        "uses": 1
+      },
+      {
+        "type": "add_air_experience",
+        "value": 28
+      }
     ]
   },
   {
@@ -33,6 +82,19 @@
     "prerequisites": [
       "JAP_unified_fighter_development",
       "JAP_strategic_bomber_effort"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 46
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "空軍",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -42,7 +104,18 @@
     "y": 50,
     "cost": 70,
     "effect": "海軍の増強のための、そしてその増強に伴って必要とされるであろう湾岸施設についての新たな予算案を提出しなければならない。",
-    "prerequisites": []
+    "prerequisites": [],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 121
+      },
+      {
+        "type": "add_navy_experience",
+        "value": 21
+      }
+    ]
   },
   {
     "id": "JAP_carrier_warfare_experiments",
@@ -53,6 +126,17 @@
     "effect": "戦艦は過ぎ去った過去の遺物である。海軍の未来は航空戦力の保有にあるのだ。航空母艦があれば太平洋を越えて航空戦力を投射することがきるようになる。",
     "prerequisites": [
       "JAP_new_naval_estimates"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 81
+      },
+      {
+        "type": "add_air_experience",
+        "value": 11
+      }
     ]
   },
   {
@@ -65,6 +149,17 @@
     "prerequisites": [
       "JAP_carrier_warfare_experiments",
       "JAP_supremacy_of_the_battlefleet"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 77
+      },
+      {
+        "type": "add_navy_experience",
+        "value": 27
+      }
     ]
   },
   {
@@ -76,6 +171,17 @@
     "effect": "最大限の攻撃かつ打撃力を発揮するために、多数の航空母艦を1つの艦隊にまとめる。この艦隊を運用するために必要なドクトリンを発展させることによって、我が軍が海軍航空戦力の優位性を失うことはなくなるであろう。",
     "prerequisites": [
       "JAP_carrier_warfare_experiments"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 72
+      },
+      {
+        "type": "add_air_experience",
+        "value": 22
+      }
     ]
   },
   {
@@ -88,6 +194,13 @@
     "prerequisites": [
       "JAP_first_air_fleet",
       "JAP_the_ultimate_battleship"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 56
+      }
     ]
   },
   {
@@ -99,6 +212,17 @@
     "effect": "我々の優れた戦艦設計により、たった一回の決戦で海戦の雌雄を決することができる。そのような戦いを遂行し勝利するため、戦闘艦隊の最適化が必要だ。",
     "prerequisites": [
       "JAP_new_naval_estimates"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 89
+      },
+      {
+        "type": "add_navy_experience",
+        "value": 19
+      }
     ]
   },
   {
@@ -110,6 +234,18 @@
     "effect": "我が国は資源に乏しく、その運用を効率的に行う必要がある。史上最強にして、相対する如何なる敵も粉砕し得る戦艦を建造する。",
     "prerequisites": [
       "JAP_supremacy_of_the_battlefleet"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 78
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   }
 ]

@@ -8,6 +8,13 @@
     "effect": "急進右翼からの反発の恐れは実際の政府に共産主義者を含めることを妨げてきた。しかし恐怖とは貧弱な顧問である。衝突が避けられないのなら、彼らを招いてみよう。",
     "prerequisites": [
       "FRA_form_the_popular_front"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 86
+      }
     ]
   },
   {
@@ -19,6 +26,13 @@
     "effect": "長きに渡って、労働者個人が同志と共に団体交渉を行う権利は攻撃に晒されてきた。今はないことだが。",
     "prerequisites": [
       "FRA_invite_communist_ministers"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 71
+      }
     ]
   },
   {
@@ -30,6 +44,13 @@
     "effect": "短命だったかも知れないが、パリ・コミューンはフランスの大地に共産主義社会を作り上げる最初の試みだった。",
     "prerequisites": [
       "FRA_strengthen_the_unions"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 54
+      }
     ]
   },
   {
@@ -41,6 +62,13 @@
     "effect": "幾度となくバリケードで自らの権利を得るために戦ってきたフランスの勤勉な女性労働者に投票権がないことは不条理で嘆かわしい。この不平等は絶たれることになるだろう。",
     "prerequisites": [
       "FRA_invite_communist_ministers"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 79
+      }
     ]
   },
   {
@@ -52,6 +80,13 @@
     "effect": "あらゆる点で女性はまだ二級市民と考えられており、常に男性の意思に従属している。この馬鹿げた状態はいま終わる。",
     "prerequisites": [
       "FRA_womens_suffrage"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      }
     ]
   },
   {
@@ -64,6 +99,18 @@
     "prerequisites": [
       "FRA_womens_suffrage",
       "FRA_strengthen_the_unions"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 52
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -75,6 +122,18 @@
     "effect": "産業に適用できることはフランス全土の農業にも適用できるはずだ。小規模農家は近代的な機器を買う余裕がなく、彼らの高祖父と何ら変わらない方法で働いている。小規模農家を農業生産単位に統合し、効率と生産量を増加させるべきだ。",
     "prerequisites": [
       "FRA_industrial_collectivization"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 60
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -87,6 +146,13 @@
     "prerequisites": [
       "FRA_celebrate_the_commune",
       "FRA_legal_equality"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 48
+      }
     ]
   },
   {
@@ -98,6 +164,13 @@
     "effect": "過去において、フランスの革命は余りにも頻繁に国中を革命と反革命テロの終わりのない痙攣に放り込んだ。おそらく、革命を支持したかどうかではなく、個々人がそれぞれの居場所を持つ、共和国を設立すべき時が来たのだ。",
     "prerequisites": [
       "FRA_force_the_issue"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 45
+      }
     ]
   },
   {
@@ -109,6 +182,13 @@
     "effect": "我らが共和国の本質を根本的に変えることを一夜にして行える訳がなく、新憲法の交渉なしにはできない。",
     "prerequisites": [
       "FRA_reconciliation"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 51
+      }
     ]
   }
 ]

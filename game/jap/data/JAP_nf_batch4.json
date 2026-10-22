@@ -8,6 +8,17 @@
     "effect": "我々の手には負えない困難が目の前に迫っている。我々は同じ目的を持つ他の政府に手を差し伸べるべきだ。協力を取り付けられるかもしれない。",
     "prerequisites": [
       "JAP_liaison_conference"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 78
+      },
+      {
+        "type": "add_world_tension",
+        "value": 3
+      }
     ]
   },
   {
@@ -19,6 +30,18 @@
     "effect": "財閥はかつてないほどの政治的、経済的権力を持っている。策略を巡らせることにより、彼らの取り組みを我々の利益となるものへと誘導することができるかもしれない。",
     "prerequisites": [
       "JAP_purge_the_kodoha_faction"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 83
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 2
+      }
     ]
   },
   {
@@ -31,6 +54,23 @@
     "prerequisites": [
       "JAP_guide_the_zaibatsus",
       "JAP_national_mobilization_law"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 47
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 1
+      }
     ]
   },
   {
@@ -42,6 +82,13 @@
     "effect": "[JAP.GetNameDefCap]は石油が不足しているため、合成石油の分野により一段と取り組まなくてはならない。",
     "prerequisites": [
       "JAP_nationalize_war_industry"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 42
+      }
     ]
   },
   {
@@ -54,6 +101,21 @@
     "prerequisites": [
       "JAP_guide_the_zaibatsus",
       "JAP_challenge_the_zaibatsus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 80
+      },
+      {
+        "type": "add_war_support",
+        "value": 5
+      },
+      {
+        "type": "add_manpower",
+        "value": 5000
+      }
     ]
   },
   {
@@ -65,6 +127,19 @@
     "effect": "政府による研究機関への支援と管理は研究開発計画の柔軟性と生産性を向上させる。",
     "prerequisites": [
       "JAP_national_mobilization_law"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 54
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -77,6 +152,23 @@
     "prerequisites": [
       "JAP_national_mobilization_law",
       "JAP_challenge_the_zaibatsus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 44
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 1
+      }
     ]
   },
   {
@@ -89,6 +181,13 @@
     "prerequisites": [
       "JAP_nationalize_war_industry",
       "JAP_imperial_arsenals"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 53
+      }
     ]
   },
   {
@@ -100,6 +199,21 @@
     "effect": "神道により国民を教化し義務感を養うことで新兵を増やすことができる。",
     "prerequisites": [
       "JAP_national_defense_state"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 47
+      },
+      {
+        "type": "add_war_support",
+        "value": 13
+      },
+      {
+        "type": "add_manpower",
+        "value": 5000
+      }
     ]
   },
   {
@@ -111,6 +225,13 @@
     "effect": "国家神道によって、御国と皇室の繁栄のため自己犠牲をする必要性を国民に植え付けることができる。",
     "prerequisites": [
       "JAP_national_defense_state"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 45
+      }
     ]
   }
 ]

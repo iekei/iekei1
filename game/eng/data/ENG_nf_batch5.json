@@ -8,6 +8,13 @@
     "effect": "地中海を通るルートは、インド往来のショートカットとして非常に重要だ。従って、このルートを開放し、我々の管理下に置くことが最も重要である。",
     "prerequisites": [
       "uk_service_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 75
+      }
     ]
   },
   {
@@ -19,6 +26,18 @@
     "effect": "地中海への入り口を支配しているだけでなく、ジブラルタルは大西洋・地中海の二つの海での作戦行動を可能とする強固な防備を備えた港である。従って、更なる強固な防備は必要不可欠なものである。",
     "prerequisites": [
       "uk_mediterranean_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 55
+      },
+      {
+        "type": "add_building_construction",
+        "building": "bunker",
+        "level": 2
+      }
     ]
   },
   {
@@ -31,6 +50,13 @@
     "prerequisites": [
       "uk_mediterranean_focus",
       "uk_carrier_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 41
+      }
     ]
   },
   {
@@ -42,6 +68,18 @@
     "effect": "スエズの支配は、大英帝国の制海権を維持する重要な方策であり、この地域の失陥は取り返しのつかない打撃を帝国に与える事になる。スエズの要塞化を行う必要があるだろう。",
     "prerequisites": [
       "uk_mediterranean_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      },
+      {
+        "type": "add_building_construction",
+        "building": "bunker",
+        "level": 2
+      }
     ]
   },
   {
@@ -54,6 +92,13 @@
     "prerequisites": [
       "uk_protect_suez",
       "uk_malta_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 48
+      }
     ]
   },
   {
@@ -65,6 +110,13 @@
     "effect": "ムッソリーニは新たなローマ帝国を夢見ており、その馬鹿げた夢を達成するためにいつか我々を攻撃してくるかもしれない。戦争が起こる前にそれを防ぐべきである。",
     "prerequisites": [
       "uk_balkan_strategy"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 41
+      }
     ]
   },
   {
@@ -76,6 +128,18 @@
     "effect": "イタリアが新しい帝国への計画の放棄を拒んだことは、彼らが直に領土拡張戦争を始めるであろうことを証明している。手遅れとなる前に、この脅威を取り除く必要があるだろう。",
     "prerequisites": [
       "uk_sanction_italy_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 52
+      },
+      {
+        "type": "create_wargoal",
+        "target": "ITA",
+        "wargoal": "annex_everything"
+      }
     ]
   },
   {
@@ -88,6 +152,13 @@
     "prerequisites": [
       "uk_protect_suez",
       "uk_battleship_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 42
+      }
     ]
   },
   {
@@ -99,6 +170,13 @@
     "effect": "ギリシャの基地使用権を獲得する事は我が国にとり大きな利益であり、率直に言ってギリシャ人は我々の要請を拒否できる立場には無い。",
     "prerequisites": [
       "uk_protect_suez"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 42
+      }
     ]
   },
   {
@@ -110,6 +188,18 @@
     "effect": "マルタ島は中央地中海の要衝であり、エジプトからスエズ運河を通りインド・極東へ向かう帝国のライフラインの重要な中継駅でもある。マルタの要塞化に費やした時間は決して無駄にはならないだろう。",
     "prerequisites": [
       "uk_mediterranean_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 54
+      },
+      {
+        "type": "add_building_construction",
+        "building": "bunker",
+        "level": 2
+      }
     ]
   }
 ]

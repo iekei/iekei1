@@ -130,8 +130,10 @@ export class EconomyManager {
       }
       const mioBonus = 1 + this.mio.productionEfficiencyBonus(line.mioId);
       const costMult = this.mio.productionCostMultiplier(line.mioId);
+      // 国家的精神などによる生産効率補正（例: 四カ年計画 factoryOutput +5%）
+      const spiritOutput = 1 + ((s.getModifier?.('factoryOutput') || 0) + (s.getModifier?.('productionEfficiency') || 0));
       const shortage = this._shortagePenalty(item);
-      const output = line.factories * line.efficiency * item.output * mioBonus * shortage * dayFrac;
+      const output = line.factories * line.efficiency * item.output * mioBonus * spiritOutput * shortage * dayFrac;
       s.addStockpile(line.item, output);
 
       // 資源消費

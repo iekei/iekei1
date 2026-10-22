@@ -113,6 +113,11 @@ export class MapEngine {
     this.offensiveLayer.setAttribute('id', 'map-offensive');
     svg.appendChild(this.offensiveLayer);
 
+    // 作戦計画レイヤ（前線ポリライン・攻撃線矢印・計画準備表示）
+    this.planLayer = document.createElementNS(SVGNS, 'g');
+    this.planLayer.setAttribute('id', 'map-battle-plans');
+    svg.appendChild(this.planLayer);
+
     // 州ノード
     for (const p of PROVINCES) {
       this._createProvinceNode(svg, p);
@@ -151,14 +156,31 @@ export class MapEngine {
     svg.appendChild(this.capitalMarker);
     this._updateCapital();
 
-    // 州クリック → 外交
+    // 州クリック → 作戦計画モードならUIが処理、それ以外は外交
     svg.addEventListener('click', (e) => {
       const g = e.target.closest ? e.target.closest('.map-province') : null;
-      if (g && this.onProvinceClick) {
-        const id = g.dataset.province;
-        if (id) this.onProvinceClick(id);
+      if (!g) return;
+      const id = g.dataset.province;
+      if (!id) return;
+      // 作戦計画モード（前線/攻撃線）中は外交を開かない
+      if (this.planController?.mode && this.planController.mode !== 'idle') {
+        this.planController.handleClick(id);
+        return;
       }
+      if (this.onProvinceClick) this.onProvinceClick(id);
     });
+  }
+
+  /** プロヴィンス所有国の変更をマップ色へ反映（占領時） */
+  refreshProvinceColors() {
+    for (const p of PROVINCES) {
+      const g = this.provinceEls.get(p.id);
+      if (!g) continue;
+      const circle = g.querySelector('circle');
+      if (!circle) continue;
+      const color = NATION_COLORS[p.tag] || '#555';
+      if (circle.getAttribute('fill') !== color) circle.setAttribute('fill', color);
+    }
   }
 
   /** 1プロヴィンスの SVG グループを作成 */
@@ -260,8 +282,10 @@ export class MapEngine {
 
   update() {
     this._updateCapital();
+    this.refreshProvinceColors();
     this.renderDivisions();
     this.renderFrontlines();
+    this.renderBattlePlans();
     this.renderCombatBubbles();
     if (this.airNavalRenderer) this.airNavalRenderer();
     Tooltip.attachAll(this.svg);
@@ -280,10 +304,20 @@ export class MapEngine {
   renderDivisions() {
     this.divisionLayer.innerHTML = '';
     this.divisionIcons.clear();
+    // 同一州に複数師団がいる場合はリング状に展開（カウンターの重なり防止）
+    const stacks = new Map();
 
     for (const div of this.state.divisions) {
       const p = this.byId[div.provinceId];
       if (!p) continue;
+
+      const idx = stacks.get(p.id) || 0;
+      stacks.set(p.id, idx + 1);
+      const ring = Math.floor(idx / 6);
+      const spread = idx === 0 ? 0 : 20 + ring * 10;
+      const ang = (idx % 6) * (Math.PI * 2 / 6) - Math.PI / 2 + ring * 0.5;
+      const px = p.x + Math.cos(ang) * spread;
+      const py = p.y + Math.sin(ang) * spread;
 
       const sym = UNIT_SYMBOLS[div.type] || UNIT_SYMBOLS.infantry;
       const g = document.createElementNS(SVGNS, 'g');
@@ -293,19 +327,19 @@ export class MapEngine {
 
       // 外円（所属国色の縁取り）
       const outer = document.createElementNS(SVGNS, 'circle');
-      outer.setAttribute('cx', p.x);
-      outer.setAttribute('cy', p.y);
+      outer.setAttribute('cx', px);
+      outer.setAttribute('cy', py);
       outer.setAttribute('r', 14);
       outer.setAttribute('fill', 'none');
-      outer.setAttribute('stroke', NATION_COLORS[this.state.playerTag] || '#fff');
+      outer.setAttribute('stroke', NATION_COLORS[div.tag || this.state.playerTag] || '#fff');
       outer.setAttribute('stroke-width', '2');
       outer.setAttribute('stroke-opacity', '0.9');
       g.appendChild(outer);
 
       // 内円（兵科色）
       const inner = document.createElementNS(SVGNS, 'circle');
-      inner.setAttribute('cx', p.x);
-      inner.setAttribute('cy', p.y);
+      inner.setAttribute('cx', px);
+      inner.setAttribute('cy', py);
       inner.setAttribute('r', 11);
       inner.setAttribute('fill', sym.fill);
       inner.setAttribute('stroke', sym.color);
@@ -314,8 +348,8 @@ export class MapEngine {
 
       // シンボル文字
       const symText = document.createElementNS(SVGNS, 'text');
-      symText.setAttribute('x', p.x);
-      symText.setAttribute('y', p.y + 4);
+      symText.setAttribute('x', px);
+      symText.setAttribute('y', py + 4);
       symText.setAttribute('fill', sym.color);
       symText.setAttribute('font-size', '11');
       symText.setAttribute('font-weight', '900');
@@ -326,8 +360,8 @@ export class MapEngine {
 
       // 充足度バー（オレンジ）— 背景
       const supBg = document.createElementNS(SVGNS, 'rect');
-      supBg.setAttribute('x', p.x - 22);
-      supBg.setAttribute('y', p.y + 18);
+      supBg.setAttribute('x', px - 22);
+      supBg.setAttribute('y', py + 18);
       supBg.setAttribute('width', 44);
       supBg.setAttribute('height', 5);
       supBg.setAttribute('fill', '#0e1114');
@@ -335,8 +369,8 @@ export class MapEngine {
       supBg.setAttribute('stroke-width', '0.5');
       g.appendChild(supBg);
       const supFill = document.createElementNS(SVGNS, 'rect');
-      supFill.setAttribute('x', p.x - 22);
-      supFill.setAttribute('y', p.y + 18);
+      supFill.setAttribute('x', px - 22);
+      supFill.setAttribute('y', py + 18);
       supFill.setAttribute('width', Math.max(1, 44 * (div.supply || 1)));
       supFill.setAttribute('height', 5);
       supFill.setAttribute('fill', '#e6a23c'); // オレンジ
@@ -346,8 +380,8 @@ export class MapEngine {
 
       // 指揮統制率バー（緑）
       const cmdBg = document.createElementNS(SVGNS, 'rect');
-      cmdBg.setAttribute('x', p.x - 22);
-      cmdBg.setAttribute('y', p.y + 25);
+      cmdBg.setAttribute('x', px - 22);
+      cmdBg.setAttribute('y', py + 25);
       cmdBg.setAttribute('width', 44);
       cmdBg.setAttribute('height', 5);
       cmdBg.setAttribute('fill', '#0e1114');
@@ -355,8 +389,8 @@ export class MapEngine {
       cmdBg.setAttribute('stroke-width', '0.5');
       g.appendChild(cmdBg);
       const cmdFill = document.createElementNS(SVGNS, 'rect');
-      cmdFill.setAttribute('x', p.x - 22);
-      cmdFill.setAttribute('y', p.y + 25);
+      cmdFill.setAttribute('x', px - 22);
+      cmdFill.setAttribute('y', py + 25);
       cmdFill.setAttribute('width', Math.max(1, 44 * (div.command || 1)));
       cmdFill.setAttribute('height', 5);
       cmdFill.setAttribute('fill', '#7ec850'); // 緑
@@ -366,8 +400,8 @@ export class MapEngine {
 
       // ラベル（師団名・タイプ）
       const lbl = document.createElementNS(SVGNS, 'text');
-      lbl.setAttribute('x', p.x);
-      lbl.setAttribute('y', p.y - 16);
+      lbl.setAttribute('x', px);
+      lbl.setAttribute('y', py - 16);
       lbl.setAttribute('fill', '#d7dde2');
       lbl.setAttribute('font-size', '9.5');
       lbl.setAttribute('font-weight', '700');
@@ -378,14 +412,19 @@ export class MapEngine {
 
       // 充足・指揮値テキスト
       const valTxt = document.createElementNS(SVGNS, 'text');
-      valTxt.setAttribute('x', p.x);
-      valTxt.setAttribute('y', p.y + 34);
+      valTxt.setAttribute('x', px);
+      valTxt.setAttribute('y', py + 34);
       valTxt.setAttribute('fill', '#8b96a0');
       valTxt.setAttribute('font-size', '8.5');
       valTxt.setAttribute('text-anchor', 'middle');
       valTxt.textContent = `充足 ${Math.round((div.supply || 1) * 100)}% / 指揮 ${Math.round((div.command || 1) * 100)}%`;
       g.appendChild(valTxt);
 
+      // 計画準備ボーナス（作戦計画に配属されている場合）
+      const plan = (this.state.battlePlans || []).find((bp) => (bp.divisions || []).includes(div.id));
+      const planningLine = plan
+        ? `<div style="font-size:11px;color:#e6c268;margin-top:2px;">作戦計画：${plan.name}（計画準備 +${(plan.planning * 100).toFixed(1)}%）</div>`
+        : '';
       // ツールチップ
       const tipHtml = `
         <div style="font-weight:700;letter-spacing:.08em;font-family:var(--mil-font);color:var(--gold);">${div.name || div.type}</div>
@@ -395,11 +434,12 @@ export class MapEngine {
         <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">人員：${Math.round(div.hp || 0)} / ${div.maxHp || 0}</div>
         <div style="font-size:11px;color:#e6a23c;margin-top:2px;">充足度：${Math.round((div.supply || 1) * 100)}%</div>
         <div style="font-size:11px;color:#7ec850;margin-top:2px;">指揮統制率：${Math.round((div.command || 1) * 100)}%</div>
+        ${planningLine}
       `;
       Tooltip.bind(g, tipHtml, { kind: 'info' });
 
       this.divisionLayer.appendChild(g);
-      this.divisionIcons.set(div.id, { g, supFill, cmdFill, valTxt, x: p.x, y: p.y });
+      this.divisionIcons.set(div.id, { g, supFill, cmdFill, valTxt, x: px, y: py });
     }
 
     Tooltip.attachAll(this.svg);
@@ -476,6 +516,185 @@ export class MapEngine {
       defs.appendChild(marker);
       this.svg.insertBefore(defs, this.svg.firstChild);
     }
+  }
+
+  /* ================= 作戦計画（前線・攻撃線） ================= */
+
+  /** 前線ポリライン・攻撃線矢印・計画準備表示を描画 */
+  renderBattlePlans() {
+    if (!this.planLayer) return;
+    this.planLayer.innerHTML = '';
+    const plans = this.state.battlePlans || [];
+    if (!plans.length) return;
+
+    this._ensurePlanDefs();
+
+    for (const plan of plans) {
+      const isPlayer = plan.tag === this.state.playerTag;
+      const color = isPlayer ? '#e6c268' : '#d05038';
+      const tag = plan.tag;
+
+      /* --- 前線: 前線州を結ぶポリライン --- */
+      const pts = (plan.frontline || [])
+        .map((id) => this.byId[id])
+        .filter(Boolean);
+      if (pts.length === 1) {
+        const ring = document.createElementNS(SVGNS, 'circle');
+        ring.setAttribute('cx', pts[0].x); ring.setAttribute('cy', pts[0].y);
+        ring.setAttribute('r', 16);
+        ring.setAttribute('fill', 'none');
+        ring.setAttribute('stroke', color);
+        ring.setAttribute('stroke-width', '3');
+        ring.classList.add('plan-frontline');
+        this.planLayer.appendChild(ring);
+      } else if (pts.length > 1) {
+        const poly = document.createElementNS(SVGNS, 'polyline');
+        poly.setAttribute('points', pts.map((p) => `${p.x},${p.y}`).join(' '));
+        poly.setAttribute('fill', 'none');
+        poly.setAttribute('stroke', color);
+        poly.setAttribute('stroke-width', '4');
+        poly.setAttribute('stroke-linecap', 'round');
+        poly.setAttribute('stroke-linejoin', 'round');
+        poly.setAttribute('opacity', '0.9');
+        poly.classList.add('plan-frontline');
+        if (plan.executing) poly.classList.add('advancing');
+        this.planLayer.appendChild(poly);
+
+        // 前線州のマーカー（陣地）
+        for (const p of pts) {
+          const dot = document.createElementNS(SVGNS, 'rect');
+          dot.setAttribute('x', p.x - 7); dot.setAttribute('y', p.y - 7);
+          dot.setAttribute('width', 14); dot.setAttribute('height', 14);
+          dot.setAttribute('transform', `rotate(45 ${p.x} ${p.y})`);
+          dot.setAttribute('fill', color);
+          dot.setAttribute('fill-opacity', '0.18');
+          dot.setAttribute('stroke', color);
+          dot.setAttribute('stroke-width', '1.5');
+          this.planLayer.appendChild(dot);
+        }
+      }
+
+      /* --- 計画準備ボーナスのラベル（前線中央） --- */
+      if (pts.length) {
+        const mid = pts[Math.floor(pts.length / 2)];
+        const cap = this.battlePlan?.maxPlanningBonus?.() ?? 0.30;
+        const pct = Math.round(Math.min(plan.planning / cap, 1) * 100);
+        const label = document.createElementNS(SVGNS, 'g');
+        label.classList.add('plan-label-group');
+        const bg = document.createElementNS(SVGNS, 'rect');
+        const w = 128, h = 26;
+        bg.setAttribute('x', mid.x - w / 2);
+        bg.setAttribute('y', mid.y - 46);
+        bg.setAttribute('width', w);
+        bg.setAttribute('height', h);
+        bg.setAttribute('rx', 4);
+        bg.setAttribute('fill', '#0b0e11');
+        bg.setAttribute('fill-opacity', '0.85');
+        bg.setAttribute('stroke', color);
+        bg.setAttribute('stroke-width', '1');
+        bg.setAttribute('stroke-opacity', '0.6');
+        label.appendChild(bg);
+
+        const txt = document.createElementNS(SVGNS, 'text');
+        txt.setAttribute('x', mid.x);
+        txt.setAttribute('y', mid.y - 33);
+        txt.setAttribute('fill', color);
+        txt.setAttribute('font-size', '9.5');
+        txt.setAttribute('font-weight', '800');
+        txt.setAttribute('text-anchor', 'middle');
+        txt.setAttribute('font-family', 'var(--mil-font)');
+        txt.textContent = `${plan.executing ? '実行中' : '準備'} ${pct}%`;
+        label.appendChild(txt);
+
+        const barBg = document.createElementNS(SVGNS, 'rect');
+        barBg.setAttribute('x', mid.x - w / 2 + 8);
+        barBg.setAttribute('y', mid.y - 28);
+        barBg.setAttribute('width', w - 16);
+        barBg.setAttribute('height', 4);
+        barBg.setAttribute('fill', '#1b2127');
+        label.appendChild(barBg);
+        const barFill = document.createElementNS(SVGNS, 'rect');
+        barFill.setAttribute('x', mid.x - w / 2 + 8);
+        barFill.setAttribute('y', mid.y - 28);
+        barFill.setAttribute('width', Math.max(0, (w - 16) * (plan.planning / cap)));
+        barFill.setAttribute('height', 4);
+        barFill.setAttribute('fill', color);
+        label.appendChild(barFill);
+        this.planLayer.appendChild(label);
+      }
+
+      /* --- 攻撃線: 経路に沿った矢印 --- */
+      for (const goal of plan.goals || []) {
+        const pathPts = (goal.path || []).map((id) => this.byId[id]).filter(Boolean);
+        if (pathPts.length < 2) continue;
+        const d = pathPts
+          .map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`)
+          .join(' ');
+        const path = document.createElementNS(SVGNS, 'path');
+        path.setAttribute('d', d);
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke', goal.done ? '#7ec850' : color);
+        path.setAttribute('stroke-width', '3');
+        path.setAttribute('stroke-dasharray', '10 6');
+        path.setAttribute('stroke-opacity', '0.95');
+        path.setAttribute('marker-end', `url(#plan-arrow-${isPlayer ? 'player' : 'enemy'})`);
+        path.classList.add('plan-arrow');
+        if (plan.executing) path.classList.add('advancing');
+        this.planLayer.appendChild(path);
+
+        // 目標マーカー
+        const target = pathPts[pathPts.length - 1];
+        const marker = document.createElementNS(SVGNS, 'g');
+        const ring = document.createElementNS(SVGNS, 'circle');
+        ring.setAttribute('cx', target.x); ring.setAttribute('cy', target.y);
+        ring.setAttribute('r', 18);
+        ring.setAttribute('fill', 'none');
+        ring.setAttribute('stroke', goal.done ? '#7ec850' : color);
+        ring.setAttribute('stroke-width', '2');
+        ring.setAttribute('stroke-dasharray', '4 4');
+        marker.appendChild(ring);
+        const cross1 = document.createElementNS(SVGNS, 'line');
+        cross1.setAttribute('x1', target.x - 6); cross1.setAttribute('y1', target.y - 6);
+        cross1.setAttribute('x2', target.x + 6); cross1.setAttribute('y2', target.y + 6);
+        cross1.setAttribute('stroke', goal.done ? '#7ec850' : color);
+        cross1.setAttribute('stroke-width', '2');
+        marker.appendChild(cross1);
+        const cross2 = document.createElementNS(SVGNS, 'line');
+        cross2.setAttribute('x1', target.x + 6); cross2.setAttribute('y1', target.y - 6);
+        cross2.setAttribute('x2', target.x - 6); cross2.setAttribute('y2', target.y + 6);
+        cross2.setAttribute('stroke', goal.done ? '#7ec850' : color);
+        cross2.setAttribute('stroke-width', '2');
+        marker.appendChild(cross2);
+        this.planLayer.appendChild(marker);
+      }
+
+      /* --- 進軍中の師団の軌跡（デバッグ用の淡い線） --- */
+      void tag;
+    }
+    Tooltip.attachAll(this.svg);
+  }
+
+  _ensurePlanDefs() {
+    if (this.svg.querySelector('#plan-arrow-player')) return;
+    const defs = document.createElementNS(SVGNS, 'defs');
+    const mk = (id, fill) => {
+      const marker = document.createElementNS(SVGNS, 'marker');
+      marker.setAttribute('id', id);
+      marker.setAttribute('markerWidth', '12');
+      marker.setAttribute('markerHeight', '12');
+      marker.setAttribute('refX', '9');
+      marker.setAttribute('refY', '4');
+      marker.setAttribute('orient', 'auto');
+      marker.setAttribute('markerUnits', 'userSpaceOnUse');
+      const path = document.createElementNS(SVGNS, 'path');
+      path.setAttribute('d', 'M0,0 L0,8 L10,4 z');
+      path.setAttribute('fill', fill);
+      marker.appendChild(path);
+      defs.appendChild(marker);
+    };
+    mk('plan-arrow-player', '#e6c268');
+    mk('plan-arrow-enemy', '#d05038');
+    this.svg.insertBefore(defs, this.svg.firstChild);
   }
 
   /* ================= 戦闘バブル ================= */

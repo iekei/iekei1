@@ -8,6 +8,17 @@
     "effect": "我々の利点の一つは、新たな乗組員を訓練するために先次対戦の経験を持つ熟練乗員が多数いる環境を利用できることだ。対潜水艦戦の専門家であるコモドール・ギルバート・スティーブンソンが担当し、トバモーリに新たな対潜水艦訓練学校（Anti-Submarine Training School）を設立することで、大西洋における護衛任務に着手し、Uボートの脅威に直面する前に、乗組員が必要な練度を習得できるようになる。",
     "prerequisites": [
       "uk_convoy_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      },
+      {
+        "type": "add_army_experience",
+        "value": 14
+      }
     ]
   },
   {
@@ -19,6 +30,13 @@
     "effect": "[Root.GetBritanniaRulesTheWavesDesc]",
     "prerequisites": [
       "naval_rearmament_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 46
+      }
     ]
   },
   {
@@ -30,6 +48,23 @@
     "effect": "海軍の理論家の間で戦艦の継続的有用性について激しい論争が起こっている。中には、近代がもたらした空軍力が海軍を支配するようになり、海の王者の地位が戦艦から空母に置き換わるだろうと主張する人々も存在する。",
     "prerequisites": [
       "uk_waves_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 52
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "海軍",
+        "bonus": 0.5,
+        "uses": 1
+      },
+      {
+        "type": "add_air_experience",
+        "value": 22
+      }
     ]
   },
   {
@@ -41,6 +76,19 @@
     "effect": "理論家は制空権や制海権について議論しているが、自分の家が艦砲の標的になる事など誰も望まないだろう。たとえ空母推進者が最終的に正しかったとしても、戦艦は少なくとも数年は海を支配し続けるに違いない。",
     "prerequisites": [
       "uk_waves_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 51
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "海軍",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -52,6 +100,13 @@
     "effect": "「大海原を統べる」のは結構なことだが、自らの脚を濡らすことも時には必要だろう。敵領地を攻める陸戦力の増強を怠ってはならない。",
     "prerequisites": [
       "naval_rearmament_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 44
+      }
     ]
   },
   {
@@ -64,6 +119,18 @@
     "prerequisites": [
       "uk_battleship_focus",
       "uk_carrier_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 46
+      },
+      {
+        "type": "add_building_construction",
+        "building": "dockyard",
+        "level": 1
+      }
     ]
   },
   {
@@ -75,6 +142,13 @@
     "effect": "[Root.GetVanguardDesc]",
     "prerequisites": [
       "uk_battleship_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      }
     ]
   },
   {
@@ -84,7 +158,19 @@
     "y": 50,
     "cost": 70,
     "effect": "赤にしろ茶色にしろ、独裁者達を打倒する最も良い手段は、単純に彼らが戦争を遂行するための資源を干上がらせることだ。問題は奴らと取引をしている銀行家や企業を怒鳴りつけることだが……",
-    "prerequisites": []
+    "prerequisites": [],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 124
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 2
+      }
+    ]
   },
   {
     "id": "uk_empire_focus",
@@ -93,7 +179,18 @@
     "y": 50,
     "cost": 70,
     "effect": "我々の帝国は広大で、大国であるにもかかわらず、防御が手薄だ。これに対処する為、帝国領全土において臣民の愛国主義を奨励する必要がある。",
-    "prerequisites": []
+    "prerequisites": [],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 128
+      },
+      {
+        "type": "add_war_support",
+        "value": 13
+      }
+    ]
   },
   {
     "id": "uk_service_focus",
@@ -104,6 +201,13 @@
     "effect": "兵士を植民地と本国の間でローテーション勤務させることで、戦線毎に異なる環境を知り、経験を得て、本国の僚友とそれを共有する事が可能になる。",
     "prerequisites": [
       "uk_empire_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 92
+      }
     ]
   }
 ]

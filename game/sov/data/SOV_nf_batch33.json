@@ -9,6 +9,13 @@
     "prerequisites": [
       "SOV_independent_synod_west",
       "SOV_educate_the_masses_west"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      }
     ]
   },
   {
@@ -22,6 +29,13 @@
       "SOV_educate_the_masses_west",
       "SOV_educate_the_masses_caucasus",
       "SOV_educate_the_masses_east"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 58
+      }
     ]
   },
   {
@@ -33,6 +47,13 @@
     "effect": "独立したコーラン学校を設立し、イスラム系住民の教育を担う。",
     "prerequisites": [
       "SOV_consolidate_the_east"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 51
+      }
     ]
   },
   {
@@ -44,6 +65,13 @@
     "effect": "東部地域の民衆教育を推進する。",
     "prerequisites": [
       "SOV_consolidate_the_east"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      }
     ]
   },
   {
@@ -56,6 +84,13 @@
     "prerequisites": [
       "SOV_independent_koranic_school",
       "SOV_educate_the_masses_east"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 55
+      }
     ]
   }
 ]

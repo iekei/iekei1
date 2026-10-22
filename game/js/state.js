@@ -3,6 +3,7 @@
 import { Bus, uid } from './util.js';
 import { NATIONS, MAJORS } from './data/nations.js';
 import { EQUIPMENT_ITEMS } from './data/equipment.js';
+import { PROVINCES } from './map-data.js';
 
 const DAY_HOURS = 24;
 
@@ -68,7 +69,13 @@ export class GameState {
     this.mios = {}; // mioId -> {level, xp, traits:[], assignment:{type,ref}|null}
 
     // ドクトリン
-    this.doctrine = { xp: { land: 0, naval: 0, air: 0 }, unlocked: { land: new Set(), naval: new Set(), air: new Set() }, assigned: { land: null, naval: null, air: null } };
+    this.doctrine = {
+      // XP は state.xp（army/navy/air）が正。ここは旧参照用のミラー。
+      xp: { land: this.xp.army, naval: this.xp.navy, air: this.xp.air },
+      unlocked: { land: new Set(), naval: new Set(), air: new Set() },
+      assigned: { land: null, naval: null, air: null },
+      route: { land: null, naval: null, air: null }, // 相互排他ルート（不可逆）
+    };
 
     // 諜報
     this.intel = { operatives: [], slots: 2, intelValue: {} }; // intelValue[targetTag] = value
@@ -115,6 +122,10 @@ export class GameState {
     // 陸上戦闘表示用
     this.frontlines = [];     // [{provinceId, side:'attacker'|'defender'}]
     this.offensiveLines = []; // [{fromProvince, toProvince}]
+    // 作戦計画（前線 / 攻撃線 / 計画準備ボーナス）。BattlePlanManager が管理
+    this.battlePlans = [];
+    // 研究ボーナス（国家方針の completion_reward などで付与。研究日数を短縮）
+    this.researchBonuses = [];
     this.combatBubbles = [];  // [{id, province, attacker, defender, advantage:'green'|'yellow'|'red', hp}]
     this.paratrooperRoutes = []; // [{id, from, to, transportCount, airSupremacyOk}]
     this.navalInvasionRoutes = []; // [{id, fromPort, toProvince, navalSupremacyOk}]
@@ -141,6 +152,91 @@ export class GameState {
   }
 
   get nation() { return NATIONS[this.playerTag]; }
+
+  /* ================= 国家的精神・補正 ================= */
+
+  /**
+   * 国家的精神（ideas / country spirits）の modifiers を合算して返す。
+   * 例: spirits: [{ id, name, desc, modifiers: { org: 0.05, researchBonus: 0.03 } }]
+   */
+  getModifier(key) {
+    let sum = 0;
+    for (const spirit of this.politics?.spirits || []) {
+      const v = spirit?.modifiers?.[key];
+      if (Number.isFinite(v)) sum += v;
+    }
+    return sum;
+  }
+
+  /* ================= 研究ボーナス ================= */
+
+  /**
+   * 研究時間短縮ボーナスを追加する。
+   * @param {{scope:'tech'|'category'|'any', match?:string, reduction:number, uses?:number, label?:string}} bonus
+   */
+  addResearchBonus(bonus) {
+    const entry = {
+      id: `rb-${this.researchBonuses.length + 1}-${Math.random().toString(36).slice(2, 7)}`,
+      scope: bonus.scope || 'any',
+      match: bonus.match || null,
+      reduction: Math.max(0, Math.min(0.95, Number(bonus.reduction) || 0)),
+      uses: Number.isFinite(bonus.uses) ? bonus.uses : 1,
+      label: bonus.label || '研究ボーナス',
+      grantedAt: this.dateLabel,
+    };
+    this.researchBonuses.push(entry);
+    this.bus.emit('research-bonus-added', entry);
+    return entry;
+  }
+
+  /** 指定技術に適用できる研究ボーナス（未使用のもの）を探す */
+  findResearchBonus(techId, category) {
+    return this.researchBonuses.find((b) => {
+      if (b.uses <= 0) return false;
+      if (b.scope === 'tech') return b.match === techId;
+      if (b.scope === 'category') return b.match === category;
+      return true;
+    }) || null;
+  }
+
+  /** ボーナスを使用済みにする（研究完了時に呼ぶ） */
+  consumeResearchBonus(bonusId) {
+    const b = this.researchBonuses.find((x) => x.id === bonusId);
+    if (!b) return false;
+    b.uses -= 1;
+    return true;
+  }
+
+  /* ================= 師団の初期配置 ================= */
+
+  /**
+   * 指定国の師団を初期配置する（作戦計画・前線のデモ用）。
+   * 既にその国の師団が存在する場合は何もしない。
+   */
+  ensureDivisions(tag = this.playerTag, count = 8) {
+    const has = (this.divisions || []).some((d) => (d.tag || tag) === tag);
+    if (has) return this.divisions;
+    const owned = PROVINCES.filter((p) => p.tag === tag);
+    const pool = owned.length ? owned : PROVINCES.filter((p) => p.tag === 'GER');
+    if (!pool.length) return this.divisions;
+    const types = ['infantry', 'infantry', 'armor', 'infantry', 'artillery', 'armor', 'infantry', 'infantry'];
+    const names = { infantry: '歩兵師団', armor: '装甲師団', artillery: '砲兵師団' };
+    for (let i = 0; i < count; i++) {
+      const p = pool[Math.floor((i * pool.length) / count)] || pool[0];
+      const type = types[i % types.length];
+      this.divisions.push({
+        id: `div-${tag}-${i + 1}`,
+        provinceId: p.id,
+        tag,
+        type,
+        name: `${names[type]} ${i + 1}`,
+        org: 50, hp: 90, maxOrg: 50, maxHp: 100,
+        supply: 0.9, command: 0.85,
+      });
+    }
+    this.bus.emit('division-added', { tag });
+    return this.divisions;
+  }
 
   /** 日付をフォーマット */
   get dateLabel() {

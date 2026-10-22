@@ -33,7 +33,7 @@
       "force": "army",
       "title": "浸透戦術",
       "description": "柔軟な防御と浸透攻撃で歩兵部隊の持久力を高める。",
-      "icon": "assets/doctrine/land/Infiltration_Tactics.png",
+      "icon": "assets/doctrine/land/Guerilla_War.png",
       "effects": {
         "orgRecovery": 0.1,
         "softAttack": 0.08,

@@ -6,7 +6,14 @@
     "y": 50,
     "cost": 70,
     "effect": "大恐慌からの脱出に向けた最初の国家方針。ニューディール政策の土台を築く。",
-    "prerequisites": []
+    "prerequisites": [],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 112
+      }
+    ]
   },
   {
     "id": "USA_continue_the_new_deal",
@@ -15,7 +22,14 @@
     "y": 50,
     "cost": 70,
     "effect": "ニューディール政策は機能していることが証明された。今後もこの道を踏み外してはならない。",
-    "prerequisites": []
+    "prerequisites": [],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 123
+      }
+    ]
   },
   {
     "id": "USA_suspend_the_presecution",
@@ -26,6 +40,13 @@
     "effect": "アメリカ市民の各々の政治的見解に対する迫害は（たとえどれほど恐ろしい思想であったとしても）この国の基本的価値観にそぐわない。直ちに迫害を中止するべきだ。",
     "prerequisites": [
       "USA_continue_the_new_deal"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 95
+      }
     ]
   },
   {
@@ -37,6 +58,17 @@
     "effect": "自国の軍隊の一員として奉仕するのは人によっては歓迎されない責務かもしれない。だが人から大事に扱われる権利でもある。我らが多くの国民の権利は、それぞれの先祖の評価によって拒絶されているのだ。",
     "prerequisites": [
       "USA_suspend_the_presecution"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 78
+      },
+      {
+        "type": "add_stability",
+        "value": 8
+      }
     ]
   },
   {
@@ -48,6 +80,13 @@
     "effect": "あまりにも長期に渡って、いくつかの州は古臭く時代遅れで非人間的な規準に基づいて、人々を異なる方法で扱ってきた。この自由な共和国において、すべての人民は平等に扱われなければならない。故に別々に扱ってはならない。",
     "prerequisites": [
       "USA_desegregate_the_armed_forces"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      }
     ]
   },
   {
@@ -59,6 +98,17 @@
     "effect": "善良な考えを持った人々は皆、社会主義が人類文明の未来であることを否定しない。同時に、誇り高く愛国心に溢れる共和国の人民は皆、もはや人民の人民によるものではなくなった政府に対し、支援し得ることもありえない。我らの誇り高き祖先たちのように、我々は両方を結合させた新しい政体を創り上げる。",
     "prerequisites": [
       "USA_desegregate_the_armed_forces"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 54
+      },
+      {
+        "type": "add_war_support",
+        "value": 10
+      }
     ]
   },
   {
@@ -71,6 +121,13 @@
     "prerequisites": [
       "USA_democratic_socialism",
       "USA_full_desegregation"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 42
+      }
     ]
   },
   {
@@ -82,6 +139,13 @@
     "effect": "ヨーロッパの列強が太平洋への駐留を続ける、あるいは太平洋の人々にヨーロッパの主人へと奉仕させ続ける、そんなことに正統性など「決して」無い。こんな正義に背くことが続くならば、アメリカはもはや悠長に構えてはいられない。",
     "prerequisites": [
       "USA_liberty_for_the_philippines"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      }
     ]
   },
   {
@@ -93,6 +157,13 @@
     "effect": "労働は人間の生活の主幹であり、労働組合を組織する事とは民主主義社会を組織する為の原理的主幹である。このことを我々が認識し、労働組合が議会に対し委任代表権を有することを確実なものにするのは当然である。",
     "prerequisites": [
       "USA_suspend_the_presecution"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 69
+      }
     ]
   },
   {
@@ -104,6 +175,22 @@
     "effect": "仕事ばかりの人生を送ったなら、その人々は皆、経済の安定に楽しみつつ老齢者として尊敬されるに値する。こんな人達を支えるために存在するべき法制度が明らかに足りていない。",
     "prerequisites": [
       "USA_union_representation_act"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 45
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_stability",
+        "value": 10
+      }
     ]
   }
 ]

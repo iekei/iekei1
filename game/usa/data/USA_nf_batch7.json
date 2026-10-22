@@ -8,6 +8,13 @@
     "effect": "あの著名な飛行士が、ドイツが先の大戦から如何に復興したか調査するため、ヨーロッパに行きたいのだと申し出てきた。これは我々にとって貴重な経験をもたらしてくれるに違いない。リンドバーグはまた、彼が顧問の立場から政府に加わることも厭わないと暗に示してきた。",
     "prerequisites": [
       "USA_invite_foreign_support"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 47
+      }
     ]
   },
   {
@@ -19,6 +26,17 @@
     "effect": "ドイツ系アメリカ人協会（German-American Bund）は、ドイツにルーツを持つアメリカ国民の多くに、我々の立場を伝える手助けをしてくれた。これで彼らの多い州に我々と共感する支持母体が生まれるのは、確実なものとなるだろう。",
     "prerequisites": [
       "USA_send_lindbergh_to_germany"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 42
+      },
+      {
+        "type": "add_stability",
+        "value": 7
+      }
     ]
   },
   {
@@ -30,6 +48,13 @@
     "effect": "益々疑心暗鬼を生じている軍部に対し、我々は先の大戦の英雄たちに声を呼びかけるべきだろう。時局匡救のためにと、ドイツの義勇軍、フライコールはドイツ共和国を支援するために集結した。我々にもこれに似た、必要な時に助けてくれる忠実な組織が必要だ。",
     "prerequisites": [
       "USA_send_lindbergh_to_germany"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 53
+      }
     ]
   },
   {
@@ -42,6 +67,13 @@
     "prerequisites": [
       "USA_work_with_the_bund",
       "USA_national_employment_strategy"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 43
+      }
     ]
   },
   {
@@ -53,6 +85,18 @@
     "effect": "次々に高速化する航空機が次々に爆弾を積み増すこの世界において、また潜水艦や化学兵器の溢れるこの世界において、大統領は国家防衛に必要な事柄について、一々議会の同意を求めるよう権力を制限されているのは、災厄をおびき寄せているようなものであろう。",
     "prerequisites": [
       "USA_america_first"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 77
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 1
+      }
     ]
   },
   {
@@ -64,6 +108,13 @@
     "effect": "我々の裏庭に、攻撃者が基地として利用できる準備のできている不沈空母がある。これを敵に利用させてはならない。",
     "prerequisites": [
       "USA_war_powers_act"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 46
+      }
     ]
   },
   {
@@ -75,6 +126,13 @@
     "effect": "建国と歴史にまつわる我が国の特殊な環境は、世界の不公正や抑圧に対し介入するべきであるという天命を我々にもたらしている。平和な国際的共同体の創造のため、最優先に輸出しなければならないものは自由なのだ。",
     "prerequisites": [
       "USA_war_powers_act"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 58
+      }
     ]
   },
   {
@@ -86,6 +144,17 @@
     "effect": "この30年間ずっとメキシコは不安定な混乱の中にあった。暴力が国境を越えて流入してくるだとか、国民が団結して北へ行進するだとか、そんなことはどうでもいい。我々は南の横腹を守らなければならない。",
     "prerequisites": [
       "USA_seize_cuba"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 45
+      },
+      {
+        "type": "add_stability",
+        "value": 7
+      }
     ]
   },
   {
@@ -97,6 +166,17 @@
     "effect": "貧相な人口しかないカナダの領土の一片が、アラスカと合衆国本土を分け隔てている。故に北方の防衛はカナダの善意で成り立っている。しかし、最も攻撃する可能性が高い国もカナダである。これを阻止しなければならない。",
     "prerequisites": [
       "USA_manifest_destiny"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 50
+      },
+      {
+        "type": "add_manpower",
+        "value": 22500
+      }
     ]
   },
   {
@@ -109,6 +189,13 @@
     "prerequisites": [
       "USA_the_canadian_corridor",
       "USA_eliminate_the_southern_threat"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 43
+      }
     ]
   }
 ]

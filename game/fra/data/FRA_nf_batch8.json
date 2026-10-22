@@ -9,6 +9,13 @@
     "prerequisites": [
       "FRA_reorganize_the_aviation_industry",
       "FRA_form_the_state_arsenals"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 55
+      }
     ]
   },
   {
@@ -20,6 +27,18 @@
     "effect": "ソビエト式の全面的な計画経済は明らかに極端な手法であり、我々の経済には最適な計画と方向性があるはずだ。",
     "prerequisites": [
       "FRA_general_work_council"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 55
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -31,6 +50,18 @@
     "effect": "国際的なレベルで競争する可能性のある企業をいくつか選び抜き、それらを最高度に支援することで、他国と同等の現代経済を創造することができる。",
     "prerequisites": [
       "FRA_general_work_council"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 52
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -42,6 +73,17 @@
     "effect": "極右勢力は未制圧の組織であり、クーデターを企てるには今は弱小であるが、今後何をしでかすかはわからない。今すぐ解散させるのが最適だろう。",
     "prerequisites": [
       "FRA_form_the_popular_front"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 94
+      },
+      {
+        "type": "add_world_tension",
+        "value": 4
+      }
     ]
   },
   {
@@ -54,6 +96,13 @@
     "prerequisites": [
       "FRA_reform_the_labour_laws",
       "FRA_protect_the_rights_of_man"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 51
+      }
     ]
   },
   {
@@ -65,6 +114,13 @@
     "effect": "共和国において、一部の市民は国に住んでいながら、市民権を得られないことになっており、我々はこの制度の継続が許されている。だがすぐにでも正すべきだろう。",
     "prerequisites": [
       "FRA_the_blum_viollette_proposal"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 45
+      }
     ]
   },
   {
@@ -76,6 +132,13 @@
     "effect": "フランスは一つの旗の下に一つにならなければならない。分断の恐怖に終止符を打つため、これを是認しなければならない。",
     "prerequisites": [
       "FRA_expand_the_citizenship"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 48
+      }
     ]
   },
   {
@@ -87,6 +150,13 @@
     "effect": "域内すべてが統合された世界にまたがる新たなフランスを宣言する時だ。我々はすべてにおいて国民投票を行い、この新たで、強大なフランスに参加するすべての人の意思を確認するだろう。",
     "prerequisites": [
       "FRA_france_undividable"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 56
+      }
     ]
   },
   {
@@ -98,6 +168,13 @@
     "effect": "我が祖国は先の大戦で生じた損失を補うために労働者を切実に欲している。フランスへの移住を容易にすることにより、労働力の不足を補うことのできる有能な労働者を引き付けることができるだろう。",
     "prerequisites": [
       "FRA_expand_the_citizenship"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 53
+      }
     ]
   },
   {
@@ -110,6 +187,17 @@
     "prerequisites": [
       "FRA_reform_the_labour_laws",
       "FRA_protect_the_rights_of_man"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 41
+      },
+      {
+        "type": "add_world_tension",
+        "value": 3
+      }
     ]
   }
 ]

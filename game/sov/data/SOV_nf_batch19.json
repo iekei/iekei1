@@ -9,6 +9,13 @@
     "prerequisites": [
       "SOV_the_left_opposition",
       "SOV_the_right_opposition"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 67
+      }
     ]
   },
   {
@@ -16,11 +23,18 @@
     "title": "鉄道職員をこちら側へ",
     "x": 9050,
     "y": 310,
-    "cost": 35,
+    "cost": 70,
     "effect": "革命には物資が必要だ。鉄道職員を味方につける必要がある。そうすれば、作戦基地周辺に補給基地を用意し隠すことができる。",
     "prerequisites": [
       "SOV_the_left_opposition",
       "SOV_the_right_opposition"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 62
+      }
     ]
   },
   {
@@ -33,6 +47,13 @@
     "prerequisites": [
       "SOV_the_left_opposition",
       "SOV_the_right_opposition"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 67
+      }
     ]
   },
   {
@@ -44,6 +65,13 @@
     "effect": "どのような違いがあれども、この闘争の段階ではスターリンに反対するという点で一致しなければならない。",
     "prerequisites": [
       "SOV_gain_support_from_party_members"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      }
     ]
   },
   {
@@ -55,6 +83,13 @@
     "effect": "$SOV_grigory_zinovyev$はかつてトロツキーに対抗するためスターリンに味方した。その直後にスターリンは彼を裏切り、あらゆる地位から追放した。彼はその些細なことを忘れていないだろうし、もし我々が$SOV_grigory_zinovyev$に復讐の機会を与えたのなら、それを受け入れるだろう。",
     "prerequisites": [
       "SOV_cooperation_against_stalin"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 46
+      }
     ]
   },
   {
@@ -66,6 +101,13 @@
     "effect": "同志リューチンはスターリンの多くの欠点や短所を躊躇なく非難してきた。スターリンが彼を見せしめにしたのは当然といえば当然かもしれない。しかし今は、彼がスターリン亡き後の国家運営に協力できるように、スターリンが排除されるまでの間海外に逃亡させるよう裏から手を回すべきだ。",
     "prerequisites": [
       "SOV_cooperation_against_stalin"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 44
+      }
     ]
   },
   {
@@ -77,6 +119,13 @@
     "effect": "革命の最中には、進むべき最良の道についての絶え間ない議論に執着する余裕のない時期があった。しかし時代は変わり、労働者に約束した生活でのあらゆる面における民主主義を実現させる時が来た。このことは同時に、かつて善意の批判を妨害工作とみなされた人々を党に復帰させることができるようになったという意味でもある。",
     "prerequisites": [
       "SOV_cooperation_against_stalin"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      }
     ]
   },
   {
@@ -89,6 +138,13 @@
     "prerequisites": [
       "SOV_all_power_to_the_soviets",
       "SOV_incorporate_local_organizations"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 50
+      }
     ]
   },
   {
@@ -100,6 +156,13 @@
     "effect": "もし革命が持続するなら、それは社会のあらゆる面を埋め合わせなければならない。国民全体が革命の担い手であると考えてこそ、数多の脅威に耐えることができる。",
     "prerequisites": [
       "SOV_strengthen_the_trade_unions"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 41
+      }
     ]
   },
   {
@@ -111,6 +174,13 @@
     "effect": "一人の人間が国全体を代表することは、根本的に非民主的であり、故に反革命的である。そのようなカルト的行為は廃し、代わって最高会議に集う人民の集団的意思によって、我らが連邦の代表を永遠に務めることを宣言する。",
     "prerequisites": [
       "SOV_the_peoples_revolution"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 48
+      }
     ]
   }
 ]

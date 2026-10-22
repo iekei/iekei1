@@ -8,6 +8,17 @@
     "effect": "我々の先の大戦での行いは、いまだ多くの人々の記憶に留まっている。大陸における脅威の認識を、本来の危険に向けなければならない。つまり、東にそびえ立つ強大な共産主義の脅威を。そのために、大陸に目を向けるための大規模な宣伝活動を始めるつもりだ。",
     "prerequisites": [
       "GER_the_monarchy_compromise"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 43
+      },
+      {
+        "type": "add_stability",
+        "value": 5
+      }
     ]
   },
   {
@@ -20,6 +31,17 @@
     "prerequisites": [
       "GER_the_great_red_menace",
       "GER_bulwark_against_bolshevism"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 44
+      },
+      {
+        "type": "add_world_tension",
+        "value": 5
+      }
     ]
   },
   {
@@ -31,6 +53,17 @@
     "effect": "オーストリア＝ハンガリー帝国の後継であるドナウの国々は、我々の同盟国であることが何を意味するのか忘れていない。彼らを陣営に招きいれ、共産主義の脅威から防護しなければならない。 ",
     "prerequisites": [
       "GER_central_european_alliance"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 47
+      },
+      {
+        "type": "add_world_tension",
+        "value": 4
+      }
     ]
   },
   {
@@ -42,6 +75,17 @@
     "effect": "ソビエトの侵略を受けやすいバルカン諸国への影響力を拡大する必要がある。残りのドナウ諸国を陣営に招き入れ、共産主義の脅威から防護しなければならない。",
     "prerequisites": [
       "GER_danubian_membership"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 47
+      },
+      {
+        "type": "add_world_tension",
+        "value": 6
+      }
     ]
   },
   {
@@ -53,6 +97,13 @@
     "effect": "共産主義勢力の影響がバルカン諸国に入り込んできた。これを許すことはできない。共産主義が根付く前に破壊しなければならない。",
     "prerequisites": [
       "GER_danubian_expansion"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 43
+      }
     ]
   },
   {
@@ -64,6 +115,17 @@
     "effect": "ヨーロッパの東の国境から遠く離れているとはいえ、もし中欧が陥落すれば次に狙われるのは自分達であることを低地諸国は自覚している。共に共産主義の脅威に対して立ち向かえるよう、彼らに同盟を提供するべきだ。",
     "prerequisites": [
       "GER_central_european_alliance"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 41
+      },
+      {
+        "type": "add_world_tension",
+        "value": 3
+      }
     ]
   },
   {
@@ -75,6 +137,13 @@
     "effect": "共産主義の影響が西ヨーロッパに浸透してきた。これを許してはならない。共産主義が根付く前に破壊しなければならない。",
     "prerequisites": [
       "GER_low_countries_membership"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 42
+      }
     ]
   },
   {
@@ -86,6 +155,17 @@
     "effect": "山と寒さはアカのろくでなしどもに対する防御としては全く役に立たず、スカンディナヴィア人もそれを知っているはずだ。彼らに共産主義の脅威に対する保護と同盟を提供するべきだ。",
     "prerequisites": [
       "GER_central_european_alliance"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      },
+      {
+        "type": "add_world_tension",
+        "value": 3
+      }
     ]
   },
   {
@@ -97,6 +177,17 @@
     "effect": "20年間、バルト人は再併合と共産主義という二重の危機に脅かされながら生きてきた。彼らに共産主義の脅威に対する保護と同盟を提供するべきだ。",
     "prerequisites": [
       "GER_scandinavian_membership"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      },
+      {
+        "type": "add_world_tension",
+        "value": 4
+      }
     ]
   },
   {
@@ -108,6 +199,17 @@
     "effect": "ポーランド人は周辺国全てを不信の眼差しで見ている、だとしても最大の脅威が東から到来することは理解しているはずだ。彼らに共産主義の脅威に対する保護と同盟を提供するべきだ。",
     "prerequisites": [
       "GER_scandinavian_membership"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 47
+      },
+      {
+        "type": "add_world_tension",
+        "value": 5
+      }
     ]
   }
 ]

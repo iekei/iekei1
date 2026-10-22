@@ -1980,9 +1980,7 @@ class FocusTreeManager {
     FocusTreeManager.applyFocusEffect(f);
     const completionRewards = FocusTreeManager.getCompletionRewards(f);
     window.dispatchEvent(new CustomEvent('nf-reward-debug', { detail: { message: `completion_reward 適用: ${FocusTreeManager.localizedTitle(f)}`, data: { focusId: id, rewards: completionRewards, rewardCount: completionRewards.length } } }));
-    if (window.NationalFocusManager && typeof NationalFocusManager.applyCompletionRewards === 'function') {
-      NationalFocusManager.applyCompletionRewards(completionRewards);
-    }
+    FocusTreeManager.applyCompletionRewards(completionRewards);
     DecisionManager.onFocus(f);
     CoreEngine.log('国家方針「' + FocusTreeManager.localizedTitle(f) + '」が完了しました！');
     GameUI.notify('方針完了: ' + FocusTreeManager.localizedTitle(f), 'success');
@@ -2001,6 +1999,34 @@ class FocusTreeManager {
     if (wsMatch) s.warSupport = Math.min(100, s.warSupport + parseInt(wsMatch[1]));
     if (f.effect.includes('研究スロット')) s.researchSlots = Math.min(5, s.researchSlots + 1);
     CoreEngine.renderStats();
+  }
+
+  // ---- 完了報酬の適用 (HOI4 の completion_reward) ----
+  // 国家方針データの completion_rewards を gameState に反映する。
+  // 表示と適用のロジックは assets/hoi4-effects-config.js に一元化している。
+  static applyCompletionRewards(rewards) {
+    const s = CoreEngine.gameState;
+    const list = Array.isArray(rewards) ? rewards : [];
+    const applyEffect = window.HOI4EffectsConfig?.applyEffect || window.applyEffect;
+    const applied = [];
+    const summary = [];
+    list.forEach(reward => {
+      if (!reward || !reward.type) return;
+      if (typeof applyEffect === 'function') {
+        applyEffect(s, reward);
+        applied.push(reward);
+        const text = window.HOI4EffectsConfig?.formatEffect?.(reward);
+        if (text) summary.push(typeof text === 'string' ? text : text.text);
+      }
+    });
+    // 上限・下限のクランプ (政治力 0〜999 / 安定度・戦争協力度 0〜100)
+    s.politicalPower = Math.max(0, Math.min(999, Number(s.politicalPower) || 0));
+    s.stability = Math.max(0, Math.min(100, Number(s.stability) || 0));
+    s.warSupport = Math.max(0, Math.min(100, Number(s.warSupport) || 0));
+    if (typeof CoreEngine.renderStats === 'function') CoreEngine.renderStats();
+    if (typeof CoreEngine.updateCalendar === 'function') CoreEngine.updateCalendar();
+    if (summary.length) CoreEngine.log('🎁 方針報酬: ' + summary.map(line => line.replace(/^・/, '')).join(' / '));
+    return applied;
   }
 
   static normalizeCompletionRewards(f) {
@@ -3816,6 +3842,8 @@ class BattlePlanManager {
     army.frontEnemy = enemyTag;
     army.route = null;
     army.arrow = null; army.targetState = null; army.chain = null;
+    if (typeof PlanningBonus !== 'undefined') PlanningBonus.reset(army);
+    OffensivePlanner.deployAlongFront(army);   // 国境線に沿って師団を自動配備
     CoreEngine.log(army.name + 'の前線を' + enemyTag + 'との国境に自動設定しました (' + ordered.length + '���点)。');
     GameUI.notify('✅ ' + enemyTag + 'との国境に前��を自動スナップ (' + ordered.length + '地点) — Shift+右ドラッグで攻撃矢印を描けます', 'success');
     MultiplayerManager.broadcast({ type: 'battle_front', army: army.id, points: ordered });
@@ -3871,6 +3899,8 @@ class BattlePlanManager {
       } else {
         const army = BattlePlanManager.selectedArmy();
         army.frontline = snapped;
+        if (typeof PlanningBonus !== 'undefined') PlanningBonus.reset(army);  // 前線を引き直すと計画準備はリセット
+        OffensivePlanner.deployAlongFront(army);   // 配属師団を前線へ自動展開
         CoreEngine.log(army.name + 'の前線を国境に設定しました (' + snapped.length + '点' + (dropped ? ' / ' + dropped + '点をスナップ' : '') + ')。');
         GameUI.notify('前線設定完了 (国境にスナップ' + (dropped ? ' — ' + dropped + '点補正' : '') + ') — Shift+右ドラッグで攻撃矢印を描けます', 'success');
         MultiplayerManager.broadcast({ type: 'battle_front', army: army.id, points: snapped });
@@ -3909,6 +3939,7 @@ class BattlePlanManager {
           army.chain = chain;
           army.chainIdx = 0;
           army.progress = 0;
+          if (typeof PlanningBonus !== 'undefined') PlanningBonus.reset(army);  // 新しい攻撃線 = 新しい計画
           if (chain.length > 0) {
             const firstTarget = MapRenderer.states[chain[0]];
             CoreEngine.log(army.name + 'の攻撃作戦を描きました: → ' + target.name + ' (前線から' + chain.length + '州を段階的に進撃 — 最初: ' + (firstTarget ? firstTarget.name : '') + ')');
@@ -3941,6 +3972,7 @@ class BattlePlanManager {
     army.arrow = null;
     army.targetState = null;
     army.executing = false;
+    if (typeof PlanningBonus !== 'undefined') PlanningBonus.reset(army);
     BattlePlanManager.renderPanel();
   }
 
@@ -4013,6 +4045,9 @@ class BattlePlanManager {
     if (!unit.zone || !MapRenderer.ready) return;
     const gs = CoreEngine.gameState;
     const player = gs.country;
+    // ドクトリン補正 (空軍: 制空/戦略爆撃, 海軍: 制海権)
+    const airDoctrine = typeof DoctrineManager !== 'undefined' ? DoctrineManager.bonuses('air') : {};
+    const navyDoctrine = typeof DoctrineManager !== 'undefined' ? DoctrineManager.bonuses('naval') : {};
     // 任務区域に近い敵の州 (開戦国のみ) を探す
     const typeNames = MapRenderer.provinces.types;
     let target = null, bestD = 260;
@@ -4030,7 +4065,8 @@ class BattlePlanManager {
     if (unit.type === 'air' && unit.mission === 'strategic') {
       const targets = ['arms_factory', 'industrial_complex', 'infrastructure'];
       const key = targets[Math.floor(unit.progress / 30) % targets.length];
-      if (unit.progress % 25 < 1.2 && (st.b[key] || 0) > 0) {
+      const bombRate = 25 / (1 + (airDoctrine.strategicBombing || 0));
+      if (unit.progress % bombRate < 1.2 && (st.b[key] || 0) > 0) {
         st.b[key]--;
         MapRenderer.invalidateModes();
         CoreEngine.log('💥 戦略爆撃: ' + st.name + 'の' + key + 'を破壊 (' + st.b[key] + 'レベル残り)');
@@ -4061,12 +4097,13 @@ class BattlePlanManager {
       }
     }
     // 空軍「制空」: 制空権をじわじわ獲得
+    // 空軍ドクトリン (airAttack / agility) は制空権の獲得速度に影響する
     if (unit.type === 'air' && unit.mission === 'air_sup') {
-      gs.airSupremacy = Math.min(100, (gs.airSupremacy || 0) + 0.3);
+      gs.airSupremacy = Math.min(100, (gs.airSupremacy || 0) + 0.3 * (1 + (airDoctrine.airAttack || 0) + (airDoctrine.agility || 0) * 0.5));
     }
-    // 海軍「哨戒」: 制海権をじわじわ獲得
+    // 海軍ドクトリン (navalHit / submarineAttack) は制海権の獲得速度に影響する
     if (unit.type === 'navy' && unit.mission === 'patrol') {
-      gs.navalSupremacy = Math.min(100, (gs.navalSupremacy || 0) + 0.3);
+      gs.navalSupremacy = Math.min(100, (gs.navalSupremacy || 0) + 0.3 * (1 + (navyDoctrine.navalHit || 0) + (navyDoctrine.navalHeavy || 0) * 0.5));
     }
   }
 
@@ -4094,7 +4131,11 @@ class BattlePlanManager {
 
   static onTick() {
     if (!MapRenderer.ready) return;
-    BattlePlanManager.armies.forEach(army => OffensivePlanner.tickArmy(army));
+    BattlePlanManager.armies.forEach(army => {
+      // 作戦計画の準備ボーナスを毎日更新してから進軍処理を行う
+      if (typeof PlanningBonus !== 'undefined') PlanningBonus.tick(army);
+      OffensivePlanner.tickArmy(army);
+    });
     // 海軍/空軍ミッションの進行 (DLC拡張)
     const gs = CoreEngine.gameState;
     [...BattlePlanManager.navy, ...BattlePlanManager.air].forEach(unit => {
@@ -6234,21 +6275,47 @@ class ResearchManager {
     return { yearsAhead: Math.round(yearsAhead * 10) / 10, percent, multiplier: 1 + yearsAhead };
   }
 
+  // ---- 国家方針の研究ボーナス (完成報酬 add_tech_bonus) ----
+  // 例: 研究ボーナス 50% (1回分) → 次に開始する該当カテゴリの研究時間を 50% 短縮する。
+  static techCategoryOf(tech) {
+    const id = String(tech?.id || '');
+    if (/ship|naval|convoy|submarine/.test(id)) return '海軍';
+    if (/air|fighter|bomber|plane|airframe|torpedo_bomb/.test(id)) return '空軍';
+    if (/tank|armor|artillery|infantry|gun|weapon|engine|motor/.test(id)) return '陸軍';
+    return '全般';
+  }
+
+  static takeTechBonus(tech) {
+    const s = CoreEngine.gameState;
+    if (!Array.isArray(s.techBonuses) || !s.techBonuses.length) return null;
+    const category = ResearchManager.techCategoryOf(tech);
+    const index = s.techBonuses.findIndex(bonus => bonus && (bonus.category === category || bonus.category === '全般'));
+    if (index < 0) return null;
+    const bonus = s.techBonuses[index];
+    const applied = { category: bonus.category, bonus: Number(bonus.bonus) || 0 };
+    bonus.uses = Math.max(0, (Number(bonus.uses) || 1) - 1);
+    if (bonus.uses <= 0) s.techBonuses.splice(index, 1);
+    return applied;
+  }
+
   static selectTech(tech) {
     if (ResearchManager.researchedTech.has(tech.id)) { GameUI.notify('既に研究済みです。'); return; }
     if (tech.prerequisites && !tech.prerequisites.every(p => ResearchManager.researchedTech.has(p))) {
-      GameUI.notify('前提技術��不足しています。', 'alert'); return;
+      GameUI.notify('前提技術が不足しています。', 'alert'); return;
     }
     const s = CoreEngine.gameState;
     const penalty = ResearchManager.researchPenalty(tech);
     const baseTime = tech.research_time || 100;
-    const totalTime = Math.round(baseTime * penalty.multiplier);
+    const techBonus = ResearchManager.takeTechBonus(tech);
+    const bonusFactor = techBonus ? Math.max(0.1, 1 - techBonus.bonus) : 1;
+    const totalTime = Math.max(1, Math.round(baseTime * penalty.multiplier * bonusFactor));
     for (let i = 1; i <= s.researchSlots; i++) {
       if (!ResearchManager.researching[i]) {
-        ResearchManager.researching[i] = { techId: tech.id, progress: 0, total: totalTime, baseTime, penaltyPercent: penalty.percent };
+        ResearchManager.researching[i] = { techId: tech.id, progress: 0, total: totalTime, baseTime, penaltyPercent: penalty.percent, techBonus: techBonus ? techBonus.bonus : 0 };
+        const bonusMsg = techBonus ? ' / 研究ボーナス -' + Math.round(techBonus.bonus * 100) + '%' : '';
         const msg = penalty.percent > 0
-          ? '研究開始: ' + tech.title + ' (先取りペナルティ +' + penalty.percent + '% → ' + totalTime + '日)'
-          : '研究開始: ' + tech.title;
+          ? '研究開始: ' + tech.title + ' (先取りペナルティ +' + penalty.percent + '% → ' + totalTime + '日' + bonusMsg + ')'
+          : '研究開始: ' + tech.title + (bonusMsg ? ' (' + bonusMsg.replace(' / ', '') + ' → ' + totalTime + '日)' : '');
         CoreEngine.log(msg);
         GameUI.notify(msg, 'success');
         MultiplayerManager.broadcast({ type: 'research_start', slot: i, techId: tech.id });
@@ -6942,7 +7009,8 @@ window.addEventListener('DOMContentLoaded', () => StartScreen.show());
 <!-- ==================== 徴兵・訓練システム (師団は徴兵→訓練でのみ増える) ==================== -->
 <script src="training.js"></script>
 <!-- ==================== DLC拡張モジュール (ドクトリン/兵器設計/諜報/MIO・国際市場/講和会議/将軍特性) ==================== -->
-<script src="dlc.js?v=artwork-2"></script>
+<script src="assets/doctrine-data.js"></script>
+<script src="dlc.js?v=artwork-3"></script>
   <script src="strategy.js?v=artwork-2"></script>
   <script src="assets/technology-resolver.js"></script>
   <script src="assets/equipment-designer.js"></script>

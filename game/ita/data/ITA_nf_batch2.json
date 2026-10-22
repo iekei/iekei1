@@ -9,6 +9,18 @@
     "prerequisites": [
       "ITA_litoranea_balbo",
       "ITA_prospect_for_oil"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 51
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -16,10 +28,22 @@
     "title": "石油の産出調査",
     "x": 1250,
     "y": 570,
-    "cost": 35,
+    "cost": 70,
     "effect": "古の諸帝国は、常に新たなる競合相手を利する事に怯えてきた。この例に沿って、我々は他の国家からの石油に頼るわけにはならず、帝国内での資源自給に尽力せねばならない。これによっは遠い将来まで競争力を保つことかできるのである。",
     "prerequisites": [
       "ITA_regional_development"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -27,10 +51,22 @@
     "title": "リビアの製油所",
     "x": 1250,
     "y": 700,
-    "cost": 35,
+    "cost": 70,
     "effect": "石油資源と本土の工業地帯に双方に近いベンガジは、製油所の建設に完璧に適した地である。",
     "prerequisites": [
       "ITA_prospect_for_oil"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 50
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -42,6 +78,13 @@
     "effect": "ここまでの間、植民地警察は有能な部隊であることが証明されている。もう少し手を加えれば、各植民地に投資した額に見合った収穫が確約されることだろう。",
     "prerequisites": [
       "ITA_regional_development"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 58
+      }
     ]
   },
   {
@@ -53,6 +96,13 @@
     "effect": "同じ帝国の人間でも、ヨーロッパからの部隊はしばしば、アフリカの厳しい気候に苦しめられている。当然のことながら、地元民は問題ない。暑い天候下で戦わねばならない時は、奴らをいくらか採用して部隊の支援に回すとしよう。",
     "prerequisites": [
       "ITA_regional_development"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 55
+      }
     ]
   },
   {
@@ -65,6 +115,22 @@
     "prerequisites": [
       "ITA_polizia_dell_africa_italiana",
       "ITA_strengthen_ascari_corps"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      },
+      {
+        "type": "create_wargoal",
+        "target": "ETH",
+        "wargoal": "annex_everything"
+      },
+      {
+        "type": "add_army_experience",
+        "value": 5
+      }
     ]
   },
   {
@@ -76,6 +142,13 @@
     "effect": "テルニの製鋼所は長い間、イタリアの鉄鋼生産を支えてきた。今後の戦争では、これまで以上に彼らに頼ることになるだろう。今の内にいくらか投資しておけば、後々何倍もの利益になって返ってくるはずだ。",
     "prerequisites": [
       "ITA_italian_highways_bba"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 95
+      }
     ]
   },
   {
@@ -87,6 +160,18 @@
     "effect": "この地域を、より大規模な産業の中心地に成長させようと思ったら、今テルニにある発電所だけでは不十分だ。もっと数を増やさなくては。",
     "prerequisites": [
       "ITA_italian_highways_bba"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 88
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 2
+      }
     ]
   },
   {
@@ -94,11 +179,23 @@
     "title": "合成ゴム産業",
     "x": 2150,
     "y": 310,
-    "cost": 35,
+    "cost": 70,
     "effect": "地中海の真ん中に位置する我が国は、敵国による封鎖攻撃に対して特に脆弱だ。我々が世界での正当な立場を獲得するためには、外国からの輸入に頼ることなく、国内の産業を維持できるようにしておかなくてはならない。",
     "prerequisites": [
       "ITA_steel_industry_in_terni",
       "ITA_power_plants_in_terni"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 74
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -110,6 +207,13 @@
     "effect": "北イタリアは、昔から我が国の工業の中心地だった。地域全体が申し分ない位置にあるため、ちょっと時間をかけて少しばかりの資産を投資すれば、今後さらなる成長が期待できる。",
     "prerequisites": [
       "ITA_industria_della_gomma_sintetica"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 43
+      }
     ]
   }
 ]

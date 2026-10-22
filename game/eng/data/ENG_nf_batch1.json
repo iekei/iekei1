@@ -6,7 +6,20 @@
     "y": 50,
     "cost": 70,
     "effect": "ポーランドはドイツのエニグマ暗号を解読できる、「暗号爆弾」と呼ばれる素晴らしい機械を開発してきた。我々はさらにそれの開発を進めるためのリソースを、ブレッチリー・パーク政府暗号学校に有している。",
-    "prerequisites": []
+    "prerequisites": [],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 118
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
+    ]
   },
   {
     "id": "tizard_mission_focus",
@@ -18,6 +31,24 @@
     "prerequisites": [
       "crypto_bomb_focus",
       "radar_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 55
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -29,6 +60,19 @@
     "effect": "「ウラン爆発の軍事的利用（Military Application of Uranium Detonation）」委員会は、ウランを制御不可能な核分裂反応を起こすために利用する事で、信じがたいほどの威力を持つ爆弾の製作が理論的に可能であると確信していた。だが、独力ではこの技術の開発は間に合わないかもしれない。アメリカ人との談合をすべきだろう。",
     "prerequisites": [
       "tizard_mission_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 48
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -38,7 +82,19 @@
     "y": 50,
     "cost": 70,
     "effect": "[Root.GetLimitedRearmamentDesc]",
-    "prerequisites": []
+    "prerequisites": [],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 121
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 2
+      }
+    ]
   },
   {
     "id": "ENG_motorized_focus",
@@ -49,6 +105,17 @@
     "effect": "近年、陸軍は歩兵の自動車化を試みている。十分な自動車化が成されているとは言い難いが、陸軍大臣の言葉があれば間も無く可能となるだろう。",
     "prerequisites": [
       "limited_rearmament_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 92
+      },
+      {
+        "type": "add_army_experience",
+        "value": 17
+      }
     ]
   },
   {
@@ -60,6 +127,13 @@
     "effect": "[Root.GetRoyalTankRegimentDesc]",
     "prerequisites": [
       "ENG_motorized_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 70
+      }
     ]
   },
   {
@@ -71,6 +145,13 @@
     "effect": "敵はどこからやってくるか、そんなことは決まっている。我々は膨大な対空砲台で海岸を護らねばならない。",
     "prerequisites": [
       "limited_rearmament_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 99
+      }
     ]
   },
   {
@@ -82,6 +163,19 @@
     "effect": "敵爆撃機の発見能力は戦争遂行には欠かせない。更なるレーダー技術の開発と、沿岸部の索敵網の構築に費用を惜しむべきではないだろう。",
     "prerequisites": [
       "air_defense_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 72
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "空軍",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -93,6 +187,23 @@
     "effect": "航空省は、民需から軍需工業へ転換する妙案を発案した。重要ないくつかの企業に十分な支援と貸し出しを行う事で、彼らの工場を拡大させ、拡大した工場は円滑な軍需への転換を容易にするだろうという案である。",
     "prerequisites": [
       "limited_rearmament_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 82
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 2
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 2
+      }
     ]
   },
   {
@@ -104,6 +215,18 @@
     "effect": "産業力の強化に注力する。",
     "prerequisites": [
       "shadow_scheme_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 79
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   }
 ]

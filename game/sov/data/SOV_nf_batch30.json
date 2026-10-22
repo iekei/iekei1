@@ -9,6 +9,18 @@
     "prerequisites": [
       "SOV_romanov_reconstruction",
       "SOV_dismantle_the_zemsky_sobor"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -21,6 +33,13 @@
     "prerequisites": [
       "SOV_westward_bound",
       "SOV_romanov_reconstruction"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 50
+      }
     ]
   },
   {
@@ -32,6 +51,13 @@
     "effect": "かつて我らは弱きスラヴの同胞を守るため、先の大戦にも参戦した全スラヴ人の擁護者だった。もう一度この責務を負い、彼らの防衛に我が軍事力を貸す時が来た。",
     "prerequisites": [
       "SOV_the_triple_entente"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 43
+      }
     ]
   },
   {
@@ -43,6 +69,13 @@
     "effect": "長年にわたり、スウェーデンは帝国にとって悩みの種だった。奴らは幾度もロシアを攻撃し我らに対する包囲網を作ろうとした。ツァーリ・ピョートル1世は初めて奴らを押し返し、ポルタヴァの戦いに勝利した。1809年に我らは再び奴らを打ち破り、連中に自らの立場を思い知らせたと考えられてきた。しかし、奴らはバルト地域における我が国の利益を奪おうとし続けている。今こそ、断固としてこの小国を黙らせる時である。",
     "prerequisites": [
       "SOV_westward_bound"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 48
+      }
     ]
   },
   {
@@ -54,6 +87,13 @@
     "effect": "フィンランド大公国は一世紀以上にわたり我が国の北部国境を守ってきたが、内戦によって袂を分かった。フィンランドと祖国を再び統合する時が来たのである。",
     "prerequisites": [
       "SOV_westward_bound"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      }
     ]
   },
   {
@@ -65,6 +105,13 @@
     "effect": "バルト地域は長い間、分かたれざるロシアの一部であった。国家が弱体化した時に離脱したのであり、一刻も早く取り戻さねばならない。",
     "prerequisites": [
       "SOV_westward_bound"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 43
+      }
     ]
   },
   {
@@ -78,6 +125,13 @@
       "SOV_secure_the_baltics",
       "SOV_secure_finland",
       "SOV_the_old_enemy"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      }
     ]
   },
   {
@@ -90,6 +144,18 @@
     "prerequisites": [
       "SOV_our_slavic_commitments",
       "SOV_panslavic_nationalism"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 57
+      },
+      {
+        "type": "create_wargoal",
+        "target": "ROM",
+        "wargoal": "annex_everything"
+      }
     ]
   },
   {
@@ -102,6 +168,18 @@
     "prerequisites": [
       "SOV_dismantle_the_zemsky_sobor",
       "SOV_romanov_reconstruction"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 52
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -114,6 +192,18 @@
     "prerequisites": [
       "SOV_pacify_the_rim",
       "SOV_dismantle_the_zemsky_sobor"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 54
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   }
 ]

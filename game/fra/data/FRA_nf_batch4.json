@@ -8,6 +8,13 @@
     "effect": "戦場とは軍隊どうしが衝突する小さな領域であるとする、過去の概念は陳腐化した。大規模なモータリゼーション、飛行機、無線通信により、戦場は数百キロメートルの距離を素早く移動するものとなるのだ。これに対する準備は、早ければ早い程よい。",
     "prerequisites": [
       "FRA_aggressive_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 79
+      }
     ]
   },
   {
@@ -19,6 +26,17 @@
     "effect": "歩兵車両生産の優れた方法を発見する事で、前線を支援し、補強する能力を高める助けになるだろう。",
     "prerequisites": [
       "FRA_battle_of_maneuver"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 56
+      },
+      {
+        "type": "add_army_experience",
+        "value": 21
+      }
     ]
   },
   {
@@ -30,6 +48,17 @@
     "effect": "戦争において、装甲車両の果たす役目はますます重要になりつつある。脅威の度合いでは標準的な戦車にやや劣るものの、装甲車両は情報伝達、作戦指令、輸送、現代戦において我々を優位に立たせてくれる。",
     "prerequisites": [
       "FRA_motorized_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      },
+      {
+        "type": "add_army_experience",
+        "value": 24
+      }
     ]
   },
   {
@@ -41,6 +70,17 @@
     "effect": "原則として、歩兵が全ての機甲戦力を統制する。より軽くて速い装甲偵察部隊の「乗り物」、つまり装甲車両（Automitrailleuses）ならば、搭載した機銃である程度の火力を持つことができ、行軍にも適している。",
     "prerequisites": [
       "FRA_mechanized_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 58
+      },
+      {
+        "type": "add_army_experience",
+        "value": 23
+      }
     ]
   },
   {
@@ -52,6 +92,17 @@
     "effect": "飛行機の発展により生まれたのは、陸軍にとって憂慮すべき第三の側面である。側面の防御を固めなければ、破滅に直面することになる。",
     "prerequisites": [
       "FRA_aggressive_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 63
+      },
+      {
+        "type": "add_army_experience",
+        "value": 8
+      }
     ]
   },
   {
@@ -63,6 +114,28 @@
     "effect": "艦船及び地上戦力への航空支援は、比較的小さな投資で非常に効率的な成果を挙げている。この目的に用いられる航空機に対して、我々の技術者が次世代の支援機を構成できるような複数の改良の提案が存在している。",
     "prerequisites": [
       "FRA_air_dominance"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 53
+      },
+      {
+        "type": "add_building_construction",
+        "building": "dockyard",
+        "level": 1
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "空軍",
+        "bonus": 0.5,
+        "uses": 1
+      },
+      {
+        "type": "add_air_experience",
+        "value": 23
+      }
     ]
   },
   {
@@ -74,6 +147,13 @@
     "effect": "空中戦は地上戦の目標に追随してこそ軍事的な意味を持つ。地上戦と空中戦を統合するほど、戦果は拡大するだろう。",
     "prerequisites": [
       "FRA_cas_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 58
+      }
     ]
   },
   {
@@ -85,6 +165,13 @@
     "effect": "今日の展開の早い戦争においては、低速の砲列は追いつけないことがままある。航空機に爆弾を搭載し、その役目を課すことができるだろう。",
     "prerequisites": [
       "FRA_air_ground_cooperation"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 53
+      }
     ]
   },
   {
@@ -99,6 +186,17 @@
       "FRA_heavy_armor_focus",
       "FRA_extend_the_maginot_line",
       "FRA_flying_artillery"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 60
+      },
+      {
+        "type": "add_army_experience",
+        "value": 25
+      }
     ]
   },
   {
@@ -108,6 +206,18 @@
     "y": 50,
     "cost": 70,
     "effect": "ドイツとイタリアのファシズムの台頭により、我々が生き残るには左派内部での諍いを停止すべきなのは明らかだ。すべての様々な左派の人々が連帯した大規模な人民戦線には、ファシズムを生み出す経済状態に最終的に対抗する人々からの信任がある。",
-    "prerequisites": []
+    "prerequisites": [],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 124
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 2
+      }
+    ]
   }
 ]

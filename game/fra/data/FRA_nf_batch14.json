@@ -8,6 +8,13 @@
     "effect": "何世紀にも渡り、我々の国民たちは我々が不倶戴天の、先祖代々の敵だという信念の元で生きてきた。この信念は我々の利益が相いれないものだという考えに基づいている。しかし、我々の影響圏を定め、注意して干渉を控えれば、確実に合意へ達することができるだろう。",
     "prerequisites": [
       "FRA_towards_a_new_europe"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 45
+      }
     ]
   },
   {
@@ -19,6 +26,13 @@
     "effect": "ベルギーを勢力圏におさめた今、ベルギーのフランス語圏をわが家に呼び戻す時だ。残りは新たな国になるだろうが。",
     "prerequisites": [
       "FRA_establish_spheres_of_influence"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 53
+      }
     ]
   },
   {
@@ -30,6 +44,13 @@
     "effect": "ベルギー人は我々に依存しており、それの事実を忘れさせるわけにはいかない。独立を維持したままなら、少なくとも友好的な政府が設立されるだろう。",
     "prerequisites": [
       "FRA_establish_spheres_of_influence"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      }
     ]
   },
   {
@@ -42,6 +63,13 @@
     "prerequisites": [
       "FRA_split_belgium",
       "FRA_align_belgium"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 55
+      }
     ]
   },
   {
@@ -53,6 +81,13 @@
     "effect": "遥か昔に失陥した州は、今に再び我らのものとなるだろう。世界のフランス語圏の人々はいずれ、みな再び祖国に統合されるであろう。",
     "prerequisites": [
       "FRA_grow_the_empire"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      }
     ]
   },
   {
@@ -65,6 +100,18 @@
     "prerequisites": [
       "FRA_intervention_in_greece",
       "FRA_grow_the_empire"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      },
+      {
+        "type": "create_wargoal",
+        "target": "ENG",
+        "wargoal": "annex_everything"
+      }
     ]
   },
   {
@@ -76,6 +123,13 @@
     "effect": "中東の国々は、オスマン帝国の亡骸から削り出された偽りの概念にすぎない。彼らには平均的なフランスの村落程度の自治権しかないという事実を、思い出させる時が来たのだ。",
     "prerequisites": [
       "FRA_expand_to_the_suez"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      }
     ]
   },
   {
@@ -87,6 +141,19 @@
     "effect": "全てのフランス人の心を動かし彼らの民族精神を称揚することに注力せねばなら\nない。我々が彼らの求める強力な指導者足りうることを示してやることで、彼らも我らが栄光の国家の誇り高き市民となるだろう。",
     "prerequisites": [
       "FRA_revive_the_national_bloc"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 95
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -98,6 +165,13 @@
     "effect": "敵がヨーロッパ中に蔓延っている以上、もはや時代遅れの壁の後ろに座り込んでいることはできない。今こそ我が軍を強化し、フランスが偉大なる国家であり続けられるように国境を押し上げる時だ。",
     "prerequisites": [
       "FRA_right_wing_rhetoric"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 78
+      }
     ]
   },
   {
@@ -109,6 +183,13 @@
     "effect": "我々はフランスだ！大戦の勝者だ！ヨーロッパの救世主だ！世界の最も偉大な思想家の生地こそ我が国だ。世界を混沌へと誘う国が多すぎる。我々は必要とされている、我々はその声に耳を傾ける。我々が舵を取り、この嵐を晴らし、我々の支配の下で人類を安寧へと導く！",
     "prerequisites": [
       "FRA_army_of_aggression"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 52
+      }
     ]
   }
 ]

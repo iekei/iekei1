@@ -8,6 +8,13 @@
     "effect": "輸送機は飛行機と同じくらい良いものだ。現代の飛行機がなければどんな輸送機も無駄な投資になる。",
     "prerequisites": [
       "FRA_carrier_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 46
+      }
     ]
   },
   {
@@ -19,6 +26,18 @@
     "effect": "ヨーロッパの状況がますます緊迫しているため、従来の方法で新しい水上部隊を構築する時間がない。新しい戦艦をできるだけ早く使えるようにするには資源に優先順位をつける必要がある。",
     "prerequisites": [
       "FRA_capital_ship_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 47
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -30,6 +49,13 @@
     "effect": "我々の現在の空母艦隊は絶望的に時代遅れであり、潜在的な敵よりかは勝っている。新しい輸送計画が最優先されるようにしなければならない。",
     "prerequisites": [
       "FRA_carrier_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      }
     ]
   },
   {
@@ -41,6 +67,29 @@
     "effect": "航空機、潜水艦、魚雷の開発により、主力艦は時代遅れになった。限られた海軍産業では、現代の海上の脅威に対して巨大なだけの水上要塞の建設に時間とお金を浪費する余裕はない。代わりに、効率の改善に焦点を合わせて、より多くの小型艦を建造できるようにしなければならない。",
     "prerequisites": [
       "FRA_naval_rearmament"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 98
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 2
+      },
+      {
+        "type": "add_building_construction",
+        "building": "bunker",
+        "level": 3
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "海軍",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -52,6 +101,13 @@
     "effect": "潜水艦は過去10年の間で洗練された。その発見と撃破がますます困難になっていることから、今ではすべての水上艦の致命的脅威とみなされている。",
     "prerequisites": [
       "FRA_the_young_school"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 75
+      }
     ]
   },
   {
@@ -63,6 +119,18 @@
     "effect": "銃砲の進歩により、敵の主力艦との長期にわたる打撃戦を勝ち残ることができる艦船を建造することはほとんど不可能になった。魚雷の一斉射で敵艦を圧倒する新鋭駆逐艦と水雷艇の艦隊を組織する方がいいだろう。",
     "prerequisites": [
       "FRA_the_young_school"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 64
+      },
+      {
+        "type": "add_building_construction",
+        "building": "dockyard",
+        "level": 1
+      }
     ]
   },
   {
@@ -75,6 +143,29 @@
     "prerequisites": [
       "FRA_surface_combat",
       "FRA_undersea_combat"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 44
+      },
+      {
+        "type": "add_building_construction",
+        "building": "dockyard",
+        "level": 1
+      },
+      {
+        "type": "add_building_construction",
+        "building": "bunker",
+        "level": 2
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "海軍",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -88,6 +179,28 @@
       "FRA_prioritize_the_joffre",
       "FRA_rush_the_richelieus",
       "FRA_improved_screen_ships"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 41
+      },
+      {
+        "type": "add_building_construction",
+        "building": "dockyard",
+        "level": 1
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "海軍",
+        "bonus": 0.5,
+        "uses": 1
+      },
+      {
+        "type": "add_navy_experience",
+        "value": 11
+      }
     ]
   },
   {
@@ -97,7 +210,23 @@
     "y": 50,
     "cost": 70,
     "effect": "今こそ空軍を拡大化させる時だ！計画によってすでに航空機と人員の両者の増強を支えるための、新たな航空基地の建設が始められた。",
-    "prerequisites": []
+    "prerequisites": [],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 112
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 2
+      },
+      {
+        "type": "add_air_experience",
+        "value": 12
+      }
+    ]
   },
   {
     "id": "FRA_fighter_focus",
@@ -108,6 +237,28 @@
     "effect": "革新的な民間技術を応用することにより、戦闘機の速度、航続距離と最大高度を上昇させる事ができる。他国の進歩に遅れないようにするためにこれに注力する必要がある。",
     "prerequisites": [
       "FRA_air_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 99
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 2
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "空軍",
+        "bonus": 0.5,
+        "uses": 1
+      },
+      {
+        "type": "add_air_experience",
+        "value": 29
+      }
     ]
   }
 ]

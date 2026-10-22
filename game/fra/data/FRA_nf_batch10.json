@@ -8,6 +8,17 @@
     "effect": "フランスは独立したポーランドを常に援助してきた。近年、我らの関係はやや冷え込んでいる。ドイツの脅威が差し迫っている今こそ、我々の条約を甦らせる時だろう。",
     "prerequisites": [
       "FRA_confirm_eastern_commitments"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 56
+      },
+      {
+        "type": "add_world_tension",
+        "value": 6
+      }
     ]
   },
   {
@@ -19,6 +30,13 @@
     "effect": "我々はドイツと相対する準備ができていない。同盟国は弱体であり、我が軍は時代遅れのものである。生き残りたいのならば、生け贄を用意する必要があるかもしれない。",
     "prerequisites": [
       "FRA_review_foreign_policy"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 58
+      }
     ]
   },
   {
@@ -31,6 +49,17 @@
     "prerequisites": [
       "FRA_strengthen_the_little_entente",
       "FRA_buy_time"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 54
+      },
+      {
+        "type": "add_stability",
+        "value": 7
+      }
     ]
   },
   {
@@ -42,6 +71,13 @@
     "effect": "フランス国民を戦わせようとするならば、明確な指針を持つ事がこれまで以上に重要である。内輪揉めを終わらせ、フランスと\"Liberté, égalité, fraternité（自由・平等・博愛）\"のために戦わねばならない。",
     "prerequisites": [
       "FRA_strengthen_government_support"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 58
+      }
     ]
   },
   {
@@ -53,6 +89,13 @@
     "effect": "ロシアが永久に戻らない今、フランスとイギリスのみがかつての三国協商国として残っている。歴史が繰り返す運命にあるならば、ヨーロッパにおける自由と民主主義の砦たる両国は同盟国であり続けなければならない。",
     "prerequisites": [
       "FRA_buy_time"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 58
+      }
     ]
   },
   {
@@ -64,6 +107,23 @@
     "effect": "我々の軍需産業は、近代火器を我々軍に供給する役割にかなっていない。だがアメリカには十分な生産能力がある。彼らが孤立主義に回帰しなければ、彼らが我々の必要とする武器を輸出するように交渉できるはずだ。",
     "prerequisites": [
       "FRA_go_with_britain"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 60
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 1
+      }
     ]
   },
   {
@@ -75,6 +135,13 @@
     "effect": "誇り高き歴史を持つフランスは、外交政策を余所から指示されたりはしない。我々は自ら選び、自らの利益へと導く。",
     "prerequisites": [
       "FRA_buy_time"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 48
+      }
     ]
   },
   {
@@ -86,6 +153,18 @@
     "effect": "イタリアはいまだにアフリカの帝国を夢見ている。もしも我々が譲歩を打診し、さらにエチオピアの征服を承認したならば、ローマとベルリンによる枢軸の形成を阻めるかもしれない。",
     "prerequisites": [
       "FRA_france_leads"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 54
+      },
+      {
+        "type": "create_wargoal",
+        "target": "ITA",
+        "wargoal": "annex_everything"
+      }
     ]
   },
   {
@@ -97,6 +176,13 @@
     "effect": "イタリアはアフリカの領土と引き換えに我々の陣営へ参加するとほのめかしている。今こそ筆を執り、必要な条約に批准する時だ。",
     "prerequisites": [
       "FRA_concessions_to_italy"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 57
+      }
     ]
   },
   {
@@ -108,6 +194,17 @@
     "effect": "ソ連はちょうど我々と同じように欧州にファシズムが台頭するのを憂慮している。おそらく、その時が来たならば、我々を支援するよう説得することも可能である。",
     "prerequisites": [
       "FRA_france_leads"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 56
+      },
+      {
+        "type": "add_world_tension",
+        "value": 2
+      }
     ]
   }
 ]

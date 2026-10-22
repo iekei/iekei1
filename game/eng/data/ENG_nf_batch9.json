@@ -8,6 +8,19 @@
     "effect": "ニュージーランドは我が国と強いつながりを有しており、ファシズムの脅威に対して警告を発している。戦争の際に彼らが貢献してくれるであろう事は確実であり、我々はそれに応えて彼らを支援するべきだ。",
     "prerequisites": [
       "uk_australia_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 52
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -19,6 +32,29 @@
     "effect": "カナダの産業や造船所への投資はカナダ経済に活力を与え、戦争の際には彼らが大きな貢献をしてくれるようになるだろう。",
     "prerequisites": [
       "uk_commonwealth_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 60
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_building_construction",
+        "building": "dockyard",
+        "level": 1
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -30,6 +66,19 @@
     "effect": "南アフリカの政治情勢は不透明だ。戦時の支援を完全に信頼する事はできないが、彼らの工業力を強化し支援する事で、イギリスの問題に対して彼らの支援が増大する事は望めるだろう。",
     "prerequisites": [
       "uk_commonwealth_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 60
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -41,6 +90,13 @@
     "effect": "完全な独立について合意せず、他の自治領がすでに享受しているように、彼らに広範囲にわたる自治を与えることによってインドの独立運動を弱めることができる可能性がある。",
     "prerequisites": [
       "uk_india_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 52
+      }
     ]
   },
   {
@@ -54,6 +110,13 @@
       "uk_canada_focus",
       "uk_new_zealand_focus",
       "uk_south_africa_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 42
+      }
     ]
   },
   {
@@ -65,6 +128,13 @@
     "effect": "帝国連邦は長い間自治に代わる手段として認識されていた。長い準備期間を経て、ついに我が政府と我が自治領政府を統一し、世界有数の超大国としての地位を取り戻す時が来た。Rule Britannia!（統べよブリタニア！）",
     "prerequisites": [
       "ENG_imperial_conference"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 47
+      }
     ]
   },
   {
@@ -72,9 +142,20 @@
     "title": "進路を保て",
     "x": 7250,
     "y": 50,
-    "cost": 35,
+    "cost": 70,
     "effect": "迫り来る危機は我々が真に自身のルーツに忠実であり続けなければならない理由である。我々は余裕がないときに内情不安定を引き起こしかねない劇的な政治的辺かをするのではなく、近年進み続けた進路を保つだろう。",
-    "prerequisites": []
+    "prerequisites": [],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 110
+      },
+      {
+        "type": "add_stability",
+        "value": 8
+      }
+    ]
   },
   {
     "id": "ENG_global_defense",
@@ -85,6 +166,17 @@
     "effect": "イギリスの人々を保護することはそもそも脅威の拡大を防ぐことから始まる。奴らが我々を我々のホームで焼き払い、遠くまでかつ広くに拡散する群衆となる前に、我々は紛争の原因を見つけ出してその場に明らかにしなければならない。",
     "prerequisites": [
       "ENG_steady_as_she_goes"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 92
+      },
+      {
+        "type": "add_world_tension",
+        "value": 4
+      }
     ]
   },
   {
@@ -96,6 +188,13 @@
     "effect": "ネルソンの有名な言葉の精神でもって我々は人々に義務感を植え付けなければならない。彼らがそれを好きであろうとなかろうと、国家は来たる危機に直面すると彼らの奉仕を要求するのだから。",
     "prerequisites": [
       "ENG_global_defense"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 61
+      }
     ]
   },
   {
@@ -107,6 +206,13 @@
     "effect": "現在の政府は、迫り来る世界の危機を打開する試みに失敗した。これ以上の試みは、今や己の弱さの表れに過ぎない。我々は来たる嵐を乗り切ることができるよう、さらに強い指導者を必要としている。",
     "prerequisites": [
       "ENG_global_defense"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 80
+      }
     ]
   }
 ]

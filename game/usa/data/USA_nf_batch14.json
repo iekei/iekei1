@@ -8,6 +8,13 @@
     "effect": "商船の保護には護衛と知略だけではなく、通商の航路、日程の調整をする戦術が必要だ。",
     "prerequisites": [
       "USA_escort_effort"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 44
+      }
     ]
   },
   {
@@ -19,6 +26,17 @@
     "effect": "海戦において、我が国と我が国の仮想敵国はどちらも、潜水艦に対して非常に脆弱な対外貿易に依拠している。大海原を横切りつつ敵の沿海部で作戦を展開できるよう、潜水艦は非常に長い航続距離を持つべきだ。",
     "prerequisites": [
       "USA_bureau_of_ships"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 57
+      },
+      {
+        "type": "add_navy_experience",
+        "value": 27
+      }
     ]
   },
   {
@@ -30,6 +48,17 @@
     "effect": "如何なる善意ある条約が潜水艦戦を抑制しようとも、紙に書かれただけの文書に価値がないのは歴史が証明している。我々の敵が無視する程の愚策に、思考を囚われてしまってはならない。",
     "prerequisites": [
       "USA_fleet_submarines"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 52
+      },
+      {
+        "type": "add_navy_experience",
+        "value": 22
+      }
     ]
   },
   {
@@ -41,6 +70,17 @@
     "effect": "新たな敵が何で攻撃して来ようとも対処できなければならない。海軍演習へのさらなる投資によって、敵海軍に優る腕利きの海軍を作り上げられるだろう。",
     "prerequisites": [
       "USA_two_ocean_navy_act"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 72
+      },
+      {
+        "type": "add_navy_experience",
+        "value": 22
+      }
     ]
   },
   {
@@ -52,6 +92,13 @@
     "effect": "合衆国海兵隊（United States Marine Corps）は今までの戦いにおいても重要な戦力であり、上陸作戦においてはさらに重要である。海兵隊よ、常に忠誠を！",
     "prerequisites": [
       "USA_fund_the_navy"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 46
+      }
     ]
   },
   {
@@ -63,6 +110,13 @@
     "effect": "悪夢が現実のものとならなければ、この戦争がアメリカの地にて終結することはなさそうだ。勝利への道には、完璧な上陸作戦が必要である。",
     "prerequisites": [
       "USA_expand_the_USMC"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 58
+      }
     ]
   }
 ]

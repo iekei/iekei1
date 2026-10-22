@@ -8,6 +8,13 @@
     "effect": "ヨーロッパの大国は世界を戦争に突入させるつもりだ、以前のように我々に影響を与えられるまで待つことはできない。ヨーロッパの国々が平和を脅かすのであれば、我々は断固として介入の準備をしなければならない。",
     "prerequisites": [
       "USA_war_propaganda"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 55
+      }
     ]
   },
   {
@@ -19,6 +26,13 @@
     "effect": "情報専門機関の組織は今の戦争のみならず、将来の外国への軍事行動の助けになるだろう。イギリスの情報機関は模範として役に立つはずだ。",
     "prerequisites": [
       "USA_focus_on_europe"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      }
     ]
   },
   {
@@ -30,6 +44,17 @@
     "effect": "ほとんどの国民はヨーロッパの不安定さに対し不安になっているが、我々は太平洋において不安定さや不確実性に直面している。我々の領土から近いところで攻撃するよりも、海外において介入したほうが利益が出るだろう。",
     "prerequisites": [
       "USA_war_propaganda"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 40
+      },
+      {
+        "type": "add_stability",
+        "value": 5
+      }
     ]
   },
   {
@@ -41,6 +66,13 @@
     "effect": "海軍は日本の暗号電文を解読できると考えている。我々は日本側の船舶の航行を含め、通信文で交換される情報の全てを解読できるかもしれない。",
     "prerequisites": [
       "USA_focus_on_asia"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 42
+      }
     ]
   },
   {
@@ -53,6 +85,13 @@
     "prerequisites": [
       "USA_magic",
       "USA_office_of_strategic_services"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 54
+      }
     ]
   },
   {
@@ -65,6 +104,19 @@
     "prerequisites": [
       "USA_black_chamber",
       "USA_arsenal_of_democracy"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 44
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -76,6 +128,23 @@
     "effect": "代替物質開発、アメリカ陸軍工兵司令部のこの一見無害そうな計画は、後にマンハッタン計画（Manhattan Project）として知られるようになる。軍事史上最大級に危険で機密とされる企てであり、その目標は最初の原子爆弾を作ることだ。",
     "prerequisites": [
       "USA_scientist_haven"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 49
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "陸軍",
+        "bonus": 0.5,
+        "uses": 1
+      },
+      {
+        "type": "add_army_experience",
+        "value": 14
+      }
     ]
   },
   {
@@ -88,6 +157,13 @@
     "prerequisites": [
       "USA_continue_the_new_deal",
       "USA_reestablish_the_gold_standard"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 86
+      }
     ]
   },
   {
@@ -100,6 +176,13 @@
     "prerequisites": [
       "USA_neutrality_act",
       "USA_limited_intervention"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 69
+      }
     ]
   },
   {
@@ -111,6 +194,18 @@
     "effect": "あらゆる民主主義国家は知ってほしい。戦争への直接介入如何にかかわらず、我が国は必ず諸君に武器を与え、支援を欠かさぬものであると。",
     "prerequisites": [
       "USA_neutrality_act"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 64
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 1
+      }
     ]
   }
 ]

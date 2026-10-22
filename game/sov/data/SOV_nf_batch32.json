@@ -8,6 +8,13 @@
     "effect": "西側の側面が確保された今、東側の側面に注意するべきだ。日本人はドイツ人と多くの共通点を持っており、彼らの認識以上に我が新政府と共通点がある。彼らにも招待状を送り、ドイツ人にどうするか尋ねてみることにしよう。",
     "prerequisites": [
       "SOV_the_berlin_moscow_axis"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 57
+      }
     ]
   },
   {
@@ -19,6 +26,13 @@
     "effect": "カフカス地域への支配を固める。",
     "prerequisites": [
       "SOV_consolidate_power"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 58
+      }
     ]
   },
   {
@@ -30,6 +44,13 @@
     "effect": "西部地域への支配を固める。",
     "prerequisites": [
       "SOV_consolidate_power"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 47
+      }
     ]
   },
   {
@@ -41,6 +62,13 @@
     "effect": "東部地域への支配を固める。",
     "prerequisites": [
       "SOV_consolidate_power"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 56
+      }
     ]
   },
   {
@@ -52,6 +80,13 @@
     "effect": "スーフィー教団の拠点を通じてカフカスの民衆に影響を与える。",
     "prerequisites": [
       "SOV_consolidate_the_caucasus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 50
+      }
     ]
   },
   {
@@ -63,6 +98,13 @@
     "effect": "独立した教会会議を設立し宗教政策を統率する。",
     "prerequisites": [
       "SOV_consolidate_the_caucasus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 54
+      }
     ]
   },
   {
@@ -74,6 +116,13 @@
     "effect": "カフカス地域の民衆教育を推進する。",
     "prerequisites": [
       "SOV_consolidate_the_caucasus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      }
     ]
   },
   {
@@ -87,6 +136,13 @@
       "SOV_sufi_stronghold",
       "SOV_independent_synod",
       "SOV_educate_the_masses_caucasus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 58
+      }
     ]
   },
   {
@@ -98,6 +154,13 @@
     "effect": "西部に独立した教会会議を設立する。",
     "prerequisites": [
       "SOV_consolidate_the_west"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 54
+      }
     ]
   },
   {
@@ -109,6 +172,13 @@
     "effect": "西部地域の民衆教育を推進する。",
     "prerequisites": [
       "SOV_consolidate_the_west"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 55
+      }
     ]
   }
 ]

@@ -48,7 +48,9 @@ export const MAX_TICKS = 96; // 4日間で決着
 export class CombatSimulator {
   constructor(config) {
     this.bus = new Bus();
-    this.cfg = config; // {attacker:{template,commander,intelBonus}, defender:{...}, terrain, weather, tactic, entrenchment}
+    // {attacker:{template,commander,intelBonus}, defender:{...}, terrain, weather, tactic, entrenchment,
+    //  doctrine: DoctrineManager.effects('land'), planningBonus: 0..0.6}
+    this.cfg = config;
     this.tickCount = 0;
     this.ended = false;
     this.winner = null;
@@ -57,6 +59,9 @@ export class CombatSimulator {
   }
 
   _initCombatants() {
+    // ドクトリン補正（DoctrineManager.effects('land') の集計値）
+    const doc = this.cfg.doctrine || {};
+    const planning = this.cfg.planningBonus || 0;
     const mk = (side, cfg) => {
       const st = cfg.template?.stats || { softAttack: 10, hardAttack: 5, defense: 20, breakthrough: 10, maxOrg: 50, hp: 100, armor: 0, piercing: 10 };
       const eff = commanderEffects(cfg.commander);
@@ -64,21 +69,25 @@ export class CombatSimulator {
       const weather = WEATHER_MODS[this.cfg.weather] || WEATHER_MODS.clear;
       const tac = TACTICS[this.cfg.tactic] || TACTICS.balanced;
       const isAttacker = side === 'attacker';
+      // 計画準備ボーナスは攻撃側の攻撃・突破にのみ乗る（HOI4 準拠）
+      const planMul = isAttacker ? 1 + planning : 1;
+      const entrench = this.cfg.entrenchment ? 0.15 + (doc.entrench || 0) : 0;
       return {
         side,
         name: cfg.template?.name || (isAttacker ? '攻撃側師団' : '防御側師団'),
-        org: st.maxOrg || st.org || 50,
-        maxOrg: st.maxOrg || st.org || 50,
+        org: (st.maxOrg || st.org || 50) * (1 + (doc.org || 0)),
+        maxOrg: (st.maxOrg || st.org || 50) * (1 + (doc.org || 0)),
         hp: st.hp || 100,
         maxHp: st.hp || 100,
-        soft: (st.softAttack || 0) * (1 + (eff.softPct || 0) + (eff.hardPct || 0)) * (1 + (isAttacker ? terrain.attack : terrain.defense) + weather.attack + (isAttacker ? tac.attack : tac.defense)),
-        hard: (st.hardAttack || 0) * (1 + (eff.hardPct || 0)) * (1 + (isAttacker ? terrain.attack : terrain.defense) + weather.attack + (isAttacker ? tac.attack : tac.defense)),
-        defense: (st.defense || 0) * (1 + (eff.defensePct || 0) + (isAttacker ? 0 : (this.cfg.entrenchment ? 0.15 : 0))),
-        breakthrough: (st.breakthrough || 0) * (1 + (eff.breakthroughPct || 0) + (tac.breakthroughBonus || 0)),
-        piercing: (st.piercing || 0) * (1 + (eff.piercingPct || 0)),
-        armor: (st.armor || 0) * (1 + (eff.armorPct || 0)),
+        soft: (st.softAttack || 0) * (1 + (eff.softPct || 0) + (eff.hardPct || 0) + (doc.soft || 0)) * planMul * (1 + (isAttacker ? terrain.attack : terrain.defense) + weather.attack + (isAttacker ? tac.attack : tac.defense)),
+        hard: (st.hardAttack || 0) * (1 + (eff.hardPct || 0) + (doc.hard || 0)) * planMul * (1 + (isAttacker ? terrain.attack : terrain.defense) + weather.attack + (isAttacker ? tac.attack : tac.defense)),
+        defense: (st.defense || 0) * (1 + (eff.defensePct || 0) + (doc.defense || 0) + (isAttacker ? 0 : entrench)),
+        breakthrough: (st.breakthrough || 0) * (1 + (eff.breakthroughPct || 0) + (doc.breakthrough || 0) + (tac.breakthroughBonus || 0)) * planMul,
+        piercing: (st.piercing || 0) * (1 + (eff.piercingPct || 0) + (doc.piercing || 0)),
+        armor: (st.armor || 0) * (1 + (eff.armorPct || 0) + (doc.armor || 0)),
         intelBonus: cfg.intelBonus || 0, // 諜報による優位
         entrenchment: !isAttacker && this.cfg.entrenchment,
+        planningBonus: isAttacker ? planning : 0,
       };
     };
     this.attacker = mk('attacker', this.cfg.attacker || {});

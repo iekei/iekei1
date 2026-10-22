@@ -9,6 +9,18 @@
     "prerequisites": [
       "uk_iran_focus",
       "ENG_no_further_appeasement"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 45
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -20,6 +32,18 @@
     "effect": "ソビエト連邦の脅威は、我々の非難にも関わらず日に日に増大している。最早これを黙認する余地はなく、戦争へと踏み切ることが、より良い我が国の未来への決断となるだろう。",
     "prerequisites": [
       "ENG_embargo_ussr"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 60
+      },
+      {
+        "type": "create_wargoal",
+        "target": "SOV",
+        "wargoal": "annex_everything"
+      }
     ]
   },
   {
@@ -31,6 +55,18 @@
     "effect": "世界は日々その危険さを増している。いかなる毒ガス攻撃からも民間人を保護しなければならない。イギリス人は「ほっと一息」するべきだ。",
     "prerequisites": [
       "ENG_home_defence"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 60
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -42,6 +78,17 @@
     "effect": "先の大戦は、人々の心にもう戦う必要はないという印象を残していった。世界情勢の緊迫に伴い、全ての若い男性が基礎的軍事訓練を受けるようにせねばならない。",
     "prerequisites": [
       "ENG_issue_gasmasks"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 41
+      },
+      {
+        "type": "add_army_experience",
+        "value": 6
+      }
     ]
   },
   {
@@ -53,6 +100,23 @@
     "effect": "ドイツの再軍備は国際平和への侮辱かつ強大な脅威である。彼らが軍備への補給をするための資源を、我々は供給すべきではない。",
     "prerequisites": [
       "ENG_military_training_act"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 47
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 1
+      }
     ]
   },
   {
@@ -64,6 +128,13 @@
     "effect": "ドイツ人達は我々に他の選択肢を残しはしなかった。自由な世界と我らの子供の未来のために。今こそ戦争の時である。",
     "prerequisites": [
       "ENG_embargo_germany"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 45
+      }
     ]
   },
   {
@@ -75,6 +146,18 @@
     "effect": "もしスウェーデン鋼の輸出がなければ、スカンディナヴィアに戦略上に重要な意味は殆ど無かっただろう。我々はこの重要な資源がドイツに渡ることを防止するために、スウェーデンとノルウェー両国に圧力をかけなければならない。もしも彼らがそれを拒絶するようなら、我々は侵略をする覚悟が必要かもしれない……",
     "prerequisites": [
       "ENG_home_defence"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 75
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      }
     ]
   },
   {
@@ -86,6 +169,13 @@
     "effect": "スウェーデン内の反民主主義的運動が懸念すべきレベルの影響力を持ち始めている。スウェーデンの鉄鋼が銃として敵の手に収まる事態は避けなければならない。スウェーデン人は自由であるべきだが、我が国が一定の影響力を確保する事は必要だろう。",
     "prerequisites": [
       "uk_scandinavian_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 47
+      }
     ]
   },
   {
@@ -97,6 +187,18 @@
     "effect": "ノルウェー内に反民主主義的運動が根付きつつある。例え武力行使が必要となる事態に至ろうとも、彼らの政治が我々の利害に添うよう留め置くべきだろう。",
     "prerequisites": [
       "uk_scandinavian_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 47
+      },
+      {
+        "type": "create_wargoal",
+        "target": "NOR",
+        "wargoal": "annex_everything"
+      }
     ]
   },
   {
@@ -108,6 +210,18 @@
     "effect": "世界平和の敵に対するデンマークの支援が続いているが、奴らをこちら側に置く唯一の手段が存在する。ヨーロッパ大陸において陸上からの侵攻が必要となった場合に備え、デンマークを戦略的足掛かりの確立のために利用することだ。",
     "prerequisites": [
       "uk_scandinavian_focus"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 59
+      },
+      {
+        "type": "create_wargoal",
+        "target": "DEN",
+        "wargoal": "annex_everything"
+      }
     ]
   }
 ]

@@ -8,6 +8,18 @@
     "effect": "大規模な工業化のための必要不可欠な前提として、徹底的な生産の向上のために昭和製鋼所の拡大をしなければならない。",
     "prerequisites": [
       "JAP_the_manchurian_project"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 97
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 2
+      }
     ]
   },
   {
@@ -19,6 +31,24 @@
     "effect": "航空産業の計画には十分なアルミ資源が要求される。それゆえ満州の資源は広範に開発されなければならない。",
     "prerequisites": [
       "JAP_expand_the_showa_steel_works"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 73
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 1
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "空軍",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -30,6 +60,18 @@
     "effect": "工業化を進めるための劇的な輸送力の拡大が、満州のインフラには必須だ。",
     "prerequisites": [
       "JAP_the_manchurian_project"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 98
+      },
+      {
+        "type": "add_building_construction",
+        "building": "industrial_complex",
+        "level": 2
+      }
     ]
   },
   {
@@ -41,6 +83,24 @@
     "effect": "軽軍需工業は軍の基本的な需要に必要不可欠であり、拡大されなければならない。",
     "prerequisites": [
       "JAP_expand_manchurian_railways"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 80
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 1
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -52,6 +112,24 @@
     "effect": "重軍需工業は軍の先進的な需要に必要不可欠であり、拡張されなければならない。",
     "prerequisites": [
       "JAP_expand_manchurian_railways"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 60
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 1
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   },
   {
@@ -64,6 +142,13 @@
     "prerequisites": [
       "JAP_heavy_industry_development",
       "JAP_light_industry_development"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 55
+      }
     ]
   },
   {
@@ -75,6 +160,18 @@
     "effect": "北の国境は殆ど防衛体制が整っていない。我が国は北方からの攻撃に備え、防衛の準備をする必要がある。",
     "prerequisites": [
       "JAP_the_manchurian_project"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 86
+      },
+      {
+        "type": "add_building_construction",
+        "building": "bunker",
+        "level": 3
+      }
     ]
   },
   {
@@ -84,7 +181,23 @@
     "y": 50,
     "cost": 70,
     "effect": "政府は即時的かつ徹底的な軍備拡張を中核とするべきだ。",
-    "prerequisites": []
+    "prerequisites": [],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 124
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 3
+      },
+      {
+        "type": "add_army_experience",
+        "value": 19
+      }
+    ]
   },
   {
     "id": "JAP_small_arms_modernization",
@@ -95,6 +208,18 @@
     "effect": "我が軍は、潜在敵国に対抗し得る近代的兵器を装備する必要がある。",
     "prerequisites": [
       "JAP_army_expansion_law"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 87
+      },
+      {
+        "type": "add_building_construction",
+        "building": "arms_factory",
+        "level": 2
+      }
     ]
   },
   {
@@ -106,6 +231,19 @@
     "effect": "我々を勝利に導くのは技術である。軍と装備の観点で敵をかけ離すことにすべての努力は向けられなければならない。",
     "prerequisites": [
       "JAP_small_arms_modernization"
+    ],
+    "days": 70,
+    "completion_rewards": [
+      {
+        "type": "add_political_power",
+        "value": 71
+      },
+      {
+        "type": "add_tech_bonus",
+        "category": "全般",
+        "bonus": 0.5,
+        "uses": 1
+      }
     ]
   }
 ]
