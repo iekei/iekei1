@@ -1,3 +1,4 @@
+import { enableTreeGestures } from './touch-viewport.js';
 /** ui/screens.js — 各種画面レンダラー（前編: 研究/貿易/生産/建設/兵站/ディシジョン/政治パネル） */
 
 import { el, img, imgChain, fmt, fmtPct, $ } from '../util.js';
@@ -110,22 +111,31 @@ export function renderResearchScreen(ctx) {
       wrap.appendChild(slotsBox);
 
       // ツリーキャンバス
-      const canvas = el('div', 'tech-canvas');
+      const canvas = el('div', 'tech-canvas tree-stage');
       canvas.style.minHeight = '520px';
       const nodes = research.nodesOf(currentCat);
-      const xs = nodes.map((n) => n.x || 0), ys = nodes.map((n) => n.y || 0);
-      const minX = Math.min(...xs, 0), maxX = Math.max(...xs, 100);
-      const minY = Math.min(...ys, 0), maxY = Math.max(...ys, 100);
-      const scale = 90, pad = 60;
-      const W = (maxX - minX + 200) * scale / 100 + pad * 2;
-      const H = (maxY - minY + 200) * scale / 100 + pad * 2;
+      // Dependency depth defines rows, not the cramped source x/y coordinates.
+      const depth = new Map();
+      const level = (n, visiting = new Set()) => {
+        if (depth.has(n.id)) return depth.get(n.id);
+        if (visiting.has(n.id)) return 0;
+        const next = new Set(visiting).add(n.id);
+        const parents = (n.prerequisites || []).map(id => nodes.find(p => p.id === id)).filter(Boolean);
+        const d = parents.length ? 1 + Math.max(...parents.map(p => level(p, next))) : 0;
+        depth.set(n.id, d); return d;
+      };
+      const rows = new Map(), positions = new Map();
+      for (const n of nodes) { const d = level(n); if (!rows.has(d)) rows.set(d, []); rows.get(d).push(n); }
+      for (const [d, row] of rows) row.sort((a,b) => (a.x || 0)-(b.x || 0)).forEach((n,i) => positions.set(n.id, [70+i*210, 60+d*160]));
+      const W = Math.max(800, ...[...rows.values()].map(row => row.length*210+140));
+      const H = Math.max(520, rows.size*160+120);
       canvas.style.width = W + 'px';
       canvas.style.height = H + 'px';
       canvas.style.position = 'relative';
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
       svg.setAttribute('width', W); svg.setAttribute('height', H);
       svg.style.position = 'absolute';
-      const pos = (n) => [pad + (n.x - minX + 100) * scale / 100, pad + (n.y - minY + 100) * scale / 100];
+      const pos = n => positions.get(n.id) || [0,0];
       for (const n of nodes) {
         for (const p of n.prerequisites || []) {
           const pn = research.nodes[p];
@@ -151,10 +161,13 @@ export function renderResearchScreen(ctx) {
         const catIcon = I18N.dict?.research?.category_icons?.[currentCat] || '';
         node.appendChild(imgChain([techIconUrl(n.asset_key), catIcon].filter(Boolean), I18N.techName(n.id, n.title), '', 'R'));
         node.appendChild(el('span', 'year-badge', `${n.year}`));
+        node.appendChild(el('span', 'tech-label', I18N.techName(n.id, n.title)));
         node.onclick = () => showTechDetail(n, can, done, researching, prog, currentNation);
         canvas.appendChild(node);
       }
-      wrap.appendChild(canvas);
+      const viewport = enableTreeGestures(el('div', 'research-viewport'));
+      viewport.appendChild(canvas);
+      wrap.appendChild(viewport);
       content.appendChild(wrap);
     };
 

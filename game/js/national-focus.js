@@ -7,31 +7,12 @@
  * - すべてのノード・線にツールチップを紐付け
  */
 
+import { MAJOR_FOCUSES } from './data/major-focuses.js';
 import { el } from './util.js';
 import { Tooltip } from './tooltip.js';
 import { I18N } from './i18n.js';
 
 const SVGNS = 'http://www.w3.org/2000/svg';
-const FOCUS_FILES = ['game/eng/data/ENG_nf_batch1.json',
-  'game/eng/data/ENG_nf_batch2.json', 'game/eng/data/ENG_nf_batch3.json',
-  'game/eng/data/ENG_nf_batch4.json', 'game/eng/data/ENG_nf_batch5.json',
-  'game/eng/data/ENG_nf_batch6.json', 'game/eng/data/ENG_nf_batch7.json',
-  'game/eng/data/ENG_nf_batch8.json', 'game/eng/data/ENG_nf_batch9.json',
-  'game/eng/data/ENG_nf_batch10.json', 'game/eng/data/ENG_nf_batch11.json',
-  'game/eng/data/ENG_nf_batch12.json', 'game/eng/data/ENG_nf_batch13.json',
-  'game/eng/data/ENG_nf_batch14.json', 'game/eng/data/ENG_nf_batch15.json',
-  'game/eng/data/ENG_nf_batch16.json'];
-
-/** デフォルトフォーカスデータ（データファイル未取得時のフォールバック） */
-const FALLBACK_FOCUSES = [
-  { id: 'ger_rhineland', title: 'ラインラント軍事化', x: 100, y: 100, cost: 70, prerequisites: [], effect: 'add_political_power = 50', group: 'ger_rhineland' },
-  { id: 'ger_anschluss', title: 'アンシュルス', x: 260, y: 100, cost: 70, prerequisites: [], effect: 'add_political_power = 50', group: 'ger_anschluss' },
-  { id: 'ger_sudeten', title: 'ズデーテン合併', x: 420, y: 100, cost: 70, prerequisites: ['ger_anschluss'], effect: 'add_political_power = 50' },
-  { id: 'ger_war_economy', title: '戦時経済へ移行', x: 100, y: 260, cost: 70, prerequisites: [], effect: 'add_stability = 5; add_war_support = 10' },
-  { id: 'ger_total_war', title: '総力戦', x: 260, y: 260, cost: 70, prerequisites: ['ger_war_economy'], effect: 'add_political_power = 100' },
-  { id: 'ger_nuclear', title: 'ウラン計画', x: 100, y: 420, cost: 140, prerequisites: ['ger_war_economy'], effect: 'nuclear_research_start = 1' },
-];
-
 export class NationalFocusManager {
   constructor(state, effectEngine) {
     this.state = state;
@@ -42,20 +23,10 @@ export class NationalFocusManager {
   }
 
   async load(tag = null) {
-    const t = tag || this.state.playerTag;
-    let all = [];
-    try {
-      const jsons = await Promise.all(FOCUS_FILES.map(async (u) => {
-        try {
-          const r = await fetch(u, { cache: 'no-cache' });
-          return await r.json();
-        } catch { return []; }
-      }));
-      all = jsons.flat();
-    } catch { all = []; }
-    if (!all.length) all = FALLBACK_FOCUSES;
-    for (const n of all) this.nodes[n.id] = { ...n };
-    this.tags[t] = all;
+    this.tags = MAJOR_FOCUSES;
+    for (const nodes of Object.values(this.tags)) {
+      for (const node of nodes) this.nodes[node.id] = { ...node };
+    }
     this.loaded = true;
     return this;
   }
@@ -79,7 +50,8 @@ export class NationalFocusManager {
   /** 前提条件が整っているか */
   canStart(focusId, tag) {
     const node = this.nodes[focusId];
-    if (!node) return { ok: false, reason: 'unknown' };
+    if (!node || node.tag !== tag) return { ok: false, reason: 'unknown' };
+    if (tag !== this.state.playerTag) return { ok: false, reason: 'foreign_country' };
     const prog = this.progressFor(tag);
     if (this.isCompleted(tag, focusId)) return { ok: false, reason: 'completed' };
     if (prog.active && prog.active.tag === tag && prog.active.focusId === focusId) {
@@ -125,10 +97,11 @@ export class NationalFocusManager {
 
   _complete(tag, active) {
     const node = this.nodes[active.focusId];
+    if (this.isCompleted(tag, active.focusId)) return;
     this.state.focus.completed[tag].add(active.focusId);
     // エフェクト実行（completion_reward）
-    if (node.effect) {
-      this.effectEngine.execute(node.effect, { focus: node.id, tag });
+    if (node.completion_reward || node.effect) {
+      this.effectEngine.execute(node.completion_reward || node.effect, { focus: node.id, tag });
     }
     this.state.focus.active = null;
     this.state.bus.emit('focus-completed', { tag, focusId: active.focusId, node });
@@ -160,7 +133,7 @@ export class NationalFocusManager {
     const W = (maxX - minX + 140) * scale + pad * 2;
     const H = (maxY - minY + 140) * scale + pad * 2;
 
-    const wrap = el('div', 'focus-wrap');
+    const wrap = el('div', 'focus-wrap tree-stage');
     wrap.style.position = 'relative';
     wrap.style.width = W + 'px';
     wrap.style.height = H + 'px';
@@ -231,7 +204,7 @@ export class NationalFocusManager {
       // ツールチップ
       const tipHtml = `
         <div style="font-weight:800;letter-spacing:.06em;font-family:var(--mil-font);color:var(--gold);">${n.title}</div>
-        <div style="font-size:11px;color:var(--text-dim);margin-top:4px;">${n.effect || n.effect || ''}</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:4px;">${n.reward_description || n.effect || ''}</div>
         <div style="font-size:11px;color:var(--text-dim);margin-top:4px;">必要日数：${n.cost}日</div>
         <div style="font-size:11px;color:var(--text-dim);margin-top:4px;">状態：${done ? '完了' : isActive ? `進行中（${Math.round(active.progressDays)}/${n.cost}日）` : available ? '選択可能' : check.reason === 'exclusive' ? '相互排他' : '前提未完了'}</div>
         <div style="font-size:11px;color:var(--text-dim);margin-top:4px;">前提：${(n.prerequisites || []).join(', ') || 'なし'}</div>
@@ -246,6 +219,17 @@ export class NationalFocusManager {
           }
         });
       }
+      const label = document.createElementNS(SVGNS, 'text');
+      label.setAttribute('y', '38'); label.setAttribute('text-anchor', 'middle');
+      label.setAttribute('fill', '#d7dde2'); label.setAttribute('font-size', '13');
+      label.textContent = n.title; g.appendChild(label);
+      const rewardLabel = document.createElementNS(SVGNS, 'text');
+      rewardLabel.setAttribute('y', '59'); rewardLabel.setAttribute('text-anchor', 'middle');
+      rewardLabel.setAttribute('fill', '#7ec850'); rewardLabel.setAttribute('font-size', '10');
+      rewardLabel.textContent = n.reward_description || ''; g.appendChild(rewardLabel);
+      g.setAttribute('tabindex', '0'); g.setAttribute('role', 'button');
+      g.setAttribute('aria-label', n.title);
+      g.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); g.dispatchEvent(new MouseEvent('click')); } });
       svg.appendChild(g);
     }
 

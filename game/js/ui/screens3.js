@@ -10,7 +10,7 @@ import { el, img } from '../util.js';
 import { I18N } from '../i18n.js';
 import { NATIONS, MAJORS, nationName } from '../data/nations.js';
 import { AIR_REGIONS, NAVAL_REGIONS, AIR_TYPE_INFO, NAVAL_TYPE_INFO } from '../air-naval.js';
-import { PACKS } from '../gacha.js';
+import { enableTreeGestures } from './touch-viewport.js';
 import { PROVINCES } from '../map-data.js';
 
 /* ================= 国家方針画面 ================= */
@@ -33,6 +33,9 @@ export function renderFocusScreen(ctx) {
     const tabs = el('div', 'screen-tabs');
     body.insertBefore(tabs, treeWrap);
 
+    const info = el('div', 'steel-card');
+    body.insertBefore(info, treeWrap);
+    enableTreeGestures(treeWrap);
     const draw = () => {
       tabs.innerHTML = '';
       for (const tag of MAJORS) {
@@ -45,7 +48,7 @@ export function renderFocusScreen(ctx) {
 
       // アクティブフォーカス表示
       const active = focusMgr.activeProgress(currentTag);
-      const info = el('div', 'steel-card');
+      info.innerHTML = '';
       info.style.flex = '0 0 auto';
       if (active) {
         const pct = Math.round(active.pct * 100);
@@ -55,12 +58,12 @@ export function renderFocusScreen(ctx) {
           </div>
           <div class="mil-bar" style="margin-top:4px"><div style="height:100%;width:${pct}%;background:linear-gradient(90deg,#7ec850,#4d7a2f)"></div></div>
           <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">残り${Math.ceil(active.daysLeft)}日</div>
-          <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">${active.node.effect || ''}</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">${active.node.reward_description || active.node.effect || ''}</div>
         `;
       } else {
         info.innerHTML = `<div class="dim small">実行中の国家方針はありません。ツリーノードをクリックして開始してください。</div>`;
       }
-      body.insertBefore(info, treeWrap);
+
     };
 
     draw();
@@ -268,64 +271,13 @@ export function renderAirNavalScreen(ctx) {
 
 export function renderGachaScreen(ctx) {
   return (body) => {
-    const { state, gacha } = ctx;
-    body.innerHTML = '';
-    body.style.padding = '10px';
-    body.style.display = 'flex';
-    body.style.flexDirection = 'column';
-    body.style.gap = '10px';
+    body.classList.add('gacha-embed');
+    const frame = document.createElement('iframe');
+    frame.src = 'game/card/index.html';
+    frame.title = 'カードパック・ガチャ';
+    frame.className = 'gacha-frame';
+    body.replaceChildren(frame);
 
-    body.appendChild(el('h4', '', I18N.t('gacha.title')));
-    body.appendChild(el('div', 'small dim mb4', I18N.t('gacha.hint')));
-
-    const packGrid = el('div', 'grid3');
-    for (const [id, pack] of Object.entries(PACKS)) {
-      const card = el('div', 'steel-card');
-      card.appendChild(el('b', '', `${pack.label} （${pack.costPP} PP）`));
-      const weights = Object.entries(pack.weights).map(([r, w]) => `${r}: ${Math.round(w * 100)}%`).join(' / ');
-      card.appendChild(el('div', 'small dim', weights));
-      const btn = el('button', 'steel-btn primary mt4', I18N.t('gacha.open'));
-      btn.disabled = state.pp < pack.costPP;
-      btn.onclick = () => {
-        const c = gacha.openPack(id, null, state.playerTag);
-        if (c) drawCollection();
-      };
-      card.appendChild(btn);
-      packGrid.appendChild(card);
-    }
-    body.appendChild(packGrid);
-
-    body.appendChild(el('h4', '', I18N.t('gacha.collection')));
-    const list = el('div', 'col');
-    list.style.gap = '6px';
-    const drawCollection = () => {
-      list.innerHTML = '';
-      const coll = gacha.collection();
-      if (!coll.length) { list.appendChild(el('div', 'dim small', I18N.t('ui.no_data'))); return; }
-      for (const c of coll) {
-        const row = el('div', 'steel-card row');
-        const rarityColor = { common: '#8b96a0', rare: '#5e9ec7', epic: '#a06ec8', legendary: '#e6c268' }[c.rarity] || '#8b96a0';
-        row.appendChild(el('span', `badge`, c.rarity.charAt(0).toUpperCase() + c.rarity.slice(1)));
-        row.querySelector('.badge').style.color = rarityColor;
-        row.appendChild(el('b', 'grow', c.name));
-        row.appendChild(el('span', 'dim small', `Lv${c.level} ${c.branch ? I18N.t(`menu.branch.${c.branch}`) : c.branch || ''}`));
-        const assignSel = el('select', 'steel-select mt4');
-        assignSel.innerHTML = `<option value="">配属</option>
-          <option value="army">${I18N.t('deployment.army_commander')}</option>
-          <option value="navy">${I18N.t('deployment.navy_commander')}</option>
-          <option value="air">${I18N.t('deployment.air_commander')}</option>`;
-        const go = el('button', 'steel-btn mt4', '配属');
-        go.onclick = () => {
-          if (assignSel.value) { gacha.assignCommander(c.instanceId, assignSel.value); drawCollection(); }
-        };
-        row.appendChild(assignSel); row.appendChild(go);
-        list.appendChild(row);
-      }
-    };
-    body.appendChild(list);
-    drawCollection();
-
-    ctx.onTickScreens.push(() => { if (ctx.modals.isOpen('gacha')) drawCollection(); });
   };
 }
 

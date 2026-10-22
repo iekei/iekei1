@@ -1,3 +1,4 @@
+import { project } from './geo.js';
 /**
  * map-data.js — 世界地図の州（Province）データと地形補正定義
  *
@@ -27,53 +28,53 @@ export function terrainInfo(id) { return TERRAIN[id] || TERRAIN.plains; }
 /** プロヴィンス定義 */
 export const PROVINCES = [
   // ── ドイツ領 ──
-  { id: 'ger_berlin',   name: 'ベルリン',        tag: 'GER', x: 560, y: 220, terrain: 'urban',    airbase: 2, naval: 0, vp: 15, capital: true },
-  { id: 'ger_hamburg',  name: 'ハンブルク',      tag: 'GER', x: 540, y: 190, terrain: 'coastal',  airbase: 1, naval: 2, vp: 8,  capital: false },
-  { id: 'ger_munich',   name: 'ミュンヘン',      tag: 'GER', x: 600, y: 270, terrain: 'plains',   airbase: 1, naval: 0, vp: 5,  capital: false },
-  { id: 'ger_ruhr',     name: 'ルール地方',      tag: 'GER', x: 520, y: 200, terrain: 'urban',    airbase: 1, naval: 0, vp: 10, capital: false },
-  { id: 'ger_east_prussia', name: '東プロイセン', tag: 'GER', x: 720, y: 180, terrain: 'plains',   airbase: 1, naval: 0, vp: 4,  capital: false },
+  { id: 'ger_berlin',   name: 'ベルリン',        tag: 'GER', ...project(13.405, 52.52), lon: 13.405, lat: 52.52, terrain: 'urban',    airbase: 2, naval: 0, vp: 15, capital: true },
+  { id: 'ger_hamburg',  name: 'ハンブルク',      tag: 'GER', ...project(9.994, 53.55), lon: 9.994, lat: 53.55, terrain: 'coastal',  airbase: 1, naval: 2, vp: 8,  capital: false },
+  { id: 'ger_munich',   name: 'ミュンヘン',      tag: 'GER', ...project(11.58, 48.14), lon: 11.58, lat: 48.14, terrain: 'plains',   airbase: 1, naval: 0, vp: 5,  capital: false },
+  { id: 'ger_ruhr',     name: 'ルール地方',      tag: 'GER', ...project(7.01, 51.45), lon: 7.01, lat: 51.45, terrain: 'urban',    airbase: 1, naval: 0, vp: 10, capital: false },
+  { id: 'ger_east_prussia', name: '東プロイセン', tag: 'GER', ...project(20.5, 54.71), lon: 20.5, lat: 54.71, terrain: 'plains',   airbase: 1, naval: 0, vp: 4,  capital: false },
 
   // ── ソ連領 ──
-  { id: 'sov_moscow',   name: 'モスクワ',        tag: 'SOV', x: 1020, y: 160, terrain: 'plains',   airbase: 2, naval: 0, vp: 20, capital: true },
-  { id: 'sov_kiev',     name: 'キエフ',          tag: 'SOV', x: 860, y: 260, terrain: 'plains',   airbase: 1, naval: 0, vp: 12, capital: false },
-  { id: 'sov_leningrad',name: 'レニングラード',  tag: 'SOV', x: 760, y: 140, terrain: 'marsh',    airbase: 1, naval: 2, vp: 15, capital: false },
-  { id: 'sov_stalingrad', name: 'スタリングラード',tag:'SOV', x: 980, y: 240, terrain: 'plains',   airbase: 1, naval: 0, vp: 10, capital: false },
-  { id: 'sov_ural',     name: 'ウラル',          tag: 'SOV', x: 1080, y: 180, terrain: 'mountains',airbase: 1, naval: 0, vp: 6,  capital: false },
+  { id: 'sov_moscow',   name: 'モスクワ',        tag: 'SOV', ...project(37.62, 55.75), lon: 37.62, lat: 55.75, terrain: 'plains',   airbase: 2, naval: 0, vp: 20, capital: true },
+  { id: 'sov_kiev',     name: 'キエフ',          tag: 'SOV', ...project(30.52, 50.45), lon: 30.52, lat: 50.45, terrain: 'plains',   airbase: 1, naval: 0, vp: 12, capital: false },
+  { id: 'sov_leningrad',name: 'レニングラード',  tag: 'SOV', ...project(30.32, 59.93), lon: 30.32, lat: 59.93, terrain: 'marsh',    airbase: 1, naval: 2, vp: 15, capital: false },
+  { id: 'sov_stalingrad', name: 'スタリングラード',tag:'SOV', ...project(44.51, 48.71), lon: 44.51, lat: 48.71, terrain: 'plains',   airbase: 1, naval: 0, vp: 10, capital: false },
+  { id: 'sov_ural',     name: 'ウラル',          tag: 'SOV', ...project(60.6, 56.84), lon: 60.6, lat: 56.84, terrain: 'mountains',airbase: 1, naval: 0, vp: 6,  capital: false },
 
   // ── イギリス領 ──
-  { id: 'eng_london',   name: 'ロンドン',        tag: 'ENG', x: 300, y: 210, terrain: 'urban',    airbase: 2, naval: 3, vp: 18, capital: true },
-  { id: 'eng_liverpool',name: 'リバプール',      tag: 'ENG', x: 260, y: 200, terrain: 'coastal',  airbase: 1, naval: 2, vp: 8,  capital: false },
-  { id: 'eng_scotland', name: 'スコットランド',   tag: 'ENG', x: 280, y: 160, terrain: 'hills',    airbase: 1, naval: 1, vp: 4,  capital: false },
+  { id: 'eng_london',   name: 'ロンドン',        tag: 'ENG', ...project(-0.128, 51.507), lon: -0.128, lat: 51.507, terrain: 'urban',    airbase: 2, naval: 3, vp: 18, capital: true },
+  { id: 'eng_liverpool',name: 'リバプール',      tag: 'ENG', ...project(-2.98, 53.41), lon: -2.98, lat: 53.41, terrain: 'coastal',  airbase: 1, naval: 2, vp: 8,  capital: false },
+  { id: 'eng_scotland', name: 'スコットランド',   tag: 'ENG', ...project(-3.19, 55.95), lon: -3.19, lat: 55.95, terrain: 'hills',    airbase: 1, naval: 1, vp: 4,  capital: false },
 
   // ── フランス領 ──
-  { id: 'fra_paris',    name: 'パリ',            tag: 'FRA', x: 380, y: 300, terrain: 'urban',    airbase: 2, naval: 0, vp: 18, capital: true },
-  { id: 'fra_marseille',name: 'マルセイユ',      tag: 'FRA', x: 420, y: 360, terrain: 'coastal',  airbase: 1, naval: 2, vp: 8,  capital: false },
-  { id: 'fra_maginot',  name: 'マジノー線地帯',   tag: 'FRA', x: 460, y: 290, terrain: 'fort',    airbase: 1, naval: 0, vp: 6,  capital: false },
+  { id: 'fra_paris',    name: 'パリ',            tag: 'FRA', ...project(2.35, 48.86), lon: 2.35, lat: 48.86, terrain: 'urban',    airbase: 2, naval: 0, vp: 18, capital: true },
+  { id: 'fra_marseille',name: 'マルセイユ',      tag: 'FRA', ...project(5.37, 43.3), lon: 5.37, lat: 43.3, terrain: 'coastal',  airbase: 1, naval: 2, vp: 8,  capital: false },
+  { id: 'fra_maginot',  name: 'マジノー線地帯',   tag: 'FRA', ...project(7.26, 48.58), lon: 7.26, lat: 48.58, terrain: 'fort',    airbase: 1, naval: 0, vp: 6,  capital: false },
 
   // ── イタリア領 ──
-  { id: 'ita_rome',     name: 'ローマ',          tag: 'ITA', x: 520, y: 400, terrain: 'urban',    airbase: 2, naval: 2, vp: 15, capital: true },
-  { id: 'ita_milan',    name: 'ミラノ',          tag: 'ITA', x: 490, y: 350, terrain: 'plains',   airbase: 1, naval: 0, vp: 8,  capital: false },
-  { id: 'ita_naples',   name: 'ナポリ',          tag: 'ITA', x: 550, y: 430, terrain: 'coastal',  airbase: 1, naval: 2, vp: 7,  capital: false },
+  { id: 'ita_rome',     name: 'ローマ',          tag: 'ITA', ...project(12.5, 41.9), lon: 12.5, lat: 41.9, terrain: 'urban',    airbase: 2, naval: 2, vp: 15, capital: true },
+  { id: 'ita_milan',    name: 'ミラノ',          tag: 'ITA', ...project(9.19, 45.46), lon: 9.19, lat: 45.46, terrain: 'plains',   airbase: 1, naval: 0, vp: 8,  capital: false },
+  { id: 'ita_naples',   name: 'ナポリ',          tag: 'ITA', ...project(14.27, 40.85), lon: 14.27, lat: 40.85, terrain: 'coastal',  airbase: 1, naval: 2, vp: 7,  capital: false },
 
   // ── 日本領 ──
-  { id: 'jap_tokyo',    name: '東京',            tag: 'JAP', x: 1080, y: 330, terrain: 'urban',    airbase: 2, naval: 2, vp: 18, capital: true },
-  { id: 'jap_osaka',    name: '大阪',            tag: 'JAP', x: 1100, y: 360, terrain: 'plains',   airbase: 1, naval: 2, vp: 12, capital: false },
-  { id: 'jap_nagoya',   name: '名古屋',          tag: 'JAP', x: 1090, y: 350, terrain: 'plains',   airbase: 1, naval: 0, vp: 6,  capital: false },
-  { id: 'jap_kyushu',   name: '九州',            tag: 'JAP', x: 1140, y: 400, terrain: 'coastal',  airbase: 1, naval: 2, vp: 8,  capital: false },
+  { id: 'jap_tokyo',    name: '東京',            tag: 'JAP', ...project(139.69, 35.68), lon: 139.69, lat: 35.68, terrain: 'urban',    airbase: 2, naval: 2, vp: 18, capital: true },
+  { id: 'jap_osaka',    name: '大阪',            tag: 'JAP', ...project(135.5, 34.69), lon: 135.5, lat: 34.69, terrain: 'plains',   airbase: 1, naval: 2, vp: 12, capital: false },
+  { id: 'jap_nagoya',   name: '名古屋',          tag: 'JAP', ...project(136.91, 35.18), lon: 136.91, lat: 35.18, terrain: 'plains',   airbase: 1, naval: 0, vp: 6,  capital: false },
+  { id: 'jap_kyushu',   name: '九州',            tag: 'JAP', ...project(130.4, 33.59), lon: 130.4, lat: 33.59, terrain: 'coastal',  airbase: 1, naval: 2, vp: 8,  capital: false },
 
   // ── アメリカ領 ──
-  { id: 'usa_washington', name: 'ワシントン',     tag: 'USA', x: 120, y: 280, terrain: 'urban',    airbase: 2, naval: 2, vp: 18, capital: true },
-  { id: 'usa_newyork',  name: 'ニューヨーク',     tag: 'USA', x: 160, y: 250, terrain: 'coastal',  airbase: 2, naval: 3, vp: 15, capital: false },
-  { id: 'usa_chicago',  name: 'シカゴ',          tag: 'USA', x: 90, y: 240,  terrain: 'plains',   airbase: 1, naval: 0, vp: 8,  capital: false },
+  { id: 'usa_washington', name: 'ワシントン',     tag: 'USA', ...project(-77.04, 38.91), lon: -77.04, lat: 38.91, terrain: 'urban',    airbase: 2, naval: 2, vp: 18, capital: true },
+  { id: 'usa_newyork',  name: 'ニューヨーク',     tag: 'USA', ...project(-74.01, 40.71), lon: -74.01, lat: 40.71, terrain: 'coastal',  airbase: 2, naval: 3, vp: 15, capital: false },
+  { id: 'usa_chicago',  name: 'シカゴ',          tag: 'USA', ...project(-87.63, 41.88), lon: -87.63, lat: 41.88,  terrain: 'plains',   airbase: 1, naval: 0, vp: 8,  capital: false },
 
   // ── その他中小国 ──
-  { id: 'pol_warsaw',   name: 'ワルシャワ',      tag: 'POL', x: 700, y: 240, terrain: 'plains',   airbase: 1, naval: 0, vp: 8,  capital: true },
-  { id: 'cze_prague',   name: 'プラハ',          tag: 'CZE', x: 640, y: 280, terrain: 'plains',   airbase: 1, naval: 0, vp: 6,  capital: true },
-  { id: 'aus_vienna',   name: 'ウィーン',        tag: 'AUS', x: 660, y: 320, terrain: 'plains',   airbase: 1, naval: 0, vp: 6,  capital: true },
-  { id: 'tur_istanbul', name: 'イスタンブール',   tag: 'TUR', x: 760, y: 400, terrain: 'coastal',  airbase: 1, naval: 2, vp: 8,  capital: true },
-  { id: 'egy_cairo',    name: 'カイロ',          tag: 'EGY', x: 700, y: 520, terrain: 'desert',   airbase: 1, naval: 0, vp: 5,  capital: true },
-  { id: 'chi_shanghai', name: '上海',            tag: 'CHI', x: 980, y: 380, terrain: 'urban',    airbase: 1, naval: 2, vp: 10, capital: false },
-  { id: 'chi_nanjing',  name: '南京',            tag: 'CHI', x: 960, y: 400, terrain: 'plains',   airbase: 1, naval: 0, vp: 6,  capital: true },
+  { id: 'pol_warsaw',   name: 'ワルシャワ',      tag: 'POL', ...project(21.01, 52.23), lon: 21.01, lat: 52.23, terrain: 'plains',   airbase: 1, naval: 0, vp: 8,  capital: true },
+  { id: 'cze_prague',   name: 'プラハ',          tag: 'CZE', ...project(14.42, 50.08), lon: 14.42, lat: 50.08, terrain: 'plains',   airbase: 1, naval: 0, vp: 6,  capital: true },
+  { id: 'aus_vienna',   name: 'ウィーン',        tag: 'AUS', ...project(16.37, 48.21), lon: 16.37, lat: 48.21, terrain: 'plains',   airbase: 1, naval: 0, vp: 6,  capital: true },
+  { id: 'tur_istanbul', name: 'イスタンブール',   tag: 'TUR', ...project(28.98, 41.01), lon: 28.98, lat: 41.01, terrain: 'coastal',  airbase: 1, naval: 2, vp: 8,  capital: true },
+  { id: 'egy_cairo',    name: 'カイロ',          tag: 'EGY', ...project(31.24, 30.04), lon: 31.24, lat: 30.04, terrain: 'desert',   airbase: 1, naval: 0, vp: 5,  capital: true },
+  { id: 'chi_shanghai', name: '上海',            tag: 'CHI', ...project(121.47, 31.23), lon: 121.47, lat: 31.23, terrain: 'urban',    airbase: 1, naval: 2, vp: 10, capital: false },
+  { id: 'chi_nanjing',  name: '南京',            tag: 'CHI', ...project(118.8, 32.06), lon: 118.8, lat: 32.06, terrain: 'plains',   airbase: 1, naval: 0, vp: 6,  capital: true },
 ];
 
 /** プロヴィンス間の隣接（陸路移動・前線接続） */

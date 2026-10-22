@@ -1,3 +1,4 @@
+import { kmToPixels } from './geo.js';
 /**
  * map-engine.js — HoI4 風 戦略マップエンジン（SVG ベース）
  *
@@ -10,6 +11,7 @@
  * - あらゆる要素に data-tip / Tooltip を紐付け
  */
 
+import { installMapUI } from './ui/strategy-map.js';
 import { el } from './util.js';
 import { Tooltip } from './tooltip.js';
 import { I18N } from './i18n.js';
@@ -59,6 +61,8 @@ export class MapEngine {
     this.combatBubbles = new Map(); // bubbleId -> <g>
     this.airNavalRenderer = null; // () => void 外部（air-naval.js）から設定
     this._build();
+    this.mapMode = 'land';
+    this.mapReady = installMapUI(this);
   }
 
   _build() {
@@ -562,7 +566,7 @@ export class MapEngine {
   showAirRange(center, rangeKm, hasDropTank = false) {
     this.rangeLayer.innerHTML = '';
     if (!rangeKm) return;
-    const px = Math.max(20, (rangeKm / 1000) * 260);
+    const px = kmToPixels(rangeKm);
     const c = document.createElementNS(SVGNS, 'circle');
     c.setAttribute('cx', center.x); c.setAttribute('cy', center.y); c.setAttribute('r', px);
     c.setAttribute('fill', hasDropTank ? 'rgba(230,194,104,0.10)' : 'rgba(94,158,199,0.10)');
