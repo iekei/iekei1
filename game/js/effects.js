@@ -33,6 +33,20 @@ export class EffectEngine {
   _registerDefaultHandlers() {
     const set = (k, fn) => this.handlers.set(k, fn);
 
+    const amount = val => { const n = Number(val); return Number.isFinite(n) ? Math.trunc(n) : 0; };
+    for (const [effect, type] of Object.entries({ add_civilian_factories:'civ', add_military_factories:'mil', add_dockyards:'dock' })) {
+      set(effect, (ctx, val) => {
+        this.state.factories[type] = Math.max(0, this.state.factories[type] + amount(val));
+        this.state.bus.emit('economy-changed');
+      });
+    }
+    set('add_fuel', (ctx, val) => {
+      this.state.fuel.stock = Math.max(0, Math.min(this.state.fuel.max, this.state.fuel.stock + amount(val)));
+    });
+    set('add_convoys', (ctx, val) => {
+      this.state.convoys.total = Math.max(this.state.convoys.used, this.state.convoys.total + amount(val));
+    });
+
     set('add_political_power', (ctx, val) => {
       const n = Number(val) || 0;
       this.state.pp = Math.max(0, this.state.pp + n);
@@ -193,7 +207,16 @@ export class EffectEngine {
   /** エフェクト文字列または配列を順次実行 */
   execute(effects, ctx = {}) {
     if (!effects) return;
-    const list = Array.isArray(effects) ? effects : [effects];
+    // Accept HOI-style completion_reward = { ... }, plain reward objects and legacy strings.
+    if (typeof effects === 'string') {
+      const parsed = this.parseBlock(effects);
+      for (const effect of parsed) {
+        if (effect.key === 'completion_reward' && effect.block) effect.block.forEach(sub => this._run(sub, ctx));
+        else this._run(effect, ctx);
+      }
+      this.state.bus.emit('effects-executed'); return;
+    }
+    const list = Array.isArray(effects) ? effects : effects.key || effects.block ? [effects] : Object.entries(effects).map(([key,value]) => ({key,value}));
     for (const item of list) {
       if (typeof item === 'string') {
         const parsed = this.parseEffect(item);

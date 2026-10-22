@@ -1,3 +1,4 @@
+import { project, kmToPixels } from './geo.js';
 /**
  * air-naval.js — 空軍・海軍作戦システム
  *
@@ -17,19 +18,19 @@ const SVGNS = 'http://www.w3.org/2000/svg';
 
 /** 空域定義 */
 export const AIR_REGIONS = [
-  { id: 'eur_west', name: '西ヨーロッパ空域', center: { x: 440, y: 260 }, radius: 220, provinces: ['ger_berlin', 'ger_hamburg', 'ger_ruhr', 'fra_paris', 'eng_london'] },
-  { id: 'eur_east', name: '東ヨーロッパ空域', center: { x: 880, y: 200 }, radius: 200, provinces: ['sov_moscow', 'sov_kiev', 'pol_warsaw', 'ger_east_prussia', 'aus_vienna'] },
-  { id: 'med', name: '地中海空域', center: { x: 620, y: 400 }, radius: 180, provinces: ['ita_rome', 'ita_naples', 'tur_istanbul', 'egy_cairo'] },
-  { id: 'east_asia', name: '東アジア空域', center: { x: 1060, y: 360 }, radius: 220, provinces: ['jap_tokyo', 'jap_osaka', 'chi_shanghai', 'jap_kyushu'] },
-  { id: 'n_america', name: '北アメリカ空域', center: { x: 140, y: 260 }, radius: 180, provinces: ['usa_washington', 'usa_newyork', 'usa_chicago'] },
+  { id: 'eur_west', name: '西ヨーロッパ空域', center: project(4, 51), radius: kmToPixels(1400), provinces: ['ger_berlin', 'ger_hamburg', 'ger_ruhr', 'fra_paris', 'eng_london'] },
+  { id: 'eur_east', name: '東ヨーロッパ空域', center: project(30, 53), radius: kmToPixels(1600), provinces: ['sov_moscow', 'sov_kiev', 'pol_warsaw', 'ger_east_prussia', 'aus_vienna'] },
+  { id: 'med', name: '地中海空域', center: project(18, 37), radius: kmToPixels(1300), provinces: ['ita_rome', 'ita_naples', 'tur_istanbul', 'egy_cairo'] },
+  { id: 'east_asia', name: '東アジア空域', center: project(132, 35), radius: kmToPixels(2000), provinces: ['jap_tokyo', 'jap_osaka', 'chi_shanghai', 'jap_kyushu'] },
+  { id: 'n_america', name: '北アメリカ空域', center: project(-95, 40), radius: kmToPixels(2300), provinces: ['usa_washington', 'usa_newyork', 'usa_chicago'] },
 ];
 
 /** 海域定義 */
 export const NAVAL_REGIONS = [
-  { id: 'atlantic', name: '大西洋', center: { x: 240, y: 300 }, radius: 260 },
-  { id: 'pacific', name: '太平洋', center: { x: 860, y: 380 }, radius: 320 },
-  { id: 'mediterranean', name: '地中海', center: { x: 560, y: 430 }, radius: 160 },
-  { id: 'north_sea', name: '北海', center: { x: 440, y: 190 }, radius: 140 },
+  { id: 'atlantic', name: '大西洋', center: project(-35, 35), radius: kmToPixels(3000) },
+  { id: 'pacific', name: '太平洋', center: project(165, 20), radius: kmToPixels(3500) },
+  { id: 'mediterranean', name: '地中海', center: project(18, 35), radius: kmToPixels(1300) },
+  { id: 'north_sea', name: '北海', center: project(3, 58), radius: kmToPixels(900) },
 ];
 
 // ↓ ここに export を追加しました

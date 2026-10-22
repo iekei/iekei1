@@ -885,3 +885,29 @@ table.mil-table tr:hover td { background: rgba(255, 255, 255, .03); }
 .pick-item img { width: 26px; height: 26px; object-fit: contain; }
 .pick-item .pname { flex: 1; font-weight: 700; }
 .pick-item .pmeta { color: var(--text-dim); font-size: 10.5px; font-family: var(--mil-font); }
+
+/* HOI4 strategy views: vector borders, embedded cards and roomy tree navigation. */
+#map-hud-top { pointer-events: none; }
+.map-controls { display:flex; flex-wrap:wrap; gap:6px; pointer-events:auto; }
+.map-controls button[aria-pressed="true"] { border-color:var(--gold); color:var(--gold); }
+.province-area { stroke:#303b44; stroke-width:1; fill-opacity:.62; vector-effect:non-scaling-stroke; }
+.province-area.country-hover { fill-opacity:.85; }
+.province-area:hover { stroke:#ffe393; stroke-width:3; fill-opacity:1; }
+.country-borders path { fill:none; stroke:#111820; stroke-width:2.5; vector-effect:non-scaling-stroke; }
+.show-borders .country-borders path { stroke:#e6c268; stroke-width:3; }
+.show-provinces .province-area { stroke:#d9e5ed; stroke-width:1.5; }
+#map-svg[data-mode="air"] .province-area, #map-svg[data-mode="naval"] .province-area { fill-opacity:.28; }
+#map-legend { pointer-events:none; background:#101820dd; padding:8px; }
+.tree-viewport { min-width:0; min-height:0; overflow:auto; overscroll-behavior:contain; scrollbar-gutter:stable; }
+.focus-tree-wrap { height: min(62vh, 700px); }
+.research-viewport { width:100%; height:min(62vh, 680px); border:1px solid #3a434d; }
+.tree-stage { flex:none; transform-origin:0 0; }
+.tech-canvas.tree-stage { overflow:visible; }
+.tech-node .tech-label { position:absolute; top:64px; left:-62px; width:176px; text-align:center; font-size:12px; line-height:1.5; white-space:normal; }
+.gacha-embed { padding:0 !important; display:flex; min-height:65vh; overflow:hidden; }
+.gacha-frame { border:0; width:100%; flex:1; min-height:65vh; background:#121212; }
+.screen-tabs { flex-shrink:0; overflow-x:auto; }
+.country-area { stroke:#18212b; stroke-width:.7; vector-effect:non-scaling-stroke; fill-opacity:.85; }
+.historical-country:hover .country-area { fill-opacity:1; stroke:#ffe393; stroke-width:1.5; }
+.show-borders .country-area { stroke:#e6c268; stroke-width:1.3; }
+#map-svg[data-mode="air"] .country-area, #map-svg[data-mode="naval"] .country-area { fill-opacity:.45; }
