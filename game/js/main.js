@@ -1,9 +1,9 @@
 /**
- * main.js — ゲームブートストラップ
+- main.js — ゲームブートストラップ
  *
- *  初期化: I18N → GameState → 各マネージャ → カード/研究データ → TopBar/画面/マップ
- *  ゲームループ: TimeEngine の Tick が研究/経済/政治/諜報/ドクトリンを駆動
- *  マルチプレイ: ?mp=host&room=XXX / ?mp=client&room=XXX で TimeSync を有効化
+-  初期化: I18N → GameState → 各マネージャ → カード/研究データ → TopBar/画面/マップ
+-  ゲームループ: TimeEngine の Tick が研究/経済/政治/諜報/ドクトリンを駆動
+-  マルチプレイ: ?mp=host&room=XXX / ?mp=client&room=XXX で TimeSync を有効化
  */
 
 import { I18N } from './i18n.js';
@@ -60,9 +60,9 @@ async function boot() {
   // 1.5 国家選択画面（?nation= で直接指定時はスキップ）
   const directTag = params.get('nation') || null;
   let selectedTag = directTag;
-  let mpMode = 'local';
-  let room = 'default';
-  const gameRoot = document.getElementById('game-root');
+  let mpMode = params.get('mp') || 'local';
+  let room = params.get('room') || 'default';
+  
   if (!directTag) {
     const ns = new NationSelect({
       onSelect: (tag, mp) => { selectedTag = tag; mpMode = mp.mode; room = mp.room; },
@@ -88,8 +88,10 @@ async function boot() {
     } finally {
       // オーバーレイを確実に除去し、ゲーム本体の見た目を戻す（真っ暗固定防止）
       ns.unmount();
-      gameRoot.style.filter = '';
-      gameRoot.style.pointerEvents = '';
+      if (gameRoot) {
+        gameRoot.style.filter = '';
+        gameRoot.style.pointerEvents = '';
+      }
     }
   }
 
