@@ -32,14 +32,16 @@ export const NAVAL_REGIONS = [
   { id: 'north_sea', name: '北海', center: { x: 440, y: 190 }, radius: 140 },
 ];
 
-const AIR_TYPE_INFO = {
+// ↓ ここに export を追加しました
+export const AIR_TYPE_INFO = {
   fighter: { name: '戦闘機', icon: '✈', color: '#5e9ec7', airCombat: 1.0 },
   cas: { name: '近接航空支援(CAS)', icon: '💣', color: '#d05038', groundSupport: 0.15 },
   strategic_bomber: { name: '戦略爆撃機', icon: '💥', color: '#a06ec8', strategic: 0.2 },
   transport: { name: '輸送機', icon: '🚁', color: '#e6c268', transport: 1.0 },
 };
 
-const NAVAL_TYPE_INFO = {
+// ↓ ここにも念のため export を追加しました
+export const NAVAL_TYPE_INFO = {
   fleet: { name: '主力艦隊', icon: '🚢', color: '#5e9ec7', power: 30 },
   task_force: { name: '機動部隊', icon: '🚢', color: '#7ec850', power: 20 },
   convoy: { name: '船団', icon: '🚢', color: '#a06ec8', power: 5 },
