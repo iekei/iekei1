@@ -1,9 +1,9 @@
 /**
- * gacha.js — 将軍・司令官カードガチャ
+- gacha.js — 将軍・司令官カードガチャ
  *
- * CardLibrary のカードプールからレアリティ別確率でカードを1枚ずつアンロックし、
- * state.cardCollection に追加する。アンロックした司令官を軍集団・艦隊・航空軍に
- * 配属し、特性（Trait）が戦闘ダイスロールに反映される。
+- CardLibrary のカードプールからレアリティ別確率でカードを1枚ずつアンロックし、
+- state.cardCollection に追加する。アンロックした司令官を軍集団・艦隊・航空軍に
+- 配属し、特性（Trait）が戦闘ダイスロールに反映される。
  */
 
 import { weightedPick } from './util.js';
@@ -17,7 +17,7 @@ export const PACKS = {
   legendary: { id: 'legendary', label: '伝説パック', costPP: 500, weights: { common: 0.05, rare: 0.15, epic: 0.40, legendary: 0.40 } },
 };
 
-const RARITY_ORDER = ['common', 'rare', 'epic', 'legendary'];
+export const RARITY_ORDER = ['common', 'rare', 'epic', 'legendary'];
 
 export class GachaManager {
   constructor(state, cardLibrary) {
@@ -132,5 +132,4 @@ export class GachaManager {
   }
 }
 
-export { PACKS, RARITY_ORDER };
 export default GachaManager;
