@@ -59,8 +59,18 @@ docker compose -f docker-compose.base44.yml up -d
 
 - `/game/` is a separate static document; root `/` is the website homepage, not the game. No SPA router or HMR: refresh after frontend edits. For browser verification, a separate `window.location.assign('/game/')` expression navigates the document; do not return/await across the reload.
 - `assets/topbar-ui.js` owns the seven status instruments and tooltip presentation; CoreEngine still owns values/explanations. Render updates text/gauges without replacing the instruments, so keyboard focus survives daily ticks. Order: political power, stability, war support, manpower, factories, fuel, convoys.
+- 軍事XP（陸/海/空）の基本増加は `DLC.onTick()` → `DLC.accrueExperienceXP()` の **各軍種 0.2 XP/日**（`DLC.XP_PER_DAY`）。`CoreEngine.tick()` は1時間単位なので毎時 0.2/24 を加算し、同じ時刻の再Tickは `DLC._lastXpStamp` で無視する。戦時補正はなく、ミッション完了報酬は +1。トップバーと兵器設計は小数第1位まで表示する（`assets/topbar-ui.js` の `formatExperience` / `EquipmentDesigner.xpAvailable`）。
 - Status explanations support mouseover/mouseout, focus, Escape, and touch/click; world tension retains its diplomacy action. Small screens scroll the instruments rather than reordering or hiding them. `assets/topbar.css` overrides the theme only for the topbar and existing navigation icons.
 - Existing focus-tree icons still request missing GitHub raw images. These image errors are not topbar script failures; check loaded inline status images, nonempty `#game-root`, and the absence of script errors separately.
+
+## 兵器設計 Equipment Designer（game/index.html）
+
+- 画面は `assets/equipment-designer.js`（`window.EquipmentDesigner`）+ `assets/equipment-designer.css`。データ本体は `dlc.js` の `EquipmentDesigner.DATA`（tank/ship/plane の hull と slot→module）で、asset 側が必須スロット・サイズ制限・倍率メタデータを後付けする。`hoi4.html` 側の `js/designers.js` とは独立実装。
+- 唯一の描画先は `DLC.installUI()` が注入する `#designer-content`。旧 `dlc.js` の設計UIと `strategy-systems.js` の `updateDesigner()` は `.eqd` があるとき無効化される（二重描画防止）。CSS/JS を更新したら `index.html` の `?v=designer-N` を上げる。
+- 研究ゲートは `ResearchManager.researchedTech`。研究データ未読込（空 Set + `techData` 未設定）の間だけプレビューとして全解禁し、`init()` 後は 1936年以前の技術のみ解禁。`init`/`onTick` をラップして研究完了時に再描画する。
+- 必須スロット（戦車: 主砲/エンジン、艦船: 主砲/機関、航空機: エンジン/武装）は `pickModule(slot,'')` を拒否し、`validation()` も空スロットをエラーにする。サイズ制限（小型機体への大型爆弾、駆逐艦への大口径砲、軽戦車への重榴弾砲など）はピッカーで `aria-disabled` + 理由表示、`pickModule` でも拒否。
+- 保存は 20 XP（陸/海/空）。`saveDesign()` は検証 → XP 消費 → `designs` へ push → `MultiplayerManager.broadcast`。`strategy-systems.js` が `saveDesign` をラップして `registerDesign`（生産カタログ）へ登録し、「生産」ボタンは未登録の復元設計を補完してから生産画面を開く。
+- 回帰テスト: `game/tests/hoi4-systems.test.cjs` の「equipment designer enforces mandatory slots, size limits and XP spending」。
 
 ## HOI4風大戦略ゲーム（hoi4.html）
 
