@@ -688,6 +688,7 @@ class FactoryBudget {
     let total=tag===s.country?Math.floor(s.civilianFactories):Math.floor(a.civilian);
     (s.strategy.contracts||[]).filter(c=>c.expires>day).forEach(c=>{if(c.buyer===tag)total-=c.factories;if(c.seller===tag)total+=c.factories;});
     if(tag===s.country && s.intel?.building) total-=2;
+    if(tag===s.country && s.intel?.branchProject) total-=s.intel.branchProject.factories;
     if(tag===s.country) total-=(s.strategy.tradeLeases||[]).filter(c=>c.expires>day).reduce((n,c)=>n+c.factories,0);
     return Math.max(0,total);
   }
@@ -801,7 +802,8 @@ class ProductionManager {
       if(!count || line.shortage.length) continue;
       Object.entries(need).forEach(([k,v])=>{s.resources[k]=Math.max(0,s.resources[k]-v);});
       const law=PoliticsManager.currentLaw('economy');
-      line.progress=(line.progress||0)+def.rate*count*(1+(law.factoryOutput||0));
+      const sabotage = (s.countryEffects?.[s.country]?.sabotageUntil || 0) > GameTools.day() ? 0.75 : 1;
+      line.progress=(line.progress||0)+def.rate*count*(1+(law.factoryOutput||0))*sabotage;
       const whole=Math.floor(line.progress+1e-9);line.progress-=whole;line.produced=(line.produced||0)+whole;a.stock[line.type]=(a.stock[line.type]||0)+whole;
     }
     ProductionManager.syncLocal();

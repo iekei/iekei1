@@ -210,7 +210,8 @@ class BattleManager {
     const resolved = [];
     BattleManager.battles.forEach(b => {
       if(b.preparation>0){b.preparation--;return;}
-      const attackValue = b.softAttack + b.hardAttack * 0.6;
+      const cipherBonus = typeof AgencyUI !== 'undefined' ? AgencyUI.combatBonus(b.defender) : 0;
+      const attackValue = (b.softAttack + b.hardAttack * 0.6) * (1 + (b.attacker === CoreEngine.gameState.country ? cipherBonus : 0));
       const defenseValue = Math.max(1, b.defense + b.breakthrough);
       const exceeded = attackValue > defenseValue;
       b.hitChance = exceeded ? 0.4 : 0.2;
