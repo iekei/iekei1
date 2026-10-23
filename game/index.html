@@ -705,7 +705,8 @@
   <link rel="stylesheet" href="assets/game-visuals.css?v=artwork-3">
   <link rel="stylesheet" href="assets/topbar.css">
   <link rel="stylesheet" href="assets/research-tree.css">
-  <link rel="stylesheet" href="assets/equipment-designer.css?v=xp-1">
+  <link rel="stylesheet" href="assets/equipment-designer.css?v=designer-3">
+  <link rel="stylesheet" href="assets/intelligence-agency.css">
   <link rel="stylesheet" href="assets/strategy-systems.css">
   <link rel="stylesheet" href="assets/war-systems.css">
   <!-- HOI4 大戦略 全画面レイヤー (../hoi4.html を iframe で表示) -->
@@ -953,6 +954,8 @@
 <script src="assets/localization-manager.js"></script>
   <script src="assets/research-icons.js"></script>
   <script src="assets/hoi4-effects-config.js"></script>
+  <script src="assets/completion-reward.js"></script>
+  <script src="assets/focus-routing.js"></script>
   <script src="assets/nf-reward-loader.js"></script>
   <script src="assets/nf-reward-debug.js"></script>
   <script src="assets/technology-resolver.js"></script>
@@ -1715,6 +1718,7 @@ class FocusTreeManager {
   }
 
   static routeConnections(focuses, focusMap, position, nodeWidth, nodeHeight) {
+    if (window.FocusRouting) return window.FocusRouting.route(focuses, focusMap, position, nodeWidth, nodeHeight);
     const edges = [];
     const seen = new Set();
     focuses.forEach(focus => (focus.prerequisites || []).forEach(id => {
@@ -2038,6 +2042,9 @@ class FocusTreeManager {
   static normalizeCompletionRewards(f) {
     const raw = f?.completion_rewards ?? f?.completionRewards ?? f?.completion_reward ?? f?.complication_reward ?? f?.complication_rewards ?? f?.completionReward ?? [];
     if (!raw) return [];
+    if (typeof raw === 'string') {
+      try { return window.parseCompletionReward(raw); } catch (error) { console.warn('国家方針報酬の構文エラー', error); return [{type:'syntax_error',unsupported:true}]; }
+    }
     if (Array.isArray(raw)) return raw.filter(reward => reward && typeof reward === 'object');
     if (typeof raw === 'object') {
       if (raw.type) return [raw];
@@ -6297,7 +6304,13 @@ class ResearchManager {
     const s = CoreEngine.gameState;
     if (!Array.isArray(s.techBonuses) || !s.techBonuses.length) return null;
     const category = ResearchManager.techCategoryOf(tech);
-    const index = s.techBonuses.findIndex(bonus => bonus && (bonus.category === category || bonus.category === '全般'));
+    const index = s.techBonuses.findIndex(bonus => bonus && bonus.uses > 0 && (
+      bonus.category === category || bonus.category === '全般' ||
+      (tech.categories || []).includes(bonus.category) || (tech.tags || []).includes(bonus.category) ||
+      (bonus.category === 'armor' && /tank|armor/.test(tech.id)) ||
+      (bonus.category === 'industry' && /industry|construction|production|machine|synthetic|excavation/.test(tech.id)) ||
+      (bonus.category === 'land_doctrine' && /doctrine/.test(tech.id))
+    ));
     if (index < 0) return null;
     const bonus = s.techBonuses[index];
     const applied = { category: bonus.category, bonus: Number(bonus.bonus) || 0 };
@@ -6314,11 +6327,11 @@ class ResearchManager {
     const s = CoreEngine.gameState;
     const penalty = ResearchManager.researchPenalty(tech);
     const baseTime = tech.research_time || 100;
-    const techBonus = ResearchManager.takeTechBonus(tech);
-    const bonusFactor = techBonus ? Math.max(0.1, 1 - techBonus.bonus) : 1;
-    const totalTime = Math.max(1, Math.round(baseTime * penalty.multiplier * bonusFactor));
     for (let i = 1; i <= s.researchSlots; i++) {
       if (!ResearchManager.researching[i]) {
+        const techBonus = ResearchManager.takeTechBonus(tech);
+        const bonusFactor = techBonus ? Math.max(0.1, 1 - techBonus.bonus) : 1;
+        const totalTime = Math.max(1, Math.round(baseTime * penalty.multiplier * bonusFactor));
         ResearchManager.researching[i] = { techId: tech.id, progress: 0, total: totalTime, baseTime, penaltyPercent: penalty.percent, techBonus: techBonus ? techBonus.bonus : 0 };
         const bonusMsg = techBonus ? ' / 研究ボーナス -' + Math.round(techBonus.bonus * 100) + '%' : '';
         const msg = penalty.percent > 0
@@ -7021,9 +7034,10 @@ window.addEventListener('DOMContentLoaded', () => StartScreen.show());
 <script src="dlc.js?v=xp-1"></script>
   <script src="strategy.js?v=artwork-2"></script>
   <script src="assets/technology-resolver.js"></script>
-  <script src="assets/equipment-designer.js?v=xp-1"></script>
+  <script src="assets/equipment-designer.js?v=designer-3"></script>
   <script src="assets/strategy-systems.js?v=designer-2"></script>
   <script src="assets/force-systems.js"></script>
+  <script src="assets/intelligence-agency.js"></script>
   <script src="assets/MultiplayerTimeManager.js"></script>
   <!-- ==================== HOI4 大戦略 全画面レイヤー (../hoi4.html / H キー) ==================== -->
   <script src="hoi4-screen.js"></script>

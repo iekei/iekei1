@@ -60,7 +60,7 @@ window.NFRewardLoader = {
   },
 
   parse(text, output) {
-    const source = text.replace(/#[^\r\n]*/g, '');
+    const source = text.replace(/"(?:\\.|[^"\\])*"|#[^\r\n]*/g, token => token.startsWith('#') ? '' : token);
     const focusPattern = /(?:focus|shared_focus)\s*=\s*\{/g;
     let match;
 
@@ -88,8 +88,13 @@ window.NFRewardLoader = {
 
   blockEnd(text, open) {
     if (open < 0 || text[open] !== '{') return -1;
-    let depth = 0;
+    let depth = 0, quoted = false, escaped = false;
     for (let index = open; index < text.length; index += 1) {
+      const char = text[index];
+      if (escaped) { escaped = false; continue; }
+      if (quoted && char === '\\') { escaped = true; continue; }
+      if (char === '"') { quoted = !quoted; continue; }
+      if (quoted) continue;
       if (text[index] === '{') depth += 1;
       else if (text[index] === '}' && --depth === 0) return index;
     }
@@ -98,6 +103,7 @@ window.NFRewardLoader = {
 
   // 再帰的なブロック解析でネストした { building = bunker level = 3 } を正しく読み取る。
   parseBlock(block) {
+    if (window.parseCompletionReward) return window.parseCompletionReward(block);
     const rewards = [];
     const tokens = this.tokenize(block);
     let i = 0;

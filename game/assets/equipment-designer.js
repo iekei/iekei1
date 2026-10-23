@@ -873,6 +873,18 @@
     return chips;
   }
 
+  function moduleImageFile(cat, slot, option) {
+    if (option.asset_key || option.icon_key) return (option.asset_key || option.icon_key).replace(/\.png$/, '');
+    const index = Math.max(0, slot.options.filter(o => o.id !== 'none').indexOf(option));
+    const tier = Math.min(4, index + 1);
+    if (slot.id === 'engine') return (cat === 'plane' ? 'bba_tech_engines_' : 'nsb_engine_tech_') + tier;
+    if (slot.id === 'armor' || slot.id === 'turret') return 'nsb_armor_tech_' + tier;
+    if (slot.id === 'radio' || slot.id === 'radar') return 'radio';
+    if (slot.id === 'gun') return cat === 'ship' ? 'Basic_heavy_battery' : 'artillery_equipment';
+    if (slot.id === 'weapon') return 'bba_tech_aa_cannon_1';
+    return 'electronic_mechanical_engineering';
+  }
+
   function chipsHtml(chips, limit) {
     const list = limit ? chips.slice(0, limit) : chips;
     return list.map(chip => '<span class="eqd-chip ' + chip.tone + '">' + esc(chip.text) + '</span>').join('');
@@ -902,6 +914,7 @@
       return '' +
         '<button type="button" class="eqd-module' + (selected ? ' selected' : '') + (blocked ? ' blocked' : '') + '" ' +
         'data-eqd-pick="' + esc(option.id) + '"' + (blocked ? ' aria-disabled="true"' : '') + ' title="' + esc(option.name) + '">' +
+        '<img class="eqd-module-image" src="assets/technology/' + encodeURIComponent(moduleImageFile(cat, slot, option)) + '.png" alt="' + esc(option.name) + '" loading="lazy" onerror="this.hidden=true">' +
         '<span class="eqd-module-top"><b>' + esc(option.name) + '</b>' +
         (selected ? '<span class="eqd-module-check">✓ 装備中</span>' : '') + '</span>' +
         '<span class="eqd-module-chips">' + chipsHtml(chips) + '</span>' +
