@@ -90,10 +90,12 @@ class ForceSystems {
   }
 
   static cardType(card) {
+    // Old saves omitted type/stats when hiring. Recover from the loaded catalog.
+    if (typeof CardSystem !== 'undefined' && CardSystem.normalizeHiredCard) card = CardSystem.normalizeHiredCard(card);
     const explicit = card?.type;
     if (['army_leader', 'navy_leader', 'air_leader'].includes(explicit)) return explicit;
     const legacy = { general: 'army_leader', navy: 'navy_leader', air: 'air_leader' };
-    return legacy[explicit] || null;
+    return legacy[explicit] || (!explicit && ({army:'army_leader',navy:'navy_leader',air:'air_leader'})[card?.branch]) || null;
   }
 
   static commander(group) {
@@ -113,6 +115,7 @@ class ForceSystems {
   }
 
   static openCommander(force, groupId) {
+    if (typeof CardSystem !== 'undefined') CardSystem.normalizeHiredCards?.();
     const group = ForceSystems.groups(force).find(item => String(item.id) === String(groupId));
     if (!group) return;
     const player = CoreEngine.gameState.country;
@@ -147,6 +150,7 @@ class ForceSystems {
   }
 
   static cardStats(card) {
+    if (typeof CardSystem !== 'undefined' && CardSystem.normalizeHiredCard) card = CardSystem.normalizeHiredCard(card);
     const source = card?.stats || card || {};
     return {
       attack: Math.max(0, Number(source.attack) || 0),
@@ -156,6 +160,7 @@ class ForceSystems {
   }
 
   static assignCommander(force, groupId, cardId, country) {
+    if (typeof CardSystem !== 'undefined') CardSystem.normalizeHiredCards?.();
     const group = ForceSystems.groups(force).find(item => String(item.id) === String(groupId));
     const card = (CardSystem.hiredCards || []).find(item =>
       item.id === cardId && item.country === country && item.country === CoreEngine.gameState.country);
@@ -570,6 +575,7 @@ class ForceSystems {
   }
 
   static initializeGroups() {
+    if (typeof CardSystem !== 'undefined') CardSystem.normalizeHiredCards?.();
     ForceSystems.ensureState();
     ForceSystems.migrateAircraftDesigns();
     const assigned = new Set();

@@ -23,16 +23,26 @@ class BattleManager {
 
   // ---- 戦闘開始: 陸軍の攻撃作戦 ----
   static startOffensive(army, targetPid, targetStateId, options = {}) {
-    if (!army.divisions.length || BattleManager.battles.some(b => b.attackerArmyId === army.id)) return null;
+    const area = Array.isArray(options.divisionIds);
+    const ids = new Set(options.divisionIds || []);
+    const participants = area ? army.divisions.filter(d => ids.has(d.id)) : army.divisions;
+    if (!participants.length) return null;
+    if (area) {
+      if (participants.length !== ids.size || !army.executing) return null;
+      if (BattleManager.battles.some(b => Number(b.provId) === Number(targetPid))) return null;
+      const busy = new Set(BattleManager.battles.filter(b => b.attackerArmyId === army.id).flatMap(b => b.divisionIds || army.divisions.map(d => d.id)));
+      if (participants.some(d => busy.has(d.id) || MapRenderer.ownerOf(d.pid) !== CoreEngine.gameState.country || !(MapRenderer.provNeighbors.get(Number(d.pid)) || new Set()).has(Number(targetPid)))) return null;
+    } else if (BattleManager.battles.some(b => b.attackerArmyId === army.id)) return null;
+    const force = area ? { ...army, divisions: participants } : army;
     const owner = MapRenderer.ownerOf(targetPid);
     if (!CoreEngine.gameState.atWar.includes(owner)) return null;
-    if (!options.invasion && !options.airdrop && !(MapRenderer.provNeighbors.get(army.positionPid) || new Set()).has(targetPid)) return null;
+    if (!area && !options.invasion && !options.airdrop && !(MapRenderer.provNeighbors.get(army.positionPid) || new Set()).has(targetPid)) return null;
     const st = MapRenderer.states[targetStateId];
     const pos = MapRenderer.provCentroid.get(targetPid) ||
       MapRenderer.stateCenter.get(String(targetStateId)) || army.base.slice();
     // 計画準備ボーナス: 前線で蓄積した値をこの戦闘に適用する。
     const planning = typeof PlanningBonus !== 'undefined' ? PlanningBonus.of(army) : 0;
-    const profile = BattleManager.attackProfile(army);
+    const profile = BattleManager.attackProfile(force);
     const b = {
       id: BattleManager.nextId++,
       kind: 'offensive',
@@ -43,8 +53,10 @@ class BattleManager {
       defender: owner,
       invasion: !!options.invasion, airdrop: !!options.airdrop,
       attackerArmyId: army.id,
+      areaPlan: area, divisionIds: area ? participants.map(d => d.id) : null,
+      originPids: area ? participants.map(d => Number(d.pid)) : null,
       // プレイヤー視点の優勢度 (-1 〜 +1)
-      advantage: Math.max(-1, Math.min(1, BattleManager.calcOffensiveAdvantage(army, st) + planning * 0.25)),
+      advantage: Math.max(-1, Math.min(1, BattleManager.calcOffensiveAdvantage(force, st) + planning * 0.25)),
       planning,
       softAttack: profile.soft * (1 + planning),
       hardAttack: profile.hard * (1 + planning),
@@ -56,7 +68,7 @@ class BattleManager {
       totalDays: 0
     };
     // 優勢ほど短く終わる: 3〜13日
-    b.totalDays = OffensivePlanner.duration(army, targetPid, Math.max(3, Math.round(3 + (1 - Math.abs(b.advantage)) * 10)));
+    b.totalDays = OffensivePlanner.duration(force, targetPid, Math.max(3, Math.round(3 + (1 - Math.abs(b.advantage)) * 10)));
     if (options.invasion && army.divisions.some(d => d.comp?.marine)) b.totalDays = Math.max(2, Math.round(b.totalDays * 0.65));
     BattleManager.battles.push(b);
     CoreEngine.log('⚔️ 戦闘開始: ' + (st ? st.name : '州' + targetStateId) + ' — ' + b.attacker + ' vs ' + b.defender + ' (約' + b.totalDays + '日)');
@@ -196,7 +208,8 @@ class BattleManager {
   static serialize(b) {
     return { id: b.id, kind: b.kind, stateId: b.stateId, provId: b.provId, x: b.x, y: b.y,
       attacker: b.attacker, defender: b.defender, advantage: b.advantage,
-      progress: b.progress, totalDays: b.totalDays, attackerArmyId: b.attackerArmyId, invasion: b.invasion, airdrop: b.airdrop, preparation:b.preparation, planning:b.planning || 0 };
+      progress: b.progress, totalDays: b.totalDays, attackerArmyId: b.attackerArmyId, invasion: b.invasion, airdrop: b.airdrop, preparation:b.preparation, planning:b.planning || 0, areaPlan:!!b.areaPlan, divisionIds:b.divisionIds, originPids:b.originPids,
+      softAttack:b.softAttack, hardAttack:b.hardAttack, defense:b.defense, breakthrough:b.breakthrough };
   }
 
   static deserialize(data) {
@@ -234,7 +247,7 @@ class BattleManager {
     // Disconnected colonies and landing bridgeheads are not instant defeats.
     // Only troops actually in an enemy-controlled pocket lose organization.
     BattlePlanManager.armies.forEach(army => {
-      if (army.positionPid && MapRenderer.ownerOf(army.positionPid) !== CoreEngine.gameState.country) {
+      if (!army.areaPlan && army.positionPid && MapRenderer.ownerOf(army.positionPid) !== CoreEngine.gameState.country) {
         army.divisions.forEach(d => { d.org = Math.max(0, d.org - 2); });
         army.executing = false;
         army.status = '補給路切断';
@@ -244,6 +257,8 @@ class BattleManager {
 
   // ---- 戦闘結果の確定 → 占領 / 逆占領 ----
   static resolve(b) {
+    // A canceled or already-resolved province battle cannot apply captures/losses twice.
+    if (b.areaPlan && !BattleManager.battles.some(active => active.id === b.id)) return;
     BattleManager.battles = BattleManager.battles.filter(x => x.id !== b.id);
     BattleManager.applyEquipmentLosses(b);
     if (b.kind === 'offensive') OffensivePlanner.result(b);
@@ -257,7 +272,7 @@ class BattleManager {
   static applyEquipmentLosses(battle) {
     const attackerArmy = (BattlePlanManager.armies || []).find(army => army.id === battle.attackerArmyId);
     const affected = battle.kind === 'offensive'
-      ? (attackerArmy?.divisions || [])
+      ? (attackerArmy?.divisions || []).filter(d => !battle.areaPlan || (battle.divisionIds || []).includes(d.id))
       : ArmyRoster.all().filter(division => Number(division.pid) === Number(battle.provId));
     const loss = 2 + Math.floor(Math.random() * 4) +
       (battle.defender === CoreEngine.gameState.country && battle.advantage < 0 ? 2 : 0);

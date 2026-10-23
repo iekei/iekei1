@@ -954,7 +954,7 @@
 <script src="assets/localization-manager.js"></script>
   <script src="assets/research-icons.js"></script>
   <script src="assets/hoi4-effects-config.js"></script>
-  <script src="assets/completion-reward.js"></script>
+  <script src="assets/completion-reward.js?v=roster-2"></script>
   <script src="assets/focus-routing.js"></script>
   <script src="assets/nf-reward-loader.js"></script>
   <script src="assets/nf-reward-debug.js"></script>
@@ -2811,29 +2811,38 @@ class MapRenderer {
 
   // ---- プロビンス隣接マップ & 国境プロビンス (前線スナップ用) ----
   static provNeighbors = new Map();   // provId -> Set(隣接provId)
+  static provinceBoundarySegments = new Map(); // shared raster edges, keyed by sorted province IDs
   static borderCache = new Map();     // playerTag -> [{pid, x, y}] 他国に面した自国陸地プロビンス
 
   static buildAdjacency() {
     // 全ピクセルを走査し隣接プロビンス対を収集
     const W = MapRenderer.mapW, H = MapRenderer.mapH, idm = MapRenderer.idMap;
-    const nb = new Map();
-    const add = (a, b) => {
+    const nb = new Map(), boundaries = new Map();
+    const add = (a, b, x1, y1, x2, y2) => {
       if (!a || !b || a === b) return;
       let s = nb.get(a);
       if (!s) { s = new Set(); nb.set(a, s); }
       s.add(b);
+      if (!nb.has(b)) nb.set(b, new Set());
+      nb.get(b).add(a);
+      const key = Math.min(a,b) + ':' + Math.max(a,b);
+      if (!boundaries.has(key)) boundaries.set(key, []);
+      boundaries.get(key).push(x1,y1,x2,y2);
     };
     for (let y = 0; y < H; y++) {
       const row = y * W;
       for (let x = 0; x < W; x++) {
         const i = row + x, id = idm[i];
         if (!id) continue;
-        if (x + 1 < W) add(id, idm[i + 1]);
-        if (y + 1 < H) add(id, idm[i + W]);
+        if (x + 1 < W) add(id, idm[i + 1], x+1,y,x+1,y+1);
+        if (y + 1 < H) add(id, idm[i + W], x,y+1,x+1,y+1);
       }
-      add(idm[row], idm[row + W - 1]);
+      add(idm[row], idm[row + W - 1], 0,y,0,y+1);
+      // Duplicate the seam at the far map edge for wrap-aware rendering.
+      add(idm[row], idm[row + W - 1], W,y,W,y+1);
     }
     MapRenderer.provNeighbors = nb;
+    MapRenderer.provinceBoundarySegments = boundaries;
   }
 
   static isBorderProvince(pid, playerTag) {
@@ -3858,7 +3867,7 @@ class BattlePlanManager {
     if (typeof PlanningBonus !== 'undefined') PlanningBonus.reset(army);
     OffensivePlanner.deployAlongFront(army);   // 国境線に沿って師団を自動配備
     CoreEngine.log(army.name + 'の前線を' + enemyTag + 'との国境に自動設定しました (' + ordered.length + '���点)。');
-    GameUI.notify('✅ ' + enemyTag + 'との国境に前��を自動スナップ (' + ordered.length + '地点) — Shift+右ドラッグで攻撃矢印を描けます', 'success');
+    GameUI.notify('✅ ' + enemyTag + 'との国境に前��を自動スナップ (' + ordered.length + '地点) — Shift+右ドラッグで敵領内の目標ラインを横になぞってください', 'success');
     MultiplayerManager.broadcast({ type: 'battle_front', army: army.id, points: ordered });
     BattlePlanManager.renderPanel();
   }
@@ -3915,7 +3924,7 @@ class BattlePlanManager {
         if (typeof PlanningBonus !== 'undefined') PlanningBonus.reset(army);  // 前線を引き直すと計画準備はリセット
         OffensivePlanner.deployAlongFront(army);   // 配属師団を前線へ自動展開
         CoreEngine.log(army.name + 'の前線を国境に設定しました (' + snapped.length + '点' + (dropped ? ' / ' + dropped + '点をスナップ' : '') + ')。');
-        GameUI.notify('前線設定完了 (国境にスナップ' + (dropped ? ' — ' + dropped + '点補正' : '') + ') — Shift+右ドラッグで攻撃矢印を描けます', 'success');
+        GameUI.notify('前線設定完了 (国境にスナップ' + (dropped ? ' — ' + dropped + '点補正' : '') + ') — Shift+右ドラッグで敵領内の目標ラインを横になぞってください', 'success');
         MultiplayerManager.broadcast({ type: 'battle_front', army: army.id, points: snapped });
       }
     } else if (BattlePlanManager.dragMode === 'arrow') {
@@ -4227,8 +4236,9 @@ class BattlePlanManager {
     };
 
     BattlePlanManager.armies.forEach(army => {
-      // 前線 (緑の光線)
-      if (army.frontline) {
+      const areaDrawn = typeof AreaBattlePlan !== 'undefined' && AreaBattlePlan.draw(ctx, worldToScreen, army);
+      // Area plans draw actual shared province edges, not centre-to-centre lines.
+      if (!areaDrawn && army.frontline) {
         ctx.save();
         ctx.shadowColor = '#4ac46a';
         ctx.shadowBlur = 8;
@@ -4236,12 +4246,12 @@ class BattlePlanManager {
         ctx.restore();
       }
       // 攻撃チェーン (残りの進撃経路: 破線の金線 — 段階的に広がる戦線)
-      if (army.chain && army.chain.length > 0) {
+      if (!areaDrawn && army.chain && army.chain.length > 0) {
         const pts = army.chain.map(sid => MapRenderer.stateCenter.get(String(sid))).filter(Boolean);
         drawPolyline(pts, 'rgba(212,168,67,0.85)', 2, [6, 6]);
       }
       // 攻撃矢印 (赤)
-      if (army.arrow) {
+      if (!areaDrawn && army.arrow) {
         const from = worldToScreen(army.arrow.from[0], army.arrow.from[1]);
         const to = worldToScreen(army.arrow.to[0], army.arrow.to[1]);
         ctx.strokeStyle = 'rgba(255,90,90,0.95)';
@@ -4276,7 +4286,7 @@ class BattlePlanManager {
         if (s[0] < -30 || s[1] < -30 || s[0] > ctx.canvas.width + 30 || s[1] > ctx.canvas.height + 30) return;
         const selected = d.selected;
         const pid = d.pid;
-        const engaged = BattleManager.battles.some(battle => Number(battle.provId) === Number(pid));
+        const engaged = BattleManager.battles.some(battle => Number(battle.provId) === Number(pid) || (battle.areaPlan && (battle.originPids || []).includes(Number(pid))));
         const w = 13*markerScale, h = 10*markerScale;
         if (engaged) {
           ctx.save();
@@ -5799,7 +5809,7 @@ class MultiplayerManager {
           const cards = CardSystem.allCards[data.country] || [];
           const card = cards.find(c => c.id === data.cardId);
           if (card) {
-            CardSystem.hiredCards.push({ id: card.id, country: card.country, name: card.name, rank: card.rank });
+            CardSystem.hiredCards.push(CardSystem.normalizeHiredCard({ ...card, country: data.country }));
             CardSystem.saveHired();
             CardSystem.render();
             GameUI.notify('他プレイヤーが ' + card.name + ' を雇用しました', 'alert');
@@ -5831,7 +5841,7 @@ class MultiplayerManager {
         break;
       case 'battle_arrow':
         var ba2 = BattlePlanManager.armies.find(a => a.id === data.army);
-        if (ba2) { ba2.arrow = { from: data.from, to: data.to }; ba2.targetState = data.state; ba2.progress = 0; BattlePlanManager.renderPanel(); }
+        if (ba2) { ba2.arrow = { from: data.from, to: data.to }; ba2.offensiveLine = data.offensiveLine || null; ba2.areaPlan = null; ba2.targetState = data.state; ba2.progress = 0; BattlePlanManager.renderPanel(); }
         break;
       case 'battle_execute':
         CoreEngine.log('他プレイヤーが攻撃作戦を開始しました');
@@ -5945,9 +5955,36 @@ class CardSystem {
       const saved = localStorage.getItem(CardSystem.hiredKey);
       if (saved) CardSystem.hiredCards = JSON.parse(saved);
     } catch (e) { CardSystem.hiredCards = []; }
+    CardSystem.normalizeHiredCards();
+  }
+
+  // Keep commander metadata through hiring and repair older name/rank-only saves.
+  static normalizeHiredCard(entry) {
+    if (!entry || typeof entry !== 'object') return null;
+    const tag = entry.country || entry.nation;
+    let definition = tag ? (CardSystem.allCards[tag] || []).find(c => c.id === entry.id) : null;
+    let pack = tag;
+    if (!tag) {
+      const matches = Object.entries(CardSystem.allCards).flatMap(([country, cards]) =>
+        cards.filter(c => c.id === entry.id).map(card => ({ country, card })));
+      if (matches.length === 1) { definition = matches[0].card; pack = matches[0].country; }
+    }
+    const card = { ...definition, ...entry };
+    card.country = tag || definition?.country || definition?.nation || pack;
+    card.type = entry.type ?? definition?.type ??
+      ({ army: 'army_leader', navy: 'navy_leader', air: 'air_leader' })[entry.branch || definition?.branch];
+    card.stats = { ...(definition?.stats || {}), ...(entry.stats || {}) };
+    return card;
+  }
+
+  static normalizeHiredCards() {
+    CardSystem.hiredCards = (Array.isArray(CardSystem.hiredCards) ? CardSystem.hiredCards : [])
+      .map(card => CardSystem.normalizeHiredCard(card)).filter(Boolean);
+    return CardSystem.hiredCards;
   }
 
   static saveHired() {
+    CardSystem.normalizeHiredCards();
     localStorage.setItem(CardSystem.hiredKey, JSON.stringify(CardSystem.hiredCards));
   }
 
@@ -5983,7 +6020,7 @@ class CardSystem {
       return;
     }
     CoreEngine.gameState.politicalPower -= cost;
-    CardSystem.hiredCards.push({ id: card.id, country: card.country, name: card.name, rank: card.rank });
+    CardSystem.hiredCards.push(CardSystem.normalizeHiredCard({ ...card, country }));
     CardSystem.saveHired();
     CardSystem.applyModifiers(cardId);
     CoreEngine.renderStats();
@@ -6748,6 +6785,7 @@ class SaveLoadManager {
     }
     CardSystem.deck = data.deck || [];
     CardSystem.hiredCards = data.hired || [];
+    CardSystem.normalizeHiredCards();
     if (data.dlc && typeof DLC !== 'undefined') DLC.apply(data.dlc);   // DLC拡張状態を復元
     StrategyGame.apply(data.strategy);
     gs.speed=0;gs.paused=true;CoreEngine.updateSpeedUI();
@@ -7022,7 +7060,7 @@ async function initGame() {
 window.addEventListener('DOMContentLoaded', () => StartScreen.show());
 </script>
 <!-- ==================== 戦闘シミュレーション (戦闘マーカー・占領ロジック) ==================== -->
-<script src="battle.js?v=artwork-2"></script>
+<script src="battle.js?v=area-plan-1"></script>
 <!-- ==================== ニュースイベント (世界の出来事を報道するポップアップ) ==================== -->
 <script src="news.js"></script>
 <!-- ==================== AI自動操作 (非プレイヤー国の史実準拠AI) ==================== -->
@@ -7032,12 +7070,13 @@ window.addEventListener('DOMContentLoaded', () => StartScreen.show());
 <!-- ==================== DLC拡張モジュール (ドクトリン/兵器設計/諜報/MIO・国際市場/講和会議/将軍特性) ==================== -->
 <script src="assets/doctrine-data.js"></script>
 <script src="dlc.js?v=xp-1"></script>
-  <script src="strategy.js?v=artwork-2"></script>
+  <script src="strategy.js?v=roster-2"></script>
   <script src="assets/technology-resolver.js"></script>
   <script src="assets/equipment-designer.js?v=designer-3"></script>
   <script src="assets/strategy-systems.js?v=designer-2"></script>
-  <script src="assets/force-systems.js"></script>
+  <script src="assets/force-systems.js?v=roster-2"></script>
   <script src="assets/intelligence-agency.js"></script>
+  <script src="assets/area-battle-plan.js"></script>
   <script src="assets/MultiplayerTimeManager.js"></script>
   <!-- ==================== HOI4 大戦略 全画面レイヤー (../hoi4.html / H キー) ==================== -->
   <script src="hoi4-screen.js"></script>
