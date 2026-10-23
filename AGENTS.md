@@ -88,3 +88,18 @@ docker compose -f docker-compose.base44.yml up -d
   埋め込み時は `game/js/ui/topbar.js` が「← 将軍カードゲーム」ボタンを追加する。
   `steel-ui.css` はグローバル CSS（`html`/`body`/`button`）を所有するため、直接読み込まず
   iframe で分離するのが前提。レイヤーのスタイルは `game/index.html` の既存 UI と衝突させない。
+
+## 面的バトルプラン（game/index.html）
+
+- `assets/area-battle-plan.js` を `strategy.js` の後に読み込み、通常陸軍の `OffensivePlanner.execute/next/tickArmy/result` をプロヴィンスグラフ方式へ接続する。旧 `army.arrow` は互換表示データのみ。`offensiveLine.pids` が目標線、`army.areaPlan` が有限の作戦範囲・到達済み区画・動的前線を持つ。師団の `plan*` フィールドと戦闘の `divisionIds/originPids` は既存JSONセーブに含まれる。
+- `MapRenderer.buildAdjacency()` は双方向隣接と実ピクセル境界 `provinceBoundarySegments` を同時構築する。前線の描画は共有境界を使い、離れた区画の中心を結ばない。占領後は当該計画内の境界を更新し、全世界の敵国境へ再配備しない。
+- `BattleManager.startOffensive(...,{divisionIds})` は軍集団内の並列戦闘を許可するが、一師団の二重参加・非隣接攻撃・同一区画の重複戦闘を拒否する。組織力・装備損耗・勝利後の移動は参加師団のみ。通常攻勢で `OffensivePlanner.hold()` を使うと軍集団全体が集結するため使用しない。上陸・空挺の旧専用結果処理は別扱い。
+- 自国領行軍/再配備は隣接1区画/24時間。師団の隙間埋めにテレポートを再導入しない。攻撃線は敵領の目標ラインをなぞって入力し、向きを示す矢印として解釈しない。
+- 仕様と手順: `game/README-area-battle-plan.md`。回帰テスト: `game/tests/area-battle-plan.test.cjs`（16件）。`game/tests/helpers/strategy-fixture.cjs` は旧strategyテストと共有するVMフィクスチャ。
+
+## 将軍・併合師団の配属互換
+
+- `CardSystem.normalizeHiredCard(s)` は雇用時・localStorage読み込み・セーブ復元時に種別/能力値を保持し、古い名前/レアリティのみのレコードは読み込み済みの `allCards` から補完する。`ForceSystems` の指揮官候補・配属判定も同じ正規化を使う。雇用データから `type` / `branch` / `stats` を削除しないこと。
+- 師団選択のDOM値は文字列として受け取り、`ArmyRoster.transfer` は `String(id)` で照合する。既存セーブには `POL-0` のような外国由来IDが存在するため、`Number(input.value)` に戻さない。
+- 今後の併合は領土所有権変更前に生存師団を確保し、`ArmyRoster.absorbDivisions` で一意な自国数値IDと元の `sourceCountry/sourceDivisionId` を付与する。編成と組織力は保持。所有権変更後に再度 `IntelOperations.forces(target)` を呼ぶと師団が全滅扱いになるため呼ばない。配属時に軍集団全体を `hold()` で瞬間移動させない。
+- 回帰テスト: `game/tests/roster-assignment.test.cjs`（6件）。実データの雇用→候補表示→配属、旧雇用レコード補完、文字列IDのDOM選択、併合・ID衝突・セーブ復元を検証。

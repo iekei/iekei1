@@ -143,7 +143,11 @@
     switch (r.type) {
       case "add_ideas":
       case "remove_ideas":
-        text = "国民精神「" + loc(r.idea ?? r.value) + "」を" + (r.type === "add_ideas" ? "獲得する" : "喪失する");
+        text =
+          "国民精神「" +
+          loc(r.idea ?? r.value) +
+          "」を" +
+          (r.type === "add_ideas" ? "獲得する" : "喪失する");
         break;
       case "set_politics":
         text = "与党が " + loc(r.ruling_party) + " に変更される";
@@ -359,16 +363,24 @@
         break;
       }
       case "annex_country": {
-        const tags = [r.target ?? r.country ?? r.value].flat().filter(t => t && t !== s.country);
+        const tags = [r.target ?? r.country ?? r.value]
+          .flat()
+          .filter((t) => t && t !== s.country);
         for (const t of tags) {
           if (t === s.country || (s.annexedCountries || []).includes(t))
             continue;
+          // Snapshot troops before changing ownership: forces() marks units
+          // without remaining territory as defeated, so never call it afterwards.
+          let foreign = s.strategy?.worldForces?.[t];
           if (
             s.strategy &&
             typeof IntelOperations !== "undefined" &&
             map?.ready
           )
-            IntelOperations.forces(t);
+            foreign = IntelOperations.forces(t);
+          const foreignDivisions = (foreign?.divisions || [])
+            .filter((u) => !u.defeated)
+            .map((u) => ({ ...u }));
           for (const [id, x] of Object.entries(states))
             if (x.owner === t) {
               if (map?.captureState) map.captureState(id, s.country);
@@ -383,35 +395,34 @@
               b.stock = {};
             }
           }
-          if (
-            s.strategy &&
-            typeof IntelOperations !== "undefined" &&
-            map?.ready
-          )
-            IntelOperations.forces(t);
-          if (s.strategy?.worldForces?.[t]) {
-            const a = (s.strategy.worldForces[s.country] ||= {
-                divisions: [],
-                navy: [],
-              }),
-              b = s.strategy.worldForces[t];
-            for (const k of ["divisions", "navy"]) {
-              a[k] ||= [];
-              const units = (b[k] || []).map((u) => ({
-                ...u,
-                country: s.country,
-                tag: s.country,
-                org: 60,
-                maxOrg: 60,
-                comp: { infantry: 6 },
-              }));
-              if (k === "divisions")
-                (s.strategy.reserves ||= []).push(...units);
-              else if (typeof BattlePlanManager !== "undefined")
-                BattlePlanManager.navy.push(...units);
-              a[k].push(...units);
-              b[k] = [];
+          if (foreign) {
+            if (
+              typeof ArmyRoster !== "undefined" &&
+              typeof ArmyRoster.absorbDivisions === "function"
+            ) {
+              ArmyRoster.absorbDivisions(foreignDivisions, t);
+            } else if (s.strategy) {
+              (s.strategy.reserves ||= []).push(
+                ...foreignDivisions.map((u) => ({
+                  ...u,
+                  country: s.country,
+                  tag: s.country,
+                  org: u.org ?? 60,
+                  maxOrg: u.maxOrg ?? 60,
+                  comp: { ...(u.comp || { infantry: 6 }) },
+                })),
+              );
             }
+            if (typeof BattlePlanManager !== "undefined")
+              BattlePlanManager.navy.push(
+                ...(foreign.navy || []).map((u) => ({
+                  ...u,
+                  country: s.country,
+                  tag: s.country,
+                })),
+              );
+            foreign.divisions = [];
+            foreign.navy = [];
           }
         }
         s.annexedCountries = [

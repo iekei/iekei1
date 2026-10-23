@@ -221,7 +221,7 @@ class PlanningBonus {
       value = Math.max(0, value - PlanningBonus.DECAY_PER_DAY);
     } else if (army.frontline && army.frontline.length && army.divisions && army.divisions.length) {
       // 前線 + 攻撃線が揃っているほど計画が進む (攻撃線なしは 60% の速度)
-      const planned = army.arrow && army.chain ? 1 : 0.6;
+      const planned = army.offensiveLine?.pids?.length || (army.arrow && army.chain) ? 1 : 0.6;
       value = Math.min(cap, value + PlanningBonus.rate() * planned);
       army.planningDays = Math.max(0, Math.floor(Number(army.planningDays) || 0)) + 1;
     } else {
@@ -598,7 +598,7 @@ class ArmyRoster {
     const reserves=CoreEngine.gameState.strategy.reserves;
     [{name:'未所属',divisions:reserves},...BattlePlanManager.armies].forEach(a=>{
       html+='<h4>'+a.name+' ('+a.divisions.length+')</h4>';
-      a.divisions.forEach(d=>{html+='<label><input type="checkbox" name="move-division" value="'+d.id+'"'+(a.executing||a.id===target.id?' disabled':'')+'>'+GameTools.escape(d.name||'師団 '+d.id)+'</label>';});
+      a.divisions.forEach(d=>{html+='<label><input type="checkbox" name="move-division" value="'+GameTools.escape(d.id)+'"'+(a.executing||a.id===target.id?' disabled':'')+'>'+GameTools.escape(d.name||'師団 '+d.id)+'</label>';});
     });
     html+='</div>'+GameTools.button('選択した師団を '+target.name+' に配属','ArmyRoster.moveSelected('+target.id+')',target.executing);
     GameUI.openModal('師団の配属',html);
@@ -609,19 +609,19 @@ class ArmyRoster {
     inputs.forEach((input,index)=>{input.checked=index<limit;});
   }
   static moveSelected(targetId) {
-    const ids=[...document.querySelectorAll('input[name="move-division"]:checked')].map(e=>Number(e.value));
-    ArmyRoster.transfer(ids,targetId); GameUI.closeModal(); ArmyRoster.render();
+    const ids=[...document.querySelectorAll('input[name="move-division"]:checked')].map(e=>e.value);
+    if (!ArmyRoster.transfer(ids,targetId)) { GameUI.notify('配属できる師団を選択し、軍集団が作戦中でないことを確認してください。','alert'); return false; }
+    GameUI.closeModal(); ArmyRoster.render(); return true;
   }
   static transfer(ids,targetId) {
     const target=targetId===0?null:BattlePlanManager.armies.find(a=>a.id===targetId);
     if ((targetId!==0&&!target)||target?.executing) return false;
-    const reserve=CoreEngine.gameState.strategy.reserves, wanted=new Set(ids);
+    const reserve=CoreEngine.gameState.strategy.reserves, wanted=new Set(ids.map(String));
     const sources=[{divisions:reserve},...BattlePlanManager.armies];
     const moved=[];
-    sources.forEach(a=>{if(a.executing || a===target) return; a.divisions=a.divisions.filter(d=>{if(wanted.has(d.id)){moved.push(d);return false;}return true;});});
+    sources.forEach(a=>{if(a.executing || a===target) return; a.divisions=a.divisions.filter(d=>{if(wanted.has(String(d.id))){moved.push(d);return false;}return true;});});
     CoreEngine.gameState.strategy.reserves=sources[0].divisions;
     (target?target.divisions:CoreEngine.gameState.strategy.reserves).push(...moved);
-    if(target){const pid=target.positionPid||OffensivePlanner.nearest(target.base,p=>MapRenderer.ownerOf(p)===CoreEngine.gameState.country);if(pid)OffensivePlanner.hold(target,pid);}
     // 師団の配属変更は計画準備をリセットし、前線へ再配備する (HOI4 と同じ)
     if (target && moved.length) {
       if (typeof PlanningBonus !== 'undefined') PlanningBonus.reset(target);
@@ -629,6 +629,33 @@ class ArmyRoster {
     }
     return moved.length>0;
   }
+  // Absorbed foreign units receive local numeric IDs; keep their original
+  // identity separately and preserve composition instead of making all infantry.
+  static absorbDivisions(units, sourceCountry) {
+    const s=CoreEngine.gameState, st=s.strategy;
+    st.reserves ||= [];
+    const existing=ArmyRoster.all(), used=new Set(existing.map(d=>String(d.id)));
+    const origins=new Set(existing.filter(d=>d.sourceCountry===sourceCountry).map(d=>String(d.sourceDivisionId)));
+    let next=Number.isSafeInteger(st.nextDivisionId)&&st.nextDivisionId>0?st.nextDivisionId:1;
+    const absorbed=[];
+    for (const unit of units || []) {
+      if (!unit || unit.defeated) continue;
+      const original=unit.id;
+      if (original!=null && origins.has(String(original))) continue;
+      while(used.has(String(next)))next++;
+      const division={...unit,id:next++,sourceCountry,sourceDivisionId:original,
+        country:s.country,tag:s.country,name:unit.name||sourceCountry+' 第'+(absorbed.length+1)+'師団',
+        org:Number.isFinite(unit.org)?unit.org:60,maxOrg:Number.isFinite(unit.maxOrg)?unit.maxOrg:60,
+        comp:{...(unit.comp||{[unit.type==='tank'?'armor':unit.type||'infantry']:6})}};
+      delete division.defeated;
+      for(const key of ['planStagingPid','planGoal','planMoveHours','planCooldown']) delete division[key];
+      used.add(String(division.id));if(original!=null)origins.add(String(original));
+      absorbed.push(division);
+    }
+    st.nextDivisionId=next;st.reserves.push(...absorbed);
+    return absorbed;
+  }
+
   static airdrop(pid) {
     const army=BattlePlanManager.selectedArmy(),s=CoreEngine.gameState;
     if (!army || army.executing || !army.divisions.length || !army.divisions.every(d=>d.comp?.paratrooper)) { GameUI.notify('空挺兵だけを編成した待機中の軍集団を選んでください。','alert'); return; }
@@ -675,6 +702,7 @@ class ArmyRoster {
       BattlePlanManager.armies.forEach(a=>{
         const card=GameTools.card(a.general?.id,CoreEngine.gameState.country),org=a.divisions.reduce((n,d)=>n+d.org,0)/Math.max(1,a.divisions.length);
         html+='<div class="army-tile'+(a.id===BattlePlanManager.selectedArmyId?' selected':'')+'"><button class="army-portrait" onclick="BattlePlanManager.selectArmy('+a.id+')">'+GameTools.portrait(card,a.general?.name||'将軍未配置')+'<strong>'+a.divisions.length+' 師団</strong></button><div class="army-tile-info"><b>'+a.name+'</b><p>'+GameTools.escape(a.general?.name||'将軍未配置')+'</p><p>'+GameTools.escape(a.status||'待機')+' / 組織力 '+Math.round(org)+'</p>'+
+          (a.offensiveLine?'<p class="army-area-plan">目標線 '+a.offensiveLine.pids.length+'区画 / 前線 '+(a.areaPlan?.frontier.length||0)+'区画 / 戦闘 '+BattleManager.battles.filter(b=>b.attackerArmyId===a.id).length+'か所</p>':'')+
           (typeof PlanningBonus!=='undefined'?'<p class="army-planning" title="前線と攻撃線に配属された師団は時間経過で計画準備ボーナスを蓄積します">計画準備 <b>'+PlanningBonus.label(a)+'</b> / 上限 +'+Math.round(PlanningBonus.cap()*100)+'%<i><em style="width:'+Math.round(Math.min(1,PlanningBonus.of(a)/Math.max(0.01,PlanningBonus.cap()))*100)+'%"></em></i></p>':'')+GameTools.button('将軍','BattlePlanManager.assignGeneral('+a.id+')')+GameTools.button(a.executing?'中止':'計画実行','BattlePlanManager.'+(a.executing?'abort':'execute')+'('+a.id+')',!a.executing&&(!a.arrow||!a.divisions.length))+GameTools.button('未所属へ','ArmyRoster.transfer(BattlePlanManager.armies.find(a=>a.id==='+a.id+').divisions.map(d=>d.id),0);ArmyRoster.render()',a.executing)+'</div></div>';
       }); html+='</div>';
     }
