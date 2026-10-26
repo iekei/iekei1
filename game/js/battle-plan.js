@@ -587,7 +587,9 @@ export class BattlePlanManager {
   _moveHours(div, province) {
     const terrain = terrainInfo(province.terrain);
     const speed = DIVISION_SPEED[div.type] || 1;
-    return (PLAN.MOVE_HOURS_BASE * terrain.moveCost) / Math.max(0.4, speed * (div.supply ?? 1));
+    // 補給不足ペナルティ（速度低下）を反映
+    const supplySpeed = div.supplyPenalty?.speed ?? div.supply ?? 1;
+    return (PLAN.MOVE_HOURS_BASE * terrain.moveCost) / Math.max(0.4, speed * supplySpeed);
   }
 
   /** 敵プロヴィンスの守備隊（VP・地形から算出） */
@@ -630,7 +632,9 @@ export class BattlePlanManager {
       if (!div) continue;
       const base = DIVISION_POWER[div.type] || DIVISION_POWER.infantry;
       const orgRatio = 0.35 + 0.65 * Math.max(0, Math.min(1, (div.org || 0) / Math.max(1, div.maxOrg || 1)));
-      power += base * orgRatio * (1 + this.planningBonus(plan));
+      // 補給不足ペナルティ（戦闘力低下）
+      const supplyCombat = div.supplyPenalty?.combat ?? 1;
+      power += base * orgRatio * supplyCombat * (1 + this.planningBonus(plan));
     }
     const effects = this.doctrine?.effects?.('land') || {};
     const spiritSoft = this.state.getModifier?.('soft') || 0;

@@ -12,6 +12,7 @@ import { I18N } from '../i18n.js';
 
 const TOP = 'game/assets/top';
 const MENU = 'game/assets/top_menu';
+const LU = 'game/assets/land_units';
 
 /** メニュー定義（順序厳守） */
 export const MENU_ITEMS = [
@@ -27,6 +28,7 @@ export const MENU_ITEMS = [
   { id: 'trade',        key: 'R', shift: false, icon: `${MENU}/Trade_button_transparent.png`,        labelKey: 'menu.trade' },
   { id: 'construction', key: 'T', shift: false, icon: `${MENU}/Construction_button_transparent.png`, labelKey: 'menu.construction' },
   { id: 'production',   key: 'Y', shift: false, icon: `${MENU}/Production_button_transparent.png`,   labelKey: 'menu.production' },
+  { id: 'division',     key: 'J', shift: false, icon: `${LU}/division_designer_icon.svg`, labelKey: 'menu.division' },
   { id: 'deployment',   key: 'U', shift: false, icon: `${MENU}/Deployment_button_transparent.png`,   labelKey: 'menu.deployment' },
   { id: 'logistics',    key: 'I', shift: false, icon: `${MENU}/Logistics_button_transparent.png`,    labelKey: 'menu.logistics' },
   { id: 'doctrine',     key: 'E', shift: true,  icon: `${MENU}/Officer_corps_button.png`,            labelKey: 'menu.doctrine', iconAlt: `${MENU}/Officer_corps_button.png` },

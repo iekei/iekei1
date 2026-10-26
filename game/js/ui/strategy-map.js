@@ -17,20 +17,41 @@ export async function installMapUI(map) {
   const hud = document.getElementById('map-hud-top');
   const controls = document.createElement('div'); controls.className = 'map-controls'; controls.setAttribute('aria-label', 'マップ表示');
   const buttons = [];
-  for (const [mode,label] of [['land','陸軍'],['naval','海軍'],['air','空軍']]) {
+  for (const [mode,label] of [['land','陸軍'],['naval','海軍'],['air','空軍'],['supply','補給']]) {
     const b = document.createElement('button'); b.className = 'steel-btn'; b.textContent = label;
+    if (mode === 'supply') { b.title = '補給網・インフラ・補給ハブの状態を表示 (F2)'; b.dataset.supplyToggle = '1'; }
     b.onclick = () => setMode(mode); controls.append(b); buttons.push([mode,b]);
   }
   const setMode = mode => {
     map.mapMode = mode; svg.dataset.mode = mode;
     map.airLayer.style.display = mode === 'air' ? '' : 'none';
     map.navalLayer.style.display = mode === 'naval' ? '' : 'none';
-    map.divisionLayer.style.display = mode === 'land' ? '' : 'none';
+    map.divisionLayer.style.display = (mode === 'land' || mode === 'supply') ? '' : 'none';
+    if (map.supplyRouteLayer) map.supplyRouteLayer.style.display = mode === 'supply' ? '' : 'none';
+    if (map.supplyLayer) map.supplyLayer.style.display = mode === 'supply' ? '' : 'none';
     buttons.forEach(([m,b]) => b.setAttribute('aria-pressed', String(mode === m)));
     const legend = document.getElementById('map-legend');
-    legend.textContent = { land:'陸軍：歴史国境・海岸線・師団', air:'空軍：空域・制空権・航空基地', naval:'海軍：海域・制海権・艦隊' }[mode];
+    if (mode === 'supply') {
+      const net = map.supplyManager?.network?.();
+      const sum = net?.summary || {};
+      legend.innerHTML = [
+        '<div class="map-legend-title">補給網</div>',
+        '<div class="map-legend-row"><i class="map-legend-dot ok"></i>正常（緑）</div>',
+        '<div class="map-legend-row"><i class="map-legend-dot low"></i>不足（黄）</div>',
+        '<div class="map-legend-row"><i class="map-legend-dot critical"></i>枯渇（赤）</div>',
+        '<div class="map-legend-row"><i class="map-legend-line"></i>鉄道（首都 → 補給ハブ）</div>',
+        '<div class="map-legend-row"><i class="map-legend-line thin"></i>補給ハブの分配範囲</div>',
+        `<div class="map-legend-note">補給ハブ ${sum.hubs || 0} / 州 ${sum.provinces || 0} — 容量 ${sum.totalCapacity || 0}・需要 ${sum.totalDemand || 0}</div>`,
+      ].join('');
+    } else {
+      legend.textContent = { land:'陸軍：歴史国境・海岸線・師団', air:'空軍：空域・制空権・航空基地', naval:'海軍：海域・制海権・艦隊' }[mode] || '';
+    }
+    if (mode === 'supply') map.renderSupplyNetwork();
     if (map.airNavalRenderer) map.airNavalRenderer();
   };
+  // 建設画面など外部から切り替えられるように公開
+  map.setMode = setMode;
+  map.mapModeButtons = buttons;
   for (const [cls,label] of [['show-borders','国境強調']]) {
     const b = document.createElement('button'); b.className = 'steel-btn'; b.textContent = label; b.setAttribute('aria-pressed','false');
     b.onclick = () => b.setAttribute('aria-pressed', String(svg.classList.toggle(cls))); controls.append(b);

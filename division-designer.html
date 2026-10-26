@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  <title>師団編成 — Division Designer | 大戦略</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="game/css/steel-ui.css">
+  <link rel="stylesheet" href="game/css/division-designer.css">
+  <style>
+    html, body { height: 100%; }
+    body {
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      background:
+        radial-gradient(ellipse at 50% 0%, #1c242b 0%, #0b0e11 60%, #06080a 100%);
+      overflow: hidden;
+    }
+    .dd-standalone {
+      width: 100vw;
+      height: 100vh;
+      padding: 12px;
+    }
+    .dd-standalone .steel-frame { width: 100%; height: 100%; }
+    .dd-standalone .steel-inner { height: 100%; }
+    .dd-standalone .steel-body { min-height: 0; }
+    .demo-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-left: auto;
+    }
+    .demo-bar .demo-note {
+      font-size: 10px;
+      color: var(--text-dim);
+      margin-right: 4px;
+      letter-spacing: .04em;
+    }
+    .demo-bar a {
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 11px;
+      padding: 4px 9px;
+      border: 1px solid var(--gold-dim);
+      border-radius: 2px;
+      background: linear-gradient(180deg, #2f2b1e, #1b1913);
+      white-space: nowrap;
+    }
+    .demo-bar a:hover { border-color: var(--gold); color: #f6e2a8; }
+    .demo-bar .steel-btn { padding: 4px 9px; font-size: 10.5px; }
+    .demo-bar .steel-btn.on { color: var(--gold); border-color: var(--gold-dim); box-shadow: 0 0 10px rgba(230,194,104,.3), inset 0 2px 6px rgba(0,0,0,.6); }
+    @media (max-width: 760px) {
+      .demo-bar .demo-note { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div id="toast-layer"></div>
+
+  <div class="dd-standalone">
+    <div class="steel-frame">
+      <div class="steel-inner">
+        <div class="steel-titlebar">
+          <span class="orn"></span>
+          <div class="steel-title">大戦略 ／ 師団編成スタンドアロン</div>
+          <span class="orn"></span>
+          <div class="demo-bar">
+            <span class="demo-note">デモ用タイム加速</span>
+            <button class="steel-btn" id="btn-time" type="button">時間を進める</button>
+            <button class="steel-btn" id="btn-reset" type="button">データ初期化</button>
+            <a href="hoi4.html?nation=GER">HOI4 本編へ</a>
+          </div>
+        </div>
+        <div class="steel-body dd-host" id="dd-body"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { I18N } from './game/js/i18n.js';
+    import { Bus, toast } from './game/js/util.js';
+    import { installDivisionDesigner } from './game/js/division-designer.js';
+    import { renderDivisionDesignerScreen } from './game/js/ui/division-designer.js';
+
+    await I18N.init('game/locales/ja.json');
+
+    const stock = {
+      infantry_equipment_1: 250000,
+      motorized_equipment_1: 60000,
+      mechanized_equipment_1: 40000,
+      artillery1: 60000,
+      antitank1: 30000,
+      antiair1: 30000,
+      support_weapons: 30000,
+      light_tank_equipment_1: 30000,
+      medium_tank_equipment_1: 40000,
+      heavy_tank_equipment_1: 20000,
+      modern_tank_equipment_1: 10000,
+      antitank2: 20000,
+    };
+
+    const state = {
+      playerTag: 'GER',
+      bus: new Bus(),
+      manpower: 2500000,
+      stockpile: stock,
+      divisions: [],
+      divisionTemplates: [],
+      trainingQueue: [],
+      dateLabel: '1936年1月1日 00:00',
+      speed: 1,
+      paused: true,
+    };
+
+    installDivisionDesigner(state);
+
+    const body = document.getElementById('dd-body');
+    renderDivisionDesignerScreen({ state })(body);
+
+    // ---- デモ用: 時間を進めて訓練キューを進行させる ----
+    let timer = null;
+    const timeBtn = document.getElementById('btn-time');
+    timeBtn.addEventListener('click', () => {
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+        timeBtn.classList.remove('on');
+        timeBtn.textContent = '時間を進める';
+        return;
+      }
+      timeBtn.classList.add('on');
+      timeBtn.textContent = '時間を止める';
+      timer = setInterval(() => {
+        // 1 回で 24 時間（1 日）進める（訓練キューが進行）
+        for (let i = 0; i < 24; i++) state.bus.emit('hour');
+      }, 150);
+    });
+
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      localStorage.removeItem('hoi4.divisionTemplates.v1');
+      localStorage.removeItem('hoi4.divisionTraining.v1');
+      location.reload();
+    });
+
+    // 本編と同じく J キーで開閉する代わりに、ここでは再描画のみ
+    window.DD_DEMO = { state, body };
+  </script>
+</body>
+</html>

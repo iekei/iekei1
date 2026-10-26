@@ -65,7 +65,9 @@
   "trade": "貿易",
   "construction": "建設",
   "production": "生産",
+  "division": "師団編成",
   "deployment": "兵器設計/展開",
+  "key_division": "J",
   "logistics": "国家方針/補給",
   "doctrine": "軍士気/ドクトリン",
   "diplomacy": "外交",
@@ -889,7 +891,7 @@
   }
  },
  "division": {
-  "designer_title": "師団設計",
+  "designer_title": "師団編成",
   "template_name": "テンプレート名",
   "rename": "改名",
   "clear": "編成をクリア",
@@ -1001,7 +1003,15 @@
    "entrench": "塹壕"
   },
   "grid_hint": "クリックで大隊を配置 / 再クリックで削除",
-  "support_hint": "支援中隊スロット（1×5）"
+  "support_hint": "支援中隊スロット（1×5）",
+  "designer_subtitle": "DIVISION DESIGNER ／ 陸軍編成",
+  "save": "変更を保存",
+  "saved": "保存しました",
+  "new": "新規作成",
+  "delete": "削除",
+  "train": "この編成で訓練開始",
+  "train_queue": "訓練キュー",
+  "realtime": "リアルタイム"
  },
  "equipment": {
   "names": {

@@ -78,8 +78,9 @@ export class EconomyManager {
     return Math.max(0, this.state.factories.civ - this.lentCivilianFactories() - this.constructionCivUsage());
   }
 
+  /** 建設に従事している民需工場数（全建設プロジェクトで 1 つずつ使用） */
   constructionCivUsage() {
-    return this.state.constructionQueue.filter((q) => q.type === 'civilian_factory').length;
+    return this.state.constructionQueue.filter((q) => q.usesCiv !== false).length;
   }
 
   setImport(resource, amount) {
@@ -99,7 +100,7 @@ export class EconomyManager {
     };
     const def = defs[type];
     if (!def) return null;
-    const q = { id: uid('build'), type, progress: 0, days: def.days, def };
+    const q = { id: uid('build'), type, progress: 0, days: def.days, def, usesCiv: true };
     this.state.constructionQueue.push(q);
     return q;
   }
@@ -155,8 +156,12 @@ export class EconomyManager {
 
     // --- 建設キュー進行（民需工場は建設にも使われる）
     const civAvail = this.availableCivilianFactories();
+    // 民需工場が多いほど建設が速い（0.5x〜1.5x）
+    const buildSpeed = Math.min(1.5, 0.5 + Math.max(0, civAvail) * 0.12);
     for (const q of s.constructionQueue) {
-      const speed = q.type === 'civilian_factory' ? Math.min(1, civAvail > 0 ? 2 : 0.2) : 1;
+      const speed = q.type === 'civilian_factory'
+        ? Math.min(1, civAvail > 0 ? 2 : 0.2)
+        : buildSpeed;
       q.progress += dayFrac * speed;
       if (q.progress >= q.days) this._completeConstruction(q);
     }
@@ -207,6 +212,8 @@ export class EconomyManager {
     else if (q.type === 'military_factory') s.factories.mil += 1;
     else if (q.type === 'dockyard') s.factories.dock += 1;
     else if (q.type === 'fuel_silo') s.fuel.max += 10000;
+    // 州のインフラ / 補給ハブ（SupplyManager がレベルを更新して補給網を再計算）
+    if (q.provinceId) s._supplyMgr?.completeConstruction(q);
     s.bus.emit('construction-completed', q);
   }
 

@@ -7,8 +7,9 @@ Hearts of Iron IV 風の大規模戦略Webゲーム。Vanilla HTML5 / CSS3 / ES6
 ```bash
 # 静的サーバー（リポジトリルートから）
 python3 -m http.server 8000
-# → http://localhost:8000/hoi4.html          HOI4 単独
-# → http://localhost:8000/game/              将軍カードゲーム（H で HOI4 画面）
+# → http://localhost:8000/hoi4.html               HOI4 単独
+# → http://localhost:8000/division-designer.html  師団編成 単独プレビュー
+# → http://localhost:8000/game/                   将軍カードゲーム（H で HOI4 画面）
 
 # マルチプレイ時間同期サーバー（別ターミナル）
 node server/timesync-server.js 8787
@@ -66,8 +67,10 @@ node server/timesync-server.js 8787
 | `T` | 建設 |
 | `Y` | 生産 |
 | `U` | 兵器設計/展開（師団・戦車・艦艇・航空機・シミュレーター） |
+| `J` | 師団編成 / 編集（Division Designer） |
 | `I` | 国家方針/補給 |
 | `Shift + E` | 軍士気/ドクトリン |
+| `F2` | マップ表示切替（通常 ⇔ 補給モード） |
 | （ボタンのみ） | 外交 |
 
 ## ディレクトリ構成
@@ -80,6 +83,8 @@ game/
   css/steel-ui.css            重厚スチールフレーム デザインシステム
   css/hoi4-screen.css         game/index.html 側の全画面クローム / 起動ボタン
   css/systems.css             作戦計画パネル / 兵器設計 / ドクトリンツリーのスタイル
+  css/division-designer.css   師団編成画面（ダークグレー / ミリタリーオリーブ / ゴールド）
+  css/supply.css              補給網（州カード / 建設スロット / マップの鉄道ルート）
   README-systems.md           4大システム（作戦計画/方針報酬/兵器設計/ドクトリン）の実装ノート
   locales/ja.json             日本語ローカライズ辞書（hoidesigner.com準拠・全294技術名収録）
   js/
@@ -91,8 +96,10 @@ game/
     mio.js                    MIOマネージャ（アサイン/レベル/XP/特性ツリー）
     economy.js                生産ライン・貿易・燃料・建設キュー
     division.js               DivisionTemplate（5×5＋1×5 全ステータスリアルタイム再計算）
+    division-designer.js      師団編成のデータ層（既定テンプレート / 保存 / 訓練キュー / 配備）
     designers.js              戦車/艦艇/航空機設計（研究アンロック/スロット上限/増槽システム含む）
     battle-plan.js            作戦計画（前線/攻撃線/経路探索/計画準備/自動進軍・戦闘）
+    supply.js                 補給網（州インフラ0-5 / 補給ハブ0-3 / 首都→鉄道→ハブのスループット / 師団ペナルティ）
     effects.js                国家方針 completion_reward のエフェクトエンジン（併合/研究ボーナス/精神/XP等）
     combat.js                 戦闘シミュレーター（1時間Tick/ダイスロール/地形ペナルティ）
     doctrine.js               ドクトリン（陸海空/XP/相互排他ルート/軍集団割当）
@@ -101,8 +108,110 @@ game/
     politics.js               政治（法律/閣僚/占領度統合タイマー/併合）
     data/                     nations / battalions / equipment / mios / doctrines / major-focuses / operatives / cards
     ui/                       topbar.js / modal.js / screens.js / screens2.js / screens3.js / map.js / embed.js
-                              battle-plan-ui.js / designer-ui.js / doctrine-ui.js
+                              battle-plan-ui.js / designer-ui.js / doctrine-ui.js / division-designer.js
+                              supply-ui.js（州インフラ・補給ハブ建設タブ）
+  tests/division-designer.test.mjs  師団編成ロジックの回帰テスト（node --test）
+  tests/supply.test.mjs             補給網ロジックの回帰テスト（node --test）
 server/timesync-server.js     マルチプレイ時間同期 WebSocket サーバー（依存なし）
+```
+
+## 師団編成 / Division Designer（`J` またはメニュー「師団編成」）
+
+陸軍管理の全画面デザイナー。トップバーの **「師団編成」** ボタン（`J`）で開閉する。
+`U` の兵器設計/展開画面の「師団編成」タブからも全画面版を開ける。
+
+| 位置 | 内容 |
+| --- | --- |
+| 左 | 師団テンプレート一覧（選択 / 新規作成 / 複製 / 削除）＋ 利用可能な大隊・支援中隊パレット |
+| 中央 | 5×5 大隊グリッド ＋ 1×5 支援中隊スロット ＋ 訓練キュー |
+| 右 | リアルタイム統計（対人/対装甲攻撃・突破・防御・貫通・装甲・硬度・組織力/組織率・戦闘幅・速度・補給・生産コスト・人的資源・訓練日数・必要装備） |
+
+- **操作**: パレットで大隊を選びスロットをクリックで配置。同じ大隊の再クリック / 右クリック / `✕` で削除。
+  パレット → スロット、スロット → スロットのドラッグ＆ドロップに対応（入れ替え可）。
+  支援中隊は下段の 5 スロットのみ。消去モードあり。
+- **リアルタイム再計算**: 配置・入替・支援中隊の変更ごとに `DivisionTemplate._recalc()` が走り、
+  右パネルと「未保存の変更」差分（▲/▼）が即時更新される。
+- **変更を保存**: `state.divisionTemplates` と `localStorage["hoi4.divisionTemplates.v1"]` に
+  JSON を書き出し、以後の訓練・配備・装備所要量（`GameState.requiredEquipment()`）へ反映する。
+- **訓練・配備**: 「この編成で訓練開始」で人的資源と装備を消費し、訓練キューへ追加。
+  `GameState` の 1 時間 Tick で進行し、完了すると `state.divisions` に師団が配備される
+  （`templateId` / `maxOrg` / `maxHp` / 攻撃力などのステータス付き）。訓練はキャンセルで資源返却。
+- **単独プレビュー**: `division-designer.html` を開くと、モック状態でデザイナーだけを確認できる
+  （デモ用の時間加速ボタン付き）。
+- **テスト**: `node --test game/tests/division-designer.test.mjs`
+
+## 補給網 / インフラ・補給ハブ（`T` → 「州インフラ・補給網」タブ / `F2`）
+
+HOI4 風の補給システム。州ごとの **インフラ（0〜5）** と **補給ハブ（0〜3）** を建設し、
+首都から鉄道網を伝って補給を流す。容量を超えた州の師団は移動速度・戦闘力・組織率が低下する。
+
+### 建設（建設画面の「州インフラ・補給網」タブ）
+
+| 建物 | 最大Lv | 基準工期（現Lv基準） | 効果 |
+| --- | --- | --- | --- |
+| インフラ | 5 | 70 + 14×Lv 日 | 現地調達量 +0.8/Lv、ハブのスループット係数 +0.09/Lv |
+| 補給ハブ | 3 | 120 + 45×Lv 日 | 補給源。スループット (4 + 5×Lv)、到達範囲 2+Lv 州 |
+
+資源コストは消費せず、民需工場の稼働で進む（既存の建設キューと共通）。
+
+- 首都は自動的に **Lv3 の補給ハブ** を持つ（建設不要）。インフラも最大で開始。
+- 建設は `state.constructionQueue` に積まれ、`economy.tick()` で進行 →
+  完成時に `SupplyManager.completeConstruction()` が州のレベルを+1 して再計算する。
+- **建設スロット**: 1州あたり同時 **3 件** まで。同じ州で同じ建物の二重予約は不可。
+- 建設速度は空き民需工場数に応じて `0.5〜1.5倍`（`0.5 + 空き民需×0.12`）で変動する。
+- 予約・キャンセルはカード/全国キューの `✕` から。キャンセルで予約枠が空く。
+
+### スループット計算（`SupplyManager.recompute()`）
+
+```
+hubThroughput = (4 + 5×hubLv)
+              × (0.55 + 0.09×ハブ州インフラLv)
+              × (0.50 + 0.10×経路上の最小インフラLv)
+              × (首都ハブなら 1.1)
+到達範囲     = 2 + hubLv 州（PROVINCE_LINKS の隣接グラフ、首都から幅優先）
+距離減衰     = 0.55^距離
+州の容量     = インフラLv×0.8（現地調達） + 最も強い1つのハブからの供給量
+```
+
+- 経路は首都 →（鉄道網）→ 各補給ハブ。マップの補給モードで **点線アニメーション** として描画。
+- ハブは重複加算しない（1州につき最良の1ハブのみ）。首都が無い/孤立している国は
+  最高VP州を仮の補給源にする。
+
+### 師団ペナルティ（`supplyPenalties(ratio)`）
+
+| 比率 `ratio = 容量 / 需要` | 状態 | 移動速度 | 戦闘力 | 組織率上限 |
+| --- | --- | --- | --- | --- |
+| ≥ 1.0 | 正常（緑） | 100% | 100% | 100% |
+| ≥ 0.5 | 不足（黄） | 70〜100% | 65〜100% | 70〜100% |
+| < 0.5 | 枯渇（赤） | 40〜70% | 30〜65% | 40〜70% |
+
+- `speed = 0.40 + 0.60×ratio` / `combat = 0.30 + 0.70×ratio` / `org = 0.40 + 0.60×ratio`
+- 毎 Tick（1時間）`SupplyManager.tick()` が各師団へ
+  `supplyRatio` / `supplyPenalty` / `effectiveMaxOrg` を書き込み、
+  組織力は `effectiveMaxOrg` を上限に切り下げられる。補給が足りると 0.5/時 で回復。
+- `battle-plan.js` はこの値を使い、進軍所要時間に `/ speed`、攻撃力に `× combat` を適用する。
+
+### マップ表示（`F2` または「補給」ボタン）
+
+- 州の塗りは **緑 = 正常 / 黄 = 不足 / 赤 = 枯渇**。薄い州は自国領外。
+- 点線アニメーション = 首都からの鉄道ルート（太さはスループット）、細点線 = ハブの分配範囲。
+- ★ = 補給ハブ（Lv表示）、不足/枯渇州には充足率バッジ。マップ左に凡例を表示。
+- 通常モードでも師団の補給バーが状態色になる（`div.supplyRatio`）。
+
+### ロジスティクス画面
+
+「兵站」画面の下部に補給サマリ（正常/不足/枯渇州数・総容量・総需要・補給不足の師団数）と
+不足州トップ8、「マップで補給網を見る」ボタンを表示する。
+
+### 保存
+
+`localStorage["hoi4.supplyNetwork.v1"]` に `{ infra: {州ID: Lv}, hubs: {州ID: Lv} }` を保存し、
+次回起動時に復元する（`supplyLevelsJSON()`）。
+
+### テスト
+
+```bash
+node --test game/tests/supply.test.mjs
 ```
 
 ## 主要システム
@@ -151,11 +260,27 @@ JSONをロード。海軍/空軍の指揮官スロットには該当ブランチ
 node /tmp/smoke.mjs
 # E2E UIテスト（jsdom + vm.SourceTextModule、52項目）
 cd /tmp/uitest && node --experimental-vm-modules e2e.mjs
+# 補給網ロジック（10項目）
+node --test game/tests/supply.test.mjs
+# 4大システム（17項目）
+node --test game/tests/systems.test.mjs
 # 時間同期テスト（実WebSocketサーバー使用）
 node server/timesync-server.js 8787
 ```
 
 ## 更新履歴
+
+### 2026-10-26 — 補給網・インフラ・補給ハブ
+- `js/supply.js`: 州インフラ(0-5) / 補給ハブ(0-3) / 首都→鉄道→ハブのスループット経路計算、
+  距離減衰・現地調達・州容量・状態判定（緑/黄/赤）、師団ペナルティ（移動/戦闘/組織）
+- `js/ui/supply-ui.js` + 建設画面タブ: 州カード（Lvピップ・建設計画・スロット・キュー・充足率）、
+  全国建設キュー、フィルタ（全州 / 補給不足 / 補給ハブ）
+- `js/economy.js`: 補給建物を既存の建設キューへ統合（空き民需工場で工期変動・完成フック）
+- `js/battle-plan.js`: 補給ペナルティを進軍速度と攻撃力へ適用
+- `js/map-engine.js` + `js/ui/strategy-map.js`: 補給モード（鉄道点線アニメーション / ハブ★ /
+  状態色 / 充足率バッジ / 凡例）、師団の補給バーを状態色に
+- `css/supply.css`: 上記 UI 一式。`assets/icons/Supply_hub.svg` 追加
+- `game/tests/supply.test.mjs`: 10件
 
 ### 2026-10-22 — 4大システム（作戦計画 / 国家方針報酬 / 兵器設計 / ドクトリン）
 - `js/battle-plan.js` + `js/ui/battle-plan-ui.js`: 前線ドラッグ設定・攻撃線（Dijkstra 経路）・

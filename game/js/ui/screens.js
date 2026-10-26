@@ -6,6 +6,8 @@ import { I18N } from '../i18n.js';
 import { NATIONS, MAJORS, RESOURCES, IDEOLOGIES, MINOR_STATES, nationFlag, nationName } from '../data/nations.js';
 import { techIconUrl } from '../research.js';
 import { EQUIPMENT_ITEMS } from '../data/equipment.js';
+import { renderSupplyConstruction } from './supply-ui.js';
+import { SUPPLY_STATUS_LABEL, SUPPLY_STATUS_COLOR } from '../supply.js';
 
 /* ================= 小パーツ ================= */
 
@@ -443,52 +445,138 @@ export function renderConstructionScreen(ctx) {
   return (body) => {
     const { state, economy } = ctx;
     body.innerHTML = '';
-    body.appendChild(sectionTitle(I18N.t('construction.queue')));
-    body.appendChild(el('div', 'small dim mb8', `${I18N.t('economy.civilian')}: ${economy.availableCivilianFactories()} ${I18N.t('ui.available') || ''} / ${state.factories.civ}`));
+    body.classList.add('construction-screen');
+    body.style.display = 'flex';
+    body.style.flexDirection = 'column';
 
-    const kinds = [
-      ['civilian_factory', 'construction.civilian_factory'],
-      ['military_factory', 'construction.military_factory'],
-      ['dockyard', 'construction.dockyard'],
-      ['infrastructure', 'construction.infrastructure'],
-      ['fuel_silo', 'construction.fuel_silo'],
-      ['naval_base', 'construction.naval_base'],
-    ];
-    const grid = el('div', 'grid3');
-    for (const [type, key] of kinds) {
-      const card = el('div', 'steel-card center');
-      card.appendChild(el('b', 'gold', I18N.t(key)));
-      const btn = el('button', 'steel-btn primary mt8', I18N.t('construction.build'));
-      btn.onclick = () => { economy.enqueueConstruction(type); draw(); };
-      card.appendChild(btn);
-      grid.appendChild(card);
-    }
-    body.appendChild(grid);
+    let tab = 'supply';
 
-    const list = el('div', 'col mt12');
-    body.appendChild(list);
-    const draw = () => {
-      list.innerHTML = '';
-      if (!state.constructionQueue.length) {
-        list.appendChild(el('div', 'dim small', I18N.t('ui.no_data')));
-        return;
+    const tabs = el('div', 'screen-tabs construction-tabs');
+    const content = el('div', 'construction-content');
+    body.appendChild(tabs);
+    body.appendChild(content);
+
+    const renderSupplyTab = renderSupplyConstruction(ctx);
+
+    const drawTabs = () => {
+      tabs.innerHTML = '';
+      const defs = [
+        ['supply', '州インフラ・補給網'],
+        ['national', '国家建設'],
+      ];
+      for (const [id, label] of defs) {
+        const b = el('button', `screen-tab${tab === id ? ' active' : ''}`, label);
+        b.type = 'button';
+        b.onclick = () => { if (tab === id) return; tab = id; draw(); };
+        tabs.appendChild(b);
       }
-      for (const q of state.constructionQueue) {
-        const card = el('div', 'steel-card');
-        card.appendChild(el('b', '', `${I18N.t(q.def.name)} #${q.id.slice(-4)}`));
-        const bar = el('div', 'mil-bar mt8');
-        const pct = fmtPct(Math.min(1, q.progress / q.days));
-        bar.appendChild(el('i', `style="width:${pct}"`));
-        bar.appendChild(el('b', '', `${I18N.t('construction.progress')} ${pct}`));
-        card.appendChild(bar);
-        const cancel = el('button', 'steel-btn danger mt8', I18N.t('ui.cancel'));
-        cancel.onclick = () => { economy.removeConstruction(q.id); draw(); };
-        card.appendChild(cancel);
-        list.appendChild(card);
+      const summary = el('div', 'construction-tabs-summary');
+      summary.appendChild(el('span', 'dim', `民需工場 ${economy.availableCivilianFactories()} / ${state.factories.civ}`));
+      summary.appendChild(el('span', 'sep', '・'));
+      summary.appendChild(el('span', 'dim', `建設中 ${state.constructionQueue.length} 件`));
+      tabs.appendChild(summary);
+    };
+
+    /* ---------------- 国家建設タブ ---------------- */
+    let nationalTimer = null;
+    const drawNational = () => {
+      if (nationalTimer) { clearInterval(nationalTimer); nationalTimer = null; }
+      content.innerHTML = '';
+      const wrap = el('div', 'construction-national');
+
+      wrap.appendChild(sectionTitle('国家建設'));
+      wrap.appendChild(el('div', 'small dim mb8',
+        `利用可能な民需工場: ${economy.availableCivilianFactories()} / ${state.factories.civ}（建設は民需工場が多いほど速く進みます）`));
+
+      const kinds = [
+        ['civilian_factory', 'construction.civilian_factory'],
+        ['military_factory', 'construction.military_factory'],
+        ['dockyard', 'construction.dockyard'],
+        ['fuel_silo', 'construction.fuel_silo'],
+        ['naval_base', 'construction.naval_base'],
+      ];
+      const grid = el('div', 'grid3');
+      for (const [type, key] of kinds) {
+        const card = el('div', 'steel-card center');
+        card.appendChild(el('b', 'gold', I18N.t(key)));
+        const btn = el('button', 'steel-btn primary mt8', I18N.t('construction.build'));
+        btn.type = 'button';
+        btn.onclick = () => { economy.enqueueConstruction(type); draw(); };
+        card.appendChild(btn);
+        grid.appendChild(card);
+      }
+      wrap.appendChild(grid);
+
+      wrap.appendChild(sectionTitle(I18N.t('construction.queue')));
+      const list = el('div', 'col mt8');
+      wrap.appendChild(list);
+
+      const drawQueue = () => {
+        list.innerHTML = '';
+        if (!state.constructionQueue.length) {
+          list.appendChild(el('div', 'dim small', I18N.t('ui.no_data')));
+          return;
+        }
+        for (const q of state.constructionQueue) {
+          const card = el('div', 'steel-card');
+          card.dataset.buildId = q.id;
+          const label = q.provinceId ? (q.label || q.def?.name) : `${I18N.t(q.def?.name || q.type)} #${String(q.id).slice(-4)}`;
+          card.appendChild(el('b', '', label));
+          const bar = el('div', 'mil-bar mt8');
+          const pct = Math.min(1, q.progress / q.days);
+          const fill = el('i', 'sup-q-fill');
+          fill.style.width = `${pct * 100}%`;
+          bar.appendChild(fill);
+          bar.appendChild(el('b', 'sup-q-pct', `${I18N.t('construction.progress')} ${fmtPct(pct)}`));
+          card.appendChild(bar);
+          const cancel = el('button', 'steel-btn danger mt8', I18N.t('ui.cancel'));
+          cancel.type = 'button';
+          cancel.onclick = () => { economy.removeConstruction(q.id); draw(); };
+          card.appendChild(cancel);
+          list.appendChild(card);
+        }
+      };
+      drawQueue();
+      content.appendChild(wrap);
+      lastNationalQueueLen = state.constructionQueue.length;
+
+      const timer = setInterval(() => {
+        if (!content.isConnected || tab !== 'national') {
+          clearInterval(timer);
+          if (nationalTimer === timer) nationalTimer = null;
+          return;
+        }
+        if (state.constructionQueue.length !== lastNationalQueueLen) {
+          lastNationalQueueLen = state.constructionQueue.length;
+          drawNational();
+          return;
+        }
+        for (const card of content.querySelectorAll('[data-build-id]')) {
+          const q = state.constructionQueue.find((x) => x.id === card.dataset.buildId);
+          if (!q) continue;
+          const pct = Math.min(1, q.progress / q.days);
+          const fill = card.querySelector('.sup-q-fill');
+          if (fill) fill.style.width = `${pct * 100}%`;
+          const txt = card.querySelector('.sup-q-pct');
+          if (txt) txt.textContent = `${I18N.t('construction.progress')} ${fmtPct(pct)}`;
+        }
+      }, 1000);
+      nationalTimer = timer;
+    };
+
+    /* ---------------- タブ描画 ---------------- */
+    let lastNationalQueueLen = -1;
+    const draw = () => {
+      drawTabs();
+      if (nationalTimer) { clearInterval(nationalTimer); nationalTimer = null; }
+      content.innerHTML = '';
+      if (tab === 'supply') {
+        renderSupplyTab(content);
+      } else {
+        drawNational();
       }
     };
     draw();
-    ctx.onTickScreens.push(() => { if (ctx.modals.isOpen('construction')) draw(); });
   };
 }
 
@@ -529,6 +617,60 @@ export function renderLogisticsScreen(ctx) {
     }
     table.appendChild(tbody);
     body.appendChild(table);
+
+    /* ---- 補給網（インフラ・補給ハブ） ---- */
+    const supply = ctx.supply || state._supplyMgr;
+    if (!supply) return;
+    const net = supply.network();
+    const sum = net?.summary || {};
+    body.appendChild(sectionTitle('補給網'));
+    const supRow = el('div', 'row mb8');
+    supRow.style.flexWrap = 'wrap';
+    const chip = (label, value, color = '') => {
+      const c = el('div', 'steel-card');
+      c.style.padding = '5px 10px';
+      c.appendChild(el('span', 'small dim', label + ' '));
+      const b = el('b', color, String(value));
+      c.appendChild(b);
+      return c;
+    };
+    supRow.appendChild(chip('正常', sum.ok || 0, 'good'));
+    supRow.appendChild(chip('不足', sum.low || 0, 'warn'));
+    supRow.appendChild(chip('枯渇', sum.critical || 0, 'bad'));
+    supRow.appendChild(chip('総容量', sum.totalCapacity || 0));
+    supRow.appendChild(chip('総需要', sum.totalDemand || 0));
+    supRow.appendChild(chip('補給不足の師団', sum.unsuppliedDivisions || 0, sum.unsuppliedDivisions ? 'bad' : 'good'));
+    body.appendChild(supRow);
+
+    const critical = Object.values(net?.provinces || {})
+      .filter((p) => p.status === 'critical' || p.status === 'low')
+      .sort((a, b) => a.ratio - b.ratio)
+      .slice(0, 8);
+    if (critical.length) {
+      const list = el('div', 'col');
+      list.style.gap = '3px';
+      for (const p of critical) {
+        const row = el('div', 'steel-card row');
+        row.style.padding = '4px 9px';
+        const color = SUPPLY_STATUS_COLOR[p.status] || '#8b96a0';
+        row.appendChild(el('b', '', p.name));
+        row.appendChild(el('span', 'small', SUPPLY_STATUS_LABEL[p.status] || p.status)).style.color = color;
+        row.appendChild(el('span', 'small dim', `容量 ${p.capacity} / 需要 ${p.demand}（師団 ${p.divisions}）`));
+        if (p.demand > 0) row.appendChild(el('span', 'small', `充足率 ${Math.round(Math.min(1, p.ratio) * 100)}%`)).style.color = color;
+        list.appendChild(row);
+      }
+      body.appendChild(list);
+    } else {
+      body.appendChild(el('div', 'small dim', 'すべての州で補給容量が需要を満たしています'));
+    }
+    const mapBtn = el('button', 'steel-btn primary mt8', 'マップで補給網を見る');
+    mapBtn.type = 'button';
+    mapBtn.onclick = () => {
+      if (!ctx.mapEngine?.setMode) return;
+      ctx.mapEngine.setMode('supply');
+      ctx.modals?.close('logistics');
+    };
+    body.appendChild(mapBtn);
   };
 }
 

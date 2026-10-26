@@ -35,6 +35,11 @@ function renderDivisionDesigner(ctx) {
     const clearBtn = el('button', 'steel-btn', I18N.t('division.clear'));
     clearBtn.onclick = () => { tpl.clear(); drawAll(); };
     top.appendChild(clearBtn);
+    // 全画面の師団編成（Division Designer）を開く
+    const openDesignerBtn = el('button', 'steel-btn primary', `⊞ ${I18N.t('menu.division')}`);
+    openDesignerBtn.title = '師団編成 / 編集画面を開く（J）';
+    openDesignerBtn.onclick = () => ctx.modals.toggle('division', {});
+    top.appendChild(openDesignerBtn);
     body.appendChild(top);
 
     const main = el('div', 'row');

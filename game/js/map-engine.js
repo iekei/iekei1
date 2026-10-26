@@ -17,6 +17,7 @@ import { Tooltip } from './tooltip.js';
 import { I18N } from './i18n.js';
 import { PROVINCES, PROVINCE_LINKS, PROVINCE_BY_ID, neighbors, terrainInfo, moveSpeedMultiplier } from './map-data.js';
 import { NATIONS, nationName, nationFlag } from './data/nations.js';
+import { SUPPLY_STATUS_COLOR, SUPPLY_STATUS_LABEL } from './supply.js';
 
 const SVGNS = 'http://www.w3.org/2000/svg';
 
@@ -35,6 +36,14 @@ const NATION_COLORS = {
   CZE: '#7a9ab0', AUS: '#c8b060', TUR: '#5aa0a0', EGY: '#b08a4a',
   CHI: '#c8c060', SPA: '#c07a4a',
 };
+
+/** 師団の補給バー色（緑＝正常 / 黄＝不足 / 赤＝枯渇） */
+function supplyBarColor(div) {
+  const ratio = Number(div?.supplyRatio ?? div?.supply ?? 1);
+  if (ratio >= 1) return '#7ec850';
+  if (ratio >= 0.5) return '#e0b93e';
+  return '#d05038';
+}
 
 /** 戦闘バブルの色（優勢度） */
 function advantageColor(adv) {
@@ -60,6 +69,7 @@ export class MapEngine {
     this.divisionIcons = new Map(); // divisionId -> {g, symbol, bars}
     this.combatBubbles = new Map(); // bubbleId -> <g>
     this.airNavalRenderer = null; // () => void 外部（air-naval.js）から設定
+    this.supplyManager = null;    // SupplyManager（main.js から接続）
     this._build();
     this.mapMode = 'land';
     this.mapReady = installMapUI(this);
@@ -102,6 +112,12 @@ export class MapEngine {
       linkLayer.appendChild(l);
     }
     svg.appendChild(linkLayer);
+
+    // 補給ルートレイヤ（州ノードの下に描画）
+    this.supplyRouteLayer = document.createElementNS(SVGNS, 'g');
+    this.supplyRouteLayer.setAttribute('id', 'map-supply-routes');
+    this.supplyRouteLayer.style.display = 'none';
+    svg.appendChild(this.supplyRouteLayer);
 
     // 前線レイヤ
     this.frontlineLayer = document.createElementNS(SVGNS, 'g');
@@ -155,6 +171,12 @@ export class MapEngine {
     this.capitalMarker.setAttribute('stroke-dasharray', '5 5');
     svg.appendChild(this.capitalMarker);
     this._updateCapital();
+
+    // 補給ハブ / 州の補給状態マーカー（最前面・補給モード時のみ表示）
+    this.supplyLayer = document.createElementNS(SVGNS, 'g');
+    this.supplyLayer.setAttribute('id', 'map-supply');
+    this.supplyLayer.style.display = 'none';
+    svg.appendChild(this.supplyLayer);
 
     // 州クリック → 作戦計画モードならUIが処理、それ以外は外交
     svg.addEventListener('click', (e) => {
@@ -264,14 +286,18 @@ export class MapEngine {
 
     // ツールチップ（地形・所有国・基地レベル）
     const nat = NATIONS[p.tag];
-    const tipHtml = `
+    const tipHtml = () => {
+      const supplyTip = this._supplyTooltip(p);
+      return `
       <div style="font-weight:700;letter-spacing:.08em;font-family:var(--mil-font);color:var(--gold);">${p.name}</div>
       <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">${nationName(p.tag)}（${nat?.ideology || '-'}）</div>
       <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">地形：${I18N.terrainName(p.terrain) || t.name}</div>
       <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">航空基地Lv${p.airbase || 0} / 海軍基地Lv${p.naval || 0}</div>
       <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">VP: ${p.vp || 0}${p.capital ? '（首都）' : ''}</div>
       <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">移動コスト：${moveSpeedMultiplier(p.terrain).toFixed(2)}x</div>
-    `;
+      ${supplyTip}
+      `;
+    };
     Tooltip.bind(g, tipHtml, { kind: 'info' });
 
     svg.appendChild(g);
@@ -287,6 +313,7 @@ export class MapEngine {
     this.renderFrontlines();
     this.renderBattlePlans();
     this.renderCombatBubbles();
+    if (this.mapMode === 'supply') this.renderSupplyNetwork();
     if (this.airNavalRenderer) this.airNavalRenderer();
     Tooltip.attachAll(this.svg);
   }
@@ -298,6 +325,220 @@ export class MapEngine {
   }
 
   playerCapital() { return this._capital || PROVINCES[0]; }
+
+  /* ================= 補給網 ================= */
+
+  /** SupplyManager を接続（main.js から） */
+  setSupplyManager(mgr) {
+    this.supplyManager = mgr;
+    if (this.mapMode === 'supply') this.renderSupplyNetwork();
+    return this;
+  }
+
+  /** 州ツールチップ用の補給情報 */
+  _supplyTooltip(p) {
+    const mgr = this.supplyManager;
+    if (!mgr) return '';
+    const infra = mgr.infra(p.id);
+    const hub = mgr.hubLevel(p.id);
+    const st = mgr.statusFor(p.id);
+    const rows = [];
+    rows.push(`<div style="font-size:11px;color:#8fa85b;margin-top:4px;">インフラ Lv${infra} / 補給ハブ ${hub > 0 ? `Lv${hub}` : 'なし'}</div>`);
+    if (!st) {
+      rows.push(`<div style="font-size:11px;color:#8b96a0;">補給網：対象外（自国州ではありません）</div>`);
+      return rows.join('');
+    }
+    const color = SUPPLY_STATUS_COLOR[st.status] || '#8b96a0';
+    const pct = st.demand > 0 ? `${Math.round(Math.min(1, st.ratio) * 100)}%` : '—';
+    rows.push(`<div style="font-size:11px;color:${color};margin-top:2px;">補給：${SUPPLY_STATUS_LABEL[st.status] || st.status}（充足率 ${pct}）</div>`);
+    rows.push(`<div style="font-size:11px;color:var(--text-dim);">容量 ${st.capacity} / 需要 ${st.demand}（師団 ${st.divisions} 個）</div>`);
+    if (st.demand > 0 && st.ratio < 1) {
+      const pen = st.penalties;
+      rows.push(`<div style="font-size:11px;color:#d05038;margin-top:2px;">補給不足ペナルティ：速度 -${Math.round((1 - pen.speed) * 100)}% / 戦闘力 -${Math.round((1 - pen.combat) * 100)}% / 組織率 -${Math.round((1 - pen.org) * 100)}%</div>`);
+    }
+    return rows.join('');
+  }
+
+  /** 補給モードの描画（首都 → ハブの鉄道網 + ハブからの分配 + 状態マーカー） */
+  renderSupplyNetwork() {
+    const routeLayer = this.supplyRouteLayer;
+    const markerLayer = this.supplyLayer;
+    if (!routeLayer || !markerLayer) return;
+    routeLayer.innerHTML = '';
+    markerLayer.innerHTML = '';
+    const active = this.mapMode === 'supply';
+    routeLayer.style.display = active ? '' : 'none';
+    markerLayer.style.display = active ? '' : 'none';
+    if (!active) return;
+    const net = this.supplyManager?.network();
+    if (!net) return;
+
+    const colorOf = (status) => SUPPLY_STATUS_COLOR[status] || SUPPLY_STATUS_COLOR.none;
+    const pathPoints = (ids) => ids.map((id) => this.byId[id]).filter(Boolean);
+    const pointsAttr = (list) => list.map((p) => `${p.x},${p.y}`).join(' ');
+
+    // --- 分配線（ハブ → 州）: 細い線
+    for (const d of net.distribution || []) {
+      const a = this.byId[d.from];
+      const b = this.byId[d.to];
+      if (!a || !b) continue;
+      const line = document.createElementNS(SVGNS, 'line');
+      line.setAttribute('x1', a.x);
+      line.setAttribute('y1', a.y);
+      line.setAttribute('x2', b.x);
+      line.setAttribute('y2', b.y);
+      line.setAttribute('stroke', colorOf(d.status));
+      line.setAttribute('stroke-width', '1.1');
+      line.setAttribute('stroke-opacity', d.status === 'ok' ? '0.38' : '0.7');
+      line.setAttribute('stroke-dasharray', '3 5');
+      line.classList.add('supply-distribution');
+      routeLayer.appendChild(line);
+    }
+
+    // --- 主要鉄道（首都 → 補給ハブ）: 太い線 + 流れる破線
+    for (const r of net.routes || []) {
+      const pts = pathPoints(r.path || []);
+      if (pts.length < 2) continue;
+      const color = colorOf(r.status);
+      const g = document.createElementNS(SVGNS, 'g');
+      g.classList.add('supply-route-group');
+      const under = document.createElementNS(SVGNS, 'polyline');
+      under.setAttribute('points', pointsAttr(pts));
+      under.setAttribute('fill', 'none');
+      under.setAttribute('stroke', '#070a0c');
+      under.setAttribute('stroke-width', String(6 + Math.min(3, r.level)));
+      under.setAttribute('stroke-opacity', '0.75');
+      under.setAttribute('stroke-linecap', 'round');
+      g.appendChild(under);
+      const line = document.createElementNS(SVGNS, 'polyline');
+      line.setAttribute('points', pointsAttr(pts));
+      line.setAttribute('fill', 'none');
+      line.setAttribute('stroke', color);
+      line.setAttribute('stroke-width', String(2.4 + Math.min(2, r.level * 0.6)));
+      line.setAttribute('stroke-opacity', '0.92');
+      line.setAttribute('stroke-linecap', 'round');
+      line.setAttribute('stroke-linejoin', 'round');
+      line.setAttribute('stroke-dasharray', '10 6');
+      line.classList.add('supply-route');
+      g.appendChild(line);
+      g.style.pointerEvents = 'auto';
+      const hub = net.hubs.find((h) => h.provinceId === r.to);
+      const names = pathPoints(r.path || []).map((p) => p.name).join(' → ');
+      Tooltip.bind(g, () => `
+        <div style="font-weight:700;letter-spacing:.08em;font-family:var(--mil-font);color:var(--gold);">${hub?.name || r.to} 補給線</div>
+        <div style="font-size:11px;color:${color};margin-top:2px;">状態：${SUPPLY_STATUS_LABEL[r.status] || r.status}</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">経路：${names || '鉄道網未接続'}</div>
+        <div style="font-size:11px;color:var(--text-dim);">スループット：${r.throughput} / ハブLv${r.level}</div>
+        <div style="font-size:11px;color:var(--text-dim);">鉄道品質（経路最低インフラ）：Lv${hub?.pathInfra ?? 0}</div>
+      `, { kind: r.status === 'critical' ? 'bad' : r.status === 'low' ? 'warn' : 'good' });
+      routeLayer.appendChild(g);
+    }
+
+    // --- 州の補給状態リング
+    for (const st of Object.values(net.provinces || {})) {
+      const p = this.byId[st.provinceId];
+      if (!p) continue;
+      const color = colorOf(st.status);
+      const ring = document.createElementNS(SVGNS, 'circle');
+      ring.setAttribute('cx', p.x);
+      ring.setAttribute('cy', p.y);
+      ring.setAttribute('r', p.capital ? 20 : 17);
+      ring.setAttribute('fill', color);
+      ring.setAttribute('fill-opacity', st.status === 'ok' ? '0.06' : '0.13');
+      ring.setAttribute('stroke', color);
+      ring.setAttribute('stroke-width', '1.2');
+      ring.setAttribute('stroke-opacity', st.status === 'ok' ? '0.45' : '0.85');
+      ring.style.pointerEvents = 'none';
+      markerLayer.appendChild(ring);
+
+      // 不足・枯渇の州には充足率バッジを表示
+      if (st.status === 'low' || st.status === 'critical') {
+        const bg = document.createElementNS(SVGNS, 'rect');
+        bg.setAttribute('x', p.x - 16);
+        bg.setAttribute('y', p.y - (p.capital ? 32 : 29));
+        bg.setAttribute('width', 32);
+        bg.setAttribute('height', 12);
+        bg.setAttribute('rx', 2);
+        bg.setAttribute('fill', '#0b0e11');
+        bg.setAttribute('fill-opacity', '0.9');
+        bg.setAttribute('stroke', color);
+        bg.setAttribute('stroke-width', '1');
+        bg.style.pointerEvents = 'none';
+        markerLayer.appendChild(bg);
+        const txt = document.createElementNS(SVGNS, 'text');
+        txt.setAttribute('x', p.x);
+        txt.setAttribute('y', p.y - (p.capital ? 23 : 20));
+        txt.setAttribute('fill', color);
+        txt.setAttribute('font-size', '9');
+        txt.setAttribute('font-weight', '800');
+        txt.setAttribute('text-anchor', 'middle');
+        txt.setAttribute('font-family', 'var(--mil-font)');
+        txt.textContent = st.demand > 0 ? `${Math.round(Math.min(1, st.ratio) * 100)}%` : '—';
+        txt.style.pointerEvents = 'none';
+        markerLayer.appendChild(txt);
+      }
+    }
+
+    // --- 補給ハブのマーカー
+    for (const hub of net.hubs || []) {
+      const p = this.byId[hub.provinceId];
+      if (!p) continue;
+      const color = colorOf(hub.status);
+      const g = document.createElementNS(SVGNS, 'g');
+      g.classList.add('supply-hub');
+      g.style.cursor = 'help';
+      const halo = document.createElementNS(SVGNS, 'circle');
+      halo.setAttribute('cx', p.x);
+      halo.setAttribute('cy', p.y);
+      halo.setAttribute('r', 14);
+      halo.setAttribute('fill', 'none');
+      halo.setAttribute('stroke', color);
+      halo.setAttribute('stroke-width', '1');
+      halo.setAttribute('stroke-opacity', '0.55');
+      halo.setAttribute('stroke-dasharray', '3 3');
+      g.appendChild(halo);
+      const body = document.createElementNS(SVGNS, 'circle');
+      body.setAttribute('cx', p.x);
+      body.setAttribute('cy', p.y);
+      body.setAttribute('r', 9);
+      body.setAttribute('fill', '#141a1f');
+      body.setAttribute('stroke', color);
+      body.setAttribute('stroke-width', '2');
+      g.appendChild(body);
+      const txt = document.createElementNS(SVGNS, 'text');
+      txt.setAttribute('x', p.x);
+      txt.setAttribute('y', p.y + 3.5);
+      txt.setAttribute('fill', color);
+      txt.setAttribute('font-size', '9');
+      txt.setAttribute('font-weight', '900');
+      txt.setAttribute('text-anchor', 'middle');
+      txt.setAttribute('font-family', 'var(--mil-font)');
+      txt.textContent = hub.isCapital ? '★' : String(hub.level);
+      g.appendChild(txt);
+      const label = document.createElementNS(SVGNS, 'text');
+      label.setAttribute('x', p.x);
+      label.setAttribute('y', p.y + (p.capital ? 34 : 32));
+      label.setAttribute('fill', color);
+      label.setAttribute('font-size', '8');
+      label.setAttribute('font-weight', '700');
+      label.setAttribute('text-anchor', 'middle');
+      label.textContent = hub.isCapital ? '首都 補給源' : `補給ハブ Lv${hub.level}`;
+      label.style.pointerEvents = 'none';
+      g.appendChild(label);
+      g.style.pointerEvents = 'auto';
+      Tooltip.bind(g, () => `
+        <div style="font-weight:700;letter-spacing:.08em;font-family:var(--mil-font);color:var(--gold);">${hub.name}${hub.isCapital ? '（首都）' : ' 補給ハブ'}</div>
+        <div style="font-size:11px;color:${color};margin-top:2px;">状態：${SUPPLY_STATUS_LABEL[hub.status] || hub.status}</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">レベル：Lv${hub.level} / スループット ${hub.throughput}</div>
+        <div style="font-size:11px;color:var(--text-dim);">分配範囲：${hub.range} 州 / 供給州数 ${hub.servedCount}</div>
+        <div style="font-size:11px;color:var(--text-dim);">経路インフラ：Lv${hub.pathInfra} / ハブ州インフラ：Lv${hub.hubInfra}</div>
+        ${hub.disconnected ? '<div style="font-size:11px;color:#d05038;">首都からの鉄道網が未接続</div>' : ''}
+      `, { kind: hub.status === 'critical' ? 'bad' : hub.status === 'low' ? 'warn' : 'good' });
+      markerLayer.appendChild(g);
+    }
+
+    Tooltip.attachAll(this.svg);
+  }
 
   /* ================= 師団描画 ================= */
 
@@ -371,9 +612,9 @@ export class MapEngine {
       const supFill = document.createElementNS(SVGNS, 'rect');
       supFill.setAttribute('x', px - 22);
       supFill.setAttribute('y', py + 18);
-      supFill.setAttribute('width', Math.max(1, 44 * (div.supply || 1)));
+      supFill.setAttribute('width', Math.max(1, 44 * (div.supply ?? 1)));
       supFill.setAttribute('height', 5);
-      supFill.setAttribute('fill', '#e6a23c'); // オレンジ
+      supFill.setAttribute('fill', supplyBarColor(div)); // 緑/黄/赤（補給状態）
       supFill.setAttribute('stroke', '#0b0e11');
       supFill.setAttribute('stroke-width', '0.5');
       g.appendChild(supFill);
@@ -417,7 +658,7 @@ export class MapEngine {
       valTxt.setAttribute('fill', '#8b96a0');
       valTxt.setAttribute('font-size', '8.5');
       valTxt.setAttribute('text-anchor', 'middle');
-      valTxt.textContent = `充足 ${Math.round((div.supply || 1) * 100)}% / 指揮 ${Math.round((div.command || 1) * 100)}%`;
+      valTxt.textContent = `補給 ${Math.round((div.supplyRatio ?? div.supply ?? 1) * 100)}% / 指揮 ${Math.round((div.command || 1) * 100)}%`;
       g.appendChild(valTxt);
 
       // 計画準備ボーナス（作戦計画に配属されている場合）
@@ -430,9 +671,10 @@ export class MapEngine {
         <div style="font-weight:700;letter-spacing:.08em;font-family:var(--mil-font);color:var(--gold);">${div.name || div.type}</div>
         <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">所在地：${p.name}（${I18N.terrainName(p.terrain) || terrainInfo(p.terrain).name}）</div>
         <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">兵科：${I18N.t(`division.types.${div.type}`) || div.type}</div>
-        <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">組織力：${Math.round(div.org || 0)} / ${div.maxOrg || 0}</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">組織力：${Math.round(div.org || 0)} / ${div.maxOrg || 0}${div.effectiveMaxOrg ? `（補給上限 ${div.effectiveMaxOrg}）` : ''}</div>
         <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">人員：${Math.round(div.hp || 0)} / ${div.maxHp || 0}</div>
-        <div style="font-size:11px;color:#e6a23c;margin-top:2px;">充足度：${Math.round((div.supply || 1) * 100)}%</div>
+        <div style="font-size:11px;color:${supplyBarColor(div)};margin-top:2px;">補給：${Math.round((div.supplyRatio ?? div.supply ?? 1) * 100)}%（容量 ${div.supplyCapacity ?? '—'} / 需要 ${div.supplyDemand ?? '—'}）</div>
+        ${div.supplyPenalty && div.supplyPenalty.penaltyPct > 0 ? `<div style="font-size:11px;color:#d05038;margin-top:2px;">補給不足：速度 -${Math.round((1 - div.supplyPenalty.speed) * 100)}% / 戦闘力 -${Math.round((1 - div.supplyPenalty.combat) * 100)}% / 組織率 -${Math.round((1 - div.supplyPenalty.org) * 100)}%</div>` : ''}
         <div style="font-size:11px;color:#7ec850;margin-top:2px;">指揮統制率：${Math.round((div.command || 1) * 100)}%</div>
         ${planningLine}
       `;
@@ -452,10 +694,11 @@ export class MapEngine {
     Object.assign(div, patch);
     const icon = this.divisionIcons.get(divId);
     if (icon) {
-      icon.supFill.setAttribute('width', Math.max(1, 44 * (div.supply || 1)));
+      icon.supFill.setAttribute('width', Math.max(1, 44 * (div.supply ?? 1)));
+      icon.supFill.setAttribute('fill', supplyBarColor(div));
       icon.cmdFill.setAttribute('width', Math.max(1, 44 * (div.command || 1)));
       if (icon.valTxt) {
-        icon.valTxt.textContent = `充足 ${Math.round((div.supply || 1) * 100)}% / 指揮 ${Math.round((div.command || 1) * 100)}%`;
+        icon.valTxt.textContent = `補給 ${Math.round((div.supplyRatio ?? div.supply ?? 1) * 100)}% / 指揮 ${Math.round((div.command || 1) * 100)}%`;
       }
     }
   }
