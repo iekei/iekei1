@@ -19,7 +19,7 @@ import { installSupplySystem } from './supply.js';
 import { installAirWingSystem } from './air-wings.js';
 import { EquipmentDesigner } from './designers.js';
 import { DoctrineManager } from './doctrine.js';
-import { IntelManager } from './intel.js';
+import { installIntelAgency } from './intel.js';
 import { DiplomacyManager } from './diplomacy.js';
 import { PoliticsManager } from './politics.js';
 import { CardLibrary } from './data/cards.js';
@@ -129,7 +129,7 @@ async function boot() {
   const economy = new EconomyManager(state, mio);
   const doctrine = new DoctrineManager(state);
   state._doctrineMgr = doctrine;
-  const intel = new IntelManager(state);
+  const intel = installIntelAgency(state);
   const diplomacy = new DiplomacyManager(state);
   const politics = new PoliticsManager(state);
   state._politicsMgr = politics;
@@ -175,14 +175,21 @@ async function boot() {
   const mapEngine = new MapEngine(state, document.getElementById('map-svg'));
   mapEngine.setSupplyManager(supply);
   mapEngine.setAirWingManager(airWings);
+  mapEngine.setIntelManager(intel);
+  mapEngine.onIntelTargetClick = () => { modals.toggle('intel', {}); };
 
-  // F2: 補給モードのオン/オフ（マップ上部の「補給」ボタンと同じ）
+  // F2: 補給モード / F3: 諜報モードのオン・オフ（マップ上部のボタンと同じ）
   document.addEventListener('keydown', (e) => {
-    if (e.key !== 'F2') return;
     if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
     if (!mapEngine.setMode) return;
-    e.preventDefault();
-    mapEngine.setMode(mapEngine.mapMode === 'supply' ? 'land' : 'supply');
+    if (e.key === 'F2') {
+      e.preventDefault();
+      mapEngine.setMode(mapEngine.mapMode === 'supply' ? 'land' : 'supply');
+    } else if (e.key === 'F3') {
+      e.preventDefault();
+      mapEngine.setMode(mapEngine.mapMode === 'intel' ? 'land' : 'intel');
+      toast(mapEngine.mapMode === 'intel' ? 'マップを諜報モードに切り替えました' : 'マップを陸軍モードに戻しました', 'info');
+    }
   });
 
   const airNaval = new AirNavalManager(state, mapEngine);

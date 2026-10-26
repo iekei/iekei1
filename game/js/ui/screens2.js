@@ -7,6 +7,7 @@ import { BATTALIONS, SUPPORT_COMPANIES } from '../data/battalions.js';
 import { DivisionTemplate, divisionType, GRID_W, GRID_H, SUPPORT_SLOTS } from '../division.js';
 import { RARITY_COLORS, commanderEffects, COMMANDER_TRAITS } from '../data/cards.js';
 import { renderDoctrineScreen } from './doctrine-ui.js';
+import { renderIntelScreen } from './intel-ui.js';
 import { CombatSimulator, TERRAIN_MODS, WEATHER_MODS, TACTICS } from '../combat.js';
 import { renderTankDesigner, renderNavalDesigner, renderAirDesigner } from './designer-ui.js';
 import { sectionTitle } from './screens.js';
@@ -339,81 +340,8 @@ function renderSimulator(ctx) {
 
 /* ================= 諜報機関画面 ================= */
 
-function renderIntelScreen(ctx) {
-  return (body) => {
-    const { state, intel } = ctx;
-    body.innerHTML = '';
-    body.appendChild(sectionTitle(`${I18N.t('intel.operatives')}（スロット ${intel.operatives().length}/${state.intel.slots}）`));
-
-    const draw = () => {
-      body.innerHTML = '';
-      body.appendChild(sectionTitle(`${I18N.t('intel.operatives')}（スロット ${intel.operatives().length}/${state.intel.slots}）`));
-      const row = el('div', 'row');
-      row.style.flexWrap = 'wrap';
-      for (const op of intel.operatives()) {
-        const card = el('div', 'steel-card col');
-        card.style.width = '200px';
-        const face = el('div', 'center');
-        face.appendChild(img(op.portrait, op.name, 'style="width:72px;height:72px;object-fit:cover;border:1px solid var(--gold-dim)"', op.name.slice(0, 1)));
-        card.appendChild(face);
-        card.appendChild(el('b', 'gold center', op.name));
-        card.appendChild(el('div', 'small dim center', `${I18N.t(`intel.skills.${op.skill}`)} Lv${op.skillValue}`));
-        if (op.mission) {
-          const m = intel.missions().find((m) => m.id === op.mission.missionId);
-          const pct = fmtPct(1 - op.mission.daysLeft / op.mission.totalDays);
-          card.appendChild(el('div', 'small mt8', `${I18N.t(`intel.missions.${op.mission.missionId}.name`)} → ${nationName(op.mission.target)}`));
-          const bar = el('div', 'mil-bar mt8');
-          bar.appendChild(el('i', `style="width:${pct}"`));
-          bar.appendChild(el('b', '', pct));
-          card.appendChild(bar);
-          const cancel = el('button', 'steel-btn mt8', I18N.t('ui.cancel'));
-          cancel.onclick = () => { intel.unassign(op.id); draw(); };
-          card.appendChild(cancel);
-        } else {
-          const sel = el('select', 'steel-select mt8');
-          sel.innerHTML = `<option value="">${I18N.t('intel.idle')}</option>` +
-            intel.missions().map((m) => `<option value="${m.id}">${I18N.t(`intel.missions.${m.id}.name`)}</option>`).join('');
-          const targetSel = el('select', 'steel-select mt8');
-          for (const t of intel.targets()) targetSel.appendChild(Object.assign(el('option', '', nationName(t)), { value: t }));
-          const go = el('button', 'steel-btn primary mt8', I18N.t('ui.confirm'));
-          go.onclick = () => { if (sel.value) { intel.assignMission(op.id, sel.value, targetSel.value); draw(); } };
-          card.appendChild(sel); card.appendChild(targetSel); card.appendChild(go);
-        }
-        row.appendChild(card);
-      }
-      body.appendChild(row);
-
-      // 雇用可能リスト
-      body.appendChild(sectionTitle(I18N.t('intel.recruit')));
-      const avail = el('div', 'row');
-      avail.style.flexWrap = 'wrap';
-      for (const t of intel.availableOperatives()) {
-        if (intel.operatives().some((o) => o.templateId === t.id)) continue;
-        const card = el('div', 'commander-card');
-        const face = el('div', 'face');
-        if (t.portrait) face.appendChild(img(t.portrait, t.name));
-        else face.appendChild(el('span', 'initial', t.name.slice(0, 1)));
-        card.appendChild(face);
-        card.appendChild(el('div', 'cname', t.name));
-        card.appendChild(el('div', 'ctrait', I18N.t(`intel.skills.${t.skill}`)));
-        card.title = I18N.t('intel.recruit_cost', { pp: 50 });
-        card.onclick = () => { if (intel.recruit(t.id)) draw(); };
-        avail.appendChild(card);
-      }
-      body.appendChild(avail);
-      //諜報価値
-      body.appendChild(sectionTitle(I18N.t('intel.intel_value')));
-      const iv = el('div', 'col');
-      for (const t of intel.targets()) {
-        iv.appendChild(el('div', 'kv', `<span class="k">${nationName(t)}</span><span class="v">${intel.intelOn(t)}</span>`));
-      }
-      body.appendChild(iv);
-    };
-    draw();
-    ctx.onTickScreens.push(() => { if (ctx.modals.isOpen('intel')) draw(); });
-  };
-}
-
+// 諜報機関（Agency & Espionage）画面は ui/intel-ui.js に分離。
+// 旧 API 互換のためここから再エクスポートする。
 /* ================= 外交画面 ================= */
 
 function renderDiplomacyScreen(ctx) {

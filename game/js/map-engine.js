@@ -71,6 +71,10 @@ export class MapEngine {
     this.airNavalRenderer = null; // () => void 外部（air-naval.js）から設定
     this.supplyManager = null;    // SupplyManager（main.js から接続）
     this.airWingManager = null;   // AirWingManager（main.js から接続）
+    this.intelManager = null;     // IntelManager（main.js から接続）
+    this.onIntelTargetClick = null; // (tag) => void 外部から設定
+    this.intelLayer = null;
+    this.intelMarkers = new Map(); // tag -> <g>
     this._build();
     this.mapMode = 'land';
     this.mapReady = installMapUI(this);
@@ -157,6 +161,21 @@ export class MapEngine {
     this.navalLayer = document.createElementNS(SVGNS, 'g');
     this.navalLayer.setAttribute('id', 'map-naval');
     svg.appendChild(this.navalLayer);
+
+    // 諜報レイヤ（インテル・ネットワーク・敵師団推計）
+    this.intelLayer = document.createElementNS(SVGNS, 'g');
+    this.intelLayer.setAttribute('id', 'map-intel');
+    this.intelLayer.style.display = 'none';
+    svg.appendChild(this.intelLayer);
+    // 毎フレーム再生成されるためイベントは委譲で受ける
+    this.intelLayer.addEventListener('click', (e) => {
+      const g = e.target.closest ? e.target.closest('[data-intel-tag]') : null;
+      if (!g) return;
+      e.stopPropagation();
+      const tag = g.dataset.intelTag;
+      this.state.bus?.emit('intel-target-selected', { tag });
+      if (this.onIntelTargetClick) this.onIntelTargetClick(tag);
+    });
 
     // 航空射程レイヤ
     this.rangeLayer = document.createElementNS(SVGNS, 'g');
@@ -316,6 +335,7 @@ export class MapEngine {
     this.renderBattlePlans();
     this.renderCombatBubbles();
     if (this.mapMode === 'supply') this.renderSupplyNetwork();
+    if (this.mapMode === 'intel') this.renderIntelOverlay();
     if (this.airNavalRenderer) this.airNavalRenderer();
     Tooltip.attachAll(this.svg);
   }
@@ -363,6 +383,152 @@ export class MapEngine {
       lines.push(`<div style="font-size:11px;color:#e08a6a;margin-top:2px;">爆撃被害：施設 ${Math.round(p.airDamage || 0)}% / 工場 ${Math.round(p.factoryDamage || 0)}%</div>`);
     }
     return lines.join('');
+  }
+
+  /* ================= 諜報（インテル・敵師団推計） ================= */
+
+  /** IntelManager を接続（main.js から） */
+  setIntelManager(mgr) {
+    this.intelManager = mgr;
+    if (this.mapMode === 'intel') this.renderIntelOverlay();
+    return this;
+  }
+
+  /**
+   * 諜報オーバーレイを描画する。
+   *  ・ネットワーク構築済みの国  : 首都にネットワーク進行度リング（インテル段階色）
+   *  ・軍事情報（intelTier='military'）獲得国 : 各州に敵師団配置（推計）バッジ
+   */
+  renderIntelOverlay() {
+    const layer = this.intelLayer;
+    const mgr = this.intelManager;
+    if (!layer) return;
+    layer.innerHTML = '';
+    this.intelMarkers.clear();
+    if (!mgr || this.mapMode !== 'intel') return;
+
+    const showForces = this.state?.intel?.showEnemyForces !== false;
+    const tierColor = { none: '#55606a', political: '#e0b93e', economy: '#5e9ec7', military: '#d05038' };
+    const tierLabel = { none: '情報なし', political: '政治情報', economy: '経済情報', military: '軍事情報' };
+
+    for (const tag of mgr.targets()) {
+      const data = mgr.intelData(tag);
+      if (!data) continue;
+      const capital = PROVINCES.find((p) => p.tag === tag && p.capital)
+        || PROVINCES.find((p) => p.tag === tag);
+      if (!capital) continue;
+      const color = tierColor[data.tier] || '#55606a';
+
+      // ネットワーク進捗リング（首都）
+      if (data.network > 0 || data.tier !== 'none') {
+        const g = document.createElementNS(SVGNS, 'g');
+        g.setAttribute('data-intel-tag', tag);
+        g.setAttribute('class', 'map-intel-network');
+        g.style.cursor = 'pointer';
+        const r = 20;
+        const ringBg = document.createElementNS(SVGNS, 'circle');
+        ringBg.setAttribute('cx', capital.x);
+        ringBg.setAttribute('cy', capital.y);
+        ringBg.setAttribute('r', r);
+        ringBg.setAttribute('fill', 'none');
+        ringBg.setAttribute('stroke', '#0b0e11');
+        ringBg.setAttribute('stroke-width', '4');
+        ringBg.setAttribute('opacity', '.55');
+        g.appendChild(ringBg);
+
+        const arc = document.createElementNS(SVGNS, 'circle');
+        const c = 2 * Math.PI * r;
+        arc.setAttribute('cx', capital.x);
+        arc.setAttribute('cy', capital.y);
+        arc.setAttribute('r', r);
+        arc.setAttribute('fill', 'none');
+        arc.setAttribute('stroke', color);
+        arc.setAttribute('stroke-width', '2.5');
+        arc.setAttribute('stroke-dasharray', `${(c * Math.max(0.02, data.network / 100)).toFixed(1)} ${c.toFixed(1)}`);
+        arc.setAttribute('transform', `rotate(-90 ${capital.x} ${capital.y})`);
+        arc.setAttribute('opacity', data.network > 0 ? '1' : '.35');
+        g.appendChild(arc);
+
+        const label = document.createElementNS(SVGNS, 'text');
+        label.setAttribute('x', capital.x);
+        label.setAttribute('y', capital.y + 3);
+        label.setAttribute('fill', color);
+        label.setAttribute('font-size', '9');
+        label.setAttribute('font-weight', '800');
+        label.setAttribute('font-family', 'var(--mil-font)');
+        label.setAttribute('text-anchor', 'middle');
+        label.setAttribute('pointer-events', 'none');
+        label.textContent = `${data.level}`;
+        g.appendChild(label);
+
+        Tooltip.bind(g, () => `
+          <div style="font-weight:700;letter-spacing:.06em;color:${color};font-family:var(--mil-font);">${data.name} — ${tierLabel[data.tier]}</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">インテル ${data.level} / 100 ・ ネットワーク ${Math.round(data.network)}%</div>
+          <div style="font-size:11px;color:var(--text-dim);">政治 ${data.political ? '公開' : '🔒'} ・ 経済 ${data.economy ? '公開' : '🔒'} ・ 軍事 ${data.military ? '公開' : '🔒'}</div>
+          ${data.military ? `<div style="font-size:11px;color:#d05038;margin-top:2px;">師団 ${data.military.divisions} 個（推計）</div>` : ''}
+          <div style="font-size:10px;color:#8b96a0;margin-top:3px;">クリックで諜報画面を開く</div>
+        `, { kind: 'info' });
+        layer.appendChild(g);
+        this.intelMarkers.set(tag, g);
+      }
+
+      // 敵師団配置（軍事情報のみ）
+      if (!showForces || !data.military) continue;
+      for (const f of data.military.forces) {
+        const prov = PROVINCE_BY_ID[f.provinceId];
+        if (!prov) continue;
+        const g = document.createElementNS(SVGNS, 'g');
+        g.setAttribute('data-intel-tag', tag);
+        g.setAttribute('class', 'map-intel-forces');
+        g.style.cursor = 'pointer';
+        const w = 26;
+        const h = 14;
+        const bx = prov.x - w / 2;
+        const by = prov.y + 14;
+        const bg = document.createElementNS(SVGNS, 'rect');
+        bg.setAttribute('x', bx);
+        bg.setAttribute('y', by);
+        bg.setAttribute('rx', 2);
+        bg.setAttribute('width', w);
+        bg.setAttribute('height', h);
+        bg.setAttribute('fill', '#1b2024');
+        bg.setAttribute('stroke', '#d05038');
+        bg.setAttribute('stroke-width', '1.2');
+        bg.setAttribute('opacity', '0.94');
+        g.appendChild(bg);
+
+        const icon = document.createElementNS(SVGNS, 'text');
+        icon.setAttribute('x', bx + 5);
+        icon.setAttribute('y', by + 10.5);
+        icon.setAttribute('fill', '#d05038');
+        icon.setAttribute('font-size', '8');
+        icon.setAttribute('font-weight', '800');
+        icon.setAttribute('text-anchor', 'middle');
+        icon.setAttribute('pointer-events', 'none');
+        icon.textContent = { infantry: 'I', armor: 'T', artillery: 'A', garrison: 'G' }[f.type] || '?';
+        g.appendChild(icon);
+
+        const txt = document.createElementNS(SVGNS, 'text');
+        txt.setAttribute('x', bx + w - 6);
+        txt.setAttribute('y', by + 10.5);
+        txt.setAttribute('fill', '#f0d8d0');
+        txt.setAttribute('font-size', '9');
+        txt.setAttribute('font-weight', '800');
+        txt.setAttribute('text-anchor', 'middle');
+        txt.setAttribute('font-family', 'var(--mil-font)');
+        txt.setAttribute('pointer-events', 'none');
+        txt.textContent = f.count;
+        g.appendChild(txt);
+
+        Tooltip.bind(g, () => `
+          <div style="font-weight:700;color:#d05038;font-family:var(--mil-font);">敵師団配置（推計）</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">${prov.name} ／ ${data.name}</div>
+          <div style="font-size:11px;margin-top:2px;">${f.count} 個（戦力充足 ${Math.round(f.strength * 100)}%）</div>
+          <div style="font-size:10px;color:#8b96a0;margin-top:3px;">軍事情報による推計値（実際の配置とは異なります）</div>
+        `, { kind: 'info' });
+        layer.appendChild(g);
+      }
+    }
   }
 
   /* ================= 補給網 ================= */

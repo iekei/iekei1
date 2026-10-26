@@ -17,16 +17,18 @@ export async function installMapUI(map) {
   const hud = document.getElementById('map-hud-top');
   const controls = document.createElement('div'); controls.className = 'map-controls'; controls.setAttribute('aria-label', 'マップ表示');
   const buttons = [];
-  for (const [mode,label] of [['land','陸軍'],['naval','海軍'],['air','空軍'],['supply','補給']]) {
+  for (const [mode,label] of [['land','陸軍'],['naval','海軍'],['air','空軍'],['supply','補給'],['intel','諜報']]) {
     const b = document.createElement('button'); b.className = 'steel-btn'; b.textContent = label;
     if (mode === 'supply') { b.title = '補給網・インフラ・補給ハブの状態を表示 (F2)'; b.dataset.supplyToggle = '1'; }
+    if (mode === 'intel') { b.title = 'インテル・ネットワーク・敵師団推計を表示 (F3)'; b.dataset.intelToggle = '1'; }
     b.onclick = () => setMode(mode); controls.append(b); buttons.push([mode,b]);
   }
   const setMode = mode => {
     map.mapMode = mode; svg.dataset.mode = mode;
     map.airLayer.style.display = mode === 'air' ? '' : 'none';
     map.navalLayer.style.display = mode === 'naval' ? '' : 'none';
-    map.divisionLayer.style.display = (mode === 'land' || mode === 'supply') ? '' : 'none';
+    map.divisionLayer.style.display = (mode === 'land' || mode === 'supply' || mode === 'intel') ? '' : 'none';
+    if (map.intelLayer) map.intelLayer.style.display = mode === 'intel' ? '' : 'none';
     if (map.supplyRouteLayer) map.supplyRouteLayer.style.display = mode === 'supply' ? '' : 'none';
     if (map.supplyLayer) map.supplyLayer.style.display = mode === 'supply' ? '' : 'none';
     buttons.forEach(([m,b]) => b.setAttribute('aria-pressed', String(mode === m)));
@@ -42,6 +44,17 @@ export async function installMapUI(map) {
         '<div class="map-legend-row"><i class="map-legend-line"></i>鉄道（首都 → 補給ハブ）</div>',
         '<div class="map-legend-row"><i class="map-legend-line thin"></i>補給ハブの分配範囲</div>',
         `<div class="map-legend-note">補給ハブ ${sum.hubs || 0} / 州 ${sum.provinces || 0} — 容量 ${sum.totalCapacity || 0}・需要 ${sum.totalDemand || 0}</div>`,
+      ].join('');
+    } else if (mode === 'intel') {
+      const mgr = map.intelManager;
+      const sum = mgr?.summary?.() || { revealed: { political: 0, economy: 0, military: 0 }, avgIntel: 0 };
+      legend.innerHTML = [
+        '<div class="map-legend-title">諜報 / インテル</div>',
+        '<div class="map-legend-row"><i class="map-legend-dot" style="background:#e0b93e"></i>政治情報（リング = ネットワーク進行度）</div>',
+        '<div class="map-legend-row"><i class="map-legend-dot" style="background:#5e9ec7"></i>経済情報</div>',
+        '<div class="map-legend-row"><i class="map-legend-dot" style="background:#d05038"></i>軍事情報</div>',
+        '<div class="map-legend-row"><i class="map-legend-line"></i>赤枠バッジ = 敵師団配置（推計・軍事情報のみ）</div>',
+        `<div class="map-legend-note">政治 ${sum.revealed.political} ・ 経済 ${sum.revealed.economy} ・ 軍事 ${sum.revealed.military} か国を可視化 — 平均インテル ${sum.avgIntel}</div>`,
       ].join('');
     } else if (mode === 'air') {
       const regions = map.airWingManager?.allRegions?.() || [];
@@ -59,6 +72,7 @@ export async function installMapUI(map) {
       legend.textContent = { land:'陸軍：歴史国境・海岸線・師団', naval:'海軍：海域・制海権・艦隊' }[mode] || '';
     }
     if (mode === 'supply') map.renderSupplyNetwork();
+    if (mode === 'intel') map.renderIntelOverlay?.();
     if (map.airNavalRenderer) map.airNavalRenderer();
   };
   // 建設画面など外部から切り替えられるように公開
