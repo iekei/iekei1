@@ -710,6 +710,7 @@
   <link rel="stylesheet" href="assets/strategy-systems.css">
   <link rel="stylesheet" href="assets/war-systems.css">
   <link rel="stylesheet" href="assets/division-designer.css?v=designer-1">
+  <link rel="stylesheet" href="assets/supply-network.css?v=supply-1">
   <!-- HOI4 大戦略 全画面レイヤー (../hoi4.html を iframe で表示) -->
   <link rel="stylesheet" href="css/hoi4-screen.css">
   </head>
@@ -2976,7 +2977,9 @@ class MapRenderer {
           const st = sid ? states[sid] : null;
           const sup = st ? (st.supply || 0) : 0;
           const owner = MapRenderer.ownerOf(id);
+          const netRgb = owner === player && typeof SupplyNetwork !== 'undefined' ? SupplyNetwork.stateRGB(sid) : null;
           if (owner !== player) rgb = [70, 70, 70];
+          else if (netRgb) rgb = netRgb;
           else {
             const t = Math.min(1, sup / 12);
             rgb = [160 - t * 140 | 0, 60 + t * 120 | 0, 60];
@@ -3236,7 +3239,9 @@ class MapRenderer {
         '<span style="color:var(--text-secondary);font-size:11px;">地形: ' + terr + ' (' + coastal + ') | 補給: ' + (st.supply || 0) + '</span><br>' +
         '<span style="color:var(--text-gold);font-size:11px;">🏭民需' + (b.industrial_complex || 0) +
         ' ⚙️軍需' + (b.arms_factory || 0) + ' ⚓工廠' + (b.dockyard || 0) +
-        ' ✈️飛行場' + (b.air_base || 0) + ' 🛤️' + (b.infrastructure || 0) + '</span>';
+        ' ✈️飛行場' + (b.air_base || 0) + ' 🛤️' + (b.infrastructure || 0) + ' 📦ハブ' + (b.supply_hub || 0) + '</span>' +
+        (typeof SupplyNetwork !== 'undefined' && st.owner === CoreEngine.gameState.country ? '<br>' + SupplyNetwork.summaryLine(sid) : '') +
+        (st.owner === CoreEngine.gameState.country ? '<br><button class="map-info-build-btn" onclick="ConstructionManager.selectState(\'' + sid + '\');GameUI.switchTab(\'construction\')">🏗️ 建設 (インフラ・補給ハブ)</button>' : '');
       ConstructionManager.selectState(sid);
     } else {
       overlay.innerHTML = '<strong>' + provinceName + '</strong><br><span style="color:var(--text-secondary);font-size:11px;">海域ID: ' + pid + '</span>';
@@ -3413,7 +3418,7 @@ class MapRenderer {
       political: [...['GER','SOV','JAP','ENG','FRA','ITA','USA'].map(tag=>['rgb('+DataFetcher.countryColor(tag).join(',')+')',DataFetcher.getCountryFlagImage(tag)+' '+DiplomacyManager.nameOf(tag)+(tag===CoreEngine.gameState.country?' (自国)':'')]),['#1e3a52','海']],
       terrain: [['#96a064','平原'],['#5f784b','森林'],['#8c7a58','丘陵'],['#7a6454','山岳'],['#647660','湿地'],['#c4ac6e','砂漠']],
       construction: [['#96a064','自国 (建設可能)'],['#404040','他国'],['#4ac46a','建設中の州']],
-      supply: [['#a03c3c','補給不足'],['#7c9040','普通'],['#3cc464','補給良好']],
+      supply: [['#3cc464','正常 (供給≧需要)'],['#e0c040','不足 (供給が需要の40%以上)'],['#e04a3c','枯渇 (40%未満 / 首都未接続)'],['#5f9a50','駐留なし (濃いほど容量大)'],['#464646','他国']],
       air: [['#404040','制空権なし'],['#506eaa','自国空域']],
       naval: [['#1e3a52','海域'],['#404040','他国沿岸']]
     };
@@ -6841,6 +6846,7 @@ async function initGame() {
   PoliticsManager.init();
   PoliticsManager.render();
   DivisionDesigner.init();      // 師団テンプレート (編成デザイナー)
+  if (typeof SupplyNetwork !== 'undefined') SupplyNetwork.init();   // 補給網・インフラ・補給ハブ
   TrainingManager.init();       // 徴兵・訓練 (師団は徴兵→訓練でのみ増える)
   CheatConsole.init();
   MultiplayerManager.init();
@@ -6898,6 +6904,7 @@ window.addEventListener('DOMContentLoaded', () => StartScreen.show());
   <script src="assets/force-systems.js?v=roster-2"></script>
   <script src="assets/intelligence-agency.js"></script>
   <script src="assets/area-battle-plan.js"></script>
+  <script src="assets/supply-network.js?v=supply-1"></script>
   <script src="assets/MultiplayerTimeManager.js"></script>
   <!-- ==================== HOI4 大戦略 全画面レイヤー (../hoi4.html / H キー) ==================== -->
   <script src="hoi4-screen.js"></script>

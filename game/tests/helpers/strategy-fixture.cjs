@@ -140,6 +140,11 @@ function fixture() {
     { filename: "strategy-systems.js" },
   );
   vm.runInContext(
+    fs.readFileSync(path.join(root, "assets/supply-network.js"), "utf8"),
+    ctx,
+    { filename: "supply-network.js" },
+  );
+  vm.runInContext(
     fs.readFileSync(
       path.join(root, "assets/MultiplayerTimeManager.js"),
       "utf8",

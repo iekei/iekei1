@@ -84,6 +84,7 @@ class StrategyGame {
       selectedArmy: BattlePlanManager.selectedArmyId, battles: BattleManager.battles,
       forceSystems: CoreEngine.gameState.forceSystems || null,
       construction: ConstructionManager.queue,
+      buildings: (typeof SupplyNetwork!=='undefined' && MapRenderer.states) ? SupplyNetwork.collectBuildings() : null,
       owners: MapRenderer.states ? Object.fromEntries(Object.entries(MapRenderer.states).map(([id,st])=>[id,st.owner])) : {} };
   }
   static apply(data) {
@@ -100,6 +101,7 @@ class StrategyGame {
     BattleManager.battles = data.battles || [];
     BattleManager.nextId = Math.max(0, ...BattleManager.battles.map(b => b.id)) + 1;
     ConstructionManager.queue = data.construction || [];
+    if (data.buildings && typeof SupplyNetwork!=='undefined') SupplyNetwork.applyBuildings(data.buildings);
     Object.entries(data.owners || {}).forEach(([id,owner]) => { if (MapRenderer.states[id]) MapRenderer.states[id].owner = owner; });
     TrainingManager.queue = CoreEngine.gameState.recruitQueue || [];
     TrainingManager.nextId = Math.max(0, ...TrainingManager.queue.map(o=>o.id)) + 1;
