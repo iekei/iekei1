@@ -716,6 +716,7 @@
   <link rel="stylesheet" href="assets/naval-force.css?v=navy-1">
   <link rel="stylesheet" href="assets/trade-resources.css?v=trade-1">
   <link rel="stylesheet" href="assets/peace-conference.css?v=peace-1">
+  <link rel="stylesheet" href="assets/politics-cabinet.css?v=pol-1">
   <!-- HOI4 大戦略 全画面レイヤー (../hoi4.html を iframe で表示) -->
   <link rel="stylesheet" href="css/hoi4-screen.css">
   </head>
@@ -781,6 +782,7 @@
   <!-- ==================== WINDOW NAVIGATION RAIL ==================== -->
   <nav id="window-nav">
     <span style="font-size:11px;color:var(--text-secondary);margin-right:4px;white-space:nowrap;">ウィンドウ:</span>
+    <button class="win-btn" data-tab="politics" onclick="GameUI.switchTab('politics')">🏛️ 政治</button>
     <button class="win-btn" data-tab="focus" onclick="GameUI.switchTab('focus')"><img class="win-btn-icon" data-menu-icon="focus" alt=""> 国家方針</button>
     <button class="win-btn" data-tab="research" onclick="GameUI.switchTab('research')"><img class="win-btn-icon" data-menu-icon="research" alt=""> 研究</button>
     <button class="win-btn" data-tab="special" onclick="GameUI.switchTab('special')"><img class="win-btn-icon" data-menu-icon="special" alt=""> 特別研究</button>
@@ -6875,6 +6877,7 @@ async function initGame() {
   if (typeof NavalForce !== 'undefined') NavalForce.init();         // 海軍: 艦隊編成・海域任務・海戦・制海権
   if (typeof TradeSystem !== 'undefined') TradeSystem.init();       // 貿易: 州資源産出・民需工場による輸入・生産効率
   if (typeof PeaceSystem !== 'undefined') PeaceSystem.init();       // 講和会議・戦勝点・傀儡国と自治度
+  if (typeof PoliticsSystem !== 'undefined') PoliticsSystem.init();   // 政治: 法案・閣僚・政党支持率・国家補正
   TrainingManager.init();       // 徴兵・訓練 (師団は徴兵→訓練でのみ増える)
   CheatConsole.init();
   MultiplayerManager.init();
@@ -6939,6 +6942,7 @@ window.addEventListener('DOMContentLoaded', () => StartScreen.show());
   <script src="assets/naval-force.js?v=navy-1"></script>
   <script src="assets/trade-resources.js?v=trade-1"></script>
   <script src="assets/peace-conference.js?v=peace-1"></script>
+  <script src="assets/politics-cabinet.js?v=pol-1"></script>
   <script src="assets/MultiplayerTimeManager.js"></script>
   <!-- ==================== HOI4 大戦略 全画面レイヤー (../hoi4.html / H キー) ==================== -->
   <script src="hoi4-screen.js"></script>

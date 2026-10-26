@@ -165,6 +165,11 @@ function fixture() {
     { filename: "peace-conference.js" },
   );
   vm.runInContext(
+    fs.readFileSync(path.join(root, "assets/politics-cabinet.js"), "utf8"),
+    ctx,
+    { filename: "politics-cabinet.js" },
+  );
+  vm.runInContext(
     fs.readFileSync(path.join(root, "assets/espionage.js"), "utf8"),
     ctx,
     { filename: "espionage.js" },
