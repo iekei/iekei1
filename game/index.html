@@ -718,6 +718,7 @@
   <link rel="stylesheet" href="assets/peace-conference.css?v=peace-1">
   <link rel="stylesheet" href="assets/politics-cabinet.css?v=pol-1">
   <link rel="stylesheet" href="assets/occupation.css?v=occ-1">
+  <link rel="stylesheet" href="assets/training-logistics.css?v=tl-1">
   <!-- HOI4 大戦略 全画面レイヤー (../hoi4.html を iframe で表示) -->
   <link rel="stylesheet" href="css/hoi4-screen.css">
   </head>
@@ -794,6 +795,8 @@
     <button class="win-btn" data-tab="diplomacy" onclick="GameUI.switchTab('diplomacy')"><img class="win-btn-icon" data-menu-icon="diplomacy" alt=""> 外交</button>
     <button class="win-btn" data-tab="cards" onclick="GameUI.switchTab('cards')"><img class="win-btn-icon" data-menu-icon="cards" alt=""> 将軍カード</button>
     <button class="win-btn" data-tab="division" onclick="GameUI.switchTab('division')"><img class="win-btn-icon" data-menu-icon="division" alt=""> 師団編成</button>
+    <button class="win-btn" data-tab="training" onclick="GameUI.switchTab('training')">🎓 徴兵・訓練</button>
+    <button class="win-btn" data-tab="logistics" onclick="GameUI.switchTab('logistics')">📦 兵站</button>
     <button class="win-btn" data-tab="airforce" onclick="GameUI.switchTab('airforce')">✈️ 空軍</button>
     <button class="win-btn" data-tab="multiplayer" onclick="GameUI.switchTab('multiplayer')"><img class="win-btn-icon" data-menu-icon="multiplayer" alt=""> マルチ</button>
     <button class="win-btn" data-tab="nation" onclick="GameUI.switchTab('nation')"><img class="win-btn-icon" data-menu-icon="nation" alt=""> 固有システム</button>
@@ -6881,6 +6884,7 @@ async function initGame() {
   if (typeof PeaceSystem !== 'undefined') PeaceSystem.init();       // 講和会議・戦勝点・傀儡国と自治度
   if (typeof PoliticsSystem !== 'undefined') PoliticsSystem.init();   // 政治: 法案・閣僚・政党支持率・国家補正
   if (typeof OccupationSystem !== 'undefined') OccupationSystem.init(); // 占領地: レジスタンス・順応度・占領政策・鎮圧師団
+  if (typeof TrainingLogistics !== 'undefined') TrainingLogistics.init(); // 訓練・練度・兵站備蓄・補充優先度
   TrainingManager.init();       // 徴兵・訓練 (師団は徴兵→訓練でのみ増える)
   CheatConsole.init();
   MultiplayerManager.init();
@@ -6947,6 +6951,7 @@ window.addEventListener('DOMContentLoaded', () => StartScreen.show());
   <script src="assets/peace-conference.js?v=peace-1"></script>
   <script src="assets/politics-cabinet.js?v=pol-1"></script>
   <script src="assets/occupation.js?v=occ-1"></script>
+  <script src="assets/training-logistics.js?v=tl-1"></script>
   <script src="assets/MultiplayerTimeManager.js"></script>
   <!-- ==================== HOI4 大戦略 全画面レイヤー (../hoi4.html / H キー) ==================== -->
   <script src="hoi4-screen.js"></script>

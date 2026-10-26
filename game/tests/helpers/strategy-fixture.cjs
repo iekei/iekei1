@@ -175,6 +175,11 @@ function fixture() {
     { filename: "occupation.js" },
   );
   vm.runInContext(
+    fs.readFileSync(path.join(root, "assets/training-logistics.js"), "utf8"),
+    ctx,
+    { filename: "training-logistics.js" },
+  );
+  vm.runInContext(
     fs.readFileSync(path.join(root, "assets/espionage.js"), "utf8"),
     ctx,
     { filename: "espionage.js" },
