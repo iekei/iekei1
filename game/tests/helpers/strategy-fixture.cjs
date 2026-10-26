@@ -150,6 +150,11 @@ function fixture() {
     { filename: "air-force.js" },
   );
   vm.runInContext(
+    fs.readFileSync(path.join(root, "assets/espionage.js"), "utf8"),
+    ctx,
+    { filename: "espionage.js" },
+  );
+  vm.runInContext(
     fs.readFileSync(
       path.join(root, "assets/MultiplayerTimeManager.js"),
       "utf8",

@@ -707,6 +707,7 @@
   <link rel="stylesheet" href="assets/research-tree.css">
   <link rel="stylesheet" href="assets/equipment-designer.css?v=designer-3">
   <link rel="stylesheet" href="assets/intelligence-agency.css">
+  <link rel="stylesheet" href="assets/espionage.css?v=esp-1">
   <link rel="stylesheet" href="assets/strategy-systems.css">
   <link rel="stylesheet" href="assets/war-systems.css">
   <link rel="stylesheet" href="assets/division-designer.css?v=designer-1">
@@ -6867,6 +6868,7 @@ async function initGame() {
   if (typeof NewsManager !== 'undefined') NewsManager.init();   // ニュースイベント (世界の出来事を報道)
   if (typeof AIManager !== 'undefined') AIManager.init();       // 非プレイヤー国のAI自動操作 (史実準拠)
   if (typeof DLC !== 'undefined') DLC.onGameStart();   // 全DLC拡張 (ドクトリン/兵器設計/諜報/MIO・国際市場/講和会議/将軍特性)
+  if (typeof Espionage !== 'undefined') Espionage.init();   // 諜報機関: 政治力制アップグレードツリー・諜報員任務・インテル可視化
   StrategyGame.init();
   try {
     await ForceSystems.init();
@@ -6915,6 +6917,7 @@ window.addEventListener('DOMContentLoaded', () => StartScreen.show());
   <script src="assets/strategy-systems.js?v=designer-2"></script>
   <script src="assets/force-systems.js?v=roster-2"></script>
   <script src="assets/intelligence-agency.js"></script>
+  <script src="assets/espionage.js?v=esp-1"></script>
   <script src="assets/area-battle-plan.js"></script>
   <script src="assets/supply-network.js?v=supply-1"></script>
   <script src="assets/air-force.js?v=air-1"></script>
