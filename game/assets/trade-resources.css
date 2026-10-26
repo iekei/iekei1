@@ -5,7 +5,9 @@
 .tr-chip b { font-variant-numeric: tabular-nums; }
 .tr-chip.pos b { color: #7fc46a; } .tr-chip.neg b { color: #ff8a7a; } .tr-chip.neg { border-color: #8a3a30; }
 .tr-chip.go { margin-left: auto; color: #e3c06a; border-color: #c9a44c; padding: 2px 8px; }
-.tr-ic, .tr-chip i { display: inline-grid; place-items: center; width: 18px; height: 18px; font-size: 11px; font-style: normal; color: #0e1011; border-radius: 3px; }
+.tr-ic { display: inline-grid; place-items: center; width: 18px; height: 18px; font-size: 12px; font-style: normal; vertical-align: middle; border-radius: 3px; }
+img.tr-ic { object-fit: contain; width: auto; height: auto; filter: drop-shadow(0 1px 1px rgba(0,0,0,.6)); }
+.tr-eff img.tr-ic { vertical-align: -3px; }
 .tr-eff { display: inline-block; margin-left: 6px; padding: 1px 6px; font-size: 11px; border: 1px solid #3a4044; color: #7fc46a; }
 .tr-eff.warn { color: #ffb4a8; background: #3a1a16; border-color: #e04a3c; font-weight: 700; }
 .production-card.tr-short { box-shadow: inset 3px 0 0 #e04a3c; }

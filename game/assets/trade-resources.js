@@ -7,13 +7,22 @@
  */
 class TradeSystem {
   static RESOURCES = {
-    oil:      { id: 'oil',      name: '石油',       icon: '🛢', color: '#5a5a5a' },
-    steel:    { id: 'steel',    name: '鉄',         icon: '⛓', color: '#8a9aa8' },
-    aluminum: { id: 'aluminum', name: 'アルミニウム', icon: '▰', color: '#b9c4cc' },
-    tungsten: { id: 'tungsten', name: 'タングステン', icon: '◆', color: '#c9a44c' },
-    rubber:   { id: 'rubber',   name: 'ゴム',       icon: '◉', color: '#6f8f4f' },
-    chromium: { id: 'chromium', name: 'クロム',     icon: '⬟', color: '#7fb3d5' },
+    oil:      { id: 'oil',      name: '石油',       icon: '🛢', color: '#5a5a5a', img: '石油.png' },
+    steel:    { id: 'steel',    name: '鉄',         icon: '⛓', color: '#8a9aa8', img: '鋼材.png' },
+    aluminum: { id: 'aluminum', name: 'アルミニウム', icon: '▰', color: '#b9c4cc', img: 'アルミ.png' },
+    tungsten: { id: 'tungsten', name: 'タングステン', icon: '◆', color: '#c9a44c', img: 'タングステン.png' },
+    rubber:   { id: 'rubber',   name: 'ゴム',       icon: '◉', color: '#6f8f4f', img: 'ゴム.png' },
+    chromium: { id: 'chromium', name: 'クロム',     icon: '⬟', color: '#7fb3d5', img: 'クロム.png' },
   };
+  static IMG_DIR = 'ger/tec/p/image/';
+  static EXTRA_IMG = { factory: '民需工場.png', convoy: '輸送船.png', coal: '石炭.png' };
+  /** 資源アイコン (<img>)。k は資源ID または EXTRA_IMG のキー */
+  static icon(k, size = 18) {
+    const file = TradeSystem.RESOURCES[k]?.img || TradeSystem.EXTRA_IMG[k];
+    const name = TradeSystem.RESOURCES[k]?.name || ({ factory: '民需工場', convoy: '輸送船', coal: '石炭' })[k] || k;
+    if (!file) return '<i class="tr-ic">' + (TradeSystem.RESOURCES[k]?.icon || '◆') + '</i>';
+    return '<img class="tr-ic" src="' + TradeSystem.IMG_DIR + encodeURIComponent(file) + '" alt="' + name + '" title="' + name + '" width="' + size + '" height="' + size + '" decoding="async" onerror="this.outerHTML=\'<i class=&quot;tr-ic&quot;>' + (TradeSystem.RESOURCES[k]?.icon || '🏭') + '</i>\'">';
+  }
   static ORDER = ['oil', 'steel', 'aluminum', 'tungsten', 'rubber', 'chromium'];
   static UNIT = 8;   // 民需工場1 = 資源8
   // 国別の総産出 (1日あたり) プロファイル。未記載国は default
@@ -295,7 +304,7 @@ class TradeSystem {
     return '<div class="tr-header" onclick="GameUI.switchTab(\'trade\')" title="クリックで貿易画面へ">' + TradeSystem.ORDER.map(k => {
       const r = TradeSystem.RESOURCES[k], b = bal[k], net = Math.round(b.net);
       const cls = net < 0 ? 'neg' : net > 0 ? 'pos' : '';
-      return '<span class="tr-chip ' + cls + '" title="' + r.name + ': 産出 ' + b.production + ' + 輸入 ' + b.imports + ' − 輸出 ' + b.exports + ' − 需要 ' + b.demand.toFixed(1) + ' ／ 備蓄 ' + Math.floor(s.resources[k] || 0) + '"><i style="background:' + r.color + '">' + r.icon + '</i>' + r.name + ' <b>' + (net > 0 ? '+' : '') + net + '</b></span>';
+      return '<span class="tr-chip ' + cls + '" title="' + r.name + ': 産出 ' + b.production + ' + 輸入 ' + b.imports + ' − 輸出 ' + b.exports + ' − 需要 ' + b.demand.toFixed(1) + ' ／ 備蓄 ' + Math.floor(s.resources[k] || 0) + '">' + TradeSystem.icon(k, 18) + r.name + ' <b>' + (net > 0 ? '+' : '') + net + '</b></span>';
     }).join('') + '<span class="tr-chip go">📦 貿易 ›</span></div>';
   }
   static injectHeader(contentId) {
@@ -321,14 +330,15 @@ class TradeSystem {
       const costs = card.querySelector('.production-costs'); if (!costs) return;
       const stop = costs.querySelector('strong[role="status"]'); if (stop) stop.remove();
       const eff = line.efficiency == null ? 1 : line.efficiency;
-      const short = (line.shortage || []).map(k => TradeSystem.RESOURCES[k]?.icon + TradeSystem.RESOURCES[k]?.name).join(' ');
-      costs.insertAdjacentHTML('beforeend', '<span class="tr-eff ' + (eff < 0.999 ? 'warn' : 'ok') + '" title="' + (eff < 0.999 ? '資源不足: ' + short + ' — 貿易で輸入してください' : '資源充足') + '">' + (eff < 0.999 ? '⚠ ' : '✔ ') + '生産効率 ' + Math.round(eff * 100) + '%' + (eff < 0.999 ? ' (不足: ' + short + ')' : '') + '</span>');
+      const short = (line.shortage || []).map(k => TradeSystem.icon(k, 14) + TradeSystem.RESOURCES[k]?.name).join(' ');
+      const shortText = (line.shortage || []).map(k => TradeSystem.RESOURCES[k]?.name).join(' ');
+      costs.insertAdjacentHTML('beforeend', '<span class="tr-eff ' + (eff < 0.999 ? 'warn' : 'ok') + '" title="' + (eff < 0.999 ? '資源不足: ' + shortText + ' — 貿易で輸入してください' : '資源充足') + '">' + (eff < 0.999 ? '⚠ ' : '✔ ') + '生産効率 ' + Math.round(eff * 100) + '%' + (eff < 0.999 ? ' (不足: ' + short + ')' : '') + '</span>');
       card.classList.toggle('tr-short', eff < 0.999);
     });
   }
   static summaryLine(sid) {
     const r = TradeSystem.stateResources(sid);
-    const parts = TradeSystem.ORDER.filter(k => r[k]).map(k => TradeSystem.RESOURCES[k].icon + ' ' + TradeSystem.RESOURCES[k].name + ' ' + r[k]);
+    const parts = TradeSystem.ORDER.filter(k => r[k]).map(k => TradeSystem.icon(k, 14) + ' ' + TradeSystem.RESOURCES[k].name + ' ' + r[k]);
     return '<span style="font-size:11px;color:#c9b27a">⛏️ 資源: ' + (parts.length ? parts.join(' ／ ') : 'なし') + '</span>';
   }
 
@@ -351,25 +361,25 @@ class TradeSystem {
     }).join('') + '</tbody></table></div>';
     // 契約
     const myImports = TradeSystem.deals().filter(d => d.buyer === me), myExports = TradeSystem.deals().filter(d => d.seller === me);
-    html += '<div class="tr-cols"><div class="tr-section"><h4>輸入契約 <small>民需工場 ' + myImports.reduce((n, d) => n + d.factories, 0) + ' 使用</small></h4>' + (myImports.length ? myImports.map(d => '<div class="tr-deal"><span>' + TradeSystem.RESOURCES[d.resource].icon + ' ' + TradeSystem.esc(DiplomacyManager.nameOf(d.seller)) + ' → ' + TradeSystem.RESOURCES[d.resource].name + ' <b>' + d.amount + '</b>/日</span><span>🏭' + d.factories + '</span><button class="tr-btn small" onclick="TradeSystem.adjust(\'' + d.seller + '\',\'' + d.resource + '\',-1)">−8</button><button class="tr-btn small" onclick="TradeSystem.adjust(\'' + d.seller + '\',\'' + d.resource + '\',1)">+8</button></div>').join('') : '<p class="sn-help">輸入契約はありません。</p>') + '</div>' +
-      '<div class="tr-section"><h4>輸出契約 <small>民需工場 +' + myExports.reduce((n, d) => n + d.factories, 0) + ' 獲得</small></h4>' + (myExports.length ? myExports.map(d => '<div class="tr-deal"><span>' + TradeSystem.RESOURCES[d.resource].icon + ' ' + TradeSystem.esc(DiplomacyManager.nameOf(d.buyer)) + ' ← ' + TradeSystem.RESOURCES[d.resource].name + ' <b>' + d.amount + '</b>/日</span><span>🏭+' + d.factories + '</span><button class="tr-btn small danger" onclick="TradeSystem.cancelExport(\'' + d.buyer + '\',\'' + d.resource + '\')">破棄</button></div>').join('') : '<p class="sn-help">各国は不足資源を自国の余剰から自動で輸入します (輸出方針で制御)。</p>') + '</div></div>';
+    html += '<div class="tr-cols"><div class="tr-section"><h4>輸入契約 <small>民需工場 ' + myImports.reduce((n, d) => n + d.factories, 0) + ' 使用</small></h4>' + (myImports.length ? myImports.map(d => '<div class="tr-deal"><span>' + TradeSystem.icon(d.resource, 16) + ' ' + TradeSystem.esc(DiplomacyManager.nameOf(d.seller)) + ' → ' + TradeSystem.RESOURCES[d.resource].name + ' <b>' + d.amount + '</b>/日</span><span>🏭' + d.factories + '</span><button class="tr-btn small" onclick="TradeSystem.adjust(\'' + d.seller + '\',\'' + d.resource + '\',-1)">−8</button><button class="tr-btn small" onclick="TradeSystem.adjust(\'' + d.seller + '\',\'' + d.resource + '\',1)">+8</button></div>').join('') : '<p class="sn-help">輸入契約はありません。</p>') + '</div>' +
+      '<div class="tr-section"><h4>輸出契約 <small>民需工場 +' + myExports.reduce((n, d) => n + d.factories, 0) + ' 獲得</small></h4>' + (myExports.length ? myExports.map(d => '<div class="tr-deal"><span>' + TradeSystem.icon(d.resource, 16) + ' ' + TradeSystem.esc(DiplomacyManager.nameOf(d.buyer)) + ' ← ' + TradeSystem.RESOURCES[d.resource].name + ' <b>' + d.amount + '</b>/日</span><span>🏭+' + d.factories + '</span><button class="tr-btn small danger" onclick="TradeSystem.cancelExport(\'' + d.buyer + '\',\'' + d.resource + '\')">破棄</button></div>').join('') : '<p class="sn-help">各国は不足資源を自国の余剰から自動で輸入します (輸出方針で制御)。</p>') + '</div></div>';
     // 世界の輸出市場
     const countries = (typeof DiplomacyManager !== 'undefined' ? DiplomacyManager.countries : []).map(c => ({ ...c, surplus: TradeSystem.surplus(c.id), deals: TradeSystem.deals().filter(d => d.buyer === me && d.seller === c.id) }))
       .filter(c => filter === 'all' ? (TradeSystem.ORDER.some(k => c.surplus[k] >= TradeSystem.UNIT) || c.deals.length) : (c.surplus[filter] >= TradeSystem.UNIT || c.deals.some(d => d.resource === filter)))
       .sort((a, b) => (filter === 'all' ? TradeSystem.ORDER.reduce((n, k) => n + b.surplus[k], 0) - TradeSystem.ORDER.reduce((n, k) => n + a.surplus[k], 0) : b.surplus[filter] - a.surplus[filter]));
-    html += '<div class="tr-section"><h4>世界の輸出市場 <small>' + countries.length + 'か国</small><span class="tr-filter">' + ['all', ...TradeSystem.ORDER].map(k => '<button class="tr-btn small' + (filter === k ? ' on' : '') + '" onclick="TradeSystem.filter=\'' + k + '\';TradeSystem.render()">' + (k === 'all' ? '全て' : TradeSystem.RESOURCES[k].icon + ' ' + TradeSystem.RESOURCES[k].name) + '</button>').join('') + '</span></h4>' +
-      '<table class="tr-table market"><thead><tr><th>国</th>' + TradeSystem.ORDER.map(k => '<th><i class="tr-ic" style="background:' + TradeSystem.RESOURCES[k].color + '">' + TradeSystem.RESOURCES[k].icon + '</i> ' + TradeSystem.RESOURCES[k].name + '</th>').join('') + '</tr></thead><tbody>' +
+    html += '<div class="tr-section"><h4>世界の輸出市場 <small>' + countries.length + 'か国</small><span class="tr-filter">' + ['all', ...TradeSystem.ORDER].map(k => '<button class="tr-btn small' + (filter === k ? ' on' : '') + '" onclick="TradeSystem.filter=\'' + k + '\';TradeSystem.render()">' + (k === 'all' ? '全て' : TradeSystem.icon(k, 14) + ' ' + TradeSystem.RESOURCES[k].name) + '</button>').join('') + '</span></h4>' +
+      '<table class="tr-table market"><thead><tr><th>国</th>' + TradeSystem.ORDER.map(k => '<th>' + TradeSystem.icon(k, 18) + ' ' + TradeSystem.RESOURCES[k].name + '</th>').join('') + '</tr></thead><tbody>' +
       (countries.length ? countries.map(c => {
         const war = !TradeSystem.canTrade(me, c.id);
         return '<tr' + (war ? ' class="war"' : '') + '><td><b>' + TradeSystem.esc(c.name) + '</b>' + (war ? '<small>交戦中</small>' : '<small>' + c.id + (c.relation != null ? ' ／ 関係 ' + c.relation : '') + '</small>') + '</td>' + TradeSystem.ORDER.map(k => {
           const d = c.deals.find(x => x.resource === k), cur = d ? d.amount : 0, avail = c.surplus[k];
           if (!avail && !cur) return '<td class="dim">—</td>';
-          return '<td><div class="tr-cell"><small>余剰 ' + avail + '</small><div class="tr-ctl"><button class="tr-btn small" ' + (cur ? '' : 'disabled') + ' onclick="TradeSystem.adjust(\'' + c.id + '\',\'' + k + '\',-1)">−</button><b' + (cur ? ' class="pos"' : '') + '>' + cur + '</b><button class="tr-btn small" ' + (avail >= TradeSystem.UNIT && !war ? '' : 'disabled') + ' onclick="TradeSystem.adjust(\'' + c.id + '\',\'' + k + '\',1)">＋</button></div>' + (cur ? '<small>🏭' + cur / TradeSystem.UNIT + '</small>' : '') + '</div></td>';
+          return '<td><div class="tr-cell"><small>余剰 ' + avail + '</small><div class="tr-ctl"><button class="tr-btn small" ' + (cur ? '' : 'disabled') + ' onclick="TradeSystem.adjust(\'' + c.id + '\',\'' + k + '\',-1)">−</button><b' + (cur ? ' class="pos"' : '') + '>' + cur + '</b><button class="tr-btn small" ' + (avail >= TradeSystem.UNIT && !war ? '' : 'disabled') + ' onclick="TradeSystem.adjust(\'' + c.id + '\',\'' + k + '\',1)">＋</button></div>' + (cur ? '<small>' + TradeSystem.icon('factory', 12) + ' ' + cur / TradeSystem.UNIT + '</small>' : '') + '</div></td>';
         }).join('') + '</tr>';
       }).join('') : '<tr><td colspan="7" class="sn-help">条件に合う輸出国がありません。</td></tr>') + '</tbody></table></div>';
     // 自国の州別産出
     const states = Object.entries(MapRenderer.states || {}).filter(([, st]) => st.owner === me).map(([sid, st]) => [sid, st, TradeSystem.stateResources(sid)]).filter(([, , r]) => Object.keys(r).length);
-    html += '<div class="tr-section"><h4>自国領の資源産出 (州別)</h4><div class="tr-states">' + (states.length ? states.map(([sid, st, r]) => '<div class="tr-state" onclick="ConstructionManager.selectState(\'' + sid + '\')"><b>' + TradeSystem.esc(st.name || '州' + sid) + '</b>' + TradeSystem.ORDER.filter(k => r[k]).map(k => '<span><i class="tr-ic" style="background:' + TradeSystem.RESOURCES[k].color + '">' + TradeSystem.RESOURCES[k].icon + '</i>' + r[k] + '</span>').join('') + '</div>').join('') : '<p class="sn-help">資源を産出する州がありません。</p>') + '</div></div></div>';
+    html += '<div class="tr-section"><h4>自国領の資源産出 (州別)</h4><div class="tr-states">' + (states.length ? states.map(([sid, st, r]) => '<div class="tr-state" onclick="ConstructionManager.selectState(\'' + sid + '\')"><b>' + TradeSystem.esc(st.name || '州' + sid) + '</b>' + TradeSystem.ORDER.filter(k => r[k]).map(k => '<span>' + TradeSystem.icon(k, 18) + r[k] + '</span>').join('') + '</div>').join('') : '<p class="sn-help">資源を産出する州がありません。</p>') + '</div></div></div>';
     el.innerHTML = html;
   }
 }
