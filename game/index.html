@@ -721,6 +721,7 @@
   <link rel="stylesheet" href="assets/training-logistics.css?v=tl-1">
   <link rel="stylesheet" href="assets/factions.css?v=fs-1">
   <link rel="stylesheet" href="assets/superweapons.css?v=sw-2">
+  <link rel="stylesheet" href="assets/frontline-command.css?v=fc-1">
   <!-- HOI4 大戦略 全画面レイヤー (../hoi4.html を iframe で表示) -->
   <link rel="stylesheet" href="css/hoi4-screen.css">
   </head>
@@ -3125,7 +3126,8 @@ class MapRenderer {
           const pid = MapRenderer.provinceAt(wp[0], wp[1]);
           const owner = pid ? MapRenderer.ownerOf(pid) : null;
           const player = CoreEngine.gameState.country;
-          if (owner && owner !== player) DiplomacyManager.openFor(owner);
+          const handled = typeof FrontCommand !== 'undefined' && FrontCommand.rightClick(pid, wp);
+          if (!handled && owner && owner !== player) DiplomacyManager.openFor(owner);
         }
         rightDown = false;
       }
@@ -3219,6 +3221,7 @@ class MapRenderer {
     }
     if (ArmyRoster.frontTool) { ArmyRoster.placeFront(pid); return; }
     if (ArmyRoster.airdropTool) { ArmyRoster.airdrop(pid); return; }
+    if (typeof FrontCommand !== 'undefined' && FrontCommand.leftClick(pid, wp)) return;
     MapRenderer.selectProvince(pid);
   }
 
@@ -6890,6 +6893,7 @@ async function initGame() {
   if (typeof TrainingLogistics !== 'undefined') TrainingLogistics.init(); // 訓練・練度・兵站備蓄・補充優先度
   if (typeof FactionSystem !== 'undefined') FactionSystem.init();     // 陣営・世界緊張度・参戦要請
   if (typeof SuperWeapons !== 'undefined') SuperWeapons.init();       // 特殊計画・核・ミサイル
+  if (typeof FrontCommand !== 'undefined') FrontCommand.init();       // 前線・司令階層・強襲上陸
   TrainingManager.init();       // 徴兵・訓練 (師団は徴兵→訓練でのみ増える)
   CheatConsole.init();
   MultiplayerManager.init();
@@ -6959,6 +6963,7 @@ window.addEventListener('DOMContentLoaded', () => StartScreen.show());
   <script src="assets/training-logistics.js?v=tl-1"></script>
   <script src="assets/factions.js?v=fs-1"></script>
   <script src="assets/superweapons.js?v=sw-2"></script>
+  <script src="assets/frontline-command.js?v=fc-1"></script>
   <script src="assets/MultiplayerTimeManager.js"></script>
   <!-- ==================== HOI4 大戦略 全画面レイヤー (../hoi4.html / H キー) ==================== -->
   <script src="hoi4-screen.js"></script>

@@ -190,6 +190,11 @@ function fixture() {
     { filename: "superweapons.js" },
   );
   vm.runInContext(
+    fs.readFileSync(path.join(root, "assets/frontline-command.js"), "utf8"),
+    ctx,
+    { filename: "frontline-command.js" },
+  );
+  vm.runInContext(
     fs.readFileSync(path.join(root, "assets/espionage.js"), "utf8"),
     ctx,
     { filename: "espionage.js" },
