@@ -195,6 +195,11 @@ function fixture() {
     { filename: "frontline-command.js" },
   );
   vm.runInContext(
+    fs.readFileSync(path.join(root, "assets/ui-layout.js"), "utf8"),
+    ctx,
+    { filename: "ui-layout.js" },
+  );
+  vm.runInContext(
     fs.readFileSync(path.join(root, "assets/espionage.js"), "utf8"),
     ctx,
     { filename: "espionage.js" },
