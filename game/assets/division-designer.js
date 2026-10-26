@@ -97,20 +97,37 @@ class DivisionDesigner {
     DivisionDesigner.load();
   }
 
+  // 各大隊・支援中隊のアイコン (assets/land_units の 152×42 スプライト。左半分 76×42 のみ表示)
+  static ICON_FILES = {
+    infantry: 'unit_infantry_icon.png', cavalry: 'unit_cavalry_icon.png', marine: 'unit_marine_icon.png',
+    mountaineer: 'unit_mountain_icon.png', paratrooper: 'unit_paratroop_icon.png', ranger: 'unit_ranger_battalion_icon.png',
+    motorized: 'unit_motorized_icon.png', mechanized: 'unit_mechanized_icon.png',
+    light_armor: 'unit_light_tank_icon.png', armor: 'unit_medium_tank_icon.png', heavy_armor: 'unit_heavy_armor_icon.png',
+    artillery: 'unit_art_icon.png', rocket_artillery: 'unit_rocket_art_icon.png', anti_tank: 'unit_at_icon.png', anti_air: 'unit_anti_air_icon.png',
+    engineer: 'unit_engineer_icon.png', recon: 'unit_recon_icon.png', support_artillery: 'support_unit_art_icon.png',
+    support_anti_tank: 'support_unit_at_icon.png', support_anti_air: 'support_unit_anti_air_icon.png',
+    field_hospital: 'support_unit_field_hospital_icon.png', logistics: 'support_unit_logistics_company_icon.png',
+    signal: 'support_unit_signal_company_icon.png', maintenance: 'support_unit_maintenance_company_icon.png',
+    military_police: 'support_unit_military_police_icon.png',
+    jet_fighter: 'support_unit_hq_air_liason_icon.png', v2_rocket: 'unit_guided_missile_icon.png',
+    nuke_battalion: 'unit_super_heavy_artillery_icon.png', land_battleship: 'unit_land_cruiser_icon.png'
+  };
+  static ICON_SHEET_WIDTH = 152;   // 元画像幅 (2状態シート)
+  static ICON_WIDTH = 76;          // 表示する左側アイコンの幅
+  static ICON_HEIGHT = 42;
+
   static registerIcons() {
     if (typeof GameVisuals === 'undefined' || !GameVisuals.unitFiles) return;
-    Object.assign(GameVisuals.unitFiles, {
-      cavalry: 'unit_cavalry_icon.png', motorized: 'unit_motorized_icon.png', mechanized: 'unit_mechanized_icon.png',
-      light_armor: 'unit_light_tank_icon.png', armor: 'unit_medium_tank_icon.png', heavy_armor: 'unit_heavy_armor_icon.png',
-      artillery: 'unit_art_icon.png', rocket_artillery: 'unit_rocket_art_icon.png', anti_tank: 'unit_at_icon.png',
-      marine: 'unit_marine_icon.png', paratrooper: 'unit_paratroop_icon.png',
-      engineer: 'unit_engineer_icon.png', recon: 'unit_recon_icon.png', support_artillery: 'support_unit_art_icon.png',
-      support_anti_tank: 'support_unit_at_icon.png', support_anti_air: 'support_unit_anti_air_icon.png',
-      field_hospital: 'support_unit_field_hospital_icon.png', logistics: 'support_unit_logistics_company_icon.png',
-      signal: 'support_unit_signal_company_icon.png', maintenance: 'support_unit_maintenance_company_icon.png',
-      military_police: 'support_unit_military_police_icon.png', jet_fighter: 'unit_guided_missile_icon.png',
-      v2_rocket: 'unit_guided_missile_icon.png', land_battleship: 'unit_land_cruiser_icon.png'
-    });
+    Object.assign(GameVisuals.unitFiles, DivisionDesigner.ICON_FILES);   // 他画面 (GameVisuals.unit) にも同じ対応表を適用
+  }
+
+  static iconUrl(id) {
+    const file = DivisionDesigner.ICON_FILES[id] || DivisionDesigner.ICON_FILES.infantry;
+    try {
+      if (typeof GameVisuals !== 'undefined' && GameVisuals.url) return GameVisuals.url('land_unit_icons', file);
+      if (typeof AssetRegistry !== 'undefined') return AssetRegistry.getLocalAssetUrl('land_unit_icons', file).replace(/^game\//, '');
+    } catch (e) { /* fall through */ }
+    return 'assets/land_units/' + file;
   }
 
   // gameState からテンプレートを復元 (旧 divisionPresets も移行)
@@ -562,9 +579,15 @@ class DivisionDesigner {
   static esc(v) { return typeof GameTools !== 'undefined' ? GameTools.escape(v) : String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
   static fmt(v, digits = 1) { return Number(v || 0).toLocaleString('ja-JP', { maximumFractionDigits: digits, minimumFractionDigits: 0 }); }
 
+  // 152×42 シートの左半分 (76×42) だけを切り出して表示。画像が無い場合のみ絵文字にフォールバック
   static iconHtml(def) {
-    const img = typeof GameVisuals !== 'undefined' && GameVisuals.unit ? GameVisuals.unit(def) : '';
-    return '<span class="dd-icon" data-cat="' + def.category + '">' + img + '<span class="dd-emoji">' + def.icon + '</span></span>';
+    const file = DivisionDesigner.ICON_FILES[def.id] || DivisionDesigner.ICON_FILES.infantry;
+    const dims = (typeof GameAssetData !== 'undefined' && GameAssetData.units && GameAssetData.units[file]) || { width: DivisionDesigner.ICON_SHEET_WIDTH, height: DivisionDesigner.ICON_HEIGHT };
+    const sheetWidth = dims.width > DivisionDesigner.ICON_WIDTH ? dims.width : DivisionDesigner.ICON_WIDTH;   // 76px単体画像はそのまま
+    return '<span class="dd-icon" data-cat="' + def.category + '" role="img" aria-label="' + DivisionDesigner.esc(def.name) + '">' +
+      '<img src="' + DivisionDesigner.esc(DivisionDesigner.iconUrl(def.id)) + '" alt="" draggable="false" decoding="async" style="width:' + sheetWidth + 'px;height:' + dims.height + 'px" ' +
+      'onerror="this.parentNode.classList.add(\'dd-icon-missing\')">' +
+      '<span class="dd-emoji">' + def.icon + '</span></span>';
   }
 
   static tooltip(def) {

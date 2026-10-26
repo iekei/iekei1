@@ -181,12 +181,12 @@
 .dd-hint { margin: 8px 0 0; font-size: 11px; color: var(--dd-text-dim); max-width: 400px; }
 .dd-hint b { color: var(--dd-gold-2); }
 
-/* ユニットアイコン (GameVisuals の画像 + 絵文字フォールバック) */
-.dd-icon { position: relative; display: inline-grid; place-items: center; width: 76px; height: 42px; }
-.dd-icon .land-unit-icon { position: absolute; inset: 0; }
-.dd-icon .dd-emoji { font-size: 20px; line-height: 1; position: relative; z-index: 0; }
-.dd-icon:has(.land-unit-icon img:not([hidden])) .dd-emoji { opacity: 0; }
-.dd-icon .land-unit-icon { z-index: 1; }
+/* ユニットアイコン: assets/land_units の 152×42 シートから左半分 (76×42) のみ表示 */
+.dd-icon { position: relative; display: inline-block; width: 76px; height: 42px; overflow: hidden; flex: 0 0 76px; }
+.dd-icon img { position: absolute; left: 0; top: 50%; transform: translateY(-50%); max-width: none; image-rendering: auto; pointer-events: none; }
+.dd-icon .dd-emoji { display: none; }
+.dd-icon.dd-icon-missing img { display: none; }
+.dd-icon.dd-icon-missing .dd-emoji { display: grid; place-items: center; width: 100%; height: 100%; font-size: 20px; line-height: 1; }
 
 /* 右: ステータス */
 .dd-stats { display: flex; flex-direction: column; border-left: 1px solid var(--dd-border); background: var(--dd-bg-2); overflow-y: auto; min-height: 0; }
