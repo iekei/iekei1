@@ -43,8 +43,20 @@ export async function installMapUI(map) {
         '<div class="map-legend-row"><i class="map-legend-line thin"></i>補給ハブの分配範囲</div>',
         `<div class="map-legend-note">補給ハブ ${sum.hubs || 0} / 州 ${sum.provinces || 0} — 容量 ${sum.totalCapacity || 0}・需要 ${sum.totalDemand || 0}</div>`,
       ].join('');
+    } else if (mode === 'air') {
+      const regions = map.airWingManager?.allRegions?.() || [];
+      const own = regions.filter((r) => r.status === 'green').length;
+      legend.innerHTML = [
+        '<div class="map-legend-title">空軍 / 制空権</div>',
+        '<div class="map-legend-row"><i class="map-legend-dot ok"></i>自軍優勢（65%以上）</div>',
+        '<div class="map-legend-row"><i class="map-legend-dot low"></i>均衡（45〜64%）</div>',
+        '<div class="map-legend-row"><i class="map-legend-dot critical"></i>劣勢（45%未満）</div>',
+        '<div class="map-legend-row"><i class="map-legend-line"></i>自軍 / 敵軍の制空権割合バー</div>',
+        '<div class="map-legend-row">✈ 航空隊（基地） ・ ✈⚔ = CAS 支援中の戦闘</div>',
+        `<div class="map-legend-note">空域の円をクリックで制空権ウィンドウ（優勢 ${own} / ${regions.length}）</div>`,
+      ].join('');
     } else {
-      legend.textContent = { land:'陸軍：歴史国境・海岸線・師団', air:'空軍：空域・制空権・航空基地', naval:'海軍：海域・制海権・艦隊' }[mode] || '';
+      legend.textContent = { land:'陸軍：歴史国境・海岸線・師団', naval:'海軍：海域・制海権・艦隊' }[mode] || '';
     }
     if (mode === 'supply') map.renderSupplyNetwork();
     if (map.airNavalRenderer) map.airNavalRenderer();

@@ -1,0 +1,595 @@
+/* ==========================================================================
+   air.css — 空軍（航空隊・航空基地・空域任務）UI
+   ・空軍画面（航空隊カード / 空域カード / 航空基地一覧）
+   ・空域情報ウィンドウ（制空権の自軍/敵軍割合）
+   ・マップ州パネル（インフラ・補給ハブ・航空基地の建設ボタン）
+   読み込み順: supply.css の後
+   ========================================================================== */
+
+/* ============================================================ 空軍画面 */
+
+.air-screen { min-height: 0; }
+.air-root { display: flex; flex-direction: column; gap: 9px; min-height: 0; flex: 1 1 auto; }
+
+/* ---------- ヘッダー ---------- */
+.air-head {
+  position: relative;
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  padding: 10px 12px;
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(94, 158, 199, .14), transparent 60%),
+    linear-gradient(180deg, #2a323a 0%, #1b2127 100%);
+  border: 1px solid #0a0d10;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06), 0 3px 10px rgba(0, 0, 0, .35);
+}
+.air-head::before,
+.air-head::after {
+  content: '';
+  position: absolute;
+  width: 10px; height: 10px;
+  pointer-events: none;
+  opacity: .7;
+}
+.air-head::before { top: 2px; left: 2px; border-top: 1px solid var(--gold-dim); border-left: 1px solid var(--gold-dim); }
+.air-head::after { bottom: 2px; right: 2px; border-bottom: 1px solid var(--gold-dim); border-right: 1px solid var(--gold-dim); }
+
+.air-head-left { flex: 1 1 460px; min-width: 0; }
+.air-title { display: flex; align-items: baseline; gap: 9px; }
+.air-title-main {
+  font-family: var(--mil-font);
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: .14em;
+  color: var(--gold);
+  text-shadow: 0 1px 0 #000, 0 0 12px rgba(230, 194, 104, .2);
+}
+.air-title-sub { font-family: var(--mil-font); font-size: 8.5px; letter-spacing: .22em; color: var(--text-dim); }
+
+.air-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.air-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  padding: 2px 7px;
+  background: #11161a;
+  border: 1px solid #2a3239;
+  border-radius: 2px;
+  white-space: nowrap;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .03);
+}
+.air-chip .k { font-size: 8.5px; color: #7b8791; }
+.air-chip b { font-family: var(--mil-font); font-size: 10.5px; color: #dfe6eb; }
+.air-chip.good b { color: var(--green); }
+.air-chip.warn b { color: var(--yellow); }
+.air-chip.bad b { color: var(--red); }
+
+.air-head-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; min-width: 260px; }
+.air-status-items { display: flex; gap: 4px; }
+.air-status-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 7px;
+  border: 1px solid #2a3239;
+  border-radius: 2px;
+  background: #11161a;
+  font-size: 9.5px;
+  color: var(--text-dim);
+}
+.air-status-item b { font-family: var(--mil-font); font-size: 11px; color: #e7edf1; }
+.air-status-item.green { border-color: rgba(126, 200, 80, .4); }
+.air-status-item.green b { color: var(--green); }
+.air-status-item.yellow { border-color: rgba(224, 185, 62, .45); }
+.air-status-item.yellow b { color: var(--yellow); }
+.air-status-item.red { border-color: rgba(208, 80, 56, .5); }
+.air-status-item.red b { color: var(--red); }
+
+.air-stock { display: flex; flex-wrap: wrap; gap: 3px; justify-content: flex-end; }
+.air-stock-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 6px;
+  font-size: 9px;
+  color: #a8b3bd;
+  background: #11161a;
+  border: 1px solid #2a3239;
+  border-left-width: 2px;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+.air-stock-item .ico { font-size: 10px; }
+.air-head-btns { display: flex; gap: 5px; }
+.air-head-btns .steel-btn { padding: 5px 10px; font-size: 11px; }
+
+/* ---------- レイアウト ---------- */
+.air-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 9px;
+  align-items: start;
+  min-height: 0;
+}
+.air-col { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+.air-col-wings { min-width: 0; }
+.air-col-regions { min-width: 0; }
+.air-section-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.air-section-head .section-title { margin: 0; flex: 0 1 auto; }
+.air-hint { font-size: 9px; color: #6d7a85; margin-left: auto; }
+
+/* ---------- フィルタ / 編成 ---------- */
+.air-filter { display: flex; gap: 3px; margin-left: auto; flex-wrap: wrap; }
+.air-filter-btn {
+  padding: 2px 7px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-dim);
+  background: linear-gradient(180deg, #262e35, #161b20);
+  border: 1px solid #0a0d10;
+  border-radius: 2px;
+  box-shadow: 0 2px 0 #0b0e11, inset 0 1px 0 rgba(255, 255, 255, .05);
+}
+.air-filter-btn:hover { color: #e8eef2; background: #333c45; }
+.air-filter-btn.active {
+  color: #10141a;
+  background: linear-gradient(180deg, #d7c58e, #9a8248);
+  text-shadow: 0 1px 0 rgba(255, 245, 210, .45);
+}
+
+.air-create {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+  padding: 6px 8px;
+  background: linear-gradient(180deg, #20272e, #161b20);
+  border: 1px solid #0a0d10;
+  border-left: 2px solid var(--gold-dim);
+  border-radius: 3px;
+}
+.air-create-label {
+  font-family: var(--mil-font);
+  font-size: 9px;
+  letter-spacing: .14em;
+  color: var(--gold);
+  margin-right: 3px;
+  white-space: nowrap;
+}
+.air-create .steel-select,
+.air-create .steel-input { padding: 2px 5px; font-size: 10.5px; height: 24px; }
+.air-create .steel-btn { padding: 3px 10px; font-size: 11px; }
+
+/* ---------- 航空隊カード ---------- */
+.air-wings { display: flex; flex-direction: column; gap: 6px; }
+.air-wing {
+  position: relative;
+  padding: 8px 10px 9px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .025), transparent 40%),
+    linear-gradient(180deg, #232a31 0%, #171c21 100%);
+  border: 1px solid #0a0d10;
+  border-left: 3px solid var(--air-color, #8b96a0);
+  border-radius: 3px;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, .4), inset 0 1px 0 rgba(255, 255, 255, .04);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.air-wing-head { display: flex; align-items: center; gap: 8px; }
+.air-wing-icon {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  color: var(--air-color, #8b96a0);
+  background: #0d1114;
+  border: 1px solid var(--air-color, #333c45);
+  border-radius: 3px;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, .8);
+}
+.air-wing-name { flex: 1 1 auto; min-width: 0; }
+.air-wing-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #e7edf1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.air-wing-sub { display: flex; gap: 3px; font-size: 9px; color: #7b8791; white-space: nowrap; overflow: hidden; }
+.air-wing-sub .sep { opacity: .45; }
+.air-wing-count { display: flex; align-items: baseline; gap: 2px; }
+.air-wing-count b { font-family: var(--mil-font); font-size: 17px; color: #f0f4f7; }
+.air-wing-count span { font-size: 9px; color: #8b96a0; }
+
+.air-wing-missions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.air-mission-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 6px;
+  font-size: 9.5px;
+  color: #e7edf1;
+  background: #11161a;
+  border: 1px solid #2a3239;
+  border-radius: 2px;
+}
+.air-mission-badge.idle { color: #7b8791; }
+.air-wing-region { font-size: 9px; color: #7b8791; }
+
+.air-wing-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.air-wing-stat { display: flex; align-items: center; gap: 5px; }
+.air-wing-stat .k { font-size: 8.5px; color: #7b8791; width: 34px; flex: 0 0 34px; }
+.air-stat-bar { flex: 1 1 auto; height: 9px; }
+.air-stat-bar > i { background: linear-gradient(90deg, #6fa9cf, #3f7fa6); }
+.air-stat-bar.good > i { background: linear-gradient(90deg, #8fd06a, #4d7a2f); }
+.air-stat-bar.warn > i { background: linear-gradient(90deg, #e8cc72, #a8862f); }
+.air-stat-bar.bad > i { background: linear-gradient(90deg, #e0775c, #8f2f1f); }
+.air-stat-bar > b { font-size: 7.5px; }
+
+.air-wing-assign { display: flex; gap: 4px; flex-wrap: wrap; }
+.air-wing-assign .steel-select { flex: 1 1 110px; min-width: 0; padding: 2px 5px; font-size: 10px; height: 24px; }
+.air-wing-assign .steel-btn { padding: 3px 8px; font-size: 10.5px; }
+.air-wing-ops { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
+.air-wing-ops .steel-select { flex: 1 1 120px; min-width: 0; padding: 2px 5px; font-size: 10px; height: 24px; }
+.air-wing-ops .steel-btn { padding: 2px 7px; font-size: 10px; }
+
+/* ---------- 空域カード ---------- */
+.air-regions { display: flex; flex-direction: column; gap: 6px; }
+.air-region {
+  padding: 7px 10px 8px;
+  background: linear-gradient(180deg, #232a31 0%, #171c21 100%);
+  border: 1px solid #0a0d10;
+  border-left: 3px solid #55606a;
+  border-radius: 3px;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, .4), inset 0 1px 0 rgba(255, 255, 255, .04);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.air-region.status-green { border-left-color: var(--green); }
+.air-region.status-yellow { border-left-color: var(--yellow); }
+.air-region.status-red { border-left-color: var(--red); }
+.air-region-top { display: flex; align-items: center; gap: 8px; }
+.air-region-top b { flex: 1 1 auto; font-size: 12.5px; color: #e7edf1; }
+.air-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 6px;
+  font-size: 9.5px;
+  color: #c8d2da;
+  background: #11161a;
+  border: 1px solid #2a3239;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+.air-status-badge.green { border-color: rgba(126, 200, 80, .45); color: #b6d99b; }
+.air-status-badge.yellow { border-color: rgba(224, 185, 62, .5); color: #e3c977; }
+.air-status-badge.red { border-color: rgba(208, 80, 56, .55); color: #f0a393; }
+
+.air-sup-bar {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 14px;
+  border: 1px solid #0a0d10;
+  border-radius: 2px;
+  overflow: hidden;
+  background: #0c1013;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, .9);
+}
+.air-sup-bar > i {
+  display: block;
+  height: 100%;
+  transition: width .45s ease;
+}
+.air-sup-bar > i.own {
+  background: linear-gradient(180deg, #8fd0f0, #3f7fa6);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35);
+}
+.air-sup-bar > i.enemy {
+  background: linear-gradient(180deg, #d4694c, #7a2b1f);
+}
+.air-sup-own,
+.air-sup-enemy {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--mil-font);
+  font-size: 8.5px;
+  font-weight: 800;
+  color: #06131c;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .25);
+  pointer-events: none;
+}
+.air-sup-own { left: 5px; }
+.air-sup-enemy { right: 5px; color: #ffe6dc; text-shadow: 0 1px 0 rgba(0, 0, 0, .6); }
+
+.air-region-meta { display: flex; gap: 4px; font-size: 9.5px; color: #8b96a0; flex-wrap: wrap; }
+.air-region-meta .sep { opacity: .4; }
+.air-region-bonus { display: flex; align-items: baseline; gap: 4px; font-size: 9.5px; color: #8b96a0; flex-wrap: wrap; }
+.air-region-bonus .k { color: #7b8791; }
+.air-region-bonus b { font-family: var(--mil-font); font-size: 10.5px; color: #ffd76a; }
+.air-region-bonus .sep { opacity: .4; }
+.air-region .steel-btn { align-self: flex-start; padding: 2px 8px; font-size: 10px; }
+
+/* ---------- 航空基地一覧 ---------- */
+.air-bases { display: flex; flex-direction: column; gap: 4px; }
+.air-base {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  background: linear-gradient(180deg, #20272e, #161b20);
+  border: 1px solid #0a0d10;
+  border-radius: 2px;
+}
+.air-base.empty { opacity: .72; }
+.air-base-left { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.air-base-name { display: flex; align-items: baseline; gap: 6px; font-size: 11px; color: #dfe6eb; }
+.air-base-name b { font-family: var(--mil-font); font-size: 10px; color: #9fd0ee; }
+.air-base-none { font-size: 9px; color: #d08a6a; }
+.air-base-cap { display: flex; align-items: center; gap: 6px; font-size: 9px; color: #7b8791; white-space: nowrap; }
+.air-base-bar { flex: 1 1 auto; height: 6px; min-width: 50px; }
+.air-base-bar > i { background: linear-gradient(90deg, #9fd0ee, #3f7fa6); }
+.air-base-right { flex: 0 0 auto; }
+.air-base-build { padding: 3px 8px; font-size: 10px; white-space: nowrap; }
+.air-base-queue { display: flex; flex-direction: column; gap: 2px; font-size: 8.5px; color: #e0b93e; min-width: 120px; }
+.air-base-queue .mil-bar { height: 6px; }
+.air-base-queue .mil-bar > i { background: repeating-linear-gradient(90deg, #d9bd74 0 5px, #8a6f35 5px 7px); }
+
+.air-pips { display: flex; gap: 2px; }
+.air-pip {
+  width: 12px;
+  height: 6px;
+  background: #0c1013;
+  border: 1px solid #0a0d10;
+  border-radius: 1px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, .9);
+}
+.air-pips.base .air-pip { width: 16px; height: 7px; }
+.air-pip.on { box-shadow: 0 0 5px rgba(94, 158, 199, .35), inset 0 1px 0 rgba(255, 255, 255, .3); }
+
+.air-empty {
+  padding: 16px 10px;
+  text-align: center;
+  font-size: 10.5px;
+  color: #6d7a85;
+  background: rgba(0, 0, 0, .18);
+  border: 1px dashed #333c45;
+  border-radius: 3px;
+}
+
+/* ============================================================ 空域情報ウィンドウ */
+
+.air-region-modal { display: flex; flex-direction: column; gap: 8px; }
+.air-region-window-head { display: flex; align-items: flex-start; gap: 10px; }
+.air-region-window-title {
+  font-family: var(--mil-font);
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  color: var(--gold);
+  text-shadow: 0 1px 0 #000;
+}
+.air-region-window-meta { display: flex; align-items: center; gap: 8px; margin-top: 3px; }
+.air-region-window-pct { font-size: 11px; color: #c8d2da; }
+.air-region-modal .air-sup-bar { height: 20px; }
+.air-region-modal .air-sup-own,
+.air-region-modal .air-sup-enemy { font-size: 10px; }
+
+.air-region-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 4px;
+}
+.air-region-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 4px 8px;
+  background: #14191e;
+  border: 1px solid #262e35;
+  border-radius: 2px;
+}
+.air-region-stat .k { font-size: 8.5px; color: #7b8791; }
+.air-region-stat b { font-family: var(--mil-font); font-size: 12px; color: #e6edf2; }
+.air-region-stat.good b { color: var(--green); }
+.air-region-stat.warn b { color: var(--yellow); }
+.air-region-window-note {
+  font-size: 9.5px;
+  color: #8b96a0;
+  padding: 5px 8px;
+  background: rgba(94, 158, 199, .08);
+  border: 1px solid rgba(94, 158, 199, .3);
+  border-radius: 2px;
+}
+
+.air-region-wings { display: flex; flex-direction: column; gap: 4px; }
+.air-region-wing {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 8px;
+  background: linear-gradient(180deg, #20272e, #161b20);
+  border: 1px solid #0a0d10;
+  border-left: 3px solid var(--air-color, #8b96a0);
+  border-radius: 2px;
+}
+.air-region-wing-name { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
+.air-region-wing-name b { font-size: 11.5px; color: #e7edf1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.air-region-wing-sub { font-size: 9px; color: #7b8791; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.air-region-wing .steel-select { flex: 0 0 132px; padding: 2px 5px; font-size: 10px; height: 24px; }
+.air-region-wing .steel-btn { padding: 2px 7px; font-size: 10px; }
+
+.air-region-assign { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
+.air-region-assign .steel-select { flex: 1 1 150px; min-width: 0; padding: 2px 5px; font-size: 10.5px; height: 26px; }
+
+.air-region-provinces { display: flex; flex-direction: column; gap: 3px; }
+.air-region-province {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 3px 8px;
+  background: #14191e;
+  border: 1px solid #262e35;
+  border-radius: 2px;
+  font-size: 10px;
+  color: #c8d2da;
+}
+.air-region-province b { color: #e7edf1; font-size: 11px; min-width: 90px; }
+
+.air-region-foot { display: flex; justify-content: flex-end; gap: 6px; margin-top: 2px; }
+
+/* ============================================================ マップ州パネル */
+
+.province-panel {
+  position: absolute;
+  top: 92px;
+  right: 12px;
+  width: 264px;
+  max-height: calc(100% - 150px);
+  overflow: auto;
+  z-index: 30;
+  padding: 9px 10px 10px;
+  background: linear-gradient(180deg, #242c34 0%, #14191e 100%);
+  border: 1px solid #0a0d10;
+  border-radius: 3px;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, .6), inset 0 1px 0 rgba(255, 255, 255, .07);
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  animation: provIn .16s ease-out;
+}
+@keyframes provIn {
+  from { opacity: 0; transform: translateX(8px); }
+  to { opacity: 1; transform: none; }
+}
+.prov-head { display: flex; align-items: center; gap: 6px; }
+.prov-title { display: flex; align-items: baseline; gap: 6px; flex: 1 1 auto; min-width: 0; }
+.prov-name {
+  font-family: var(--mil-font);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: .06em;
+  color: var(--gold);
+  text-shadow: 0 1px 0 #000;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.prov-capital {
+  font-family: var(--mil-font);
+  font-size: 8px;
+  padding: 1px 4px;
+  color: #1b1408;
+  background: linear-gradient(180deg, #f0d48a, #b28f45);
+  border-radius: 2px;
+}
+.prov-tag { font-size: 9px; color: #8b96a0; }
+.prov-close {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+  color: #8b96a0;
+  background: #1c2228;
+  border: 1px solid #0a0d10;
+  border-radius: 2px;
+}
+.prov-close:hover { color: #ff8a70; border-color: #6b3a30; background: rgba(208, 80, 56, .18); }
+.prov-meta { display: flex; gap: 4px; flex-wrap: wrap; font-size: 9px; color: #7b8791; }
+.prov-meta .sep { opacity: .4; }
+.prov-damage { color: #e08a6a; }
+
+.prov-rows { display: flex; flex-direction: column; gap: 5px; }
+.prov-row {
+  padding: 5px 7px 6px;
+  background: #131a1f;
+  border: 1px solid #262e35;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.prov-row-top { display: flex; align-items: baseline; gap: 6px; }
+.prov-row-label { flex: 1 1 auto; font-size: 10.5px; color: #cfd8df; }
+
+.prov-row-level { font-family: var(--mil-font); font-size: 10px; color: #9fd0ee; }
+.prov-row-note { font-size: 8.5px; color: #7b8791; line-height: 1.35; }
+.prov-build { align-self: flex-start; padding: 2px 10px; font-size: 10px; margin-top: 1px; }
+
+.prov-wings { display: flex; flex-direction: column; gap: 3px; }
+.prov-wings-title { font-size: 9px; color: #7b8791; letter-spacing: .06em; }
+.prov-wing {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 6px;
+  background: #131a1f;
+  border: 1px solid #262e35;
+  border-left: 2px solid var(--air-color, #8b96a0);
+  border-radius: 2px;
+  font-size: 10px;
+  color: #dfe6eb;
+}
+.prov-wing .air-wing-icon { width: 18px; height: 18px; flex: 0 0 18px; font-size: 10px; }
+.prov-wing-name { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.prov-wing-count { font-family: var(--mil-font); font-size: 10px; color: #9fd0ee; }
+.prov-wing-mission { font-size: 8.5px; color: #7b8791; white-space: nowrap; }
+
+.prov-foot { display: flex; gap: 5px; }
+.prov-foot .steel-btn { flex: 1 1 auto; padding: 4px 6px; font-size: 10.5px; }
+
+/* ============================================================ マップ表示 */
+
+#map-air .air-region-circle { transition: fill-opacity .15s; }
+#map-air .air-region-circle:hover { fill-opacity: .26; stroke-width: 3.5; }
+#map-air .map-air-icon { cursor: pointer; }
+
+.cas-marker {
+  animation: casPulse 1.6s ease-in-out infinite;
+  filter: drop-shadow(0 0 4px rgba(255, 215, 106, .8));
+}
+@keyframes casPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .35; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cas-marker { animation: none; }
+}
+
+/* ============================================================ 建設画面の航空基地行 */
+
+.air-build-btn { min-width: 118px; }
+
+/* ============================================================ レスポンシブ */
+
+@media (max-width: 1080px) {
+  .air-grid { grid-template-columns: 1fr; }
+  .air-col-regions { order: 2; }
+}
+@media (max-width: 700px) {
+  .air-head-right { align-items: flex-start; width: 100%; }
+  .air-stock { justify-content: flex-start; }
+  .air-wing-stats { grid-template-columns: 1fr; }
+  .air-region-wing { flex-wrap: wrap; }
+  .air-region-wing .steel-select { flex: 1 1 120px; }
+  .province-panel {
+    top: auto;
+    bottom: 10px;
+    right: 8px;
+    left: 8px;
+    width: auto;
+    max-height: 52%;
+  }
+}

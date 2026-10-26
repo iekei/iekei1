@@ -12,6 +12,7 @@ import { PROVINCES, PROVINCE_BY_ID, terrainInfo } from '../map-data.js';
 import {
   SUPPLY, SUPPLY_BUILDINGS, SUPPLY_STATUS_COLOR, SUPPLY_STATUS_LABEL,
 } from '../supply.js';
+import { airbaseRow } from './air-ui.js';
 
 const STATUS_ORDER = { critical: 0, low: 1, ok: 2, none: 3 };
 
@@ -273,6 +274,10 @@ export function renderSupplyConstruction(ctx) {
       hubRow.appendChild(pips(supply.hubLevel(p.id), SUPPLY.HUB_MAX, 'hub'));
       hubRow.appendChild(buildButton(p, 'supply_hub'));
       levels.appendChild(hubRow);
+
+      // 航空基地（空軍システムと共用の建設キュー）
+      const abRow = airbaseRow(ctx, p, () => drawAll());
+      if (abRow) levels.appendChild(abRow);
       card.appendChild(levels);
 
       /* 補給数値 */

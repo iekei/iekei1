@@ -623,8 +623,8 @@ export class BattlePlanManager {
     return battle;
   }
 
-  /** 攻撃側の戦闘力（計画準備ボーナス + ドクトリン） */
-  _attackerPower(plan, battle) {
+  /** 攻撃側の戦闘力（計画準備ボーナス + ドクトリン + CAS 支援） */
+  _attackerPower(plan, battle, cas = null) {
     let power = 0;
     // 戦闘幅を超える師団は予備として待機（攻撃力に寄与しない）
     for (const id of battle.attackerIds.slice(0, battle.width || 6)) {
@@ -642,7 +642,14 @@ export class BattlePlanManager {
     const spiritOrg = this.state.getModifier?.('org') || 0;
     const bonus = (1 + (effects.soft || 0) * 0.5 + (effects.breakthrough || 0) * 0.5
       + (spiritSoft + spiritBreak) * 0.5) * (1 + spiritOrg * 0.5);
-    return Math.max(1, power * bonus);
+    // 近接航空支援（CAS）: 戦闘中の州上空に CAS 任務の航空隊がいれば攻撃力ボーナス
+    const airBonus = 1 + Math.max(0, Math.min(0.35, cas?.bonus || 0));
+    return Math.max(1, power * bonus * airBonus);
+  }
+
+  /** その州の戦闘に参加できる CAS 支援（航空隊システムが無ければ null） */
+  _casSupport(provinceId) {
+    return this.state._airWingMgr?.battleSupport?.(provinceId) || null;
   }
 
   _tickBattles(hours) {
@@ -653,7 +660,13 @@ export class BattlePlanManager {
       const terrain = terrainInfo(province?.terrain);
       battle.hours += hours;
 
-      const attackerPower = this._attackerPower(plan, battle);
+      // 近接航空支援（CAS）: 制空権に応じた直接ダメージと攻撃力ボーナス
+      const cas = this._casSupport(battle.provinceId);
+      battle.cas = cas
+        ? { bonus: cas.bonus, damage: cas.damage, wingCount: cas.wingCount, aircraft: cas.aircraft, ownPct: cas.ownPct }
+        : null;
+
+      const attackerPower = this._attackerPower(plan, battle, cas);
       const defenderPower = battle.defender.power * (1 + terrain.defense);
 
       // 防御側の組織力・HPを削る
@@ -661,6 +674,14 @@ export class BattlePlanManager {
       const hpDamage = orgDamage * 0.30;
       battle.defender.org = Math.max(0, battle.defender.org - orgDamage);
       battle.defender.hp = Math.max(0, battle.defender.hp - hpDamage);
+
+      // CAS の直接ダメージ（地上部隊への航空攻撃）
+      if (cas && cas.damage > 0) {
+        const casDamage = cas.damage * hours;
+        battle.defender.org = Math.max(0, battle.defender.org - casDamage);
+        battle.defender.hp = Math.max(0, battle.defender.hp - casDamage * 0.5);
+        battle.casDamage = (battle.casDamage || 0) + casDamage;
+      }
 
       // 攻撃側の損耗（反撃）
       const playerDefense = this.state.getModifier?.('defense') || 0;
@@ -757,6 +778,7 @@ export class BattlePlanManager {
       attackerName: `${battle.attackerIds.length}個師団`,
       defenderName: `${province?.name || battle.provinceId} 守備隊`,
       advantage: battle.advantage,
+      cas: battle.cas || null,
       intensity: Math.min(0.95, 0.25 + battle.hours / 120),
     };
     if (!bubble) { this.state.combatBubbles.push({ ...data }); }

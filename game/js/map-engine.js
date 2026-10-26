@@ -70,6 +70,7 @@ export class MapEngine {
     this.combatBubbles = new Map(); // bubbleId -> <g>
     this.airNavalRenderer = null; // () => void 外部（air-naval.js）から設定
     this.supplyManager = null;    // SupplyManager（main.js から接続）
+    this.airWingManager = null;   // AirWingManager（main.js から接続）
     this._build();
     this.mapMode = 'land';
     this.mapReady = installMapUI(this);
@@ -273,7 +274,7 @@ export class MapEngine {
     }
 
     // 航空基地レベルインジケータ
-    if (p.airbase && p.airbase > 0) {
+    if ((this.airWingManager?.airbaseLevel?.(p.id) ?? p.airbase ?? 0) > 0) {
       const ab = document.createElementNS(SVGNS, 'circle');
       ab.setAttribute('cx', p.x - 9);
       ab.setAttribute('cy', p.y - 9);
@@ -292,7 +293,8 @@ export class MapEngine {
       <div style="font-weight:700;letter-spacing:.08em;font-family:var(--mil-font);color:var(--gold);">${p.name}</div>
       <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">${nationName(p.tag)}（${nat?.ideology || '-'}）</div>
       <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">地形：${I18N.terrainName(p.terrain) || t.name}</div>
-      <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">航空基地Lv${p.airbase || 0} / 海軍基地Lv${p.naval || 0}</div>
+      <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">航空基地Lv${this.airWingManager?.airbaseLevel?.(p.id) ?? (p.airbase || 0)} / 海軍基地Lv${p.naval || 0}</div>
+      ${this._airTooltip(p)}
       <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">VP: ${p.vp || 0}${p.capital ? '（首都）' : ''}</div>
       <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">移動コスト：${moveSpeedMultiplier(p.terrain).toFixed(2)}x</div>
       ${supplyTip}
@@ -325,6 +327,43 @@ export class MapEngine {
   }
 
   playerCapital() { return this._capital || PROVINCES[0]; }
+
+  /* ================= 航空隊 ================= */
+
+  /** AirWingManager を接続（main.js から） */
+  setAirWingManager(mgr) {
+    this.airWingManager = mgr;
+    return this;
+  }
+
+  /** 州ツールチップ用の航空情報 */
+  _airTooltip(p) {
+    const mgr = this.airWingManager;
+    if (!mgr) return '';
+    const info = mgr.provinceInfo?.(p.id);
+    if (!info) return '';
+    const region = info.regionId ? mgr.regionInfo(info.regionId) : null;
+    const label = { fighter: '戦闘機', cas: 'CAS', strategic_bomber: '戦略爆撃機' };
+    const lines = [];
+    if (info.level > 0) {
+      lines.push(`<div style="font-size:11px;color:var(--text-dim);margin-top:2px;">航空基地：Lv${info.level}（${info.used} / ${info.capacity} 機）</div>`);
+    } else if (info.queued) {
+      lines.push(`<div style="font-size:11px;color:#e0b93e;margin-top:2px;">航空基地：建設中（Lv${info.queued.targetLevel}）</div>`);
+    }
+    if (info.wings.length) {
+      const byType = {};
+      for (const w of info.wings) byType[w.type] = (byType[w.type] || 0) + w.count;
+      lines.push(`<div style="font-size:11px;color:#5e9ec7;margin-top:2px;">配備：${Object.entries(byType).map(([t, n]) => `${label[t] || t} ×${n}`).join(' / ')}</div>`);
+    }
+    if (region) {
+      lines.push(`<div style="font-size:11px;color:var(--text-dim);margin-top:2px;">空域：${region.name}（自軍 ${region.ownPct}% / 敵軍 ${region.enemyPct}%）</div>`);
+    }
+    lines.push(`<div style="font-size:11px;color:var(--text-dim);margin-top:2px;">工場：${mgr.factoryCount(p.id)}</div>`);
+    if (p.airDamage > 0 || p.factoryDamage > 0) {
+      lines.push(`<div style="font-size:11px;color:#e08a6a;margin-top:2px;">爆撃被害：施設 ${Math.round(p.airDamage || 0)}% / 工場 ${Math.round(p.factoryDamage || 0)}%</div>`);
+    }
+    return lines.join('');
+  }
 
   /* ================= 補給網 ================= */
 
@@ -988,6 +1027,20 @@ export class MapEngine {
         : cb.advantage === 'red' ? '防御側優勢' : '均衡';
       g.appendChild(advTxt);
 
+      // CAS 支援中マーカー（航空機アイコン）
+      if (cb.cas) {
+        const air = document.createElementNS(SVGNS, 'text');
+        air.setAttribute('x', p.x + r - 2);
+        air.setAttribute('y', p.y - r + 2);
+        air.setAttribute('fill', '#ffd76a');
+        air.setAttribute('font-size', '13');
+        air.setAttribute('font-weight', '900');
+        air.setAttribute('text-anchor', 'middle');
+        air.setAttribute('class', 'cas-marker');
+        air.textContent = '✈';
+        g.appendChild(air);
+      }
+
       // ツールチップ
       const tipHtml = `
         <div style="font-weight:700;letter-spacing:.08em;font-family:var(--mil-font);color:var(--gold);">戦闘：${p.name}</div>
@@ -995,6 +1048,8 @@ export class MapEngine {
         <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">地形：${I18N.terrainName(p.terrain) || terrainInfo(p.terrain).name}</div>
         <div style="font-size:11px;color:${advantageColor(cb.advantage || 'yellow')};margin-top:2px;">状況：${cb.advantage === 'green' ? '攻撃側優勢' : cb.advantage === 'red' ? '防御側優勢' : '均衡'}</div>
         <div style="font-size:11px;color:var(--text-dim);margin-top:2px;">戦闘強度：${Math.round((cb.intensity || 0) * 100)}%</div>
+        ${cb.cas ? `<div style="font-size:11px;color:#ffd76a;margin-top:3px;">近接航空支援：+${Math.round((cb.cas.bonus || 0) * 100)}%（${cb.cas.aircraft || 0} 機・航空隊 ${cb.cas.wingCount || 0}）</div>
+        <div style="font-size:11px;color:#ffd76a;">CAS 与ダメージ：${(cb.cas.damage || 0).toFixed(1)} / 時</div>` : ''}
       `;
       Tooltip.bind(g, tipHtml, { kind: cb.advantage === 'red' ? 'bad' : cb.advantage === 'green' ? 'good' : 'warn' });
 
