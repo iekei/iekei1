@@ -1,0 +1,65 @@
+/* naval-force.css — 海軍 (艦隊編成・海戦・通商破壊) ウィンドウ */
+#tpl-navy > #navy-content { padding: 0; }
+.nf-root { display: flex; flex-direction: column; min-height: 100%; background: radial-gradient(ellipse at top left, rgba(60,120,180,0.14), transparent 55%), #121a22; color: #d6dde4; font-size: 12px; }
+.nf-header { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding: 10px 14px; border-bottom: 2px solid #2f6e9e; background: linear-gradient(180deg, #1e2a36, #15202b); }
+.nf-title { display: flex; align-items: center; gap: 10px; flex: 1 1 320px; }
+.nf-mark { width: 36px; height: 36px; display: grid; place-items: center; font-size: 18px; color: #9cd2ff; border: 2px solid #4a8fc4; background: #16293a; box-shadow: 0 0 0 2px #0b1117; }
+.nf-title h3 { margin: 0; font-size: 16px; letter-spacing: 1px; color: #e3c06a; }
+.nf-title h3 small { font-size: 10px; letter-spacing: 3px; color: #8ea2b4; margin-left: 6px; }
+.nf-title p { margin: 2px 0 0; font-size: 11px; color: #8ea2b4; }
+.nf-actions { display: flex; gap: 6px; margin-left: auto; }
+.nf-body { display: grid; grid-template-columns: 250px minmax(0, 1fr) 270px; flex: 1; min-height: 540px; }
+.nf-side { background: #18222c; border-right: 1px solid #2d3b48; padding: 8px; overflow-y: auto; max-height: 700px; }
+.nf-side.right { border-right: 0; border-left: 1px solid #2d3b48; }
+.nf-stock-row { display: grid; grid-template-columns: 22px 1fr auto; gap: 6px; align-items: center; padding: 5px 0; border-bottom: 1px dotted rgba(255,255,255,.08); }
+.nf-stock-row b small { color: #8ea2b4; font-weight: 400; }
+.nf-stock-row > div > small { display: block; color: #8ea2b4; font-size: 10px; }
+.nf-ship-icon { font-size: 16px; text-align: center; }
+.nf-count { font-size: 16px; color: #e3c06a; }
+.nf-port { padding: 6px; margin-bottom: 5px; background: #1f2b37; border: 1px solid #2d3b48; border-left: 3px solid #4a8fc4; display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; align-items: center; }
+.nf-port small { grid-column: 1; color: #8ea2b4; font-size: 10px; }
+.nf-main { padding: 8px; overflow-y: auto; max-height: 700px; }
+.nf-tf { background: #18222c; border: 1px solid #2d3b48; border-left: 3px solid #4e5d6b; padding: 8px 10px; margin-bottom: 8px; cursor: pointer; }
+.nf-tf.selected { border-color: #c9a44c; border-left-color: #c9a44c; background: #1f2622; }
+.nf-tf.sailing { border-left-color: #4a8fc4; }
+.nf-tf.battle { border-left-color: #e04a3c; box-shadow: inset 0 0 18px rgba(224,74,60,0.12); }
+.nf-tf-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.nf-tf-icon { font-size: 18px; }
+.nf-name { flex: 1; min-width: 0; font-size: 13px; font-weight: 700; color: #e3c06a; background: transparent; border: 1px solid transparent; border-bottom-color: #2d3b48; padding: 2px 4px; }
+.nf-name:focus { border-color: #c9a44c; outline: none; background: #0e141a; }
+.nf-status { font-size: 10px; padding: 2px 8px; border: 1px solid #4e5d6b; color: #8ea2b4; white-space: nowrap; }
+.nf-status.on { color: #9cd2ff; border-color: #4a8fc4; background: #16293a; }
+.nf-status.fight { color: #ffb4a8; border-color: #e04a3c; background: #3a1a16; }
+.nf-tf-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.nf-tf-grid label { display: flex; flex-direction: column; gap: 2px; font-size: 10px; color: #8ea2b4; }
+.nf-tf-grid label b { font-size: 11px; color: #d6dde4; }
+.nf-tf-grid select { width: 100%; background: #0e141a; color: #d6dde4; border: 1px solid #4e5d6b; padding: 4px; font-size: 11px; }
+.nf-mission-desc { margin: 6px 0; font-size: 10px; color: #8ea2b4; }
+.nf-comp { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; }
+.nf-comp-row { background: #1f2b37; border: 1px solid #2d3b48; padding: 4px; display: flex; flex-direction: column; gap: 3px; font-size: 10px; }
+.nf-comp-ctl { display: flex; align-items: center; gap: 3px; }
+.nf-comp-ctl b { flex: 1; text-align: center; font-size: 13px; color: #e3c06a; }
+.nf-stats { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; margin-top: 8px; }
+.nf-stats > div { display: grid; gap: 1px; font-size: 10px; color: #8ea2b4; background: #121a22; padding: 3px 5px; }
+.nf-stats b { font-size: 12px; color: #d6dde4; font-variant-numeric: tabular-nums; }
+.nf-ships { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 4px; margin-top: 8px; }
+.nf-ship { display: grid; grid-template-columns: 1fr auto auto; gap: 2px 4px; align-items: center; background: #0e141a; border: 1px solid #2d3b48; padding: 3px 5px; font-size: 10px; }
+.nf-ship span { grid-column: 1 / -1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nf-ship em { display: block; height: 5px; background: #1b2530; border: 1px solid #2d3b48; }
+.nf-ship em i { display: block; height: 100%; background: #4a8fc4; }
+.nf-ship.dmg em i { background: #e04a3c; }
+.nf-ship small { color: #8ea2b4; }
+.nf-ship .af-mini { padding: 0 4px; }
+.nf-battle-live { margin-top: 8px; padding: 6px 8px; background: #2a1613; border: 1px solid #e04a3c; font-size: 11px; }
+.nf-tf-foot { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+.nf-zone { padding: 6px 8px; margin-bottom: 6px; background: #1f2b37; border: 1px solid #2d3b48; cursor: pointer; }
+.nf-zone:hover { border-color: #c9a44c; }
+.nf-zone.enemy { border-left: 3px solid #e04a3c; }
+.nf-zone b { display: block; font-size: 12px; margin-bottom: 3px; }
+.nf-zone small { display: block; color: #8ea2b4; font-size: 10px; margin-top: 3px; }
+.nf-log { font-size: 10px; line-height: 1.5; color: #c9d3dc; background: #0e141a; border: 1px solid #2d3b48; padding: 6px; max-height: 260px; overflow-y: auto; margin-bottom: 8px; }
+.nf-log > div { border-bottom: 1px dotted rgba(255,255,255,.06); padding: 2px 0; }
+.nf-log.small { max-height: 90px; margin: 4px 0 0; }
+.nf-dispatch { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; padding: 3px 0; border-bottom: 1px dotted rgba(255,255,255,.08); }
+.nf-dispatch span { flex: 1 1 120px; font-size: 11px; }
+.af-mini.on { border-color: #c9a44c; color: #e3c06a; background: #2a2416; }

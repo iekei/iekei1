@@ -1,0 +1,39 @@
+/* factions.css — 陣営・世界緊張度 */
+#world-tension.fs-tension-big { padding: 2px 12px; min-width: 150px; }
+#world-tension.fs-tension-big .tension-content { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.05; }
+#world-tension.fs-tension-big .tension-label { font-size: 9px; color: var(--text-secondary, #929a92); letter-spacing: 1px; }
+#world-tension.fs-tension-big .wt-val { font-size: 20px; font-weight: 800; letter-spacing: 1px; text-shadow: 0 0 8px rgba(255,255,255,.15); }
+.fs-root { color: #d6d9d2; font-size: 12px; }
+.fs-tabs { display: flex; align-items: center; gap: 4px; margin-bottom: 10px; border-bottom: 2px solid #3a4044; }
+.fs-tab { padding: 8px 16px; background: #1d2124; border: 1px solid #3a4044; border-bottom: none; color: #b8bdb5; cursor: pointer; font-size: 13px; position: relative; }
+.fs-tab.on { background: #3d3115; color: #e3c06a; border-color: #c9a44c; font-weight: 700; }
+.fs-badge { position: absolute; top: -6px; right: -6px; min-width: 18px; height: 18px; border-radius: 9px; background: #c0392b; color: #fff; font-size: 10px; display: grid; place-items: center; font-weight: 700; animation: fs-blink 1.2s infinite; }
+@keyframes fs-blink { 50% { opacity: .5; } }
+.fs-tension-mini { margin-left: auto; font-size: 11px; color: #929a92; } .fs-tension-mini b { color: #e3c06a; font-size: 13px; }
+.fs-panel { border: 1px solid #3a4044; background: #1d2124; padding: 10px 12px; margin-bottom: 8px; }
+.fs-panel.alert { border-color: #c0392b; background: #2a1616; }
+.fs-panel h4 { margin: 0 0 8px; font-size: 12px; color: #c9a44c; letter-spacing: 1px; } .fs-panel h4 + h4 { margin-top: 12px; }
+.fs-help { font-size: 10px; color: #929a92; margin: 6px 0 0; line-height: 1.5; } .fs-red { color: #ff8a7a; font-weight: 700; } .up { color: #9fd98a; font-weight: 700; } .down { color: #ff8a7a; }
+.fs-actions { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.fs-btn { padding: 6px 10px; background: #1a1d1f; border: 1px solid #4e565b; color: #d6d9d2; cursor: pointer; font-size: 11px; white-space: nowrap; }
+.fs-btn:hover:not(:disabled) { border-color: #c9a44c; color: #e3c06a; } .fs-btn:disabled { opacity: .4; cursor: not-allowed; }
+.fs-btn.primary { background: #3d3115; border-color: #c9a44c; color: #e3c06a; font-weight: 700; } .fs-btn.small { padding: 3px 8px; font-size: 10px; }
+.fs-btn.danger { border-color: #c75b4a; color: #ff9a8a; } .fs-btn.on { background: #1d2a1e; border-color: #7fc46a; color: #9fd98a; }
+.fs-call { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 6px 8px; margin-bottom: 4px; background: rgba(0,0,0,.25); border: 1px solid #3a4044; } .fs-call small { color: #929a92; } .fs-call img { width: 20px; vertical-align: middle; }
+.fs-faction-card { border: 1px solid #c9a44c; background: #24261d; padding: 8px 10px; margin-bottom: 6px; } .fs-faction-card.other { border-color: #3a4044; background: #262b2e; }
+.fs-faction-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; } .fs-faction-head b { font-size: 15px; color: #e3c06a; } .fs-faction-head small { display: block; color: #929a92; font-size: 10px; } .fs-faction-head img { width: 18px; vertical-align: middle; }
+.fs-members { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 6px; }
+.fs-member { padding: 6px 8px; background: #1d2124; border: 1px solid #3a4044; border-left: 3px solid #4e565b; } .fs-member.leader { border-left-color: #c9a44c; }
+.fs-member img { width: 24px; float: left; margin: 2px 6px 0 0; } .fs-member b { display: block; color: #e3c06a; } .fs-member small { display: block; color: #929a92; font-size: 10px; margin-bottom: 4px; }
+.fs-chips { display: flex; flex-wrap: wrap; gap: 4px; } .fs-chips span { padding: 2px 6px; background: #101214; border: 1px solid #3a4044; font-size: 10px; } .fs-chips img { width: 14px; vertical-align: middle; } .fs-chips b { color: #e3c06a; }
+.fs-search { width: 100%; box-sizing: border-box; padding: 6px 8px; background: #101214; border: 1px solid #4e565b; color: #d6d9d2; font-size: 12px; margin-bottom: 6px; }
+.fs-log { width: 100%; border-collapse: collapse; font-size: 11px; } .fs-log th { text-align: left; font-size: 10px; color: #929a92; font-weight: 400; padding: 4px 6px; border-bottom: 1px solid #3a4044; } .fs-log td { padding: 4px 6px; border-bottom: 1px dotted rgba(255,255,255,.08); } .fs-log img { width: 16px; vertical-align: middle; }
+.fs-table { width: 100%; border-collapse: collapse; font-size: 11px; } .fs-table th { color: #e3c06a; text-align: left; padding: 3px 6px 3px 0; } .fs-table td { padding: 3px 0; border-bottom: 1px dotted rgba(255,255,255,.08); }
+.fs-tension-hero { display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: center; padding: 14px 18px; border: 1px solid #3a4044; border-top: 3px solid var(--c, #c9a44c); background: linear-gradient(180deg, #23282b, #1a1e21); margin-bottom: 8px; }
+.fs-tension-num { font-size: 52px; font-weight: 800; color: var(--c, #e3c06a); line-height: 1; text-shadow: 0 0 18px rgba(255,255,255,.1); } .fs-tension-num small { font-size: 18px; }
+.fs-tension-hero h3 { margin: 0; color: #e3c06a; font-size: 16px; } .fs-tension-hero h3 small { font-size: 10px; letter-spacing: 3px; color: #929a92; margin-left: 8px; } .fs-tension-hero p { margin: 3px 0 6px; font-size: 11px; color: #b8bdb5; }
+.fs-bar { position: relative; height: 14px; background: #0e1011; border: 1px solid #2c3236; } .fs-bar em { display: block; height: 100%; } .fs-bar i { position: absolute; top: -3px; bottom: -3px; width: 2px; background: rgba(255,255,255,.5); }
+.fs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.fs-spark { display: flex; align-items: flex-end; gap: 1px; height: 90px; background: #0e1011; border: 1px solid #2c3236; padding: 4px; } .fs-spark i { flex: 1; min-width: 2px; display: block; }
+.fs-modal { color: #d6d9d2; font-size: 12px; } .fs-call-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; } .fs-call-head img { width: 40px; } .fs-call-head b { font-size: 15px; color: #e3c06a; } .fs-call-head small { display: block; color: #929a92; }
+.fs-enemies span { display: inline-block; padding: 2px 6px; background: #2a1616; border: 1px solid #c0392b; margin: 2px; } .fs-enemies img { width: 14px; vertical-align: middle; }

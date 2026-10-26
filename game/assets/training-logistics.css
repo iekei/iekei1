@@ -1,0 +1,43 @@
+/* training-logistics.css — 徴兵・訓練 / 兵站・装備備蓄 */
+.tl-root { color: #d6d9d2; font-size: 12px; }
+.tl-head { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px 14px; border: 1px solid #3a4044; border-top: 2px solid #c9a44c; background: linear-gradient(180deg, #23282b, #1a1e21); margin-bottom: 8px; }
+.tl-mark { width: 40px; height: 40px; display: grid; place-items: center; font-size: 20px; border: 2px solid #c9a44c; background: #2a2416; }
+.tl-head h3 { margin: 0; color: #e3c06a; font-size: 16px; } .tl-head h3 small { font-size: 10px; letter-spacing: 3px; color: #929a92; margin-left: 8px; }
+.tl-head p { margin: 3px 0 0; color: #b8bdb5; font-size: 11px; }
+.tl-levels { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
+.tl-levels span { display: grid; text-align: center; padding: 3px 7px; background: #101214; border: 1px solid #2c3236; font-size: 11px; } .tl-levels small { font-size: 9px; color: #929a92; }
+.tl-grid { display: grid; grid-template-columns: 260px minmax(0, 1fr) 320px; gap: 8px; margin-bottom: 8px; }
+.tl-panel { border: 1px solid #3a4044; background: #1d2124; padding: 10px 12px; margin-bottom: 8px; min-width: 0; }
+.tl-panel h4 { margin: 0 0 8px; font-size: 12px; color: #c9a44c; letter-spacing: 1px; } .tl-panel h4 small { color: #929a92; font-weight: 400; margin-left: 6px; }
+.tl-tpls { display: grid; gap: 5px; max-height: 420px; overflow-y: auto; margin-bottom: 8px; }
+.tl-tpl { padding: 6px 8px; background: #262b2e; border: 1px solid #3a4044; border-left: 3px solid #4e565b; cursor: pointer; }
+.tl-tpl.on { border-color: #c9a44c; border-left-color: #c9a44c; background: #24261d; } .tl-tpl b { display: block; color: #e3c06a; } .tl-tpl small { color: #929a92; font-size: 10px; }
+.tl-form { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+.tl-form label { display: grid; gap: 3px; font-size: 10px; color: #929a92; }
+.tl-form select, .tl-form input { background: #101214; color: #d6d9d2; border: 1px solid #4e565b; padding: 5px; font-size: 12px; }
+.tl-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 8px; }
+.tl-table th { text-align: left; color: #929a92; font-weight: 400; padding: 3px 0; border-bottom: 1px dotted rgba(255,255,255,.08); } .tl-table td { text-align: right; padding: 3px 0; border-bottom: 1px dotted rgba(255,255,255,.08); } .tl-table small { color: #929a92; }
+.tl-table td.red, .red { color: #ff8a7a; font-weight: 700; } .ok { color: #9fd98a; } .dim { color: #4e565b; }
+.tl-warn { font-size: 11px; color: #ffb3a7; background: rgba(192,57,43,.12); border-left: 3px solid #c0392b; padding: 6px 8px; margin: 0 0 8px; }
+.tl-help { font-size: 10px; color: #929a92; margin: 6px 0 0; line-height: 1.5; }
+.tl-btn { padding: 6px 10px; background: #1a1d1f; border: 1px solid #4e565b; color: #d6d9d2; cursor: pointer; font-size: 11px; }
+.tl-btn:hover { border-color: #c9a44c; color: #e3c06a; } .tl-btn.primary { background: #3d3115; border-color: #c9a44c; color: #e3c06a; font-weight: 700; }
+.tl-btn.big { width: 100%; padding: 10px; font-size: 13px; } .tl-btn.small { padding: 2px 8px; font-size: 10px; } .tl-btn.danger { border-color: #c75b4a; color: #ff9a8a; } .tl-btn.on { background: #1d2a1e; border-color: #7fc46a; color: #9fd98a; }
+.tl-queue { display: grid; gap: 6px; max-height: 520px; overflow-y: auto; }
+.tl-order { padding: 6px 8px; background: #262b2e; border: 1px solid #3a4044; border-left: 3px solid #4e565b; }
+.tl-order.training { border-left-color: #7fc46a; }
+.tl-order-top { display: flex; justify-content: space-between; gap: 6px; } .tl-order-top b { color: #e3c06a; } .tl-order-top span { font-size: 10px; color: #b8bdb5; white-space: nowrap; }
+.tl-order small { display: block; color: #929a92; font-size: 10px; margin-top: 2px; }
+.tl-order-btns { display: flex; gap: 4px; margin-top: 4px; }
+.tl-bar { height: 8px; background: #0e1011; border: 1px solid #2c3236; margin: 4px 0; } .tl-bar em { display: block; height: 100%; background: linear-gradient(90deg, #8a6d2b, #c9a44c, #7fc46a); }
+.tl-bar.sm { display: inline-block; width: 70px; height: 7px; vertical-align: middle; margin: 0 6px 0 0; }
+.tl-armies { display: grid; gap: 6px; }
+.tl-army { padding: 6px 8px; background: #262b2e; border: 1px solid #3a4044; }
+.tl-army-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; } .tl-army-head b { color: #e3c06a; } .tl-army-head span { font-size: 11px; color: #b8bdb5; flex: 1; }
+.tl-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; } .tl-chips span { padding: 2px 6px; background: #101214; border: 1px solid #3a4044; font-size: 10px; }
+.tl-divs { margin-top: 4px; font-size: 13px; letter-spacing: 1px; line-height: 1.4; }
+.tl-stock { width: 100%; border-collapse: collapse; font-size: 11px; }
+.tl-stock th { text-align: left; font-size: 10px; color: #929a92; font-weight: 400; padding: 4px 6px; border-bottom: 1px solid #3a4044; }
+.tl-stock td { padding: 5px 6px; border-bottom: 1px dotted rgba(255,255,255,.08); } .tl-stock td small { display: block; color: #929a92; font-size: 9px; font-weight: 400; }
+.tl-stock tr.short td { background: rgba(192,57,43,.1); }
+.tl-stock select { background: #101214; color: #d6d9d2; border: 1px solid #4e565b; padding: 2px 4px; font-size: 11px; }

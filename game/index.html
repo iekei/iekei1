@@ -707,8 +707,21 @@
   <link rel="stylesheet" href="assets/research-tree.css">
   <link rel="stylesheet" href="assets/equipment-designer.css?v=designer-3">
   <link rel="stylesheet" href="assets/intelligence-agency.css">
+  <link rel="stylesheet" href="assets/espionage.css?v=esp-1">
   <link rel="stylesheet" href="assets/strategy-systems.css">
   <link rel="stylesheet" href="assets/war-systems.css">
+  <link rel="stylesheet" href="assets/division-designer.css?v=designer-1">
+  <link rel="stylesheet" href="assets/supply-network.css?v=supply-1">
+  <link rel="stylesheet" href="assets/air-force.css?v=air-1">
+  <link rel="stylesheet" href="assets/naval-force.css?v=navy-1">
+  <link rel="stylesheet" href="assets/trade-resources.css?v=trade-1">
+  <link rel="stylesheet" href="assets/peace-conference.css?v=peace-1">
+  <link rel="stylesheet" href="assets/politics-cabinet.css?v=pol-1">
+  <link rel="stylesheet" href="assets/occupation.css?v=occ-1">
+  <link rel="stylesheet" href="assets/training-logistics.css?v=tl-1">
+  <link rel="stylesheet" href="assets/factions.css?v=fs-1">
+  <link rel="stylesheet" href="assets/superweapons.css?v=sw-2">
+  <link rel="stylesheet" href="assets/frontline-command.css?v=fc-1">
   <!-- HOI4 大戦略 全画面レイヤー (../hoi4.html を iframe で表示) -->
   <link rel="stylesheet" href="css/hoi4-screen.css">
   </head>
@@ -774,15 +787,20 @@
   <!-- ==================== WINDOW NAVIGATION RAIL ==================== -->
   <nav id="window-nav">
     <span style="font-size:11px;color:var(--text-secondary);margin-right:4px;white-space:nowrap;">ウィンドウ:</span>
+    <button class="win-btn" data-tab="politics" onclick="GameUI.switchTab('politics')">🏛️ 政治</button>
     <button class="win-btn" data-tab="focus" onclick="GameUI.switchTab('focus')"><img class="win-btn-icon" data-menu-icon="focus" alt=""> 国家方針</button>
     <button class="win-btn" data-tab="research" onclick="GameUI.switchTab('research')"><img class="win-btn-icon" data-menu-icon="research" alt=""> 研究</button>
     <button class="win-btn" data-tab="special" onclick="GameUI.switchTab('special')"><img class="win-btn-icon" data-menu-icon="special" alt=""> 特別研究</button>
     <button class="win-btn" data-tab="nuclear" onclick="GameUI.switchTab('nuclear')"><img class="win-btn-icon" data-menu-icon="nuclear" alt=""> 核攻撃</button>
     <button class="win-btn" data-tab="construction" onclick="GameUI.switchTab('construction')"><img class="win-btn-icon" data-menu-icon="construction" alt=""> 建設</button>
+    <button class="win-btn" data-tab="navy" onclick="GameUI.switchTab('navy')">⚓ 海軍</button>
     <button class="win-btn" data-tab="trade" onclick="GameUI.switchTab('trade')"><img class="win-btn-icon" data-menu-icon="trade" alt=""> 貿易</button>
     <button class="win-btn" data-tab="diplomacy" onclick="GameUI.switchTab('diplomacy')"><img class="win-btn-icon" data-menu-icon="diplomacy" alt=""> 外交</button>
     <button class="win-btn" data-tab="cards" onclick="GameUI.switchTab('cards')"><img class="win-btn-icon" data-menu-icon="cards" alt=""> 将軍カード</button>
     <button class="win-btn" data-tab="division" onclick="GameUI.switchTab('division')"><img class="win-btn-icon" data-menu-icon="division" alt=""> 師団編成</button>
+    <button class="win-btn" data-tab="training" onclick="GameUI.switchTab('training')">🎓 徴兵・訓練</button>
+    <button class="win-btn" data-tab="logistics" onclick="GameUI.switchTab('logistics')">📦 兵站</button>
+    <button class="win-btn" data-tab="airforce" onclick="GameUI.switchTab('airforce')">✈️ 空軍</button>
     <button class="win-btn" data-tab="multiplayer" onclick="GameUI.switchTab('multiplayer')"><img class="win-btn-icon" data-menu-icon="multiplayer" alt=""> マルチ</button>
     <button class="win-btn" data-tab="nation" onclick="GameUI.switchTab('nation')"><img class="win-btn-icon" data-menu-icon="nation" alt=""> 固有システム</button>
     <button class="win-btn" data-tab="winsave" onclick="GameUI.switchTab('winsave')"><img class="win-btn-icon" data-menu-icon="winsave" alt=""> セーブ/ロード</button>
@@ -887,8 +905,14 @@
       <div id="cards-content"></div>
     </div>
 
-    <div class="window-template pane-scroll" id="tpl-division" data-title="⚔️ 師団編成" data-w="900" data-h="560">
+    <div class="window-template pane-scroll" id="tpl-division" data-title="⚔️ 師団編成 — Division Designer" data-w="1320" data-h="800">
       <div id="division-content"></div>
+    </div>
+    <div class="window-template pane-scroll" id="tpl-airforce" data-title="✈️ 空軍 — Air Wings &amp; Missions" data-w="1240" data-h="760">
+      <div id="airforce-content"></div>
+    </div>
+    <div class="window-template pane-scroll" id="tpl-navy" data-title="⚓ 海軍 — Naval Warfare &amp; Fleets" data-w="1280" data-h="780">
+      <div id="navy-content"></div>
     </div>
 
     <div class="window-template pane-scroll" id="tpl-multiplayer" data-title="🌐 マルチプレイ" data-w="640" data-h="560">
@@ -1226,7 +1250,10 @@ class CoreEngine {
       landingPrepTime: 0
     },
     activeAbilities: {},
-    nationSystems: {}
+    nationSystems: {},
+    divisionTemplates: null,          // 師団テンプレート (DivisionDesigner が管理・JSON)
+    activeDivisionTemplateId: null,   // 徴兵に使用するテンプレートID
+    divisionPresets: null             // 旧形式 (移行用)
   };
 
   static timer = null;
@@ -2963,6 +2990,10 @@ class MapRenderer {
             rgb = [rgb[0] * 0.55 | 0, rgb[1] * 0.55 | 0, rgb[2] * 0.55 | 0];
             if (mode === 'air' && owner) rgb = [rgb[0], rgb[1] * 0.5 | 0, rgb[2] * 0.5 | 0];
           }
+          if (mode === 'air' && typeof AirForce !== 'undefined') {
+            const airRgb = AirForce.stateRGB(provToState.get(id));
+            if (airRgb) rgb = airRgb;
+          }
         }
       } else if (mode === 'supply') {
         if (type === 'sea') rgb = [24, 46, 66];
@@ -2972,7 +3003,9 @@ class MapRenderer {
           const st = sid ? states[sid] : null;
           const sup = st ? (st.supply || 0) : 0;
           const owner = MapRenderer.ownerOf(id);
+          const netRgb = owner === player && typeof SupplyNetwork !== 'undefined' ? SupplyNetwork.stateRGB(sid) : null;
           if (owner !== player) rgb = [70, 70, 70];
+          else if (netRgb) rgb = netRgb;
           else {
             const t = Math.min(1, sup / 12);
             rgb = [160 - t * 140 | 0, 60 + t * 120 | 0, 60];
@@ -3093,7 +3126,8 @@ class MapRenderer {
           const pid = MapRenderer.provinceAt(wp[0], wp[1]);
           const owner = pid ? MapRenderer.ownerOf(pid) : null;
           const player = CoreEngine.gameState.country;
-          if (owner && owner !== player) DiplomacyManager.openFor(owner);
+          const handled = typeof FrontCommand !== 'undefined' && FrontCommand.rightClick(pid, wp);
+          if (!handled && owner && owner !== player) DiplomacyManager.openFor(owner);
         }
         rightDown = false;
       }
@@ -3187,6 +3221,7 @@ class MapRenderer {
     }
     if (ArmyRoster.frontTool) { ArmyRoster.placeFront(pid); return; }
     if (ArmyRoster.airdropTool) { ArmyRoster.airdrop(pid); return; }
+    if (typeof FrontCommand !== 'undefined' && FrontCommand.leftClick(pid, wp)) return;
     MapRenderer.selectProvince(pid);
   }
 
@@ -3232,10 +3267,19 @@ class MapRenderer {
         '<span style="color:var(--text-secondary);font-size:11px;">地形: ' + terr + ' (' + coastal + ') | 補給: ' + (st.supply || 0) + '</span><br>' +
         '<span style="color:var(--text-gold);font-size:11px;">🏭民需' + (b.industrial_complex || 0) +
         ' ⚙️軍需' + (b.arms_factory || 0) + ' ⚓工廠' + (b.dockyard || 0) +
-        ' ✈️飛行場' + (b.air_base || 0) + ' 🛤️' + (b.infrastructure || 0) + '</span>';
+        ' ✈️飛行場' + (b.air_base || 0) + ' 🛤️' + (b.infrastructure || 0) + ' 📦ハブ' + (b.supply_hub || 0) + '</span>' +
+        (typeof SupplyNetwork !== 'undefined' && st.owner === CoreEngine.gameState.country ? '<br>' + SupplyNetwork.summaryLine(sid) : '') +
+        (typeof AirForce !== 'undefined' ? '<br>' + AirForce.summaryLine(sid) : '') +
+        (typeof NavalForce !== 'undefined' && st.owner === CoreEngine.gameState.country ? '<br>' + NavalForce.summaryLine(sid) : '') +
+        (typeof TradeSystem !== 'undefined' ? '<br>' + TradeSystem.summaryLine(sid) : '') +
+        (typeof PeaceSystem !== 'undefined' && PeaceSystem.subjectLine(sid) ? '<br>' + PeaceSystem.subjectLine(sid) : '') +
+        (typeof OccupationSystem !== 'undefined' && OccupationSystem.summaryLine(sid) ? '<br>' + OccupationSystem.summaryLine(sid) : '') +
+        (typeof SuperWeapons !== 'undefined' && SuperWeapons.strikeLine(sid) ? '<br>' + SuperWeapons.strikeLine(sid) : '') +
+        (st.owner === CoreEngine.gameState.country ? '<br><button class="map-info-build-btn" onclick="ConstructionManager.selectState(\'' + sid + '\');GameUI.switchTab(\'construction\')">🏗️ 建設 (インフラ・補給ハブ)</button>' : '');
       ConstructionManager.selectState(sid);
     } else {
-      overlay.innerHTML = '<strong>' + provinceName + '</strong><br><span style="color:var(--text-secondary);font-size:11px;">海域ID: ' + pid + '</span>';
+      overlay.innerHTML = '<strong>' + provinceName + '</strong><br><span style="color:var(--text-secondary);font-size:11px;">海域ID: ' + pid + '</span>' +
+        (typeof NavalForce !== 'undefined' ? NavalForce.seaOverlay(pid) : '');
     }
   }
 
@@ -3409,8 +3453,8 @@ class MapRenderer {
       political: [...['GER','SOV','JAP','ENG','FRA','ITA','USA'].map(tag=>['rgb('+DataFetcher.countryColor(tag).join(',')+')',DataFetcher.getCountryFlagImage(tag)+' '+DiplomacyManager.nameOf(tag)+(tag===CoreEngine.gameState.country?' (自国)':'')]),['#1e3a52','海']],
       terrain: [['#96a064','平原'],['#5f784b','森林'],['#8c7a58','丘陵'],['#7a6454','山岳'],['#647660','湿地'],['#c4ac6e','砂漠']],
       construction: [['#96a064','自国 (建設可能)'],['#404040','他国'],['#4ac46a','建設中の州']],
-      supply: [['#a03c3c','補給不足'],['#7c9040','普通'],['#3cc464','補給良好']],
-      air: [['#404040','制空権なし'],['#506eaa','自国空域']],
+      supply: [['#3cc464','正常 (供給≧需要)'],['#e0c040','不足 (供給が需要の40%以上)'],['#e04a3c','枯渇 (40%未満 / 首都未接続)'],['#5f9a50','駐留なし (濃いほど容量大)'],['#464646','他国']],
+      air: [['#3cc464','制空権確保 (75%+)'],['#9ccc50','優勢'],['#e0c040','拮抗'],['#e04a3c','制空権喪失'],['#506eaa','自国 (任務なし)'],['#404040','他国']],
       naval: [['#1e3a52','海域'],['#404040','他国沿岸']]
     };
     const items = legends[MapRenderer.mode] || [];
@@ -3811,8 +3855,8 @@ class BattlePlanManager {
     if (!coastalPid) { GameUI.notify('🌊 強襲上陸は沿岸の州にのみ実行できます。', 'alert'); return; }
     // 制海権の確認 (25%以上必要)
     if (!army.divisions.length) { GameUI.notify('上陸する師団を配属してください。', 'alert'); return; }
-    const sup = CoreEngine.gameState.navalSupremacy || 0;
-    if (sup < 25) { GameUI.notify('⚓ 制海権が不足しています (25%以上必要・現在' + Math.floor(sup) + '%)。海軍の哨��で制海権を確保してください。', 'alert'); return; }
+    const sup = typeof NavalForce !== 'undefined' ? NavalForce.invasionSuperiority(coastalPid) : (CoreEngine.gameState.navalSupremacy || 0);
+    if (sup < 25) { GameUI.notify('⚓ 上陸地点近海の制海権が不足しています (25%以上必要・現在' + Math.floor(sup) + '%)。任務部隊を近海に展開して制海権を確保してください。', 'alert'); return; }
     // 上陸開始 (陸路接続は不要 — これが強襲上陸)
     const c = MapRenderer.stateCenter.get(String(sid)) || wp;
     army.executing = true; army.progress = 0; army.chain = null;
@@ -5149,194 +5193,8 @@ class DiplomacyManager {
 }
 
 // ==========================================================
-// Module 9: DivisionDesigner — 5×5グリッド編成エディター
+// Module 9: DivisionDesigner — assets/division-designer.js に移動 (HOI4風 師団編成画面)
 // ==========================================================
-class DivisionDesigner {
-  static grid = Array(5).fill(null).map(() => Array(5).fill(null));
-  static selectedBattalion = null;
-  static availableBattalions = [
-    { id: 'infantry', name: '歩兵', icon: '🪖', attack: 10, defense: 20, org: 60 },
-    { id: 'artillery', name: '砲兵', icon: '💥', attack: 25, defense: 5, org: 10 },
-    { id: 'armor', name: '戦車', icon: '🚜', attack: 30, defense: 15, org: 40 },
-    { id: 'anti_tank', name: '対戦車', icon: '🎯', attack: 15, defense: 8, org: 15 },
-    { id: 'anti_air', name: '対空', icon: '🛡️', attack: 8, defense: 10, org: 15 },
-    { id: 'engineer', name: '工兵', icon: '🔧', attack: 5, defense: 25, org: 30 },
-    { id: 'recon', name: '偵察', icon: '🔭', attack: 8, defense: 12, org: 25 },
-    { id: 'ranger', name: 'レ��ジャー（森林・河川）', icon: '🌲', attack: 14, defense: 22, org: 65 },
-    { id: 'mountaineer', name: '山岳兵', icon: '⛰️', attack: 14, defense: 24, org: 65 },
-    { id: 'paratrooper', name: '空挺兵', icon: '🪂', attack: 12, defense: 18, org: 60 },
-    { id: 'marine', name: '海兵隊', icon: '⚓', attack: 15, defense: 20, org: 65 }
-  ];
-  static specialBattalions = [];
-  static presets = [];   // 師団編成���リセット
-
-  static init() {
-    // プリセットをゲーム状態から復元
-    if (CoreEngine.gameState.divisionPresets) {
-      DivisionDesigner.presets = CoreEngine.gameState.divisionPresets;
-    }
-    DivisionDesigner.render();
-  }
-
-  // ---- プリセット保存 ----
-  static savePreset() {
-    const name = prompt('プリセット名を入力:', '編成' + (DivisionDesigner.presets.length + 1));
-    if (!name) return;
-    // 現在のグリッドをコピー
-    const gridCopy = DivisionDesigner.grid.map(row => row.map(cell => cell ? { ...cell } : null));
-    DivisionDesigner.presets.push({ name: name, grid: gridCopy });
-    CoreEngine.gameState.divisionPresets = DivisionDesigner.presets;
-    CoreEngine.log('💾 師団編成プリセット「' + name + '」を保存しました。');
-    GameUI.notify('💾 プリセット「' + name + '」を保存しました', 'success');
-    DivisionDesigner.render();
-  }
-
-  // ---- プリセット読込 ----
-  static loadPreset(idx) {
-    const p = DivisionDesigner.presets[idx];
-    if (!p) return;
-    DivisionDesigner.grid = p.grid.map(row => row.map(cell => cell ? { ...cell } : null));
-    CoreEngine.log('📂 プリセット「' + p.name + '」を読み込みました。');
-    GameUI.notify('��� プ���セット「' + p.name + '」を読み込みました', 'success');
-    DivisionDesigner.render();
-  }
-
-  // ---- プリセット削除 ----
-  static deletePreset(idx) {
-    const p = DivisionDesigner.presets[idx];
-    if (!p) return;
-    DivisionDesigner.presets.splice(idx, 1);
-    CoreEngine.gameState.divisionPresets = DivisionDesigner.presets;
-    CoreEngine.log('🗑️ プリセット「' + p.name + '」を削除しました。');
-    DivisionDesigner.render();
-  }
-
-  static unlockSpecialBattalion(sciId) {
-    const specialBatts = {
-      boris_stechkin: { id: 'jet_fighter', name: 'ジェット戦闘機', icon: '✈️', attack: 40, defense: 20, org: 30 },
-      sergey_korolyov: { id: 'v2_rocket', name: 'V2ロケット', icon: '🚀', attack: 50, defense: 0, org: 5 },
-      igor_kurchatov: { id: 'nuke_battalion', name: '核部隊', icon: '☢️', attack: 99, defense: 10, org: 10 },
-      vladimir_kotelnikov: { id: 'land_battleship', name: '陸上戦艦', icon: '🛳️', attack: 45, defense: 40, org: 50 }
-    };
-    const batt = specialBatts[sciId];
-    if (batt && !DivisionDesigner.specialBattalions.find(b => b.id === batt.id)) {
-      DivisionDesigner.specialBattalions.push(batt);
-      GameUI.notify('特別大隊解除: ' + batt.name + '！', 'success');
-    }
-  }
-
-  static render() {
-    const container = document.getElementById('division-content');
-    const allBatts = [...DivisionDesigner.availableBattalions, ...DivisionDesigner.specialBattalions];
-
-    let html = '<div class="sp-section"><h3>⚔️ 師団編成エディター (5×5)</h3>' +
-      '<p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px;">左の大隊を選択し、グリッドをクリックして配置します。特殊部隊は全軍集団・未所属・訓練中を合わせて5師団までです。</p>' +
-      '<div class="division-grid-container"><div><div class="division-grid" id="division-grid">';
-
-    for (let y = 0; y < 5; y++) {
-      for (let x = 0; x < 5; x++) {
-        const cell = DivisionDesigner.grid[y][x];
-        const cls = cell ? 'division-cell filled' : 'division-cell';
-        const icon = cell ? GameVisuals.unit(cell) : '';
-        html += '<div class="' + cls + '" onclick="DivisionDesigner.toggleCell(' + x + ',' + y + ')">' + icon + '</div>';
-      }
-    }
-    html += '</div><button class="sp-btn" onclick="DivisionDesigner.clearGrid()" style="margin-top:8px;">グリッドをクリア</button>' +
-      '<button class="sp-btn" onclick="DivisionDesigner.savePreset()" style="margin-top:8px;margin-left:4px;">💾 プリセット保存</button></div>' +
-      '<div style="margin-top:8px;"><h4 style="color:var(--text-gold);font-size:12px;margin-bottom:4px;">📋 プリセット一覧</h4>';
-    if (DivisionDesigner.presets.length === 0) {
-      html += '<p style="font-size:11px;color:var(--text-secondary);">プリセットなし</p>';
-    } else {
-      DivisionDesigner.presets.forEach((p, i) => {
-        html += '<div style="display:flex;align-items:center;gap:4px;margin:3px 0;background:var(--bg-panel);border:1px solid var(--border-mil);border-radius:4px;padding:4px 8px;">' +
-          '<span style="flex:1;font-size:12px;">' + p.name + '</span>' +
-          '<button class="army-btn" style="font-size:10px;padding:2px 8px;" onclick="DivisionDesigner.loadPreset(' + i + ')">📂 読込</button>' +
-          '<button class="army-btn abort" style="font-size:10px;padding:2px 8px;" onclick="DivisionDesigner.deletePreset(' + i + ')">✕</button></div>';
-      });
-    }
-    html += '</div>';
-
-    html += '<div class="division-battalion-list"><h4 style="color:var(--text-gold);margin-bottom:6px;">大隊選択</h4>';
-    allBatts.forEach(b => {
-      const isSpecial = DivisionDesigner.specialBattalions.find(sb => sb.id === b.id);
-      html += '<div class="battalion-option" onclick="DivisionDesigner.selectBattalion(\'' + b.id + '\')">' +
-        GameVisuals.unit(b) + ' ' + b.name + (isSpecial ? ' <span style="color:var(--accent-green);">★</span>' : '') + '</div>';
-    });
-    html += '</div>';
-
-    const stats = DivisionDesigner.calculateStats();
-    html += '<div class="division-stats"><h4 style="color:var(--text-gold);margin-bottom:6px;">師団ステータス</h4>' +
-      '<div class="division-stat-row"><span>攻撃力</span><span style="color:var(--accent-red);">' + stats.attack + '</span></div>' +
-      '<div class="division-stat-row"><span>防御力</span><span style="color:var(--accent-green);">' + stats.defense + '</span></div>' +
-      '<div class="division-stat-row"><span>組織力</span><span style="color:var(--accent-blue);">' + stats.org + '</span></div>' +
-      '<div class="division-stat-row"><span>大隊数</span><span>' + stats.count + '</span></div>' +
-      '<div class="division-stat-row"><span>機甲速度ボーナス</span><span>' + (CoreEngine.gameState.cardModifiers.armorSpeed > 0 ? '+' : '') + (CoreEngine.gameState.cardModifiers.armorSpeed * 100) + '%</span></div>' +
-      '<div class="division-stat-row"><span>歩兵防御ボーナス</span><span>' + (CoreEngine.gameState.cardModifiers.infantryDefense > 0 ? '+' : '') + (CoreEngine.gameState.cardModifiers.infantryDefense * 100) + '%</span></div>' +
-      '<div class="division-stat-row"><span>訓練期間</span><span style="color:var(--accent-blue);">' + ((typeof TrainingManager !== 'undefined' && TrainingManager.requirements()) ? TrainingManager.requirements().trainDays + '日 (約' + Math.round(TrainingManager.requirements().trainDays / 30) + 'ヶ月)' : '編成してください') + '</span></div>' +
-      '</div>';
-    const trainingStates=TrainingManager.availableTrainingStates();
-    const capitalState=String(MapRenderer.stateOf(ArmyRoster.capitalProvince())||'');
-    if(!trainingStates.some(([id])=>id===TrainingManager.trainingStateId))
-      TrainingManager.trainingStateId=trainingStates.some(([id])=>id===capitalState)?capitalState:(trainingStates[0]?.[0]||'');
-    html +=
-      '<div style="margin-top:10px;">' +
-      '<label style="font-size:12px;color:var(--text-secondary);margin-right:6px;">訓練地点:</label>' +
-      '<select id="recruit-training-state" onchange="TrainingManager.trainingStateId=this.value" style="background:var(--bg-panel);border:1px solid var(--border-mil);color:var(--text-primary);border-radius:4px;padding:4px 8px;font-size:12px;">' +
-      trainingStates.map(([id,state])=>'<option value="'+id+'"'+(id===TrainingManager.trainingStateId?' selected':'')+'>'+GameTools.escape(state.name||('州'+id))+'</option>').join('') +
-      '</select><br>' +
-      '<label style="font-size:12px;color:var(--text-secondary);margin-right:6px;">配備先軍集団:</label>' +
-      '<select id="recruit-target-army" style="background:var(--bg-panel);border:1px solid var(--border-mil);color:var(--text-primary);border-radius:4px;padding:4px 8px;font-size:12px;" onchange="TrainingManager.targetArmyId = this.value ? parseInt(this.value) : null">' +
-      '<option value="">未所属師団として配備</option>' +
-      (BattlePlanManager.armies || []).map(a => '<option value="' + a.id + '"' + (TrainingManager.targetArmyId === a.id ? ' selected' : '') + '>' + a.name + ' (師団' + a.divisions.length + ')</option>').join('') +
-      '</select><br>' +
-      '<button class="sp-btn" onclick="TrainingManager.recruit()">📝 この編成で徴兵 (兵員・兵器が揃い次第訓練開始)</button></div>' +
-      '</div></div>' +
-      '<div id="training-queue"></div>';
-
-    container.innerHTML = html;
-    if (typeof TrainingManager !== 'undefined') TrainingManager.renderQueue();
-  }
-
-  static selectBattalion(battId) {
-    const allBatts = [...DivisionDesigner.availableBattalions, ...DivisionDesigner.specialBattalions];
-    DivisionDesigner.selectedBattalion = allBatts.find(b => b.id === battId) || null;
-    GameUI.notify(DivisionDesigner.selectedBattalion ? '選択: ' + DivisionDesigner.selectedBattalion.name : '選択解除');
-  }
-
-  static toggleCell(x, y) {
-    if (DivisionDesigner.grid[y][x]) {
-      DivisionDesigner.grid[y][x] = null;
-    } else if (DivisionDesigner.selectedBattalion) {
-      DivisionDesigner.grid[y][x] = { ...DivisionDesigner.selectedBattalion };
-    }
-    DivisionDesigner.render();
-  }
-
-  static clearGrid() {
-    DivisionDesigner.grid = Array(5).fill(null).map(() => Array(5).fill(null));
-    DivisionDesigner.render();
-  }
-
-  static calculateStats() {
-    let attack = 0, defense = 0, org = 0, count = 0;
-    DivisionDesigner.grid.forEach(row => {
-      row.forEach(cell => {
-        if (cell) {
-          let cellAttack = cell.attack;
-          let cellDefense = cell.defense;
-          if (cell.id === 'armor') cellAttack *= (1 + (CoreEngine.gameState.cardModifiers.armorBreakthrough || 0));
-          if (cell.id === 'infantry') cellDefense *= (1 + (CoreEngine.gameState.cardModifiers.infantryDefense || 0));
-          attack += cellAttack;
-          defense += cellDefense;
-          org += cell.org;
-          count++;
-        }
-      });
-    });
-    if (count > 0) org = Math.floor(org / count);
-    return { attack: Math.floor(attack), defense: Math.floor(defense), org: org, count: count };
-  }
-}
 
 // ==========================================================
 // Module 10: CheatConsole — コンソールチート機能
@@ -6788,6 +6646,7 @@ class SaveLoadManager {
     CardSystem.normalizeHiredCards();
     if (data.dlc && typeof DLC !== 'undefined') DLC.apply(data.dlc);   // DLC拡張状態を復元
     StrategyGame.apply(data.strategy);
+    if (typeof DivisionDesigner !== 'undefined') DivisionDesigner.load();   // 師団テンプレートを復元
     gs.speed=0;gs.paused=true;CoreEngine.updateSpeedUI();
     CardSystem.saveDeck();
     CardSystem.saveHired();
@@ -6904,6 +6763,8 @@ class GameUI {
     if (tabName === 'diplomacy') DiplomacyManager.render();
     if (tabName === 'cards') CardSystem.render();
     if (tabName === 'division') DivisionDesigner.render();
+    if (tabName === 'airforce' && typeof AirForce !== 'undefined') AirForce.render();
+    if (tabName === 'navy' && typeof NavalForce !== 'undefined') NavalForce.render();
     if (tabName === 'multiplayer') MultiplayerManager.render();
     if (tabName === 'research') { ResearchManager.renderTabs(); ResearchManager.renderSlots(); ResearchManager.render(); }
     if (tabName === 'focus') FocusTreeManager.render();
@@ -7021,6 +6882,18 @@ async function initGame() {
   await CardSystem.init();
   PoliticsManager.init();
   PoliticsManager.render();
+  DivisionDesigner.init();      // 師団テンプレート (編成デザイナー)
+  if (typeof SupplyNetwork !== 'undefined') SupplyNetwork.init();   // 補給網・インフラ・補給ハブ
+  if (typeof AirForce !== 'undefined') AirForce.init();             // 空軍: 航空隊配備・任務・制空権
+  if (typeof NavalForce !== 'undefined') NavalForce.init();         // 海軍: 艦隊編成・海域任務・海戦・制海権
+  if (typeof TradeSystem !== 'undefined') TradeSystem.init();       // 貿易: 州資源産出・民需工場による輸入・生産効率
+  if (typeof PeaceSystem !== 'undefined') PeaceSystem.init();       // 講和会議・戦勝点・傀儡国と自治度
+  if (typeof PoliticsSystem !== 'undefined') PoliticsSystem.init();   // 政治: 法案・閣僚・政党支持率・国家補正
+  if (typeof OccupationSystem !== 'undefined') OccupationSystem.init(); // 占領地: レジスタンス・順応度・占領政策・鎮圧師団
+  if (typeof TrainingLogistics !== 'undefined') TrainingLogistics.init(); // 訓練・練度・兵站備蓄・補充優先度
+  if (typeof FactionSystem !== 'undefined') FactionSystem.init();     // 陣営・世界緊張度・参戦要請
+  if (typeof SuperWeapons !== 'undefined') SuperWeapons.init();       // 特殊計画・核・ミサイル
+  if (typeof FrontCommand !== 'undefined') FrontCommand.init();       // 前線・司令階層・強襲上陸
   TrainingManager.init();       // 徴兵・訓練 (師団は徴兵→訓練でのみ増える)
   CheatConsole.init();
   MultiplayerManager.init();
@@ -7029,6 +6902,7 @@ async function initGame() {
   if (typeof NewsManager !== 'undefined') NewsManager.init();   // ニュースイベント (世界の出来事を報道)
   if (typeof AIManager !== 'undefined') AIManager.init();       // 非プレイヤー国のAI自動操作 (史実準拠)
   if (typeof DLC !== 'undefined') DLC.onGameStart();   // 全DLC拡張 (ドクトリン/兵器設計/諜報/MIO・国際市場/講和会議/将軍特性)
+  if (typeof Espionage !== 'undefined') Espionage.init();   // 諜報機関: 政治力制アップグレードツリー・諜報員任務・インテル可視化
   StrategyGame.init();
   try {
     await ForceSystems.init();
@@ -7066,6 +6940,7 @@ window.addEventListener('DOMContentLoaded', () => StartScreen.show());
 <!-- ==================== AI自動操作 (非プレイヤー国の史実準拠AI) ==================== -->
 <script src="ai.js"></script>
 <!-- ==================== 徴兵・訓練システム (師団は徴兵→訓練でのみ増える) ==================== -->
+<script src="assets/division-designer.js?v=designer-1"></script>
 <script src="training.js"></script>
 <!-- ==================== DLC拡張モジュール (ドクトリン/兵器設計/諜報/MIO・国際市場/講和会議/将軍特性) ==================== -->
 <script src="assets/doctrine-data.js"></script>
@@ -7076,7 +6951,19 @@ window.addEventListener('DOMContentLoaded', () => StartScreen.show());
   <script src="assets/strategy-systems.js?v=designer-2"></script>
   <script src="assets/force-systems.js?v=roster-2"></script>
   <script src="assets/intelligence-agency.js"></script>
+  <script src="assets/espionage.js?v=esp-1"></script>
   <script src="assets/area-battle-plan.js"></script>
+  <script src="assets/supply-network.js?v=supply-1"></script>
+  <script src="assets/air-force.js?v=air-1"></script>
+  <script src="assets/naval-force.js?v=navy-1"></script>
+  <script src="assets/trade-resources.js?v=trade-1"></script>
+  <script src="assets/peace-conference.js?v=peace-1"></script>
+  <script src="assets/politics-cabinet.js?v=pol-1"></script>
+  <script src="assets/occupation.js?v=occ-1"></script>
+  <script src="assets/training-logistics.js?v=tl-1"></script>
+  <script src="assets/factions.js?v=fs-1"></script>
+  <script src="assets/superweapons.js?v=sw-2"></script>
+  <script src="assets/frontline-command.js?v=fc-1"></script>
   <script src="assets/MultiplayerTimeManager.js"></script>
   <!-- ==================== HOI4 大戦略 全画面レイヤー (../hoi4.html / H キー) ==================== -->
   <script src="hoi4-screen.js"></script>

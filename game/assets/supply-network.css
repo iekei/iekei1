@@ -1,0 +1,35 @@
+/* supply-network.css — 補給網・インフラ・補給ハブ UI (建設ウィンドウ内セクション) */
+.sn-section h3 { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.sn-mode-btn {
+  font-size: 11px; padding: 3px 10px; cursor: pointer; color: #e3c06a; background: #2a2d22;
+  border: 1px solid #c9a44c; letter-spacing: .5px;
+}
+.sn-mode-btn:hover { background: #3a3d2a; }
+.sn-state { background: #1d2124; border: 1px solid #3a4044; border-left: 3px solid #c9a44c; padding: 8px 10px; margin-bottom: 8px; }
+.sn-state-head { font-size: 13px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+.sn-tag { font-size: 10px; padding: 1px 6px; border: 1px solid #4e565b; color: #929a92; }
+.sn-tag.gold { color: #e3c06a; border-color: #c9a44c; }
+.sn-rows { display: flex; flex-direction: column; gap: 4px; }
+.sn-row { display: grid; grid-template-columns: 90px 1fr 56px auto auto; align-items: center; gap: 8px; font-size: 12px; padding: 4px 0; border-bottom: 1px dotted rgba(255,255,255,.08); }
+.sn-row small { font-size: 10px; color: #e0c040; }
+.sn-row b { font-variant-numeric: tabular-nums; }
+.sn-pips { display: inline-flex; gap: 3px; }
+.sn-pips i { display: inline-block; width: 16px; height: 8px; background: #0f1113; border: 1px solid #3a4044; }
+.sn-pips i.on.infra { background: #5d93c2; border-color: #86b8e4; }
+.sn-pips i.on.hub { background: #c9a44c; border-color: #e3c06a; }
+.sn-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px 14px; margin-top: 8px; font-size: 11px; }
+.sn-stats div { display: flex; justify-content: space-between; gap: 6px; padding: 2px 0; border-bottom: 1px dotted rgba(255,255,255,.08); }
+.sn-stats span { color: #929a92; }
+.sn-warn { margin-top: 8px; padding: 6px 8px; font-size: 11px; color: #f0b887; background: #2a1e12; border: 1px solid #8a5a2a; }
+.sn-help { font-size: 11px; color: #929a92; margin: 4px 0; }
+.sn-help.ok { color: #a9c97a; }
+.sn-overview { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 6px; }
+.sn-col h4 { font-size: 11px; color: #c9a44c; letter-spacing: 1px; margin: 0 0 4px; }
+.sn-item { display: grid; grid-template-columns: 10px 1fr auto; gap: 6px; align-items: center; font-size: 11px; padding: 3px 6px; margin-bottom: 2px; background: #1d2124; border: 1px solid #3a4044; cursor: pointer; }
+.sn-item:hover { border-color: #c9a44c; }
+.sn-item i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.sn-item b { font-variant-numeric: tabular-nums; color: #d6d9d2; }
+.map-info-build-btn {
+  margin-top: 4px; font-size: 11px; padding: 2px 8px; cursor: pointer; color: #fff; background: #4b5320; border: 1px solid #7b8a3a;
+}
+.map-info-build-btn:hover { background: #5e6a2c; }

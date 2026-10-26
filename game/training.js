@@ -16,12 +16,21 @@ class TrainingManager {
 
   // 大隊1個あたりの装備ロードアウト。徴兵・補充で同じ表を使う。
   static BATTALION_EQUIPMENT = {
-    infantry: { infantry: 100 }, engineer: { infantry: 100 }, recon: { infantry: 100 },
+    // 戦列大隊
+    infantry: { infantry: 100 }, cavalry: { infantry: 120 },
     ranger: { infantry: 100 }, mountaineer: { infantry: 100 }, paratrooper: { infantry: 100 }, marine: { infantry: 100 },
-    anti_tank: { artillery: 150 }, anti_air: { artillery: 150 }, artillery: { artillery: 200 },
-    armor: { tank: 350 }, land_battleship: { tank: 380 },
-    jet_fighter: { fighter: 300 }, v2_rocket: { artillery: 320 }, nuke_battalion: { infantry: 400 }
+    motorized: { infantry: 120 }, mechanized: { infantry: 100, tank: 120 },
+    anti_tank: { artillery: 150 }, anti_air: { artillery: 150 }, artillery: { artillery: 200 }, rocket_artillery: { artillery: 200 },
+    light_armor: { tank: 250 }, armor: { tank: 350 }, heavy_armor: { tank: 450 }, land_battleship: { tank: 380 },
+    jet_fighter: { fighter: 300 }, v2_rocket: { artillery: 320 }, nuke_battalion: { infantry: 400 },
+    // 支援中隊 (師団編成の支援スロット)
+    engineer: { infantry: 60 }, recon: { infantry: 60 }, support_artillery: { artillery: 60 },
+    support_anti_tank: { artillery: 60 }, support_anti_air: { artillery: 60 },
+    field_hospital: { infantry: 40 }, logistics: { infantry: 40 }, signal: { infantry: 40 }, maintenance: { infantry: 40 }, military_police: { infantry: 40 }
   };
+
+  // 支援中隊は訓練人員・大隊数に数えない
+  static SUPPORT_IDS = new Set(['engineer','recon','support_artillery','support_anti_tank','support_anti_air','field_hospital','logistics','signal','maintenance','military_police']);
 
   static init() {
     const gs = CoreEngine.gameState;
@@ -58,21 +67,28 @@ class TrainingManager {
       pid=>MapRenderer.ownerOf(pid)===CoreEngine.gameState.country);
   }
 
-  // ---- 現在の師団テンプレート (DivisionDesigner の5×5グリッド) から必要量を算出 ----
-  static requirements() {
-    const comp = {};
-    let count = 0;
-    DivisionDesigner.grid.forEach(row => row.forEach(c => {
-      if (c) { comp[c.id] = (comp[c.id] || 0) + 1; count++; }
-    }));
+  // ---- 徴兵用テンプレート (DivisionDesigner で保存したアクティブテンプレート) から必要量を算出 ----
+  //      引数で構成 { 大隊ID: 個数 } を渡すと任意の編成を評価できる (支援中隊を含む)
+  static requirements(composition) {
+    let comp = composition;
+    if (!comp) {
+      if (typeof DivisionDesigner.activeComposition === 'function') comp = DivisionDesigner.activeComposition();
+      else {
+        comp = {};
+        DivisionDesigner.grid.forEach(row => row.forEach(c => { if (c) comp[c.id] = (comp[c.id] || 0) + 1; }));
+      }
+    }
+    const count = Object.entries(comp).reduce((n, [id, k]) => n + (TrainingManager.SUPPORT_IDS.has(id) ? 0 : k), 0);
     if (!count) return null;
     const equipmentNeeds = TrainingManager.equipmentNeedsFor(comp);
     const equipNeed = Object.values(equipmentNeeds).reduce((sum, amount) => sum + amount, 0);
     // 訓練期間: 基礎2ヶ月 (60日) — 機甲・砲兵・特別大隊が多いほど長い (最大5ヶ月)
-    const trainDays = Math.min(150, Math.round(60 +
-      (comp.armor || 0) * 9 + (comp.artillery || 0) * 5 +
-      (comp.jet_fighter || 0) * 7 + (comp.v2_rocket || 0) * 7 +
-      (comp.nuke_battalion || 0) * 10 + (comp.land_battleship || 0) * 8));
+    const trainDays = typeof DivisionDesigner.trainDaysFor === 'function'
+      ? DivisionDesigner.trainDaysFor(comp, count)
+      : Math.min(150, Math.round(60 +
+        (comp.armor || 0) * 9 + (comp.artillery || 0) * 5 +
+        (comp.jet_fighter || 0) * 7 + (comp.v2_rocket || 0) * 7 +
+        (comp.nuke_battalion || 0) * 10 + (comp.land_battleship || 0) * 8));
     return { comp, count, equipNeed, equipmentNeeds, trainDays, manpowerNeed: count * 10000 };
   }
 
@@ -91,7 +107,7 @@ class TrainingManager {
   static recruit() {
     const s = CoreEngine.gameState;
     const req = TrainingManager.requirements();
-    if (!req) { GameUI.notify('先に師団編成エディターで大隊を配置してください。', 'alert'); return; }
+    if (!req) { GameUI.notify('先に師団編成で大隊を配置し「変更を保存」してください。', 'alert'); return; }
     if (['ranger','mountaineer','paratrooper','marine'].some(k => req.comp[k]) && ArmyRoster.specialCount() >= 5) { GameUI.notify('特殊部隊は全軍で5師団までです（訓練中を含みます）。', 'alert'); return; }
     if (TrainingManager.queue.length >= 10) { GameUI.notify('徴兵キューが満杯です。', 'alert'); return; }
     const selectedState=document.getElementById('recruit-training-state')?.value||
@@ -99,9 +115,11 @@ class TrainingManager {
       TrainingManager.availableTrainingStates()[0]?.[0];
     const trainingPid=TrainingManager.trainingProvince(String(selectedState||''));
     if(!trainingPid) {GameUI.notify('自国が支配する訓練地点を選択してください。','alert');return;}
+    const template = (typeof DivisionDesigner.activeTemplate === 'function' && DivisionDesigner.activeTemplate()) || null;
     const order = {
       id: TrainingManager.nextId++,
-      name: '新編師団 #' + TrainingManager.nextId,
+      name: (template ? template.name : '新編師団') + ' #' + TrainingManager.nextId,
+      templateId: template ? template.id : null,
       comp: req.comp, count: req.count,
       manpowerNeed: req.manpowerNeed, equipmentNeed: req.equipNeed, equipmentNeeds: req.equipmentNeeds,
       trainDays: req.trainDays,
@@ -154,7 +172,7 @@ class TrainingManager {
           const division = {
             id: s.strategy.nextDivisionId++, name: o.name, comp: o.comp,
             org: 30, maxOrg: 60, equipmentStrength: 100,
-            equipmentNeeds: TrainingManager.equipmentNeedsFor(o.comp), type: Object.keys(o.comp)[0],
+            equipmentNeeds: TrainingManager.equipmentNeedsFor(o.comp), type: Object.keys(o.comp).find(k => !TrainingManager.SUPPORT_IDS.has(k)) || Object.keys(o.comp)[0], templateId: o.templateId || null,
             x: a?.base[0] ?? spawnCenter[0], y: a?.base[1] ?? spawnCenter[1],
             pid: a?.positionPid || Number(spawnPid)
           };

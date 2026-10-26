@@ -224,8 +224,11 @@ class BattleManager {
     BattleManager.battles.forEach(b => {
       if(b.preparation>0){b.preparation--;return;}
       const cipherBonus = typeof AgencyUI !== 'undefined' ? AgencyUI.combatBonus(b.defender) : 0;
-      const attackValue = (b.softAttack + b.hardAttack * 0.6) * (1 + (b.attacker === CoreEngine.gameState.country ? cipherBonus : 0));
-      const defenseValue = Math.max(1, b.defense + b.breakthrough);
+      // 近接航空支援 (CAS): 戦闘中の州上空で任務中なら、プレイヤー側の火力 (攻撃側) または防御 (防衛側) を強化
+      const cas = typeof AirForce !== 'undefined' ? AirForce.casBonus(b) : 0;
+      const playerAttacks = b.attacker === CoreEngine.gameState.country;
+      const attackValue = (b.softAttack + b.hardAttack * 0.6) * (1 + (playerAttacks ? cipherBonus : 0)) * (playerAttacks ? 1 + cas : 1);
+      const defenseValue = Math.max(1, b.defense + b.breakthrough) * (!playerAttacks && b.defender === CoreEngine.gameState.country ? 1 + cas : 1);
       const exceeded = attackValue > defenseValue;
       b.hitChance = exceeded ? 0.4 : 0.2;
       b.damage = Math.max(0, attackValue / defenseValue) * b.hitChance * 2;

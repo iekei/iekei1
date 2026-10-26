@@ -115,6 +115,11 @@ function fixture() {
       { filename: file + ".js" },
     );
   vm.runInContext(inline, ctx, { filename: "index.html:inline" });
+  vm.runInContext(
+    fs.readFileSync(path.join(root, "assets/division-designer.js"), "utf8"),
+    ctx,
+    { filename: "division-designer.js" },
+  );
   for (const name of [
     "battle",
     "news",
@@ -133,6 +138,66 @@ function fixture() {
     fs.readFileSync(path.join(root, "assets/strategy-systems.js"), "utf8"),
     ctx,
     { filename: "strategy-systems.js" },
+  );
+  vm.runInContext(
+    fs.readFileSync(path.join(root, "assets/supply-network.js"), "utf8"),
+    ctx,
+    { filename: "supply-network.js" },
+  );
+  vm.runInContext(
+    fs.readFileSync(path.join(root, "assets/air-force.js"), "utf8"),
+    ctx,
+    { filename: "air-force.js" },
+  );
+  vm.runInContext(
+    fs.readFileSync(path.join(root, "assets/naval-force.js"), "utf8"),
+    ctx,
+    { filename: "naval-force.js" },
+  );
+  vm.runInContext(
+    fs.readFileSync(path.join(root, "assets/trade-resources.js"), "utf8"),
+    ctx,
+    { filename: "trade-resources.js" },
+  );
+  vm.runInContext(
+    fs.readFileSync(path.join(root, "assets/peace-conference.js"), "utf8"),
+    ctx,
+    { filename: "peace-conference.js" },
+  );
+  vm.runInContext(
+    fs.readFileSync(path.join(root, "assets/politics-cabinet.js"), "utf8"),
+    ctx,
+    { filename: "politics-cabinet.js" },
+  );
+  vm.runInContext(
+    fs.readFileSync(path.join(root, "assets/occupation.js"), "utf8"),
+    ctx,
+    { filename: "occupation.js" },
+  );
+  vm.runInContext(
+    fs.readFileSync(path.join(root, "assets/training-logistics.js"), "utf8"),
+    ctx,
+    { filename: "training-logistics.js" },
+  );
+  vm.runInContext(
+    fs.readFileSync(path.join(root, "assets/factions.js"), "utf8"),
+    ctx,
+    { filename: "factions.js" },
+  );
+  vm.runInContext(
+    fs.readFileSync(path.join(root, "assets/superweapons.js"), "utf8"),
+    ctx,
+    { filename: "superweapons.js" },
+  );
+  vm.runInContext(
+    fs.readFileSync(path.join(root, "assets/frontline-command.js"), "utf8"),
+    ctx,
+    { filename: "frontline-command.js" },
+  );
+  vm.runInContext(
+    fs.readFileSync(path.join(root, "assets/espionage.js"), "utf8"),
+    ctx,
+    { filename: "espionage.js" },
   );
   vm.runInContext(
     fs.readFileSync(
