@@ -145,6 +145,11 @@ function fixture() {
     { filename: "supply-network.js" },
   );
   vm.runInContext(
+    fs.readFileSync(path.join(root, "assets/air-force.js"), "utf8"),
+    ctx,
+    { filename: "air-force.js" },
+  );
+  vm.runInContext(
     fs.readFileSync(
       path.join(root, "assets/MultiplayerTimeManager.js"),
       "utf8",

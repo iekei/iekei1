@@ -1,0 +1,69 @@
+/* air-force.css — 空軍 (航空隊配備・任務) ウィンドウ */
+#tpl-airforce > #airforce-content { padding: 0; display: flex; flex-direction: column; }
+.af-root { display: flex; flex-direction: column; min-height: 100%; background: radial-gradient(ellipse at top left, rgba(93,147,194,0.10), transparent 55%), #15181a; color: #d6d9d2; font-size: 12px; }
+.af-header { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding: 10px 14px; border-bottom: 2px solid #3f6a8e; background: linear-gradient(180deg, #23282b, #1a1e21); }
+.af-title { display: flex; align-items: center; gap: 10px; flex: 1 1 320px; }
+.af-mark { width: 36px; height: 36px; display: grid; place-items: center; font-size: 18px; color: #86b8e4; border: 2px solid #5d93c2; background: #1f2d3a; box-shadow: 0 0 0 2px #0e1011; }
+.af-title h3 { margin: 0; font-size: 16px; letter-spacing: 1px; color: #e3c06a; }
+.af-title h3 small { font-size: 10px; letter-spacing: 3px; color: #929a92; margin-left: 6px; }
+.af-title p { margin: 2px 0 0; font-size: 11px; color: #929a92; }
+.af-actions { display: flex; gap: 6px; margin-left: auto; }
+.af-body { display: grid; grid-template-columns: 240px minmax(0, 1fr) 260px; flex: 1; min-height: 520px; }
+.af-side { background: #1d2124; border-right: 1px solid #3a4044; display: flex; flex-direction: column; min-height: 0; overflow-y: auto; }
+.af-side.right { border-right: 0; border-left: 1px solid #3a4044; }
+.af-stock, .af-bases, .af-zones { padding: 8px; }
+.af-stock-row { display: grid; grid-template-columns: 1fr 70px auto; gap: 6px; align-items: center; padding: 4px 0; border-bottom: 1px dotted rgba(255,255,255,.08); }
+.af-stock-row b small { color: #929a92; font-weight: 400; }
+.af-bar { display: block; height: 7px; background: #0f1113; border: 1px solid #2c3236; }
+.af-bar em { display: block; height: 100%; transition: width .2s; }
+.af-base { padding: 6px; margin-bottom: 5px; background: #262b2e; border: 1px solid #3a4044; border-left: 3px solid #c9a44c; display: grid; grid-template-columns: 1fr auto; gap: 3px 8px; align-items: center; }
+.af-base > div { grid-column: 1 / -1; }
+.af-base small { color: #929a92; font-size: 10px; }
+.af-base.over { border-left-color: #e04a3c; }
+.af-mini { font-size: 10px; padding: 2px 7px; cursor: pointer; color: #d6d9d2; background: #1a1d1f; border: 1px solid #4e565b; }
+.af-mini:hover { border-color: #c9a44c; color: #e3c06a; }
+.af-mini.danger:hover { background: #c75b4a; border-color: #c75b4a; color: #fff; }
+.af-main { display: flex; flex-direction: column; min-height: 0; min-width: 0; }
+.af-wings { flex: 1; overflow-y: auto; padding: 8px; }
+.af-wing { background: #1d2124; border: 1px solid #3a4044; border-left: 3px solid #4e565b; padding: 8px 10px; margin-bottom: 8px; cursor: pointer; }
+.af-wing.selected { border-color: #c9a44c; border-left-color: #c9a44c; background: #24261d; }
+.af-wing.flying { border-left-color: #5d93c2; }
+.af-wing-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.af-wing-icon { font-size: 18px; }
+.af-name { flex: 1; min-width: 0; font-size: 13px; font-weight: 700; color: #e3c06a; background: transparent; border: 1px solid transparent; border-bottom-color: #3a4044; padding: 2px 4px; }
+.af-name:focus { border-color: #c9a44c; outline: none; background: #101214; }
+.af-status { font-size: 10px; padding: 2px 8px; border: 1px solid #4e565b; color: #929a92; white-space: nowrap; }
+.af-status.on { color: #86b8e4; border-color: #5d93c2; background: #1f2d3a; }
+.af-wing-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.af-wing-grid label { display: flex; flex-direction: column; gap: 2px; font-size: 10px; color: #929a92; }
+.af-wing-grid select, .af-wing-grid input { width: 100%; background: #101214; color: #d6d9d2; border: 1px solid #4e565b; padding: 4px; font-size: 11px; box-sizing: border-box; }
+.af-count { display: flex; gap: 3px; }
+.af-count input { flex: 1; min-width: 0; }
+.af-wing-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 8px; }
+.af-wing-stats > div { display: grid; grid-template-columns: 1fr; gap: 2px; font-size: 10px; color: #929a92; }
+.af-wing-stats b { font-size: 12px; color: #d6d9d2; font-variant-numeric: tabular-nums; }
+.af-wing-foot { display: flex; align-items: center; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+.af-zone-label { flex: 1; font-size: 11px; color: #929a92; }
+.af-zone-label b { color: #d6d9d2; }
+.af-zone { background: #262b2e; border: 1px solid #3a4044; padding: 6px 8px; margin-bottom: 6px; cursor: pointer; }
+.af-zone:hover { border-color: #c9a44c; }
+.af-zone > b { display: block; font-size: 12px; margin-bottom: 4px; }
+.af-zone > small { display: block; color: #929a92; font-size: 10px; margin-top: 3px; }
+.af-zone-row { display: flex; justify-content: space-between; gap: 6px; font-size: 11px; padding: 2px 0; }
+.af-zone-row small { color: #929a92; }
+.af-sup { position: relative; height: 12px; background: linear-gradient(90deg, #5a1f1f, #7a2a2a); border: 1px solid #2c3236; overflow: hidden; }
+.af-sup em { display: block; height: 100%; background: linear-gradient(90deg, #2f6e9e, #5d93c2); }
+.af-sup span { position: absolute; inset: 0; display: grid; place-items: center; font-size: 9px; font-weight: 700; color: #fff; text-shadow: 0 1px 1px #000; }
+.af-sup.big { height: 20px; }
+.af-sup.big span { font-size: 11px; }
+.af-modal { font-size: 12px; color: #d6d9d2; }
+.af-modal-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.af-modal-head > span { font-size: 32px; }
+.af-modal-head h3 { margin: 0; color: #e3c06a; font-size: 15px; }
+.af-modal-head small { color: #929a92; font-size: 11px; }
+.af-modal-sup { background: #1d2124; border: 1px solid #3a4044; padding: 8px; margin-bottom: 8px; }
+.af-modal-row { display: flex; justify-content: space-between; gap: 8px; margin-top: 6px; font-size: 11px; }
+.af-modal-row span { color: #929a92; }
+.af-modal-list { background: #1d2124; border: 1px solid #3a4044; padding: 6px 8px; margin-bottom: 8px; }
+.af-modal-list h4 { margin: 0 0 4px; font-size: 11px; color: #c9a44c; letter-spacing: 1px; }
+.af-modal-actions { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-top: 8px; }
