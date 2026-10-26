@@ -694,7 +694,7 @@ class ArmyRoster {
       });
       html+='</div>';
     } else {
-      html+=GameTools.button('＋軍集団','BattlePlanManager.addArmy()')+GameTools.button('師団を配属 ('+CoreEngine.gameState.strategy.reserves.length+' 未所属)','ArmyRoster.assignModal()');
+      html+=GameTools.button('＋軍集団','BattlePlanManager.addArmy()')+GameTools.button('師団を配属 ('+CoreEngine.gameState.strategy.reserves.length+' 未所属)','ArmyRoster.assignModal()')+GameTools.button('⚔️ 師団編成',"GameUI.switchTab('division')");
       html+=GameTools.button(ArmyRoster.moveTool?'移動先をクリック…':'移動','ArmyRoster.toggleMove()',!BattlePlanManager.selectedArmy()||BattlePlanManager.selectedArmy().executing||(!ArmyRoster.moveTool&&!BattlePlanManager.selectedArmy().divisions.length));
       html+=GameTools.button(ArmyRoster.frontTool?'前線指定中…':'前線を引く','ArmyRoster.toggleFront()')+GameTools.button(BattlePlanManager.arrowTool?'攻撃線指定中…':'攻撃線を引く','BattlePlanManager.arrowTool=!BattlePlanManager.arrowTool;ArmyRoster.frontTool=false;ArmyRoster.moveTool=false;BattlePlanManager.renderPanel()');
       html+=GameTools.button('強襲上陸','BattlePlanManager.toggleInvasion()')+GameTools.button('空挺降下','ArmyRoster.airdropTool=!ArmyRoster.airdropTool;ArmyRoster.frontTool=false;ArmyRoster.moveTool=false;ArmyRoster.render()');

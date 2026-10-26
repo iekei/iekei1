@@ -115,6 +115,11 @@ function fixture() {
       { filename: file + ".js" },
     );
   vm.runInContext(inline, ctx, { filename: "index.html:inline" });
+  vm.runInContext(
+    fs.readFileSync(path.join(root, "assets/division-designer.js"), "utf8"),
+    ctx,
+    { filename: "division-designer.js" },
+  );
   for (const name of [
     "battle",
     "news",

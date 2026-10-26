@@ -1,0 +1,221 @@
+/* ==========================================================
+ * division-designer.css — 師団編成 (Division Designer) HOI4風スタイル
+ *   配色: ダークグレー / ミリタリーオリーブ / ゴールドアクセント
+ * ========================================================== */
+:root {
+  --dd-bg: #15181a;
+  --dd-bg-2: #1d2124;
+  --dd-bg-3: #262b2e;
+  --dd-olive: #4b5320;
+  --dd-olive-2: #5e6a2c;
+  --dd-olive-dark: #343b17;
+  --dd-gold: #c9a44c;
+  --dd-gold-2: #e3c06a;
+  --dd-border: #3a4044;
+  --dd-border-light: #4e565b;
+  --dd-text: #d6d9d2;
+  --dd-text-dim: #929a92;
+  --dd-red: #c75b4a;
+  --dd-green: #7fa84f;
+  --dd-blue: #5d93c2;
+  --dd-orange: #d2914a;
+}
+
+#tpl-division > #division-content { padding: 0; display: flex; flex-direction: column; }
+.dd-root {
+  display: flex; flex-direction: column; min-height: 100%; height: 100%;
+  background:
+    radial-gradient(ellipse at top left, rgba(94,106,44,0.10), transparent 55%),
+    repeating-linear-gradient(135deg, rgba(255,255,255,0.012) 0 2px, transparent 2px 6px),
+    var(--dd-bg);
+  color: var(--dd-text); font-size: 12px; font-family: 'Segoe UI', 'Noto Sans JP', 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* ---------- ヘッダー ---------- */
+.dd-header {
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  padding: 10px 14px; border-bottom: 2px solid var(--dd-olive);
+  background: linear-gradient(180deg, #23282b, #1a1e21);
+  box-shadow: inset 0 -1px 0 rgba(201,164,76,0.25);
+}
+.dd-title { display: flex; align-items: center; gap: 10px; flex: 1 1 320px; min-width: 260px; }
+.dd-title-mark {
+  width: 36px; height: 36px; display: grid; place-items: center; font-size: 18px; color: var(--dd-gold);
+  border: 2px solid var(--dd-gold); background: var(--dd-olive-dark); box-shadow: 0 0 0 2px #0e1011, 0 0 10px rgba(201,164,76,0.3);
+}
+.dd-title h3 { margin: 0; font-size: 16px; letter-spacing: 1px; color: var(--dd-gold-2); text-shadow: 0 1px 0 #000; }
+.dd-title h3 small { font-size: 10px; letter-spacing: 3px; color: var(--dd-text-dim); margin-left: 6px; }
+.dd-title p { margin: 2px 0 0; font-size: 11px; color: var(--dd-text-dim); }
+.dd-name { display: flex; align-items: center; gap: 8px; }
+.dd-name label { font-size: 11px; color: var(--dd-text-dim); letter-spacing: 1px; }
+.dd-name input {
+  width: 200px; padding: 6px 10px; font-size: 13px; font-weight: 600; color: var(--dd-gold-2);
+  background: #101214; border: 1px solid var(--dd-border-light); border-bottom-color: var(--dd-gold); outline: none;
+}
+.dd-name input:focus { border-color: var(--dd-gold); box-shadow: 0 0 6px rgba(201,164,76,0.35); }
+.dd-badge { font-size: 10px; padding: 2px 8px; border: 1px solid var(--dd-border-light); color: var(--dd-text-dim); letter-spacing: 1px; background: #121416; }
+.dd-badge.dirty { color: #f0c36a; border-color: #a7812f; background: #2b2312; }
+.dd-badge.active { color: var(--dd-gold-2); border-color: var(--dd-gold); background: var(--dd-olive-dark); }
+.dd-actions { display: flex; gap: 6px; margin-left: auto; }
+
+/* ---------- ボタン ---------- */
+.dd-btn {
+  padding: 6px 12px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px; cursor: pointer; color: var(--dd-text);
+  background: linear-gradient(180deg, #353c40, #24292c); border: 1px solid var(--dd-border-light); border-bottom-color: #121416;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06); transition: all .12s;
+}
+.dd-btn:hover:not(:disabled) { border-color: var(--dd-gold); color: var(--dd-gold-2); }
+.dd-btn:disabled { opacity: .45; cursor: not-allowed; }
+.dd-btn.primary { background: linear-gradient(180deg, var(--dd-olive-2), var(--dd-olive)); border-color: #7b8a3a; color: #f3eccc; }
+.dd-btn.primary:hover:not(:disabled) { background: linear-gradient(180deg, #6f7d35, var(--dd-olive-2)); box-shadow: 0 0 8px rgba(201,164,76,0.35); }
+.dd-btn.ghost { background: transparent; }
+
+/* ---------- 3ペイン ---------- */
+.dd-body { display: grid; grid-template-columns: 230px minmax(0, 1fr) 270px; flex: 1; min-height: 540px; }
+.dd-pane-title {
+  display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; font-size: 11px; letter-spacing: 2px; font-weight: 700;
+  color: var(--dd-gold); text-transform: uppercase; border-bottom: 1px solid var(--dd-border); background: linear-gradient(90deg, rgba(75,83,32,0.45), transparent);
+}
+.dd-pane-title span { font-weight: 400; letter-spacing: 0; color: var(--dd-text-dim); }
+
+/* 左: テンプレート一覧 */
+.dd-templates { display: flex; flex-direction: column; border-right: 1px solid var(--dd-border); background: var(--dd-bg-2); min-height: 0; }
+.dd-template-list { flex: 1; overflow-y: auto; padding: 6px; }
+.dd-template {
+  display: grid; grid-template-columns: 44px 1fr auto; gap: 6px; align-items: center; padding: 6px; margin-bottom: 5px; cursor: pointer;
+  background: var(--dd-bg-3); border: 1px solid var(--dd-border); border-left: 3px solid var(--dd-border-light); transition: border-color .12s, background .12s;
+}
+.dd-template:hover { border-color: var(--dd-border-light); border-left-color: var(--dd-gold); background: #2b3135; }
+.dd-template.editing { border-color: var(--dd-gold); border-left-color: var(--dd-gold); background: #2a2d22; box-shadow: inset 0 0 0 1px rgba(201,164,76,0.2); }
+.dd-template.active .dd-template-info b { color: var(--dd-gold-2); }
+.dd-template-icon { display: grid; place-items: center; width: 44px; height: 36px; background: #0f1113; border: 1px solid var(--dd-border); }
+.dd-template-icon .dd-icon { transform: scale(.55); }
+.dd-template-info { min-width: 0; display: flex; flex-direction: column; }
+.dd-template-info b { font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dd-template-info small { font-size: 10px; color: var(--dd-text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dd-template-tools { display: flex; flex-direction: column; gap: 2px; }
+.dd-template-tools button {
+  width: 22px; height: 18px; font-size: 10px; line-height: 1; cursor: pointer; color: var(--dd-text-dim);
+  background: #1a1d1f; border: 1px solid var(--dd-border);
+}
+.dd-template-tools button:hover:not(:disabled) { color: var(--dd-gold-2); border-color: var(--dd-gold); }
+.dd-template-tools button:disabled { color: var(--dd-gold); border-color: var(--dd-olive-2); cursor: default; }
+.dd-template-tools button.danger:hover { color: #fff; background: var(--dd-red); border-color: var(--dd-red); }
+.dd-template-actions { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px; border-top: 1px solid var(--dd-border); }
+.dd-template-actions .dd-btn { flex: 1 1 auto; padding: 5px 6px; font-size: 11px; }
+
+/* 中央: パレット + マトリクス */
+.dd-center { display: grid; grid-template-columns: 210px minmax(0, 1fr); min-height: 0; min-width: 0; }
+.dd-palette { display: flex; flex-direction: column; min-height: 0; border-right: 1px solid var(--dd-border); background: #191d20; }
+.dd-tabs { display: flex; border-bottom: 1px solid var(--dd-border); }
+.dd-tabs button {
+  flex: 1; padding: 8px 4px; font-size: 11px; font-weight: 700; letter-spacing: 1px; cursor: pointer; color: var(--dd-text-dim);
+  background: #141719; border: none; border-bottom: 2px solid transparent;
+}
+.dd-tabs button.on { color: var(--dd-gold-2); border-bottom-color: var(--dd-gold); background: #1f2326; }
+.dd-palette-list { flex: 1; overflow-y: auto; padding: 6px; }
+.dd-palette-cat { font-size: 10px; letter-spacing: 2px; color: var(--dd-text-dim); padding: 6px 2px 3px; border-bottom: 1px dashed var(--dd-border); margin-bottom: 4px; }
+.dd-palette-item {
+  display: flex; align-items: center; gap: 6px; padding: 4px 6px; margin-bottom: 4px; cursor: grab; user-select: none;
+  background: var(--dd-bg-3); border: 1px solid var(--dd-border); border-left: 3px solid var(--dd-border-light); transition: all .12s;
+}
+.dd-palette-item[data-cat="infantry"] { border-left-color: var(--dd-green); }
+.dd-palette-item[data-cat="mobile"] { border-left-color: var(--dd-blue); }
+.dd-palette-item[data-cat="armor"] { border-left-color: var(--dd-orange); }
+.dd-palette-item[data-cat="artillery"] { border-left-color: var(--dd-red); }
+.dd-palette-item[data-cat="special"] { border-left-color: #b07ddc; }
+.dd-palette-item[data-cat="support"] { border-left-color: var(--dd-gold); }
+.dd-palette-item:hover { border-color: var(--dd-border-light); background: #2d3337; }
+.dd-palette-item.selected { border-color: var(--dd-gold); background: #2f2d1d; box-shadow: 0 0 0 1px rgba(201,164,76,0.35), 0 0 8px rgba(201,164,76,0.25); }
+.dd-palette-item .dd-icon { transform: scale(.6); margin: -8px -14px; }
+.dd-palette-text { min-width: 0; display: flex; flex-direction: column; }
+.dd-palette-text b { font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dd-palette-text small { font-size: 9.5px; color: var(--dd-text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dd-star { color: var(--dd-gold); font-style: normal; }
+.dd-trash {
+  margin: 6px; padding: 8px; text-align: center; font-size: 11px; color: var(--dd-text-dim); border: 1px dashed var(--dd-border-light); background: #141719;
+}
+.dd-trash small { font-size: 9px; }
+.dd-trash.dd-dragover { border-color: var(--dd-red); color: #f1a89c; background: #2a1b19; }
+
+.dd-matrix { display: flex; gap: 14px; padding: 12px; overflow: auto; align-items: flex-start; }
+.dd-support { display: flex; flex-direction: column; gap: 6px; }
+.dd-col-heads { display: grid; grid-template-columns: repeat(5, 74px); gap: 6px; margin-bottom: 6px; }
+.dd-col-head {
+  height: 30px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 10px; letter-spacing: 1px; font-weight: 700;
+  color: var(--dd-gold); background: linear-gradient(180deg, var(--dd-olive-dark), #1b1f12); border: 1px solid var(--dd-olive-2); border-bottom: 2px solid var(--dd-gold);
+}
+.dd-col-head small { font-size: 9px; font-weight: 400; color: var(--dd-text-dim); letter-spacing: 0; }
+.dd-col-head[data-cat="infantry"] small { color: var(--dd-green); }
+.dd-col-head[data-cat="mobile"] small { color: var(--dd-blue); }
+.dd-col-head[data-cat="armor"] small { color: var(--dd-orange); }
+.dd-col-head[data-cat="artillery"] small { color: var(--dd-red); }
+.dd-support .dd-col-head { margin-bottom: 0; }
+.dd-grid { display: grid; grid-template-columns: repeat(5, 74px); grid-template-rows: repeat(5, 74px); gap: 6px; }
+.dd-cell {
+  position: relative; width: 74px; height: 74px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer;
+  background: repeating-linear-gradient(45deg, #1a1d1f 0 4px, #171a1c 4px 8px); border: 2px dashed var(--dd-border); transition: all .12s;
+}
+.dd-cell:hover { border-color: var(--dd-border-light); background: #23282b; }
+.dd-cell.target { border-color: rgba(201,164,76,0.6); box-shadow: inset 0 0 10px rgba(201,164,76,0.15); }
+.dd-cell.filled {
+  border: 2px solid var(--dd-olive-2); background: linear-gradient(180deg, #2a3119, #1d2213); cursor: grab;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.5), 0 2px 4px rgba(0,0,0,0.5);
+}
+.dd-cell.filled[data-cat="mobile"] { border-color: #3f6a8e; background: linear-gradient(180deg, #1f2d3a, #161f28); }
+.dd-cell.filled[data-cat="armor"] { border-color: #9a6a30; background: linear-gradient(180deg, #3a2c19, #271d11); }
+.dd-cell.filled[data-cat="artillery"] { border-color: #8e4336; background: linear-gradient(180deg, #3a211c, #261613); }
+.dd-cell.filled[data-cat="special"] { border-color: #8a63b4; background: linear-gradient(180deg, #2d2238, #1d1626); }
+.dd-cell.support.filled { border-color: var(--dd-gold); background: linear-gradient(180deg, #332c17, #211c10); }
+.dd-cell.filled:hover { filter: brightness(1.15); }
+.dd-cell.dd-dragover { border-color: var(--dd-gold) !important; border-style: solid; box-shadow: 0 0 10px rgba(201,164,76,0.5); }
+.dd-cell.dd-dragging { opacity: .4; }
+.dd-cell .dd-icon { transform: scale(.75); margin: -6px 0 -4px; }
+.dd-cell-name { font-size: 9.5px; font-weight: 600; color: var(--dd-text); white-space: nowrap; max-width: 70px; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 1px 0 #000; }
+.dd-slot-no { font-size: 11px; color: #3e464b; font-weight: 700; }
+.dd-cell-x {
+  position: absolute; top: -1px; right: -1px; width: 16px; height: 16px; display: none; font-size: 9px; line-height: 1; cursor: pointer;
+  color: #fff; background: var(--dd-red); border: none;
+}
+.dd-cell.filled:hover .dd-cell-x { display: block; }
+.dd-hint { margin: 8px 0 0; font-size: 11px; color: var(--dd-text-dim); max-width: 400px; }
+.dd-hint b { color: var(--dd-gold-2); }
+
+/* ユニットアイコン (GameVisuals の画像 + 絵文字フォールバック) */
+.dd-icon { position: relative; display: inline-grid; place-items: center; width: 76px; height: 42px; }
+.dd-icon .land-unit-icon { position: absolute; inset: 0; }
+.dd-icon .dd-emoji { font-size: 20px; line-height: 1; position: relative; z-index: 0; }
+.dd-icon:has(.land-unit-icon img:not([hidden])) .dd-emoji { opacity: 0; }
+.dd-icon .land-unit-icon { z-index: 1; }
+
+/* 右: ステータス */
+.dd-stats { display: flex; flex-direction: column; border-left: 1px solid var(--dd-border); background: var(--dd-bg-2); overflow-y: auto; min-height: 0; }
+.dd-valid { margin: 8px; padding: 6px 8px; font-size: 11px; border: 1px solid; }
+.dd-valid.ok { color: #a9c97a; border-color: #4f6a2a; background: #1b2414; }
+.dd-valid.ng { color: #f0b887; border-color: #8a5a2a; background: #2a1e12; }
+.dd-stat-group { padding: 4px 8px 8px; border-bottom: 1px solid var(--dd-border); }
+.dd-stat-group h4 { margin: 4px 0 6px; font-size: 10px; letter-spacing: 2px; color: var(--dd-gold); text-transform: uppercase; }
+.dd-stat { display: grid; grid-template-columns: 1fr 56px 56px; align-items: center; gap: 6px; padding: 3px 0; border-bottom: 1px dotted rgba(255,255,255,0.06); font-size: 11px; }
+.dd-stat span { color: var(--dd-text-dim); }
+.dd-stat b { text-align: right; font-variant-numeric: tabular-nums; font-size: 12px; grid-column: 3; }
+.dd-stat b.red { color: #e88a7a; } .dd-stat b.orange { color: #e5ad6c; } .dd-stat b.green { color: #a9d273; } .dd-stat b.gold { color: var(--dd-gold-2); } .dd-stat b.blue { color: #86b8e4; }
+.dd-bar { grid-column: 2; display: block; height: 6px; background: #0f1113; border: 1px solid #2c3236; }
+.dd-bar em { display: block; height: 100%; background: var(--dd-text-dim); transition: width .2s; }
+.dd-bar em.red { background: var(--dd-red); } .dd-bar em.orange { background: var(--dd-orange); } .dd-bar em.green { background: var(--dd-green); } .dd-bar em.gold { background: var(--dd-gold); } .dd-bar em.blue { background: var(--dd-blue); }
+
+/* 下: 徴兵 */
+.dd-footer {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 10px; padding: 8px 14px; border-top: 2px solid var(--dd-olive);
+  background: linear-gradient(180deg, #1a1e21, #23282b);
+}
+.dd-footer-info { font-size: 11px; color: var(--dd-text-dim); flex: 1 1 220px; }
+.dd-footer-info b { color: var(--dd-gold); }
+.dd-footer label { font-size: 11px; color: var(--dd-text-dim); display: flex; align-items: center; gap: 4px; }
+.dd-footer select { background: #101214; color: var(--dd-text); border: 1px solid var(--dd-border-light); padding: 4px 6px; font-size: 11px; max-width: 180px; }
+.dd-queue { padding: 0 10px 10px; }
+.dd-queue .sp-section { margin-top: 8px; }
+
+@media (max-width: 1100px) {
+  .dd-body { grid-template-columns: 200px minmax(0, 1fr) 230px; }
+  .dd-center { grid-template-columns: 180px minmax(0, 1fr); }
+}
