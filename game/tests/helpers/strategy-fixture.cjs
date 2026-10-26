@@ -185,6 +185,11 @@ function fixture() {
     { filename: "factions.js" },
   );
   vm.runInContext(
+    fs.readFileSync(path.join(root, "assets/superweapons.js"), "utf8"),
+    ctx,
+    { filename: "superweapons.js" },
+  );
+  vm.runInContext(
     fs.readFileSync(path.join(root, "assets/espionage.js"), "utf8"),
     ctx,
     { filename: "espionage.js" },
