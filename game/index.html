@@ -717,6 +717,7 @@
   <link rel="stylesheet" href="assets/trade-resources.css?v=trade-1">
   <link rel="stylesheet" href="assets/peace-conference.css?v=peace-1">
   <link rel="stylesheet" href="assets/politics-cabinet.css?v=pol-1">
+  <link rel="stylesheet" href="assets/occupation.css?v=occ-1">
   <!-- HOI4 大戦略 全画面レイヤー (../hoi4.html を iframe で表示) -->
   <link rel="stylesheet" href="css/hoi4-screen.css">
   </head>
@@ -3264,6 +3265,7 @@ class MapRenderer {
         (typeof NavalForce !== 'undefined' && st.owner === CoreEngine.gameState.country ? '<br>' + NavalForce.summaryLine(sid) : '') +
         (typeof TradeSystem !== 'undefined' ? '<br>' + TradeSystem.summaryLine(sid) : '') +
         (typeof PeaceSystem !== 'undefined' && PeaceSystem.subjectLine(sid) ? '<br>' + PeaceSystem.subjectLine(sid) : '') +
+        (typeof OccupationSystem !== 'undefined' && OccupationSystem.summaryLine(sid) ? '<br>' + OccupationSystem.summaryLine(sid) : '') +
         (st.owner === CoreEngine.gameState.country ? '<br><button class="map-info-build-btn" onclick="ConstructionManager.selectState(\'' + sid + '\');GameUI.switchTab(\'construction\')">🏗️ 建設 (インフラ・補給ハブ)</button>' : '');
       ConstructionManager.selectState(sid);
     } else {
@@ -6878,6 +6880,7 @@ async function initGame() {
   if (typeof TradeSystem !== 'undefined') TradeSystem.init();       // 貿易: 州資源産出・民需工場による輸入・生産効率
   if (typeof PeaceSystem !== 'undefined') PeaceSystem.init();       // 講和会議・戦勝点・傀儡国と自治度
   if (typeof PoliticsSystem !== 'undefined') PoliticsSystem.init();   // 政治: 法案・閣僚・政党支持率・国家補正
+  if (typeof OccupationSystem !== 'undefined') OccupationSystem.init(); // 占領地: レジスタンス・順応度・占領政策・鎮圧師団
   TrainingManager.init();       // 徴兵・訓練 (師団は徴兵→訓練でのみ増える)
   CheatConsole.init();
   MultiplayerManager.init();
@@ -6943,6 +6946,7 @@ window.addEventListener('DOMContentLoaded', () => StartScreen.show());
   <script src="assets/trade-resources.js?v=trade-1"></script>
   <script src="assets/peace-conference.js?v=peace-1"></script>
   <script src="assets/politics-cabinet.js?v=pol-1"></script>
+  <script src="assets/occupation.js?v=occ-1"></script>
   <script src="assets/MultiplayerTimeManager.js"></script>
   <!-- ==================== HOI4 大戦略 全画面レイヤー (../hoi4.html / H キー) ==================== -->
   <script src="hoi4-screen.js"></script>
