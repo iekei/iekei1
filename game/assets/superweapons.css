@@ -78,3 +78,15 @@
 .sw-telop { position: absolute; left: 0; right: 0; top: 12%; text-align: center; color: #fff; font-size: 40px; font-weight: 900; letter-spacing: 6px; text-shadow: 0 0 20px #ff6a20, 0 0 4px #000; opacity: 0; animation: sw-telop 3.5s .8s ease-out forwards; }
 .sw-telop small { display: block; font-size: 18px; letter-spacing: 3px; margin-top: 6px; color: #ffd0a0; }
 @keyframes sw-telop { 0% { opacity: 0; transform: scale(1.3); } 15% { opacity: 1; transform: scale(1); } 85% { opacity: 1; } 100% { opacity: 0; } }
+
+/* 計画画像・科学者肖像 */
+.sw-pimg { width: 112px; height: 68px; object-fit: cover; border-radius: 4px; border: 1px solid #3a4a6a; flex-shrink: 0; background: #0b1a33; }
+.sw-portrait { width: 52px; height: 70px; object-fit: cover; object-position: top; border-radius: 4px; border: 1px solid #4a5060; background: #0b0e14; flex-shrink: 0; }
+.sw-sci { display: flex; gap: 8px; align-items: center; width: 100%; padding: 4px; background: #0f131b; border-radius: 4px; }
+.sw-sci b { display: block; color: #fff; font-size: 12px; } .sw-sci small { color: #9ab; font-size: 10px; } .sw-sci.empty small { color: #667; }
+.sw-roster { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 6px; }
+.sw-sci-card { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2px; padding: 6px 4px; background: #141821; border: 1px solid #2c3340; border-radius: 6px; }
+.sw-sci-card .sw-portrait { width: 64px; height: 86px; } .sw-sci-card b { font-size: 11px; color: #fff; line-height: 1.2; } .sw-sci-card small { font-size: 10px; color: #9ab; }
+.sw-sci-card.busy { border-color: #d0a030; } .sw-sci-card em { font-style: normal; font-size: 10px; color: #ffd45a; }
+.sw-field { font-size: 10px; padding: 1px 6px; border-radius: 8px; background: #222838; color: #ccd; }
+.sw-field.nuclear { background: #4a2a10; color: #ffd45a; } .sw-field.rocket { background: #10304a; color: #9fd0ff; } .sw-field.jet { background: #1a3a2a; color: #9fe09f; }

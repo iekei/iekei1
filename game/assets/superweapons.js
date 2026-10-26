@@ -10,36 +10,135 @@
  */
 class SuperWeapons {
   static PROJECTS = {
-    uranium:  { id: 'uranium',  name: 'ウラン濃縮計画',   icon: '⚛️', points: 900,  manpower: 20000, tech: /atomic|nuclear|uranium/i, techName: '原子物理学 (atomic_research)', requires: null,      desc: '原子炉の建設を可能にする。核開発の第一歩。', unlocks: '原子炉の建設' },
-    atomic:   { id: 'atomic',   name: '原子爆弾',         icon: '☢️', points: 1600, manpower: 30000, tech: /atomic|nuclear/i,         techName: '原子物理学',           requires: 'uranium', desc: '原子炉から核兵器を生産できるようになる。', unlocks: '核兵器の生産 (原子炉 Lv1 ごとに 50 日に 1 発)' },
-    v2:       { id: 'v2',       name: 'V2ロケット開発',   icon: '🚀', points: 700,  manpower: 10000, tech: /rocket/i,                 techName: 'ロケット工学 (experimental_rockets)', requires: null,  desc: 'ロケット発射施設の建設と長距離ロケットの生産を解禁。', unlocks: 'ロケット発射施設・ロケット生産 (施設 Lv1 ごとに 0.5 発/日)' },
-    ballistic:{ id: 'ballistic', name: '弾道ミサイル',     icon: '🛰️', points: 1300, manpower: 15000, tech: /rocket/i,                 techName: 'ロケット工学',          requires: 'v2',      desc: '射程 2 倍・威力 1.5 倍のミサイル。核弾頭の搭載も可能に。', unlocks: 'ミサイル射程×2・威力×1.5' },
-    jet:      { id: 'jet',      name: 'ジェットエンジン実用化', icon: '✈️', points: 800, manpower: 8000, tech: /jet/i,                 techName: 'ジェットエンジン (sp_centrifugal_jet_tech)', requires: null, desc: 'ジェット爆撃機が核の運搬手段として使用可能になり、戦略爆撃機 +20。', unlocks: 'ジェット爆撃機 (核攻撃の適格機)・戦略爆撃機 +20' },
+    uranium:  { id: 'uranium',  name: 'ウラン濃縮計画',   icon: '⚛️', img: 'Sp_commercial_nuclear_reactor.png', points: 900,  manpower: 20000, tech: /atomic|nuclear|uranium/i, techName: '原子物理学 (atomic_research)', requires: null,      desc: '原子炉の建設を可能にする。核開発の第一歩。', unlocks: '原子炉の建設' },
+    atomic:   { id: 'atomic',   name: '原子爆弾',         icon: '☢️', img: 'Sp_air_earthshaker_bomb.png', points: 1600, manpower: 30000, tech: /atomic|nuclear/i,         techName: '原子物理学',           requires: 'uranium', desc: '原子炉から核兵器を生産できるようになる。', unlocks: '核兵器の生産 (原子炉 Lv1 ごとに 50 日に 1 発)' },
+    v2:       { id: 'v2',       name: 'V2ロケット開発',   icon: '🚀', img: 'Sp_naval_nuclear_missile_submarine.png', points: 700,  manpower: 10000, tech: /rocket/i,                 techName: 'ロケット工学 (experimental_rockets)', requires: null,  desc: 'ロケット発射施設の建設と長距離ロケットの生産を解禁。', unlocks: 'ロケット発射施設・ロケット生産 (施設 Lv1 ごとに 0.5 発/日)' },
+    ballistic:{ id: 'ballistic', name: '弾道ミサイル',     icon: '🛰️', img: 'Sp_air_intercontinental_bomber.png', points: 1300, manpower: 15000, tech: /rocket/i,                 techName: 'ロケット工学',          requires: 'v2',      desc: '射程 2 倍・威力 1.5 倍のミサイル。核弾頭の搭載も可能に。', unlocks: 'ミサイル射程×2・威力×1.5' },
+    jet:      { id: 'jet',      name: 'ジェットエンジン実用化', icon: '✈️', img: 'Sp_air_jet_engine.png', points: 800, manpower: 8000, tech: /jet/i,                 techName: 'ジェットエンジン (sp_centrifugal_jet_tech)', requires: null, desc: 'ジェット爆撃機が核の運搬手段として使用可能になり、戦略爆撃機 +20。', unlocks: 'ジェット爆撃機 (核攻撃の適格機)・戦略爆撃機 +20' },
   };
-  static SCIENTISTS = [
-    { id: 'phys1', name: '理論物理学者', icon: '👨‍🔬', skill: 1.6, field: ['uranium', 'atomic'] },
-    { id: 'phys2', name: '核化学者',     icon: '👩‍🔬', skill: 1.3, field: ['uranium', 'atomic'] },
-    { id: 'rock1', name: 'ロケット技師', icon: '🧑‍🚀', skill: 1.6, field: ['v2', 'ballistic'] },
-    { id: 'rock2', name: '弾道学者',     icon: '🧮', skill: 1.3, field: ['v2', 'ballistic'] },
-    { id: 'aero1', name: '航空工学者',   icon: '🛠️', skill: 1.5, field: ['jet'] },
-    { id: 'gen1',  name: '総合研究所長', icon: '🎓', skill: 1.1, field: ['uranium', 'atomic', 'v2', 'ballistic', 'jet'] },
+  static IMG = 'assets/special_projects/';
+  static PORTRAIT = 'assets/scientists/';
+  /** 科学者の名簿 (game/assets/scientists に肖像があるもののみ)。field: nuclear / rocket / jet / general */
+  static ROSTER = [
+    // ドイツ
+    { id: 'werner_heisenberg', tag: 'GER', file: 'Portrait_GER_werner_heisenberg.png', name: 'ヴェルナー・ハイゼンベルク', title: '理論物理学者', field: 'nuclear', skill: 1.7 },
+    { id: 'manfred_von_ardenne', tag: 'GER', file: 'Portrait_GER_manfred_von_ardenne.png', name: 'マンフレート・フォン・アルデンネ', title: '応用物理学者', field: 'nuclear', skill: 1.3 },
+    { id: 'gustav_ludwig_hertz', tag: 'GER', file: 'Portrait_GER_gustav_ludwig_hertz.png', name: 'グスタフ・ヘルツ', title: '原子物理学者', field: 'nuclear', skill: 1.4 },
+    { id: 'peter_adolf_thiessen', tag: 'GER', file: 'Portrait_GER_peter_adolf_thiessen.png', name: 'ペーター・ティーセン', title: '物理化学者', field: 'nuclear', skill: 1.2 },
+    { id: 'wernher_von_braun', tag: 'GER', file: 'Portrait_GER_wernher_von_braun.png', name: 'ヴェルナー・フォン・ブラウン', title: 'ロケット技師', field: 'rocket', skill: 1.8 },
+    { id: 'hellmuth_walter', tag: 'GER', file: 'Portrait_GER_hellmuth_walter.png', name: 'ヘルムート・ヴァルター', title: 'ロケット推進技師', field: 'rocket', skill: 1.4 },
+    { id: 'max_kramer', tag: 'GER', file: 'Portrait_GER_max_kramer.png', name: 'マックス・クラマー', title: '誘導兵器技師', field: 'rocket', skill: 1.3 },
+    { id: 'karl_heinrich_emil_becker', tag: 'GER', file: 'Portrait_GER_karl_heinrich_emil_becker.png', name: 'カール・ベッカー', title: '兵器局長', field: 'rocket', skill: 1.2 },
+    { id: 'hans_von_ohain', tag: 'GER', file: 'Portrait_GER_hans_von_ohain.png', name: 'ハンス・フォン・オハイン', title: 'ジェットエンジン技師', field: 'jet', skill: 1.7 },
+    { id: 'kurt_tank', tag: 'GER', file: 'Portrait_GER_kurt_tank.png', name: 'クルト・タンク', title: '航空機設計者', field: 'jet', skill: 1.4 },
+    { id: 'henrich_focke', tag: 'GER', file: 'Portrait_GER_henrich_focke.png', name: 'ハインリヒ・フォッケ', title: '航空機設計者', field: 'jet', skill: 1.2 },
+    { id: 'konrad_zuse', tag: 'GER', file: 'Portrait_GER_konrad_zuse.png', name: 'コンラート・ツーゼ', title: '計算機技術者', field: 'general', skill: 1.1 },
+    // アメリカ
+    { id: 'robert_oppenheimer', tag: 'USA', file: 'portrait_USA_robert_oppenheimer.png', name: 'ロバート・オッペンハイマー', title: '理論物理学者', field: 'nuclear', skill: 1.8 },
+    { id: 'vannevar_bush', tag: 'USA', file: 'portrait_USA_vannevar_bush.png', name: 'ヴァネヴァー・ブッシュ', title: '科学研究開発局長', field: 'general', skill: 1.3 },
+    { id: 'robert_goddard', tag: 'USA', file: 'portrait_USA_robert_goddard.png', name: 'ロバート・ゴダード', title: 'ロケット工学者', field: 'rocket', skill: 1.6 },
+    { id: 'leslie_skinner', tag: 'USA', file: 'portrait_USA_leslie_skinner.png', name: 'レスリー・スキナー', title: 'ロケット兵器技師', field: 'rocket', skill: 1.2 },
+    { id: 'edward_curtis_wells', tag: 'USA', file: 'portrait_USA_edward_curtis_wells.png', name: 'エドワード・ウェルズ', title: '航空機設計者', field: 'jet', skill: 1.4 },
+    { id: 'andrew_mckee', tag: 'USA', file: 'portrait_USA_andrew_mckee.png', name: 'アンドリュー・マッキー', title: '造船技師', field: 'general', skill: 1.0 },
+    // ソ連
+    { id: 'igor_kurchatov', tag: 'SOV', file: 'portrait_SOV_igor_kurchatov.png', name: 'イーゴリ・クルチャトフ', title: '核物理学者', field: 'nuclear', skill: 1.7 },
+    { id: 'abram_ioffe', tag: 'SOV', file: 'portrait_SOV_abram_ioffe.png', name: 'アブラム・ヨッフェ', title: '物理学者', field: 'nuclear', skill: 1.3 },
+    { id: 'sergei_korolev', tag: 'SOV', file: 'portrait_SOV_sergei_korolev.png', name: 'セルゲイ・コロリョフ', title: 'ロケット設計主任', field: 'rocket', skill: 1.8 },
+    { id: 'boris_stechkin', tag: 'SOV', file: 'portrait_SOV_boris_stechkin.png', name: 'ボリス・ステチキン', title: 'エンジン工学者', field: 'jet', skill: 1.5 },
+    { id: 'arkady_nazarov', tag: 'SOV', file: 'portrait_SOV_arkady_nazarov.png', name: 'アルカージー・ナザロフ', title: '航空技師', field: 'jet', skill: 1.1 },
+    { id: 'vladimir_kotelnikov', tag: 'SOV', file: 'portrait_SOV_vladimir_kotelnikov.png', name: 'ウラジーミル・コテルニコフ', title: '通信工学者', field: 'general', skill: 1.1 },
+    // イギリス
+    { id: 'james_chadwick', tag: 'ENG', file: 'Portrait_ENG_james_chadwick.png', name: 'ジェームズ・チャドウィック', title: '核物理学者', field: 'nuclear', skill: 1.7 },
+    { id: 'john_cockcroft', tag: 'ENG', file: 'Portrait_ENG_john_cockcroft.png', name: 'ジョン・コッククロフト', title: '原子核物理学者', field: 'nuclear', skill: 1.5 },
+    { id: 'frank_whittle', tag: 'ENG', file: 'Portrait_ENG_frank_whittle.png', name: 'フランク・ホイットル', title: 'ジェットエンジン発明者', field: 'jet', skill: 1.8 },
+    { id: 'nevil_shute', tag: 'ENG', file: 'Portrait_ENG_nevil_shute.png', name: 'ネビル・シュート', title: '航空技師', field: 'rocket', skill: 1.2 },
+    { id: 'robert_watson_watt', tag: 'ENG', file: 'Portrait_ENG_robert_watson_watt.png', name: 'ロバート・ワトソン＝ワット', title: 'レーダー工学者', field: 'general', skill: 1.2 },
+    { id: 'charles_goodeve', tag: 'ENG', file: 'Portrait_ENG_charles_goodeve.png', name: 'チャールズ・グッドイヴ', title: '化学者', field: 'general', skill: 1.1 },
+    // フランス
+    { id: 'frederic_joliot_curie', tag: 'FRA', file: 'Portrait_FRA_frederic_joliot_curie.png', name: 'フレデリック・ジョリオ＝キュリー', title: '核物理学者', field: 'nuclear', skill: 1.7 },
+    { id: 'irene_joliot_curie', tag: 'FRA', file: 'Portrait_FRA_irene_joliot_curie.png', name: 'イレーヌ・ジョリオ＝キュリー', title: '放射化学者', field: 'nuclear', skill: 1.5 },
+    { id: 'henri_edmond_fouche', tag: 'FRA', file: 'Portrait_FRA_henri_edmond_fouche.png', name: 'アンリ・フーシェ', title: '推進工学者', field: 'rocket', skill: 1.2 },
+    { id: 'francois_hussenot', tag: 'FRA', file: 'Portrait_FRA_francois_hussenot.png', name: 'フランソワ・ユスノ', title: '航空技師', field: 'jet', skill: 1.2 },
+    { id: 'joseph_bethenod', tag: 'FRA', file: 'Portrait_FRA_joseph_bethenod.png', name: 'ジョゼフ・ベトノ', title: '電気工学者', field: 'general', skill: 1.1 },
+    { id: 'louis_renault', tag: 'FRA', file: 'Portrait_FRA_louis_renault.png', name: 'ルイ・ルノー', title: '実業家・技術者', field: 'general', skill: 1.0 },
+    // イタリア
+    { id: 'enrico_fermi', tag: 'ITA', file: 'Portrait_ITA_enrico_fermi.png', name: 'エンリコ・フェルミ', title: '核物理学者', field: 'nuclear', skill: 1.8 },
+    { id: 'gaetano_crocco', tag: 'ITA', file: 'Portrait_ITA_gaetano_crocco.png', name: 'ガエターノ・クロッコ', title: 'ロケット・航空工学者', field: 'rocket', skill: 1.5 },
+    { id: 'mario_castoldi', tag: 'ITA', file: 'Portrait_ITA_mario_castoldi.png', name: 'マリオ・カストルディ', title: '航空機設計者', field: 'jet', skill: 1.3 },
+    { id: 'giovanni_giorgi', tag: 'ITA', file: 'Portrait_ITA_giovanni_giorgi.png', name: 'ジョヴァンニ・ジョルジ', title: '物理学者', field: 'general', skill: 1.1 },
+    { id: 'filippo_bonfiglietti', tag: 'ITA', file: 'Portrait_ITA_filippo_bonfiglietti.png', name: 'フィリッポ・ボンフィリエッティ', title: '造船技師', field: 'general', skill: 1.0 },
+    // 日本
+    { id: 'yoshio_nishina', tag: 'JAP', file: 'portrait_JAP_yoshio_nishina.png', name: '仁科芳雄', title: '原子物理学者', field: 'nuclear', skill: 1.6 },
+    { id: 'hideki_yukawa', tag: 'JAP', file: 'Portrait_JAP_hideki_yukawa.png', name: '湯川秀樹', title: '理論物理学者', field: 'nuclear', skill: 1.5 },
+    { id: 'hideo_itokawa', tag: 'JAP', file: 'Portrait_JAP_hideo_itokawa.png', name: '糸川英夫', title: 'ロケット工学者', field: 'rocket', skill: 1.6 },
+    { id: 'yoji_ito', tag: 'JAP', file: 'portrait_JAP_yoji_ito.png', name: '伊藤庸二', title: '電波兵器技術者', field: 'rocket', skill: 1.1 },
+    { id: 'jiro_horikoshi', tag: 'JAP', file: 'portrait_JAP_jiro_horikoshi.png', name: '堀越二郎', title: '航空機設計者', field: 'jet', skill: 1.5 },
+    { id: 'keiji_fukuda', tag: 'JAP', file: 'portrait_JAP_keiji_fukuda.png', name: '福田啓二', title: '造船技師', field: 'general', skill: 1.0 },
+    { id: 'hideo_iwakuro', tag: 'JAP', file: 'portrait_JAP_hideo_iwakuro_scientist.png', name: '岩畔豪雄', title: '技術将校', field: 'general', skill: 1.0 },
+    // ハンガリー
+    { id: 'edward_teller', tag: 'HUN', file: 'Portrait_HUN_edward_teller.png', name: 'エドワード・テラー', title: '理論物理学者', field: 'nuclear', skill: 1.6 },
+    { id: 'leo_szilard', tag: 'HUN', file: 'Portrait_HUN_leo_szilard.png', name: 'レオ・シラード', title: '核物理学者', field: 'nuclear', skill: 1.6 },
+    { id: 'john_von_neumann', tag: 'HUN', file: 'Portrait_HUN_john_von_neumann.png', name: 'ジョン・フォン・ノイマン', title: '数学者', field: 'general', skill: 1.5 },
+    { id: 'gyorgy_jendrassik', tag: 'HUN', file: 'Portrait_HUN_gyorgy_jendrassik.png', name: 'イェンドラシク・ジェルジ', title: 'ターボプロップ発明者', field: 'jet', skill: 1.4 },
+    { id: 'asboth_oszkar', tag: 'HUN', file: 'Portrait_HUN_asboth_oszkar.png', name: 'アシュボート・オスカール', title: '航空技師', field: 'general', skill: 1.0 },
+    // オーストリア
+    { id: 'erwin_schrodinger', tag: 'AUS', file: 'portrait_AUS_erwin_schrodinger.png', name: 'エルヴィン・シュレーディンガー', title: '理論物理学者', field: 'nuclear', skill: 1.5 },
+    { id: 'egon_schweidler', tag: 'AUS', file: 'Portrait_AUS_egon_schweidler.png', name: 'エゴン・シュヴァイドラー', title: '放射能研究者', field: 'nuclear', skill: 1.2 },
+    { id: 'eugen_sanger', tag: 'AUS', file: 'Portrait_AUS_eugen_sanger.png', name: 'オイゲン・ゼンガー', title: 'ロケット工学者', field: 'rocket', skill: 1.6 },
+    { id: 'herbert_wagner', tag: 'AUS', file: 'Portrait_AUS_herbert_wagner.png', name: 'ヘルベルト・ワーグナー', title: '誘導ミサイル技師', field: 'rocket', skill: 1.3 },
+    { id: 'hedy_lamarr', tag: 'AUS', file: 'Portrait_AUS_hedy_lamarr.png', name: 'ヘディ・ラマー', title: '周波数ホッピング発明者', field: 'general', skill: 1.1 },
+    { id: 'paul_eisler', tag: 'AUS', file: 'Portrait_AUS_paul_eisler.png', name: 'パウル・アイスラー', title: '電子工学者', field: 'general', skill: 1.0 },
+    // その他
+    { id: 'niels_bohr', tag: 'DEN', file: 'Portrait_DEN_niels_bohr.png', name: 'ニールス・ボーア', title: '理論物理学者', field: 'nuclear', skill: 1.8 },
+    { id: 'ernest_walton', tag: 'IRE', file: 'Portrait_IRE_ernest_walton.png', name: 'アーネスト・ウォルトン', title: '原子核物理学者', field: 'nuclear', skill: 1.4 },
+    { id: 'george_volkoff', tag: 'CAN', file: 'Portrait_CAN_george_volkoff.png', name: 'ジョージ・ヴォルコフ', title: '理論物理学者', field: 'nuclear', skill: 1.3 },
+    { id: 'georg_placzek', tag: 'CZE', file: 'Portrait_CZE_georg_placzek.png', name: 'ゲオルク・プラチェク', title: '核物理学者', field: 'nuclear', skill: 1.3 },
+    { id: 'alexej_surin', tag: 'CZE', file: 'Portrait_CZE_alexej_surin.png', name: 'アレクセイ・スリン', title: '車両設計者', field: 'general', skill: 1.0 },
+    { id: 'antonin_husnik', tag: 'CZE', file: 'Portrait_CZE_antonin_husnik.png', name: 'アントニーン・フスニーク', title: '航空技師', field: 'jet', skill: 1.1 },
+    { id: 'karel_bossart', tag: 'BEL', file: 'Portrait_BEL_karel_bossart.png', name: 'カレル・ボサール', title: 'ICBM 設計者', field: 'rocket', skill: 1.6 },
+    { id: 'georges_lemaitre', tag: 'BEL', file: 'Portrait_BEL_georges_lemaitre.png', name: 'ジョルジュ・ルメートル', title: '宇宙物理学者', field: 'general', skill: 1.2 },
+    { id: 'auguste_piccard', tag: 'BEL', file: 'Portrait_BEL_auguste_piccard.png', name: 'オーギュスト・ピカール', title: '物理学者', field: 'general', skill: 1.1 },
+    { id: 'alfred_renard', tag: 'BEL', file: 'Portrait_BEL_alfred_renard.png', name: 'アルフレッド・ルナール', title: '航空機設計者', field: 'jet', skill: 1.1 },
+    { id: 'nicolas_florine', tag: 'BEL', file: 'Portrait_BEL_nicolas_florine.png', name: 'ニコラ・フロリーヌ', title: 'ヘリコプター技師', field: 'general', skill: 1.0 },
+    { id: 'anthony_fokker', tag: 'HOL', file: 'Portrait_HOL_anthony_fokker.png', name: 'アントニー・フォッカー', title: '航空機設計者', field: 'jet', skill: 1.3 },
+    { id: 'mark_oliphant', tag: 'AST', file: 'Portrait_AST_mark_oliphant.png', name: 'マーク・オリファント', title: '核物理学者', field: 'nuclear', skill: 1.5 },
+    { id: 'jack_piddington', tag: 'AST', file: 'Portrait_AST_jack_piddington.png', name: 'ジャック・ピディントン', title: '電波物理学者', field: 'general', skill: 1.1 },
+    { id: 'lawrence_wackett', tag: 'AST', file: 'Portrait_AST_lawrence_wackett.png', name: 'ローレンス・ワケット', title: '航空技師', field: 'jet', skill: 1.1 },
+    { id: 'wang_ganchang', tag: 'CHI', file: 'Portrait_CHI_wang_ganchang.png', name: '王淦昌', title: '核物理学者', field: 'nuclear', skill: 1.5 },
+    { id: 'wong_tsu', tag: 'CHI', file: 'Portrait_CHI_wong_tsu.png', name: '王助', title: '航空機設計者', field: 'jet', skill: 1.2 },
+    { id: 'chu_chia_jen', tag: 'CHI', file: 'Portrait_CHI_chu_chia_jen.png', name: '朱家仁', title: '航空技師', field: 'general', skill: 1.0 },
+    { id: 'xu_tingyao', tag: 'CHI', file: 'Portrait_CHI_xu_tingyao.png', name: '徐庭瑤', title: '機甲兵科将校', field: 'general', skill: 1.0 },
+    { id: 'qian_sanqiang', tag: 'PRC', file: 'portrait_PRC_qian_sanqiang.png', name: '銭三強', title: '核物理学者', field: 'nuclear', skill: 1.5 },
+    { id: 'he_zehui', tag: 'PRC', file: 'portrait_PRC_he_zehui.png', name: '何沢慧', title: '核物理学者', field: 'nuclear', skill: 1.3 },
+    { id: 'qian_xuesan', tag: 'PRC', file: 'portrait_PRC_qian_xuesan.png', name: '銭学森', title: 'ロケット工学者', field: 'rocket', skill: 1.7 },
+    { id: 'wang_shusheng', tag: 'PRC', file: 'portrait_PRC_wang_shusheng.png', name: '王樹声', title: '兵器技術将校', field: 'general', skill: 1.0 },
+    { id: 'homi_j_bhabha', tag: 'RAJ', file: 'portrait_RAJ_homi_j_bhabha.png', name: 'ホミ・J・バーバー', title: '核物理学者', field: 'nuclear', skill: 1.5 },
+    { id: 'emma_rotor', tag: 'PHI', file: 'portrait_PHI_emma_rotor.png', name: 'エマ・ロトル', title: '物理学者', field: 'nuclear', skill: 1.1 },
+    { id: 'vecihi_hurkus', tag: 'TUR', file: 'portrait_TUR_vecihi_hurkus.png', name: 'ヴェジヒ・ヒュルクシュ', title: '航空技師', field: 'jet', skill: 1.1 },
   ];
-  static NAMES = {
-    GER: { phys1: 'ヴェルナー・ハイゼンベルク', phys2: 'オットー・ハーン', rock1: 'ヴェルナー・フォン・ブラウン', rock2: 'ヴァルター・ドルンベルガー', aero1: 'ハンス・フォン・オハイン', gen1: 'ヴァルター・ゲルラッハ' },
-    USA: { phys1: 'ロバート・オッペンハイマー', phys2: 'エンリコ・フェルミ', rock1: 'ロバート・ゴダード', rock2: 'セオドア・フォン・カルマン', aero1: 'フランク・ホイットル (招聘)', gen1: 'ヴァネヴァー・ブッシュ' },
-    SOV: { phys1: 'イーゴリ・クルチャトフ', phys2: 'ユーリ・ハリトン', rock1: 'セルゲイ・コロリョフ', rock2: 'ヴァレンティン・グルシュコ', aero1: 'アルヒープ・リューリカ', gen1: 'アブラム・ヨッフェ' },
-    ENG: { phys1: 'ジェームズ・チャドウィック', phys2: 'ルドルフ・パイエルス', rock1: 'アルウィン・クロウ', rock2: 'ウィリアム・クック', aero1: 'フランク・ホイットル', gen1: 'ヘンリー・ティザード' },
-    JAP: { phys1: '仁科芳雄', phys2: '荒勝文策', rock1: '糸川英夫', rock2: '三木忠直', aero1: '種子島時休', gen1: '湯川秀樹' },
-    FRA: { phys1: 'フレデリック・ジョリオ＝キュリー', phys2: 'イレーヌ・ジョリオ＝キュリー', rock1: 'ジャン＝ジャック・バール', rock2: 'ロベール・エスノー＝ペルトリ', aero1: 'ルネ・ルデュック', gen1: 'ポール・ランジュバン' },
-    ITA: { phys1: 'エンリコ・フェルミ', phys2: 'エドアルド・アマルディ', rock1: 'ガエターノ・アルトゥーロ・クロッコ', rock2: 'ルイジ・ブロリオ', aero1: 'セコンド・カンピーニ', gen1: 'グリエルモ・マルコーニ' },
-  };
+  static FIELD_OF = { uranium: 'nuclear', atomic: 'nuclear', v2: 'rocket', ballistic: 'rocket', jet: 'jet' };
+  static FIELD_NAME = { nuclear: '核物理', rocket: 'ロケット', jet: '航空・ジェット', general: '総合' };
+  /** 亡命・招聘が可能な中小国の科学者 (自国に該当分野の専門家が居ない場合に利用可) */
+  static EMIGRE_TAGS = ['HUN', 'AUS', 'DEN', 'IRE', 'CAN', 'CZE', 'BEL', 'HOL', 'AST', 'PHI', 'RAJ', 'TUR'];
+  static fits(sc, projectId) { return sc.field === 'general' || sc.field === SuperWeapons.FIELD_OF[projectId]; }
+  /** 自国で雇用可能な科学者: 自国籍 + (自国籍の専門家が居ない分野は亡命者から補充) */
+  static SCIENTISTS_FOR(tag = CoreEngine.gameState.country) {
+    const own = SuperWeapons.ROSTER.filter(x => x.tag === tag);
+    const list = [...own];
+    ['nuclear', 'rocket', 'jet'].forEach(f => { if (!own.some(x => x.field === f)) list.push(...SuperWeapons.ROSTER.filter(x => x.tag !== tag && x.field === f && SuperWeapons.EMIGRE_TAGS.includes(x.tag)).sort((a, b) => b.skill - a.skill).slice(0, 2).map(x => ({ ...x, emigre: true }))); });
+    if (!own.length) list.push(...SuperWeapons.ROSTER.filter(x => x.field === 'general' && SuperWeapons.EMIGRE_TAGS.includes(x.tag)).slice(0, 1).map(x => ({ ...x, emigre: true })));
+    return list;
+  }
+  static get SCIENTISTS() { return SuperWeapons.SCIENTISTS_FOR(); }
+  static portrait(sc, cls = 'sw-portrait') { return '<img class="' + cls + '" src="' + SuperWeapons.PORTRAIT + sc.file + '" alt="" onerror="this.style.visibility=\'hidden\'">'; }
+  static projectImg(P) { return '<img class="sw-pimg" src="' + SuperWeapons.IMG + P.img + '" alt="" onerror="this.style.display=\'none\'">'; }
   static NUKE_RATE = 0.02;      // 原子炉 Lv1 あたり /日 (= 50日に1発)
   static ROCKET_RATE = 0.5;     // 発射施設 Lv1 あたり /日
   static MISSILE_RANGE = 900;   // 地図ピクセル
   static esc(s) { return typeof GameTools !== 'undefined' ? GameTools.escape(String(s ?? '')) : String(s ?? ''); }
   static day() { return typeof GameTools !== 'undefined' ? GameTools.day() : 0; }
   static nameOf(tag) { return typeof DiplomacyManager !== 'undefined' ? DiplomacyManager.nameOf(tag) : tag; }
-  static sciName(sc) { return SuperWeapons.NAMES[CoreEngine.gameState.country]?.[sc.id] || sc.name; }
+  static sciName(sc) { return sc.name + (sc.emigre ? ' (亡命)' : ''); }
 
   // ------------------------------------------------------------------
   static init() {
@@ -132,7 +231,7 @@ class SuperWeapons {
   static assign(id, sciId) {
     const d = SuperWeapons.data(); const sc = SuperWeapons.SCIENTISTS.find(x => x.id === sciId);
     if (sciId && !sc) return;
-    if (sc && !sc.field.includes(id)) { GameUI.notify(SuperWeapons.sciName(sc) + ' はこの分野の専門家ではありません。', 'alert'); return; }
+    if (sc && !SuperWeapons.fits(sc, id)) { GameUI.notify(SuperWeapons.sciName(sc) + ' はこの分野の専門家ではありません。', 'alert'); return; }
     Object.values(d.projects).forEach(p => { if (p.scientist === sciId) p.scientist = null; });
     d.projects[id].scientist = sciId || null;
     SuperWeapons.render();
@@ -352,14 +451,17 @@ class SuperWeapons {
     // 計画カード
     html += '<div class="sw-panel"><h4>⚛️ 計画</h4><div class="sw-projects">' + Object.values(SuperWeapons.PROJECTS).map(P => {
       const p = d.projects[P.id], block = SuperWeapons.blocker(P.id), sc = SuperWeapons.scientistOf(P.id), pct = Math.min(100, p.progress / P.points * 100), rate = SuperWeapons.rate(P.id), eta = p.started && rate > 0 ? Math.ceil((P.points - p.progress) / rate) : null;
-      const scis = SuperWeapons.SCIENTISTS.filter(x => x.field.includes(P.id));
+      const scis = SuperWeapons.SCIENTISTS.filter(x => SuperWeapons.fits(x, P.id));
       return '<div class="sw-project' + (p.done ? ' done' : p.started ? ' active' : block ? ' locked' : '') + '"><div class="sw-project-head"><span class="sw-ic">' + P.icon + '</span><div><b>' + P.name + '</b><small>' + SuperWeapons.esc(P.desc) + '</small></div><span class="sw-status">' + (p.done ? '✅ 完了' : p.started ? '🔄 進行中' : block ? '🔒' : '待機') + '</span></div>' +
         '<div class="sw-bar"><em style="width:' + pct.toFixed(1) + '%"></em><span>' + pct.toFixed(0) + '% (' + Math.floor(p.progress) + ' / ' + P.points + ')' + (eta ? ' ／ あと ' + eta + ' 日' : '') + '</span></div>' +
         (block && !p.done ? '<p class="sw-req">🔒 ' + SuperWeapons.esc(block) + '</p>' : '') +
-        (!p.done ? '<div class="sw-controls"><label>科学者<select ' + (block ? 'disabled' : '') + ' onchange="SuperWeapons.assign(\'' + P.id + '\', this.value)"><option value="">— 未割り当て —</option>' + scis.map(x => '<option value="' + x.id + '"' + (sc && sc.id === x.id ? ' selected' : '') + '>' + x.icon + ' ' + SuperWeapons.esc(SuperWeapons.sciName(x)) + ' (' + x.name + ' ×' + x.skill + ')</option>').join('') + '</select></label>' +
+        (!p.done ? '<div class="sw-controls">' + (sc ? '<div class="sw-sci">' + SuperWeapons.portrait(sc) + '<div><b>' + SuperWeapons.esc(SuperWeapons.sciName(sc)) + '</b><small>' + SuperWeapons.esc(sc.title) + ' ／ ' + SuperWeapons.FIELD_NAME[sc.field] + ' ×' + sc.skill + '</small></div></div>' : '<div class="sw-sci empty"><div class="sw-portrait"></div><small>科学者未割り当て</small></div>') + '<label>科学者<select ' + (block ? 'disabled' : '') + ' onchange="SuperWeapons.assign(\'' + P.id + '\', this.value)"><option value="">— 未割り当て —</option>' + scis.map(x => '<option value="' + x.id + '"' + (sc && sc.id === x.id ? ' selected' : '') + '>' + SuperWeapons.esc(SuperWeapons.sciName(x)) + ' — ' + SuperWeapons.esc(x.title) + ' (×' + x.skill + ')</option>').join('') + '</select></label>' +
           '<label>民需工場 (IC)<span class="sw-pm"><button ' + (block ? 'disabled' : '') + ' onclick="SuperWeapons.setFactories(\'' + P.id + '\',' + (p.factories - 1) + ')">−</button><b>' + p.factories + '</b><button ' + (block ? 'disabled' : '') + ' onclick="SuperWeapons.setFactories(\'' + P.id + '\',' + (p.factories + 1) + ')">＋</button></span></label>' +
           '<label>人的資源<b>' + (p.manpowerPaid ? '支払済' : P.manpower.toLocaleString()) + '</b></label><label>進捗/日<b>' + rate.toFixed(1) + '</b></label>' +
           (p.started ? '<button class="sw-btn small" onclick="SuperWeapons.pause(\'' + P.id + '\')">⏸ 中断</button>' : '<button class="sw-btn small primary" ' + (block ? 'disabled' : '') + ' onclick="SuperWeapons.start(\'' + P.id + '\')">▶ 計画を開始</button>') + '</div>' : '<p class="sw-unlock">🔓 解禁: ' + SuperWeapons.esc(P.unlocks) + '</p>') + '</div>'; }).join('') + '</div></div>';
+    // 科学者名簿
+    const busy = {}; Object.entries(d.projects).forEach(([id, p]) => { if (p.scientist) busy[p.scientist] = id; });
+    html += '<div class="sw-panel"><h4>👩‍🔬 科学者 <small>自国の科学者' + (SuperWeapons.SCIENTISTS.some(x => x.emigre) ? ' + 亡命科学者' : '') + '</small></h4><div class="sw-roster">' + SuperWeapons.SCIENTISTS.map(x => '<div class="sw-sci-card' + (busy[x.id] ? ' busy' : '') + '">' + SuperWeapons.portrait(x) + '<b>' + SuperWeapons.esc(SuperWeapons.sciName(x)) + '</b><small>' + SuperWeapons.esc(x.title) + '</small><span class="sw-field ' + x.field + '">' + SuperWeapons.FIELD_NAME[x.field] + ' ×' + x.skill + '</span>' + (busy[x.id] ? '<em>' + SuperWeapons.PROJECTS[busy[x.id]].name + '</em>' : '') + '</div>').join('') + '</div></div>';
     // 施設
     html += '<div class="sw-grid"><div class="sw-panel"><h4>☢️ 原子炉 <small>建設画面で州ごとに最大 Lv3</small></h4>' + (reactors.length ? '<table class="sw-table">' + reactors.map(f => '<tr><td>' + SuperWeapons.esc(f.st.name || '州' + f.sid) + '</td><td>Lv' + f.level + '</td><td>+' + (SuperWeapons.done('atomic') ? (f.level * SuperWeapons.NUKE_RATE).toFixed(2) : '0') + ' 発/日</td></tr>').join('') + '</table>' : '<p class="sw-help">原子炉がありません。' + (SuperWeapons.done('uranium') ? '建設画面 → 州を選択 → ☢️ 原子炉 (600)。' : '「ウラン濃縮計画」を完了すると建設できます。') + '</p>') + '<button class="sw-btn small" onclick="GameUI.switchTab(\'construction\')">🏗️ 建設画面へ</button></div>' +
       '<div class="sw-panel"><h4>🚀 ロケット発射施設 <small>射程 ' + SuperWeapons.missileRange() + '</small></h4>' + (sites.length ? '<table class="sw-table">' + sites.map(f => '<tr><td>' + SuperWeapons.esc(f.st.name || '州' + f.sid) + '</td><td>Lv' + f.level + '</td><td>+' + (f.level * SuperWeapons.ROCKET_RATE).toFixed(1) + ' 発/日</td></tr>').join('') + '</table>' : '<p class="sw-help">発射施設がありません。' + (SuperWeapons.done('v2') ? '建設画面 → 州を選択 → 🚀 ロケット発射施設 (400)。' : '「V2ロケット開発」を完了すると建設できます。') + '</p>') + '</div></div>';
