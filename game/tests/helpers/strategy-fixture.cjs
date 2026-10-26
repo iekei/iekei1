@@ -180,6 +180,11 @@ function fixture() {
     { filename: "training-logistics.js" },
   );
   vm.runInContext(
+    fs.readFileSync(path.join(root, "assets/factions.js"), "utf8"),
+    ctx,
+    { filename: "factions.js" },
+  );
+  vm.runInContext(
     fs.readFileSync(path.join(root, "assets/espionage.js"), "utf8"),
     ctx,
     { filename: "espionage.js" },
