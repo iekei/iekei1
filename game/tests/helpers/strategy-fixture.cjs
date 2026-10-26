@@ -155,6 +155,11 @@ function fixture() {
     { filename: "naval-force.js" },
   );
   vm.runInContext(
+    fs.readFileSync(path.join(root, "assets/trade-resources.js"), "utf8"),
+    ctx,
+    { filename: "trade-resources.js" },
+  );
+  vm.runInContext(
     fs.readFileSync(path.join(root, "assets/espionage.js"), "utf8"),
     ctx,
     { filename: "espionage.js" },
