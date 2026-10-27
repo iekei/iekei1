@@ -14,9 +14,12 @@ import { ResearchManager } from './research.js';
 import { MIOManager } from './mio.js';
 import { EconomyManager } from './economy.js';
 import { DivisionTemplate } from './division.js';
+import { installDivisionDesigner } from './division-designer.js';
+import { installSupplySystem } from './supply.js';
+import { installAirWingSystem } from './air-wings.js';
 import { EquipmentDesigner } from './designers.js';
 import { DoctrineManager } from './doctrine.js';
-import { IntelManager } from './intel.js';
+import { installIntelAgency } from './intel.js';
 import { DiplomacyManager } from './diplomacy.js';
 import { PoliticsManager } from './politics.js';
 import { CardLibrary } from './data/cards.js';
@@ -33,6 +36,8 @@ import { NukeManager } from './nukes.js';
 import { SpecialProjectManager } from './special-projects.js';
 import { PoliticsPanel, renderResearchScreen, renderTradeScreen, renderProductionScreen, renderConstructionScreen, renderLogisticsScreen, renderDecisionsScreen } from './ui/screens.js';
 import { renderDeploymentScreen, renderDoctrineScreen, renderIntelScreen, renderDiplomacyScreen } from './ui/screens2.js';
+import { renderDivisionDesignerScreen } from './ui/division-designer.js';
+import { renderAirForceScreen, openAirRegionModal, installProvincePanel } from './ui/air-ui.js';
 import { renderFocusScreen, renderAirNavalScreen, renderGachaScreen, renderPeaceScreen, renderSpecialScreen, renderNukeScreen } from './ui/screens3.js';
 import { NationSelect } from './nation-select.js';
 import { BattlePlanManager } from './battle-plan.js';
@@ -110,6 +115,8 @@ async function boot() {
   if (selectedTag) state.changePlayer(selectedTag);
   // マルチプレイ設定を状態に保存（TopBar のホスト専用時間制御などで参照）
   state.multiplayer = { mode: mpMode, room };
+  // 師団テンプレートの読み込み + 訓練キューの時間進行を接続
+  installDivisionDesigner(state);
 
   // 3. カード・研究データ
   const cards = await new CardLibrary().load();
@@ -122,7 +129,7 @@ async function boot() {
   const economy = new EconomyManager(state, mio);
   const doctrine = new DoctrineManager(state);
   state._doctrineMgr = doctrine;
-  const intel = new IntelManager(state);
+  const intel = installIntelAgency(state);
   const diplomacy = new DiplomacyManager(state);
   const politics = new PoliticsManager(state);
   state._politicsMgr = politics;
@@ -133,6 +140,12 @@ async function boot() {
   // 作戦計画（前線 / 攻撃線 / 計画準備ボーナス）
   const battlePlan = new BattlePlanManager(state, doctrine);
   state.ensureDivisions(state.playerTag, 8);
+  // 補給網・インフラ・補給ハブ（建設完了で再計算、毎時ペナルティ適用）
+  state._economyMgr = economy;
+  const supply = installSupplySystem(state);
+  // 航空隊・航空基地・空域任務（CAS は作戦計画の戦闘に直接反映される）
+  const airWings = installAirWingSystem(state);
+  state._airWingMgr = airWings;
   const focusMgr = new NationalFocusManager(state, effectEngine);
   await focusMgr.load(state.playerTag);
   const gacha = new GachaManager(state, cards);
@@ -160,8 +173,29 @@ async function boot() {
   const topbar = new TopBar(state, modals, politicsPanel);
   topbar.mount(document.getElementById('topbar'));
   const mapEngine = new MapEngine(state, document.getElementById('map-svg'));
+  mapEngine.setSupplyManager(supply);
+  mapEngine.setAirWingManager(airWings);
+  mapEngine.setIntelManager(intel);
+  mapEngine.onIntelTargetClick = () => { modals.toggle('intel', {}); };
+
+  // F2: 補給モード / F3: 諜報モードのオン・オフ（マップ上部のボタンと同じ）
+  document.addEventListener('keydown', (e) => {
+    if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+    if (!mapEngine.setMode) return;
+    if (e.key === 'F2') {
+      e.preventDefault();
+      mapEngine.setMode(mapEngine.mapMode === 'supply' ? 'land' : 'supply');
+    } else if (e.key === 'F3') {
+      e.preventDefault();
+      mapEngine.setMode(mapEngine.mapMode === 'intel' ? 'land' : 'intel');
+      toast(mapEngine.mapMode === 'intel' ? 'マップを諜報モードに切り替えました' : 'マップを陸軍モードに戻しました', 'info');
+    }
+  });
 
   const airNaval = new AirNavalManager(state, mapEngine);
+  // 航空隊システムを空域オーバーレイの唯一の算出元にする
+  airNaval.wingManager = airWings;
+  airNaval.onRegionClick = (regionId) => openAirRegionModal(ctx, regionId);
   const nukes = new NukeManager(state, airNaval, effectEngine, mapEngine);
 
   // 州クリックでその国の外交ウィンドウを開く
@@ -169,9 +203,15 @@ async function boot() {
   const battlePlanUI = installBattlePlanUI({ mapEngine, battlePlan, state, doctrine, modals });
   mapEngine.battlePlan = battlePlan;
 
+  // 州クリック：自国州は建設パネル（インフラ / 補給ハブ / 航空基地）、他国は外交
   mapEngine.onProvinceClick = (provinceId) => {
     const p = mapEngine.byId[provinceId];
-    if (!p || p.tag === state.playerTag) return;
+    if (!p) return;
+    if (p.tag === state.playerTag) {
+      provincePanel.open(provinceId);
+      return;
+    }
+    provincePanel.close();
     diplomacy.select(p.tag);
     modals.toggle('diplomacy', {});
   };
@@ -180,9 +220,13 @@ async function boot() {
     state, research, mio, economy, doctrine, intel, diplomacy, politics,
     cards, designer, equipDesigner, modals, mapEngine,
     effectEngine, focusMgr, airNaval, gacha, peace, special, nukes,
-    battlePlan, battlePlanUI,
+    battlePlan, battlePlanUI, supply, airWings,
     onTickScreens: [],
   };
+
+  // マップ上の州パネル（自国州クリックでインフラ / 補給ハブ / 航空基地を建設）
+  const provincePanel = installProvincePanel(ctx);
+  ctx.provincePanel = provincePanel;
 
   // 画面レジストリ（トグルID → 画面定義）
   const SCREENS = {
@@ -192,11 +236,13 @@ async function boot() {
     trade:        { title: I18N.t('menu.trade'),        width: '',       render: renderTradeScreen(ctx) },
     construction: { title: I18N.t('menu.construction'), width: '',       render: renderConstructionScreen(ctx) },
     production:   { title: I18N.t('menu.production'),   width: 'wide',   render: renderProductionScreen(ctx) },
+    division:     { title: I18N.t('menu.division'),     width: 'wide',   render: renderDivisionDesignerScreen(ctx) },
     deployment:   { title: I18N.t('menu.deployment'),   width: 'wide',   render: renderDeploymentScreen(ctx) },
     logistics:    { title: I18N.t('menu.logistics'),    width: '',       render: renderLogisticsScreen(ctx) },
     doctrine:     { title: I18N.t('menu.doctrine'),     width: 'wide',   render: renderDoctrineScreen(ctx) },
     diplomacy:    { title: I18N.t('menu.diplomacy'),    width: 'wide',   render: renderDiplomacyScreen(ctx) },
     focus:        { title: I18N.t('menu.focus'),        width: 'wide',   render: renderFocusScreen(ctx) },
+    airforce:     { title: '空軍',                     width: 'wide',   render: renderAirForceScreen(ctx) },
     airnaval:     { title: I18N.t('menu.airnaval'),     width: 'wide',   render: renderAirNavalScreen(ctx) },
     gacha:        { title: I18N.t('menu.gacha'),        width: '',       render: renderGachaScreen(ctx) },
     special:      { title: I18N.t('menu.special'),      width: '',       render: renderSpecialScreen(ctx) },
@@ -230,6 +276,8 @@ async function boot() {
   engine.onTick((st, hours) => {
     research.tick(st.playerTag, hours);
     economy.tick(hours);
+    supply.tick(hours);
+    airWings.tick(hours);
     politics.tick(hours);
     intel.tick(hours);
     focusMgr.tick(st.playerTag, hours);
@@ -284,6 +332,8 @@ async function boot() {
   // 作戦計画による占領
   state.bus.on('province-captured', ({ planId }) => {
     mapEngine.refreshProvinceColors();
+    supply.refresh();
+    if (mapEngine.mapMode === 'supply') mapEngine.renderSupplyNetwork();
     mapEngine.renderBattlePlans();
     if (battlePlanUI.planId === planId) battlePlanUI.render();
   });
@@ -291,6 +341,30 @@ async function boot() {
   state.bus.on('battle-lost', () => mapEngine.renderCombatBubbles());
 
   // 8. 通知系
+  // 航空基地の建設完了（供給システムと同じ建設キューを共有）
+  state.bus.on('construction-completed', (q) => {
+    if (q?.type !== 'air_base') return;
+    const level = airWings.completeConstruction(q);
+    if (level != null) {
+      const p = mapEngine.byId[q.provinceId];
+      toast(`${p?.name || q.provinceName} の航空基地が Lv${level} になりました（収容 ${level * 100} 機）`, 'good');
+      mapEngine.update();
+    }
+  });
+  // 航空隊の消耗・戦略爆撃
+  state.bus.on('air-bombing', (e) => {
+    const what = e.destroyed === 'airbase' ? '航空基地'
+      : e.destroyed === 'infrastructure' ? 'インフラ'
+      : e.destroyed === 'factory' ? `工場（残り ${e.factories}）` : '目標';
+    toast(`戦略爆撃：${e.provinceName} の${what}を破壊しました`, 'good');
+    mapEngine.update();
+  });
+  state.bus.on('supply-buildings-changed', ({ provinceId, type, level }) => {
+    const p = mapEngine.byId[provinceId];
+    const name = type === 'supply_hub' ? '補給ハブ' : 'インフラ';
+    if (p) toast(`${p.name} の${name}が Lv${level} になりました`, 'good');
+    if (mapEngine.mapMode === 'supply') mapEngine.renderSupplyNetwork();
+  });
   state.bus.on('ship-completed', ({ item }) => toast(`${item.name} の建造が完了しました`, 'good'));
   state.bus.on('construction-completed', (q) => toast(`${I18N.t(q.def.name)} の建設が完了しました`, 'good'));
   state.bus.on('war-declared', ({ target }) => toast(`宣戦布告: ${target}`, 'bad'));
@@ -301,7 +375,7 @@ async function boot() {
   engine.start();
 
   // デバッグ用に公開
-  window.GAME = { state, engine, research, mio, economy, doctrine, intel, diplomacy, politics, modals, topbar, mapEngine, effectEngine, focusMgr, airNaval, gacha, peace, special, nukes, cards, sync, I18N, battlePlan, battlePlanUI, equipDesigner };
+  window.GAME = { state, engine, research, mio, economy, doctrine, intel, diplomacy, politics, modals, topbar, mapEngine, effectEngine, focusMgr, airNaval, gacha, peace, special, nukes, cards, sync, I18N, battlePlan, battlePlanUI, equipDesigner, supply, airWings };
   // 埋め込み元（game/index.html）へ読み込み完了を通知（ローディング解除）
   if (embedded) window.dispatchEvent(new CustomEvent('hoi4:ready'));
   console.log('%c 大戦略ゲーム 起動完了（?mp=host&room=xxx でマルチプレイ時間同期）', 'color:#e6c268;font-size:14px');

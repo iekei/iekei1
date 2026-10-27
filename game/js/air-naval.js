@@ -41,6 +41,15 @@ export const AIR_TYPE_INFO = {
   transport: { name: '輸送機', icon: '🚁', color: '#e6c268', transport: 1.0 },
 };
 
+export const AIR_MISSION_LABELS = {
+  air_superiority: '制空', cas: '近接航空支援', strategic_bombing: '戦略爆撃', training: '訓練',
+};
+export const AIR_MISSION_COLORS = {
+  air_superiority: '#5e9ec7', cas: '#d05038', strategic_bombing: '#a06ec8', training: '#7ec850',
+};
+const MISSION_LABELS = AIR_MISSION_LABELS;
+const MISSION_COLORS = AIR_MISSION_COLORS;
+
 // ↓ ここにも念のため export を追加しました
 export const NAVAL_TYPE_INFO = {
   fleet: { name: '主力艦隊', icon: '🚢', color: '#5e9ec7', power: 30 },
@@ -59,9 +68,21 @@ export class AirNavalManager {
     this.airIcons = new Map();   // airForceId -> <g>
     this.navalIcons = new Map(); // navalForceId -> <g>
     this.routeLayer = null;
+    // 航空隊システム（air-wings.js）。設定されると制空権・CAS 支援の算出を委譲する
+    this.wingManager = null;
+    this.onRegionClick = null; // (regionId) => void : 空域クリック
+
 
     // mapEngine にレンダラを登録
     this.map.airNavalRenderer = () => this.renderAll();
+
+    // 空域円のクリック（委譲：毎フレーム再生成されるためレイヤ側で受ける）
+    this.map.airLayer.addEventListener('click', (e) => {
+      const node = e.target?.closest?.('.air-region-circle');
+      if (!node) return;
+      e.stopPropagation();
+      this.onRegionClick?.(node.getAttribute('data-air-region'));
+    });
 
     // ルートレイヤ（空挺・強襲上陸ルート）
     this.routeLayer = document.createElementNS(SVGNS, 'g');
@@ -80,7 +101,11 @@ export class AirNavalManager {
     this.state.airForces.push({
       id, baseProvince: provinceId, type, count,
       region: null, mission: null, morale: 100,
+      // 航空隊（air-wings.js）としてのステータス
+      name: `${AIR_TYPE_INFO[type]?.name || type} 航空隊`,
+      training: 35, readiness: 100,
     });
+    this.wingManager?.refresh?.();
     this.state.bus.emit('air-changed');
     return true;
   }
@@ -92,13 +117,20 @@ export class AirNavalManager {
     if (!af || !region) return false;
     af.region = regionId;
     af.mission = mission; // 'air_superiority' | 'cas' | 'strategic_bombing' | null
+    this.wingManager?.refresh?.();
     this.state.bus.emit('air-changed');
     this._recalcAirSupremacy();
     return true;
   }
 
-  /** 制空権を再計算（簡易：味方航空戦力 - 想定敵戦力） */
+  /** 制空権を再計算（航空隊システムがあればそちらへ委譲） */
   _recalcAirSupremacy() {
+    if (this.wingManager) {
+      for (const region of AIR_REGIONS) {
+        this.airSupremacy[region.id] = this.wingManager.supremacySigned(region.id);
+      }
+      return;
+    }
     for (const region of AIR_REGIONS) {
       let power = 0;
       for (const af of this.state.airForces) {
@@ -127,6 +159,7 @@ export class AirNavalManager {
 
   /** 陸戦への空支援バフ（CAS 任務がある空域のみ） */
   airSupportBuff(regionId) {
+    if (this.wingManager) return this.wingManager.casBonusForRegion(regionId);
     let buff = 0;
     for (const af of this.state.airForces) {
       if (af.region !== regionId) continue;
@@ -274,6 +307,30 @@ export class AirNavalManager {
       circle.setAttribute('stroke-dasharray', '10 8');
       this.map.airLayer.appendChild(circle);
 
+      const info = this.wingManager?.regionInfo?.(region.id) || null;
+      const ownPct = info ? info.ownPct : Math.max(0, Math.round((this.calcAirSupremacy(region.id) + 100) / 2));
+      const enemyPct = 100 - ownPct;
+
+      // 自軍 / 敵軍の制空権割合バー（空域円の内側に表示）
+      if (info) {
+        const barW = Math.min(300, region.radius * 1.15);
+        const barX = region.center.x - barW / 2;
+        const barY = region.center.y + region.radius + 10;
+        const bg = document.createElementNS(SVGNS, 'rect');
+        bg.setAttribute('x', barX); bg.setAttribute('y', barY);
+        bg.setAttribute('width', barW); bg.setAttribute('height', 7);
+        bg.setAttribute('rx', 2);
+        bg.setAttribute('fill', '#7a2b1f');
+        bg.setAttribute('opacity', '0.85');
+        this.map.airLayer.appendChild(bg);
+        const own = document.createElementNS(SVGNS, 'rect');
+        own.setAttribute('x', barX); own.setAttribute('y', barY);
+        own.setAttribute('width', Math.max(0, (barW * ownPct) / 100)); own.setAttribute('height', 7);
+        own.setAttribute('rx', 2);
+        own.setAttribute('fill', '#5aa0d0');
+        this.map.airLayer.appendChild(own);
+      }
+
       const label = document.createElementNS(SVGNS, 'text');
       label.setAttribute('x', region.center.x);
       label.setAttribute('y', region.center.y - region.radius - 8);
@@ -282,15 +339,28 @@ export class AirNavalManager {
       label.setAttribute('font-weight', '800');
       label.setAttribute('text-anchor', 'middle');
       label.setAttribute('font-family', 'var(--mil-font)');
-      label.textContent = `${region.name} 制空権 ${this.calcAirSupremacy(region.id)}%`;
+      label.textContent = info
+        ? `${region.name} 自軍 ${ownPct}% / 敵軍 ${enemyPct}%`
+        : `${region.name} 制空権 ${this.calcAirSupremacy(region.id)}%`;
       this.map.airLayer.appendChild(label);
 
+      // クリックで空域情報ウィンドウ
+      circle.style.cursor = 'pointer';
+      circle.classList.add('air-region-circle');
+      circle.setAttribute('data-air-region', region.id);
+
       // ツールチップ
+      const missionLine = info
+        ? `<div style="font-size:11px;color:var(--text-dim);margin-top:3px;">自軍 ${ownPct}% / 敵軍 ${enemyPct}%</div>
+           <div style="font-size:11px;color:var(--text-dim);margin-top:3px;">航空隊 ${info.wingCount}（制空 ${info.supWings} / CAS ${info.casWings} / 爆撃 ${info.stratWings}）</div>
+           <div style="font-size:11px;color:var(--text-dim);margin-top:3px;">CAS 支援：+${(this.airSupportBuff(region.id) * 100).toFixed(0)}%（${info.aircraft} 機）</div>
+           <div style="font-size:10px;color:#7ec850;margin-top:4px;">クリックで空域情報を表示</div>`
+        : `<div style="font-size:11px;color:var(--text-dim);margin-top:3px;">制空権：<span style="color:${color};font-weight:800">${this.calcAirSupremacy(region.id)}%</span></div>
+           <div style="font-size:11px;color:var(--text-dim);margin-top:3px;">陸戦支援バフ：${(this.airSupportBuff(region.id) * 100).toFixed(0)}%</div>`;
       const tip = `
         <div style="font-weight:800;letter-spacing:.06em;font-family:var(--mil-font);color:var(--gold);">${region.name}</div>
-        <div style="font-size:11px;color:var(--text-dim);margin-top:3px;">制空権：<span style="color:${color};font-weight:800">${this.calcAirSupremacy(region.id)}%</span></div>
+        ${missionLine}
         <div style="font-size:11px;color:var(--text-dim);margin-top:3px;">レベル：${level === 'green' ? '優勢（空挺可能）' : level === 'yellow' ? '均衡' : '劣勢'}</div>
-        <div style="font-size:11px;color:var(--text-dim);margin-top:3px;">陸戦支援バフ：${(this.airSupportBuff(region.id) * 100).toFixed(0)}%</div>
       `;
       Tooltip.bind(circle, tip, { kind: level === 'red' ? 'bad' : level === 'green' ? 'good' : 'warn' });
     }
@@ -307,10 +377,11 @@ export class AirNavalManager {
       let g = this.airIcons.get(af.id);
       if (!g) {
         g = document.createElementNS(SVGNS, 'g');
-        g.classList.add('map-air-icon');
-        this.map.airLayer.appendChild(g);
         this.airIcons.set(af.id, g);
       }
+      g.classList.add('map-air-icon');
+      // オーバーレイは毎フレーム innerHTML='' で作り直されるため、都度付け直す
+      if (g.parentNode !== this.map.airLayer) this.map.airLayer.appendChild(g);
       g.setAttribute('transform', `translate(${p.x - 14},${p.y - 14})`);
       g.innerHTML = '';
       // 円背景
@@ -335,12 +406,16 @@ export class AirNavalManager {
       n.textContent = `×${af.count}`;
       g.appendChild(n);
 
+      const missionLabel = af.mission ? (MISSION_LABELS[af.mission] || af.mission) : '待機';
+      const missionColor = MISSION_COLORS[af.mission] || '#8b96a0';
       const tip = `
-        <div style="font-weight:800;letter-spacing:.06em;font-family:var(--mil-font);color:var(--gold);">${info.name}</div>
-        <div style="font-size:11px;color:var(--text-dim);margin-top:3px;">基地：${p.name}</div>
-        <div style="font-size:11px;color:var(--text-dim);margin-top:3px;">台数：${af.count}</div>
-        <div style="font-size:11px;color:var(--text-dim);margin-top:3px;">任務：${af.mission ? I18N.t(`air.missions.${af.mission}`) || af.mission : '未割当'}</div>
+        <div style="font-weight:800;letter-spacing:.06em;font-family:var(--mil-font);color:var(--gold);">${af.name || info.name}</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:3px;">基地：${p.name}（Lv${this.wingManager?.airbaseLevel?.(p.id) ?? p.airbase ?? 0}）</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:3px;">機数：${af.count}</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:3px;">任務：<span style="color:${missionColor};font-weight:700;">${missionLabel}</span></div>
         <div style="font-size:11px;color:var(--text-dim);margin-top:3px;">空域：${af.region ? AIR_REGIONS.find((r) => r.id === af.region)?.name : 'なし'}</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:3px;">練度：${Math.round(af.training ?? 0)}% / 稼働率：${Math.round(af.readiness ?? 100)}%</div>
+        <div style="font-size:10px;color:#7ec850;margin-top:3px;">クリックで空軍画面（該当空域）</div>
       `;
       Tooltip.bind(g, tip, { kind: 'info' });
     }
@@ -392,10 +467,10 @@ export class AirNavalManager {
       let g = this.navalIcons.get(nf.id);
       if (!g) {
         g = document.createElementNS(SVGNS, 'g');
-        g.classList.add('map-naval-icon');
-        this.map.navalLayer.appendChild(g);
         this.navalIcons.set(nf.id, g);
       }
+      g.classList.add('map-naval-icon');
+      if (g.parentNode !== this.map.navalLayer) this.map.navalLayer.appendChild(g);
       g.setAttribute('transform', `translate(${region.center.x - 14},${region.center.y - 14})`);
       g.innerHTML = '';
       const bg = document.createElementNS(SVGNS, 'circle');

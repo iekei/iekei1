@@ -1,0 +1,376 @@
+/* ==========================================================================
+   intel.css — 諜報機関（Agency & Espionage）UI
+   ・諜報画面（機関 / エージェント / インテル の 3 タブ）
+   ・機関アップグレードツリー（本部 / 暗号解読 / 潜入 / 特殊部隊）
+   ・対象国インテルダッシュボード（政治 / 経済 / 軍事の解禁状況）
+   ・マップ上の諜報レイヤ（ネットワークリング・敵師団推計バッジ）
+   読み込み順: air.css の後
+   ========================================================================== */
+
+.intel-screen { min-height: 0; overflow: hidden; }
+.intel-root { display: flex; flex-direction: column; gap: 9px; min-height: 0; flex: 1 1 auto; overflow: auto; }
+.intel-tabs { border-bottom: 1px solid #0b0e11; }
+.intel-empty {
+  padding: 18px;
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 12px;
+  border: 1px dashed #2a3239;
+  border-radius: 3px;
+  background: #12161a;
+}
+.intel-empty.small { padding: 9px; font-size: 11px; }
+.intel-note { font-size: 11px; color: var(--text-dim); padding: 3px 2px; line-height: 1.5; }
+
+/* ---------------------------------------------------------- ヘッダー */
+
+.intel-head {
+  position: relative;
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  padding: 10px 12px;
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(230, 194, 104, .12), transparent 60%),
+    linear-gradient(180deg, #2a323a 0%, #1b2127 100%);
+  border: 1px solid #0a0d10;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06), 0 3px 10px rgba(0, 0, 0, .35);
+}
+.intel-head::before,
+.intel-head::after {
+  content: '';
+  position: absolute;
+  width: 10px; height: 10px;
+  pointer-events: none;
+  opacity: .7;
+}
+.intel-head::before { top: 2px; left: 2px; border-top: 1px solid var(--gold-dim); border-left: 1px solid var(--gold-dim); }
+.intel-head::after { bottom: 2px; right: 2px; border-bottom: 1px solid var(--gold-dim); border-right: 1px solid var(--gold-dim); }
+
+.intel-head-left { flex: 1 1 460px; min-width: 0; }
+.intel-head-right { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+
+.intel-title { display: flex; align-items: baseline; gap: 9px; }
+.intel-title-main {
+  font-family: var(--mil-font);
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: .14em;
+  color: var(--gold);
+  text-shadow: 0 1px 0 #000, 0 0 12px rgba(230, 194, 104, .2);
+}
+.intel-title-sub { font-family: var(--mil-font); font-size: 8.5px; letter-spacing: .22em; color: var(--text-dim); }
+
+.intel-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.intel-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  padding: 2px 7px;
+  background: #11161a;
+  border: 1px solid #2a3239;
+  border-radius: 2px;
+  font-size: 10.5px;
+  color: var(--text-dim);
+}
+.intel-chip b { color: var(--text); font-size: 11.5px; font-family: var(--mil-font); }
+.intel-chip.good b { color: var(--green); }
+.intel-chip.warn b { color: var(--yellow); }
+.intel-chip.bad b { color: var(--red); }
+
+.intel-status-items { display: flex; flex-wrap: wrap; gap: 4px; justify-content: flex-end; }
+.intel-status-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  background: #11161a;
+  border: 1px solid #2a3239;
+  border-radius: 2px;
+  font-size: 10.5px;
+  color: var(--text-dim);
+}
+.intel-status-item b { color: var(--text); font-family: var(--mil-font); }
+
+.intel-head-btns { display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end; }
+.intel-head-btns .steel-btn.active {
+  color: var(--gold);
+  border-color: var(--gold-dim);
+  box-shadow: 0 3px 0 #0d1013, 0 0 10px rgba(230, 194, 104, .35), inset 0 1px 0 rgba(255, 255, 255, .18);
+}
+
+/* ---------------------------------------------------------- 共通バー */
+
+.intel-bar { height: 10px; flex: 1 1 auto; min-width: 70px; }
+.intel-bar > i {
+  background: repeating-linear-gradient(90deg, #e6c268 0 7px, #9a7b3a 7px 9px);
+  box-shadow: 0 0 9px rgba(230, 194, 104, .45), inset 0 1px 0 rgba(255, 255, 255, .3);
+}
+.intel-bar.network > i {
+  background: repeating-linear-gradient(90deg, #5e9ec7 0 7px, #36617d 7px 9px);
+  box-shadow: 0 0 9px rgba(94, 158, 199, .45), inset 0 1px 0 rgba(255, 255, 255, .3);
+}
+
+/* ---------------------------------------------------------- 機関タブ */
+
+.intel-agency { display: flex; flex-direction: column; gap: 9px; }
+
+.intel-establish {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 16px 18px;
+  background:
+    radial-gradient(ellipse at 0% 0%, rgba(230, 194, 104, .12), transparent 65%),
+    linear-gradient(180deg, #262d34 0%, #171c21 100%);
+  border: 1px solid #0b0e11;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05);
+}
+.intel-establish-title {
+  font-family: var(--mil-font);
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: .1em;
+  color: var(--gold);
+}
+.intel-establish-desc { font-size: 11.5px; color: var(--text-dim); line-height: 1.65; max-width: 720px; }
+.intel-establish-btn { padding: 8px 20px; font-size: 13px; }
+
+.intel-agency-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 8px 12px;
+  background: #12171b;
+  border: 1px solid #2a3239;
+  border-left: 3px solid var(--gold-dim);
+  border-radius: 2px;
+}
+.intel-agency-summary b { color: var(--gold); font-family: var(--mil-font); letter-spacing: .06em; font-size: 12.5px; }
+.intel-agency-summary-text { font-size: 11px; color: var(--text-dim); }
+
+.intel-branches {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(238px, 1fr));
+  gap: 8px;
+}
+.intel-branch {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 9px 10px;
+  background: linear-gradient(180deg, #232a31 0%, #171c21 100%);
+  border: 1px solid #0b0e11;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05), 0 2px 6px rgba(0, 0, 0, .35);
+}
+.intel-branch.owned { border-color: #3c4a33; box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07), 0 0 10px rgba(126, 200, 80, .1); }
+.intel-branch-head { display: flex; align-items: center; gap: 7px; }
+.intel-branch-icon { font-size: 17px; line-height: 1; }
+.intel-branch-name { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.intel-branch-name b { font-size: 12.5px; color: var(--gold); letter-spacing: .04em; }
+.intel-branch-level { font-family: var(--mil-font); font-size: 11px; color: var(--text-dim); }
+.intel-pips { display: flex; gap: 3px; }
+.intel-pip {
+  width: 16px; height: 5px;
+  background: #0d1114;
+  border: 1px solid #2a3239;
+  border-radius: 1px;
+}
+.intel-pip.on {
+  background: linear-gradient(180deg, #c9a24e, #8a6d31);
+  border-color: var(--gold-dim);
+  box-shadow: 0 0 6px rgba(230, 194, 104, .45);
+}
+.intel-branch-desc { font-size: 10.5px; color: var(--text-dim); line-height: 1.5; }
+.intel-branch-effect { font-size: 11px; color: var(--green); }
+.intel-branch-effect::before { content: '▸ '; color: var(--gold-dim); }
+.intel-branch-req { font-size: 10.5px; color: var(--yellow); }
+.intel-branch-next {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  font-size: 10.5px;
+  color: var(--text-dim);
+  padding-top: 4px;
+  border-top: 1px dashed #2a3239;
+}
+.intel-branch-next .k { color: var(--gold-dim); font-family: var(--mil-font); letter-spacing: .06em; }
+.intel-branch-next span:last-child { color: var(--gold); }
+.intel-branch-max { font-size: 10.5px; color: var(--green); text-align: center; padding: 4px; border: 1px solid #2f4030; border-radius: 2px; background: #131a14; }
+.intel-upgrade-btn { width: 100%; }
+
+.intel-history { display: flex; flex-direction: column; gap: 5px; }
+.intel-history-list { display: flex; flex-direction: column; gap: 3px; }
+.intel-history-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  font-size: 11px;
+  background: #12171b;
+  border: 1px solid #232a31;
+  border-radius: 2px;
+}
+.intel-history-row .ico { color: var(--gold); }
+.intel-history-row .name { flex: 1 1 auto; color: var(--text); }
+.intel-history-row .detail { color: var(--green); font-size: 10.5px; }
+
+/* ---------------------------------------------------------- エージェント */
+
+.intel-agents { display: flex; flex-direction: column; gap: 8px; }
+.intel-ops { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 8px; }
+.intel-op {
+  display: flex;
+  gap: 9px;
+  padding: 9px;
+  background: linear-gradient(180deg, #232a31 0%, #171c21 100%);
+  border: 1px solid #0b0e11;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05);
+}
+.intel-op-face img,
+.intel-op-face .mono {
+  width: 54px; height: 54px;
+  object-fit: cover;
+  border: 1px solid var(--gold-dim);
+  border-radius: 2px;
+  background: #0d1114;
+}
+.intel-op-face .mono { display: grid; place-items: center; font-size: 18px; color: var(--gold); }
+.intel-op-info { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+.intel-op-name { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+.intel-op-name b { color: var(--gold); font-size: 12.5px; }
+.intel-op-skill {
+  font-size: 10px;
+  color: var(--blue);
+  border: 1px solid #2c4356;
+  border-radius: 2px;
+  padding: 0 5px;
+  background: #101a20;
+}
+.intel-op-mission { display: flex; align-items: center; gap: 6px; font-size: 11px; flex-wrap: wrap; }
+.intel-op-mission .ico { color: var(--gold); }
+.intel-op-days { margin-left: auto; color: var(--yellow); font-size: 10.5px; font-family: var(--mil-font); }
+.intel-op-cancel { align-self: flex-start; padding: 3px 9px; font-size: 11px; }
+.intel-op-form { display: flex; gap: 4px; flex-wrap: wrap; }
+.intel-op-form .steel-select { flex: 1 1 110px; min-width: 0; font-size: 11px; padding: 3px 5px; }
+.intel-op-form .steel-btn { padding: 3px 9px; font-size: 11px; }
+.intel-op-detail { font-size: 10px; color: var(--text-dim); line-height: 1.45; }
+.intel-op-done { font-size: 10px; color: var(--text-dim); }
+
+.intel-recruits {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 7px;
+}
+.intel-recruit {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 7px;
+  background: #171c21;
+  border: 1px solid #2a3239;
+  border-radius: 3px;
+  transition: border-color .12s, box-shadow .12s;
+}
+.intel-recruit:hover { border-color: var(--gold-dim); box-shadow: 0 0 10px rgba(230, 194, 104, .18); }
+.intel-recruit.locked { opacity: .62; }
+.intel-recruit-face img,
+.intel-recruit-face .mono {
+  width: 34px; height: 34px;
+  object-fit: cover;
+  border: 1px solid #2a3239;
+  border-radius: 2px;
+}
+.intel-recruit-face .mono { display: grid; place-items: center; color: var(--gold); font-size: 13px; }
+.intel-recruit-info { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.intel-recruit-info b { font-size: 11.5px; color: var(--text); }
+.intel-recruit-skill { font-size: 10px; color: var(--blue); }
+.intel-recruit-cost { font-size: 10px; color: var(--gold-dim); }
+.intel-hire-btn { padding: 3px 9px; font-size: 11px; }
+
+/* ---------------------------------------------------------- インテル */
+
+.intel-targets { display: flex; flex-direction: column; gap: 8px; }
+.intel-legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 10.5px; }
+.intel-legend-item { display: inline-flex; gap: 4px; align-items: center; }
+.intel-legend-item i { font-style: normal; }
+
+.intel-target-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 8px; }
+.intel-target {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 9px 10px;
+  background: linear-gradient(180deg, #232a31 0%, #171c21 100%);
+  border: 1px solid #0b0e11;
+  border-left: 3px solid var(--intel-color, #55606a);
+  border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05);
+}
+.intel-target.tier-military { box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06), 0 0 12px rgba(208, 80, 56, .14); }
+.intel-target.tier-economy { box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06), 0 0 12px rgba(94, 158, 199, .12); }
+.intel-target-head { display: flex; align-items: center; gap: 7px; }
+.intel-target-name { flex: 1 1 auto; display: flex; align-items: baseline; gap: 6px; min-width: 0; }
+.intel-target-name b { font-size: 13px; color: var(--gold); font-family: var(--mil-font); letter-spacing: .04em; }
+.intel-target-tag { font-size: 9.5px; color: var(--text-dim); border: 1px solid #2a3239; border-radius: 2px; padding: 0 4px; }
+.intel-tier-badge {
+  font-size: 10px;
+  padding: 1px 7px;
+  border: 1px solid var(--gold-dim);
+  border-radius: 10px;
+  background: #10151a;
+  white-space: nowrap;
+}
+.intel-target-level,
+.intel-target-network { display: flex; align-items: center; gap: 7px; font-size: 10.5px; color: var(--text-dim); }
+.intel-target-level .k,
+.intel-target-network .k { width: 68px; flex: 0 0 auto; }
+.intel-target-decrypt { color: var(--blue); font-size: 10px; }
+
+.intel-rows { display: flex; flex-direction: column; gap: 4px; }
+.intel-info-row {
+  display: flex;
+  gap: 8px;
+  padding: 5px 7px;
+  background: #12171b;
+  border: 1px solid #232a31;
+  border-radius: 2px;
+  font-size: 11px;
+}
+.intel-info-row.locked { background: #0f1316; border-style: dashed; }
+.intel-info-label { flex: 0 0 86px; color: var(--text-dim); font-size: 10.5px; }
+.intel-info-row.political .intel-info-label { color: var(--yellow); }
+.intel-info-row.economy .intel-info-label { color: var(--blue); }
+.intel-info-row.military .intel-info-label { color: var(--red); }
+.intel-info-body { flex: 1 1 auto; display: flex; flex-direction: column; gap: 1px; min-width: 0; line-height: 1.45; }
+.intel-info-locked { color: #6c757d; font-size: 10.5px; }
+.intel-force-chips { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 3px; }
+.intel-force-chip {
+  display: inline-flex;
+  gap: 4px;
+  align-items: baseline;
+  padding: 0 5px;
+  font-size: 10px;
+  color: var(--text-dim);
+  background: #1a1010;
+  border: 1px solid #432a24;
+  border-radius: 2px;
+}
+.intel-force-chip b { color: #e08a6a; font-weight: 700; }
+.intel-force-chip.more { color: var(--text-dim); background: #12171b; border-color: #2a3239; }
+.intel-target-ops { font-size: 10px; color: var(--blue); }
+.intel-target-map { align-self: flex-start; padding: 3px 9px; font-size: 11px; }
+
+/* ---------------------------------------------------------- マップ */
+
+#map-intel { pointer-events: none; }
+#map-intel > g { pointer-events: auto; }
+.map-intel-network text { paint-order: stroke; stroke: #0b0e11; stroke-width: 2.5px; }
+.map-intel-forces rect { filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .8)); }
+.map-intel-forces text { paint-order: stroke; stroke: #0b0e11; stroke-width: 1.5px; }
