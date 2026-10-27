@@ -937,13 +937,7 @@
       '<p>' + esc(slot.desc) + '</p></div>' +
       '<button type="button" class="eqd-modal-close" data-eqd-close aria-label="閉じる">✕</button>' +
       '</header>' +
-      '<div class="eqd-modal-split">' +
       '<div class="eqd-modal-body">' + noneCard + cards + '</div>' +
-      '<aside class="eqd-modal-preview"><span class="eqd-kicker">設計図プレビュー</span>' +
-      '<div class="eqd-modal-preview-svg" data-eqd-preview>' + this.previewSvg(cat, hull.id) + '</div>' +
-      '<p class="eqd-modal-preview-name" data-eqd-preview-name>' + esc(slot.name + ': ' + (selectedId ? ((slot.options.find(o => o.id === selectedId) || {}).name || selectedId) : '未装着')) + '</p>' +
-      '<small>カーソルを合わせると設計図が切り替わります</small></aside>' +
-      '</div>' +
       '<p class="eqd-modal-alert" role="alert" aria-live="assertive" hidden></p>' +
       '<footer class="eqd-modal-foot"><span>' + esc(hull.name) + ' に装着可能なモジュール</span>' +
       '<span class="eqd-modal-legend"><i>🔒</i> 未研究 <i>⚠</i> 装備制限</span></footer>' +
@@ -991,37 +985,6 @@
       else showModalAlert(overlay, 'このモジュールは現在装着できません。研究状況と装備制限を確認してください。');
     });
 
-    const previewOption = (pick) => {
-      const optionId = pick ? pick.getAttribute('data-eqd-pick') : null;
-      const draft = this.ensureDraft(this.category);
-      const overrides = {};
-      let label;
-      if (!optionId) {
-        label = null;
-      } else if (optionId === '__none__') {
-        overrides[slotId] = '';
-        label = '未装着';
-      } else {
-        overrides[slotId] = optionId;
-        label = pick.getAttribute('title') || optionId;
-      }
-      const svg = this.previewSvg(this.category, draft.hull, overrides);
-      const pane = overlay.querySelector('[data-eqd-preview]');
-      if (pane) pane.innerHTML = svg;
-      const name = overlay.querySelector('[data-eqd-preview-name]');
-      if (name) name.textContent = (label == null ? '現在の装備' : label);
-      this.setBlueprintPreview(optionId ? svg : null, label || '');
-    };
-    overlay.addEventListener('mouseover', (event) => {
-      const pick = event.target.closest && event.target.closest('[data-eqd-pick]');
-      if (pick) previewOption(pick);
-    });
-    overlay.addEventListener('focusin', (event) => {
-      const pick = event.target.closest && event.target.closest('[data-eqd-pick]');
-      if (pick) previewOption(pick);
-    });
-    overlay.addEventListener('mouseleave', () => previewOption(null));
-
     this._modalKeyHandler = (event) => {
       if (event.key === 'Escape') this.closeSlotPicker();
     };
@@ -1035,7 +998,6 @@
     const slotId = this._modalSlot;
     const overlay = document.getElementById('eqd-modal-overlay');
     if (overlay) overlay.remove();
-    this.setBlueprintPreview(null);
     if (this._modalKeyHandler) {
       document.removeEventListener('keydown', this._modalKeyHandler);
       this._modalKeyHandler = null;
@@ -1067,257 +1029,145 @@
       '</svg>';
   }
 
-  // ==========================================================
-  // 設計図: 車体/船体/機体 + 各モジュールごとにパーツ描画が切り替わる
-  // ==========================================================
-  function slotMap(modules) { const m = {}; modules.forEach(module => { m[module._slot] = module; }); return m; }
-  function callout(x, y, tx, ty, label, anchor) {
-    return '<g class="eqd-callout"><path d="M' + x + ' ' + y + ' L' + tx + ' ' + ty + '"/><circle cx="' + x + '" cy="' + y + '" r="2.2"/>' +
-      '<text x="' + (tx + (anchor === 'end' ? -4 : 4)) + '" y="' + (ty + 3) + '" text-anchor="' + (anchor || 'start') + '">' + esc(label) + '</text></g>';
-  }
-
-  // ---------- 戦車 ----------
-  const TANK_HULLS = {
-    lt:  { len: 250, h: 34, top: 150, wheels: 5, wr: 11, sloped: false, note: 'LIGHT' },
-    ilt: { len: 262, h: 36, top: 148, wheels: 5, wr: 11, sloped: true,  note: 'LIGHT MkII' },
-    mt:  { len: 300, h: 42, top: 142, wheels: 6, wr: 12, sloped: false, note: 'MEDIUM' },
-    imt: { len: 310, h: 44, top: 140, wheels: 6, wr: 12, sloped: true,  note: 'MEDIUM MkII' },
-    amt: { len: 318, h: 42, top: 142, wheels: 7, wr: 11, sloped: true,  note: 'ADV. MEDIUM' },
-    mbt: { len: 330, h: 40, top: 144, wheels: 7, wr: 12, sloped: true,  note: 'MAIN BATTLE' },
-    ht:  { len: 326, h: 56, top: 130, wheels: 8, wr: 12, sloped: false, note: 'HEAVY' },
-    iht: { len: 336, h: 58, top: 128, wheels: 8, wr: 12, sloped: true,  note: 'HEAVY MkII' },
-    sht: { len: 380, h: 70, top: 118, wheels: 9, wr: 13, sloped: false, note: 'SUPER HEAVY' }
-  };
   function tankBlueprint(hull, modules) {
-    const by = slotMap(modules);
-    const H = TANK_HULLS[hull.id] || TANK_HULLS.mt;
-    const cx = 290, left = cx - H.len / 2, right = cx + H.len / 2, top = H.top, bottom = top + H.h, ground = 207;
-    const wheelY = bottom + 16;
-    // --- 車体 ---
-    const glacis = H.sloped ? 'L' + (right - 10) + ' ' + top + ' L' + (right + 6) + ' ' + (bottom - 6) : 'L' + right + ' ' + top + ' L' + right + ' ' + (bottom - 6);
-    const hullPath = '<path d="M' + left + ' ' + (bottom - 6) + ' L' + (left + 14) + ' ' + top + ' ' + glacis + ' L' + right + ' ' + bottom + ' L' + left + ' ' + bottom + ' Z"/>' +
-      '<path class="eqd-faint" d="M' + (left + 14) + ' ' + (bottom - 2) + ' H' + (right - 10) + '"/>';
-    // --- 足回り ---
-    const susp = by.suspension && by.suspension.id;
-    const n = H.wheels, step = (H.len - 70) / Math.max(1, n - 1), ws = left + 35;
-    let running = '<path d="M' + (left + 12) + ' ' + (wheelY + H.wr + 4) + ' H' + (right - 12) + ' M' + (left + 12) + ' ' + (wheelY - H.wr - 3) + ' H' + (right - 12) + '"/>' +
-      '<circle cx="' + (left + 10) + '" cy="' + (wheelY - 6) + '" r="' + (H.wr + 1) + '"/><circle cx="' + (right - 10) + '" cy="' + (wheelY - 8) + '" r="' + (H.wr + 2) + '"/>';
-    for (let i = 0; i < n; i++) {
-      const x = ws + i * step;
-      running += '<circle cx="' + x + '" cy="' + wheelY + '" r="' + H.wr + '"/><circle cx="' + x + '" cy="' + wheelY + '" r="' + (H.wr * 0.45) + '"/>';
-      if (susp === 'torsion') running += '<path class="eqd-accent" d="M' + x + ' ' + (wheelY - H.wr) + ' l6 -12 h-12"/>';
-    }
-    if (susp === 'bogie') { for (let i = 0; i + 1 < n; i += 2) { const x1 = ws + i * step, x2 = ws + (i + 1) * step; running += '<path class="eqd-accent" d="M' + x1 + ' ' + (wheelY - H.wr - 2) + ' L' + ((x1 + x2) / 2) + ' ' + (wheelY - H.wr - 14) + ' L' + x2 + ' ' + (wheelY - H.wr - 2) + ' M' + ((x1 + x2) / 2 - 5) + ' ' + (wheelY - H.wr - 14) + ' h10 M' + ((x1 + x2) / 2) + ' ' + (wheelY - H.wr - 14) + ' v-6"/>'; } }
-    else if (!susp) running += '<path class="eqd-accent faint" d="M' + (ws) + ' ' + (wheelY - H.wr - 6) + ' H' + (ws + (n - 1) * step) + '"/>';
-    // --- 砲塔 ---
-    const tur = by.turret && by.turret.id;
-    const tw = tur === 'large' ? 150 : tur === 'oscillating' ? 128 : 112, th = tur === 'large' ? 40 : 32, tx = cx - tw / 2 + 10, ty = top - th;
-    let turret;
-    if (tur === 'large') turret = '<path d="M' + tx + ' ' + top + ' L' + (tx + 14) + ' ' + ty + ' H' + (tx + tw - 8) + ' L' + (tx + tw + 10) + ' ' + top + ' Z"/><rect x="' + (tx + 30) + '" y="' + (ty - 8) + '" width="34" height="8" rx="2"/>';
-    else if (tur === 'oscillating') turret = '<path d="M' + tx + ' ' + top + ' L' + (tx + 10) + ' ' + (ty + 14) + ' H' + (tx + tw) + ' L' + (tx + tw + 8) + ' ' + top + ' Z"/><path d="M' + (tx + 24) + ' ' + (ty + 14) + ' L' + (tx + 34) + ' ' + ty + ' H' + (tx + tw - 10) + ' L' + (tx + tw + 2) + ' ' + (ty + 14) + '"/><circle class="eqd-accent" cx="' + (tx + tw - 4) + '" cy="' + (ty + 14) + '" r="4"/>';
-    else if (tur === 'std') turret = '<path d="M' + tx + ' ' + top + ' Q' + (tx + 6) + ' ' + ty + ' ' + (tx + 30) + ' ' + ty + ' H' + (tx + tw - 14) + ' Q' + (tx + tw + 4) + ' ' + (ty + 6) + ' ' + (tx + tw + 6) + ' ' + top + ' Z"/><circle cx="' + (tx + 40) + '" cy="' + (ty + 4) + '" r="6"/>';
-    else turret = '<path class="eqd-faint" stroke-dasharray="4 4" d="M' + tx + ' ' + top + ' L' + (tx + 12) + ' ' + (ty + 8) + ' H' + (tx + tw - 10) + ' L' + (tx + tw + 4) + ' ' + top + ' Z"/>';
-    const gunY = ty + th * 0.45, gunX = tx + tw + (tur === 'large' ? 10 : 6);
-    // --- 主砲 ---
-    const gun = by.gun && by.gun.id;
-    const G = { basic_gun: { len: 70, d: 5, brake: 0, mantlet: 10 }, how: { len: 54, d: 10, brake: 0, mantlet: 16 }, at: { len: 110, d: 6, brake: 1, mantlet: 12 }, long: { len: 150, d: 6, brake: 2, mantlet: 14 }, heavy: { len: 120, d: 11, brake: 2, mantlet: 20 } }[gun] || { len: 0 };
-    let gunSvg = '';
-    if (G.len) {
-      gunSvg = '<rect x="' + (gunX - 4) + '" y="' + (gunY - G.mantlet / 2) + '" width="12" height="' + G.mantlet + '" rx="3"/><rect x="' + (gunX + 8) + '" y="' + (gunY - G.d / 2) + '" width="' + G.len + '" height="' + G.d + '" rx="1.5"/>';
-      if (gun === 'at' || gun === 'long') gunSvg += '<rect x="' + (gunX + 8) + '" y="' + (gunY - G.d / 2 - 2) + '" width="' + (G.len * 0.35) + '" height="' + (G.d + 4) + '" rx="2"/>';
-      if (G.brake === 1) gunSvg += '<rect x="' + (gunX + 8 + G.len) + '" y="' + (gunY - G.d / 2 - 3) + '" width="10" height="' + (G.d + 6) + '" rx="2"/>';
-      if (G.brake === 2) gunSvg += '<rect x="' + (gunX + 8 + G.len) + '" y="' + (gunY - G.d / 2 - 4) + '" width="14" height="' + (G.d + 8) + '" rx="2"/><path d="M' + (gunX + 12 + G.len) + ' ' + (gunY - G.d / 2 - 4) + ' v-4 M' + (gunX + 18 + G.len) + ' ' + (gunY - G.d / 2 - 4) + ' v-4"/>';
-      if (gun === 'how' || gun === 'heavy') gunSvg += '<path d="M' + (gunX + 8 + G.len) + ' ' + (gunY - G.d / 2) + ' l6 -3 v' + (G.d + 6) + ' l-6 -3"/>';
-    }
-    // --- 装甲 ---
-    const arm = by.armor && by.armor.id; let armor = '';
-    if (arm === 'steel') armor = '<path class="eqd-accent" d="M' + (left + 16) + ' ' + (top + 6) + ' H' + (right - 14) + '"/>' + '<g class="eqd-accent faint">' + Array.from({ length: 6 }, (_, i) => '<circle cx="' + (left + 30 + i * (H.len - 60) / 5) + '" cy="' + (top + 12) + '" r="1.5"/>').join('') + '</g>';
-    else if (arm === 'slope') armor = '<path class="eqd-accent" d="M' + (right - 12) + ' ' + top + ' L' + (right + 4) + ' ' + (bottom - 8) + ' M' + (right - 20) + ' ' + (top + 4) + ' L' + (right - 4) + ' ' + (bottom - 8) + '"/><path class="eqd-accent faint" d="M' + (left + 14) + ' ' + top + ' L' + left + ' ' + (bottom - 6) + '"/>';
-    else if (arm === 'welded') armor = '<g class="eqd-accent"><path d="M' + (left + 60) + ' ' + top + ' V' + bottom + ' M' + (cx) + ' ' + top + ' V' + bottom + ' M' + (right - 60) + ' ' + top + ' V' + bottom + '"/><path class="faint" stroke-dasharray="2 3" d="M' + (left + 16) + ' ' + (top + H.h / 2) + ' H' + (right - 12) + '"/></g>';
-    else if (arm === 'composite') armor = '<g class="eqd-accent"><path d="M' + (left + 16) + ' ' + (top + 5) + ' H' + (right - 14) + ' M' + (left + 16) + ' ' + (top + 10) + ' H' + (right - 14) + '"/><path class="faint" d="M' + (left + 30) + ' ' + (top + 5) + ' l6 5 M' + (left + 70) + ' ' + (top + 5) + ' l6 5 M' + (left + 110) + ' ' + (top + 5) + ' l6 5 M' + (left + 150) + ' ' + (top + 5) + ' l6 5"/></g>';
-    // --- エンジン (後部 = 左) ---
-    const eng = by.engine && by.engine.id; let engine = '';
-    const ex = left + 20, ey = top + 8;
-    if (eng === 'gas') engine = '<g class="eqd-accent"><rect x="' + ex + '" y="' + ey + '" width="36" height="' + (H.h - 16) + '" rx="2"/><path d="M' + (ex + 8) + ' ' + ey + ' v-6 M' + (ex + 18) + ' ' + ey + ' v-6 M' + (ex + 28) + ' ' + ey + ' v-6"/></g>';
-    else if (eng === 'diesel') engine = '<g class="eqd-accent"><rect x="' + ex + '" y="' + ey + '" width="44" height="' + (H.h - 16) + '" rx="2"/><path d="M' + (ex + 6) + ' ' + ey + ' v-6 M' + (ex + 14) + ' ' + ey + ' v-6 M' + (ex + 22) + ' ' + ey + ' v-6 M' + (ex + 30) + ' ' + ey + ' v-6 M' + (ex + 38) + ' ' + ey + ' v-6"/><path d="M' + (left + 2) + ' ' + (top + 10) + ' h-10 v8"/></g>';
-    else if (eng === 'high') engine = '<g class="eqd-accent"><rect x="' + ex + '" y="' + ey + '" width="50" height="' + (H.h - 16) + '" rx="2"/><path d="M' + (ex + 6) + ' ' + (ey + 4) + ' h38 M' + (ex + 6) + ' ' + (ey + 10) + ' h38"/><path d="M' + (left + 2) + ' ' + (top + 8) + ' h-12 v6 M' + (left + 2) + ' ' + (top + 18) + ' h-12 v6"/></g>';
-    else if (eng === 'turbine') engine = '<g class="eqd-accent"><circle cx="' + (ex + 22) + '" cy="' + (ey + (H.h - 16) / 2) + '" r="' + Math.min(14, (H.h - 16) / 2) + '"/><path d="M' + (ex + 22) + ' ' + (ey + (H.h - 16) / 2 - 10) + ' v20 M' + (ex + 12) + ' ' + (ey + (H.h - 16) / 2) + ' h20"/><path d="M' + (ex + 44) + ' ' + ey + ' h20 M' + (ex + 44) + ' ' + (ey + 5) + ' h20 M' + (ex + 44) + ' ' + (ey + 10) + ' h20"/><path d="M' + (left + 2) + ' ' + (top + 6) + ' h-16 v14 h16"/></g>';
-    // --- 無線 ---
-    const rad = by.radio && by.radio.id; let radio = '';
-    if (rad === 'radio1') radio = '<path class="eqd-accent" d="M' + (tx + 14) + ' ' + ty + ' v-26 l4 -4"/>';
-    else if (rad === 'radio2') radio = '<path class="eqd-accent" d="M' + (tx + 14) + ' ' + ty + ' v-30 l4 -4 M' + (tx + tw - 16) + ' ' + ty + ' v-22 M' + (tx + tw - 22) + ' ' + (ty - 22) + ' h12"/>';
-    // --- 注釈 ---
-    let notes = '';
-    if (by.gun) notes += callout(gunX + 8 + G.len * 0.6, gunY, 470, 60, by.gun.name);
-    if (by.turret) notes += callout(tx + tw / 2, ty + 4, 300, 56, by.turret.name, 'end');
-    if (by.engine) notes += callout(ex + 20, ey + 6, 60, 72, by.engine.name);
-    if (by.armor) notes += callout(right - 30, top + 6, 500, 232, by.armor.name, 'end');
-    if (by.suspension) notes += callout(ws + step, wheelY + H.wr, 70, 236, by.suspension.name);
-    if (by.radio) notes += callout(tx + 14, ty - 20, 120, 50, by.radio.name);
+    const bySlot = {};
+    modules.forEach(module => { bySlot[module._slot] = module; });
+    const gunId = bySlot.gun && bySlot.gun.id;
+    const barrel = { basic_gun: 76, how: 88, at: 104, long: 124, heavy: 112 }[gunId] || 82;
+    const largeTurret = bySlot.turret && (bySlot.turret.id === 'large' || bySlot.turret.id === 'oscillating');
+    const turret = largeTurret
+      ? '<path d="M206 132 L230 96 L354 96 L374 132 Z"/>'
+      : '<path d="M226 132 L246 100 L338 100 L360 132 Z"/>';
+    const gunStart = largeTurret ? 366 : 352;
+    const gunY = 111;
+    const wheels = bySlot.suspension && bySlot.suspension.id === 'torsion' ? 9 : 8;
+    const wheelStart = 156;
+    const wheelStep = 34;
+    const wheelMarks = Array.from({ length: wheels }, (_, index) => {
+      const cx = wheelStart + index * wheelStep;
+      return '<circle cx="' + cx + '" cy="181" r="13"/>';
+    }).join('');
+    const armorLine = bySlot.armor
+      ? '<path class="eqd-accent" d="M132 161 H330 V191"/>' +
+        (bySlot.armor.id === 'composite' || bySlot.armor.id === 'welded' ? '<path class="eqd-accent faint" d="M140 168 H322 V188"/>' : '')
+      : '';
+    const radio = bySlot.radio
+      ? '<path class="eqd-accent" d="M174 112 V82 M174 82 l14 -9 M188 73 v12"/>'
+      : '';
+    const engine = bySlot.engine
+      ? '<g class="eqd-accent"><path d="M132 148 v-18 M140 148 v-18 M148 148 v-18 M156 148 v-18"/></g>'
+      : '';
     const content = '' +
-      '<line class="eqd-bp-ground" x1="40" y1="' + (wheelY + H.wr + 6) + '" x2="540" y2="' + (wheelY + H.wr + 6) + '"/>' +
-      '<g class="eqd-bp-dim"><path d="M' + left + ' 229 H' + right + ' M' + left + ' 224 v10 M' + right + ' 224 v10"/><text x="' + cx + '" y="242" text-anchor="middle">全長 ' + fmt(4.2 + num(hull.weight) * 0.06 + (G.len || 0) * 0.012, 1) + ' m · ' + H.note + '</text></g>' +
-      '<g class="eqd-ink">' + hullPath + running + turret + gunSvg + '</g>' +
-      armor + engine + radio + notes;
-    return blueprintFrame('tank', hull.name, fmt(hull.baseSpeed, 0) + ' km/h · ' + fmt(hull.weight, 0) + ' t', content, 'eqd-svg-tank');
+      '<line class="eqd-bp-ground" x1="62" y1="207" x2="500" y2="207"/>' +
+      '<g class="eqd-bp-dim"><path d="M112 229 H464 M112 224 v10 M464 224 v10"/><text x="288" y="242" text-anchor="middle">全長 ' + fmt(4.6 + num(hull.weight) * 0.055, 1) + ' m</text></g>' +
+      '<g class="eqd-ink">' +
+      '<path d="M128 158 H438 Q464 158 464 181 Q464 204 438 204 H150 Q112 204 112 181 Q112 158 128 158 Z"/>' +
+      wheelMarks +
+      '<circle cx="117" cy="181" r="16"/><circle cx="460" cy="181" r="16"/>' +
+      '<path d="M118 158 L448 158 L430 130 L258 130 L232 114 L142 114 Z"/>' +
+      turret +
+      '<rect x="' + gunStart + '" y="' + gunY + '" width="' + barrel + '" height="7" rx="2"/>' +
+      '<rect x="' + (gunStart + barrel) + '" y="' + (gunY - 4) + '" width="12" height="15" rx="2"/>' +
+      '<path d="M132 150 v-12 M142 130 h220"/>' +
+      '</g>' +
+      radio + engine + armorLine +
+      '<circle class="eqd-accent-dot" cx="286" cy="116" r="4"/>';
+    return blueprintFrame('tank', hull.name,
+      fmt(hull.baseSpeed, 0) + ' km/h · ' + fmt(hull.weight, 0) + ' t', content, 'eqd-svg-tank');
   }
 
-  // ---------- 艦船 ----------
-  const SHIP_HULLS = {
-    dd: { len: 330, free: 44, deck: 160, sheer: 10, type: 'dd', note: 'DESTROYER' }, dd2: { len: 350, free: 46, deck: 158, sheer: 12, type: 'dd', note: 'DESTROYER MkII' },
-    cl: { len: 400, free: 52, deck: 154, sheer: 12, type: 'cl', note: 'CRUISER' }, cl2: { len: 420, free: 54, deck: 152, sheer: 14, type: 'cl', note: 'CRUISER MkII' },
-    bb: { len: 450, free: 60, deck: 150, sheer: 14, type: 'bb', note: 'BATTLESHIP' }, bb2: { len: 470, free: 62, deck: 148, sheer: 16, type: 'bb', note: 'BATTLESHIP MkII' },
-    cv: { len: 460, free: 66, deck: 140, sheer: 6, type: 'cv', note: 'CARRIER' }, cv2: { len: 480, free: 68, deck: 138, sheer: 6, type: 'cv', note: 'CARRIER MkII' },
-    ss: { len: 300, free: 26, deck: 170, sheer: 4, type: 'ss', note: 'SUBMARINE' }, ss2: { len: 330, free: 28, deck: 168, sheer: 4, type: 'ss', note: 'SUBMARINE MkII' }
-  };
   function shipBlueprint(hull, modules) {
-    const by = slotMap(modules);
-    const H = SHIP_HULLS[hull.id] || SHIP_HULLS.dd;
-    const cx = 286, left = cx - H.len / 2, right = cx + H.len / 2, deck = H.deck, water = 199, keel = deck + H.free;
-    const sub = H.type === 'ss', cv = H.type === 'cv';
-    // --- 船体 ---
-    let body;
-    if (sub) body = '<path d="M' + left + ' ' + (deck + 12) + ' Q' + (left + 20) + ' ' + deck + ' ' + (left + 60) + ' ' + deck + ' H' + (right - 40) + ' Q' + (right) + ' ' + (deck + 4) + ' ' + (right + 2) + ' ' + (deck + 14) + ' Q' + right + ' ' + keel + ' ' + (right - 40) + ' ' + keel + ' H' + (left + 40) + ' Q' + left + ' ' + keel + ' ' + left + ' ' + (deck + 12) + ' Z"/><path class="eqd-faint" stroke-dasharray="3 4" d="M' + (left + 10) + ' ' + (deck + 14) + ' H' + (right - 10) + '"/>';
-    else body = '<path d="M' + left + ' ' + (deck + H.sheer) + ' L' + (left + 10) + ' ' + deck + ' H' + (right - 40) + ' L' + right + ' ' + (deck + H.sheer / 2) + ' L' + (right - 24) + ' ' + keel + ' Q' + (right - 60) + ' ' + (keel + 6) + ' ' + (right - 90) + ' ' + (keel + 6) + ' H' + (left + 50) + ' Q' + (left + 14) + ' ' + (keel + 2) + ' ' + (left + 6) + ' ' + (keel - 14) + ' Z"/><path d="M' + (left + 10) + ' ' + deck + ' H' + (right - 40) + '"/>' +
-      '<path class="eqd-faint" d="M' + (left + 20) + ' ' + (deck + 16) + ' H' + (right - 46) + '"/>' + (H.type !== 'dd' ? '<path class="eqd-faint" d="M' + (left + 30) + ' ' + (deck + 28) + ' H' + (right - 60) + '"/>' : '');
-    // --- 上部構造 ---
-    let sup = '';
-    const bx = cx - 30;
-    if (cv) sup = '<path d="M' + (left + 30) + ' ' + deck + ' V' + (deck - 10) + ' H' + (right - 20) + ' V' + deck + '"/><path d="M' + (cx + 70) + ' ' + (deck - 10) + ' V' + (deck - 46) + ' H' + (cx + 110) + ' V' + (deck - 10) + ' M' + (cx + 80) + ' ' + (deck - 46) + ' V' + (deck - 60) + ' H' + (cx + 100) + ' V' + (deck - 46) + '"/>' +
-      '<g class="eqd-accent">' + [0, 1, 2, 3].map(i => '<path d="M' + (left + 60 + i * 50) + ' ' + (deck - 12) + ' l10 -6 l10 6 M' + (left + 70 + i * 50) + ' ' + (deck - 18) + ' v-6"/>').join('') + '</g><text class="eqd-bp-note" x="' + (left + 60) + '" y="' + (deck - 24) + '">FLIGHT DECK</text>';
-    else if (sub) sup = '<path d="M' + (cx - 26) + ' ' + deck + ' V' + (deck - 30) + ' H' + (cx + 26) + ' V' + deck + '"/><path d="M' + (cx + 6) + ' ' + (deck - 30) + ' V' + (deck - 52) + ' M' + (cx - 10) + ' ' + (deck - 30) + ' V' + (deck - 44) + '"/><path class="eqd-accent faint" d="M' + (cx - 60) + ' ' + (deck - 4) + ' H' + (cx - 30) + ' M' + (cx + 30) + ' ' + (deck - 4) + ' H' + (cx + 70) + '"/>';
-    else {
-      const levels = H.type === 'bb' ? 4 : H.type === 'cl' ? 3 : 2;
-      let y = deck; for (let i = 0; i < levels; i++) { const w = 84 - i * 16, h = 14; sup += '<path d="M' + (bx + i * 8) + ' ' + y + ' V' + (y - h) + ' H' + (bx + i * 8 + w) + ' V' + y + '"/>'; y -= h; }
-      sup += '<path d="M' + (bx + levels * 8 + 10) + ' ' + y + ' V' + (y - 20) + '"/>';
-      if (hull.id.endsWith('2')) sup += '<path d="M' + (bx - 30) + ' ' + deck + ' V' + (deck - 12) + ' H' + bx + '"/>';
-    }
-    // --- 機関 (煙突) ---
-    const eng = by.engine && by.engine.id; let funnel = '';
-    if (!sub) {
-      const fx = cv ? cx + 112 : bx + 100;
-      if (eng === 'steam') funnel = '<g class="eqd-ink"><path d="M' + fx + ' ' + (deck - (cv ? 10 : 0)) + ' V' + (deck - 46) + ' l4 -6 h18 l4 6 V' + (deck - (cv ? 10 : 0)) + '"/><path d="M' + (fx + 36) + ' ' + (deck - (cv ? 10 : 0)) + ' V' + (deck - 42) + ' l4 -6 h16 l4 6 V' + (deck - (cv ? 10 : 0)) + '"/></g><path class="eqd-accent faint" d="M' + (fx + 13) + ' ' + (deck - 54) + ' q6 -8 0 -16 M' + (fx + 48) + ' ' + (deck - 50) + ' q6 -8 0 -16"/>';
-      else if (eng === 'diesel') funnel = '<g class="eqd-ink"><path d="M' + fx + ' ' + (deck - (cv ? 10 : 0)) + ' V' + (deck - 38) + ' l10 -6 h14 V' + (deck - (cv ? 10 : 0)) + '"/></g><path class="eqd-accent faint" d="M' + (fx + 14) + ' ' + (deck - 46) + ' v-8"/><g class="eqd-accent"><rect x="' + (bx + 20) + '" y="' + (deck + 10) + '" width="40" height="' + Math.max(10, H.free - 20) + '" rx="2"/><path d="M' + (bx + 26) + ' ' + (deck + 14) + ' h28 M' + (bx + 26) + ' ' + (deck + 20) + ' h28"/></g>';
-      else funnel = '<path class="eqd-faint" stroke-dasharray="4 4" d="M' + fx + ' ' + deck + ' V' + (deck - 40) + ' H' + (fx + 24) + ' V' + deck + '"/>';
-    } else funnel = eng ? '<g class="eqd-accent"><rect x="' + (left + 40) + '" y="' + (deck + 8) + '" width="60" height="' + (H.free - 16) + '" rx="3"/>' + (eng === 'diesel' ? '<path d="M' + (left + 48) + ' ' + (deck + 12) + ' h44 M' + (left + 48) + ' ' + (deck + 18) + ' h44"/>' : '<circle cx="' + (left + 70) + '" cy="' + (deck + H.free / 2) + '" r="6"/>') + '</g>' : '';
-    // --- 主砲 ---
-    const gun = by.gun && by.gun.id; let guns = '';
-    const turret = (x, size, barrels, blen) => '<path d="M' + (x - size) + ' ' + deck + ' h' + (size * 2) + ' l-' + (size * 0.35) + ' -' + (size * 0.9) + ' h-' + (size * 1.3) + ' z"/>' + Array.from({ length: barrels }, (_, i) => '<rect x="' + (x - size * 0.5 + i * (size * 1.1 / Math.max(1, barrels - 1)) * (barrels > 1 ? 1 : 0) - 1) + '" y="' + (deck - size * 0.9 - 6 - i * 0) + '" width="' + blen + '" height="4" rx="1.5" transform="rotate(-8 ' + x + ' ' + (deck - size * 0.9) + ')"/>').join('');
-    if (!sub && !cv) {
-      if (gun === 'lgun') guns = '<g class="eqd-ink">' + turret(right - 70, 22, 3, 46) + turret(right - 130, 22, 3, 46) + turret(left + 70, 22, 3, 46) + '</g>';
-      else if (gun === 'ddgun') guns = '<g class="eqd-ink">' + turret(right - 60, 13, 1, 30) + turret(left + 60, 13, 1, 30) + (H.type !== 'dd' ? turret(left + 110, 13, 1, 30) : '') + '</g>';
-      else if (gun === 'aa') guns = '<g class="eqd-ink">' + [right - 60, right - 100, left + 60, left + 100, cx + 60].map(x => '<path d="M' + (x - 6) + ' ' + deck + ' h12 l-3 -8 h-6 z M' + x + ' ' + (deck - 8) + ' l6 -14 M' + (x + 2) + ' ' + (deck - 8) + ' l6 -14"/>').join('') + '</g>';
-      else if (gun === 'basic_gun') guns = '<g class="eqd-ink">' + turret(right - 60, 10, 1, 24) + turret(left + 60, 10, 1, 24) + '</g>';
-    } else if (cv && gun) guns = '<g class="eqd-ink">' + [left + 44, right - 30].map(x => '<path d="M' + (x - 5) + ' ' + (deck - 10) + ' v-6 h10 v6 M' + x + ' ' + (deck - 16) + ' l4 -10"/>').join('') + '</g>';
-    else if (sub && gun) guns = '<g class="eqd-ink"><path d="M' + (cx - 60) + ' ' + deck + ' v-8 h14 v8 M' + (cx - 53) + ' ' + (deck - 8) + ' l22 -6"/></g>';
-    // --- 魚雷 ---
-    const torp = by.torp && by.torp.id; let torps = '';
-    const tubes = torp === 'tub' ? 3 : torp === 'tub2' ? 4 : torp === 'tub3' ? 4 : 0;
-    if (tubes) {
-      if (sub) torps = '<g class="eqd-accent">' + Array.from({ length: tubes }, (_, i) => '<rect x="' + (right - 60) + '" y="' + (deck + 10 + i * 7) + '" width="54" height="5" rx="2.5"/>').join('') + (torp === 'tub3' ? '<path d="M' + (right - 70) + ' ' + (deck + 10) + ' v' + (tubes * 7) + ' M' + (right - 74) + ' ' + (deck + 10) + ' v' + (tubes * 7) + '"/>' : '') + '</g>';
-      else torps = '<g class="eqd-accent">' + Array.from({ length: tubes }, (_, i) => '<rect x="' + (cx + 20 + i * 3) + '" y="' + (deck - 12 + i * 3) + '" width="' + (torp === 'tub3' ? 56 : 44) + '" height="5" rx="2.5" transform="rotate(-6 ' + (cx + 40) + ' ' + (deck - 6) + ')"/>').join('') + '<path d="M' + (cx + 40) + ' ' + deck + ' v-8"/></g>';
-    }
-    // --- 装甲 ---
-    const arm = by.armor && by.armor.id; let armor = '';
-    if (arm === 'light') armor = '<path class="eqd-accent" d="M' + (left + 30) + ' ' + (water - 6) + ' H' + (right - 40) + '"/>';
-    else if (arm === 'heavy') armor = '<g class="eqd-accent"><path d="M' + (left + 30) + ' ' + (water - 10) + ' H' + (right - 40) + ' M' + (left + 30) + ' ' + (water + 4) + ' H' + (right - 40) + '"/><path class="faint" d="' + Array.from({ length: 10 }, (_, i) => 'M' + (left + 40 + i * (H.len - 80) / 9) + ' ' + (water - 10) + ' v14 ').join('') + '"/></g>';
-    // --- 電装 ---
-    const radar = by.radar && by.radar.id; let mast = '';
-    const mx = sub ? cx + 6 : cv ? cx + 90 : bx + 40, my = sub ? deck - 52 : cv ? deck - 60 : deck - (H.type === 'bb' ? 76 : H.type === 'cl' ? 62 : 48);
-    if (radar === 'radar') mast = '<g class="eqd-accent"><path d="M' + mx + ' ' + my + ' v-22 M' + (mx - 12) + ' ' + (my - 22) + ' h24"/><path d="M' + (mx - 12) + ' ' + (my - 30) + ' q12 -10 24 0"/></g>';
-    else if (radar === 'radar2') mast = '<g class="eqd-accent"><path d="M' + mx + ' ' + my + ' v-30 M' + (mx - 16) + ' ' + (my - 30) + ' h32 M' + (mx - 8) + ' ' + (my - 16) + ' h16"/><path d="M' + (mx - 16) + ' ' + (my - 38) + ' q16 -12 32 0 M' + (mx - 8) + ' ' + (my - 22) + ' q8 -6 16 0"/><circle cx="' + mx + '" cy="' + (my - 42) + '" r="2"/></g>';
-    else mast = '<path class="eqd-ink" d="M' + mx + ' ' + my + ' v-14"/>';
-    // --- 注釈 ---
-    let notes = '';
-    if (by.gun) notes += callout(sub ? cx - 53 : cv ? right - 30 : right - 70, deck - 12, 520, 64, by.gun.name, 'end');
-    if (by.engine) notes += callout(sub ? left + 70 : (cv ? cx + 124 : bx + 112), sub ? deck + 14 : deck - 30, 90, 66, by.engine.name);
-    if (by.torp && tubes) notes += callout(sub ? right - 30 : cx + 40, sub ? deck + 14 : deck - 10, 470, 110, by.torp.name);
-    if (by.armor) notes += callout(cx, water - 8, 500, 236, by.armor.name, 'end');
-    if (by.radar) notes += callout(mx, my - 24, 60, 50, by.radar.name);
+    const bySlot = {};
+    modules.forEach(module => { bySlot[module._slot] = module; });
+    const gunId = bySlot.gun && bySlot.gun.id;
+    const bigGun = gunId === 'lgun';
+    const carrier = hull.id === 'cv' || hull.id === 'cv2';
+    const turretSize = bigGun ? 22 : 15;
+    const turrets = carrier
+      ? '<g class="eqd-accent"><path d="M210 148 H350 M220 140 V148 M340 140 V148"/></g>'
+      : '<g class="eqd-ink">' +
+        '<path d="M' + (402 - turretSize) + ' 150 h' + (turretSize * 2) + ' l-8 -18 h-' + (turretSize * 2 - 16) + ' z"/>' +
+        '<rect x="' + (402 - turretSize + 7) + '" y="126" width="' + (bigGun ? 46 : 34) + '" height="5" rx="2"/>' +
+        '<path d="M' + (146 - turretSize) + ' 150 h' + (turretSize * 2) + ' l-8 -16 h-' + (turretSize * 2 - 16) + ' z"/>' +
+        '</g>';
+    const torp = bySlot.torp
+      ? '<g class="eqd-accent"><rect x="292" y="154" width="42" height="7" rx="3"/><rect x="296" y="161" width="34" height="4" rx="2"/></g>'
+      : '';
+    const radar = bySlot.radar
+      ? '<g class="eqd-accent"><path d="M318 96 v-28 M306 76 h24"/><path d="M306 68 q12 -10 24 0"/></g>'
+      : '';
+    const armor = bySlot.armor
+      ? '<path class="eqd-accent" d="M90 160 H472" />' +
+        (bySlot.armor.id === 'heavy' ? '<path class="eqd-accent faint" d="M94 166 H468"/>' : '')
+      : '';
+    const funnel = bySlot.engine && bySlot.engine.id === 'diesel'
+      ? '<path class="eqd-ink" d="M314 150 V112 H338 V150"/><path class="eqd-accent faint" d="M326 112 v-14"/>'
+      : '<path class="eqd-ink" d="M308 150 V104 H340 V150"/><path class="eqd-ink" d="M312 104 h24"/><path class="eqd-accent faint" d="M324 104 v-16"/>';
     const content = '' +
-      '<line class="eqd-bp-ground" x1="40" y1="' + water + '" x2="530" y2="' + water + '"/>' +
-      '<g class="eqd-bp-dim"><path d="M' + left + ' 232 H' + right + ' M' + left + ' 227 v10 M' + right + ' 227 v10"/><text x="' + cx + '" y="245" text-anchor="middle">全長 ' + fmt(60 + num(hull.weight) * 2.2, 0) + ' m · ' + H.note + '</text></g>' +
-      '<g class="eqd-ink">' + body + sup + '</g>' + funnel + guns + torps + armor + mast + notes;
-    return blueprintFrame('ship', hull.name, fmt(hull.baseSpeed, 0) + ' kn · ' + fmt(hull.weight, 0) + ' t', content, 'eqd-svg-ship');
+      '<line class="eqd-bp-ground" x1="54" y1="199" x2="510" y2="199"/>' +
+      '<g class="eqd-bp-dim"><path d="M72 232 H500 M72 227 v10 M500 227 v10"/><text x="286" y="245" text-anchor="middle">全長 ' + fmt(70 + num(hull.weight) * 2.1, 0) + ' m</text></g>' +
+      '<g class="eqd-ink">' +
+      '<path d="M72 152 L500 152 L468 190 Q448 203 416 203 H122 Q92 203 82 184 Z"/>' +
+      '<path d="M72 152 H500"/>' +
+      '<path d="M230 152 V114 H292 V152 M240 114 V100 H282 V114"/>' +
+      '<path d="M180 152 V136 H212 V152"/>' +
+      funnel +
+      turrets + torp + armor + radar +
+      '<path d="M116 176 H456" class="eqd-faint"/>' +
+      '<circle cx="244" cy="132" r="3"/><circle cx="260" cy="132" r="3"/><circle cx="276" cy="132" r="3"/>' +
+      '</g>' +
+      '<text class="eqd-bp-note" x="304" y="220">' + esc(carrier ? 'FLIGHT DECK' : 'MAIN BATTERY') + '</text>';
+    return blueprintFrame('ship', hull.name,
+      fmt(hull.baseSpeed, 0) + ' kn · ' + fmt(hull.weight, 0) + ' t', content, 'eqd-svg-ship');
   }
 
-  // ---------- 航空機 ----------
-  const PLANE_HULLS = {
-    fighter:   { span: 62, len: 300, engines: 1, canopy: 'razor', tail: 'single', gear: false, note: 'FIGHTER' },
-    fighter2:  { span: 66, len: 310, engines: 1, canopy: 'bubble', tail: 'single', gear: false, note: 'FIGHTER MkII' },
-    fighter3:  { span: 68, len: 330, engines: 1, canopy: 'bubble', tail: 'single', gear: false, note: 'ADV. FIGHTER', swept: true },
-    cas:       { span: 74, len: 320, engines: 1, canopy: 'long', tail: 'single', gear: true, gull: true, note: 'CAS' },
-    bomber:    { span: 90, len: 350, engines: 2, canopy: 'glass', tail: 'twin', gear: false, note: 'TAC. BOMBER' },
-    strategic: { span: 110, len: 390, engines: 4, canopy: 'glass', tail: 'single', gear: false, note: 'STRAT. BOMBER' },
-    naval:     { span: 80, len: 330, engines: 1, canopy: 'long', tail: 'single', gear: false, fold: true, hook: true, note: 'CARRIER ATTACK' }
-  };
   function planeBlueprint(hull, modules) {
-    const by = slotMap(modules);
-    const H = PLANE_HULLS[hull.id] || PLANE_HULLS.fighter;
-    const cy = 130, nose = 296 + H.len / 2, tail = 296 - H.len / 2, fw = H.engines >= 2 ? 10 : 8;
-    const wingRoot = nose - H.len * 0.52, wingTip = wingRoot + (H.swept ? 60 : 40), chordRoot = H.engines >= 4 ? 52 : H.engines === 2 ? 44 : 34, chordTip = chordRoot * 0.55;
-    const top = cy - H.span, bottom = cy + H.span;
-    // --- 機体 ---
-    let body = '<path d="M' + tail + ' ' + (cy - 4) + ' Q' + (tail + 60) + ' ' + (cy - fw) + ' ' + (nose - 40) + ' ' + (cy - fw - 2) + ' Q' + nose + ' ' + (cy - fw / 2) + ' ' + nose + ' ' + cy + ' Q' + nose + ' ' + (cy + fw / 2) + ' ' + (nose - 40) + ' ' + (cy + fw + 2) + ' Q' + (tail + 60) + ' ' + (cy + fw) + ' ' + tail + ' ' + (cy + 4) + ' Z"/>';
-    // 主翼 (上下対称)
-    const wing = (s) => '<path d="M' + wingRoot + ' ' + (cy + s * fw) + ' L' + (wingTip + (H.gull ? 10 : 0)) + ' ' + (cy + s * H.span) + ' L' + (wingTip + chordTip + (H.gull ? 10 : 0)) + ' ' + (cy + s * H.span) + ' Q' + (wingRoot + chordRoot + 6) + ' ' + (cy + s * (H.span * 0.5)) + ' ' + (wingRoot + chordRoot) + ' ' + (cy + s * fw) + ' Z"/>' +
-      (H.gull ? '<path class="eqd-faint" d="M' + (wingRoot + 6) + ' ' + (cy + s * (fw + 14)) + ' L' + (wingRoot + chordRoot - 4) + ' ' + (cy + s * (fw + 14)) + '"/>' : '') +
-      (H.fold ? '<path class="eqd-accent" stroke-dasharray="3 3" d="M' + (wingRoot + 14) + ' ' + (cy + s * (H.span * 0.55)) + ' L' + (wingRoot + chordRoot + 2) + ' ' + (cy + s * (H.span * 0.55)) + '"/>' : '');
-    body += wing(-1) + wing(1);
-    // 尾翼
-    const tailSpan = H.span * 0.38;
-    if (H.tail === 'twin') body += '<path d="M' + (tail + 2) + ' ' + (cy - 4) + ' L' + (tail + 22) + ' ' + (cy - tailSpan) + ' L' + (tail + 44) + ' ' + (cy - tailSpan) + ' L' + (tail + 40) + ' ' + (cy - fw) + ' Z M' + (tail + 2) + ' ' + (cy + 4) + ' L' + (tail + 22) + ' ' + (cy + tailSpan) + ' L' + (tail + 44) + ' ' + (cy + tailSpan) + ' L' + (tail + 40) + ' ' + (cy + fw) + ' Z"/><rect x="' + (tail + 18) + '" y="' + (cy - tailSpan - 4) + '" width="8" height="8" rx="1"/><rect x="' + (tail + 18) + '" y="' + (cy + tailSpan - 4) + '" width="8" height="8" rx="1"/>';
-    else body += '<path d="M' + (tail + 2) + ' ' + (cy - 4) + ' L' + (tail + 14) + ' ' + (cy - tailSpan) + ' L' + (tail + 40) + ' ' + (cy - tailSpan) + ' L' + (tail + 44) + ' ' + (cy - fw) + ' Z M' + (tail + 2) + ' ' + (cy + 4) + ' L' + (tail + 14) + ' ' + (cy + tailSpan) + ' L' + (tail + 40) + ' ' + (cy + tailSpan) + ' L' + (tail + 44) + ' ' + (cy + fw) + ' Z"/><path d="M' + (tail + 8) + ' ' + (cy - 3) + ' H' + (tail + 40) + ' M' + (tail + 8) + ' ' + (cy + 3) + ' H' + (tail + 40) + '"/>';
-    if (H.hook) body += '<path class="eqd-accent" d="M' + (tail + 30) + ' ' + cy + ' h-22 l-4 4"/>';
-    // 風防
-    const ccx = H.engines >= 2 ? nose - 30 : wingRoot + chordRoot + 10;
-    if (H.canopy === 'bubble') body += '<ellipse cx="' + ccx + '" cy="' + cy + '" rx="20" ry="' + (fw - 1) + '"/>';
-    else if (H.canopy === 'razor') body += '<path d="M' + (ccx - 16) + ' ' + (cy - fw + 2) + ' H' + (ccx + 16) + ' M' + (ccx - 16) + ' ' + (cy + fw - 2) + ' H' + (ccx + 16) + ' M' + (ccx - 12) + ' ' + (cy - fw + 2) + ' V' + (cy + fw - 2) + '"/>';
-    else if (H.canopy === 'long') body += '<rect x="' + (ccx - 26) + '" y="' + (cy - fw + 2) + '" width="52" height="' + (fw * 2 - 4) + '" rx="4"/><path d="M' + (ccx - 10) + ' ' + (cy - fw + 2) + ' V' + (cy + fw - 2) + ' M' + (ccx + 6) + ' ' + (cy - fw + 2) + ' V' + (cy + fw - 2) + '"/>';
-    else body += '<path d="M' + (nose - 36) + ' ' + (cy - fw) + ' Q' + (nose - 6) + ' ' + (cy - 4) + ' ' + (nose - 6) + ' ' + cy + ' Q' + (nose - 6) + ' ' + (cy + 4) + ' ' + (nose - 36) + ' ' + (cy + fw) + '"/><path d="M' + (nose - 30) + ' ' + (cy - fw + 2) + ' V' + (cy + fw - 2) + ' M' + (nose - 20) + ' ' + (cy - fw + 3) + ' V' + (cy + fw - 3) + '"/><rect x="' + (wingRoot + chordRoot + 8) + '" y="' + (cy - fw + 2) + '" width="22" height="' + (fw * 2 - 4) + '" rx="3"/>';
-    if (H.gear) body += '<path class="eqd-accent" d="M' + (wingRoot + 10) + ' ' + (cy - 22) + ' l-10 -6 M' + (wingRoot + 10) + ' ' + (cy + 22) + ' l-10 6"/><circle class="eqd-accent" cx="' + (wingRoot - 2) + '" cy="' + (cy - 30) + '" r="4"/><circle class="eqd-accent" cx="' + (wingRoot - 2) + '" cy="' + (cy + 30) + '" r="4"/>';
-    // --- エンジン ---
-    const eng = by.engine && by.engine.id;
-    const prop = eng === 'e3' ? 20 : eng === 'e2' ? 16 : eng === 'e1' ? 13 : 10;
-    const engineAt = (x, y, nacelle) => {
-      let g = '';
-      if (nacelle) g += '<rect x="' + (x - 44) + '" y="' + (y - 7) + '" width="46" height="14" rx="6"/>';
-      if (eng === 'e3') g += '<rect x="' + (x - 10) + '" y="' + (y - 9) + '" width="12" height="18" rx="3"/><path class="eqd-accent" d="M' + (x - 24) + ' ' + (y - 11) + ' h14 v-4 h-14 z"/>';
-      else if (eng === 'e2') g += '<rect x="' + (x - 10) + '" y="' + (y - 9) + '" width="12" height="18" rx="4"/><path class="eqd-accent" d="M' + (x - 8) + ' ' + (y - 5) + ' h6 M' + (x - 8) + ' ' + y + ' h6 M' + (x - 8) + ' ' + (y + 5) + ' h6"/>';
-      else if (eng === 'e1') g += '<rect x="' + (x - 10) + '" y="' + (y - 7) + '" width="12" height="14" rx="4"/>';
-      else g += '<rect class="eqd-faint" stroke-dasharray="3 3" x="' + (x - 10) + '" y="' + (y - 7) + '" width="12" height="14" rx="4"/>';
-      g += '<path d="M' + (x + 2) + ' ' + y + ' h6"/><path d="M' + (x + 8) + ' ' + (y - prop) + ' v' + (prop * 2) + '"/><circle cx="' + (x + 8) + '" cy="' + y + '" r="3"/>';
-      if (eng === 'e3') g += '<path d="M' + (x + 8) + ' ' + (y - prop) + ' l-4 ' + prop + ' l4 ' + prop + ' l4 -' + prop + ' z" class="eqd-faint"/>';
-      return g;
-    };
-    let engines = '';
-    if (H.engines === 1) engines = engineAt(nose - 6, cy, false);
-    else { const ys = H.engines === 2 ? [-0.42, 0.42] : [-0.72, -0.38, 0.38, 0.72]; ys.forEach(k => { engines += engineAt(wingRoot + chordRoot + 10, cy + k * H.span, true); }); }
-    // --- 武装 ---
-    const wep = by.weapon && by.weapon.id; let weapons = '';
-    const gx = wingRoot + chordRoot;
-    if (wep === 'mg_basic') weapons = '<g class="eqd-accent"><path d="M' + gx + ' ' + (cy - 20) + ' h16 M' + gx + ' ' + (cy + 20) + ' h16"/></g>';
-    else if (wep === 'mg') weapons = '<g class="eqd-accent"><path d="' + [-34, -26, -18, 18, 26, 34].map(d => 'M' + gx + ' ' + (cy + d) + ' h20 ').join('') + '"/></g>';
-    else if (wep === 'cannon') weapons = '<g class="eqd-accent"><rect x="' + gx + '" y="' + (cy - 30) + '" width="30" height="4" rx="2"/><rect x="' + gx + '" y="' + (cy + 26) + '" width="30" height="4" rx="2"/><path d="M' + (gx + 30) + ' ' + (cy - 30) + ' h8 M' + (gx + 30) + ' ' + (cy + 30) + ' h8 M' + (nose - 4) + ' ' + cy + ' h22"/></g>';
-    else if (wep === 'bomb') weapons = '<g class="eqd-accent">' + [-0.5, 0.5].map(k => '<ellipse cx="' + (wingRoot + 16) + '" cy="' + (cy + k * H.span) + '" rx="7" ry="15"/><path d="M' + (wingRoot + 16) + ' ' + (cy + k * H.span - 15) + ' l-4 -5 h8 z"/>').join('') + '</g>';
-    else if (wep === 'heavy_bomb') weapons = '<g class="eqd-accent">' + [-0.45, 0.45].map(k => '<ellipse cx="' + (wingRoot + 18) + '" cy="' + (cy + k * H.span) + '" rx="10" ry="22"/><path d="M' + (wingRoot + 18) + ' ' + (cy + k * H.span - 22) + ' l-5 -6 h10 z"/>').join('') + '<ellipse cx="' + (wingRoot + 4) + '" cy="' + cy + '" rx="9" ry="20"/></g>';
-    else if (wep === 'torpedo') weapons = '<g class="eqd-accent"><rect x="' + (wingRoot - 30) + '" y="' + (cy - 6) + '" width="90" height="12" rx="6"/><path d="M' + (wingRoot - 30) + ' ' + (cy - 10) + ' v20 M' + (wingRoot - 24) + ' ' + (cy - 12) + ' v24"/></g>';
-    // --- 燃料 / 防弾 ---
-    const fuel = by.fuel && by.fuel.id; let extra = '';
-    if (fuel === 'drop_tank') extra = '<g class="eqd-accent">' + [-0.6, 0.6].map(k => '<ellipse cx="' + (wingRoot + 20) + '" cy="' + (cy + k * H.span) + '" rx="8" ry="20"/><path d="M' + (wingRoot + 20) + ' ' + (cy + k * H.span - 20) + ' v-6"/>').join('') + '</g>';
-    else if (fuel === 'plate') extra = '<g class="eqd-accent faint"><path d="M' + (ccx - 24) + ' ' + (cy - fw - 4) + ' h48 M' + (ccx - 24) + ' ' + (cy + fw + 4) + ' h48"/><path d="' + Array.from({ length: 6 }, (_, i) => 'M' + (ccx - 20 + i * 8) + ' ' + (cy - fw - 4) + ' l4 -4 ').join('') + '"/></g>';
-    // --- 注釈 ---
-    let notes = '';
-    if (by.engine) notes += callout(H.engines === 1 ? nose - 4 : wingRoot + chordRoot + 10, H.engines === 1 ? cy - 8 : cy - H.span * 0.42, 500, 58, by.engine.name, 'end');
-    if (by.weapon) notes += callout(wep === 'torpedo' ? wingRoot + 10 : gx + 10, wep === 'torpedo' ? cy : cy + 26, 470, 218, by.weapon.name, 'end');
-    if (by.fuel && fuel !== 'none') notes += callout(fuel === 'drop_tank' ? wingRoot + 20 : ccx, fuel === 'drop_tank' ? cy - H.span * 0.6 : cy - fw - 4, 80, 58, by.fuel.name);
-    notes += callout(tail + 30, cy - tailSpan + 4, 70, 212, H.note + ' AIRFRAME');
+    const bySlot = {};
+    modules.forEach(module => { bySlot[module._slot] = module; });
+    const size = hullSize('plane', hull);
+    const span = size === 'large' ? 43 : size === 'medium' ? 55 : 65;
+    const wingTop = 130 - span;
+    const wingBottom = 130 + span;
+    const weaponId = bySlot.weapon && bySlot.weapon.id;
+    const bombs = [];
+    if (weaponId === 'bomb' || weaponId === 'heavy_bomb') {
+      const rx = weaponId === 'heavy_bomb' ? 11 : 8;
+      bombs.push('<ellipse class="eqd-accent" cx="310" cy="' + (130 - span + 12) + '" rx="' + rx + '" ry="' + (rx * 1.9) + '"/>');
+      bombs.push('<ellipse class="eqd-accent" cx="310" cy="' + (130 + span - 12) + '" rx="' + rx + '" ry="' + (rx * 1.9) + '"/>');
+    }
+    if (weaponId === 'torpedo') {
+      bombs.push('<ellipse class="eqd-accent" cx="300" cy="148" rx="10" ry="24"/>');
+    }
+    const guns = (weaponId === 'mg' || weaponId === 'cannon' || weaponId === 'mg_basic')
+      ? '<g class="eqd-accent"><path d="M342 ' + (130 - span + 18) + ' h26 M342 ' + (130 + span - 18) + ' h26"/></g>'
+      : '';
+    const dropTank = bySlot.fuel && bySlot.fuel.id === 'drop_tank'
+      ? '<g class="eqd-accent"><ellipse cx="276" cy="150" rx="17" ry="7"/><path d="M276 143 v-6"/></g>'
+      : '';
+    const armor = bySlot.fuel && bySlot.fuel.id === 'plate'
+      ? '<g class="eqd-accent faint"><path d="M322 120 h40 M322 126 h40 M322 132 h40"/></g>'
+      : '';
+    const engineId = bySlot.engine && bySlot.engine.id;
+    const propSize = engineId === 'e3' ? 18 : engineId === 'e2' ? 15 : 12;
     const content = '' +
-      '<line class="eqd-bp-ground" x1="60" y1="' + cy + '" x2="520" y2="' + cy + '" stroke-dasharray="4 7"/>' +
-      '<g class="eqd-bp-dim"><path d="M540 ' + top + ' V' + bottom + ' M535 ' + top + ' h10 M535 ' + bottom + ' h10"/><text x="548" y="' + cy + '" text-anchor="middle" transform="rotate(90 548 ' + cy + ')">全幅 ' + fmt(7 + H.span * 0.14, 1) + ' m</text></g>' +
-      '<g class="eqd-bp-dim"><path d="M' + tail + ' 244 H' + nose + ' M' + tail + ' 239 v10 M' + nose + ' 239 v10"/><text x="' + (tail + nose) / 2 + '" y="257" text-anchor="middle">全長 ' + fmt(5 + H.len * 0.034, 1) + ' m · ' + H.engines + ' ENGINE</text></g>' +
-      '<g class="eqd-ink">' + body + engines + '</g>' + weapons + extra + notes;
-    return blueprintFrame('plane', hull.name, fmt(hull.baseSpeed, 0) + ' km/h · ' + fmt(hull.weight, 0) + ' t', content, 'eqd-svg-plane');
+      '<line class="eqd-bp-ground" x1="74" y1="130" x2="492" y2="130" stroke-dasharray="4 7"/>' +
+      '<g class="eqd-bp-dim"><path d="M150 238 H452 M150 233 v10 M452 233 v10"/><text x="300" y="251" text-anchor="middle">全幅 ' + fmt(8 + span * 0.07, 1) + ' m</text></g>' +
+      '<g class="eqd-ink">' +
+      '<path d="M138 122 Q180 112 250 112 L420 118 Q446 120 452 130 Q446 140 420 142 L250 148 Q180 148 138 138 Z"/>' +
+      '<path d="M' + (280 - span) + ' 124 Q' + (300 - span) + ' ' + wingTop + ' ' + (334 - span) + ' ' + wingTop +
+      ' L350 ' + wingTop + ' L350 124 Z"/>' +
+      '<path d="M' + (280 - span) + ' 136 Q' + (300 - span) + ' ' + wingBottom + ' ' + (334 - span) + ' ' + wingBottom +
+      ' L350 ' + wingBottom + ' L350 136 Z"/>' +
+      '<path d="M146 124 L114 104 L100 106 L124 128 Z M146 136 L114 156 L100 154 L124 132 Z"/>' +
+      '<path d="M170 120 L162 100 L180 100 L188 120 Z M170 140 L162 160 L180 160 L188 140 Z"/>' +
+      '<path d="M330 118 L350 108 L392 118 M330 142 L350 152 L392 142"/>' +
+      '<circle cx="454" cy="130" r="' + propSize + '"/>' +
+      '<path d="M' + (454 + propSize) + ' 130 h10"/>' +
+      '<circle cx="342" cy="130" r="9"/>' +
+      '</g>' + bombs + guns + dropTank + armor +
+      '<text class="eqd-bp-note" x="372" y="96">' + esc(engineId ? 'ENGINE' : 'ENGINE') + '</text>';
+    return blueprintFrame('plane', hull.name,
+      fmt(hull.baseSpeed, 0) + ' km/h · ' + fmt(hull.weight, 0) + ' t', content, 'eqd-svg-plane');
   }
 
   function blueprintSvg(cat, hull, modules) {
@@ -1325,48 +1175,6 @@
     if (cat === 'plane') return planeBlueprint(hull, modules);
     return tankBlueprint(hull, modules);
   }
-  Designer.blueprintSvg = blueprintSvg;
-
-  // ----------------------------------------------------------
-  // プレビュー: 車体・モジュールにマウスを乗せた時点で設計図を差し替える
-  // ----------------------------------------------------------
-  Designer.previewSvg = function (cat, hullId, overrides) {
-    cat = cat || this.category;
-    const draft = this.ensureDraft(cat);
-    const hull = chassisById(cat, hullId || draft.hull);
-    if (!hull) return '';
-    const merged = { modules: Object.assign({}, draft.modules || {}, overrides || {}) };
-    return blueprintSvg(cat, hull, selectedModules(cat, merged));
-  };
-
-  Designer.setBlueprintPreview = function (svg, label) {
-    if (typeof document === 'undefined') return;
-    const host = document.getElementById('designer-content');
-    const box = host && host.querySelector('.eqd-blueprint');
-    if (!box) return;
-    const current = box.querySelector('svg');
-    if (svg) {
-      if (!box._eqdOriginal) box._eqdOriginal = current ? current.outerHTML : '';
-      if (current) current.outerHTML = svg;
-      else box.insertAdjacentHTML('afterbegin', svg);
-      if (box.classList) box.classList.add('previewing');
-      let tag = box.querySelector('.eqd-bp-preview-tag');
-      if (!tag) {
-        tag = document.createElement('span');
-        tag.className = 'eqd-bp-preview-tag';
-        box.appendChild(tag);
-      }
-      tag.textContent = 'プレビュー: ' + (label || '');
-    } else {
-      if (box._eqdOriginal != null) {
-        if (current) current.outerHTML = box._eqdOriginal;
-        box._eqdOriginal = null;
-      }
-      if (box.classList) box.classList.remove('previewing');
-      const tag = box.querySelector('.eqd-bp-preview-tag');
-      if (tag) tag.remove();
-    }
-  };
 
   // ==========================================================
   // 画面描画
@@ -1626,22 +1434,6 @@
 
     const rootEl = host.querySelector('.eqd');
     if (rootEl) {
-      rootEl.addEventListener('mouseover', (event) => {
-        const chassisButton = event.target.closest && event.target.closest('[data-eqd-chassis]');
-        if (!chassisButton) return;
-        const hullId = chassisButton.getAttribute('data-eqd-chassis');
-        const draft = this.ensureDraft(this.category);
-        if (hullId === draft.hull) { this.setBlueprintPreview(null); return; }
-        const hull = chassisById(this.category, hullId);
-        this.setBlueprintPreview(this.previewSvg(this.category, hullId), hull ? hull.name : hullId);
-      });
-      rootEl.addEventListener('mouseout', (event) => {
-        const chassisButton = event.target.closest && event.target.closest('[data-eqd-chassis]');
-        if (!chassisButton) return;
-        const to = event.relatedTarget;
-        if (to && to.closest && to.closest('[data-eqd-chassis]') === chassisButton) return;
-        this.setBlueprintPreview(null);
-      });
       rootEl.addEventListener('click', (event) => {
         const categoryButton = event.target.closest('[data-eqd-cat]');
         if (categoryButton && categoryButton.classList.contains('eqd-tab')) {
