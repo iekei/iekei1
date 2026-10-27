@@ -1388,3 +1388,9 @@
     grid-column: auto;
   }
 }
+
+/* 設計図: モジュール注釈 (引き出し線) */
+.eqd-callout path { fill: none; stroke: rgba(255, 214, 120, .75); stroke-width: 1; stroke-dasharray: 3 3; }
+.eqd-callout circle { fill: rgba(255, 214, 120, .9); }
+.eqd-callout text { fill: rgba(255, 224, 150, .95); font-size: 9px; font-family: 'Courier New', monospace; letter-spacing: .5px; paint-order: stroke; stroke: rgba(8, 20, 40, .9); stroke-width: 3px; }
+.eqd-svg .eqd-faint { stroke: rgba(160, 200, 230, .35); fill: none; }
