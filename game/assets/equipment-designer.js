@@ -937,7 +937,13 @@
       '<p>' + esc(slot.desc) + '</p></div>' +
       '<button type="button" class="eqd-modal-close" data-eqd-close aria-label="閉じる">✕</button>' +
       '</header>' +
+      '<div class="eqd-modal-split">' +
       '<div class="eqd-modal-body">' + noneCard + cards + '</div>' +
+      '<aside class="eqd-modal-preview"><span class="eqd-kicker">設計図プレビュー</span>' +
+      '<div class="eqd-modal-preview-svg" data-eqd-preview>' + this.previewSvg(cat, hull.id) + '</div>' +
+      '<p class="eqd-modal-preview-name" data-eqd-preview-name>' + esc(slot.name + ': ' + (selectedId ? ((slot.options.find(o => o.id === selectedId) || {}).name || selectedId) : '未装着')) + '</p>' +
+      '<small>カーソルを合わせると設計図が切り替わります</small></aside>' +
+      '</div>' +
       '<p class="eqd-modal-alert" role="alert" aria-live="assertive" hidden></p>' +
       '<footer class="eqd-modal-foot"><span>' + esc(hull.name) + ' に装着可能なモジュール</span>' +
       '<span class="eqd-modal-legend"><i>🔒</i> 未研究 <i>⚠</i> 装備制限</span></footer>' +
@@ -985,6 +991,37 @@
       else showModalAlert(overlay, 'このモジュールは現在装着できません。研究状況と装備制限を確認してください。');
     });
 
+    const previewOption = (pick) => {
+      const optionId = pick ? pick.getAttribute('data-eqd-pick') : null;
+      const draft = this.ensureDraft(this.category);
+      const overrides = {};
+      let label;
+      if (!optionId) {
+        label = null;
+      } else if (optionId === '__none__') {
+        overrides[slotId] = '';
+        label = '未装着';
+      } else {
+        overrides[slotId] = optionId;
+        label = pick.getAttribute('title') || optionId;
+      }
+      const svg = this.previewSvg(this.category, draft.hull, overrides);
+      const pane = overlay.querySelector('[data-eqd-preview]');
+      if (pane) pane.innerHTML = svg;
+      const name = overlay.querySelector('[data-eqd-preview-name]');
+      if (name) name.textContent = (label == null ? '現在の装備' : label);
+      this.setBlueprintPreview(optionId ? svg : null, label || '');
+    };
+    overlay.addEventListener('mouseover', (event) => {
+      const pick = event.target.closest && event.target.closest('[data-eqd-pick]');
+      if (pick) previewOption(pick);
+    });
+    overlay.addEventListener('focusin', (event) => {
+      const pick = event.target.closest && event.target.closest('[data-eqd-pick]');
+      if (pick) previewOption(pick);
+    });
+    overlay.addEventListener('mouseleave', () => previewOption(null));
+
     this._modalKeyHandler = (event) => {
       if (event.key === 'Escape') this.closeSlotPicker();
     };
@@ -998,6 +1035,7 @@
     const slotId = this._modalSlot;
     const overlay = document.getElementById('eqd-modal-overlay');
     if (overlay) overlay.remove();
+    this.setBlueprintPreview(null);
     if (this._modalKeyHandler) {
       document.removeEventListener('keydown', this._modalKeyHandler);
       this._modalKeyHandler = null;
@@ -1289,6 +1327,47 @@
   }
   Designer.blueprintSvg = blueprintSvg;
 
+  // ----------------------------------------------------------
+  // プレビュー: 車体・モジュールにマウスを乗せた時点で設計図を差し替える
+  // ----------------------------------------------------------
+  Designer.previewSvg = function (cat, hullId, overrides) {
+    cat = cat || this.category;
+    const draft = this.ensureDraft(cat);
+    const hull = chassisById(cat, hullId || draft.hull);
+    if (!hull) return '';
+    const merged = { modules: Object.assign({}, draft.modules || {}, overrides || {}) };
+    return blueprintSvg(cat, hull, selectedModules(cat, merged));
+  };
+
+  Designer.setBlueprintPreview = function (svg, label) {
+    if (typeof document === 'undefined') return;
+    const host = document.getElementById('designer-content');
+    const box = host && host.querySelector('.eqd-blueprint');
+    if (!box) return;
+    const current = box.querySelector('svg');
+    if (svg) {
+      if (!box._eqdOriginal) box._eqdOriginal = current ? current.outerHTML : '';
+      if (current) current.outerHTML = svg;
+      else box.insertAdjacentHTML('afterbegin', svg);
+      if (box.classList) box.classList.add('previewing');
+      let tag = box.querySelector('.eqd-bp-preview-tag');
+      if (!tag) {
+        tag = document.createElement('span');
+        tag.className = 'eqd-bp-preview-tag';
+        box.appendChild(tag);
+      }
+      tag.textContent = 'プレビュー: ' + (label || '');
+    } else {
+      if (box._eqdOriginal != null) {
+        if (current) current.outerHTML = box._eqdOriginal;
+        box._eqdOriginal = null;
+      }
+      if (box.classList) box.classList.remove('previewing');
+      const tag = box.querySelector('.eqd-bp-preview-tag');
+      if (tag) tag.remove();
+    }
+  };
+
   // ==========================================================
   // 画面描画
   // ==========================================================
@@ -1547,6 +1626,22 @@
 
     const rootEl = host.querySelector('.eqd');
     if (rootEl) {
+      rootEl.addEventListener('mouseover', (event) => {
+        const chassisButton = event.target.closest && event.target.closest('[data-eqd-chassis]');
+        if (!chassisButton) return;
+        const hullId = chassisButton.getAttribute('data-eqd-chassis');
+        const draft = this.ensureDraft(this.category);
+        if (hullId === draft.hull) { this.setBlueprintPreview(null); return; }
+        const hull = chassisById(this.category, hullId);
+        this.setBlueprintPreview(this.previewSvg(this.category, hullId), hull ? hull.name : hullId);
+      });
+      rootEl.addEventListener('mouseout', (event) => {
+        const chassisButton = event.target.closest && event.target.closest('[data-eqd-chassis]');
+        if (!chassisButton) return;
+        const to = event.relatedTarget;
+        if (to && to.closest && to.closest('[data-eqd-chassis]') === chassisButton) return;
+        this.setBlueprintPreview(null);
+      });
       rootEl.addEventListener('click', (event) => {
         const categoryButton = event.target.closest('[data-eqd-cat]');
         if (categoryButton && categoryButton.classList.contains('eqd-tab')) {
