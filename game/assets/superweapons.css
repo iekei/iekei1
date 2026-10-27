@@ -90,3 +90,27 @@
 .sw-sci-card.busy { border-color: #d0a030; } .sw-sci-card em { font-style: normal; font-size: 10px; color: #ffd45a; }
 .sw-field { font-size: 10px; padding: 1px 6px; border-radius: 8px; background: #222838; color: #ccd; }
 .sw-field.nuclear { background: #4a2a10; color: #ffd45a; } .sw-field.rocket { background: #10304a; color: #9fd0ff; } .sw-field.jet { background: #1a3a2a; color: #9fe09f; }
+
+/* ===== 終末兵器ウィンドウ 3 カラム / 核攻撃モード ===== */
+.sw-cols { display: grid; grid-template-columns: 1.25fr 1fr 0.9fr; gap: 8px; align-items: start; }
+.sw-col { min-width: 0; }
+@media (max-width: 1100px) { .sw-cols { grid-template-columns: 1fr; } }
+.sw-cols .sw-projects { grid-template-columns: 1fr; }
+.sw-btn.big { padding: 8px 14px; font-size: 13px; align-self: center; }
+.sw-table th { text-align: left; color: #889; font-weight: normal; font-size: 10px; padding: 2px 6px; border-bottom: 1px solid #2c3340; }
+.sw-table td.sw-sub { color: #9ab; padding-left: 14px; }
+.sw-queue { padding: 2px 0; color: #ccd; } .sw-queue em { color: #ffd45a; font-style: normal; }
+.sw-bombs { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 8px; }
+.sw-bomb { width: 52px; height: 56px; border-radius: 6px; background: linear-gradient(180deg, #3a2a10, #1a1408); border: 1px solid #a07020; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 22px; box-shadow: 0 0 8px rgba(255, 176, 32, .35); }
+.sw-bomb small { font-size: 9px; color: #ffd45a; } .sw-bomb.more { font-size: 14px; color: #ffd45a; }
+.sw-neg { color: #ff8a7a; }
+.sw-history { max-height: 320px; overflow: auto; }
+.sw-hist { padding: 6px 8px; margin-bottom: 4px; background: #1a1410; border: 1px solid #4a3020; border-radius: 4px; font-size: 11px; }
+.sw-hist-head { display: flex; justify-content: space-between; } .sw-hist-head b { color: #ffd45a; } .sw-hist-head small { color: #889; }
+.sw-hist-d { color: #9ab; font-size: 10px; margin-top: 2px; }
+.sw-confirm-q { font-size: 14px; color: #fff; margin: 0 0 6px; } .sw-confirm-q b { color: #ffd45a; }
+.sw-warn { color: #ff9a7a; font-weight: 700; }
+#sw-stock .sw-target-btn { margin-left: 4px; padding: 0 5px; border-left: 1px solid #4a4a2a; cursor: crosshair; opacity: .8; }
+#sw-stock .sw-target-btn:hover { opacity: 1; } #sw-stock .sw-target-btn.active { color: #ff6a4a; animation: sw-pulse 1s infinite; text-shadow: 0 0 6px #ff6a4a; }
+#map-canvas.sw-crosshair { cursor: crosshair; }
+#map-canvas.sw-crosshair { cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><circle cx='16' cy='16' r='11' fill='none' stroke='%23ff5040' stroke-width='2'/><circle cx='16' cy='16' r='2' fill='%23ff5040'/><path d='M16 1v8M16 23v8M1 16h8M23 16h8' stroke='%23ff5040' stroke-width='2'/></svg>") 16 16, crosshair; }

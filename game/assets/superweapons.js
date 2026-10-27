@@ -153,7 +153,7 @@ class SuperWeapons {
   static data() {
     const s = CoreEngine.gameState; if (!s.strategy) return null;
     const d = (s.strategy.sw ||= { projects: {}, rockets: 0, missions: [], log: [], strikes: 0 });
-    d.projects ||= {}; d.missions ||= []; d.log ||= [];
+    d.projects ||= {}; d.missions ||= []; d.log ||= []; d.history ||= []; d.damage ||= {};
     Object.keys(SuperWeapons.PROJECTS).forEach(id => { d.projects[id] ||= { progress: 0, factories: 0, scientist: null, started: false, done: false, manpowerPaid: false }; });
     if (!Number.isFinite(s.nuclearStockpile)) s.nuclearStockpile = 0;
     return d;
@@ -162,14 +162,15 @@ class SuperWeapons {
     const root = document.getElementById('window-templates');
     if (root && !document.getElementById('tpl-superweapons')) {
       const el = document.createElement('div'); el.className = 'window-template pane-scroll'; el.id = 'tpl-superweapons';
-      el.dataset.title = '⚛️ 特殊計画 — Special Projects・核・ミサイル'; el.dataset.w = '1180'; el.dataset.h = '780'; el.innerHTML = '<div id="superweapons-content"></div>'; root.appendChild(el);
+      el.dataset.title = '☢️ 終末兵器・特殊計画 — Nuclear & Strategic Weapons'; el.dataset.w = '1280'; el.dataset.h = '800'; el.innerHTML = '<div id="superweapons-content"></div>'; root.appendChild(el);
     }
     // 上部バーの備蓄表示
     const nav = document.querySelector?.('.topbar-nav'); const wt = document.getElementById('world-tension');
     if (nav && !document.getElementById('sw-stock')) {
       const b = document.createElement('button'); b.className = 'speed-btn sw-stock'; b.id = 'sw-stock'; b.title = '核兵器・ロケットの備蓄 — クリックで特殊計画';
       b.setAttribute('onclick', "GameUI.switchTab('superweapons')");
-      b.innerHTML = '<span class="sw-nuke">☢️ <b id="sw-nukes">0</b></span><span class="sw-rocket">🚀 <b id="sw-rockets">0</b></span>';
+      b.title = '核兵器・ロケットの備蓄 — クリックで終末兵器ウィンドウ ／ 🎯 で核攻撃モード';
+      b.innerHTML = '<span class="sw-nuke">☢️ <b id="sw-nukes">0</b></span><span class="sw-rocket">🚀 <b id="sw-rockets">0</b></span><span class="sw-target-btn" id="sw-target-btn" title="核攻撃モード (Launch Nuke)" onclick="event.stopPropagation();SuperWeapons.toggleTargetMode()">🎯</span>';
       if (wt && nav.insertBefore) nav.insertBefore(b, wt); else nav.appendChild(b);
     }
     // ナビボタン
@@ -206,6 +207,20 @@ class SuperWeapons {
     if (typeof NuclearManager !== 'undefined' && !NuclearManager._swHooked) {
       NuclearManager._swHooked = true;
       NuclearManager.onTick = () => { if (typeof GameUI !== 'undefined' && GameUI.currentTab === 'nuclear') NuclearManager.render(); };
+    }
+    // 地図クリック: 核攻撃ターゲット選択モード
+    if (typeof MapRenderer !== 'undefined' && !MapRenderer._swHooked) {
+      MapRenderer._swHooked = true;
+      const click = MapRenderer.handlePrimaryClick.bind(MapRenderer);
+      MapRenderer.handlePrimaryClick = (ox, oy) => {
+        if (SuperWeapons.targetMode) { const wp = MapRenderer.screenToWorld(ox, oy); const pid = MapRenderer.provinceAt(wp[0], wp[1]); SuperWeapons.targetClick(pid ? MapRenderer.stateOf(pid) : null); return; }
+        return click(ox, oy);
+      };
+    }
+    if (typeof BattlePlanManager !== 'undefined' && !BattlePlanManager._swHooked) {
+      BattlePlanManager._swHooked = true;
+      const draw = BattlePlanManager.drawOverlay.bind(BattlePlanManager);
+      BattlePlanManager.drawOverlay = (ctx, cam, w2s) => { draw(ctx, cam, w2s); SuperWeapons.drawFX(ctx, w2s); };
     }
     // 特殊計画に割り当てた民需工場は他で使えない
     if (typeof FactoryBudget !== 'undefined' && !FactoryBudget._swHooked) {
@@ -348,7 +363,7 @@ class SuperWeapons {
     const d = SuperWeapons.data(); if (!d) return '';
     const hasAny = SuperWeapons.done('atomic') || SuperWeapons.done('v2'); if (!hasAny) return '';
     const n = SuperWeapons.canNuke(sid), m = SuperWeapons.canMissile(sid), active = d.missions.some(x => x.sid === String(sid));
-    return '<button class="map-info-build-btn sw-nuke-btn' + (n ? ' ready' : '') + '" onclick="SuperWeapons.openStrikeModal(\'' + sid + '\')">☢️ 核攻撃' + (n ? '' : ' (条件未達)') + '</button> <button class="map-info-build-btn sw-missile-btn' + (m ? ' ready' : '') + '" onclick="SuperWeapons.openStrikeModal(\'' + sid + '\')">🚀 ' + (active ? 'ミサイル攻撃中' : 'ミサイル攻撃') + '</button>';
+    return '<button class="map-info-build-btn sw-nuke-btn' + (n ? ' ready' : '') + '" onclick="SuperWeapons.openNukeConfirm(\'' + sid + '\')">☢️ 核攻撃' + (n ? '' : ' (条件未達)') + '</button> <button class="map-info-build-btn sw-missile-btn' + (m ? ' ready' : '') + '" onclick="SuperWeapons.openStrikeModal(\'' + sid + '\')">🚀 ' + (active ? 'ミサイル攻撃中' : 'ミサイル攻撃') + '</button>';
   }
   static openStrikeModal(sid) {
     const st = MapRenderer.states[sid]; if (!st) return;
@@ -360,6 +375,93 @@ class SuperWeapons {
       '<div class="sw-strike missile' + (canM ? ' ready' : '') + '"><h4>🚀 ミサイル攻撃 (' + (SuperWeapons.done('ballistic') ? '弾道ミサイル' : 'V2ロケット') + ')</h4>' + list(mc) + '<p class="sw-fx">効果: 毎日ロケット 1 発を消費し、インフラ・要塞・工場に損害、州内師団の組織率 −' + (SuperWeapons.done('ballistic') ? 12 : 8) + '／充足 −' + (SuperWeapons.done('ballistic') ? 4.5 : 3) + '%。備蓄が尽きるか停止するまで継続。</p>' + (active ? '<button class="sw-btn" onclick="SuperWeapons.stopMissile(\'' + sid + '\')">⏹ ミサイル攻撃を停止 (' + active.fired + ' 発発射済み)</button>' : '<button class="sw-btn missile" ' + (canM ? '' : 'disabled') + ' onclick="SuperWeapons.startMissile(\'' + sid + '\')">🚀 ミサイル攻撃を開始 (備蓄 ' + SuperWeapons.rockets() + ')</button>') + '</div></div>' +
       '<div class="sw-actions"><button class="sw-btn" onclick="GameUI.switchTab(\'superweapons\')">⚛️ 特殊計画画面へ</button><button class="sw-btn" onclick="GameUI.closeModal()">閉じる</button></div></div>');
   }
+  // ------------------------------------------------------------------
+  // 核攻撃ターゲット選択モード (照準カーソル)
+  // ------------------------------------------------------------------
+  static targetMode = false;
+  static fx = [];
+  static toggleTargetMode(on) {
+    const next = on === undefined ? !SuperWeapons.targetMode : !!on;
+    if (next && !SuperWeapons.done('atomic')) { GameUI.notify('特殊計画「原子爆弾」が未完了のため核攻撃はできません。', 'alert'); return; }
+    if (next && SuperWeapons.nukes() < 1) { GameUI.notify('核兵器の備蓄がありません (原子炉で生産してください)。', 'alert'); return; }
+    SuperWeapons.targetMode = next;
+    const c = typeof MapRenderer !== 'undefined' ? MapRenderer.canvas : null;
+    if (c && c.classList) c.classList.toggle('sw-crosshair', next);
+    const btn = document.getElementById('sw-target-btn'); if (btn && btn.classList) btn.classList.toggle('active', next);
+    if (next) { if (typeof WindowManager !== 'undefined' && WindowManager.isOpen?.('superweapons')) WindowManager.close?.('superweapons'); GameUI.notify('🎯 核攻撃モード: 地図上の敵州を左クリック (Esc で解除)', 'alert'); }
+    else GameUI.notify('核攻撃モードを解除しました');
+    if (typeof document !== 'undefined' && document.addEventListener && !SuperWeapons._escBound) { SuperWeapons._escBound = true; document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && SuperWeapons.targetMode) SuperWeapons.toggleTargetMode(false); }); }
+  }
+  static targetClick(sid) {
+    const s = CoreEngine.gameState, st = sid ? MapRenderer.states[sid] : null;
+    if (!st) { GameUI.notify('陸上の州をクリックしてください。', 'alert'); return; }
+    if (st.owner === s.country) { GameUI.notify('自国の州には投下できません。', 'alert'); return; }
+    if (!(s.atWar || []).includes(st.owner)) { GameUI.notify((typeof DiplomacyManager !== 'undefined' ? DiplomacyManager.nameOf(st.owner) : st.owner) + ' とは交戦していません。', 'alert'); return; }
+    SuperWeapons.openNukeConfirm(sid);
+  }
+  /** 確認ダイアログ: 「[州名]へ核兵器を投下しますか？ 使用数: 1」 + 厳格な事前チェック */
+  static openNukeConfirm(sid) {
+    const st = MapRenderer.states[sid]; if (!st) return;
+    const checks = SuperWeapons.nukeChecks(sid), ok = checks.every(c => c.ok), air = SuperWeapons.airInfo(sid);
+    const b = st.b || {}, divs = SuperWeapons.divisionsIn(sid);
+    GameUI.openModal('☢️ 核攻撃の確認', '<div class="sw-modal sw-confirm"><p class="sw-confirm-q">「' + SuperWeapons.esc(st.name || '州' + sid) + '」へ核兵器を投下しますか？ <b>使用数: 1</b> <small>(備蓄 ' + SuperWeapons.nukes() + ')</small></p>' +
+      '<p class="sw-target">' + SuperWeapons.esc(SuperWeapons.nameOf(st.owner)) + ' 領 ／ 🛤️' + (b.infrastructure || 0) + ' 🏭' + (b.industrial_complex || 0) + ' ⚙️' + (b.arms_factory || 0) + ' 🧪' + (b.synthetic_refinery || 0) + ' ☢️' + (b.nuclear_reactor || 0) + ' ／ 州内師団 ' + divs.length + ' ／ 制空権 ' + Math.round(air.pct) + '% ／ 爆撃機 ' + air.bombers + '</p>' +
+      '<ul class="sw-checks">' + checks.map(c => '<li class="' + (c.ok ? 'ok' : 'ng') + '">' + (c.ok ? '✅' : '❌') + ' ' + SuperWeapons.esc(c.text) + '</li>').join('') + '</ul>' +
+      (ok ? '' : '<p class="sw-warn">⚠️ 条件を満たしていないため実行できません。</p>') +
+      '<p class="sw-fx">効果: 州内の全インフラ・民需/軍需工場・合成精製所・原子炉を 0 に／州内の全師団の組織率・充足を 90% カット (隣接州 50%)／対象国の戦争協力度 −30%・安定度 −15%／世界緊張度 +15</p>' +
+      '<div class="sw-actions"><button class="sw-btn nuke" ' + (ok ? '' : 'disabled') + ' onclick="SuperWeapons.launchNuke(\'' + sid + '\')">☢️ 実行 (Launch)</button><button class="sw-btn" onclick="GameUI.closeModal();SuperWeapons.toggleTargetMode(false)">キャンセル</button></div></div>');
+  }
+  /** Canvas 演出: ミサイル飛翔 → 衝撃波 → キノコ雲 */
+  static startCanvasFX(sid) {
+    const c = MapRenderer.stateCenter.get(String(sid)); if (!c) return;
+    const site = SuperWeapons.siteFor(sid); const from = site ? MapRenderer.stateCenter.get(String(site.sid)) : [c[0] - 260, c[1] - 380];
+    SuperWeapons.fx.push({ sid, x: c[0], y: c[1], fx: from[0], fy: from[1], t0: Date.now(), flight: site ? 1400 : 900, life: 6500 });
+  }
+  static drawFX(ctx, w2s) {
+    if (!SuperWeapons.fx.length) return; const now = Date.now(); const sc = Math.max(0.3, MapRenderer.cam.scale);
+    SuperWeapons.fx = SuperWeapons.fx.filter(f => now - f.t0 < f.life);
+    SuperWeapons.fx.forEach(f => {
+      const dt = now - f.t0; const tgt = w2s(f.x, f.y);
+      ctx.save();
+      if (dt < f.flight) {
+        // ミサイル (弧を描いて飛ぶ)
+        const k = dt / f.flight, src = w2s(f.fx, f.fy); const mx = src[0] + (tgt[0] - src[0]) * k, my = src[1] + (tgt[1] - src[1]) * k - Math.sin(k * Math.PI) * 120 * sc;
+        ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.setLineDash([4, 6]); ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(src[0], src[1]); ctx.lineTo(mx, my); ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle = '#ffd45a'; ctx.beginPath(); ctx.arc(mx, my, 5, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = 'rgba(255,140,40,0.6)'; ctx.beginPath(); ctx.arc(mx - (tgt[0] - src[0]) * 0.02, my - (tgt[1] - src[1]) * 0.02 + 4, 9, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = 'rgba(255,80,80,0.9)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(tgt[0], tgt[1], 16 * sc + 6, 0, Math.PI * 2); ctx.moveTo(tgt[0] - 24, tgt[1]); ctx.lineTo(tgt[0] + 24, tgt[1]); ctx.moveTo(tgt[0], tgt[1] - 24); ctx.lineTo(tgt[0], tgt[1] + 24); ctx.stroke();
+      } else {
+        const e = (dt - f.flight) / (f.life - f.flight); // 0..1
+        // 閃光 + 衝撃波
+        const flash = Math.max(0, 1 - e * 4); if (flash > 0) { ctx.fillStyle = 'rgba(255,255,230,' + flash + ')'; ctx.beginPath(); ctx.arc(tgt[0], tgt[1], (60 + e * 600) * sc, 0, Math.PI * 2); ctx.fill(); }
+        ctx.strokeStyle = 'rgba(255,220,160,' + Math.max(0, 0.9 - e * 1.2) + ')'; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(tgt[0], tgt[1], e * 420 * sc, 0, Math.PI * 2); ctx.stroke();
+        // キノコ雲: 茎 + 傘 (上昇・拡大)
+        const rise = Math.min(1, e * 1.6), h = 110 * sc * rise, w = 22 * sc, cap = (30 + 40 * rise) * sc, alpha = Math.max(0, 1 - Math.max(0, e - 0.6) * 2.5);
+        const stem = ctx.createLinearGradient(tgt[0], tgt[1], tgt[0], tgt[1] - h); stem.addColorStop(0, 'rgba(120,70,40,' + alpha + ')'); stem.addColorStop(1, 'rgba(200,120,60,' + alpha + ')');
+        ctx.fillStyle = stem; ctx.beginPath(); ctx.moveTo(tgt[0] - w, tgt[1]); ctx.quadraticCurveTo(tgt[0] - w * 0.6, tgt[1] - h * 0.5, tgt[0] - w * 0.8, tgt[1] - h); ctx.lineTo(tgt[0] + w * 0.8, tgt[1] - h); ctx.quadraticCurveTo(tgt[0] + w * 0.6, tgt[1] - h * 0.5, tgt[0] + w, tgt[1]); ctx.closePath(); ctx.fill();
+        const g = ctx.createRadialGradient(tgt[0], tgt[1] - h, cap * 0.1, tgt[0], tgt[1] - h, cap); g.addColorStop(0, 'rgba(255,220,120,' + alpha + ')'); g.addColorStop(0.35, 'rgba(255,120,40,' + alpha + ')'); g.addColorStop(0.75, 'rgba(110,50,30,' + alpha + ')'); g.addColorStop(1, 'rgba(40,20,15,0)');
+        ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(tgt[0], tgt[1] - h, cap, cap * 0.7, 0, 0, Math.PI * 2); ctx.fill();
+        for (let i = 0; i < 5; i++) { const a = i / 5 * Math.PI * 2 + e * 2; ctx.fillStyle = 'rgba(90,45,30,' + alpha * 0.8 + ')'; ctx.beginPath(); ctx.arc(tgt[0] + Math.cos(a) * cap * 0.7, tgt[1] - h + Math.sin(a) * cap * 0.45, cap * 0.35, 0, Math.PI * 2); ctx.fill(); }
+        const base = ctx.createRadialGradient(tgt[0], tgt[1], 0, tgt[0], tgt[1], cap * 1.3); base.addColorStop(0, 'rgba(140,80,50,' + alpha * 0.8 + ')'); base.addColorStop(1, 'rgba(60,30,20,0)'); ctx.fillStyle = base; ctx.beginPath(); ctx.ellipse(tgt[0], tgt[1], cap * 1.3, cap * 0.5, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = 'rgba(255,255,255,' + alpha + ')'; ctx.font = 'bold 12px sans-serif'; ctx.fillText('☢️ ' + (MapRenderer.states[f.sid]?.name || ''), tgt[0] + cap + 4, tgt[1] - h);
+      }
+      ctx.restore();
+    });
+  }
+  /** 爆発音・警告音 (WebAudio 合成, 失敗しても無視) */
+  static playSound() {
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return; const ac = SuperWeapons._ac ||= new AC(); const t = ac.currentTime;
+      // 警告サイレン
+      const o = ac.createOscillator(), g = ac.createGain(); o.type = 'sawtooth'; o.frequency.setValueAtTime(520, t); o.frequency.linearRampToValueAtTime(760, t + 0.4); o.frequency.linearRampToValueAtTime(520, t + 0.8);
+      g.gain.setValueAtTime(0.08, t); g.gain.linearRampToValueAtTime(0, t + 0.9); o.connect(g).connect(ac.destination); o.start(t); o.stop(t + 0.9);
+      // 爆発 (ノイズ + 低音)
+      const len = ac.sampleRate * 2.5, buf = ac.createBuffer(1, len, ac.sampleRate), data = buf.getChannelData(0); for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.2);
+      const n = ac.createBufferSource(); n.buffer = buf; const lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.setValueAtTime(900, t + 1); lp.frequency.exponentialRampToValueAtTime(120, t + 3.2); const ng = ac.createGain(); ng.gain.setValueAtTime(0.9, t + 1); ng.gain.exponentialRampToValueAtTime(0.001, t + 3.4);
+      n.connect(lp).connect(ng).connect(ac.destination); n.start(t + 1);
+      const b = ac.createOscillator(), bg = ac.createGain(); b.type = 'sine'; b.frequency.setValueAtTime(70, t + 1); b.frequency.exponentialRampToValueAtTime(28, t + 3); bg.gain.setValueAtTime(0.6, t + 1); bg.gain.exponentialRampToValueAtTime(0.001, t + 3.2); b.connect(bg).connect(ac.destination); b.start(t + 1); b.stop(t + 3.3);
+    } catch (e) { /* ignore */ }
+  }
   static divisionsIn(sid) {
     if (typeof ArmyRoster === 'undefined') return [];
     return ArmyRoster.all().filter(d => { const pid = d.pid || (BattlePlanManager.armies || []).find(a => a.divisions.includes(d))?.positionPid; return pid && String(MapRenderer.stateOf(Number(pid))) === String(sid); });
@@ -368,19 +470,31 @@ class SuperWeapons {
     const s = CoreEngine.gameState, d = SuperWeapons.data(), st = MapRenderer.states[sid];
     if (!st || !SuperWeapons.canNuke(sid)) { GameUI.notify('核攻撃の条件を満たしていません。', 'alert'); return false; }
     s.nuclearStockpile -= 1; d.strikes = (d.strikes || 0) + 1;
-    GameUI.closeModal?.();
-    SuperWeapons.playNukeFX(sid);
+    GameUI.closeModal?.(); SuperWeapons.toggleTargetMode(false);
+    SuperWeapons.playNukeFX(sid); SuperWeapons.startCanvasFX(sid); SuperWeapons.playSound();
     // 州の破壊
-    st.b ||= {}; const destroyed = Object.entries(st.b).filter(([, v]) => v > 0).map(([k, v]) => k + '×' + v); Object.keys(st.b).forEach(k => { st.b[k] = 0; });
+    st.b ||= {}; const destroyed = Object.entries(st.b).filter(([, v]) => v > 0).map(([k, v]) => k + '×' + v);
+    ['infrastructure', 'industrial_complex', 'arms_factory', 'synthetic_refinery', 'nuclear_reactor', 'rocket_site', 'fort', 'air_base', 'naval_base', 'dockyard', 'radar_station', 'anti_air'].forEach(k => { st.b[k] = 0; });
+    Object.keys(st.b).forEach(k => { st.b[k] = 0; });
+    if (typeof ConstructionManager !== 'undefined' && Array.isArray(ConstructionManager.queue)) ConstructionManager.queue = ConstructionManager.queue.filter(q => String(q.stateId) !== String(sid));
     st.supply = 0; st.nuked = SuperWeapons.day();
     if (typeof TradeSystem !== 'undefined' && st.res) Object.keys(st.res).forEach(k => { st.res[k] = Math.round(st.res[k] * 0.5); });
     // 師団 (敵 AI 師団は抽象化されているため、州内のプレイヤー/同盟師団を含む全師団に適用)
-    const divs = SuperWeapons.divisionsIn(sid); divs.forEach(dv => { dv.org = Math.max(0, (dv.org || 0) * 0.1); dv.equipmentStrength = Math.max(0, (Number.isFinite(dv.equipmentStrength) ? dv.equipmentStrength : 100) * 0.1); });
+    const divs = SuperWeapons.divisionsIn(sid); divs.forEach(dv => { dv.org = Math.max(0, (dv.org || 0) * 0.1); dv.equipmentStrength = Math.max(0, (Number.isFinite(dv.equipmentStrength) ? dv.equipmentStrength : 100) * 0.1); dv.routed = true; });
+    // 隣接する交戦中の州の師団: 50% カット
+    let adjDivs = 0; try { MapRenderer.buildStateAdjacency?.(); (MapRenderer.stateAdjacency?.get(String(sid)) || []).forEach(n => { const ns = MapRenderer.states[n]; if (!ns || !(s.atWar || []).includes(ns.owner)) return; SuperWeapons.divisionsIn(n).forEach(dv => { dv.org = Math.max(0, (dv.org || 0) * 0.5); dv.equipmentStrength = Math.max(0, (Number.isFinite(dv.equipmentStrength) ? dv.equipmentStrength : 100) * 0.5); adjDivs++; }); }); } catch (e) { /* ignore */ }
+    // 敵 AI 師団 (抽象) の崩壊
+    if (typeof IntelligenceManager !== 'undefined' && IntelligenceManager.visibleDivisions) { try { IntelligenceManager.visibleDivisions().forEach(ed => { if (String(MapRenderer.stateOf(Number(ed.pid)) || ed.sid) === String(sid)) { ed.org = (ed.org || 0) * 0.1; ed.strength = (ed.strength || 100) * 0.1; ed.defeated = true; } }); } catch (e) { /* ignore */ } }
     // 敵 AI の戦力 (抽象) にも損害
     if (typeof AIManager !== 'undefined' && AIManager.state?.strength?.[st.owner]) AIManager.state.strength[st.owner] *= 0.85;
     // 対象国の戦意
     const fx = ((s.countryEffects ||= {})[st.owner] ||= { country: st.owner, stability: 50, warSupport: 50, popularity: {} });
-    fx.warSupport = Math.max(0, (fx.warSupport ?? 50) - 30); fx.stability = Math.max(0, (fx.stability ?? 50) - 10);
+    const wsBefore = fx.warSupport ?? 50, stBefore = fx.stability ?? 50;
+    fx.warSupport = Math.max(0, wsBefore - 30); fx.stability = Math.max(0, stBefore - 15);
+    const dmg = (d.damage[st.owner] ||= { country: st.owner, strikes: 0, warSupport: 0, stability: 0, divisions: 0, buildings: 0 });
+    dmg.strikes++; dmg.warSupport += wsBefore - fx.warSupport; dmg.stability += stBefore - fx.stability; dmg.divisions += divs.length + adjDivs; dmg.buildings += destroyed.length;
+    d.history.unshift({ day: SuperWeapons.day(), date: (() => { const dt = s.date; return dt instanceof Date ? dt.getFullYear() + '/' + (dt.getMonth() + 1) + '/' + dt.getDate() : ''; })(), sid: String(sid), state: st.name || '州' + sid, country: st.owner, destroyed, divisions: divs.length, adjDivisions: adjDivs, warSupport: wsBefore - fx.warSupport });
+    d.history = d.history.slice(0, 50);
     if (typeof PeaceSystem !== 'undefined') { const sc = PeaceSystem.score(s.country); sc.vp += 5; }
     s.warSupport = Math.min(100, s.warSupport + 10); s.stability = Math.max(0, s.stability - 3);
     CoreEngine.addWorldTension?.(15, (st.name || '州' + sid) + ' への核攻撃');
@@ -443,32 +557,50 @@ class SuperWeapons {
     const s = CoreEngine.gameState, d = SuperWeapons.data(); if (!d) return;
     const free = typeof FactoryBudget !== 'undefined' ? FactoryBudget.availableCivilian() : 0;
     const reactors = SuperWeapons.facilities('nuclear_reactor'), sites = SuperWeapons.facilities('rocket_site');
-    let html = '<div class="sw-root"><div class="sw-head"><div class="sw-mark">⚛️</div><div><h3>特殊計画 <small>SPECIAL PROJECTS</small></h3><p>基礎研究 → 科学者を割り当て、民需工場 (IC) と人的資源を投資 → 100% で実用化。空き民需工場 <b>' + free + '</b> ／ 人的資源 <b>' + Math.floor(s.manpower || 0).toLocaleString() + '</b></p></div>' +
-      '<div class="sw-kpis"><div class="sw-kpi nuke"><small>核兵器備蓄</small><b>☢️ ' + SuperWeapons.nukes() + '</b><span>' + (SuperWeapons.done('atomic') ? '原子炉 Lv' + SuperWeapons.reactorLevels() + ' → +' + (SuperWeapons.reactorLevels() * SuperWeapons.NUKE_RATE).toFixed(2) + ' /日' : '「原子爆弾」未完了') + '</span></div><div class="sw-kpi rocket"><small>ロケット備蓄</small><b>🚀 ' + SuperWeapons.rockets() + '</b><span>' + (SuperWeapons.done('v2') ? '発射施設 Lv' + SuperWeapons.siteLevels() + ' → +' + (SuperWeapons.siteLevels() * SuperWeapons.ROCKET_RATE).toFixed(1) + ' /日' : '「V2ロケット開発」未完了') + '</span></div></div></div>';
-    // 基礎研究
+    const queue = typeof ConstructionManager !== 'undefined' ? (ConstructionManager.queue || []).filter(q => q.building === 'nuclear_reactor' || q.building === 'rocket_site') : [];
+    const atomic = SuperWeapons.done('atomic');
+    // ---- ヘッダー ----
+    let html = '<div class="sw-root"><div class="sw-head"><div class="sw-mark">☢️</div><div><h3>終末兵器・特殊計画 <small>NUCLEAR & STRATEGIC WEAPONS</small></h3><p>基礎研究 → 科学者を割り当て、民需工場 (IC) と人的資源を投資 → 100% で実用化。空き民需工場 <b>' + free + '</b> ／ 人的資源 <b>' + Math.floor(s.manpower || 0).toLocaleString() + '</b></p></div>' +
+      '<div class="sw-kpis"><div class="sw-kpi nuke"><small>核兵器備蓄</small><b>☢️ ' + SuperWeapons.nukes() + '</b><span>' + (atomic ? '原子炉 Lv' + SuperWeapons.reactorLevels() + ' → +' + (SuperWeapons.reactorLevels() * SuperWeapons.NUKE_RATE * 30).toFixed(2) + ' /月' : '「原子爆弾」未完了') + '</span></div><div class="sw-kpi rocket"><small>ロケット備蓄</small><b>🚀 ' + SuperWeapons.rockets() + '</b><span>' + (SuperWeapons.done('v2') ? '発射施設 Lv' + SuperWeapons.siteLevels() + ' → +' + (SuperWeapons.siteLevels() * SuperWeapons.ROCKET_RATE * 30).toFixed(0) + ' /月' : '「V2ロケット開発」未完了') + '</span></div>' +
+      '<button class="sw-btn nuke big" ' + (atomic && SuperWeapons.nukes() >= 1 ? '' : 'disabled') + ' onclick="SuperWeapons.toggleTargetMode(true)">🎯 核攻撃モード (Launch Nuke)</button></div></div>';
+    html += '<div class="sw-cols">';
+    // ================= 左: 研究・生産進捗 =================
     const techs = [['原子物理学', /atomic|nuclear|uranium/i], ['ロケット工学', /rocket/i], ['ジェットエンジン', /jet/i]];
-    html += '<div class="sw-panel"><h4>🔬 基礎研究 (研究画面)</h4><div class="sw-chips">' + techs.map(([n, re]) => '<span class="' + (SuperWeapons.researched(re) ? 'ok' : '') + '">' + (SuperWeapons.researched(re) ? '✅' : '⬜') + ' ' + n + '</span>').join('') + '<button class="sw-btn small" onclick="GameUI.switchTab(\'research\')">研究画面を開く</button></div><p class="sw-help">研究ツリーの「原子物理学 (atomic_research)」「ロケット工学 (experimental_rockets)」「ジェットエンジン (sp_centrifugal_jet_tech)」などの基礎研究を完了すると、対応する特殊計画を開始できます。</p></div>';
-    // 計画カード
-    html += '<div class="sw-panel"><h4>⚛️ 計画</h4><div class="sw-projects">' + Object.values(SuperWeapons.PROJECTS).map(P => {
+    html += '<div class="sw-col"><div class="sw-panel"><h4>🔬 基礎研究</h4><div class="sw-chips">' + techs.map(([n, re]) => '<span class="' + (SuperWeapons.researched(re) ? 'ok' : '') + '">' + (SuperWeapons.researched(re) ? '✅' : '⬜') + ' ' + n + '</span>').join('') + '<button class="sw-btn small" onclick="GameUI.switchTab(\'research\')">研究画面</button></div></div>';
+    html += '<div class="sw-panel"><h4>⚛️ 特殊計画の進捗</h4><div class="sw-projects">' + Object.values(SuperWeapons.PROJECTS).map(P => {
       const p = d.projects[P.id], block = SuperWeapons.blocker(P.id), sc = SuperWeapons.scientistOf(P.id), pct = Math.min(100, p.progress / P.points * 100), rate = SuperWeapons.rate(P.id), eta = p.started && rate > 0 ? Math.ceil((P.points - p.progress) / rate) : null;
       const scis = SuperWeapons.SCIENTISTS.filter(x => SuperWeapons.fits(x, P.id));
-      return '<div class="sw-project' + (p.done ? ' done' : p.started ? ' active' : block ? ' locked' : '') + '"><div class="sw-project-head"><span class="sw-ic">' + P.icon + '</span><div><b>' + P.name + '</b><small>' + SuperWeapons.esc(P.desc) + '</small></div><span class="sw-status">' + (p.done ? '✅ 完了' : p.started ? '🔄 進行中' : block ? '🔒' : '待機') + '</span></div>' +
+      return '<div class="sw-project' + (p.done ? ' done' : p.started ? ' active' : block ? ' locked' : '') + '"><div class="sw-project-head">' + SuperWeapons.projectImg(P) + '<div><b>' + P.name + '</b><small>' + SuperWeapons.esc(P.desc) + '</small></div><span class="sw-status">' + (p.done ? '✅ 完了' : p.started ? '🔄 進行中' : block ? '🔒' : '待機') + '</span></div>' +
         '<div class="sw-bar"><em style="width:' + pct.toFixed(1) + '%"></em><span>' + pct.toFixed(0) + '% (' + Math.floor(p.progress) + ' / ' + P.points + ')' + (eta ? ' ／ あと ' + eta + ' 日' : '') + '</span></div>' +
         (block && !p.done ? '<p class="sw-req">🔒 ' + SuperWeapons.esc(block) + '</p>' : '') +
         (!p.done ? '<div class="sw-controls">' + (sc ? '<div class="sw-sci">' + SuperWeapons.portrait(sc) + '<div><b>' + SuperWeapons.esc(SuperWeapons.sciName(sc)) + '</b><small>' + SuperWeapons.esc(sc.title) + ' ／ ' + SuperWeapons.FIELD_NAME[sc.field] + ' ×' + sc.skill + '</small></div></div>' : '<div class="sw-sci empty"><div class="sw-portrait"></div><small>科学者未割り当て</small></div>') + '<label>科学者<select ' + (block ? 'disabled' : '') + ' onchange="SuperWeapons.assign(\'' + P.id + '\', this.value)"><option value="">— 未割り当て —</option>' + scis.map(x => '<option value="' + x.id + '"' + (sc && sc.id === x.id ? ' selected' : '') + '>' + SuperWeapons.esc(SuperWeapons.sciName(x)) + ' — ' + SuperWeapons.esc(x.title) + ' (×' + x.skill + ')</option>').join('') + '</select></label>' +
           '<label>民需工場 (IC)<span class="sw-pm"><button ' + (block ? 'disabled' : '') + ' onclick="SuperWeapons.setFactories(\'' + P.id + '\',' + (p.factories - 1) + ')">−</button><b>' + p.factories + '</b><button ' + (block ? 'disabled' : '') + ' onclick="SuperWeapons.setFactories(\'' + P.id + '\',' + (p.factories + 1) + ')">＋</button></span></label>' +
           '<label>人的資源<b>' + (p.manpowerPaid ? '支払済' : P.manpower.toLocaleString()) + '</b></label><label>進捗/日<b>' + rate.toFixed(1) + '</b></label>' +
           (p.started ? '<button class="sw-btn small" onclick="SuperWeapons.pause(\'' + P.id + '\')">⏸ 中断</button>' : '<button class="sw-btn small primary" ' + (block ? 'disabled' : '') + ' onclick="SuperWeapons.start(\'' + P.id + '\')">▶ 計画を開始</button>') + '</div>' : '<p class="sw-unlock">🔓 解禁: ' + SuperWeapons.esc(P.unlocks) + '</p>') + '</div>'; }).join('') + '</div></div>';
-    // 科学者名簿
+    html += '<div class="sw-panel"><h4>☢️ 原子炉 <small>稼働 ' + reactors.length + ' 州 ／ 建設中 ' + queue.filter(q => q.building === 'nuclear_reactor').length + '</small></h4>' +
+      (reactors.length ? '<table class="sw-table"><tr><th>州</th><th>Lv</th><th>月産</th></tr>' + reactors.map(f => '<tr><td>' + SuperWeapons.esc(f.st.name || '州' + f.sid) + '</td><td>Lv' + f.level + '</td><td>+' + (atomic ? (f.level * SuperWeapons.NUKE_RATE * 30).toFixed(2) : '0') + ' 発/月</td></tr>').join('') + '</table>' : '<p class="sw-help">原子炉がありません。' + (SuperWeapons.done('uranium') ? '建設画面 → 州を選択 → ☢️ 原子炉。' : '「ウラン濃縮計画」を完了すると建設できます。') + '</p>') +
+      (queue.length ? '<h5>建設中</h5>' + queue.map(q => '<div class="sw-queue">' + (q.building === 'nuclear_reactor' ? '☢️' : '🚀') + ' ' + SuperWeapons.esc(MapRenderer.states[q.stateId]?.name || q.stateId) + ' <em>' + Math.round((q.progress || 0) / (q.cost || 1) * 100) + '%</em> (工場 ' + (q.factories || 0) + ')</div>').join('') : '') +
+      '<button class="sw-btn small" onclick="GameUI.switchTab(\'construction\')">🏗️ 建設画面へ</button></div>';
+    html += '<div class="sw-panel"><h4>🚀 ロケット発射施設 <small>射程 ' + SuperWeapons.missileRange() + '</small></h4>' + (sites.length ? '<table class="sw-table">' + sites.map(f => '<tr><td>' + SuperWeapons.esc(f.st.name || '州' + f.sid) + '</td><td>Lv' + f.level + '</td><td>+' + (f.level * SuperWeapons.ROCKET_RATE * 30).toFixed(0) + ' 発/月</td></tr>').join('') + '</table>' : '<p class="sw-help">発射施設がありません。' + (SuperWeapons.done('v2') ? '建設画面 → 州を選択 → 🚀 ロケット発射施設。' : '「V2ロケット開発」を完了すると建設できます。') + '</p>') + '</div></div>';
+    // ================= 中央: 備蓄・運用 =================
+    const nukes = SuperWeapons.nukes(); let bombers = 0, bomberWings = []; try { if (typeof AirForce !== 'undefined') AirForce.wings().forEach(w => { if (w.aircraftType === 'bomber' && w.aircraftCount > 0) { bombers += w.aircraftCount; bomberWings.push(w); } }); } catch (e) { /* ignore */ }
+    const strat = Number(s.strategicBombers) || 0;
+    html += '<div class="sw-col"><div class="sw-panel sw-stock"><h4>☢️ 使用可能な核兵器 <small>' + nukes + ' 発</small></h4><div class="sw-bombs">' + (nukes ? Array.from({ length: Math.min(nukes, 24) }, (_, i) => '<div class="sw-bomb" title="Mk.' + (i + 1) + '">☢️<small>Mk.' + (i + 1) + '</small></div>').join('') + (nukes > 24 ? '<div class="sw-bomb more">+' + (nukes - 24) + '</div>' : '') : '<p class="sw-help">' + (atomic ? '生産中… 原子炉のレベルを上げると加速します (進捗 ' + Math.round(((s.nuclearStockpile || 0) % 1) * 100) + '%)。' : '「原子爆弾」計画を完了すると生産が始まります。') + '</p>') + '</div>' +
+      (atomic ? '<div class="sw-bar"><em style="width:' + Math.round(((s.nuclearStockpile || 0) % 1) * 100) + '%"></em><span>次の 1 発まで ' + Math.round(((s.nuclearStockpile || 0) % 1) * 100) + '%' + (SuperWeapons.reactorLevels() ? ' ／ あと ' + Math.ceil((1 - ((s.nuclearStockpile || 0) % 1)) / (SuperWeapons.reactorLevels() * SuperWeapons.NUKE_RATE)) + ' 日' : '') + '</span></div>' : '') +
+      '<button class="sw-btn nuke" ' + (atomic && nukes >= 1 ? '' : 'disabled') + ' onclick="SuperWeapons.toggleTargetMode(true)">🎯 核攻撃モード — 地図上の敵州をクリック</button></div>' +
+      '<div class="sw-panel"><h4>✈️ 運搬手段</h4><table class="sw-table"><tr><td>戦略爆撃機 (国家保有)</td><td><b>' + strat + '</b> 機</td></tr><tr><td>爆撃航空団 (配備中)</td><td><b>' + bombers + '</b> 機 ／ ' + bomberWings.length + ' 隊</td></tr>' + bomberWings.slice(0, 8).map(w => { const z = (() => { try { return AirForce.zoneSid(w); } catch (e) { return null; } })(); return '<tr><td class="sw-sub">↳ ' + SuperWeapons.esc(w.name || w.id) + '</td><td>' + w.aircraftCount + ' 機 ／ ' + (w.executing && z ? '空域: ' + SuperWeapons.esc(MapRenderer.states[z]?.name || z) : '待機') + '</td></tr>'; }).join('') +
+      '<tr><td>ロケット (V2' + (SuperWeapons.done('ballistic') ? '／弾道ミサイル' : '') + ')</td><td><b>' + SuperWeapons.rockets() + '</b> 発</td></tr><tr><td>ジェット爆撃機</td><td>' + (SuperWeapons.done('jet') ? '✅ 運用可' : '—') + '</td></tr></table>' +
+      '<p class="sw-help">核攻撃の条件: ① 備蓄 ≥1 ② 対象空域の制空権 ≥75% ③ 対象空域に戦略爆撃機 (またはミサイル射程内の発射施設) を配備。</p></div>' +
+      '<div class="sw-panel"><h4>🚀 ミサイル攻撃</h4>' + (d.missions.length ? d.missions.map(m => { const st = MapRenderer.states[m.sid]; return '<div class="sw-mission"><span>🚀 ' + SuperWeapons.esc(st?.name || m.sid) + ' (' + SuperWeapons.esc(SuperWeapons.nameOf(st?.owner)) + ') ← ' + SuperWeapons.esc(MapRenderer.states[m.from]?.name || m.from) + ' ／ 発射 ' + m.fired + ' ／ 命中 ' + m.damage + '</span><button class="sw-btn small" onclick="SuperWeapons.stopMissile(\'' + m.sid + '\')">停止</button></div>'; }).join('') : '<p class="sw-help">進行中のミサイル攻撃はありません。地図で敵州を選択 → 「🚀 ミサイル攻撃」。</p>') + '</div>';
+    // 科学者名簿 (中央下)
     const busy = {}; Object.entries(d.projects).forEach(([id, p]) => { if (p.scientist) busy[p.scientist] = id; });
-    html += '<div class="sw-panel"><h4>👩‍🔬 科学者 <small>自国の科学者' + (SuperWeapons.SCIENTISTS.some(x => x.emigre) ? ' + 亡命科学者' : '') + '</small></h4><div class="sw-roster">' + SuperWeapons.SCIENTISTS.map(x => '<div class="sw-sci-card' + (busy[x.id] ? ' busy' : '') + '">' + SuperWeapons.portrait(x) + '<b>' + SuperWeapons.esc(SuperWeapons.sciName(x)) + '</b><small>' + SuperWeapons.esc(x.title) + '</small><span class="sw-field ' + x.field + '">' + SuperWeapons.FIELD_NAME[x.field] + ' ×' + x.skill + '</span>' + (busy[x.id] ? '<em>' + SuperWeapons.PROJECTS[busy[x.id]].name + '</em>' : '') + '</div>').join('') + '</div></div>';
-    // 施設
-    html += '<div class="sw-grid"><div class="sw-panel"><h4>☢️ 原子炉 <small>建設画面で州ごとに最大 Lv3</small></h4>' + (reactors.length ? '<table class="sw-table">' + reactors.map(f => '<tr><td>' + SuperWeapons.esc(f.st.name || '州' + f.sid) + '</td><td>Lv' + f.level + '</td><td>+' + (SuperWeapons.done('atomic') ? (f.level * SuperWeapons.NUKE_RATE).toFixed(2) : '0') + ' 発/日</td></tr>').join('') + '</table>' : '<p class="sw-help">原子炉がありません。' + (SuperWeapons.done('uranium') ? '建設画面 → 州を選択 → ☢️ 原子炉 (600)。' : '「ウラン濃縮計画」を完了すると建設できます。') + '</p>') + '<button class="sw-btn small" onclick="GameUI.switchTab(\'construction\')">🏗️ 建設画面へ</button></div>' +
-      '<div class="sw-panel"><h4>🚀 ロケット発射施設 <small>射程 ' + SuperWeapons.missileRange() + '</small></h4>' + (sites.length ? '<table class="sw-table">' + sites.map(f => '<tr><td>' + SuperWeapons.esc(f.st.name || '州' + f.sid) + '</td><td>Lv' + f.level + '</td><td>+' + (f.level * SuperWeapons.ROCKET_RATE).toFixed(1) + ' 発/日</td></tr>').join('') + '</table>' : '<p class="sw-help">発射施設がありません。' + (SuperWeapons.done('v2') ? '建設画面 → 州を選択 → 🚀 ロケット発射施設 (400)。' : '「V2ロケット開発」を完了すると建設できます。') + '</p>') + '</div></div>';
-    // 攻撃
-    html += '<div class="sw-panel"><h4>🎯 攻撃</h4><p class="sw-help">地図上で交戦中の敵国の州をクリックすると、州情報に「☢️ 核攻撃」「🚀 ミサイル攻撃」ボタンが表示されます。核攻撃の条件: 制空権 75% 以上・戦略爆撃機 (またはジェット爆撃機) の配備・核備蓄 1 以上。</p>' +
-      (d.missions.length ? '<h5>進行中のミサイル攻撃</h5>' + d.missions.map(m => { const st = MapRenderer.states[m.sid]; return '<div class="sw-mission"><span>🚀 ' + SuperWeapons.esc(st?.name || m.sid) + ' (' + SuperWeapons.esc(SuperWeapons.nameOf(st?.owner)) + ') ← ' + SuperWeapons.esc(MapRenderer.states[m.from]?.name || m.from) + ' ／ 発射 ' + m.fired + ' 発 ／ 命中 ' + m.damage + '</span><button class="sw-btn small" onclick="SuperWeapons.stopMissile(\'' + m.sid + '\')">停止</button></div>'; }).join('') : '') +
-      '<h5>記録 <small>核攻撃 ' + (d.strikes || 0) + ' 回</small></h5><div class="sw-log">' + (d.log.length ? d.log.slice(0, 30).map(e => '<div><small>Day ' + e.day + '</small> ' + SuperWeapons.esc(e.text) + '</div>').join('') : '<span class="sw-help">記録はありません。</span>') + '</div></div></div>';
+    html += '<div class="sw-panel"><h4>👩‍🔬 科学者 <small>自国の科学者' + (SuperWeapons.SCIENTISTS.some(x => x.emigre) ? ' + 亡命科学者' : '') + '</small></h4><div class="sw-roster">' + SuperWeapons.SCIENTISTS.map(x => '<div class="sw-sci-card' + (busy[x.id] ? ' busy' : '') + '">' + SuperWeapons.portrait(x) + '<b>' + SuperWeapons.esc(SuperWeapons.sciName(x)) + '</b><small>' + SuperWeapons.esc(x.title) + '</small><span class="sw-field ' + x.field + '">' + SuperWeapons.FIELD_NAME[x.field] + ' ×' + x.skill + '</span>' + (busy[x.id] ? '<em>' + SuperWeapons.PROJECTS[busy[x.id]].name + '</em>' : '') + '</div>').join('') + '</div></div></div>';
+    // ================= 右: ターゲット履歴・統計 =================
+    const dmgRows = Object.values(d.damage || {}).sort((a, b) => b.strikes - a.strikes);
+    html += '<div class="sw-col"><div class="sw-panel"><h4>📊 戦意ダメージ統計 <small>核攻撃 ' + (d.strikes || 0) + ' 回</small></h4>' + (dmgRows.length ? '<table class="sw-table"><tr><th>国</th><th>回</th><th>戦争協力度</th><th>安定度</th><th>師団</th></tr>' + dmgRows.map(r => { const fx = s.countryEffects?.[r.country]; return '<tr><td>' + SuperWeapons.esc(SuperWeapons.nameOf(r.country)) + '</td><td>' + r.strikes + '</td><td><b class="sw-neg">−' + Math.round(r.warSupport) + '</b>' + (fx ? ' <small>(現在 ' + Math.round(fx.warSupport ?? 50) + '%)</small>' : '') + '</td><td><b class="sw-neg">−' + Math.round(r.stability) + '</b>' + (fx ? ' <small>(' + Math.round(fx.stability ?? 50) + '%)</small>' : '') + '</td><td>' + r.divisions + '</td></tr>'; }).join('') + '</table>' : '<p class="sw-help">まだ核攻撃を行っていません。</p>') + '</div>' +
+      '<div class="sw-panel"><h4>🎯 ターゲット履歴</h4><div class="sw-history">' + (d.history.length ? d.history.map(h => '<div class="sw-hist"><div class="sw-hist-head"><b>☢️ ' + SuperWeapons.esc(h.state) + '</b><small>' + SuperWeapons.esc(h.date || 'Day ' + h.day) + '</small></div><div>' + SuperWeapons.esc(SuperWeapons.nameOf(h.country)) + ' ／ 師団 ' + h.divisions + (h.adjDivisions ? ' (+隣接 ' + h.adjDivisions + ')' : '') + ' ／ 戦争協力度 −' + Math.round(h.warSupport) + '</div><div class="sw-hist-d">破壊: ' + (h.destroyed.length ? SuperWeapons.esc(h.destroyed.join(' ')) : 'なし') + '</div></div>').join('') : '<p class="sw-help">履歴はありません。</p>') + '</div></div>' +
+      '<div class="sw-panel"><h4>📜 記録</h4><div class="sw-log">' + (d.log.length ? d.log.slice(0, 30).map(e => '<div><small>Day ' + e.day + '</small> ' + SuperWeapons.esc(e.text) + '</div>').join('') : '<span class="sw-help">記録はありません。</span>') + '</div></div></div>';
+    html += '</div></div>';
     el.innerHTML = html;
   }
 }

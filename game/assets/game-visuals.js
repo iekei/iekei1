@@ -33,7 +33,8 @@ const GameVisuals = {
   operativeChoices(country, used = []) {
     const occupied = new Set(used);
     const names = new Set(used.map(id => this.operative(id)?.name).filter(Boolean));
-    return GameAssetData.operatives.filter(person => !occupied.has(person.id) && !names.has(person.name)).sort((a,b) => Number(b.country === country)-Number(a.country === country) || a.id.localeCompare(b.id));
+    // 諜報員は自国籍の人物のみ雇用可能 (例: JAP で開始した場合は JAP の諜報員のみ)
+    return GameAssetData.operatives.filter(person => person.country === country && !occupied.has(person.id) && !names.has(person.name)).sort((a,b) => Number(b.country === country)-Number(a.country === country) || a.id.localeCompare(b.id));
   },
   person(person, category = 'operative_portraits', className = 'person-portrait') {
     return person ? '<img class="'+className+'" src="'+this.escape(this.url(category,person.file))+'" alt="'+this.escape(person.name)+'" decoding="async" onerror="this.hidden=true">' : '';
