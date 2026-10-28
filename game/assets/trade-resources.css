@@ -1,19 +1,45 @@
-/* trade-resources.css — 貿易・資源 */
+/* ==========================================================
+   trade-resources.css — 貿易・6大資源 (Trade & Resources)
+   上部サマリーバー / 生産ラインの資源消費 / 輸送船 / 国家別貿易テーブル
+   ========================================================== */
+
+/* ---- 資源アイコン ---- */
+.tr-ic { display: inline-grid; place-items: center; width: 18px; height: 18px; font-size: 12px; font-style: normal; vertical-align: middle; border-radius: 3px; flex: 0 0 auto; }
+img.tr-ic { object-fit: contain; width: auto; height: auto; filter: drop-shadow(0 1px 1px rgba(0, 0, 0, .6)); }
+
+/* ---- 不足の赤点滅 ---- */
+.tr-blink { color: #ff6a55; font-style: normal; animation: tr-blink 1s steps(2, start) infinite; }
+@keyframes tr-blink { 0%, 100% { opacity: 1; } 50% { opacity: .15; } }
+@keyframes tr-ic-blink { 0%, 100% { filter: none; } 50% { filter: drop-shadow(0 0 5px #ff3a24) brightness(1.5); } }
+
+/* ==========================================================
+   共通ヘッダー (生産 / 建設画面の上部に差し込む需給バー)
+   ========================================================== */
 .tr-header { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 6px 10px; margin: 0 0 8px; background: linear-gradient(180deg, #23282b, #1a1e21); border: 1px solid #3a4044; border-left: 3px solid #c9a44c; cursor: pointer; }
 .tr-header:hover { border-color: #c9a44c; }
 .tr-chip { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: #d6d9d2; padding: 2px 8px 2px 2px; background: #101214; border: 1px solid #2c3236; }
 .tr-chip b { font-variant-numeric: tabular-nums; }
-.tr-chip.pos b { color: #7fc46a; } .tr-chip.neg b { color: #ff8a7a; } .tr-chip.neg { border-color: #8a3a30; }
+.tr-chip.pos b { color: #7fc46a; }
+.tr-chip.neg b { color: #ff8a7a; }
+.tr-chip.neg { border-color: #8a3a30; }
+.tr-chip.short { border-color: #e04a3c; background: #2a1412; color: #ffd6cf; }
+.tr-chip.short b { color: #ff8a7a; }
+.tr-chip.short .tr-ic { animation: tr-ic-blink 1.2s ease-in-out infinite; }
 .tr-chip.go { margin-left: auto; color: #e3c06a; border-color: #c9a44c; padding: 2px 8px; }
-.tr-ic { display: inline-grid; place-items: center; width: 18px; height: 18px; font-size: 12px; font-style: normal; vertical-align: middle; border-radius: 3px; }
-img.tr-ic { object-fit: contain; width: auto; height: auto; filter: drop-shadow(0 1px 1px rgba(0,0,0,.6)); }
-.tr-eff img.tr-ic { vertical-align: -3px; }
+
+/* 生産カードの効率バッジ */
 .tr-eff { display: inline-block; margin-left: 6px; padding: 1px 6px; font-size: 11px; border: 1px solid #3a4044; color: #7fc46a; }
 .tr-eff.warn { color: #ffb4a8; background: #3a1a16; border-color: #e04a3c; font-weight: 700; }
+.tr-eff img.tr-ic { vertical-align: -3px; }
 .production-card.tr-short { box-shadow: inset 3px 0 0 #e04a3c; }
+
+/* ==========================================================
+   貿易ウィンドウ
+   ========================================================== */
 #tpl-trade > #trade-content { padding: 0; }
-.tr-root { background: radial-gradient(ellipse at top right, rgba(201,164,76,0.08), transparent 55%), #15181a; color: #d6d9d2; font-size: 12px; min-height: 100%; padding-bottom: 10px; }
-.tr-head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 10px 14px; border-bottom: 2px solid #8a6d2b; background: linear-gradient(180deg, #23282b, #1a1e21); margin-bottom: 10px; }
+.tr-root { background: radial-gradient(ellipse at top right, rgba(201, 164, 76, .08), transparent 55%), #15181a; color: #d6d9d2; font-size: 12px; min-height: 100%; padding-bottom: 10px; }
+
+.tr-head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 10px 14px; border-bottom: 2px solid #8a6d2b; background: linear-gradient(180deg, #23282b, #1a1e21); margin-bottom: 10px; position: sticky; top: 0; z-index: 3; }
 .tr-title { display: flex; align-items: center; gap: 10px; flex: 1 1 320px; }
 .tr-mark { width: 36px; height: 36px; display: grid; place-items: center; font-size: 18px; border: 2px solid #c9a44c; background: #2a2416; box-shadow: 0 0 0 2px #0e1011; }
 .tr-title h3 { margin: 0; font-size: 16px; letter-spacing: 1px; color: #e3c06a; }
@@ -21,33 +47,112 @@ img.tr-ic { object-fit: contain; width: auto; height: auto; filter: drop-shadow(
 .tr-title p { margin: 2px 0 0; font-size: 11px; color: #929a92; }
 .tr-policy { font-size: 11px; color: #929a92; }
 .tr-policy select { background: #101214; color: #d6d9d2; border: 1px solid #4e565b; padding: 4px; margin-left: 4px; }
+.tr-free { display: inline-flex; align-items: center; gap: 4px; margin-right: 10px; color: #d6d9d2; }
+.tr-free b { color: #7fc46a; font-size: 13px; }
+.tr-free small { color: #929a92; }
+
 .tr-section { background: #1d2124; border: 1px solid #3a4044; padding: 8px 10px; margin: 0 10px 10px; }
 .tr-section h4 { margin: 0 0 6px; font-size: 12px; letter-spacing: 1px; color: #c9a44c; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .tr-section h4 small { color: #929a92; font-weight: 400; }
 .tr-filter { margin-left: auto; display: flex; gap: 3px; flex-wrap: wrap; }
-.tr-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 10px; margin: 0; }
-.tr-cols .tr-section:first-child { margin-right: 0; } .tr-cols .tr-section:last-child { margin-left: 0; }
+.tr-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 10px; }
+.tr-inline { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+
+/* ---- 上部: 6大資源の需給サマリー ---- */
+.tr-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px; }
+.tr-res { background: linear-gradient(180deg, #23282b, #1a1e21); border: 1px solid #3a4044; border-left: 3px solid #4e565b; padding: 6px 8px; min-width: 0; }
+.tr-res.short { border-left-color: #e04a3c; background: linear-gradient(180deg, #2d1c19, #1d1312); }
+.tr-res.dim { opacity: .45; }
+.tr-res-head { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+.tr-res-head b { color: #e3c06a; font-size: 12px; }
+.tr-res-stock { margin-left: auto; font-size: 10px; color: #929a92; font-variant-numeric: tabular-nums; }
+.tr-res-flow { display: grid; grid-template-columns: auto 1fr; gap: 1px 8px; font-size: 11px; }
+.tr-res-flow .tr-k { color: #929a92; }
+.tr-res-flow b { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; color: #d6d9d2; }
+.tr-res-flow b.pos { color: #7fc46a; }
+.tr-res-flow b.neg { color: #ff8a7a; }
+.tr-warn { margin-top: 5px; font-size: 10.5px; color: #ffb4a8; background: #3a1a16; border: 1px solid #7a2a20; padding: 2px 5px; }
+.tr-ok { margin-top: 5px; font-size: 10.5px; color: #7fc46a; }
+
+/* ---- テーブル ---- */
 .tr-table { width: 100%; border-collapse: collapse; font-size: 11px; }
 .tr-table th { text-align: left; color: #929a92; font-weight: 400; padding: 3px 6px; border-bottom: 1px solid #3a4044; }
-.tr-table td { padding: 4px 6px; border-bottom: 1px dotted rgba(255,255,255,.08); vertical-align: middle; }
+.tr-table td { padding: 4px 6px; border-bottom: 1px dotted rgba(255, 255, 255, .08); vertical-align: middle; }
 .tr-table tr.neg td:first-child { color: #ffb4a8; }
-.tr-table tr.war { opacity: .5; }
-.tr-table td.dim { color: #4e565b; text-align: center; }
-.tr-table td small, .tr-table td b + small { display: block; color: #929a92; font-size: 10px; }
-.pos { color: #7fc46a; } .neg { color: #ff8a7a; }
-.tr-cell { display: grid; gap: 2px; min-width: 96px; }
-.tr-ctl { display: flex; align-items: center; gap: 3px; }
-.tr-ctl b { flex: 1; text-align: center; font-size: 13px; }
+.tr-lines td { font-size: 11px; }
+.tr-table tr.short td { background: rgba(224, 74, 60, .08); }
+.tr-tags { white-space: nowrap; }
+.tr-tag { display: inline-flex; align-items: center; gap: 2px; padding: 0 4px 0 0; margin-right: 4px; background: #101214; border: 1px solid #2c3236; color: #cfd4cc; font-variant-numeric: tabular-nums; }
+.tr-none { color: #4e565b; }
+.pos { color: #7fc46a; }
+.neg { color: #ff8a7a; }
+
+/* ---- 輸送船 ---- */
+.tr-convoy { display: flex; align-items: center; gap: 10px; }
+.tr-convoy-main { flex: 1; min-width: 0; }
+.tr-convoy-main b { display: block; color: #d6d9d2; font-size: 12px; }
+.tr-convoy-main small { color: #929a92; font-size: 10.5px; }
+.tr-convoy-eff { text-align: right; }
+.tr-convoy-eff small { display: block; color: #929a92; font-size: 10px; }
+.tr-convoy-eff b { font-size: 16px; }
+.tr-convoy.short .tr-convoy-eff b { animation: tr-blink 1.2s ease-in-out infinite; }
+.tr-bar { height: 8px; margin: 6px 0 4px; background: #101214; border: 1px solid #3a4044; overflow: hidden; }
+.tr-bar i { display: block; height: 100%; background: linear-gradient(90deg, #2f7a3f, #7fc46a); }
+.tr-bar i.warn { background: linear-gradient(90deg, #7a2a20, #e04a3c); }
+
+/* ---- 契約一覧 ---- */
+.tr-deal { display: flex; align-items: center; gap: 6px; padding: 4px 0; border-bottom: 1px dotted rgba(255, 255, 255, .08); font-size: 11px; }
+.tr-deal-name { flex: 1; min-width: 0; }
+.tr-deal-factory { display: inline-flex; align-items: center; gap: 2px; color: #c9a44c; font-variant-numeric: tabular-nums; }
+.tr-deal-factory.pos { color: #7fc46a; }
+.tr-deal-sea { font-size: 11px; color: #9ab; min-width: 26px; text-align: center; }
+
+/* ---- 国家別貿易テーブル ---- */
+.tr-market-wrap { max-height: 460px; overflow: auto; border: 1px solid #2c3236; }
+.tr-market { min-width: 980px; border-collapse: separate; border-spacing: 0; }
+.tr-market thead th { position: sticky; top: 0; z-index: 2; background: #1a1e21; border-bottom: 1px solid #4e565b; white-space: nowrap; }
+.tr-market thead th span { margin-left: 3px; }
+.tr-market thead th.on { color: #e3c06a; }
+.tr-market .tr-country-col { position: sticky; left: 0; z-index: 1; background: #1d2124; min-width: 168px; }
+.tr-market thead .tr-country-col { z-index: 3; }
+.tr-market tbody tr:hover td { background: #23282b; }
+.tr-market tbody tr:hover .tr-country-col { background: #23282b; }
+.tr-market .tr-country-col b { display: block; color: #e3c06a; font-size: 11.5px; }
+.tr-market .tr-country-col small { display: block; color: #929a92; font-size: 10px; }
+.tr-market tr.war td { opacity: .55; }
+.tr-empty { text-align: center; color: #4e565b; white-space: nowrap; }
+.tr-empty .tr-none { margin-left: 3px; }
+.tr-market td.tr-cell { display: table-cell; min-width: 132px; padding: 3px 6px; }
+.tr-market td.tr-cell.active { background: rgba(201, 164, 76, .06); }
+.tr-pool { font-size: 10px; color: #929a92; }
+.tr-pool b { color: #cfd4cc; font-variant-numeric: tabular-nums; }
+.tr-range { width: 100%; margin: 2px 0; accent-color: #c9a44c; cursor: pointer; height: 14px; }
+.tr-range:disabled { cursor: not-allowed; opacity: .4; }
+.tr-amount { display: flex; align-items: center; gap: 5px; }
+.tr-num { width: 56px; background: #101214; color: #f0e6c8; border: 1px solid #4e565b; padding: 1px 4px; font-size: 11px; font-variant-numeric: tabular-nums; }
+.tr-num:focus { outline: none; border-color: #c9a44c; }
+.tr-fac { display: inline-flex; align-items: center; gap: 2px; color: #c9a44c; font-size: 10px; }
+.tr-fac b { font-variant-numeric: tabular-nums; }
+.tr-factory-total { text-align: center; white-space: nowrap; color: #c9a44c; }
+.tr-factory-total b { margin-left: 3px; font-variant-numeric: tabular-nums; }
+
+/* ---- 自国領の州別産出 ---- */
+.tr-states { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 6px; }
+.tr-state { background: #262b2e; border: 1px solid #3a4044; padding: 5px 8px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 11px; cursor: pointer; }
+.tr-state:hover { border-color: #c9a44c; }
+.tr-state b { flex: 1 1 100%; font-size: 11px; color: #e3c06a; }
+.tr-state span { display: inline-flex; align-items: center; gap: 3px; }
+
+/* ---- ボタン ---- */
 .tr-btn { padding: 4px 10px; background: #1a1d1f; border: 1px solid #4e565b; color: #d6d9d2; cursor: pointer; font-size: 11px; }
 .tr-btn:hover:not(:disabled) { border-color: #c9a44c; color: #e3c06a; }
 .tr-btn:disabled { opacity: .4; cursor: not-allowed; }
 .tr-btn.small { padding: 2px 7px; font-size: 10px; }
 .tr-btn.on { background: #2a2416; border-color: #c9a44c; color: #e3c06a; }
 .tr-btn.danger:hover { background: #c75b4a; border-color: #c75b4a; color: #fff; }
-.tr-deal { display: flex; align-items: center; gap: 6px; padding: 4px 0; border-bottom: 1px dotted rgba(255,255,255,.08); font-size: 11px; }
-.tr-deal span:first-child { flex: 1; }
-.tr-states { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 6px; }
-.tr-state { background: #262b2e; border: 1px solid #3a4044; padding: 5px 8px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 11px; cursor: pointer; }
-.tr-state:hover { border-color: #c9a44c; }
-.tr-state b { flex: 1 1 100%; font-size: 11px; color: #e3c06a; }
-.tr-state span { display: inline-flex; align-items: center; gap: 3px; }
+
+@media (max-width: 900px) {
+  .tr-cols { grid-template-columns: 1fr; }
+  .tr-summary { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+  .tr-title h3 small { display: none; }
+}

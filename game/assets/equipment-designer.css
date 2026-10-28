@@ -1388,3 +1388,98 @@
     grid-column: auto;
   }
 }
+
+/* ==========================================================
+   設計図の切替タブ (全体図 / 車体・船体・機体 / モジュール別)
+   ========================================================== */
+.eqd-bp-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  flex-shrink: 0;
+  padding: 4px;
+  border: 1px solid var(--eqd-line);
+  border-radius: 5px;
+  background: #0c141a;
+}
+
+.eqd-bp-tab {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  padding: 4px 8px;
+  border: 1px solid #2b4456;
+  border-radius: 3px;
+  background: #111b22;
+  color: #8ea6b6;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  transition: border-color .12s, background .12s, color .12s;
+}
+
+.eqd-bp-tab:hover {
+  border-color: #4a7591;
+  background: #16232c;
+  color: #cfe3f0;
+}
+
+.eqd-bp-tab.active {
+  border-color: var(--eqd-gold);
+  background: linear-gradient(180deg, #2a2415, #1a1710);
+  color: #f0dcae;
+  box-shadow: inset 0 0 0 1px rgba(226, 182, 75, .18);
+}
+
+.eqd-bp-tab-icon {
+  flex: 0 0 auto;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.eqd-bp-tab-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.15;
+}
+
+.eqd-bp-tab-text b {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
+
+.eqd-bp-tab-text small {
+  max-width: 120px;
+  overflow: hidden;
+  font-size: 8px;
+  color: #7f97a8;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.eqd-bp-tab.active .eqd-bp-tab-text small {
+  color: #c9b378;
+}
+
+/* モジュール単体図は主線を少し細くして「部品図」らしく見せる */
+.eqd-svg-module .eqd-ink {
+  stroke-width: 1.8;
+}
+
+.eqd-svg-module .eqd-accent {
+  stroke-width: 1.6;
+}
+
+.eqd-svg-module .eqd-bp-title {
+  fill: #e7f2fa;
+}
+
+@media (max-width: 1180px) {
+  .eqd-bp-tab-text small {
+    max-width: 78px;
+  }
+}

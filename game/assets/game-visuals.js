@@ -30,10 +30,20 @@ const GameVisuals = {
     });
   },
   operative(id) { return GameAssetData.operatives.find(person => person.id === id) || null; },
-  operativeChoices(country, used = []) {
+  /**
+   * 雇用候補の諜報員。
+   * onlyOwn = true のときは自国 (country) 所属の人物だけを返す。
+   * 例: 日本 (JAP) で開始したら JAP の諜報員しか雇えない。
+   */
+  operativeChoices(country, used = [], onlyOwn = false) {
     const occupied = new Set(used);
     const names = new Set(used.map(id => this.operative(id)?.name).filter(Boolean));
-    return GameAssetData.operatives.filter(person => !occupied.has(person.id) && !names.has(person.name)).sort((a,b) => Number(b.country === country)-Number(a.country === country) || a.id.localeCompare(b.id));
+    return GameAssetData.operatives
+      .filter(person => !occupied.has(person.id) && !names.has(person.name) && (!onlyOwn || person.country === country))
+      .sort((a,b) => Number(b.country === country)-Number(a.country === country) || a.id.localeCompare(b.id));
+  },
+  ownOperatives(country, used = []) {
+    return this.operativeChoices(country, used, true);
   },
   person(person, category = 'operative_portraits', className = 'person-portrait') {
     return person ? '<img class="'+className+'" src="'+this.escape(this.url(category,person.file))+'" alt="'+this.escape(person.name)+'" decoding="async" onerror="this.hidden=true">' : '';

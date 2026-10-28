@@ -671,9 +671,11 @@ class ArmyRoster {
   static render() {
     const el=document.getElementById('army-panel'); if (!el || !CoreEngine.gameState.strategy) return;
     BattlePlanManager._lastRender=Date.now();
-    let html='<div class="army-tools">'+['army','navy','air'].map((f,i)=>GameTools.button(['陸軍','海軍','空軍'][i],"BattlePlanManager.setForce('"+f+"')")).join('');
+    let html='<div class="army-tools">'+['army','navy','air'].map((f,i)=>GameTools.button(['陸軍','⚓ 海軍','✈️ 空軍'][i],"BattlePlanManager.setForce('"+f+"')")).join('');
     if (BattlePlanManager.activeForce!=='army') {
       const list=BattlePlanManager.activeForce==='navy'?BattlePlanManager.navy:BattlePlanManager.air;
+      // ここ (下側の将軍カード配属エリア) が海軍・空軍ウィンドウの入口
+      html+='<button class="army-btn force-window-btn" title="'+GameTools.escape((BattlePlanManager.activeForce==='navy'?'海軍':'空軍')+'ウィンドウ (艦隊・航空隊の編成と任務) を開く')+'" onclick="BattlePlanManager.openForceWindow(\''+BattlePlanManager.activeForce+'\')">'+(BattlePlanManager.activeForce==='navy'?'⚓ 海軍ウィンドウを開く':'✈️ 空軍ウィンドウを開く')+'</button>';
       html+='</div><div class="army-strip">';
       list.forEach(u=>{
         const isAir=u.type==='air';
@@ -1210,10 +1212,10 @@ class IntelOperations {
     s.intel.roster ||= [];
     const used = () => [...s.intel.roster, ...s.intel.recruiting.map(recruit => recruit.operativeId)].filter(Boolean);
     for (let slot=0; slot<s.intel.spies; slot++) {
-      if (!GameVisuals.operative(s.intel.roster[slot])) s.intel.roster[slot] = GameVisuals.operativeChoices(s.country, used())[0]?.id;
+      if (!GameVisuals.operative(s.intel.roster[slot])) s.intel.roster[slot] = GameVisuals.operativeChoices(s.country, used(), true)[0]?.id;
     }
     for (const recruit of s.intel.recruiting) {
-      if (!GameVisuals.operative(recruit.operativeId)) recruit.operativeId = GameVisuals.operativeChoices(s.country, used())[0]?.id;
+      if (!GameVisuals.operative(recruit.operativeId)) recruit.operativeId = GameVisuals.operativeChoices(s.country, used(), true)[0]?.id;
     }
   }
   static target(tag) {IntelOperations.ensure();return CoreEngine.gameState.intel.targets[tag] ||= {network:0,decrypt:0,decoded:false,revealUntil:0};}
@@ -1233,7 +1235,7 @@ class IntelOperations {
     IntelOperations.ensure();
     const s=CoreEngine.gameState;
     if(!s.intel.agency||s.intel.spies+s.intel.recruiting.length>=s.intel.level*2||s.politicalPower<75)return false;
-    const choices = GameVisuals.operativeChoices(s.country, [...s.intel.roster, ...s.intel.recruiting.map(recruit => recruit.operativeId)]);
+    const choices = GameVisuals.operativeChoices(s.country, [...s.intel.roster, ...s.intel.recruiting.map(recruit => recruit.operativeId)], true);
   const person = operativeId ? choices.find(person => person.id === operativeId) : choices[0];
   if (!person || (person.country && person.country !== s.country)) {
     GameUI.notify('自国所属の諜報員のみ採用できます。', 'alert');
@@ -1365,7 +1367,7 @@ class IntelOperations {
     let html='<h3>諜報機関</h3><p>機関設立30日、諜報員の養成30日、任務配置30日。情報網の構築と暗号解読には長い準備が必要です。</p>';
     if(!i.agency){el.innerHTML=html+(i.building?'<p>機関設立まで '+i.building.days+'日</p>':GameTools.button('設立（政治力50）','IntelligenceManager.createAgency()'));return;}
     html+='<p>'+i.agency+' Lv'+i.level+' / 諜報員 '+i.spies+'名 / 養成中 '+i.recruiting.map(r=>GameTools.escape(GameVisuals.operative(r.operativeId)?.name || '諜報員')+' '+r.days+'日').join(', ')+'</p>'+GameTools.button('拡張（政治力'+(i.level*100)+'・60日）','IntelligenceManager.upgrade()',!!i.building||i.level>=5);
-    const candidates = GameVisuals.operativeChoices(s.country, [...i.roster, ...i.recruiting.map(recruit=>recruit.operativeId)]);
+    const candidates = GameVisuals.operativeChoices(s.country, [...i.roster, ...i.recruiting.map(recruit=>recruit.operativeId)], true);
     const candidate = candidates.find(person=>person.id===i.candidate) || candidates[0];
     if (candidate) html+='<div class="operative-card"><span id="operative-candidate-preview">'+GameVisuals.person(candidate)+'</span><div class="operative-info"><label>養成する諜報員 <select id="operative-candidate" onchange="IntelOperations.selectCandidate(this.value)">'+candidates.map(person=>'<option value="'+person.id+'"'+(person.id===candidate.id?' selected':'')+'>'+GameTools.escape(person.name)+' ('+person.country+')</option>').join('')+'</select></label>'+GameTools.button('養成（政治力75・30日）',"IntelligenceManager.hireSpy(document.getElementById('operative-candidate').value)",i.spies+i.recruiting.length>=i.level*2||s.politicalPower<75)+'</div></div>';
     if(i.building)html+='<p>拡張まで '+i.building.days+'日</p>';

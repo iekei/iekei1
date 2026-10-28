@@ -107,9 +107,13 @@
       const cost = hireCost();
       if (s.politicalPower < cost) { notify('諜報員の雇用には政治力' + cost + 'が必要です。'); return false; }
       const used = [...i.roster, ...i.recruiting.map((r) => r.operativeId)];
-      const choices = GameVisuals.operativeChoices(s.country, used);
-      const person = (operativeId && choices.find((p) => p.id === operativeId)) || choices.find((p) => !p.country || p.country === s.country) || choices[0];
-      if (!person) { notify('雇用できる候補者がいません。'); return false; }
+      // 国ごとの諜報員しか雇えない (日本で開始 → JAP の諜報員のみ)
+      const choices = GameVisuals.operativeChoices(s.country, used, true);
+      const person = (operativeId && choices.find((p) => p.id === operativeId)) || choices[0];
+      if (!person || (person.country && person.country !== s.country)) {
+        notify('雇用できるのは自国 (' + s.country + ') の諜報員のみです。');
+        return false;
+      }
       s.politicalPower -= cost;
       i.recruiting.push({ days: 30, operativeId: person.id });
       Espionage.render();
@@ -325,12 +329,13 @@
     renderOperatives() {
       const i = ensure(), s = gs();
       const used = [...i.roster, ...i.recruiting.map((r) => r.operativeId)];
-      const choices = GameVisuals.operativeChoices(s.country, used);
+      // 国ごとの諜報員のみ (例: 日本 = JAP の人物だけ)
+      const choices = GameVisuals.operativeChoices(s.country, used, true);
       const cand = choices.find((p) => p.id === i.candidate) || choices[0];
       let html = '<div class="esp-section"><h4>諜報員の雇用 <small>' + i.spies + '+' + i.recruiting.length + ' / ' + spyCap(i) + '</small></h4><div class="esp-hire">' +
         (cand ? '<div class="esp-portrait">' + GameVisuals.person(cand) + '</div>' : '') +
-        '<div><select onchange="Espionage.candidate(this.value)">' + choices.slice(0, 30).map((p) => '<option value="' + p.id + '"' + (p.id === cand?.id ? ' selected' : '') + '>' + esc(p.name) + (p.country ? ' (' + p.country + ')' : '') + '</option>').join('') + '</select>' +
-        '<button class="esp-btn primary" onclick="Espionage.hire(\'' + (cand?.id || '') + '\')">🕴️ 雇用する (政治力 ' + hireCost() + '・30日)</button>' +
+        '<div>' + (choices.length ? '' : '<p class="sn-help">' + esc(s.country) + ' には雇用可能な固有の諜報員がいません (国別の候補者のみ雇用できます)。</p>') + '<select onchange="Espionage.candidate(this.value)">' + choices.slice(0, 30).map((p) => '<option value="' + p.id + '"' + (p.id === cand?.id ? ' selected' : '') + '>' + esc(p.name) + (p.country ? ' (' + p.country + ')' : '') + '</option>').join('') + '</select>' +
+        '<button class="esp-btn primary" ' + (cand ? '' : 'disabled ') + 'onclick="Espionage.hire(\'' + (cand?.id || '') + '\')">🕴️ 雇用する (政治力 ' + hireCost() + '・30日)</button>' +
         (i.recruiting.length ? '<p>養成中: ' + i.recruiting.map((r) => esc(GameVisuals.operative(r.operativeId)?.name || '諜報員') + ' ' + r.days + '日').join(' / ') + '</p>' : '') + '</div></div></div>';
       html += '<div class="esp-section"><h4>諜報員と任務 <small>対象国: ' + esc(nameOf(i.selected)) + '</small></h4>';
       if (!i.spies) html += '<p class="sn-help">諜報員がいません。雇用して任務を割り当ててください。</p>';

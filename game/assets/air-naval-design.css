@@ -1,0 +1,294 @@
+/* ==========================================================
+ * air-naval-design.css — BBA 機体設計 / MtG 艦艇設計 / 司令官スロット / 作戦半径
+ * ========================================================== */
+
+/* --- 航空隊・任務部隊カード内のスロット行 --- */
+.and-slots {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+  margin: 8px 0 6px;
+  flex-wrap: wrap;
+}
+.and-slot {
+  flex: 1 1 200px;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 6px 10px;
+  background: linear-gradient(180deg, #1a2430, #131b24);
+  border: 1px solid var(--border-mil);
+  border-left: 3px solid #3a5468;
+  border-radius: 5px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 11px;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color .15s, background .15s, transform .1s;
+}
+.and-slot:hover {
+  background: linear-gradient(180deg, #23303e, #18222c);
+  border-left-color: var(--text-gold);
+  transform: translateY(-1px);
+}
+.and-slot-tag {
+  font-size: 10px;
+  letter-spacing: .06em;
+  color: var(--text-gold);
+  text-transform: uppercase;
+}
+.and-slot b {
+  font-size: 12px;
+  color: #e2e8ee;
+  font-weight: 600;
+}
+.and-slot small {
+  font-size: 10px;
+  color: var(--text-secondary);
+  line-height: 1.35;
+}
+.and-slot.cmd {
+  border-left-color: #6b5636;
+}
+.and-slot.cmd.filled {
+  border-left-color: var(--text-gold);
+  background: linear-gradient(180deg, #2a2317, #191510);
+}
+.and-slot.cmd.filled b { color: #f0d08a; }
+
+.and-eff {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 74px;
+  padding: 4px 8px;
+  border: 1px solid var(--border-mil);
+  border-radius: 5px;
+  background: #10171e;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent-green);
+}
+.and-eff.warn { color: var(--text-gold); }
+.and-eff.bad { color: var(--accent-red); }
+.and-eff small { font-weight: 400; font-size: 9px; color: var(--text-secondary); }
+
+/* --- 補給バナー (海軍ウィンドウ) --- */
+.and-supply-wrap { margin-bottom: 8px; }
+.and-supply {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  flex-wrap: wrap;
+  padding: 7px 12px;
+  border-radius: 5px;
+  border: 1px solid var(--border-mil);
+  background: #101820;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+.and-supply b { font-size: 12px; }
+.and-supply.ok b { color: var(--accent-green); }
+.and-supply.warn { border-color: #6b5a2a; }
+.and-supply.warn b { color: var(--text-gold); }
+.and-supply.cut { border-color: #6b2a2a; background: #1b1113; }
+.and-supply.cut b { color: #e07070; }
+.and-supply-reason { color: #e0a0a0; }
+
+/* --- 設計モーダル --- */
+.and-modal { display: flex; flex-direction: column; gap: 12px; }
+.and-modal-head h3 { font-size: 15px; color: #e6edf4; margin-bottom: 3px; }
+.and-modal-head small { color: var(--text-secondary); font-size: 11px; line-height: 1.5; }
+
+.and-frames { display: flex; gap: 8px; flex-wrap: wrap; }
+.and-frame {
+  flex: 1 1 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 8px 10px;
+  background: #121a22;
+  border: 1px solid var(--border-mil);
+  border-radius: 5px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 11px;
+  text-align: left;
+  cursor: pointer;
+}
+.and-frame b { font-size: 12px; }
+.and-frame small { color: var(--text-secondary); font-size: 10px; }
+.and-frame.selected { border-color: var(--text-gold); background: #2a2317; box-shadow: inset 0 0 0 1px rgba(212,168,67,.35); }
+.and-frame.locked { opacity: .55; }
+.and-frame em { color: var(--accent-red); font-style: normal; font-size: 10px; }
+
+.and-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 8px;
+}
+.and-slot-group {
+  padding: 8px 10px;
+  background: #101821;
+  border: 1px solid var(--border-mil);
+  border-radius: 5px;
+}
+.and-slot-group-title {
+  font-size: 11px;
+  color: var(--text-gold);
+  letter-spacing: .05em;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+.and-slot-group-title small { color: var(--text-secondary); font-size: 9px; letter-spacing: 0; }
+.and-select {
+  width: 100%;
+  margin-bottom: 4px;
+  padding: 3px 4px;
+  background: #0b1218;
+  color: var(--text-primary);
+  border: 1px solid var(--border-mil);
+  border-radius: 3px;
+  font-family: inherit;
+  font-size: 11px;
+}
+.and-select:focus { outline: 1px solid var(--text-gold); }
+
+.and-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 6px;
+}
+.and-stats > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 8px;
+  background: #0f161d;
+  border: 1px solid #1d2833;
+  border-radius: 4px;
+  font-size: 11px;
+}
+.and-stats span { color: var(--text-secondary); }
+.and-stats b { color: #e2e8ee; }
+.and-stats .and-stat-warn { border-color: #6b2a2a; }
+.and-stats .and-stat-warn b { color: #e07070; }
+
+.and-errors {
+  padding: 7px 10px;
+  border: 1px solid #6b2a2a;
+  border-radius: 5px;
+  background: #1b1113;
+  color: #e0a0a0;
+  font-size: 11px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.and-mission-preview {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 11px;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border-mil);
+  padding-top: 8px;
+}
+.and-mission {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: #17222c;
+  border: 1px solid var(--border-mil);
+  color: #cfd8e0;
+}
+.and-mission.nuke { border-color: #7a4a1a; color: #ffb060; background: #22180f; }
+
+.and-modal-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+
+/* --- 司令官ピッカー --- */
+.and-card-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+.and-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  background: linear-gradient(160deg, #1a2431, #101820);
+  border: 1px solid var(--border-mil);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 11px;
+  text-align: left;
+  cursor: pointer;
+}
+.and-card:hover { border-color: var(--text-gold); }
+.and-card.active { border-color: var(--text-gold); box-shadow: inset 0 0 0 1px rgba(212,168,67,.35); }
+.and-card-head { display: flex; justify-content: space-between; align-items: baseline; gap: 6px; }
+.and-card-head b { font-size: 13px; color: #f0d9a8; }
+.and-card-head small { color: var(--text-secondary); font-size: 9px; white-space: nowrap; }
+.and-card-traits { display: flex; gap: 4px; flex-wrap: wrap; }
+.and-card-traits span {
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  background: #12202a;
+  border: 1px solid #22303c;
+  color: #8fb4cc;
+}
+.and-card-bonus { display: flex; flex-direction: column; gap: 2px; color: #a8d0a8; font-size: 10px; }
+.and-active-tag {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-style: normal;
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  background: var(--text-gold);
+  color: #1b1408;
+  font-weight: 700;
+}
+.and-empty {
+  padding: 16px;
+  border: 1px dashed var(--border-mil);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.and-empty strong { color: var(--text-gold); }
+
+/* --- 空軍/海軍 ウィンドウ内の小さい注記 --- */
+.and-hint {
+  font-size: 10px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* --- 設計の警告 (適用は可能) --- */
+.and-warnings {
+  padding: 7px 10px;
+  border: 1px solid #6b5a2a;
+  border-radius: 5px;
+  background: #1b1710;
+  color: #e0c890;
+  font-size: 11px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}

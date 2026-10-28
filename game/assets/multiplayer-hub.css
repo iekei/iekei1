@@ -1,0 +1,441 @@
+/* ==========================================================
+   multiplayer-hub.css — マルチプレイ・ラウンジ / 時間権限 / 通信状態 /
+   インゲームチャット / 右クリック外交 / 政治「陣営」タブ
+   ダークグレー + 金の軍事的 UI (既存 military-theme と整合)
+   ========================================================== */
+
+/* ---------- 共通トークン ---------- */
+.mph-root,
+.mph-chat,
+.mph-diplo-menu,
+#mph-banner,
+.mph-card {
+  --mph-bg: #10161c;
+  --mph-bg-2: #161f27;
+  --mph-bg-3: #1d2833;
+  --mph-line: #33424f;
+  --mph-gold: #d4a843;
+  --mph-gold-dim: #8e7230;
+  --mph-text: #d9e2ea;
+  --mph-dim: #92a2b1;
+  --mph-green: #57c477;
+  --mph-red: #e05348;
+  --mph-yellow: #e0b93f;
+}
+
+/* ---------- ナビの「マルチ」ボタン (軍事的スタイル) ---------- */
+.win-btn.mph-nav-btn {
+  border-color: var(--mph-gold, #d4a843);
+  color: #f0d79a;
+  background: linear-gradient(180deg, #2a2318, #1a1710);
+  letter-spacing: 0.04em;
+}
+.win-btn.mph-nav-btn:hover {
+  color: #fff3cf;
+  border-color: #f0c75e;
+  box-shadow: 0 0 8px rgba(212, 168, 67, 0.45);
+}
+.win-btn.mph-nav-btn::after {
+  content: '';
+  width: 6px; height: 6px; margin-left: 6px;
+  border-radius: 50%;
+  background: #5a6673;
+  display: inline-block;
+}
+.win-btn.mph-nav-btn.connected::after { background: var(--mph-green, #57c477); box-shadow: 0 0 6px rgba(87, 196, 119, .8); }
+
+/* ==========================================================
+   1. マルチプレイ・ウィンドウ (ロビー)
+   ========================================================== */
+.mph-root { color: var(--mph-text); font-size: 13px; }
+.mph-hero {
+  display: flex; gap: 14px; align-items: center;
+  padding: 14px 16px; margin-bottom: 14px;
+  background: linear-gradient(135deg, #1b242d, #121a21 65%);
+  border: 1px solid var(--mph-line);
+  border-left: 4px solid var(--mph-gold);
+  border-radius: 4px;
+}
+.mph-hero-mark {
+  font-size: 30px; width: 54px; height: 54px; flex: 0 0 auto;
+  display: grid; place-items: center;
+  background: radial-gradient(circle at 50% 40%, #2b3641, #141b22);
+  border: 1px solid var(--mph-gold-dim); border-radius: 50%;
+  box-shadow: inset 0 0 12px rgba(212, 168, 67, .18);
+}
+.mph-hero-body h3 {
+  margin: 0 0 4px; font-size: 18px; color: #f2e2b8;
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.mph-hero-body h3 small { font-size: 10px; color: var(--mph-dim); letter-spacing: .18em; margin-left: 8px; }
+.mph-hero-body p { margin: 0 0 8px; color: var(--mph-dim); font-size: 12px; line-height: 1.6; }
+.mph-hero-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.mph-chip {
+  font-size: 11px; padding: 3px 9px; border-radius: 999px;
+  background: #1a242d; border: 1px solid var(--mph-line); color: var(--mph-dim);
+}
+.mph-chip.on { color: #c8f0d4; border-color: #3a6a4c; background: #16241c; }
+.mph-chip.off { color: #b9c3cc; }
+.mph-chip.code { color: #ffe6a8; border-color: var(--mph-gold-dim); background: #241f13; font-family: ui-monospace, monospace; letter-spacing: .08em; }
+
+.mph-connect { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+.mph-card {
+  background: var(--mph-bg-2); border: 1px solid var(--mph-line);
+  border-top: 3px solid var(--mph-gold-dim); border-radius: 5px; padding: 14px 16px;
+}
+.mph-card h4 {
+  margin: 0 0 8px; font-size: 14px; color: #f0d79a;
+  letter-spacing: .05em; border-bottom: 1px dashed #2a3743; padding-bottom: 8px;
+}
+.mph-help { color: var(--mph-dim); font-size: 12px; line-height: 1.65; margin: 0 0 10px; }
+.mph-help b { color: #f0d79a; }
+.mph-field { margin-bottom: 10px; }
+.mph-field label { display: block; font-size: 11px; color: var(--mph-dim); margin-bottom: 4px; letter-spacing: .08em; }
+.mph-field-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.mph-field-row .mph-input { flex: 1 1 180px; }
+.mph-input {
+  width: 100%; box-sizing: border-box;
+  background: #0d1419; color: var(--mph-text);
+  border: 1px solid var(--mph-line); border-radius: 3px;
+  padding: 8px 10px; font-size: 13px; font-family: inherit;
+}
+.mph-input:focus { outline: none; border-color: var(--mph-gold); box-shadow: 0 0 0 2px rgba(212, 168, 67, .16); }
+.mph-input.code { font-family: ui-monospace, monospace; letter-spacing: .12em; text-transform: uppercase; font-size: 15px; }
+
+.mph-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  background: linear-gradient(180deg, #26323d, #1b242d);
+  color: #dbe6ef; border: 1px solid var(--mph-line); border-radius: 3px;
+  padding: 8px 14px; font-size: 12px; font-weight: 600; cursor: pointer;
+  letter-spacing: .04em; transition: all .15s; font-family: inherit;
+}
+.mph-btn:hover:not(:disabled) { border-color: var(--mph-gold); color: #fff2cd; background: linear-gradient(180deg, #33404d, #222d37); }
+.mph-btn:disabled { opacity: .45; cursor: not-allowed; }
+.mph-btn.primary {
+  background: linear-gradient(180deg, #b98f2f, #8a6a22);
+  border-color: #f0c75e; color: #fff8e4; text-shadow: 0 1px 0 rgba(0, 0, 0, .4);
+}
+.mph-btn.primary:hover:not(:disabled) { background: linear-gradient(180deg, #d4a843, #a07d28); }
+.mph-btn.big { width: 100%; padding: 11px 14px; font-size: 13px; }
+.mph-btn.small { padding: 5px 10px; font-size: 11px; }
+.mph-btn.tiny { padding: 3px 8px; font-size: 10px; }
+.mph-btn.danger { border-color: #7d3a35; color: #f0b4ae; }
+.mph-btn.danger:hover:not(:disabled) { border-color: var(--mph-red); color: #fff; background: #4a211d; }
+.mph-status { margin-top: 10px; font-size: 12px; color: var(--mph-gold); min-height: 16px; }
+.mph-note {
+  margin-top: 14px; padding: 10px 12px; font-size: 11.5px; line-height: 1.7;
+  color: var(--mph-dim); background: #0e151b; border: 1px dashed var(--mph-line); border-radius: 4px;
+}
+
+/* --- ロビー --- */
+.mph-lobby { display: flex; flex-direction: column; gap: 12px; }
+.mph-code-box {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 12px 14px; background: linear-gradient(180deg, #1c2a20, #141d16);
+  border: 1px solid #3a5a44; border-left: 4px solid var(--mph-green); border-radius: 4px;
+}
+.mph-code-box > div { flex: 1 1 160px; }
+.mph-code-box small { display: block; font-size: 10px; color: #8fb39b; letter-spacing: .14em; }
+.mph-code-box b {
+  font-family: ui-monospace, monospace; font-size: 24px; letter-spacing: .14em;
+  color: #d8ffe6; text-shadow: 0 0 14px rgba(87, 196, 119, .45);
+}
+.mph-table-wrap { overflow-x: auto; border: 1px solid var(--mph-line); border-radius: 4px; background: var(--mph-bg-2); }
+.mph-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.mph-table th {
+  text-align: left; padding: 8px 10px; font-size: 10.5px; letter-spacing: .12em;
+  color: var(--mph-gold); background: #16202a; border-bottom: 1px solid var(--mph-line);
+  text-transform: uppercase;
+}
+.mph-table td { padding: 7px 10px; border-bottom: 1px solid #202b35; vertical-align: middle; }
+.mph-table tr.me td { background: rgba(212, 168, 67, .07); }
+.mph-table tr:last-child td { border-bottom: none; }
+.mph-pname { display: flex; flex-direction: column; gap: 1px; }
+.mph-pname small { color: #6d7c8a; font-size: 10px; font-family: ui-monospace, monospace; }
+.mph-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+.mph-dot.on { background: var(--mph-green); box-shadow: 0 0 6px rgba(87, 196, 119, .9); }
+.mph-dot.off { background: #6b4a46; }
+.mph-select {
+  background: #0d1419; color: var(--mph-text); border: 1px solid var(--mph-line);
+  border-radius: 3px; padding: 5px 8px; font-size: 12px; font-family: inherit; max-width: 190px;
+}
+.mph-select:focus { outline: none; border-color: var(--mph-gold); }
+.mph-country { display: inline-flex; align-items: center; gap: 5px; }
+.mph-country img { height: 14px; border: 1px solid #2b3742; }
+.mph-lobby-foot { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.mph-lobby-foot .mph-btn.big { width: auto; min-width: 240px; }
+.mph-warn { color: var(--mph-yellow); font-size: 12px; }
+.mph-ok { color: var(--mph-green); font-size: 12px; }
+.mph-started { color: var(--mph-green); font-size: 12px; letter-spacing: .06em; }
+
+/* ==========================================================
+   2. 時間権限 (ゲストロック + 一時停止要請)
+   ========================================================== */
+.speed-buttons.mph-locked {
+  filter: grayscale(.55) brightness(.62);
+  opacity: .75; position: relative;
+}
+.speed-buttons.mph-locked::after {
+  content: '🔒 ホストのみ';
+  position: absolute; inset: 0; display: grid; place-items: center;
+  font-size: 9px; color: #ffd98a; letter-spacing: .08em;
+  background: rgba(10, 14, 18, .55); border-radius: 3px; pointer-events: none;
+}
+.speed-buttons.mph-locked .speed-btn { cursor: not-allowed; }
+.mph-shake { animation: mphShake .45s; }
+@keyframes mphShake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+}
+#pause-req-btn {
+  display: none; align-items: center; gap: 4px;
+  border-color: var(--mph-gold); color: #ffe6a8;
+  background: linear-gradient(180deg, #2d2517, #1c1810);
+  white-space: nowrap;
+}
+#pause-req-btn:hover { color: #fff6d8; border-color: #f0c75e; box-shadow: 0 0 8px rgba(212, 168, 67, .4); }
+
+/* 自動停止バナー */
+#mph-banner {
+  position: fixed; left: 50%; top: 62px; transform: translateX(-50%);
+  z-index: 7600; display: none; align-items: center; gap: 10px;
+  padding: 9px 14px; font-size: 12.5px; color: #ffe9b8;
+  background: rgba(28, 22, 12, .96);
+  border: 1px solid var(--mph-gold); border-left: 4px solid var(--mph-yellow);
+  border-radius: 4px; box-shadow: 0 8px 26px rgba(0, 0, 0, .6);
+  max-width: min(560px, calc(100vw - 32px));
+}
+#mph-banner .mph-banner-ic { font-size: 16px; }
+#mph-banner .mph-banner-x {
+  background: none; border: none; color: #b9a476; cursor: pointer; font-size: 13px; padding: 0 2px;
+}
+#mph-banner .mph-banner-x:hover { color: #fff; }
+
+/* ==========================================================
+   3. 通信状態インジケーター (Ping / Desync)
+   ========================================================== */
+#mp-net-status.mph-net {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--bg-panel-light, #1d2833); border: 1px solid var(--border-mil, #33424f);
+  color: var(--mph-dim); border-radius: 3px; padding: 4px 9px;
+  font-size: 11px; cursor: pointer; margin-left: 8px; font-family: inherit;
+  letter-spacing: .03em; transition: all .2s;
+}
+#mp-net-status.mph-net:hover { color: #eef4fa; border-color: var(--mph-gold); }
+#mp-net-status .mph-net-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: #59646f; display: inline-block;
+}
+#mp-net-status.mph-net.off { opacity: .65; }
+#mp-net-status.mph-net.offline .mph-net-dot { background: #59646f; }
+#mp-net-status.mph-net.wait .mph-net-dot { background: var(--mph-gold); animation: mphPulse 1s infinite; }
+#mp-net-status.mph-net.ok { color: #b8e8c8; }
+#mp-net-status.mph-net.ok .mph-net-dot { background: var(--mph-green); box-shadow: 0 0 7px rgba(87, 196, 119, .85); }
+#mp-net-status.mph-net.warn { color: #f0dc9c; }
+#mp-net-status.mph-net.warn .mph-net-dot { background: var(--mph-yellow); box-shadow: 0 0 7px rgba(224, 185, 63, .85); }
+#mp-net-status.mph-net.bad { color: #f3bda4; }
+#mp-net-status.mph-net.bad .mph-net-dot { background: #e07a3f; box-shadow: 0 0 7px rgba(224, 122, 63, .85); }
+#mp-net-status.mph-net.desync { color: #ffc7c2; border-color: #7d3a35; }
+#mp-net-status.mph-net.desync .mph-net-dot { background: var(--mph-red); box-shadow: 0 0 9px rgba(224, 83, 72, .95); animation: mphPulse .8s infinite; }
+@keyframes mphPulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+
+/* ==========================================================
+   4. インゲームチャット (左下 / 半透明ダークグレー)
+   ========================================================== */
+.mph-chat {
+  /* ウィンドウ (z-index 100+) より下、マップ上のパネル (z-index 20) より上に置く */
+  position: fixed; left: 12px; bottom: 10px; z-index: 90;
+  width: min(360px, calc(100vw - 24px));
+  background: rgba(16, 22, 28, .86);
+  backdrop-filter: blur(3px);
+  border: 1px solid var(--mph-line); border-top: 2px solid var(--mph-gold-dim);
+  border-radius: 5px; box-shadow: 0 10px 30px rgba(0, 0, 0, .55);
+  color: var(--mph-text); font-size: 12px; overflow: hidden;
+}
+.mph-chat-head {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 8px; background: rgba(29, 40, 51, .92);
+  border-bottom: 1px solid #26323d; cursor: default;
+}
+.mph-chat-title { flex: 1 1 auto; font-size: 11px; color: #e8d6a6; letter-spacing: .1em; white-space: nowrap; }
+.mph-chat-badge {
+  display: inline-block; min-width: 16px; padding: 0 4px; margin-left: 4px;
+  background: var(--mph-red); color: #fff; border-radius: 8px; font-size: 9px;
+  font-style: normal; text-align: center; line-height: 14px;
+}
+.mph-chat-tabs { display: flex; gap: 2px; }
+.mph-chat-tabs button {
+  background: #18222b; border: 1px solid #2b3742; color: #9fb0be;
+  padding: 3px 9px; font-size: 10.5px; cursor: pointer; border-radius: 2px; font-family: inherit;
+  transition: all .15s;
+}
+.mph-chat-tabs button:hover { color: #fff; border-color: var(--mph-gold-dim); }
+.mph-chat-tabs button.on { background: linear-gradient(180deg, #b98f2f, #8a6a22); border-color: #f0c75e; color: #fff8e4; }
+.mph-chat-tabs button.unread { border-color: var(--mph-red); color: #ffd8d4; }
+.mph-chat-fold {
+  background: none; border: none; color: #9fb0be; cursor: pointer; font-size: 12px; padding: 0 4px;
+}
+.mph-chat-fold:hover { color: #fff; }
+.mph-chat-log {
+  height: 142px; overflow-y: auto; padding: 7px 9px; line-height: 1.55;
+  scrollbar-width: thin;
+}
+.mph-chat.empty .mph-chat-log { height: 0; }
+.mph-chat.folded .mph-chat-log,
+.mph-chat.folded .mph-chat-form { display: none; }
+.mph-chat.folded .mph-chat-fold { transform: rotate(180deg); }
+.mph-chat-msg { display: flex; gap: 5px; align-items: baseline; padding: 2px 0; flex-wrap: wrap; }
+.mph-chat-msg .mph-chat-flag img,
+.mph-chat-msg .mph-chat-flag svg { height: 12px; vertical-align: -1px; border: 1px solid #2b3742; }
+.mph-chat-msg .mph-chat-who { color: #ffd98a; font-weight: 600; white-space: nowrap; }
+.mph-chat-msg .mph-chat-who small { color: #7d8b99; font-weight: 400; margin-left: 4px; font-size: 10px; }
+.mph-chat-msg .mph-chat-text { color: #dfe8f1; word-break: break-word; flex: 1 1 auto; }
+.mph-chat-msg.mine .mph-chat-who { color: #9fd8b2; }
+.mph-chat-msg.mine .mph-chat-text { color: #c9f0d6; }
+.mph-chat-msg.sys {
+  display: block; font-style: italic; padding: 2px 0 2px 6px;
+  border-left: 2px solid #3d4b58; color: #a9b8c6; font-size: 11.5px;
+}
+.mph-chat-msg.sys.warn { color: #f0d98a; border-left-color: var(--mph-yellow); }
+.mph-chat-msg.sys.error { color: #ffb3ab; border-left-color: var(--mph-red); }
+.mph-chat-msg.sys.info { color: #a9d6bd; border-left-color: #3a6a4c; }
+.mph-chat-empty { color: #6f7e8c; font-size: 11px; font-style: italic; padding: 6px 2px; }
+.mph-chat-form {
+  display: flex; gap: 4px; padding: 6px; border-top: 1px solid #26323d;
+  background: rgba(13, 20, 25, .9);
+}
+.mph-chat-form input {
+  flex: 1; min-width: 0; background: #0d1419; color: #e6eef5;
+  border: 1px solid #2b3742; border-radius: 2px; padding: 6px 8px; font-size: 12px; font-family: inherit;
+}
+.mph-chat-form input:focus { outline: none; border-color: var(--mph-gold); box-shadow: 0 0 0 2px rgba(212, 168, 67, .14); }
+.mph-chat-form button {
+  background: linear-gradient(180deg, #b98f2f, #8a6a22); border: 1px solid #f0c75e;
+  color: #fff8e4; border-radius: 2px; padding: 0 10px; font-size: 11px; cursor: pointer; font-family: inherit;
+}
+.mph-chat-form button:hover { background: linear-gradient(180deg, #d4a843, #a07d28); }
+
+/* ==========================================================
+   5. 右クリック外交メニュー
+   ========================================================== */
+.mph-diplo-menu {
+  position: fixed; z-index: 4600; display: none;
+  width: 318px; max-width: calc(100vw - 16px);
+  background: rgba(16, 22, 28, .97);
+  border: 1px solid var(--mph-gold-dim); border-top: 3px solid var(--mph-gold);
+  border-radius: 5px; box-shadow: 0 14px 38px rgba(0, 0, 0, .7);
+  color: var(--mph-text); font-size: 12.5px; padding: 0 0 6px;
+  animation: mphMenuIn .12s ease-out;
+}
+@keyframes mphMenuIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+.mph-dm-head {
+  display: flex; align-items: center; gap: 9px;
+  padding: 10px 11px 8px; background: linear-gradient(180deg, #1d2833, #16202a);
+  border-bottom: 1px solid #2b3742;
+}
+.mph-dm-head > img, .mph-dm-head > span > img, .mph-dm-head svg { height: 26px; border: 1px solid #3a4854; }
+.mph-dm-title { display: flex; flex-direction: column; flex: 1 1 auto; min-width: 0; }
+.mph-dm-title b { color: #f2e2b8; font-size: 14px; letter-spacing: .03em; }
+.mph-dm-title small { color: var(--mph-dim); font-size: 10.5px; }
+.mph-dm-war { color: #ffb3ab; font-size: 10.5px; white-space: nowrap; }
+.mph-dm-meta {
+  display: flex; flex-wrap: wrap; gap: 6px; padding: 7px 11px;
+  border-bottom: 1px dashed #26323d; font-size: 11px; color: var(--mph-dim);
+}
+.mph-dm-rel.pos { color: #9fd8b2; }
+.mph-dm-rel.neg { color: #ffb3ab; }
+.mph-dm-actions { display: flex; flex-direction: column; gap: 1px; padding: 5px 0; }
+.mph-dm-act {
+  display: flex; align-items: center; gap: 8px; width: 100%;
+  background: none; border: none; border-left: 3px solid transparent;
+  color: #dbe6ef; text-align: left; padding: 8px 11px; font-size: 12.5px;
+  cursor: pointer; font-family: inherit;
+}
+.mph-dm-act:hover:not(:disabled) { background: rgba(212, 168, 67, .12); border-left-color: var(--mph-gold); color: #fff5d8; }
+.mph-dm-act .mph-dm-ic { width: 18px; text-align: center; font-size: 14px; }
+.mph-dm-act small { margin-left: auto; color: #8b9aa8; font-size: 10px; }
+.mph-dm-act.off { color: #6c7a87; cursor: not-allowed; }
+.mph-dm-act.off .mph-dm-ic { filter: grayscale(1); opacity: .6; }
+.mph-dm-act.off small { color: #5d6b78; }
+.mph-dm-foot {
+  display: flex; gap: 4px; padding: 6px 8px 0; border-top: 1px solid #26323d;
+}
+.mph-dm-link {
+  flex: 1; background: #18222b; border: 1px solid #2b3742; color: #b7c5d2;
+  font-size: 11px; padding: 6px 4px; border-radius: 3px; cursor: pointer; font-family: inherit;
+}
+.mph-dm-link:hover { border-color: var(--mph-gold); color: #ffe6a8; }
+
+/* ---------- 汎用モーダル内 (参戦要請など) ---------- */
+.mph-modal { font-size: 13px; line-height: 1.7; color: var(--mph-text); }
+.mph-modal-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.mph-modal-head img, .mph-modal-head svg { height: 34px; border: 1px solid var(--mph-line); }
+.mph-modal-head b { color: #f2e2b8; font-size: 15px; display: block; }
+.mph-modal-head small { color: var(--mph-dim); font-size: 11px; }
+.mph-modal p { margin: 0 0 10px; }
+.mph-modal-list { margin: 0 0 10px; padding-left: 18px; }
+.mph-modal-list li { margin-bottom: 3px; }
+.mph-modal-list img, .mph-modal-list svg { height: 13px; vertical-align: -2px; margin-right: 4px; }
+.mph-modal-actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.mph-modal-actions .mph-btn { flex: 1 1 140px; }
+.mph-modal .mph-help { color: var(--mph-dim); font-size: 12px; }
+
+/* ==========================================================
+   6. 政治画面の「陣営」タブ
+   ========================================================== */
+.mph-tabbar {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  padding: 6px 8px; margin: 0 0 12px;
+  background: linear-gradient(180deg, #1a232b, #141c23);
+  border: 1px solid #2b3742; border-radius: 4px;
+}
+.mph-tab {
+  background: #18222b; border: 1px solid #2b3742; color: #a9b8c6;
+  padding: 6px 12px; font-size: 12px; cursor: pointer; border-radius: 3px;
+  font-family: inherit; transition: all .15s;
+}
+.mph-tab:hover { color: #fff; border-color: var(--mph-gold-dim); }
+.mph-tab.on {
+  background: linear-gradient(180deg, #b98f2f, #8a6a22);
+  border-color: #f0c75e; color: #fff8e4; font-weight: 600;
+}
+.mph-tab b { color: #fff3cf; font-weight: 700; margin-left: 2px; }
+.mph-tabbar-note { margin-left: auto; font-size: 11px; color: var(--mph-dim); letter-spacing: .04em; }
+.mph-fac-root { display: flex; flex-direction: column; gap: 12px; }
+.mph-card.fac-create { border-top-color: var(--mph-gold); }
+.mph-faction-ideas { display: flex; flex-wrap: wrap; gap: 5px; margin: -4px 0 10px; }
+
+/* マルチプレイ開始済みの接続ラベル */
+.win-btn.mph-nav-btn.connected { color: #c9f0d6; border-color: #3a6a4c; }
+
+/* ---------- 狭い画面 ---------- */
+@media (max-width: 720px) {
+  .mph-chat { width: calc(100vw - 20px); left: 10px; bottom: 6px; }
+  .mph-chat-log { height: 110px; }
+  .mph-diplo-menu { width: calc(100vw - 16px); }
+  #mph-banner { top: 56px; font-size: 11.5px; }
+}
+
+/* ==========================================================
+   7. マルチプレイ・ウィンドウの外装 (中央寄せ + 金枠)
+   ========================================================== */
+.os-window.mph-window {
+  background: linear-gradient(180deg, #151d24, #0f151a);
+  border: 1px solid var(--mph-gold, #d4a843);
+  box-shadow: 0 26px 80px rgba(0, 0, 0, .8), 0 0 0 1px rgba(212, 168, 67, .18);
+}
+.os-window.mph-window > .os-titlebar {
+  background: linear-gradient(180deg, #2c2517, #1a1710);
+  color: #f0d79a; border-bottom: 1px solid #8e7230; letter-spacing: .05em;
+}
+.os-window.mph-window > .os-body > .window-template { padding: 14px 16px; }
+
+/* ---------- 補助 ---------- */
+.mph-net-text { font-variant-numeric: tabular-nums; }
+.mph-dm-fac { color: #c9b17a; }
+.mph-dm-tension { color: #e0b93f; }
+.mph-fac-body { margin-top: 4px; }
+.mph-fac-body > * { max-width: 100%; }
+.mph-status:empty { display: none; }
