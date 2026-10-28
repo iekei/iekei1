@@ -2,6 +2,15 @@
 #army-panel.army-dock { left: 8px; right: 8px; bottom: 8px; width: auto; max-height: 210px; overflow: auto; z-index: 25; }
 .army-tools { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
 .army-tools > span { color: var(--text-secondary); font-size: 10px; margin-left: auto; }
+/* 下側パネルから海軍・空軍ウィンドウを開くボタン */
+#army-panel .force-window-btn {
+  margin-left: 6px;
+  border-color: var(--text-gold, #c4ad72);
+  background: linear-gradient(180deg, #3a3418, #221e0c);
+  color: var(--text-gold, #e8dca0);
+  font-weight: 700;
+}
+#army-panel .force-window-btn:hover { background: linear-gradient(180deg, #4d451f, #2c270f); }
 .army-strip { display: flex; gap: 8px; overflow-x: auto; padding: 3px; }
 .army-tile { display: flex; min-width: 265px; background: var(--mil-plate); border: 1px solid var(--border-mil); border-radius: 3px; box-shadow: var(--mil-raised); padding: 6px; gap: 8px; }
 .army-tile.selected { border-color: var(--text-gold); }

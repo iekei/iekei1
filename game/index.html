@@ -714,12 +714,14 @@
   <link rel="stylesheet" href="assets/supply-network.css?v=supply-1">
   <link rel="stylesheet" href="assets/air-force.css?v=air-1">
   <link rel="stylesheet" href="assets/naval-force.css?v=navy-1">
-  <link rel="stylesheet" href="assets/trade-resources.css?v=trade-1">
+  <link rel="stylesheet" href="assets/trade-resources.css?v=trade-2">
   <link rel="stylesheet" href="assets/peace-conference.css?v=peace-1">
   <link rel="stylesheet" href="assets/politics-cabinet.css?v=pol-1">
   <link rel="stylesheet" href="assets/occupation.css?v=occ-1">
   <link rel="stylesheet" href="assets/training-logistics.css?v=tl-1">
   <link rel="stylesheet" href="assets/factions.css?v=fs-1">
+  <link rel="stylesheet" href="assets/air-naval-design.css?v=and-1">
+  <link rel="stylesheet" href="assets/multiplayer-hub.css?v=mph-1">
   <link rel="stylesheet" href="assets/superweapons.css?v=sw-2">
   <link rel="stylesheet" href="assets/frontline-command.css?v=fc-1">
   <!-- HOI4 大戦略 全画面レイヤー (../hoi4.html を iframe で表示) -->
@@ -749,7 +751,9 @@
       <li><strong>チャット:</strong> マルチプレイ画面の全体／陣営タブを切替</li>
       <li><strong>研究:</strong> 技術ノードをクリックして詳細を確認し、研究を開始</li>
       <li><strong>時間:</strong> 上部の一時停止・速度ボタンで進行を変更</li>
-      <li><strong>HOI4 大戦略:</strong> ナビの「HOI4 大戦略」または <strong>H</strong> キーで HOI4風フル画面を起動（<strong>Esc</strong> で戻る）</li>
+      <li><strong>HOI4 大戦略:</strong> <strong>H</strong> キーで HOI4風フル画面を起動（<strong>Esc</strong> で戻る）</li>
+      <li><strong>海軍 / 空軍:</strong> 画面下の作戦パネルで「海軍」「空軍」を選ぶと、それぞれのウィンドウが開きます</li>
+      <li><strong>核攻撃:</strong> 上部バーの ☢ 核備蓄、または「終末兵器」ウィンドウの「核攻撃モード」から目標州を選択</li>
     </ul>
   </aside>
   <!-- ==================== TOP BAR ==================== -->
@@ -770,6 +774,7 @@
         <button class="speed-btn" data-speed="4">▶4</button>
         <button class="speed-btn" data-speed="5">▶5</button>
       </div>
+      <button class="speed-btn" id="pause-req-btn" title="ホストへ一時停止を要請 (ゲストのみ)" onclick="MPHub.requestPause()">⏸ 要請</button>
     </div>
     <div class="topbar-nav">
       <button class="speed-btn" id="world-tension" data-tip-key="tension" aria-label="国際緊張度・外交画面を開く" onclick="GameUI.switchTab('diplomacy')"><img class="tension-icon" data-icon-key="worldTension" alt=""><span class="tension-content"><span class="tension-label">国際緊張度</span><span class="wt-val">0%</span></span></button>
@@ -787,31 +792,23 @@
   <!-- ==================== WINDOW NAVIGATION RAIL ==================== -->
   <nav id="window-nav">
     <span style="font-size:11px;color:var(--text-secondary);margin-right:4px;white-space:nowrap;">ウィンドウ:</span>
-    <button class="win-btn" data-tab="politics" onclick="GameUI.switchTab('politics')">🏛️ 政治</button>
-    <button class="win-btn" data-tab="focus" onclick="GameUI.switchTab('focus')"><img class="win-btn-icon" data-menu-icon="focus" alt=""> 国家方針</button>
-    <button class="win-btn" data-tab="research" onclick="GameUI.switchTab('research')"><img class="win-btn-icon" data-menu-icon="research" alt=""> 研究</button>
-    <button class="win-btn" data-tab="special" onclick="GameUI.switchTab('special')"><img class="win-btn-icon" data-menu-icon="special" alt=""> 特別研究</button>
-    <button class="win-btn" data-tab="nuclear" onclick="GameUI.switchTab('nuclear')"><img class="win-btn-icon" data-menu-icon="nuclear" alt=""> 核攻撃</button>
-    <button class="win-btn" data-tab="construction" onclick="GameUI.switchTab('construction')"><img class="win-btn-icon" data-menu-icon="construction" alt=""> 建設</button>
-    <button class="win-btn" data-tab="navy" onclick="GameUI.switchTab('navy')">⚓ 海軍</button>
-    <button class="win-btn" data-tab="trade" onclick="GameUI.switchTab('trade')"><img class="win-btn-icon" data-menu-icon="trade" alt=""> 貿易</button>
-    <button class="win-btn" data-tab="diplomacy" onclick="GameUI.switchTab('diplomacy')"><img class="win-btn-icon" data-menu-icon="diplomacy" alt=""> 外交</button>
-    <button class="win-btn" data-tab="cards" onclick="GameUI.switchTab('cards')"><img class="win-btn-icon" data-menu-icon="cards" alt=""> 将軍カード</button>
-    <button class="win-btn" data-tab="division" onclick="GameUI.switchTab('division')"><img class="win-btn-icon" data-menu-icon="division" alt=""> 師団編成</button>
-    <button class="win-btn" data-tab="training" onclick="GameUI.switchTab('training')">🎓 徴兵・訓練</button>
-    <button class="win-btn" data-tab="logistics" onclick="GameUI.switchTab('logistics')">📦 兵站</button>
-    <button class="win-btn" data-tab="airforce" onclick="GameUI.switchTab('airforce')">✈️ 空軍</button>
-    <button class="win-btn" data-tab="multiplayer" onclick="GameUI.switchTab('multiplayer')"><img class="win-btn-icon" data-menu-icon="multiplayer" alt=""> マルチ</button>
-    <button class="win-btn" data-tab="nation" onclick="GameUI.switchTab('nation')"><img class="win-btn-icon" data-menu-icon="nation" alt=""> 固有システム</button>
-    <button class="win-btn" data-tab="winsave" onclick="GameUI.switchTab('winsave')"><img class="win-btn-icon" data-menu-icon="winsave" alt=""> セーブ/ロード</button>
-    <button class="win-btn win-btn-hoi4" type="button" data-open-hoi4 aria-keyshortcuts="H" title="HOI4風の大戦略画面を全画面で開く (H)">
-      <svg class="win-btn-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round">
-        <path d="M12 2.6 20.2 7v10L12 21.4 3.8 17V7Z"/>
-        <path d="m12 6.4 1.5 3.2 3.5.5-2.5 2.4.6 3.5-3.1-1.7-3.1 1.7.6-3.5L7 10.1l3.5-.5Z" fill="currentColor" stroke="none"/>
-      </svg>
-      HOI4 大戦略 <span class="win-btn-kbd" aria-hidden="true">H</span>
-    </button>
-    <button class="win-btn" onclick="WindowManager.closeAll()"><img class="win-btn-icon" data-menu-icon="map" alt=""> マップ画面</button>
+    <button class="win-btn" data-tab="politics" data-nav-group="state" onclick="GameUI.switchTab('politics')">🏛️ 政治</button>
+    <button class="win-btn" data-tab="focus" data-nav-group="state" onclick="GameUI.switchTab('focus')"><img class="win-btn-icon" data-menu-icon="focus" alt=""> 国家方針</button>
+    <button class="win-btn" data-tab="research" data-nav-group="state" onclick="GameUI.switchTab('research')"><img class="win-btn-icon" data-menu-icon="research" alt=""> 研究</button>
+    <button class="win-btn" data-tab="superweapons" data-nav-group="state" onclick="GameUI.switchTab('superweapons')" title="終末兵器・特殊計画 (核兵器・ミサイル・原子炉)">☢️ 終末兵器</button>
+    <button class="win-btn" data-tab="division" data-nav-group="military" onclick="GameUI.switchTab('division')"><img class="win-btn-icon" data-menu-icon="division" alt=""> 師団編成</button>
+    <button class="win-btn" data-tab="cards" data-nav-group="military" onclick="GameUI.switchTab('cards')"><img class="win-btn-icon" data-menu-icon="cards" alt=""> 将軍カード</button>
+    <button class="win-btn" data-tab="airforce" data-nav-group="military" onclick="GameUI.switchTab('airforce')" title="空軍 — 航空隊・機体設計・制空権">✈️ 空軍</button>
+    <button class="win-btn" data-tab="navy" data-nav-group="military" onclick="GameUI.switchTab('navy')" title="海軍 — 任務部隊・艦艇設計・制海権">⚓ 海軍</button>
+    <button class="win-btn" data-tab="training" data-nav-group="military" onclick="GameUI.switchTab('training')">🎓 徴兵・訓練</button>
+    <button class="win-btn" data-tab="logistics" data-nav-group="military" onclick="GameUI.switchTab('logistics')">📦 兵站</button>
+    <button class="win-btn" data-tab="construction" data-nav-group="industry" onclick="GameUI.switchTab('construction')"><img class="win-btn-icon" data-menu-icon="construction" alt=""> 建設</button>
+    <button class="win-btn" data-tab="trade" data-nav-group="industry" onclick="GameUI.switchTab('trade')"><img class="win-btn-icon" data-menu-icon="trade" alt=""> 貿易</button>
+    <button class="win-btn" data-tab="diplomacy" data-nav-group="diplomacy" onclick="GameUI.switchTab('diplomacy')"><img class="win-btn-icon" data-menu-icon="diplomacy" alt=""> 外交</button>
+    <button class="win-btn" data-tab="nation" data-nav-group="diplomacy" onclick="GameUI.switchTab('nation')"><img class="win-btn-icon" data-menu-icon="nation" alt=""> 固有システム</button>
+    <button class="win-btn" data-tab="multiplayer" data-nav-group="system" onclick="GameUI.switchTab('multiplayer')"><img class="win-btn-icon" data-menu-icon="multiplayer" alt=""> マルチ</button>
+    <button class="win-btn" data-tab="winsave" data-nav-group="system" onclick="GameUI.switchTab('winsave')"><img class="win-btn-icon" data-menu-icon="winsave" alt=""> セーブ/ロード</button>
+    <button class="win-btn" data-tab="map" data-nav-group="system" onclick="WindowManager.closeAll()"><img class="win-btn-icon" data-menu-icon="map" alt=""> マップ画面</button>
   </nav>
 
   <!-- ==================== OPERATING SCREEN (fullscreen map) ==================== -->
@@ -893,7 +890,7 @@
       <div id="construction-content"></div>
     </div>
 
-    <div class="window-template pane-scroll" id="tpl-trade" data-title="📦 貿易・資源" data-w="800" data-h="600">
+    <div class="window-template pane-scroll" id="tpl-trade" data-title="📦 貿易・資源 — Trade &amp; Resources" data-w="1240" data-h="820">
       <div id="trade-content"></div>
     </div>
 
@@ -915,7 +912,7 @@
       <div id="navy-content"></div>
     </div>
 
-    <div class="window-template pane-scroll" id="tpl-multiplayer" data-title="🌐 マルチプレイ" data-w="640" data-h="560">
+    <div class="window-template pane-scroll" id="tpl-multiplayer" data-title="👥 マルチプレイ — Multiplayer Lobby" data-w="1040" data-h="720">
       <div id="multiplayer-content"></div>
     </div>
     <div class="window-template pane-scroll" id="tpl-nation" data-title="🏛️ 国家固有システム" data-w="700" data-h="560">
@@ -3127,7 +3124,10 @@ class MapRenderer {
           const owner = pid ? MapRenderer.ownerOf(pid) : null;
           const player = CoreEngine.gameState.country;
           const handled = typeof FrontCommand !== 'undefined' && FrontCommand.rightClick(pid, wp);
-          if (!handled && owner && owner !== player) DiplomacyManager.openFor(owner);
+          if (!handled && owner && owner !== player) {
+            if (typeof MPHub !== 'undefined') MPHub.openDiplo(owner, e.clientX, e.clientY);
+            else DiplomacyManager.openFor(owner);
+          }
         }
         rightDown = false;
       }
@@ -3274,6 +3274,7 @@ class MapRenderer {
         (typeof TradeSystem !== 'undefined' ? '<br>' + TradeSystem.summaryLine(sid) : '') +
         (typeof PeaceSystem !== 'undefined' && PeaceSystem.subjectLine(sid) ? '<br>' + PeaceSystem.subjectLine(sid) : '') +
         (typeof OccupationSystem !== 'undefined' && OccupationSystem.summaryLine(sid) ? '<br>' + OccupationSystem.summaryLine(sid) : '') +
+        (typeof SuperWeapons !== 'undefined' && SuperWeapons.ruinLine(sid) ? '<br>' + SuperWeapons.ruinLine(sid) : '') +
         (typeof SuperWeapons !== 'undefined' && SuperWeapons.strikeLine(sid) ? '<br>' + SuperWeapons.strikeLine(sid) : '') +
         (st.owner === CoreEngine.gameState.country ? '<br><button class="map-info-build-btn" onclick="ConstructionManager.selectState(\'' + sid + '\');GameUI.switchTab(\'construction\')">🏗️ 建設 (インフラ・補給ハブ)</button>' : '');
       ConstructionManager.selectState(sid);
@@ -3446,6 +3447,33 @@ class MapRenderer {
       ctx.arc(s[0], s[1] - radius * 0.4, radius * 0.35, 0, Math.PI * 2);
       ctx.fill();
     });
+
+    // 廃墟マーカー (核攻撃を受けた州) — 州の中心に ☠ を表示
+    if (MapRenderer.states) {
+      const cw = MapRenderer.canvas.width, ch = MapRenderer.canvas.height;
+      Object.keys(MapRenderer.states).forEach(sid => {
+        const st = MapRenderer.states[sid];
+        if (!st || !st.ruined) return;
+        const center = MapRenderer.stateCenter.get(String(sid));
+        if (!center) return;
+        const s = MapRenderer.worldToScreen(center[0], center[1]);
+        if (s[0] < -24 || s[0] > cw + 24 || s[1] < -24 || s[1] > ch + 24) return;
+        ctx.save();
+        ctx.fillStyle = 'rgba(10,9,8,0.72)';
+        ctx.strokeStyle = 'rgba(226,182,75,0.8)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(s[0], s[1], 13, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = '#e8d9b0';
+        ctx.font = '13px "Segoe UI Emoji", "Noto Color Emoji", serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('☠', s[0], s[1] + 1);
+        ctx.restore();
+      });
+    }
   }
 
   static renderLegend() {
@@ -3493,7 +3521,7 @@ class BattlePlanManager {
   };
   static activeMission = { navy: 'patrol', air: 'air_sup' };
 
-  static setForce(f) {
+  static setForce(f, options = {}) {
     BattlePlanManager.activeForce = f;
     if (f !== 'army') ArmyRoster.moveTool = false;
     if (f === 'army' && !BattlePlanManager.selectedArmyId) BattlePlanManager.selectedArmyId = (BattlePlanManager.armies[0] || {}).id || null;
@@ -3502,6 +3530,16 @@ class BattlePlanManager {
       if (!BattlePlanManager.selectedUnitId && units.length) BattlePlanManager.selectedUnitId = units[0].id;
     }
     BattlePlanManager.renderPanel();
+    // 画面下の「海軍」「空軍」タブ = 各軍のウィンドウを開く場所。
+    // (上部ウィンドウバーから海軍/空軍ボタンを外したため、ここから開く)
+    if (f !== 'army' && options.openWindow !== false && typeof GameUI !== 'undefined') {
+      try { GameUI.switchTab(f === 'navy' ? 'navy' : 'airforce'); } catch (error) { /* ウィンドウ未登録時は無視 */ }
+    }
+  }
+  /** 下側パネルから軍種ウィンドウを開く (ボタン用) */
+  static openForceWindow(f) {
+    const tab = f === 'navy' ? 'navy' : f === 'air' ? 'airforce' : null;
+    if (tab && typeof GameUI !== 'undefined') GameUI.switchTab(tab);
   }
 
   static selectedUnit() {
@@ -3853,10 +3891,10 @@ class BattlePlanManager {
       return pd && pd[4] && CoreEngine.gameState.atWar.includes(MapRenderer.ownerOf(p));
     });
     if (!coastalPid) { GameUI.notify('🌊 強襲上陸は沿岸の州にのみ実行できます。', 'alert'); return; }
-    // 制海権の確認 (25%以上必要)
+    // 制海権の確認 (MtG: 50%以上必要)
     if (!army.divisions.length) { GameUI.notify('上陸する師団を配属してください。', 'alert'); return; }
     const sup = typeof NavalForce !== 'undefined' ? NavalForce.invasionSuperiority(coastalPid) : (CoreEngine.gameState.navalSupremacy || 0);
-    if (sup < 25) { GameUI.notify('⚓ 上陸地点近海の制海権が不足しています (25%以上必要・現在' + Math.floor(sup) + '%)。任務部隊を近海に展開して制海権を確保してください。', 'alert'); return; }
+    if (sup < 50) { GameUI.notify('⚓ 上陸地点近海の制海権が不足しています (50%以上必要・現在' + Math.floor(sup) + '%)。任務部隊を近海に展開して制海権を確保してください。', 'alert'); return; }
     // 上陸開始 (陸路接続は不要 — これが強襲上陸)
     const c = MapRenderer.stateCenter.get(String(sid)) || wp;
     army.executing = true; army.progress = 0; army.chain = null;
@@ -6752,6 +6790,10 @@ class GameUI {
     WindowManager.open(tabName);
   }
 
+  static isOpen(tabName) {
+    return WindowManager.windows.has(tabName);
+  }
+
   // ウィンドウが開かれた時に対応するパネルを再描画
   static onWindowOpened(tabName) {
     // タブオープン時に動的画像ロードをトリガー (遅延読み込み)
@@ -6800,6 +6842,89 @@ class GameUI {
   static closeModal() {
     IntelOperations.closeMission();
     document.getElementById('generic-modal-overlay').classList.add('hidden');
+  }
+}
+
+// ==========================================================
+// NavRail — 上部ウィンドウボタンの並び順を管理
+// ----------------------------------------------------------
+// ウィンドウは DLC 拡張 (dlc.js) / strategy.js / frontline-command.js などが
+// 起動時にボタンを追加する。追加順は読み込み順に依存して分かりにくいため、
+// ここで「内政 → 軍事 → 経済 → 外交・諜報 → 特殊 → システム」の順に並べ直す。
+// MutationObserver で動的追加にも追従する。
+// ==========================================================
+class NavRail {
+  static ORDER = [
+    'politics', 'focus', 'research', 'production', 'designer', 'superweapons',
+    'division', 'cards', 'airforce', 'navy', 'training', 'logistics', 'doctrine', 'force-doctrine', 'command', 'traits',
+    'construction', 'trade', 'decisions', 'mio',
+    'diplomacy', 'intel', 'peace', 'nation', 'labs',
+    'multiplayer', 'winsave', 'map'
+  ];
+  static GROUPS = {
+    politics: 'state', focus: 'state', research: 'state', production: 'state', designer: 'state', superweapons: 'state',
+    division: 'military', cards: 'military', airforce: 'military', navy: 'military', training: 'military', logistics: 'military',
+    doctrine: 'military', 'force-doctrine': 'military', command: 'military', traits: 'military',
+    construction: 'industry', trade: 'industry', decisions: 'industry', mio: 'industry',
+    diplomacy: 'diplomacy', intel: 'diplomacy', peace: 'diplomacy', nation: 'diplomacy', labs: 'diplomacy',
+    multiplayer: 'system', winsave: 'system', map: 'system'
+  };
+  static ready = false;
+  static observer = null;
+  static tabOf(btn) {
+    if (!btn) return null;
+    const explicit = btn.dataset?.tab;
+    if (explicit) return explicit;
+    const action = btn.getAttribute?.('onclick') || '';
+    const match = /switchTab\(['"]([^'"]+)['"]\)/.exec(action);
+    if (match) return match[1];
+    if (/closeAll\(/.test(action)) return 'map';
+    return null;
+  }
+  static rank(btn, fallback) {
+    const idx = NavRail.ORDER.indexOf(NavRail.tabOf(btn));
+    return idx < 0 ? NavRail.ORDER.length + fallback : idx;
+  }
+  static init() {
+    if (NavRail.ready) return;
+    const rail = document.getElementById('window-nav');
+    if (!rail) return;
+    NavRail.ready = true;
+    NavRail.sort();
+    try {
+      NavRail.observer = new MutationObserver(() => {
+        if (NavRail._sorting) return;
+        NavRail.sort();
+      });
+      NavRail.observer.observe(rail, { childList: true });
+    } catch (error) { /* MutationObserver 非対応環境では初回の並べ替えのみ */ }
+  }
+  static sort() {
+    const rail = document.getElementById('window-nav');
+    if (!rail) return;
+    const children = Array.from(rail.children);
+    const label = children.find(node => !node.classList?.contains('win-btn')) || null;
+    const buttons = children.filter(node => node.classList?.contains('win-btn'));
+    if (buttons.length < 2) return;
+    const keyed = buttons.map((btn, index) => ({ btn, index, rank: NavRail.rank(btn, index) }));
+    keyed.sort((a, b) => a.rank - b.rank || a.index - b.index);
+    const ordered = keyed.map(item => item.btn);
+    // グループの先頭に区切り線を付ける (並び順が変わらなくても適用する)
+    let prevGroup = null;
+    ordered.forEach(btn => {
+      const group = NavRail.GROUPS[NavRail.tabOf(btn)] || null;
+      const start = !!group && !!prevGroup && group !== prevGroup;
+      btn.classList.toggle('nav-group-start', start);
+      if (group) prevGroup = group;
+    });
+    const changed = ordered.some((btn, index) => btn !== buttons[index]) || (label && rail.firstElementChild !== label);
+    if (!changed) return;
+    NavRail._sorting = true;
+    const fragment = document.createDocumentFragment();
+    if (label) fragment.appendChild(label);
+    ordered.forEach(btn => fragment.appendChild(btn));
+    rail.appendChild(fragment);
+    NavRail._sorting = false;
   }
 }
 
@@ -6886,6 +7011,7 @@ async function initGame() {
   if (typeof SupplyNetwork !== 'undefined') SupplyNetwork.init();   // 補給網・インフラ・補給ハブ
   if (typeof AirForce !== 'undefined') AirForce.init();             // 空軍: 航空隊配備・任務・制空権
   if (typeof NavalForce !== 'undefined') NavalForce.init();         // 海軍: 艦隊編成・海域任務・海戦・制海権
+  if (typeof AirNavalDesign !== 'undefined') AirNavalDesign.init();   // BBA/MtG: 機体・艦艇設計 / 司令官カード / 作戦半径
   if (typeof TradeSystem !== 'undefined') TradeSystem.init();       // 貿易: 州資源産出・民需工場による輸入・生産効率
   if (typeof PeaceSystem !== 'undefined') PeaceSystem.init();       // 講和会議・戦勝点・傀儡国と自治度
   if (typeof PoliticsSystem !== 'undefined') PoliticsSystem.init();   // 政治: 法案・閣僚・政党支持率・国家補正
@@ -6898,6 +7024,7 @@ async function initGame() {
   CheatConsole.init();
   MultiplayerManager.init();
   MultiplayerTimeManager.init();
+  if (typeof MPHub !== 'undefined') { MPHub.init(); MPHub.afterTimeManagerInit(); }   // マルチ: ロビー・チャット・右クリック外交・通信状態
   UniqueNationSystems.init();
   if (typeof NewsManager !== 'undefined') NewsManager.init();   // ニュースイベント (世界の出来事を報道)
   if (typeof AIManager !== 'undefined') AIManager.init();       // 非プレイヤー国のAI自動操作 (史実準拠)
@@ -6931,7 +7058,10 @@ async function initGame() {
   GameUI.notify('Hearts of Iron IV × 将軍カードゲーム 開始！', 'success');
 }
 
-window.addEventListener('DOMContentLoaded', () => StartScreen.show());
+window.addEventListener('DOMContentLoaded', () => {
+  NavRail.init();
+  StartScreen.show();
+});
 </script>
 <!-- ==================== 戦闘シミュレーション (戦闘マーカー・占領ロジック) ==================== -->
 <script src="battle.js?v=area-plan-1"></script>
@@ -6956,7 +7086,8 @@ window.addEventListener('DOMContentLoaded', () => StartScreen.show());
   <script src="assets/supply-network.js?v=supply-1"></script>
   <script src="assets/air-force.js?v=air-1"></script>
   <script src="assets/naval-force.js?v=navy-1"></script>
-  <script src="assets/trade-resources.js?v=trade-1"></script>
+  <script src="assets/air-naval-design.js?v=and-1"></script>
+  <script src="assets/trade-resources.js?v=trade-2"></script>
   <script src="assets/peace-conference.js?v=peace-1"></script>
   <script src="assets/politics-cabinet.js?v=pol-1"></script>
   <script src="assets/occupation.js?v=occ-1"></script>
@@ -6965,6 +7096,7 @@ window.addEventListener('DOMContentLoaded', () => StartScreen.show());
   <script src="assets/superweapons.js?v=sw-2"></script>
   <script src="assets/frontline-command.js?v=fc-1"></script>
   <script src="assets/MultiplayerTimeManager.js"></script>
+  <script src="assets/multiplayer-hub.js?v=mph-1"></script>
   <!-- ==================== HOI4 大戦略 全画面レイヤー (../hoi4.html / H キー) ==================== -->
   <script src="hoi4-screen.js"></script>
   </body>

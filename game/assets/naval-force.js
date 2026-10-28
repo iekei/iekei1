@@ -358,7 +358,7 @@ class NavalForce {
         const tag = s.atWar.find(t => t !== s.country);
         const acc = ProductionManager.account(tag), conv = Math.floor(Number(acc.stock?.convoys ?? 0) || 0);
         const escorts = fleets.filter(f => Math.hypot(f.x - tf.zone.x, f.y - tf.zone.y) <= NavalForce.RADIUS).reduce((t, f) => t + NavalForce.enemyStats(f).screens, 0);
-        const chance = Math.min(0.5, st.torpedo * 0.004 / (1 + escorts * 0.25));
+        const chance = Math.min(0.5, st.torpedo * 0.004 * (st.raid || 1) / (1 + escorts * 0.25));
         if (conv > 0 && Math.random() < chance) {
           const sunk = Math.min(conv, 1 + Math.floor(Math.random() * Math.max(1, st.subs / 3)));
           acc.stock.convoys = conv - sunk; n.convoySunk = (n.convoySunk || 0) + sunk;
@@ -567,7 +567,7 @@ class NavalForce {
     const n = NavalForce.data(), battle = n.battles.find(b => b.tfIds.includes(tf.id));
     const zoneName = tf.zone ? (typeof WarSystems !== 'undefined' ? WarSystems.provinceName(tf.zone.pid) : '海域 ' + tf.zone.pid) : null;
     const sup = tf.zone ? NavalForce.superiority(tf.zone.x, tf.zone.y) : null;
-    let html = '<div class="nf-tf' + (NavalForce.selected === tf.id ? ' selected' : '') + (tf.executing ? ' sailing' : '') + (battle ? ' battle' : '') + '" onclick="NavalForce.select(\'' + tf.id + '\');BattlePlanManager.activeForce=\'navy\';BattlePlanManager.selectedUnitId=\'' + tf.id + '\'">' +
+    let html = '<div class="nf-tf' + (NavalForce.selected === tf.id ? ' selected' : '') + (tf.executing ? ' sailing' : '') + (battle ? ' battle' : '') + '" data-tf-id="' + tf.id + '" onclick="NavalForce.select(\'' + tf.id + '\');BattlePlanManager.activeForce=\'navy\';BattlePlanManager.selectedUnitId=\'' + tf.id + '\'">' +
       '<div class="nf-tf-head"><span class="nf-tf-icon">' + m.icon + '</span><input class="nf-name" value="' + NavalForce.esc(tf.name) + '" onchange="NavalForce.rename(\'' + tf.id + '\',this.value)" onclick="event.stopPropagation()">' +
       '<span class="nf-status' + (tf.executing ? ' on' : '') + (battle ? ' fight' : '') + '">' + (battle ? '⚔️ 交戦中 ' + battle.hours + 'h' : tf.executing ? '出撃中: ' + m.label + (zoneName ? ' @' + NavalForce.esc(zoneName) : '') : '在泊') + '</span></div>' +
       '<div class="nf-tf-grid">' +
@@ -577,6 +577,7 @@ class NavalForce {
       '<label>制海権<b style="color:' + (sup ? NavalForce.LEVELS[sup.level].color : '#8a9096') + '">' + (sup ? sup.percent + '% (' + NavalForce.LEVELS[sup.level].label + ')' : '—') + '</b></label>' +
       '</div>' +
       '<p class="nf-mission-desc">' + m.desc + '</p>' +
+      (typeof AirNavalDesign !== 'undefined' ? AirNavalDesign.tfSlotHTML(tf) : '') +
       '<div class="nf-comp">' + NavalForce.ORDER.map(type => {
         const d = NavalForce.SHIPS[type], cnt = ships.filter(sh => sh.type === type).length, avail = reserve.filter(sh => sh.type === type).length;
         return '<div class="nf-comp-row"><span>' + d.icon + ' ' + d.label + '</span><div class="nf-comp-ctl"><button class="af-mini" ' + (cnt ? '' : 'disabled') + ' onclick="event.stopPropagation();NavalForce.move(\'' + tf.id + '\',\'' + type + '\',-1)">−</button><b>' + cnt + '</b><button class="af-mini" ' + (avail ? '' : 'disabled') + ' onclick="event.stopPropagation();NavalForce.move(\'' + tf.id + '\',\'' + type + '\',1)">＋</button><button class="af-mini" ' + (avail ? '' : 'disabled') + ' title="予備を全て配属" onclick="event.stopPropagation();NavalForce.move(\'' + tf.id + '\',\'' + type + '\',99)">全</button></div></div>';
@@ -636,7 +637,7 @@ class NavalForce {
     const html = '<div class="af-modal">' +
       '<div class="af-modal-head"><span>🌊</span><div><h3>海域: ' + NavalForce.esc(name) + '</h3><small>海域ID ' + pid + ' ／ 影響半径内の部隊 ' + here.length + ' ／ 敵艦隊 ' + fleets.filter(f => f.detected).length + ' (発見済)' + '</small></div></div>' +
       '<div class="af-modal-sup"><div class="af-sup big"><em style="width:' + sup.percent + '%"></em><span>' + (sup.level === 'none' ? '艦隊が展開していません' : '自軍 ' + sup.percent + '% ／ 敵軍 ' + (100 - sup.percent) + '%') + '</span></div>' +
-      '<div class="af-modal-row"><span>状態</span><b style="color:' + lv.color + '">' + lv.label + '</b></div><div class="af-modal-row"><span>自軍戦力 / 敵戦力</span><b>' + sup.own + ' / ' + sup.enemy + '</b></div><div class="af-modal-row"><span>強襲上陸</span><b>' + (sup.percent >= 25 ? '✅ 可能 (制海権25%以上)' : '❌ 不可 (制海権25%未満)') + '</b></div></div>' +
+      '<div class="af-modal-row"><span>状態</span><b style="color:' + lv.color + '">' + lv.label + '</b></div><div class="af-modal-row"><span>自軍戦力 / 敵戦力</span><b>' + sup.own + ' / ' + sup.enemy + '</b></div><div class="af-modal-row"><span>強襲上陸</span><b>' + (sup.percent >= 50 ? '✅ 可能 (制海権50%以上)' : '❌ 不可 (制海権50%未満)') + '</b></div></div>' +
       (battles.length ? '<div class="af-modal-list"><h4>⚔️ 進行中の海戦</h4>' + battles.map(b => '<div><b>' + NavalForce.esc(b.enemyName) + '</b> ' + b.hours + 'h ／ 撃沈 ' + b.sunkEnemy + ' 喪失 ' + b.sunkOwn + '<div class="nf-log small">' + b.log.slice(0, 4).map(l => '<div>' + NavalForce.esc(l) + '</div>').join('') + '</div></div>').join('') + '</div>' : '') +
       '<div class="af-modal-list"><h4>展開中の任務部隊</h4>' + (here.length ? here.map(tf => '<div>' + NavalForce.MISSIONS[tf.mission].icon + ' ' + NavalForce.esc(tf.name) + ' — ' + NavalForce.MISSIONS[tf.mission].label + ' ' + tf.ships.length + '隻' + (tf.executing ? '' : ' (在泊)') + '</div>').join('') : '<div class="sn-help">なし</div>') + '</div>' +
       '<div class="af-modal-list"><h4>敵艦隊 (半径内)</h4>' + (fleets.length ? fleets.map(f => '<div>' + (f.detected ? '🔴 ' : '❔ ') + NavalForce.esc(f.name) + ' ' + (f.detected ? f.ships.length + '隻 ／ 戦力 ' + Math.round(NavalForce.enemyStats(f).power) : '未発見 (哨戒で捜索 ' + Math.round(f.detectProgress || 0) + '%)') + '</div>').join('') : '<div class="sn-help">敵艦隊の反応なし</div>') + '</div>' +

@@ -347,7 +347,10 @@ class AirForce {
             const kills = AirForce.effective(w) * def.airAttack * 0.01 * (0.5 + sup.ratio);
             sup.enemyTags.forEach(tag => { const e = s.strategy.enemyAir[tag]; if (e) e.planes = Math.max(0, e.planes - kills / sup.enemyTags.length); });
           }
-          if (w.mission === 'strategic') AirForce.strategicBombing(w, sid, sup);
+          if (w.mission === 'strategic') {
+            if (typeof AirNavalDesign !== 'undefined') AirNavalDesign.strategicStrike(w, sid, sup);
+            else AirForce.strategicBombing(w, sid, sup);
+          }
           w.experience = Math.min(100, w.experience + 0.5);
         });
         // 国家の制空権指標 (核攻撃条件などで参照) を空域の平均に寄せる
@@ -487,7 +490,7 @@ class AirForce {
     const avail = AirForce.availableOf(w.aircraftType, w.id);
     const m = AirForce.MISSIONS[w.mission] || AirForce.MISSIONS.air_sup;
     const sup = w.zone && AirForce.zoneSid(w) ? AirForce.superiority(AirForce.zoneSid(w)) : null;
-    return '<div class="af-wing' + (sel ? ' selected' : '') + (w.executing ? ' flying' : '') + '" onclick="AirForce.select(\'' + w.id + '\')">' +
+    return '<div class="af-wing' + (sel ? ' selected' : '') + (w.executing ? ' flying' : '') + '" data-wing-id="' + w.id + '" onclick="AirForce.select(\'' + w.id + '\')">' +
       '<div class="af-wing-head"><span class="af-wing-icon">' + def.icon + '</span>' +
       '<input class="af-name" value="' + AirForce.esc(w.name) + '" onclick="event.stopPropagation()" onchange="AirForce.rename(\'' + w.id + '\',this.value)">' +
       '<span class="af-status ' + (w.executing ? 'on' : '') + '">' + (w.executing ? m.icon + ' ' + m.label + '中' : ready ? '待機' : '未配備') + '</span>' +
@@ -496,8 +499,9 @@ class AirForce {
       '<label>基地<select onchange="AirForce.setBase(\'' + w.id + '\',this.value)"><option value="">未配備</option>' + bases.map(([sid, st]) => '<option value="' + sid + '"' + (String(sid) === String(w.baseStateId) ? ' selected' : '') + '>' + AirForce.esc(st.name) + ' (Lv.' + st.b.air_base + ' ' + AirForce.baseLoad(sid) + '/' + AirForce.baseCapacity(sid) + ')</option>').join('') + '</select></label>' +
       '<label>機種<select onchange="AirForce.setType(\'' + w.id + '\',this.value)">' + Object.values(AirForce.AIRCRAFT).map(d => '<option value="' + d.id + '"' + (d.id === w.aircraftType ? ' selected' : '') + '>' + d.icon + ' ' + d.name + ' (' + AirForce.availableOf(d.id, w.id) + ')</option>').join('') + '</select></label>' +
       '<label>機体数<span class="af-count"><input type="number" min="0" max="' + (w.aircraftCount + avail) + '" value="' + w.aircraftCount + '" onchange="AirForce.setCount(\'' + w.id + '\',this.value)"><button class="af-mini" onclick="AirForce.fillCount(\'' + w.id + '\')" title="配備可能な全機を割り当て">最大</button></span></label>' +
-      '<label>任務<select onchange="AirForce.setMission(\'' + w.id + '\',this.value)">' + Object.values(AirForce.MISSIONS).map(x => '<option value="' + x.id + '"' + (x.id === w.mission ? ' selected' : '') + (def.missions.includes(x.id) ? '' : ' disabled') + '>' + x.icon + ' ' + x.label + '</option>').join('') + '</select></label>' +
+      '<label>任務<select onchange="AirForce.setMission(\'' + w.id + '\',this.value)">' + Object.values(AirForce.MISSIONS).map(x => '<option value="' + x.id + '"' + (x.id === w.mission ? ' selected' : '') + ((typeof AirNavalDesign !== 'undefined' ? AirNavalDesign.missionAllowed(w, x.id) : def.missions.includes(x.id)) ? '' : ' disabled') + '>' + x.icon + ' ' + x.label + '</option>').join('') + '</select></label>' +
       '</div>' +
+      (typeof AirNavalDesign !== 'undefined' ? AirNavalDesign.wingSlotHTML(w) : '') +
       '<div class="af-wing-stats" onclick="event.stopPropagation()">' +
       '<div><span>練度</span>' + AirForce.bar(w.experience, '#c9a44c') + '<b>' + Math.round(w.experience) + '%</b></div>' +
       '<div><span>稼働率</span>' + AirForce.bar(w.readiness, w.readiness > 50 ? '#7fa84f' : '#e04a3c') + '<b>' + Math.round(w.readiness) + '%</b></div>' +

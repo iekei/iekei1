@@ -6,11 +6,11 @@
 #sw-stock.armed { border-color: #ffb020; box-shadow: 0 0 6px rgba(255, 176, 32, .5); }
 
 .sw-root { font-size: 12px; color: #d8dde3; padding: 6px 8px 12px; }
-.sw-head { display: flex; gap: 14px; align-items: center; padding: 10px 12px; margin-bottom: 8px; background: linear-gradient(135deg, #1b1f2a, #2a2416); border: 1px solid #5a4a22; border-radius: 6px; }
+.sw-head { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; padding: 10px 12px; margin-bottom: 8px; background: linear-gradient(135deg, #1b1f2a, #2a2416); border: 1px solid #5a4a22; border-radius: 6px; }
 .sw-mark { font-size: 42px; }
 .sw-head h3 { margin: 0; color: #ffd45a; font-size: 18px; } .sw-head h3 small { color: #9aa; font-size: 10px; letter-spacing: 2px; margin-left: 8px; }
 .sw-head p { margin: 4px 0 0; color: #bcc; } .sw-head p b { color: #fff; }
-.sw-kpis { margin-left: auto; display: flex; gap: 10px; }
+.sw-kpis { margin-left: auto; display: flex; flex-wrap: wrap; gap: 10px; }
 .sw-kpi { min-width: 150px; padding: 6px 10px; border-radius: 6px; background: #10131a; border: 1px solid #3a3f4a; text-align: center; }
 .sw-kpi small { display: block; color: #8a9aaa; font-size: 10px; } .sw-kpi b { display: block; font-size: 20px; } .sw-kpi span { display: block; font-size: 10px; color: #9ab; }
 .sw-kpi.nuke b { color: #ffd45a; } .sw-kpi.rocket b { color: #9fd0ff; }
@@ -90,3 +90,156 @@
 .sw-sci-card.busy { border-color: #d0a030; } .sw-sci-card em { font-style: normal; font-size: 10px; color: #ffd45a; }
 .sw-field { font-size: 10px; padding: 1px 6px; border-radius: 8px; background: #222838; color: #ccd; }
 .sw-field.nuclear { background: #4a2a10; color: #ffd45a; } .sw-field.rocket { background: #10304a; color: #9fd0ff; } .sw-field.jet { background: #1a3a2a; color: #9fe09f; }
+
+/* ==========================================================
+   終末兵器・特殊計画 — 3カラム (研究 / 備蓄・運用 / 履歴・統計)
+   ========================================================== */
+#superweapons-content { flex: 1 1 auto; min-height: 0; overflow: hidden; padding: 0; display: flex; }
+.sw-root { flex: 1 1 auto; min-width: 0; height: 100%; display: flex; flex-direction: column; overflow: hidden; padding: 10px 12px 12px; }
+.sw-head { flex: 0 0 auto; margin-bottom: 10px; }
+.sw-head-text { min-width: 0; }
+.sw-head-text p { line-height: 1.5; }
+.sw-kpis { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+.sw-kpi { min-width: 128px; }
+.sw-kpi b { font-size: 18px; }
+
+.sw-layout { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: minmax(300px, 1.05fr) minmax(320px, 1fr) minmax(270px, .92fr); gap: 10px; }
+.sw-col { min-height: 0; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; gap: 8px; padding-right: 4px; scrollbar-width: thin; }
+.sw-col > .sw-panel { flex: 0 0 auto; margin-bottom: 0; }
+.sw-col-left .sw-projects { grid-template-columns: 1fr; }
+.sw-col-center .sw-panel { border-color: #4a4030; }
+.sw-col-right .sw-panel { border-color: #35404c; }
+@media (max-width: 1080px) {
+  .sw-layout { grid-template-columns: 1fr; overflow-y: auto; }
+  .sw-col { overflow: visible; }
+  #superweapons-content { overflow: auto; }
+  .sw-root { height: auto; }
+}
+
+/* 左カラム */
+.sw-inline { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+.sw-rate { color: #9fe09f; font-size: 11px; white-space: nowrap; }
+.sw-col-left .sw-controls { gap: 6px; }
+.sw-col-left .sw-controls select { max-width: 100%; }
+.sw-details { padding: 6px 10px; }
+.sw-details > summary { cursor: pointer; color: #ffd45a; font-size: 12px; font-weight: 700; }
+.sw-details[open] > summary { margin-bottom: 6px; }
+.sw-col-left .sw-roster { grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); }
+.sw-col-left .sw-pimg { width: 72px; height: 44px; }
+.sw-chips span { font-size: 11px; }
+
+/* 中央カラム */
+.sw-center-nuke { border-color: #7a3020 !important; background: linear-gradient(180deg, rgba(60, 20, 14, .9), rgba(18, 20, 28, .9)); }
+.sw-stock-summary { display: flex; align-items: center; gap: 14px; margin: 2px 0 8px; }
+.sw-big { font-size: 40px; line-height: 1; color: #ffd45a; text-shadow: 0 0 14px rgba(255, 160, 40, .5); }
+.sw-big small { font-size: 12px; color: #c8b48a; margin-left: 3px; }
+.sw-stock-summary div { display: flex; flex-direction: column; gap: 3px; font-size: 11px; color: #bcc; }
+.sw-bombs { display: flex; flex-wrap: wrap; gap: 2px; min-height: 26px; align-items: center; margin-bottom: 8px; }
+.sw-bomb { font-size: 20px; color: #ffd45a; filter: drop-shadow(0 0 5px rgba(255, 180, 40, .65)); }
+.sw-more { font-size: 11px; color: #c8b48a; margin-left: 4px; }
+.sw-launch-btn { width: 100%; padding: 13px 10px; margin: 2px 0 6px; font-size: 15px; font-weight: 800; letter-spacing: .5px; color: #fff; cursor: pointer;
+  border: 2px solid #ff6a4a; border-radius: 6px; background: linear-gradient(180deg, #8a2a1a, #460c0c); box-shadow: 0 0 16px rgba(255, 80, 40, .35); }
+.sw-launch-btn:hover:not(:disabled) { background: linear-gradient(180deg, #b03a22, #5a1010); box-shadow: 0 0 22px rgba(255, 90, 50, .6); }
+.sw-launch-btn:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
+.sw-delivery { display: flex; flex-direction: column; gap: 4px; }
+.sw-delivery-row { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; border-bottom: 1px dotted #2a3040; font-size: 12px; }
+.sw-delivery-row b { color: #fff; }
+.sw-wing-list { display: flex; flex-direction: column; gap: 4px; margin: 4px 0; }
+.sw-wing { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; padding: 4px 6px; border-radius: 4px; background: #171d27; border: 1px solid #2c3542; font-size: 11px; }
+.sw-wing small { grid-column: 1 / -1; color: #8a9aaa; }
+.sw-wing b { color: #9fd0ff; }
+.sw-candidates { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+@media (max-width: 1400px) { .sw-candidates { grid-template-columns: 1fr; } }
+.sw-candidate { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; padding: 5px 7px; border-radius: 4px; cursor: pointer;
+  background: #151a22; border: 1px solid #333c48; color: #d8dde3; text-align: left; font-size: 11px; }
+.sw-candidate:hover { border-color: #ff6a4a; background: #201614; }
+.sw-candidate.ready { border-color: #b04a30; box-shadow: inset 0 0 10px rgba(255, 90, 50, .18); }
+.sw-cand-name { font-weight: 700; color: #fff; }
+.sw-cand-owner { color: #94a2b0; font-size: 10px; }
+.sw-cand-state { color: #ff9a7a; font-size: 10px; }
+.sw-candidate.ready .sw-cand-state { color: #9fe09f; }
+.sw-help-list { margin: 4px 0 0 16px; padding: 0; color: #9aa6b2; font-size: 11px; line-height: 1.7; }
+
+/* 右カラム */
+.sw-damage-table th, .sw-damage-table td { padding: 3px 5px; font-size: 11px; }
+.sw-damage-table thead th { color: #8a9aaa; font-weight: 600; text-align: left; }
+.sw-damage-table td.down { color: #ff8a72; font-weight: 700; }
+.sw-history { display: flex; flex-direction: column; gap: 5px; max-height: 320px; overflow: auto; }
+.sw-history-row { padding: 5px 6px; border-radius: 4px; background: #161b24; border-left: 3px solid #b04a30; font-size: 11px; }
+.sw-history-row b { color: #fff; }
+.sw-history-row small { color: #93a0ad; }
+.sw-history-fx { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 3px; color: #ff9a7a; font-size: 10px; }
+
+/* 上部バーの核備蓄インジケーター */
+#sw-stock { display: inline-flex; gap: 6px; align-items: center; font-size: 12px; padding: 2px 9px; border: 1px solid #4a4a2a; background: linear-gradient(180deg, #2a2a1a, #1a1a10); color: #e8dca0; }
+#sw-stock .sw-stock-icon { font-size: 18px; line-height: 1; color: #ffd45a; filter: drop-shadow(0 0 5px rgba(255, 176, 32, .7)); }
+#sw-stock .sw-stock-value { display: flex; flex-direction: column; align-items: center; line-height: 1.05; }
+#sw-stock .sw-stock-value b { font-size: 15px; color: #fff; font-variant-numeric: tabular-nums; }
+#sw-stock .sw-stock-value small { font-size: 8px; color: #c9b98a; letter-spacing: .5px; }
+#sw-stock .sw-rocket { font-size: 10px; color: #9fd0ff; border-left: 1px solid #4a4a2a; padding-left: 6px; }
+#sw-stock.armed { border-color: #ffb020; box-shadow: 0 0 8px rgba(255, 176, 32, .6); animation: sw-stock-pulse 2.4s ease-in-out infinite; }
+@keyframes sw-stock-pulse { 0%, 100% { box-shadow: 0 0 6px rgba(255, 176, 32, .35); } 50% { box-shadow: 0 0 14px rgba(255, 176, 32, .8); } }
+#sw-target-btn { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; font-size: 14px; line-height: 1; padding: 2px 7px; }
+#sw-target-btn small { font-size: 8px; color: #d0b090; letter-spacing: .3px; }
+#sw-target-btn.active { border-color: #ff6a4a; background: linear-gradient(180deg, #6a1c12, #2a0a08); box-shadow: 0 0 12px rgba(255, 90, 50, .8); }
+#sw-target-btn:disabled { opacity: .45; cursor: not-allowed; }
+
+/* 核攻撃ターゲット選択モード */
+body.sw-targeting, body.sw-targeting #map-canvas, body.sw-targeting #map-canvas * { cursor: crosshair !important; }
+body.sw-targeting #map-canvas { outline: 2px solid rgba(255, 106, 74, .75); outline-offset: -4px; box-shadow: inset 0 0 60px rgba(255, 60, 30, .25); }
+#sw-target-banner { position: fixed; top: 96px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; align-items: center; gap: 12px;
+  padding: 8px 14px; border: 1px solid #ff6a4a; border-radius: 6px; color: #ffd0c0; font-size: 12px;
+  background: linear-gradient(180deg, #3a1010, #180808); box-shadow: 0 0 22px rgba(255, 60, 30, .55); pointer-events: auto; }
+#sw-target-banner b { display: block; color: #fff; font-size: 13px; letter-spacing: .5px; }
+#sw-target-banner small { display: block; color: #d0a090; font-size: 11px; }
+#sw-target-banner .sw-banner-stock { color: #ffd45a; font-weight: 700; white-space: nowrap; }
+#sw-target-banner button { padding: 4px 10px; border-radius: 4px; border: 1px solid #ff6a4a; background: #2a0c0a; color: #ffd0c0; cursor: pointer; font-size: 11px; }
+#sw-target-banner button:hover { background: #4a1410; }
+.sw-crosshair { font-size: 22px; animation: sw-pulse 1.2s infinite; }
+
+/* 確認ダイアログ */
+.sw-confirm .sw-warning { font-size: 14px; color: #ffe0d0; background: rgba(120, 30, 20, .35); border: 1px solid #7a3020; border-radius: 4px; padding: 8px 10px; margin: 0 0 6px; }
+.sw-confirm .sw-warning b { color: #fff; font-size: 15px; }
+.sw-confirm .sw-use { color: #ffd45a; font-weight: 700; margin-left: 8px; }
+.sw-confirm .sw-stock-now { color: #b8c4d0; font-size: 11px; margin-left: 6px; }
+.sw-confirm-grid { display: grid; grid-template-columns: minmax(240px, 1fr) minmax(260px, 1.2fr); gap: 12px; }
+@media (max-width: 780px) { .sw-confirm-grid { grid-template-columns: 1fr; } }
+.sw-confirm-col h4 { margin: 6px 0; font-size: 12px; color: #ffd45a; }
+.sw-confirm-col .sw-table th { text-align: left; color: #9aa6b2; font-weight: 500; vertical-align: top; padding: 3px 6px; }
+.sw-confirm-col .sw-table td { color: #e0e6ec; font-size: 11px; }
+.sw-ng-note { margin: 8px 0 0; padding: 6px 8px; border-radius: 4px; background: rgba(120, 30, 20, .3); border: 1px solid #6a2a1a; color: #ffb0a0; font-size: 11px; }
+
+/* キノコ雲を対象州の座標に描画する */
+.sw-nuke-fx { --sw-x: 50vw; --sw-y: 55vh; }
+.sw-shock { left: var(--sw-x) !important; top: var(--sw-y) !important; }
+.sw-mushroom { left: var(--sw-x) !important; top: var(--sw-y) !important; bottom: auto !important; transform: translate(-50%, -85%) scale(.2); animation: sw-mush-pos 3.6s .5s ease-out forwards; }
+@keyframes sw-mush-pos {
+  0% { opacity: 0; transform: translate(-50%, -85%) scale(.2); }
+  20% { opacity: 1; }
+  80% { opacity: 1; transform: translate(-50%, -85%) scale(1.05); }
+  100% { opacity: 0; transform: translate(-50%, -85%) scale(1.15); }
+}
+
+/* 州情報オーバーレイ: 核攻撃後の廃墟表示 */
+.sw-ruin-note {
+  display: inline-block;
+  margin-top: 2px;
+  padding: 1px 6px;
+  border: 1px solid rgba(226, 182, 75, .45);
+  border-radius: 3px;
+  background: rgba(40, 26, 10, .55);
+  color: #e8d9b0;
+  font-size: 10.5px;
+  line-height: 1.5;
+}
+
+.sw-nuke-btn,
+.sw-missile-btn {
+  margin-top: 4px;
+}
+
+.sw-nuke-btn.ready {
+  border-color: #d4574a;
+  color: #ffd9d2;
+  background: linear-gradient(180deg, #5a1d16, #33100c);
+}

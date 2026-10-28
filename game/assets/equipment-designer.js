@@ -696,6 +696,21 @@
       }
     });
     if (!draft.name || draft.name === previousDefault) draft.name = defaultName(cat, hull);
+    // 車体・船体・機体を選ぶと、その設計図に切り替える
+    if (this.bpFocus) this.bpFocus[cat] = 'hull';
+    this.render();
+    return true;
+  };
+
+  /** 設計図の表示対象: 'full' | 'hull' | スロット ID */
+  Designer.blueprintFocus = function (cat) {
+    this.bpFocus ||= {};
+    return this.bpFocus[cat] || 'full';
+  };
+  Designer.setBlueprintFocus = function (cat, focus) {
+    if (!focus || (focus !== 'full' && focus !== 'hull' && !(DATA[cat] && DATA[cat].slots.some(slot => slot.id === focus)))) return false;
+    this.bpFocus ||= {};
+    this.bpFocus[cat] = focus;
     this.render();
     return true;
   };
@@ -713,6 +728,7 @@
         return false;
       }
       draft.modules[slot.id] = '';
+      if (this.bpFocus) this.bpFocus[cat] = slot.id;
       this.render();
       return true;
     }
@@ -728,6 +744,8 @@
       return false;
     }
     draft.modules[slot.id] = option.id;
+    // 選んだモジュールの設計図に切り替える
+    if (this.bpFocus) this.bpFocus[cat] = slot.id;
     this.render();
     return true;
   };
@@ -958,6 +976,9 @@
   }
 
   Designer.openSlotPicker = function (slotId) {
+    this.bpFocus ||= {};
+    this.bpFocus[this.category] = slotId;
+    this.render();
     const html = this.slotPickerHtml(slotId);
     if (!html || typeof document === 'undefined' || !document.body) return;
     this.closeSlotPicker();
@@ -1015,7 +1036,7 @@
   // ==========================================================
   // 設計図（シルエット SVG）
   // ==========================================================
-  function blueprintFrame(cat, title, subtitle, content, extraClass) {
+  function blueprintFrame(cat, title, subtitle, content, extraClass, scaleLabel) {
     return '' +
       '<svg class="eqd-svg ' + (extraClass || '') + '" viewBox="0 0 560 260" role="img" aria-label="' + esc(title) + ' の設計図">' +
       '<defs><pattern id="eqd-grid-' + cat + '" width="28" height="28" patternUnits="userSpaceOnUse">' +
@@ -1025,7 +1046,7 @@
       content +
       '<text class="eqd-bp-title" x="28" y="34">' + esc(title) + '</text>' +
       '<text class="eqd-bp-sub" x="532" y="34" text-anchor="end">' + esc(subtitle) + '</text>' +
-      '<text class="eqd-bp-scale" x="532" y="232" text-anchor="end">SCALE 1:35 · ' + esc(CATEGORY_META[cat].blueprintLabel) + '</text>' +
+      '<text class="eqd-bp-scale" x="532" y="232" text-anchor="end">SCALE 1:35 · ' + esc(scaleLabel || CATEGORY_META[cat].blueprintLabel) + '</text>' +
       '</svg>';
   }
 
@@ -1170,10 +1191,161 @@
       fmt(hull.baseSpeed, 0) + ' km/h · ' + fmt(hull.weight, 0) + ' t', content, 'eqd-svg-plane');
   }
 
-  function blueprintSvg(cat, hull, modules) {
+  // ==========================================================
+  // モジュール別ブループリント (スロットを選ぶと設計図が切り替わる)
+  // ==========================================================
+  const SLOT_DRAWING = {
+    engine: function (cat) {
+      const propeller = cat === 'plane'
+        ? '<g class="eqd-accent"><circle cx="90" cy="138" r="46" fill="none"/><path d="M90 92 v92 M44 138 h92"/><circle cx="90" cy="138" r="9"/></g>'
+        : '<g class="eqd-accent"><circle cx="92" cy="138" r="30" fill="none"/><path d="M92 108 v60 M62 138 h60"/></g>';
+      return propeller +
+        '<g class="eqd-ink"><rect x="150" y="94" width="220" height="88" rx="8"/>' +
+        '<path d="M168 104 v68 M190 104 v68 M212 104 v68 M234 104 v68 M256 104 v68 M278 104 v68 M300 104 v68 M322 104 v68"/>' +
+        '<path d="M370 114 h36 v48 h-36"/></g>' +
+        '<g class="eqd-accent"><path d="M122 138 h28 M406 138 h50"/><circle cx="468" cy="138" r="12"/><path d="M468 126 v24 M456 138 h24"/></g>' +
+        '<g class="eqd-bp-dim"><path d="M150 206 H406 M150 201 v10 M406 201 v10"/><text x="278" y="220" text-anchor="middle">' + (cat === 'ship' ? '機関室' : 'エンジン全長') + '</text></g>' +
+        '<text class="eqd-bp-note" x="156" y="88">CYLINDER BLOCK</text>' +
+        '<text class="eqd-bp-note" x="400" y="184">DRIVE</text>';
+    },
+    gun: function () {
+      return '<g class="eqd-ink"><rect x="120" y="116" width="300" height="22" rx="7"/><rect x="420" y="107" width="58" height="40" rx="5"/>' +
+        '<path d="M478 116 h26 v22 h-26"/>' +
+        '<path d="M186 186 h78 l28 15 -28 15 h-78 z"/></g>' +
+        '<g class="eqd-accent"><path d="M120 127 h-46"/><circle cx="66" cy="127" r="11"/><path d="M186 116 v22 M246 116 v22 M306 116 v22"/><path d="M186 186 v30"/></g>' +
+        '<g class="eqd-bp-dim"><path d="M120 214 H420 M120 209 v10 M420 209 v10"/><text x="270" y="228" text-anchor="middle">砲身長</text></g>' +
+        '<text class="eqd-bp-note" x="150" y="104">BARREL</text>' +
+        '<text class="eqd-bp-note" x="430" y="164">BREECH</text>' +
+        '<text class="eqd-bp-note" x="200" y="222">SHELL</text>';
+    },
+    turret: function () {
+      return '<g class="eqd-ink"><path d="M176 196 L206 118 h150 l30 78 z"/><rect x="206" y="118" width="26" height="78"/>' +
+        '<path d="M356 138 h150"/><rect x="500" y="130" width="16" height="16" rx="3"/>' +
+        '<ellipse cx="282" cy="196" rx="112" ry="14"/></g>' +
+        '<g class="eqd-accent"><circle cx="282" cy="160" r="16"/><path d="M282 144 v32 M266 160 h32"/><path d="M232 206 v14 M332 206 v14"/></g>' +
+        '<g class="eqd-bp-dim"><path d="M176 226 H388 M176 221 v10 M388 221 v10"/><text x="282" y="240" text-anchor="middle">砲塔リング</text></g>' +
+        '<text class="eqd-bp-note" x="214" y="110">TURRET</text>' +
+        '<text class="eqd-bp-note" x="366" y="130">MAIN GUN</text>';
+    },
+    armor: function () {
+      return '<g class="eqd-ink"><path d="M120 204 L262 86 H444 L302 204 Z"/><path d="M152 204 L294 86"/><path d="M182 204 L324 86"/></g>' +
+        '<g class="eqd-accent"><path d="M120 204 L262 86"/><path d="M444 86 L302 204"/></g>' +
+        '<g class="eqd-bp-dim"><path d="M470 86 V204 M465 86 h10 M465 204 h10"/><text x="486" y="150">装甲厚</text>' +
+        '<path d="M262 214 H302 M262 209 v10 M302 209 v10"/><text x="282" y="228" text-anchor="middle">傾斜角</text></g>' +
+        '<text class="eqd-bp-note" x="130" y="220">ROLLED PLATE</text>' +
+        '<text class="eqd-bp-note" x="320" y="106">WELD</text>';
+    },
+    radio: function () {
+      return '<g class="eqd-ink"><rect x="168" y="132" width="168" height="98" rx="7"/><rect x="186" y="148" width="60" height="28" rx="3"/>' +
+        '<circle cx="300" cy="162" r="15"/><circle cx="300" cy="204" r="11"/><path d="M336 132 v-28"/></g>' +
+        '<g class="eqd-accent"><path d="M336 104 L288 50 M288 50 h-32 M288 50 h32"/><path d="M204 186 h84 M204 200 h64"/></g>' +
+        '<g class="eqd-bp-dim"><path d="M168 244 H336 M168 239 v10 M336 239 v10"/><text x="252" y="258" text-anchor="middle">送受信機</text></g>' +
+        '<text class="eqd-bp-note" x="176" y="126">RADIO SET</text>' +
+        '<text class="eqd-bp-note" x="346" y="66">ANTENNA</text>';
+    },
+    suspension: function () {
+      const wheels = Array.from({ length: 6 }, (_, i) => '<circle cx="' + (150 + i * 52) + '" cy="180" r="19"/>').join('');
+      return '<g class="eqd-ink"><path d="M112 138 H448 L462 180 L448 206 H112 L98 180 Z"/>' + wheels +
+        '<circle cx="118" cy="180" r="14"/><circle cx="452" cy="180" r="14"/></g>' +
+        '<g class="eqd-accent"><path d="M112 206 H448 M126 216 H434"/><path d="M150 158 h260"/></g>' +
+        '<g class="eqd-bp-note" x="150" y="238">TRACK / ROAD WHEELS</g>';
+    },
+    weapon: function (cat, option) {
+      const id = option && option.id || '';
+      if (id === 'torpedo' || id === 'torp') {
+        return '<g class="eqd-ink"><path d="M150 170 q30 -26 90 -26 h140 q34 0 44 26 q-10 26 -44 26 h-140 q-60 0 -90 -26 z"/>' +
+          '<path d="M424 152 l40 -16 v34 l-40 -16 z"/><path d="M150 144 h-46 v52 h46"/></g>' +
+          '<g class="eqd-accent"><path d="M250 144 v52 M300 144 v52 M350 144 v52"/></g>' +
+          '<g class="eqd-bp-dim"><path d="M150 220 H414 M150 215 v10 M414 215 v10"/><text x="282" y="234" text-anchor="middle">魚雷 / TORPEDO</text></g>';
+      }
+      if (id === 'bomb' || id === 'heavy_bomb') {
+        const rx = id === 'heavy_bomb' ? 42 : 30;
+        return '<g class="eqd-ink"><ellipse cx="280" cy="150" rx="' + rx + '" ry="' + (rx * 2.1) + '"/>' +
+          '<path d="M280 ' + (150 - rx * 2.1) + ' v-26"/><path d="M' + (280 - rx) + ' 150 q' + rx + ' -22 ' + rx * 2 + ' 0"/></g>' +
+          '<g class="eqd-accent"><path d="M' + (280 - rx) + ' ' + (150 + rx) + ' l-18 26 h36 z"/><path d="M' + (280 - rx) + ' 126 h' + rx * 2 + '"/></g>' +
+          '<g class="eqd-bp-dim"><path d="M180 232 H380 M180 227 v10 M380 227 v10"/><text x="280" y="246" text-anchor="middle">' + (id === 'heavy_bomb' ? '大型爆弾' : '爆弾') + '</text></g>';
+      }
+      return '<g class="eqd-ink"><rect x="140" y="146" width="240" height="26" rx="6"/><path d="M380 152 h56 v14 h-56"/>' +
+        '<rect x="188" y="172" width="34" height="48" rx="4"/><path d="M214 120 v26 h70"/></g>' +
+        '<g class="eqd-accent"><path d="M140 159 h-40"/><circle cx="92" cy="159" r="10"/><path d="M240 172 v22 M280 172 v22"/></g>' +
+        '<text class="eqd-bp-note" x="150" y="138">MACHINE GUN / CANNON</text>';
+    },
+    fuel: function () {
+      return '<g class="eqd-ink"><rect x="150" y="118" width="210" height="70" rx="18"/><path d="M196 118 v70 M242 118 v70 M288 118 v70"/>' +
+        '<path d="M360 138 h40 v30 h-40"/></g>' +
+        '<g class="eqd-accent"><ellipse cx="220" cy="206" rx="52" ry="20"/><path d="M220 186 v-9 M190 196 h60"/><path d="M400 152 h44"/></g>' +
+        '<g class="eqd-bp-dim"><path d="M150 244 H360 M150 239 v10 M360 239 v10"/><text x="255" y="258" text-anchor="middle">燃料タンク</text></g>' +
+        '<text class="eqd-bp-note" x="158" y="110">SELF-SEALING TANK</text>' +
+        '<text class="eqd-bp-note" x="190" y="232">DROP TANK</text>';
+    },
+    torp: function () {
+      return '<g class="eqd-ink"><path d="M140 128 h250 v40 h-250 z"/><path d="M140 176 h250 v40 h-250 z"/>' +
+        '<path d="M390 138 h60 v20 h-60 z"/><path d="M390 186 h60 v20 h-60 z"/></g>' +
+        '<g class="eqd-accent"><path d="M200 128 v40 M260 128 v40 M200 176 v40 M260 176 v40"/><path d="M140 148 h-30 M140 196 h-30"/></g>' +
+        '<g class="eqd-bp-note" x="148" y="120">TORPEDO TUBES</g>';
+    },
+    radar: function () {
+      return '<g class="eqd-ink"><path d="M280 210 V120"/><path d="M280 120 q-70 -20 -100 30 q60 -12 100 8"/><path d="M280 120 q70 -20 100 30 q-60 -12 -100 8"/></g>' +
+        '<g class="eqd-accent"><path d="M280 150 q-54 -12 -74 22 M280 150 q54 -12 74 22"/><circle cx="280" cy="112" r="8"/>' +
+        '<path d="M180 82 q100 -40 200 0"/></g>' +
+        '<text class="eqd-bp-note" x="196" y="230">RADAR / 電探</text>';
+    }
+  };
+  const SLOT_FALLBACK = function (cat, option) {
+    return '<g class="eqd-ink"><rect x="176" y="104" width="208" height="96" rx="8"/><circle cx="280" cy="152" r="30"/>' +
+      '<path d="M176 152 h-40 M384 152 h40"/></g><text class="eqd-bp-note" x="200" y="228">MODULE COMPONENT</text>';
+  };
+
+  function moduleBlueprint(cat, hull, slot, option) {
+    const draw = SLOT_DRAWING[slot.id] || SLOT_FALLBACK;
+    const title = option ? option.name : slot.name + ' (未装着)';
+    const subtitle = slot.name + ' · ' + CATEGORY_META[cat].label + ' モジュール設計図';
+    const badge = '<g class="eqd-bp-dim"><rect x="402" y="46" width="130" height="22" rx="3"/>' +
+      '<text x="467" y="61" text-anchor="middle">' + esc(slot.name) + ' SLOT</text></g>';
+    const cost = option && option.cost != null ? '<text class="eqd-bp-note" x="28" y="226">' + fmt(option.cost, 1) + ' IC / ' + esc(hull.name) + '</text>' : '<text class="eqd-bp-note" x="28" y="226">' + esc(hull.name) + '</text>';
+    return blueprintFrame(cat, title, subtitle, badge + draw(cat, option) + cost, 'eqd-svg-module eqd-svg-' + cat, slot.name + ' 設計図 · MODULE BLUEPRINT');
+  }
+
+  function blueprintSvg(cat, hull, modules, focus, draft) {
+    const slotFocus = focus && focus !== 'full' && focus !== 'hull';
+    if (slotFocus) {
+      const slot = (DATA[cat].slots || []).find(item => item.id === focus);
+      if (slot) {
+        const installedId = draft && draft.modules ? draft.modules[focus] : null;
+        // 「装備なし」も 1 つの選択肢として扱う (未選択とは区別する)
+        let option = (modules || []).find(item => item._slot === focus) || null;
+        if (!option && installedId) {
+          option = slot.options.find(item => item.id === installedId) || null;
+        }
+        return moduleBlueprint(cat, hull, slot, option);
+      }
+    }
+    if (focus === 'hull') {
+      if (cat === 'ship') return shipBlueprint(hull, []);
+      if (cat === 'plane') return planeBlueprint(hull, []);
+      return tankBlueprint(hull, []);
+    }
     if (cat === 'ship') return shipBlueprint(hull, modules);
     if (cat === 'plane') return planeBlueprint(hull, modules);
     return tankBlueprint(hull, modules);
+  }
+
+  // 設計図の切替タブ (全体図 / 車体・船体・機体 / 各モジュール)
+  function renderBlueprintTabs(cat, data, draft, focus) {
+    const hull = chassisById(cat, draft.hull);
+    const slots = data.slots || [];
+    const items = [
+      { id: 'full', icon: '📋', label: '全体図', name: '' },
+      { id: 'hull', icon: '📐', label: CATEGORY_META[cat].chassisLabel, name: hull ? hull.name : '' }
+    ].concat(slots.map(slot => {
+      const optionId = draft.modules[slot.id];
+      const option = optionId ? slot.options.find(item => item.id === optionId) : null;
+      return { id: slot.id, icon: (SLOT_INFO[cat] && SLOT_INFO[cat][slot.id] && SLOT_INFO[cat][slot.id].icon) || '🔧', label: slot.name, name: option ? option.name : '未装着' };
+    }));
+    return '<div class="eqd-bp-tabs" role="tablist" aria-label="設計図の表示切替">' +
+      items.map(item => '<button type="button" role="tab" aria-selected="' + (focus === item.id) + '" class="eqd-bp-tab' + (focus === item.id ? ' active' : '') + '" data-eqd-bp="' + esc(item.id) + '">' +
+        '<span class="eqd-bp-tab-icon">' + item.icon + '</span><span class="eqd-bp-tab-text"><b>' + esc(item.label) + '</b>' + (item.name ? '<small>' + esc(item.name) + '</small>' : '') + '</span></button>').join('') +
+      '</div>';
   }
 
   // ==========================================================
@@ -1394,6 +1566,13 @@
     const validation = this.validation(cat);
     const meta = CATEGORY_META[cat];
     const modules = selectedModules(cat, draft);
+    const focus = this.blueprintFocus(cat);
+    const focusSlot = focus !== 'full' && focus !== 'hull' ? (data.slots || []).find(slot => slot.id === focus) : null;
+    const focusOption = focusSlot ? (modules.find(item => item._slot === focusSlot.id) || null) : null;
+    const captionLeft = focus === 'full' ? hull.name + ' — 全体図'
+      : focus === 'hull' ? hull.name + ' — ' + meta.chassisLabel + '設計図'
+      : focusSlot ? focusSlot.name + ': ' + (focusOption ? focusOption.name : '未装着')
+      : hull.name;
     const sameCategory = this._lastRenderCategory === cat;
     const previousScroll = {
       left: sameCategory && host.querySelector('.eqd-left') ? host.querySelector('.eqd-left').scrollTop : 0,
@@ -1411,8 +1590,9 @@
       '<aside class="eqd-col eqd-left">' + renderChassisList(cat, data, draft) + renderSaved(cat) + '</aside>' +
       '<main class="eqd-col eqd-center">' +
       renderStagebar(cat, hull, draft) +
-      '<div class="eqd-blueprint">' + blueprintSvg(cat, hull, modules) +
-      '<div class="eqd-bp-caption"><span>' + esc(hull.name) + '</span><span>' + esc(meta.hint) + '</span></div></div>' +
+      renderBlueprintTabs(cat, data, draft, focus) +
+      '<div class="eqd-blueprint">' + blueprintSvg(cat, hull, modules, focus, draft) +
+      '<div class="eqd-bp-caption"><span>' + esc(captionLeft) + '</span><span>' + esc(focus === 'full' || focus === 'hull' ? meta.hint : '選択中のモジュールの設計図を表示しています') + '</span></div></div>' +
       renderSlots(cat, data, draft, hull) +
       '</main>' +
       '<aside class="eqd-col eqd-right">' +
@@ -1448,6 +1628,11 @@
         const slotButton = event.target.closest('[data-eqd-slot]');
         if (slotButton) {
           this.openSlotPicker(slotButton.getAttribute('data-eqd-slot'));
+          return;
+        }
+        const blueprintButton = event.target.closest('[data-eqd-bp]');
+        if (blueprintButton) {
+          this.setBlueprintFocus(this.category, blueprintButton.getAttribute('data-eqd-bp'));
           return;
         }
         const saveButton = event.target.closest('[data-eqd-save]');

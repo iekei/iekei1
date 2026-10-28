@@ -120,6 +120,8 @@
 .win-btn .win-btn-icon { width: 20px; height: 20px; flex-shrink: 0; display: block; filter: drop-shadow(0 1px 1px #0008); opacity: .85; }
 .win-btn:hover .win-btn-icon { opacity: 1; }
 .win-btn.open .win-btn-icon { opacity: 1; filter: drop-shadow(0 0 4px #c4ad7280); }
+/* グループ (内政 / 軍事 / 経済 / 外交・諜報 / 特殊 / システム) の区切り */
+.win-btn.nav-group-start { margin-left: 6px; box-shadow: inset 2px 0 0 #8d7950; padding-left: 9px; }
 
 #stat-tooltip {
   min-width: min(240px, calc(100vw - 16px));
