@@ -88,6 +88,8 @@ class DivisionDesigner {
   static selected = null;      // パレットで選択中の大隊/支援中隊 ID
   static paletteTab = 'battalion';
   static nextTemplateId = 1;
+  static currentCountry = null;
+  static countryTemplates = Object.create(null);
 
   // ==========================================================
   // 初期化 / 永続化
@@ -131,9 +133,19 @@ class DivisionDesigner {
   }
 
   // gameState からテンプレートを復元 (旧 divisionPresets も移行)
-  static load() {
+  static load(country) {
     const gs = CoreEngine.gameState;
-    let list = Array.isArray(gs.divisionTemplates) ? gs.divisionTemplates : null;
+    const selectedCountry = country || gs.country || 'GER';
+    if (DivisionDesigner.currentCountry && DivisionDesigner.currentCountry !== selectedCountry) {
+      DivisionDesigner.countryTemplates[DivisionDesigner.currentCountry] = {
+        templates: DivisionDesigner.clone(DivisionDesigner.templates),
+        activeId: DivisionDesigner.activeId
+      };
+    }
+    DivisionDesigner.currentCountry = selectedCountry;
+    const countrySaved = DivisionDesigner.countryTemplates[selectedCountry];
+    let list = countrySaved && Array.isArray(countrySaved.templates) ? countrySaved.templates :
+      (Array.isArray(gs.divisionTemplates) ? gs.divisionTemplates : null);
     if (!list || !list.length) {
       list = DivisionDesigner.DEFAULT_TEMPLATES.map(t => DivisionDesigner.fromColumns(t.name, t.cols, t.support));
       (gs.divisionPresets || []).forEach(p => {
@@ -146,7 +158,7 @@ class DivisionDesigner {
     DivisionDesigner.templates.forEach(t => { if (!t.id) t.id = DivisionDesigner.nextTemplateId++; });
     gs.divisionTemplates = DivisionDesigner.templates;
     DivisionDesigner.presets = DivisionDesigner.templates;   // 旧API互換
-    const active = DivisionDesigner.templates.find(t => t.id === gs.activeDivisionTemplateId) || DivisionDesigner.templates[0];
+    const active = DivisionDesigner.templates.find(t => t.id === (countrySaved ? countrySaved.activeId : gs.activeDivisionTemplateId)) || DivisionDesigner.templates[0];
     DivisionDesigner.activeId = active ? active.id : null;
     gs.activeDivisionTemplateId = DivisionDesigner.activeId;
     DivisionDesigner.openTemplate(DivisionDesigner.activeId, true);
@@ -154,11 +166,32 @@ class DivisionDesigner {
     if (document.getElementById('division-content')) DivisionDesigner.render();
   }
 
+  static serializeCountries() {
+    DivisionDesigner.persist();
+    return DivisionDesigner.clone(DivisionDesigner.countryTemplates);
+  }
+
+  static restoreCountries(saved, activeCountry) {
+    DivisionDesigner.countryTemplates = Object.create(null);
+    Object.entries(saved || {}).forEach(([country, entry]) => {
+      if (!/^[A-Z0-9]{3}$/.test(country) || !entry || !Array.isArray(entry.templates)) return;
+      DivisionDesigner.countryTemplates[country] = { templates: DivisionDesigner.clone(entry.templates), activeId: entry.activeId };
+    });
+    DivisionDesigner.currentCountry = null;
+    DivisionDesigner.load(activeCountry || CoreEngine.gameState.country);
+  }
+
   static persist() {
     const gs = CoreEngine.gameState;
     gs.divisionTemplates = DivisionDesigner.templates;
     gs.activeDivisionTemplateId = DivisionDesigner.activeId;
     DivisionDesigner.presets = DivisionDesigner.templates;
+    if (DivisionDesigner.currentCountry) {
+      DivisionDesigner.countryTemplates[DivisionDesigner.currentCountry] = {
+        templates: DivisionDesigner.clone(DivisionDesigner.templates),
+        activeId: DivisionDesigner.activeId
+      };
+    }
     DivisionDesigner.syncLegacyGrid();
   }
 

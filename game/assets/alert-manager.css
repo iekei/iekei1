@@ -1,0 +1,226 @@
+/* alert-manager.css — game/index.html 上部の重要事項アラート
+   既存のミリタリーテーマに合わせ、配置は通常のフレックス行にしてマップや
+   ナビゲーションを覆わない。ツールチップだけ fixed で最前面に表示する。 */
+
+#alert-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  min-height: 56px;
+  padding: 4px 12px;
+  background: var(--mil-grain, repeating-linear-gradient(0deg, #ffffff03 0 1px, #00000008 1px 3px)),
+    linear-gradient(180deg, #252b20, #1a1f16);
+  border-bottom: 3px double #76623c;
+  box-shadow: inset 0 1px 0 #d6d8bd1f, 0 2px 6px #0007;
+  position: relative;
+  z-index: 35;
+  outline: none;
+}
+#alert-container[hidden],
+#alert-tooltip[hidden] { display: none !important; }
+#alert-container.is-clear { min-height: 28px; padding-block: 2px; }
+
+.alert-heading {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+  color: #c4ad72;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  white-space: nowrap;
+}
+.alert-heading-mark { font-size: 15px; line-height: 1; }
+#alert-total {
+  display: inline-grid;
+  place-items: center;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
+  border-radius: 10px;
+  background: #76623c;
+  color: #f3e7c4;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+#alert-empty {
+  color: #96b17e;
+  font-size: 11px;
+  letter-spacing: .03em;
+}
+
+#alert-list {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 3px 2px 5px;
+  scrollbar-width: thin;
+  scrollbar-color: #76623c #14180f;
+}
+#alert-list:empty { display: none; }
+
+#game-root .alert-button {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  flex: 0 0 auto;
+  width: 66px;
+  height: 44px;
+  padding: 3px 4px 2px;
+  border: 1px solid #5a6047;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #343b2c, #20261b);
+  box-shadow: inset 0 1px 0 #d6d8bd26, 0 2px 3px #0008;
+  color: #dedbcd;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, transform .15s ease;
+}
+#game-root .alert-button:hover,
+#game-root .alert-button:focus-visible {
+  transform: translateY(-1px);
+  background: linear-gradient(180deg, #454d3a, #2a3122);
+  animation: none;
+  opacity: 1;
+}
+#game-root .alert-button:focus-visible {
+  outline: 2px solid #e6c268;
+  outline-offset: 2px;
+}
+#game-root .alert-button.is-warning { border-color: #9a7b3a; }
+#game-root .alert-button.is-critical { border-color: #b05243; }
+#game-root .alert-button.is-warning:hover,
+#game-root .alert-button.is-warning:focus-visible { border-color: #e0b45c; }
+#game-root .alert-button.is-critical:hover,
+#game-root .alert-button.is-critical:focus-visible { border-color: #ff8a7a; }
+
+.alert-icon {
+  display: grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  animation: alert-pulse 2.4s ease-in-out infinite;
+}
+.alert-icon svg { width: 24px; height: 24px; display: block; filter: drop-shadow(0 1px 1px #000a); }
+.is-warning .alert-icon { color: #e0b45c; }
+.is-critical .alert-icon { color: #ff8a7a; animation-duration: 1.8s; }
+.alert-label {
+  font-size: 9px;
+  line-height: 1.1;
+  white-space: nowrap;
+  color: #c9c8b8;
+  letter-spacing: .02em;
+}
+.alert-badge {
+  position: absolute;
+  top: 2px;
+  right: 3px;
+  display: grid;
+  place-items: center;
+  min-width: 16px;
+  height: 15px;
+  padding: 0 4px;
+  border-radius: 8px;
+  border: 1px solid #11130f;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.is-warning .alert-badge { background: #e0b45c; color: #241d0d; }
+.is-critical .alert-badge { background: #d95f4e; color: #fff; }
+
+@keyframes alert-pulse {
+  0%, 100% { opacity: .78; }
+  50% { opacity: 1; }
+}
+
+/* ツールチップはスクロール容器の外へ fixed 表示し、モバイルでも画面内に収める。 */
+#alert-tooltip {
+  position: fixed;
+  z-index: 10050;
+  width: min(340px, calc(100vw - 16px));
+  max-height: calc(100vh - 16px);
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 11px 13px;
+  border: 3px double #8d7950;
+  border-radius: 3px;
+  background: var(--mil-grain, repeating-linear-gradient(0deg, #ffffff03 0 1px, #00000008 1px 3px)),
+    linear-gradient(180deg, #303728, #171e14);
+  box-shadow: inset 0 1px 0 #dedbcd20, 0 8px 24px #000c;
+  color: #dedbcd;
+  font-family: var(--mil-font-ui, 'Trebuchet MS', 'Yu Gothic', Meiryo, sans-serif);
+  pointer-events: none;
+}
+.alert-tooltip-severity {
+  display: inline-block;
+  margin-bottom: 5px;
+  padding: 1px 7px;
+  border-radius: 2px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+}
+.alert-tooltip-severity.is-warning { background: #e0b45c; color: #241d0d; }
+.alert-tooltip-severity.is-critical { background: #d95f4e; color: #fff; }
+.alert-tooltip-title {
+  display: block;
+  color: #f0e6c8;
+  font-size: 13px;
+  line-height: 1.45;
+  margin-bottom: 6px;
+}
+.alert-tooltip-details {
+  margin: 0;
+  padding-left: 17px;
+  color: #b9bcab;
+  font-size: 11px;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+.alert-tooltip-details li + li { margin-top: 2px; }
+.alert-tooltip-action {
+  display: block;
+  margin-top: 8px;
+  padding-top: 7px;
+  border-top: 1px solid #76623c;
+  color: #d9c58d;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.alert-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 768px) {
+  #alert-container { gap: 6px; padding-inline: 6px; min-height: 52px; }
+  .alert-heading-label { display: none; }
+  #game-root .alert-button { width: 58px; height: 42px; }
+  .alert-label { font-size: 8px; }
+  #alert-list { gap: 4px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .alert-icon { animation: none; opacity: 1; }
+  #game-root .alert-button { transition: none; }
+  #game-root .alert-button:hover,
+  #game-root .alert-button:focus-visible { transform: none; }
+}

@@ -704,6 +704,8 @@
   <link rel="stylesheet" href="strategy.css">
   <link rel="stylesheet" href="assets/game-visuals.css?v=artwork-3">
   <link rel="stylesheet" href="assets/topbar.css">
+  <link rel="stylesheet" href="assets/alert-manager.css?v=alerts-1">
+  <link rel="stylesheet" href="assets/automation-manager.css?v=automation-1">
   <link rel="stylesheet" href="assets/research-tree.css">
   <link rel="stylesheet" href="assets/equipment-designer.css?v=designer-3">
   <link rel="stylesheet" href="assets/intelligence-agency.css">
@@ -734,6 +736,18 @@
     <h1>⚔️ Hearts of Iron IV × 将軍カードゲーム</h1>
     <p class="start-sub">シナリオ: 1936年1月1日 — プレイする国家を選択してください</p>
     <div class="start-nation-grid" id="start-nation-grid"></div>
+    <section class="automation-setup" aria-labelledby="start-automation-title">
+      <div class="automation-setup-head">
+        <h2 id="start-automation-title">🤖 AIアシスト（初心者向け）</h2>
+        <div class="automation-presets">
+          <button type="button" class="automation-btn" onclick="AutomationManager.preset(StartScreen.selected, true)">おすすめをON</button>
+          <button type="button" class="automation-btn ghost" onclick="AutomationManager.preset(StartScreen.selected, false)">すべてOFF</button>
+        </div>
+      </div>
+      <p id="start-automation-country">国家を選択すると、国ごとにAIアシストを設定できます。</p>
+      <div id="start-automation-options" class="automation-grid"><p class="automation-empty">国家を選択すると、国ごとにAIアシストを設定できます。</p></div>
+      <div class="automation-manual-note"><strong>⚔️ 軍事作戦は常に手動です</strong><span>前線・攻撃線・師団移動・攻撃・上陸・空挺は自動化しません。国家方針も戦争や併合につながるものは自動選択しません。</span></div>
+    </section>
     <button id="start-game-btn" onclick="StartScreen.start()" disabled>国家を選択してください</button>
     <button id="start-hoi4-btn" type="button" data-open-hoi4 aria-keyshortcuts="H">🧭 HOI4 大戦略画面を開く（H）</button>
     <span class="start-hoi4-note">将軍カードゲームを始めなくても、HOI4風の研究・生産・外交・戦闘画面を先に確認できます</span>
@@ -782,6 +796,14 @@
       <button class="speed-btn" id="cheat-toggle" aria-label="デバッグ�����ンソールを開く" onclick="CheatConsole.toggle()">~</button>
     </div>
   </header>
+
+  <!-- ==================== IMPORTANT ALERTS (HOI4風 要対応アラート) ==================== -->
+  <div id="alert-container" role="region" aria-label="重要なアラート" tabindex="-1" hidden>
+    <span class="alert-heading" aria-hidden="true"><span class="alert-heading-mark">⚑</span><span class="alert-heading-label">要対応</span><span id="alert-total">0</span></span>
+    <div id="alert-list" role="group" aria-label="対応が必要な項目"></div>
+    <span id="alert-empty" hidden>✓ 対応が必要な項目はありません</span>
+    <span id="alert-announcer" class="alert-sr-only" role="status" aria-live="polite" aria-atomic="true"></span>
+  </div>
 
   <!-- ==================== LOG BANNER ==================== -->
   <div id="log-banner">
@@ -1202,6 +1224,7 @@ class CoreEngine {
     speed: 0,
     paused: true,
     country: 'GER',
+    countries: {},              // 国別AIアシスト設定: countries[tag].automation
     politicalPower: 100,
     stability: 70,
     warSupport: 50,
@@ -1523,13 +1546,18 @@ class CoreEngine {
       country: s.country, strategyMarket: s.strategy ? { offers: s.strategy.offers, contracts: s.strategy.contracts } : null,
       pp: s.politicalPower, stab: s.stability, ws: s.warSupport, mp: s.manpower,
       res: s.resources, cf: s.civilianFactories, mf: s.militaryFactories,
-      nuke: s.nuclearStockpile, fuel: s.fuel, nation: s.nationSystems
+      nuke: s.nuclearStockpile, fuel: s.fuel, nation: s.nationSystems,
+      automation: (typeof AutomationManager !== 'undefined') ? AutomationManager.serializeCountry(s.country) : null
     };
   }
 
   static applySyncState(state) {
     if (!state) return;
     const s = CoreEngine.gameState;
+    // AIアシスト設定は国をまたいで同期するが、自国設定は上書きせず、実行もしない。
+    if (state.automation && state.country && state.country !== s.country && typeof AutomationManager !== 'undefined') {
+      AutomationManager.mergeRemote(state.automation, state.country);
+    }
     if (state.country && state.country !== s.country) return;
     if (state.pp !== undefined) s.politicalPower = Math.max(0, Math.min(999, Number(state.pp) || 0));
     if (state.stab !== undefined) s.stability = state.stab;
@@ -5592,6 +5620,7 @@ class MultiplayerManager {
     const conn0 = MultiplayerManager.connections[fromPeer];
     // ホスト側: パス���ード認証が済んでいない接続からは認証メッセージ以外を破棄
     if (conn0 && conn0.authOk === false && data.type !== 'auth_resp') return;
+    if (typeof AutomationManager !== 'undefined' && AutomationManager.receiveMessage(data, fromPeer)) return;
     if (StrategyGame.onMessage(data, fromPeer)) return;
     switch (data.type) {
       case 'auth_req': {
@@ -5607,6 +5636,7 @@ class MultiplayerManager {
           MultiplayerManager.setStatus('プレイヤー接続: ' + fromPeer, true);
           MultiplayerManager.updatePlayerList();
           if (conn) conn.send({ type: 'sync', state: CoreEngine.getSyncState(), date: CoreEngine.gameState.date.toISOString() });
+          if (conn && typeof AutomationManager !== 'undefined') AutomationManager.sendSnapshot(conn);
           if (conn && typeof MultiplayerTimeManager !== 'undefined') {
             conn.send({ type: 'TIME_SYNC_TICK', ...MultiplayerTimeManager.state() });
           }
@@ -5633,6 +5663,7 @@ class MultiplayerManager {
         CoreEngine.updateCalendar();
         CoreEngine.renderStats();
         StrategyGame.publish();
+        if (typeof AutomationManager !== 'undefined') AutomationManager.publish();
         break;
       case 'tick': {
         if(MultiplayerManager.isHost || fromPeer!==MultiplayerManager.roomId)return;
@@ -5658,6 +5689,7 @@ class MultiplayerManager {
         FocusTreeManager.completeFocus(data.focusId, true);
         break;
       case 'research_start': {
+        if (data.country && data.country !== (ResearchManager.currentCountry || CoreEngine.gameState.country)) return;
         const rsTech = ResearchManager.findTech(data.techId);
         if (rsTech && !ResearchManager.researchedTech.has(data.techId) &&
             !Object.values(ResearchManager.researching).some(r => r.techId === data.techId)) {
@@ -5669,6 +5701,7 @@ class MultiplayerManager {
         break;
       }
       case 'research_complete': {
+        if (data.country && data.country !== (ResearchManager.currentCountry || CoreEngine.gameState.country)) return;
         const rcTech = ResearchManager.findTech(data.techId);
         if (rcTech && !ResearchManager.researchedTech.has(data.techId)) {
           ResearchManager.researchedTech.add(data.techId);
@@ -5761,6 +5794,7 @@ class MultiplayerManager {
         CoreEngine.log('他プレイヤーが建設を開始しました');
         break;
       case 'recruit_add':
+        if (data.order && data.order.country && data.order.country !== CoreEngine.gameState.country) return;
         if (!TrainingManager.queue.some(o => o.id === data.order.id)) {
           TrainingManager.queue.push(data.order);
           TrainingManager.renderQueue();
@@ -6140,15 +6174,52 @@ class ResearchManager {
   static researchedTech = new Set();
   static researching = {};
   static currentCategory = 'infantry';
+  static currentCountry = null;
+  static countryStates = Object.create(null);
+
+  static captureCountryState(country = ResearchManager.currentCountry) {
+    if (!country) return null;
+    const saved = { researched: [...ResearchManager.researchedTech], researching: JSON.parse(JSON.stringify(ResearchManager.researching || {})) };
+    ResearchManager.countryStates[country] = saved;
+    return saved;
+  }
+
+  static applyCountryState(saved) {
+    ResearchManager.researchedTech = new Set((saved && saved.researched) || []);
+    ResearchManager.researching = JSON.parse(JSON.stringify((saved && saved.researching) || {}));
+  }
+
+  static serializeStates() {
+    ResearchManager.captureCountryState();
+    return JSON.parse(JSON.stringify(ResearchManager.countryStates));
+  }
+
+  static restoreStates(savedStates, activeCountry) {
+    ResearchManager.countryStates = Object.create(null);
+    Object.entries(savedStates || {}).forEach(([country, saved]) => {
+      if (!/^[A-Z0-9]{3}$/.test(country)) return;
+      ResearchManager.countryStates[country] = { researched: Array.isArray(saved.researched) ? saved.researched.slice() : [], researching: JSON.parse(JSON.stringify(saved.researching || {})) };
+    });
+    ResearchManager.currentCountry = activeCountry || CoreEngine.gameState.country || 'GER';
+    ResearchManager.applyCountryState(ResearchManager.countryStates[ResearchManager.currentCountry]);
+  }
 
   static async init(country) {
-    await window.l10n?.loadGameData(country || CoreEngine.gameState.country || 'GER');
-    const rawTechData = await DataFetcher.fetchAllTech(country);
+    const selectedCountry = country || CoreEngine.gameState.country || 'GER';
+    if (ResearchManager.currentCountry && ResearchManager.currentCountry !== selectedCountry) ResearchManager.captureCountryState();
+    await window.l10n?.loadGameData(selectedCountry);
+    const rawTechData = await DataFetcher.fetchAllTech(selectedCountry);
     // 日本語化・火力付与・年代順ソート & 1936年以前の技術を研究済みに
     const processed = ResearchI18n.processAll(rawTechData, country);
     ResearchManager.techData = processed.techData;
-    ResearchManager.researchedTech = new Set(processed.preWarTechs);
-    ResearchManager.researching = {};
+    ResearchManager.currentCountry = selectedCountry;
+    if (ResearchManager.countryStates[selectedCountry]) {
+      ResearchManager.applyCountryState(ResearchManager.countryStates[selectedCountry]);
+    } else {
+      ResearchManager.researchedTech = new Set(processed.preWarTechs);
+      ResearchManager.researching = {};
+      ResearchManager.captureCountryState(selectedCountry);
+    }
     ResearchManager.currentCategory = 'infantry';
     if (processed.preWarTechs.size > 0) {
       CoreEngine.log('📚 1936年以前の技術 (' + processed.preWarTechs.size + '件) は研究済みです。');
@@ -6272,7 +6343,7 @@ class ResearchManager {
           : '研究開始: ' + tech.title + (bonusMsg ? ' (' + bonusMsg.replace(' / ', '') + ' → ' + totalTime + '日)' : '');
         CoreEngine.log(msg);
         GameUI.notify(msg, 'success');
-        MultiplayerManager.broadcast({ type: 'research_start', slot: i, techId: tech.id });
+        MultiplayerManager.broadcast({ type: 'research_start', country: ResearchManager.currentCountry || CoreEngine.gameState.country, slot: i, techId: tech.id });
         ResearchManager.renderSlots();
         ResearchManager.render();
         return;
@@ -6289,7 +6360,7 @@ class ResearchManager {
       if (research.progress >= research.total) {
         ResearchManager.researchedTech.add(research.techId);
         delete ResearchManager.researching[slot];
-        MultiplayerManager.broadcast({ type: 'research_complete', techId: research.techId });
+        MultiplayerManager.broadcast({ type: 'research_complete', country: ResearchManager.currentCountry || CoreEngine.gameState.country, techId: research.techId });
         const tech = ResearchManager.findTech(research.techId);
         if (tech) {
           CoreEngine.log('研究完了: ' + tech.title);
@@ -6602,7 +6673,7 @@ class SaveLoadManager {
   static collect() {
     const gs = CoreEngine.gameState;
     return {
-      version: 5,
+      version: 6,
       strategy: StrategyGame.collect(),
       savedAt: new Date().toISOString(),
       core: { ...gs, date: gs.date.toISOString() },
@@ -6615,11 +6686,14 @@ class SaveLoadManager {
         byCountry: FocusTreeManager.serializeStates()
       },
       research: {
+        country: gs.country,
         researched: [...ResearchManager.researchedTech],
-        researching: JSON.parse(JSON.stringify(ResearchManager.researching))
+        researching: JSON.parse(JSON.stringify(ResearchManager.researching)),
+        byCountry: ResearchManager.serializeStates()
       },
       deck: CardSystem.deck,
       hired: CardSystem.hiredCards,
+      divisionTemplatesByCountry: (typeof DivisionDesigner !== 'undefined' && DivisionDesigner.serializeCountries) ? DivisionDesigner.serializeCountries() : null,
       dlc: (typeof DLC !== 'undefined' ? DLC.collect() : null)   // DLC拡張状態 (XP/設計/諜報/MIO/講和/特性)
     };
   }
@@ -6657,6 +6731,7 @@ class SaveLoadManager {
     });
     // 旧セーブの初期値24は誤った補正値なので、基本+1/日に移行します。
     if (gs.cardModifiers.politicalPowerGain === 24) gs.cardModifiers.politicalPowerGain = 0;
+    if (typeof AutomationManager !== 'undefined') AutomationManager.restoreCountries(data.core.countries || {}, gs.country, gs);
     gs.politicalPower = Math.max(0, Math.min(999, Number(gs.politicalPower) || 0));
     if (data.focus) {
       if (data.focus.byCountry) {
@@ -6674,8 +6749,14 @@ class SaveLoadManager {
       FocusTreeManager.init(gs.country);
     }
     if (data.research && ResearchManager.techData && Object.keys(ResearchManager.techData).length > 0) {
-      ResearchManager.researchedTech = new Set(data.research.researched || []);
-      ResearchManager.researching = data.research.researching || {};
+      if (data.research.byCountry) {
+        ResearchManager.restoreStates(data.research.byCountry, gs.country);
+      } else {
+        ResearchManager.researchedTech = new Set(data.research.researched || []);
+        ResearchManager.researching = data.research.researching || {};
+        ResearchManager.currentCountry = data.research.country || gs.country;
+        ResearchManager.captureCountryState();
+      }
       ResearchManager.renderSlots();
       if (GameUI.currentTab === 'research') ResearchManager.render();
     }
@@ -6684,7 +6765,10 @@ class SaveLoadManager {
     CardSystem.normalizeHiredCards();
     if (data.dlc && typeof DLC !== 'undefined') DLC.apply(data.dlc);   // DLC拡張状態を復元
     StrategyGame.apply(data.strategy);
-    if (typeof DivisionDesigner !== 'undefined') DivisionDesigner.load();   // 師団テンプレートを復元
+    if (typeof DivisionDesigner !== 'undefined') {
+      if (data.divisionTemplatesByCountry && DivisionDesigner.restoreCountries) DivisionDesigner.restoreCountries(data.divisionTemplatesByCountry, gs.country);
+      else DivisionDesigner.load();   // 師団テンプレートを復元
+    }
     gs.speed=0;gs.paused=true;CoreEngine.updateSpeedUI();
     CardSystem.saveDeck();
     CardSystem.saveHired();
@@ -6967,6 +7051,7 @@ class StartScreen {
     const btn = document.getElementById('start-game-btn');
     btn.disabled = false;
     btn.innerHTML = DataFetcher.getCountryFlagImage(tag) + ' ' + StartScreen.NATIONS.find(n => n.tag === tag).name + ' でゲーム開始';
+    if (typeof AutomationManager !== 'undefined') AutomationManager.renderStartOptions(tag);
   }
 
   static start() {
@@ -6974,6 +7059,7 @@ class StartScreen {
     const n = StartScreen.NATIONS.find(x => x.tag === StartScreen.selected);
     const s = CoreEngine.gameState;
     s.country = n.tag;
+    if (typeof AutomationManager !== 'undefined') AutomationManager.ensureCountry(n.tag, s);
     s.politicalPower = n.pp;
     s.civilianFactories = n.cf;
     s.militaryFactories = n.mf;
@@ -7039,6 +7125,13 @@ async function initGame() {
   }
   CardSystem.deck.forEach(card => CardSystem.applyModifiers(card.id));
 
+  // 重要事項アラート: 全Manager初期化後に監視を開始（毎Tick + 一時停止中の定期監視）。
+  // 既存の CoreEngine.registerTickCallback 経由でメインループへ接続する。
+  if (typeof AlertManager !== 'undefined') AlertManager.init(CoreEngine.gameState);
+
+  // 選択式AIアシスト: 自国の有効フラグだけを毎Tick処理する。軍事作戦は対象外。
+  if (typeof AutomationManager !== 'undefined') AutomationManager.init(CoreEngine.gameState);
+
   // ── タブ別動的画像ロード登録 (ImageLoader) ──
   // 各タブオープン時にコンテナ内の data-src 画像を遅延ロード
   if (typeof ImageLoader !== 'undefined') {
@@ -7097,6 +7190,10 @@ window.addEventListener('DOMContentLoaded', () => {
   <script src="assets/frontline-command.js?v=fc-1"></script>
   <script src="assets/MultiplayerTimeManager.js"></script>
   <script src="assets/multiplayer-hub.js?v=mph-1"></script>
+  <!-- ==================== 重要事項アラート (game/index.html 本体用) ==================== -->
+  <script src="assets/alert-manager.js?v=alerts-1"></script>
+  <!-- ==================== 選択式AIアシスト (game/index.html 本体用) ==================== -->
+  <script src="assets/automation-manager.js?v=automation-1"></script>
   <!-- ==================== HOI4 大戦略 全画面レイヤー (../hoi4.html / H キー) ==================== -->
   <script src="hoi4-screen.js"></script>
   </body>

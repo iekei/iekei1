@@ -971,6 +971,11 @@ class MPHub {
     const s = MPHub.gs();
     if (!tag || tag === s.country) return false;
     s.country = tag;
+    // 国別状態（方針・研究・テンプレート・AIアシスト）を必ず切り替える。
+    try { if (typeof FocusTreeManager !== 'undefined') FocusTreeManager.init(tag); } catch (e) { /* ignore */ }
+    try { if (typeof ResearchManager !== 'undefined') ResearchManager.init(tag); } catch (e) { /* ignore */ }
+    try { if (typeof DivisionDesigner !== 'undefined') DivisionDesigner.load(tag); } catch (e) { /* ignore */ }
+    try { if (typeof AutomationManager !== 'undefined') { AutomationManager.ensureCountry(tag, s); AutomationManager.onCountryChanged(tag); AutomationManager.publish(tag); } } catch (e) { /* ignore */ }
     try { DiplomacyManager.rebuildCountries(); } catch (e) { /* ignore */ }
     try { ProductionManager.ensure(); } catch (e) { /* ignore */ }
     try { MapRenderer.invalidateModes && MapRenderer.invalidateModes(); } catch (e) { /* ignore */ }
@@ -1055,6 +1060,7 @@ class MPHub {
   static registerSelf() {
     if (MultiplayerManager.isHost) return;
     MPHub.sendToHost({ type: 'MP_REGISTER', playerId: MultiplayerManager.playerId, name: MPHub.myName(), tag: MPHub.gs().country });
+    try { if (typeof AutomationManager !== 'undefined') AutomationManager.publish(); } catch (e) { /* ignore */ }
   }
 
   // ==========================================================
