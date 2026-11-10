@@ -122,7 +122,17 @@ const ResearchI18n = {
     construction3: '建設III',
     production: '生産技術',
     tools: '工作機械',
-    oil_processing: '石油精製'
+    oil_processing: '石油精製',
+    // 支援
+    support: '支援中隊',
+    support_equipment_1: '支援装備',
+    engineers: '工兵中隊',
+    recon: '偵察中隊',
+    tech_signal_company: '通信中隊',
+    tech_maintenance_company: '整備中隊',
+    tech_military_police: '憲兵',
+    tech_logistics_company: '輸送中隊',
+    tech_field_hospital: '野戦病院'
   },
 
   // ---- カテゴリ別の火力基準値 ----
@@ -134,7 +144,8 @@ const ResearchI18n = {
     naval: 20,       // 海軍: 基礎火力 20
     air: 18,         // 空軍: 基礎火力 18
     engineering: 5,  // 工兵: 基礎火力 5
-    industry: 0      // 産業: 火力なし (生産力に影響)
+    industry: 0,     // 産業: 火力なし (生産力に影響)
+    support: 3      // 支援: 直接火力は低いが前線維持に寄与
   },
 
   // ---- 技術の火力を計算 (カテゴリ + 技術レベル) ----

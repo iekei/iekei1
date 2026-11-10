@@ -27,7 +27,9 @@ const ResearchIcons = {
     naval: { label: '海軍', keys: ['early_destroyer', 'destroyer_1', 'light_battery'], drawing: '<path d="M7 35h50l-9 10H17zM20 35V23h23v12M31 23V10M31 14h14M5 50h54"/>' },
     air: { label: '航空', keys: ['ger_fighter1', 'fighter1', 'light_plane_1'], drawing: '<path d="M30 7h4l3 20 22 12v4l-23-6-1 12 7 6H22l7-6-1-12-23 6v-4l22-12z"/>' },
     engineering: { label: '工学', keys: ['advanced_computing_machine', 'electronic_mechanical_engineering', 'advanced_centimetric_radar'], drawing: '<rect x="16" y="15" width="32" height="32"/><path d="M23 8v7m9-7v7m9-7v7M23 47v8m9-8v8m9-8v8M8 23h8m-8 9h8m-8 9h8m32-18h8m-8 9h8m-8 9h8"/><path d="M24 24h16v16H24z"/>' },
-    industry: { label: '産業', keys: ['basic_machine_tools', 'construction1', 'improved_machine_tools'], drawing: '<path d="M8 48V28l15-9v9l15-9v9h18v20zM45 28V9h8v19M17 37h6m8 0h6m8 0h5"/>' }
+    industry: { label: '産業', keys: ['basic_machine_tools', 'construction1', 'improved_machine_tools'], drawing: '<path d="M8 48V28l15-9v9l15-9v9h18v20zM45 28V9h8v19M17 37h6m8 0h6m8 0h5"/>' },
+    // 支援中隊 (工兵・野戦病院・偵察・通信・憲兵・整備・輸送) — 大隊編成の支援枠に対応
+    support: { label: '支援', keys: ['support_equipment_1', 'engineers', 'tech_field_hospital', 'recon', 'tech_signal_company'], drawing: '<path d="M9 20h25v25H9zM9 29h25M21 20v25"/><circle cx="46" cy="35" r="11"/><path d="M41 35h10M46 30v10M9 45h25"/>' }
   },
   ready: null,
   fallbacks: {},

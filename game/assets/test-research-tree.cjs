@@ -50,8 +50,11 @@ test('missing references and cycles never recurse indefinitely', () => {
   assert.ok([...positions.values()].every(position => Number.isFinite(position.y)));
 });
 
-test('seven category fallbacks are distinct and local asset keys take precedence', () => {
-  assert.equal(new Set(Object.keys(icons.categories).map(category => icons.resolve({ id: 'unknown' }, category).src)).size, 7);
+test('eight category fallbacks are distinct and local asset keys take precedence', () => {
+  assert.equal(new Set(Object.keys(icons.categories).map(category => icons.resolve({ id: 'unknown' }, category).src)).size, 8);
+  assert.ok(icons.categories.support, '支援カテゴリが登録されている');
+  assert.equal(icons.categories.support.label, '支援');
+  assert.equal(icons.resolve({ id: 'unknown' }, 'support').source, 'category-drawing');
   context.AssetRegistry.getLocal = (category, key) => category === 'technology_icons' && key === 'kar98k' ? 'assets/technology/Kar98k.png' : null;
   assert.equal(icons.resolve({ id: 'kar98k' }, 'infantry').src, 'assets/technology/Kar98k.png');
   assert.equal(icons.resolve({ id: 'kar98k' }, 'infantry').github, null);
