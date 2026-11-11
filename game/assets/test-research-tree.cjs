@@ -66,3 +66,34 @@ test('eight category fallbacks are distinct and local asset keys take precedence
   assert.equal(github.src, 'https://iekei.github.io/iekei1/game/assets/technology/Kar98k.png');
   assert.equal(github.github, null);
 });
+
+test('special-project technologies present special_projects blueprint plates', () => {
+  const data = require('./game-asset-data.js');
+  const byId = new Map(JSON.parse(require('fs').readFileSync(path.join(assets, '..', 'ger/tec/data/tech_air.json')))
+    .map(tech => [tech.id, tech]));
+  const air = [...byId.values()];
+  const jet = air.find(tech => tech.id === 'sp_centrifugal_jet_tech');
+  assert.equal(icons.blueprintFor(jet), 'Sp_air_jet_engine.png');
+  assert.ok(data.projects.includes(icons.blueprintFor(jet)), 'plate ships in game/assets/special_projects');
+
+  // designations that keep their plain 64x64 equipment icon must not gain a plate
+  assert.equal(icons.blueprintFor(air.find(tech => tech.id === 'fighter1') || { id: 'fighter1' }), null);
+
+  // asset_key 照合 (大文字小文字を無視) — HoI4 側のキーで書かれた記述も引ける
+  assert.equal(icons.blueprintFor({ asset_key: 'sp_aircraft_centrifugal_jet' }), 'Sp_air_jet_engine.png');
+  assert.equal(icons.blueprintFor({ icon_key: 'SP_AIRCRAFT_CENTRIFUGAL_JET' }), 'Sp_air_jet_engine.png');
+
+  const resolved = icons.withBlueprint(jet, 'air');
+  assert.equal(resolved.blueprint, 'Sp_air_jet_engine.png');
+  assert.match(resolved.blueprintSrc, /assets\/special_projects\/Sp_air_jet_engine\.png$/);
+  // 設計図が無い技術には余計なキーを足さない
+  assert.equal(icons.withBlueprint({ id: 'fighter1' }, 'air').blueprint, undefined);
+});
+
+test('every mapped blueprint exists in the artwork manifest', () => {
+  const data = require('./game-asset-data.js');
+  const files = new Set(data.projects);
+  const mapped = Object.values(icons.projectBlueprints);
+  assert.ok(mapped.length >= 70, 'the special-project map covers the major tech lines');
+  mapped.forEach(file => assert.ok(files.has(file), file + ' is missing from game/assets/special_projects'));
+});

@@ -199,6 +199,11 @@
     }
     .sp-facility-card .sp-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
     .sp-facility-card img { width: 48px; height: 48px; border-radius: 4px; object-fit: cover; }
+    /* 科学者の肖像 (game/assets/scientists) と設計図 (game/assets/special_projects) */
+    .sp-facility-card .sp-header .person-portrait { width: 56px; height: 72px; object-fit: contain; background: #1b1f18; }
+    .sp-facility-card .project-blueprint-plate { border: 1px solid var(--border-mil); background: #0b1a33; padding: 3px; margin: 6px 0 2px; }
+    .sp-facility-card .project-blueprint-plate img { display: block; width: 100%; height: auto; border-radius: 0; }
+    .sp-facility-card .project-blueprint figcaption { font-size: 10px; color: var(--text-gold); text-align: right; padding-top: 3px; }
     .sp-facility-card .sp-name { font-weight: 600; font-size: 13px; }
     .sp-facility-card .sp-cat { font-size: 11px; color: var(--text-secondary); }
     .sp-phase { display: flex; gap: 4px; margin: 8px 0; }
@@ -706,7 +711,7 @@
   <link rel="stylesheet" href="assets/topbar.css">
   <link rel="stylesheet" href="assets/alert-manager.css?v=alerts-1">
   <link rel="stylesheet" href="assets/automation-manager.css?v=automation-1">
-  <link rel="stylesheet" href="assets/research-tree.css">
+  <link rel="stylesheet" href="assets/research-tree.css?v=rt-3">
   <link rel="stylesheet" href="assets/equipment-designer.css?v=designer-3">
   <link rel="stylesheet" href="assets/intelligence-agency.css">
   <link rel="stylesheet" href="assets/espionage.css?v=esp-1">
@@ -724,7 +729,7 @@
   <link rel="stylesheet" href="assets/factions.css?v=fs-1">
   <link rel="stylesheet" href="assets/air-naval-design.css?v=and-1">
   <link rel="stylesheet" href="assets/multiplayer-hub.css?v=mph-1">
-  <link rel="stylesheet" href="assets/superweapons.css?v=sw-3">
+  <link rel="stylesheet" href="assets/superweapons.css?v=sw-4">
   <link rel="stylesheet" href="assets/frontline-command.css?v=fc-1">
   <!-- HOI4 大戦略 全画面レイヤー (../hoi4.html を iframe で表示) -->
   <link rel="stylesheet" href="css/hoi4-screen.css">
@@ -990,12 +995,12 @@
 
 <script src="assets/asset-registry.js?v=artwork-2"></script>
 <script src="assets/game-asset-data.js?v=artwork-2"></script>
-<script src="assets/game-visuals.js?v=artwork-2"></script>
+<script src="assets/game-visuals.js?v=gv-2"></script>
 <script src="assets/image-loader.js"></script>
 <script src="assets/topbar-icons.js"></script>
 <script src="assets/topbar-ui.js?v=xp-1"></script>
 <script src="assets/localization-manager.js"></script>
-  <script src="assets/research-icons.js?v=ri-2"></script>
+  <script src="assets/research-icons.js?v=ri-3"></script>
   <script src="assets/hoi4-effects-config.js"></script>
   <script src="assets/completion-reward.js?v=roster-2"></script>
   <script src="assets/focus-routing.js"></script>
@@ -1003,7 +1008,7 @@
   <script src="assets/nf-reward-debug.js"></script>
   <script src="assets/technology-resolver.js"></script>
   <script src="assets/research-i18n.js?v=ri18n-2"></script>
-  <script src="assets/research-tree.js"></script>
+  <script src="assets/research-tree.js?v=rt-3"></script>
   <script src="assets/game-help.js"></script>
   <script src="war-systems.js"></script>
 <script>
@@ -2199,12 +2204,13 @@ class SpecialProjectManager {
       const phaseIdx = isHired ? SpecialProjectManager.PHASES.indexOf(proj.phase) : -1;
       const costReduction = CoreEngine.gameState.cardModifiers.facilityCostReduction || 0;
       const facilityCost = Math.ceil(50 * (1 - costReduction));
-      const portrait = GameVisuals.scientist(sci);
+      const portrait = GameVisuals.scientist(sci, CoreEngine.gameState.country);
+      const plate = SuperWeapons.blueprintFor(sci) || GameVisuals.scienceLinks[sci.id]?.[1] || null;
       html += '<div class="sp-facility-card"><div class="sp-header">' +
         GameVisuals.person(portrait, 'scientist_portraits') +
         '<div><div class="sp-name">' + GameVisuals.escape(portrait.name) + '</div><div class="sp-cat">' + sci.category_name + '</div>' +
         (portrait.generic ? '<small class="scientist-placeholder-label">本人画像未収録・汎用肖像</small>' : '') + '</div></div>' +
-        GameVisuals.blueprint(sci) +
+        (plate ? GameVisuals.blueprintPlate(plate, sci.weapons || sci.name) : GameVisuals.blueprint(sci)) +
         '<div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;">' + sci.overview + '</div>' +
         '<div style="font-size:11px;color:var(--text-gold);margin-bottom:6px;">兵器: ' + sci.weapons + '</div>';
 
@@ -7189,7 +7195,7 @@ window.addEventListener('DOMContentLoaded', () => {
   <script src="assets/occupation.js?v=occ-1"></script>
   <script src="assets/training-logistics.js?v=tl-1"></script>
   <script src="assets/factions.js?v=fs-1"></script>
-  <script src="assets/superweapons.js?v=sw-3"></script>
+  <script src="assets/superweapons.js?v=sw-4"></script>
   <script src="assets/frontline-command.js?v=fc-1"></script>
   <script src="assets/MultiplayerTimeManager.js"></script>
   <script src="assets/multiplayer-hub.js?v=mph-1"></script>

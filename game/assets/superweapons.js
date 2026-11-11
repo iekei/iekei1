@@ -131,6 +131,20 @@ class SuperWeapons {
   }
   static get SCIENTISTS() { return SuperWeapons.SCIENTISTS_FOR(); }
   static portrait(sc, cls = 'sw-portrait') { return '<img class="' + cls + '" src="' + SuperWeapons.PORTRAIT + sc.file + '" alt="" onerror="this.style.visibility=\'hidden\'">'; }
+  /** 科学者 (science.json) の分野 → 特別計画の設計図プレート */
+  static PLATE_OF_FIELD = { nuclear: 'Sp_commercial_nuclear_reactor.png', rocket: 'Sp_rocket_v2_ballistic.png',
+    air: 'Sp_air_jet_engine.png', jet: 'Sp_air_jet_engine.png', armor: 'Sp_land_land_cruiser.png',
+    artillery: 'Sp_land_super_heavy_howitzer.png', naval: 'Sp_naval_modern_battleship.png',
+    infantry: 'Sp_land_military_engineering_vehicles.png', support: 'Sp_land_military_engineering_vehicles.png',
+    industry: 'Sp_land_stronghold_network.png' };
+  /** 科学者データに合う設計図 (game/assets/special_projects)。未収録なら null */
+  static blueprintFor(sci) {
+    if (!sci) return null;
+    if (sci.blueprint) return sci.blueprint;
+    const link = (typeof GameVisuals !== 'undefined' && GameVisuals.scienceLinks?.[sci.id]) || null;
+    if (link && link[1]) return link[1];
+    return SuperWeapons.PLATE_OF_FIELD[sci.category] || null;
+  }
   static projectImg(P) { return '<img class="sw-pimg" src="' + SuperWeapons.IMG + P.img + '" alt="" onerror="this.style.display=\'none\'">'; }
   static NUKE_RATE = 0.02;      // 原子炉 Lv1 あたり /日 (= 50日に1発)
   static ROCKET_RATE = 0.5;     // 発射施設 Lv1 あたり /日

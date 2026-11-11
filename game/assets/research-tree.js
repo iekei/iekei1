@@ -75,9 +75,11 @@ const ResearchTreeUI = {
   },
 
   image(tech, category) {
-    const asset = ResearchIcons.resolve(tech, category);
+    const asset = ResearchIcons.withBlueprint(tech, category);
     const image = document.createElement('img');
-    image.className = 'tech-icon';
+    // 設計図がある技術は、装備写真 (64x64) ではなく設計図プレート (special_projects) を主画像にする
+    image.className = 'tech-icon' + (asset.blueprint ? ' has-blueprint blueprint' : '');
+    if (asset.blueprint) image.dataset.blueprint = asset.blueprint;
     image.alt = '';
     image.dataset.iconKey = asset.key;
     image.dataset.assetCategory = asset.source;
@@ -93,6 +95,17 @@ const ResearchTreeUI = {
         image.src = ResearchIcons.fallback(category);
       }
     });
+    if (asset.blueprintSrc) {
+      image.dataset.blueprint = asset.blueprint;
+      image.src = asset.blueprintSrc;
+      image.addEventListener('error', () => {
+        // 設計図が無ければ本来の技術アイコンへ戻す
+        image.className = 'tech-icon';
+        if (asset.src.startsWith('data:')) image.src = asset.src;
+        else image.dataset.src = asset.src, ImageLoader.observe(image);
+      });
+      return image;
+    }
     if (asset.src.startsWith('data:')) image.src = asset.src;
     else {
       image.dataset.src = asset.src;
@@ -162,6 +175,15 @@ const ResearchTreeUI = {
       node.style.left = position.x + 'px';
       node.style.top = position.y + 'px';
       node.appendChild(this.image(tech, category));
+      // 設計図を主画像にしたので、バッジは「元の装備写真」への参照として残す
+      const plate = ResearchIcons.blueprintFor(tech);
+      if (plate) {
+        const badge = document.createElement('span');
+        badge.className = 'tn-blueprint';
+        badge.title = '設計図: ' + plate;
+        badge.textContent = '📐';
+        node.appendChild(badge);
+      }
       const title = document.createElement('span');
       title.className = 'tn-title';
       title.textContent = tech.title;
@@ -206,6 +228,7 @@ const ResearchTreeUI = {
     this.detail.setAttribute('aria-labelledby', 'tech-detail-title');
     this.detail.innerHTML = '<button type="button" class="tech-detail-close" aria-label="技術詳細を閉じる">×</button>' +
       '<div class="tech-detail-header"><div class="tech-detail-image"></div><div><h3 id="tech-detail-title"></h3><p class="tech-detail-subtitle"></p></div></div>' +
+      '<div class="tech-detail-blueprint" hidden></div>' +
       '<p class="tech-detail-desc"></p><h4>技術の効果</h4><ul class="tech-detail-effects"></ul>' +
       '<h4>前提技術</h4><div class="tech-detail-prerequisites"></div><button type="button" class="tech-detail-action"></button>';
     document.body.appendChild(this.detail);
@@ -229,6 +252,26 @@ const ResearchTreeUI = {
     const imageContainer = detail.querySelector('.tech-detail-image');
     imageContainer.querySelectorAll('img').forEach(image => ImageLoader.observer?.unobserve(image));
     imageContainer.replaceChildren(this.image(tech, category));
+    // 設計図 (game/assets/special_projects) がある技術は詳細にもプレートを出す
+    const plate = ResearchIcons.blueprintFor(tech);
+    const plateBox = detail.querySelector('.tech-detail-blueprint');
+    if (plateBox) {
+      plateBox.replaceChildren();
+      if (plate) {
+        const figure = document.createElement('figure');
+        figure.className = 'tech-detail-plate';
+        const img = document.createElement('img');
+        img.src = AssetRegistry.getLocalAssetUrl('special_project_icons', plate);
+        img.alt = tech.title + ' の設計図';
+        img.loading = 'lazy';
+        img.addEventListener('error', () => { figure.hidden = true; });
+        const caption = document.createElement('figcaption');
+        caption.textContent = '設計図 — ' + tech.title;
+        figure.append(img, caption);
+        plateBox.appendChild(figure);
+      }
+      plateBox.hidden = !plate;
+    }
     const penalty = ResearchManager.researchPenalty(tech);
     let subtitle = ResearchIcons.categories[category].label + ' / ' + (tech.year || '—') + '年 / 研究 ' + (tech.research_time || 100) + '日';
     if (penalty.percent > 0) subtitle += ' / 先取りペナルティ +' + penalty.percent + '% (' + Math.round((tech.research_time || 100) * penalty.multiplier) + '日)';
