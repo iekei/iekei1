@@ -243,3 +243,93 @@ body.sw-targeting #map-canvas { outline: 2px solid rgba(255, 106, 74, .75); outl
   color: #ffd9d2;
   background: linear-gradient(180deg, #5a1d16, #33100c);
 }
+
+/* ==========================================================
+   特別研究ビュー / 攻撃計画 — 追加レイアウト
+   ========================================================== */
+
+/* ビュー切替タブ (備蓄・運用 / 特別研究) */
+.sw-tabs { flex: 0 0 auto; display: flex; gap: 6px; margin: 0 0 10px; flex-wrap: wrap; }
+.sw-tab { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; min-width: 168px;
+  padding: 6px 12px; border: 1px solid #333a46; border-radius: 6px; cursor: pointer; text-align: left;
+  background: linear-gradient(180deg, #181d26, #12161d); color: #b9c3ce; font-size: 12px; }
+.sw-tab span { font-weight: 700; color: #dfe6ee; }
+.sw-tab small { font-size: 10px; color: #7f8b98; letter-spacing: .3px; }
+.sw-tab:hover { border-color: #4b5564; }
+.sw-tab.active { border-color: #d0a030; background: linear-gradient(180deg, #2a241a, #191410); box-shadow: inset 0 0 14px rgba(208, 160, 48, .18); }
+.sw-tab.active span { color: #ffd45a; }
+
+/* 特別研究ビュー: 縦積みの各パネル */
+.sw-research-wrap { flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; gap: 8px; padding-right: 4px; scrollbar-width: thin; }
+.sw-research-wrap > .sw-panel { flex: 0 0 auto; }
+.sw-projects.wide { grid-template-columns: repeat(auto-fill, minmax(390px, 1fr)); }
+
+/* 計画カード: 肖像 + 設計図 */
+.sw-project-banner { display: flex; gap: 8px; align-items: flex-start; }
+.sw-project-title { min-width: 0; flex: 1 1 auto; }
+.sw-project-media { display: flex; gap: 10px; align-items: stretch; margin: 8px 0 6px; }
+.sw-sci-figure { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 3px; width: 76px; flex: 0 0 76px; }
+.sw-sci-figure figcaption { font-size: 9.5px; line-height: 1.25; text-align: center; color: #cfd6de; }
+.sw-sci-figure figcaption small { display: block; color: #8892a0; font-size: 9px; }
+.sw-portrait.lead { width: 72px; height: 92px; object-fit: cover; object-position: top center; }
+.sw-sci-figure.empty .sw-portrait.lead {
+  display: flex; align-items: center; justify-content: center;
+  color: #5a6472; font-size: 28px; font-weight: 700;
+}
+.sw-bp { margin: 0; flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.sw-bp .sw-pimg {
+  width: 100%; height: 92px; object-fit: contain; border-radius: 4px;
+  border: 1px solid #3a4a6a; background: #0b1a33;
+  image-rendering: auto;
+}
+.sw-bp figcaption { font-size: 9.5px; color: #8892a0; text-align: right; }
+.sw-project.done .sw-bp .sw-pimg { border-color: #3c8c4c; }
+.sw-project.active .sw-bp .sw-pimg { border-color: #d0a030; box-shadow: 0 0 10px rgba(208, 160, 48, .25); }
+
+/* 科学者ストリップ (コンパクト) */
+.sw-roster-strip { display: flex; gap: 6px; overflow-x: auto; padding: 2px 2px 6px; scrollbar-width: thin; }
+.sw-mini-sci { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 72px; padding: 4px;
+  background: #141821; border: 1px solid #2c3340; border-radius: 6px; }
+.sw-mini-sci .sw-portrait { width: 46px; height: 60px; }
+.sw-mini-sci b { font-size: 9.5px; color: #fff; line-height: 1.15; text-align: center; }
+.sw-mini-sci em { font-style: normal; font-size: 9px; color: #ffd45a; text-align: center; }
+.sw-mini-sci.busy { border-color: #d0a030; }
+
+/* 生産施設の 2 列 */
+.sw-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 900px) { .sw-two-col { grid-template-columns: 1fr; } .sw-projects.wide { grid-template-columns: 1fr; } }
+
+/* 攻撃計画: 一覧 */
+.sw-plan { border: 1px solid #5a3a30; border-radius: 6px; padding: 6px 8px; margin-bottom: 6px;
+  background: linear-gradient(180deg, rgba(50, 20, 16, .85), rgba(20, 22, 28, .85)); }
+.sw-plan.delayed { border-color: #8a6a20; background: linear-gradient(180deg, rgba(50, 40, 14, .85), rgba(20, 22, 28, .85)); }
+.sw-plan-head { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+.sw-plan-head b { color: #fff; font-size: 12.5px; }
+.sw-plan-owner { color: #97a3b0; font-size: 10px; }
+.sw-plan-route { font-size: 10.5px; color: #c8d2dc; margin: 3px 0; }
+.sw-plan-route small { color: #8892a0; }
+.sw-plan-actions { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-top: 2px; }
+.sw-plan-actions small { color: #8fa0ad; font-size: 10px; }
+.sw-plan-history { display: flex; flex-direction: column; gap: 2px; font-size: 10.5px; color: #9fb0bc; }
+.sw-plan-history b { color: #d8e0e8; }
+.sw-bar.delayed em { background: linear-gradient(90deg, #7a5c14, #e0b040); }
+.sw-plan-now { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 5px 8px; margin: 0 0 6px;
+  border: 1px solid #8a6a20; border-radius: 4px; background: rgba(50, 40, 14, .55); font-size: 11px; color: #ffe0a0; }
+.sw-plan-now b { color: #ffd45a; }
+
+/* モーダル: 発進基地の選択 */
+.sw-base-list { display: flex; flex-direction: column; gap: 4px; margin: 4px 0 8px; }
+.sw-base { display: flex; flex-direction: column; gap: 1px; padding: 5px 7px; border-radius: 4px; cursor: pointer;
+  background: #151a22; border: 1px solid #333c48; font-size: 11px; }
+.sw-base.on { border-color: #ff6a4a; background: #22140f; box-shadow: inset 0 0 10px rgba(255, 90, 50, .18); }
+.sw-base.out { opacity: .55; cursor: not-allowed; }
+.sw-base input { margin-right: 4px; }
+.sw-base-name { color: #fff; font-weight: 700; }
+.sw-base-meta { color: #93a0ad; font-size: 10px; }
+
+/* 予約済み核弾頭の表示 */
+.sw-bomb.reserved { color: #8a8f98; filter: none; }
+.sw-kpi.plan b { color: #ffb870; }
+.sw-wing.ng { opacity: .7; }
+.sw-wing.ng span { color: #ff9a7a; }
+.sw-nuke-btn.planned { border-color: #d0a030; color: #ffe0a0; }

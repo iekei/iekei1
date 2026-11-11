@@ -54,7 +54,10 @@ test('every existing special project has a matching or labeled generic portrait 
       const person=visuals.scientist(sci);
       exists('scientists',person.file);
       assert.match(person.name,/[ぁ-んァ-ヶ一-龠]/);
-      if(person.generic) assert.equal(person.name,sci.name,'Do not label a different real person as this scientist');
+      if(person.generic) {
+        assert.equal(person.name,sci.name,'Do not label a different real person as this scientist');
+        assert.notEqual(person.name,person.file,'the stand-in portrait is not renamed to the real person');
+      }
       assert.match(visuals.blueprint(sci),/assets\/special_projects\//,sci.id);
       exists('special_projects',visuals.scienceLinks[sci.id][1]);
     }
@@ -66,13 +69,38 @@ test('battalion sprites use uploaded art; 152px sheets retain full width behind 
     exists('land_units',visuals.unitFiles[id]);
     assert.match(visuals.unit({id,name:'歩兵'}),/assets\/land_units\//);
   }
-  const original=data.units['Artillery.png'];
+  // 砲兵は support_unit_field_guns_icon.png (152px の 2 状態シート) を使う
+  const sprite=visuals.unitFiles.artillery;
+  const original=data.units[sprite];
   try {
-    data.units['Artillery.png']={width:152,height:42};
+    data.units[sprite]={width:152,height:42};
     assert.match(visuals.unit({id:'artillery',name:'砲兵'}),/width:152px;left:0px/);
-    data.units['Artillery.png']={width:76,height:42};
+    data.units[sprite]={width:76,height:42};
     assert.match(visuals.unit({id:'artillery',name:'砲兵'}),/width:76px;left:0px/);
-  } finally { data.units['Artillery.png']=original; }
+  } finally { data.units[sprite]=original; }
   const css=fs.readFileSync(path.join(assets,'game-visuals.css'),'utf8');
   assert.match(css,/\.land-unit-icon\s*\{[^}]*width:76px;[^}]*overflow:hidden/);
+});
+
+test('science.json scientists resolve to a portrait in game/assets/scientists and a special_projects blueprint', () => {
+  for (const tag of ['ger','sov','jap','usa','eng','fra','ita']) {
+    const science=JSON.parse(fs.readFileSync(path.join(assets,`../${tag}/tec/special/data/science.json`)));
+    for (const sci of science.scientists) {
+      // 国を渡しても渡さなくても肖像は必ず解決する
+      for (const person of [visuals.scientist(sci), visuals.scientist(sci,tag.toUpperCase())]) {
+        exists('scientists',person.file);
+        assert.ok(person.name, sci.id+' has a display name');
+        if (person.generic) {
+          assert.equal(person.name,sci.name,'代役の人物名を本人として表示しない');
+          assert.ok(person.standIn,'代役の肖像が特定できる');
+          exists('scientists',data.scientists.find(p=>p.id===person.standIn).file);
+        }
+      }
+      // 設計図は必ず special_projects の収録ファイル
+      const plate=visuals.scienceLinks[sci.id]?.[1];
+      assert.ok(plate,sci.id+' has a blueprint link');
+      assert.ok(data.projects.includes(plate),sci.id+' blueprint '+plate+' is in the manifest');
+      assert.match(visuals.blueprint(sci),/assets\/special_projects\//,sci.id);
+    }
+  }
 });
