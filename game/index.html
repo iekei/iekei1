@@ -874,20 +874,56 @@
 
   <!-- ==================== WINDOW TEMPLATES (moved into windows on open) ==================== -->
   <div id="window-templates">
-    <div class="window-template pane-fill" id="tpl-focus" data-title="🌲 国家方針" data-w="900" data-h="640">
-      <div id="focus-tree-container">
-        <div id="focus-tree-zoom-controls" aria-label="国家方針ツリーの拡大縮小">
-          <button type="button" onclick="FocusTreeManager.setZoom(FocusTreeManager.zoom - 0.1)" aria-label="縮小">−</button>
-          <button type="button" onclick="FocusTreeManager.setZoom(1)" aria-label="標準倍率">100%</button>
-          <button type="button" onclick="FocusTreeManager.setZoom(FocusTreeManager.zoom + 0.1)" aria-label="拡大">＋</button>
-        </div>
-        <div id="focus-tree-viewport">
-          <div id="focus-tree-content">
-            <svg id="focus-svg-lines"></svg>
-            <div id="focus-nodes"></div>
-          </div>
-        </div>
-      </div>
+    <div class="window-template pane-fill" id="tpl-focus" data-title="🤖 カスタム国家方針 (AI)" data-w="900" data-h="640">
+      <!-- 既存のツリー式国家方針は本ウィンドウでは非表示（要件：ツリーは開かない） -->
+      <div id="focus-tree-container" class="hidden"></div>
+
+      <!-- ===== カスタム国家方針ジェネレーター（Gemini API連携） ===== -->
+      <style>
+        #custom-nf-root { display:flex; flex-direction:column; gap:10px; padding:14px 16px; height:100%; box-sizing:border-box; overflow:auto; color:var(--text-primary,#e8e8e8); font-size:13px; }
+        #custom-nf-root h2 { margin:0; font-size:18px; }
+        #custom-nf-root .cnf-desc { margin:0; color:var(--text-secondary,#9aa4b2); font-size:12px; line-height:1.5; }
+        #custom-nf-root label { font-weight:600; margin-top:4px; }
+        #custom-nf-root input, #custom-nf-root textarea {
+          background:#0e1822; color:#e8e8e8; border:1px solid var(--border-mil,#2a3a4a);
+          border-radius:6px; padding:8px; font-size:13px; width:100%; box-sizing:border-box; font-family:inherit;
+        }
+        #custom-nf-root textarea { resize:vertical; min-height:64px; }
+        #custom-nf-root .cnf-key-row { display:flex; gap:6px; align-items:center; }
+        #custom-nf-root .cnf-key-row input { flex:1; }
+        #custom-nf-root .cnf-key-note { color:var(--text-secondary,#9aa4b2); font-size:11px; }
+        #custom-nf-root .cnf-actions { display:flex; gap:10px; align-items:center; }
+        #custom-nf-root button {
+          background:#2b6cb0; color:#fff; border:none; border-radius:6px; padding:9px 14px;
+          font-size:13px; font-weight:600; cursor:pointer;
+        }
+        #custom-nf-root button:hover { background:#3182ce; }
+        #custom-nf-root button:disabled { opacity:.55; cursor:not-allowed; }
+        #custom-nf-root button.cnf-secondary { background:#3a4a5a; }
+        #custom-nf-root button.cnf-danger { background:#7a3a3a; }
+        #custom-nf-root .cnf-loading { color:#f6c453; font-weight:600; }
+        #custom-nf-root .cnf-loading::after { content:''; display:inline-block; width:10px; }
+        #custom-nf-root .cnf-error {
+          background:#3a1f1f; border:1px solid #7a3a3a; color:#ffb3b3;
+          border-radius:6px; padding:10px 12px; line-height:1.5; white-space:pre-wrap;
+        }
+        #custom-nf-root .cnf-result, #custom-nf-root .cnf-active {
+          background:#0e1822; border:1px solid var(--border-mil,#2a3a4a); border-radius:8px; padding:12px 14px;
+        }
+        #custom-nf-root .cnf-result h3 { margin:0 0 4px; font-size:15px; }
+        #custom-nf-root .cnf-flavor { color:var(--text-secondary,#9aa4b2); font-style:italic; margin:0 0 8px; line-height:1.5; }
+        #custom-nf-root .cnf-meta { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:8px; font-size:12px; }
+        #custom-nf-root .cnf-meta b { color:#f6c453; }
+        #custom-nf-root .cnf-effects { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; }
+        #custom-nf-root .cnf-chip { background:#16242f; border:1px solid #2a3a4a; border-radius:12px; padding:3px 10px; font-size:12px; }
+        #custom-nf-root .cnf-chip.pos { color:#7ee0a0; }
+        #custom-nf-root .cnf-chip.neg { color:#ff9a9a; }
+        #custom-nf-root .cnf-ai { background:#1a2433; border-left:3px solid #f6c453; padding:6px 10px; border-radius:4px; font-size:12px; line-height:1.5; }
+        #custom-nf-root .cnf-progress { height:12px; background:#16242f; border:1px solid #2a3a4a; border-radius:6px; overflow:hidden; margin:8px 0; }
+        #custom-nf-root .cnf-progress > div { height:100%; background:linear-gradient(90deg,#2b6cb0,#3182ce); width:0%; transition:width .2s; }
+        #custom-nf-root .hidden { display:none !important; }
+      </style>
+      <div id="custom-nf-root"><!-- CustomFocusAI.render() が内容を構築 --></div>
     </div>
 
     <div class="window-template tpl-research" id="tpl-research" data-title="🔬 研究" data-w="880" data-h="620">
@@ -1891,6 +1927,8 @@ class FocusTreeManager {
 
   static render() {
     const container = document.getElementById('focus-nodes');
+    // カスタム国家方針に切り替えたためツリーDOMが無い場合は安全に無視する
+    if (!container) return;
     const svg = document.getElementById('focus-svg-lines');
     const content = document.getElementById('focus-tree-content');
     const viewport = document.getElementById('focus-tree-viewport');
@@ -2169,6 +2207,417 @@ class FocusTreeManager {
     if (tt) tt.classList.add('hidden');
   }
 }
+
+// ==========================================================
+// Module 3.5: CustomFocusAI — Gemini API 連携カスタム国家方針ジェネレーター
+// ==========================================================
+// プレイヤーが日本語で自由入力した国家方針を Gemini API に送り、ゲームマスターとして
+// バランスを調整した JSON（所要日数・消費政治力・各種ステータス増減・他国AIへの影響）を
+// 生成し、ゲーム内に適用する。APIキーは localStorage のみに保存（コード内に埋め込まない）。
+class CustomFocusAI {
+  static MODEL = 'gemini-2.5-flash';
+  static STORAGE_KEY = 'gemini_api_key_v1';
+  static ALLOWED_DAYS = [35, 70, 105, 140];
+  static _tickRegistered = false;
+  static state = { result: null, loading: false, error: null, active: null };
+
+  // ---------- APIキー管理（localStorage） ----------
+  static loadKey() {
+    try { return (localStorage.getItem(CustomFocusAI.STORAGE_KEY) || '').trim(); }
+    catch (e) { return ''; }
+  }
+  static saveKey(key) {
+    try { localStorage.setItem(CustomFocusAI.STORAGE_KEY, String(key).trim()); } catch (e) { /* 保存失敗は無視 */ }
+  }
+  static clearKey() {
+    try { localStorage.removeItem(CustomFocusAI.STORAGE_KEY); } catch (e) { /* 無視 */ }
+  }
+
+  // ---------- バランス調整用システムプロンプト ----------
+  static SYSTEM_PROMPT = `あなたはこの HOI4 風戦略ゲームの「ゲームマスター」です。
+プレイヤーが自由に日本語で入力した国家方針（どんなに破天荒でも）を、論理的かつユーモアを交えて解釈し、
+ゲームバランスを崩さないよう慎重に査定してください。
+
+【評価の指針】
+- 規模が小さい（国内の軽い政策）→ 35日。中規模 → 70日。大規模 → 105日。国家を挙げた超巨大プロジェクト → 140日。
+- 消費政治力(politicalPower)は内容の重みに比例して 50〜300 の範囲で設定。軽いほど安く、壮大なほど高く。
+- 効果は控えめに：ステータスは大抵 ±3〜±15 程度、工場・造船所は 1〜3、経験値は 5〜30、世界緊張度の変動は ±1〜±10。
+- 「核開発」「宣戦」「スパイ」「他国への干渉」等は必ず worldTension / worldTensionDelta をプラスにし、他国AIが警戒する記述を aiReactionText に書く。
+- ユーモアと史実尊重を忘れずに。フレーバーテキストは1〜2文で。
+
+【出力フォーマット（必須）】
+マークダウンや説明文は一切書かず、以下のキーを持つ純粋なJSONオブジェクトのみを出力してください。
+
+{
+  "title": "方針名（15文字以内）",
+  "description": "1〜2文のフレーバーテキスト（ユーモアを交える）",
+  "days": 70,
+  "politicalPower": 120,
+  "effect": {
+    "politicalPower": 0,
+    "stability": 0,
+    "warSupport": 0,
+    "armyXp": 0,
+    "navyXp": 0,
+    "airXp": 0,
+    "researchSlots": 0,
+    "worldTension": 0,
+    "civilianFactories": 0,
+    "militaryFactories": 0,
+    "dockyards": 0,
+    "bunkerLevel": 0
+  },
+  "aiImpact": {
+    "worldTensionDelta": 0,
+    "aiReactionText": "他国AIが警戒・対抗措置をとる描写（日本語）"
+  }
+}
+
+【制約】
+- days は必ず 35, 70, 105, 140 のいずれか。
+- politicalPower（消費政治力）は 50〜300。
+- effect のキー名は上記12個のみ使用（名前を勝手に変えないこと）。
+- 存在しない効果は 0 のまま残すこと。`;
+
+  // ---------- 描画 ----------
+  static render() {
+    const root = document.getElementById('custom-nf-root');
+    if (!root) return;
+    const key = CustomFocusAI.loadKey() || '';
+    const st = CustomFocusAI.state;
+
+    let html = '';
+    html += '<h2>🤖 AI カスタム国家方針</h2>';
+    html += '<p class="cnf-desc">日本語で自由に国家方針を入力すると、Gemini AI がゲームマスターとして解釈し、所要日数・消費政治力・ゲーム内効果を自動生成します。</p>';
+
+    html += '<label>🔑 Gemini APIキー（ブラウザにのみ保存）</label>';
+    html += '<div class="cnf-key-row">';
+    html += '<input type="password" id="cnf-api-key" placeholder="AIza..." value="' + CustomFocusAI.escapeHtml(key) + '">';
+    html += '<button id="cnf-save-key" class="cnf-secondary" type="button">保存</button>';
+    html += '<button id="cnf-clear-key" class="cnf-danger" type="button">削除</button>';
+    html += '</div>';
+    html += '<div class="cnf-key-note">キーはコードに埋め込まれず、あなたのブラウザ(localStorage)にのみ保存されます。他者と共有しないでください。</div>';
+
+    html += '<label>📝 国家方針の内容（自由入力・日本語）</label>';
+    html += '<textarea id="cnf-input" placeholder="例：全国民にラーメンを配って士気を上げる / 全財産を投じて核開発を急ぐ / 隣国にスパイを送り込んで内乱を煽る"></textarea>';
+
+    html += '<div class="cnf-actions">';
+    html += '<button id="cnf-generate" type="button"' + (st.loading ? ' disabled' : '') + '>🚀 国家方針を策定する</button>';
+    html += '<span id="cnf-loading" class="' + (st.loading ? '' : 'hidden') + '">AIが国家方針を策定中...</span>';
+    html += '</div>';
+
+    if (st.error) html += '<div class="cnf-error">' + CustomFocusAI.escapeHtml(st.error) + '</div>';
+    if (st.result && !st.active) html += CustomFocusAI.renderResult(st.result);
+    if (st.active) html += CustomFocusAI.renderActive(st.active);
+
+    root.innerHTML = html;
+    CustomFocusAI.attachEvents();
+  }
+
+  static renderResult(r) {
+    const chips = CustomFocusAI.formatEffectList(r.effect || {}).map(c =>
+      '<span class="cnf-chip ' + (c.value >= 0 ? 'pos' : 'neg') + '">' + c.label + ' ' + (c.value >= 0 ? '+' : '') + c.value + '</span>'
+    ).join('');
+    const ai = r.aiImpact || {};
+    let html = '<div class="cnf-result">';
+    html += '<h3>📜 ' + CustomFocusAI.escapeHtml(r.title) + '</h3>';
+    html += '<p class="cnf-flavor">' + CustomFocusAI.escapeHtml(r.description || '') + '</p>';
+    html += '<div class="cnf-meta">';
+    html += '<span>📅 所要: <b>' + r.days + '日</b></span>';
+    html += '<span>🟦 消費政治力: <b>' + r.politicalPower + '</b></span>';
+    html += '</div>';
+    html += '<div class="cnf-effects">' + (chips || '<span class="cnf-chip">効果なし</span>') + '</div>';
+    if (ai.aiReactionText) {
+      html += '<div class="cnf-ai">🕵️ 他国の反応: ' + CustomFocusAI.escapeHtml(ai.aiReactionText) + '</div>';
+    }
+    html += '<div class="cnf-actions" style="margin-top:10px;">';
+    html += '<button id="cnf-apply" type="button">✅ この方針を実行する</button>';
+    html += '<button id="cnf-reset" class="cnf-secondary" type="button">🔄 やり直す</button>';
+    html += '</div>';
+    html += '</div>';
+    return html;
+  }
+
+  static renderActive(a) {
+    const pct = Math.max(0, Math.min(100, (a.progress / a.totalDays) * 100));
+    const remain = Math.max(0, Math.ceil(a.totalDays - a.progress));
+    let html = '<div class="cnf-active">';
+    html += '<h3>⏳ 実行中: ' + CustomFocusAI.escapeHtml(a.title) + '</h3>';
+    html += '<div class="cnf-progress"><div id="cnf-active-fill" style="width:' + pct.toFixed(1) + '%"></div></div>';
+    html += '<div class="cnf-meta"><span>残り約 <b id="cnf-active-days">' + remain + '</b> 日</span><span>消費政治力: <b>' + a.cost + '</b></span></div>';
+    html += '</div>';
+    return html;
+  }
+
+  static formatEffectList(eff) {
+    const labels = {
+      politicalPower: '政治力', stability: '安定度', warSupport: '戦争協力度',
+      armyXp: '陸軍XP', navyXp: '海軍XP', airXp: '空軍XP', researchSlots: '研究枠',
+      worldTension: '世界緊張度', civilianFactories: '民間工場', militaryFactories: '軍事工場',
+      dockyards: '造船所', bunkerLevel: '要塞Lv'
+    };
+    const out = [];
+    Object.keys(labels).forEach(k => {
+      const v = Number(eff[k]);
+      if (!Number.isNaN(v) && v !== 0) out.push({ label: labels[k], value: v });
+    });
+    return out;
+  }
+
+  static attachEvents() {
+    const save = document.getElementById('cnf-save-key');
+    const clear = document.getElementById('cnf-clear-key');
+    const gen = document.getElementById('cnf-generate');
+    const apply = document.getElementById('cnf-apply');
+    const reset = document.getElementById('cnf-reset');
+    if (save) save.addEventListener('click', () => {
+      const v = (document.getElementById('cnf-api-key').value || '').trim();
+      if (!v) { GameUI.notify('キーが空です。', 'alert'); return; }
+      CustomFocusAI.saveKey(v);
+      GameUI.notify('APIキーを保存しました。', 'success');
+    });
+    if (clear) clear.addEventListener('click', () => {
+      CustomFocusAI.clearKey();
+      const inp = document.getElementById('cnf-api-key');
+      if (inp) inp.value = '';
+      GameUI.notify('APIキーを削除しました。');
+    });
+    if (gen) gen.addEventListener('click', () => CustomFocusAI.generate());
+    if (apply) apply.addEventListener('click', () => CustomFocusAI.applyResult());
+    if (reset) reset.addEventListener('click', () => {
+      CustomFocusAI.state.result = null;
+      CustomFocusAI.state.error = null;
+      CustomFocusAI.render();
+    });
+  }
+
+  // ---------- Gemini API 呼び出し ----------
+  static async generate() {
+    const key = CustomFocusAI.loadKey();
+    const inputEl = document.getElementById('cnf-input');
+    const input = inputEl ? inputEl.value.trim() : '';
+    if (!key) {
+      CustomFocusAI.state.error = '🔑 Gemini APIキーが設定されていません。「🔑 Gemini APIキー」欄に自分のキーを入力し「保存」を押してください。';
+      CustomFocusAI.state.loading = false;
+      CustomFocusAI.render();
+      return;
+    }
+    if (!input) {
+      CustomFocusAI.state.error = '📝 国家方針の内容を入力してください。';
+      CustomFocusAI.state.loading = false;
+      CustomFocusAI.render();
+      return;
+    }
+
+    CustomFocusAI.state.loading = true;
+    CustomFocusAI.state.error = null;
+    CustomFocusAI.render();
+
+    try {
+      const url = 'https://generativelanguage.googleapis.com/v1beta/models/' + CustomFocusAI.MODEL + ':generateContent?key=' + encodeURIComponent(key);
+      const body = {
+        contents: [{ parts: [{ text: CustomFocusAI.SYSTEM_PROMPT + '\n\n【プレイヤーが入力した国家方針】\n' + input }] }],
+        generationConfig: { responseMimeType: 'application/json', temperature: 0.9, maxOutputTokens: 1024 }
+      };
+      let res;
+      try {
+        res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      } catch (netErr) {
+        throw { kind: 'net' };
+      }
+      if (res.status === 429) throw { kind: 'rate' };
+      if (!res.ok) {
+        const t = await res.text().catch(() => '');
+        throw { kind: 'http', status: res.status, detail: t };
+      }
+      const json = await res.json();
+      const cand = json && json.candidates && json.candidates[0];
+      const text = cand && cand.content && cand.content.parts && cand.content.parts[0] && cand.content.parts[0].text;
+      if (typeof text !== 'string' || !text.trim()) throw { kind: 'empty' };
+
+      let parsed;
+      try { parsed = JSON.parse(CustomFocusAI.extractJson(text)); }
+      catch (e) { throw { kind: 'parse', detail: String(e && e.message || e) }; }
+
+      const clean = CustomFocusAI.sanitize(parsed);
+      if (!clean.title || typeof clean.days !== 'number') throw { kind: 'invalid' };
+
+      CustomFocusAI.state.result = clean;
+      CustomFocusAI.state.loading = false;
+      CustomFocusAI.render();
+    } catch (err) {
+      CustomFocusAI.state.loading = false;
+      CustomFocusAI.state.error = CustomFocusAI.friendlyError(err);
+      CustomFocusAI.render();
+    }
+  }
+
+  static extractJson(text) {
+    if (typeof text !== 'string') return '';
+    let t = text.trim();
+    const fence = t.match(/```(?:json)?\s*([\s\S]*?)```/i);
+    if (fence) t = fence[1].trim();
+    const first = t.search(/[\[{]/);
+    const last = Math.max(t.lastIndexOf('}'), t.lastIndexOf(']'));
+    if (first >= 0 && last > first) t = t.slice(first, last + 1);
+    return t;
+  }
+
+  // 値を安全な範囲にクランプし、days を許可値のいずれかにスナップ
+  static sanitize(data) {
+    const ALLOWED = CustomFocusAI.ALLOWED_DAYS;
+    let days = Number(data.days);
+    if (!ALLOWED.includes(days)) {
+      days = ALLOWED.reduce((p, c) => Math.abs(c - days) < Math.abs(p - days) ? c : p, ALLOWED[0]);
+    }
+    const cost = Math.max(50, Math.min(300, Math.round(Number(data.politicalPower) || 70)));
+    const e = (data.effect && typeof data.effect === 'object') ? data.effect : {};
+    const clamp = (v, min, max) => { v = Number(v) || 0; return Math.max(min, Math.min(max, v)); };
+    const effect = {
+      politicalPower: clamp(e.politicalPower, -300, 300),
+      stability: clamp(e.stability, -100, 100),
+      warSupport: clamp(e.warSupport, -100, 100),
+      armyXp: clamp(e.armyXp, -200, 200),
+      navyXp: clamp(e.navyXp, -200, 200),
+      airXp: clamp(e.airXp, -200, 200),
+      researchSlots: clamp(e.researchSlots, -3, 3),
+      worldTension: clamp(e.worldTension, -20, 20),
+      civilianFactories: clamp(e.civilianFactories, -20, 20),
+      militaryFactories: clamp(e.militaryFactories, -20, 20),
+      dockyards: clamp(e.dockyards, -20, 20),
+      bunkerLevel: clamp(e.bunkerLevel, 0, 10)
+    };
+    const ai = (data.aiImpact && typeof data.aiImpact === 'object') ? data.aiImpact : {};
+    return {
+      title: String(data.title || 'カスタム方針').slice(0, 15),
+      description: String(data.description || ''),
+      days: days,
+      politicalPower: cost,
+      effect: effect,
+      aiImpact: {
+        worldTensionDelta: clamp(Number(ai.worldTensionDelta) || 0, -20, 20),
+        aiReactionText: String(ai.aiReactionText || '')
+      }
+    };
+  }
+
+  static friendlyError(err) {
+    if (!err || !err.kind) {
+      if (err && (err.name === 'TypeError' || /fetch|network/i.test(String(err.message || '')))) return '📡 ネットワークエラーです。接続を確認してください。';
+      return '⚠️ 予期せぬエラーが発生しました。';
+    }
+    switch (err.kind) {
+      case 'rate': return '⏳ リクエスト制限に達しました（HTTP 429）。しばらく待ってから再度お試しください。';
+      case 'http': return '🌐 APIエラーが発生しました（HTTP ' + (err.status || '?') + '）。キーが有効か、モデル名が正しいか確認してください。';
+      case 'empty': return '🤖 AIから空の応答が返されました。もう一度お試しください。';
+      case 'parse': return '🧩 AIの応答をJSONとして解析できませんでした。入力内容を変えて再度お試しください。';
+      case 'invalid': return '🚫 生成された方針の形式が不正です。もう一度お試しください。';
+      case 'net': return '📡 ネットワークエラーです。接続を確認してください。';
+      default: return '⚠️ エラー: ' + (err.detail || '');
+    }
+  }
+
+  // ---------- ゲームへの適用 ----------
+  static applyResult() {
+    const r = CustomFocusAI.state.result;
+    if (!r) return;
+    if (CustomFocusAI.state.active) { GameUI.notify('既に実行中の方針があります。', 'alert'); return; }
+    const s = CoreEngine.gameState;
+    if (s.politicalPower < r.politicalPower) {
+      GameUI.notify('政治力が不足しています（必要: ' + r.politicalPower + '）。', 'alert');
+      return;
+    }
+    CoreEngine.addPoliticalPower(-r.politicalPower);
+    CustomFocusAI.state.active = {
+      title: r.title, description: r.description, days: r.days, totalDays: r.days,
+      effect: r.effect, aiImpact: r.aiImpact, cost: r.politicalPower, progress: 0
+    };
+    CustomFocusAI.state.result = null;
+    CustomFocusAI.startCountdown();
+    GameUI.notify('国家方針「' + r.title + '」を開始しました（所要 ' + r.days + '日）。', 'success');
+    CustomFocusAI.render();
+  }
+
+  static startCountdown() {
+    if (CustomFocusAI._tickRegistered) return;
+    CustomFocusAI._tickRegistered = true;
+    if (typeof CoreEngine !== 'undefined' && typeof CoreEngine.registerTickCallback === 'function') {
+      CoreEngine.registerTickCallback(() => CustomFocusAI.onTick());
+    }
+  }
+
+  // 1ティック = 1ゲーム時間(1時間) → 24ティックで1日
+  static onTick() {
+    const a = CustomFocusAI.state.active;
+    if (!a) return;
+    a.progress += 1 / 24;
+    if (a.progress >= a.totalDays) CustomFocusAI.complete();
+    else CustomFocusAI.updateActiveView();
+  }
+
+  static updateActiveView() {
+    const a = CustomFocusAI.state.active;
+    const fill = document.getElementById('cnf-active-fill');
+    const days = document.getElementById('cnf-active-days');
+    if (!a) return;
+    const pct = Math.max(0, Math.min(100, (a.progress / a.totalDays) * 100));
+    const remain = Math.max(0, Math.ceil(a.totalDays - a.progress));
+    if (fill) fill.style.width = pct.toFixed(1) + '%';
+    if (days) days.textContent = remain;
+  }
+
+  static complete() {
+    const a = CustomFocusAI.state.active;
+    if (!a) return;
+    CustomFocusAI.state.active = null;
+
+    const focusLike = {
+      id: 'custom_nf_' + Date.now(),
+      title: a.title, name: a.title,
+      effect: a.effect, bunkerLevel: a.effect.bunkerLevel
+    };
+    let rewards = [];
+    const cfg = window.HOI4EffectsConfig;
+    if (cfg && typeof cfg.buildRewardsFromFocus === 'function') {
+      rewards = cfg.buildRewardsFromFocus(focusLike, CoreEngine.gameState.country);
+    }
+    if (!rewards || !rewards.length) rewards = CustomFocusAI.fallbackRewards(a.effect);
+    FocusTreeManager.applyCompletionRewards(rewards);
+
+    const wt = Number(a.aiImpact && a.aiImpact.worldTensionDelta) || 0;
+    if (wt) CoreEngine.addWorldTension(wt, 'カスタム方針「' + a.title + '」');
+    const aiText = (a.aiImpact && a.aiImpact.aiReactionText) ? a.aiImpact.aiReactionText : '';
+    if (aiText) CoreEngine.log('🕵️ 他国の反応: ' + aiText);
+    CoreEngine.log('✅ カスタム国家方針「' + a.title + '」が完了しました。');
+    GameUI.notify('方針完了: ' + a.title, 'success');
+    CustomFocusAI.render();
+  }
+
+  // HOI4EffectsConfig が未読み込みの場合のフォールバック（effect キーを報酬へ変換）
+  static fallbackRewards(effect) {
+    const e = effect || {};
+    const rewards = [];
+    const add = (type, value) => { if (value !== undefined && value !== null && Number(value) !== 0) rewards.push({ type, value: Number(value) }); };
+    add('add_political_power', e.politicalPower);
+    add('add_stability', e.stability);
+    add('add_war_support', e.warSupport);
+    add('add_army_experience', e.armyXp);
+    add('add_navy_experience', e.navyXp);
+    add('add_air_experience', e.airXp);
+    add('add_research_slot', e.researchSlots);
+    add('add_world_tension', e.worldTension);
+    if (e.civilianFactories) rewards.push({ type: 'add_building_construction', building: 'industrial_complex', level: Number(e.civilianFactories) });
+    if (e.militaryFactories) rewards.push({ type: 'add_building_construction', building: 'arms_factory', level: Number(e.militaryFactories) });
+    if (e.dockyards) rewards.push({ type: 'add_building_construction', building: 'dockyard', level: Number(e.dockyards) });
+    return rewards;
+  }
+
+  // ---------- ユーティリティ ----------
+  static escapeHtml(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+}
+window.CustomFocusAI = CustomFocusAI;
 
 // ==========================================================
 // Module 4: SpecialProjectManager — 特別研究計画
@@ -6902,7 +7351,7 @@ class GameUI {
     if (tabName === 'navy' && typeof NavalForce !== 'undefined') NavalForce.render();
     if (tabName === 'multiplayer') MultiplayerManager.render();
     if (tabName === 'research') { ResearchManager.renderTabs(); ResearchManager.renderSlots(); ResearchManager.render(); }
-    if (tabName === 'focus') FocusTreeManager.render();
+    if (tabName === 'focus') CustomFocusAI.render();
     if (tabName === 'nation') UniqueNationSystems.render();
     if (tabName === 'winsave') SaveLoadManager.render();
     if (tabName === 'politics') PoliticsManager.render();
