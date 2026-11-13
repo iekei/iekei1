@@ -2215,7 +2215,8 @@ class FocusTreeManager {
 // バランスを調整した JSON（所要日数・消費政治力・各種ステータス増減・他国AIへの影響）を
 // 生成し、ゲーム内に適用する。APIキーは localStorage のみに保存（コード内に埋め込まない）。
 class CustomFocusAI {
-  static MODEL = 'gemini-3.8-flash';
+  // 例：このように変更
+  static MODEL = 'gemini-2.5-flash';
   static STORAGE_KEY = 'gemini_api_key_v1';
   static ALLOWED_DAYS = [35, 70, 105, 140];
   static _tickRegistered = false;
